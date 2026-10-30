@@ -69,7 +69,7 @@ rule "BOT BECOMES BOSS":
     eventPlayer.startModifyingVoicelinePitch(0.5 + (1 / (eventPlayer.size + 1)), false)
     eventPlayer.stopAllDamageOverTime()
     eventPlayer.setHealth(eventPlayer.getMaxHealth())
-    eventPlayer.setStatusEffect(null, Status.ROOTED, 9999)
+    eventPlayer.setStatusEffect(null, Status.ROOTED, 99999)
     eventPlayer.disableEnvironmentCollision(false)
     eventPlayer.wallCollisionEnabled = false
     eventPlayer.potentialTargets = []
@@ -80,7 +80,7 @@ rule "BOT BECOMES BOSS":
     bosses[1] = distance(eventPlayer.getPosition(), eventPlayer.getEyePosition())
     waitUntil(eventPlayer.botTarget == null, 1)
     wait(0.25)
-    waitUntil(eventPlayer.botTarget != null or eventPlayer.getHealth() < eventPlayer.health, 9999)
+    waitUntil(eventPlayer.botTarget != null or eventPlayer.getHealth() < eventPlayer.health, 99999)
     eventPlayer.clearStatusEffect(Status.ROOTED)
     bosses[1] = distance(eventPlayer.getPosition(), eventPlayer.getEyePosition())
     wait(1)

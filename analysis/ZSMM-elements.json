@@ -1,0 +1,2466 @@
+{
+  "compilerVersion": "9.7.20",
+  "compilerPath": "C:\\Users\\snky\\.vscode\\extensions\\zezombye.overpy-9.7.20\\npm\\overpy.js",
+  "method": "Compile OPY with original directives plus debugElementCount; counts include disabled rules.",
+  "versions": [
+    {
+      "id": "786TW",
+      "relativePath": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+      "sourceSha256": "bcc6c75299d5aabdfcc702fb37be540f553f33f0ac7c888984f51178220c954a",
+      "directives": [
+        "#!extension playMoreEffects",
+        "#!extension spawnMoreDummyBots",
+        "#!optimizeStrict"
+      ],
+      "elements": 32264,
+      "warnings": 151,
+      "elementsNotListedIndividually": 20,
+      "ruleCounts": [
+        {
+          "name": "PLAYER ENHANCEMENT INITIALIZATION",
+          "elements": 1440
+        },
+        {
+          "name": "EFFECTS/TEXTS",
+          "elements": 1416
+        },
+        {
+          "name": "globalObjectiveEntityManagement",
+          "elements": 1400
+        },
+        {
+          "name": "setDifficulty",
+          "elements": 1112
+        },
+        {
+          "name": "botEntityManagement",
+          "elements": 619
+        },
+        {
+          "name": "LASER BARRICADE BLOCKS ZOMBIES",
+          "elements": 598
+        },
+        {
+          "name": "objectivesManagement",
+          "elements": 487
+        },
+        {
+          "name": "powerUpAssignment",
+          "elements": 444
+        },
+        {
+          "name": "sentryTurret (50-59)",
+          "elements": 440
+        },
+        {
+          "name": "GLOBAL MENU INITIALIZATION",
+          "elements": 435
+        },
+        {
+          "name": "EFFECT/TEXT (PERMANENT)",
+          "elements": 410
+        },
+        {
+          "name": "fireSatellite",
+          "elements": 384
+        },
+        {
+          "name": "BEHEMOTH (ROAD) TOXIC CLOUD",
+          "elements": 384
+        },
+        {
+          "name": "DAYTAKER (ILLARI) BURST",
+          "elements": 383
+        },
+        {
+          "name": "HITCHHIKER ATTACH/DETATCH",
+          "elements": 337
+        },
+        {
+          "name": "SLIMER (MERCY) TENTACLE GRAB",
+          "elements": 335
+        },
+        {
+          "name": "REVIVE PLAYER OR ADVANCE DEATH TIMER",
+          "elements": 329
+        },
+        {
+          "name": "INITIALIZE SURVIVOR TO BE RESCUED",
+          "elements": 325
+        },
+        {
+          "name": "WIN/LOSS CONDITIONS",
+          "elements": 315
+        },
+        {
+          "name": "EFFECTS/TEXTS",
+          "elements": 314
+        },
+        {
+          "name": "P.U.P. CONTROL",
+          "elements": 307
+        },
+        {
+          "name": "EFFECTS/TEXTS",
+          "elements": 304
+        },
+        {
+          "name": "setZombieMode",
+          "elements": 303
+        },
+        {
+          "name": "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)",
+          "elements": 291
+        },
+        {
+          "name": "stun (100-109)",
+          "elements": 287
+        },
+        {
+          "name": "EFFECT/TEXT (GLOBAL)",
+          "elements": 282
+        },
+        {
+          "name": "SKIP ASSEMBLING HEROES",
+          "elements": 264
+        },
+        {
+          "name": "setAvailableObjectives",
+          "elements": 256
+        },
+        {
+          "name": "powerUpUsage",
+          "elements": 245
+        },
+        {
+          "name": "teleportBots",
+          "elements": 241
+        },
+        {
+          "name": "LASER BARRICADE (PLACEMENT)",
+          "elements": 240
+        },
+        {
+          "name": "BOT DIES",
+          "elements": 238
+        },
+        {
+          "name": "EFFECTS/TEXT",
+          "elements": 230
+        },
+        {
+          "name": "setObjectiveType",
+          "elements": 223
+        },
+        {
+          "name": "airStrike (30-39)",
+          "elements": 219
+        },
+        {
+          "name": "PRIME SLIMER (EMRE) FLIGHT (BOSS)",
+          "elements": 213
+        },
+        {
+          "name": "VARIABLE ASSIGNMENT",
+          "elements": 212
+        },
+        {
+          "name": "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES",
+          "elements": 212
+        },
+        {
+          "name": "PLAYER INITIALIZATION",
+          "elements": 209
+        },
+        {
+          "name": "BRUTE (REIN) SUPER SEISMIC SLAM",
+          "elements": 206
+        },
+        {
+          "name": "STALKER (MOIRA) FADE",
+          "elements": 205
+        },
+        {
+          "name": "botStatManagement",
+          "elements": 199
+        },
+        {
+          "name": "BORN TO BATTLE PLAYER USES ABILITY CHARGE",
+          "elements": 196
+        },
+        {
+          "name": "bouncePad (80-89)",
+          "elements": 191
+        },
+        {
+          "name": "setPrematchTimer",
+          "elements": 188
+        },
+        {
+          "name": "REIGNITED (ANRAN) ABILITIES",
+          "elements": 188
+        },
+        {
+          "name": "BOT BECOMES BOSS",
+          "elements": 187
+        },
+        {
+          "name": "mutations",
+          "elements": 182
+        },
+        {
+          "name": "DOWNFALLEN GRABS PLAYER",
+          "elements": 181
+        },
+        {
+          "name": "cloakingDevice (60-69)",
+          "elements": 180
+        },
+        {
+          "name": "BOSS DIES (ALL BOSS OBJECTIVES)",
+          "elements": 177
+        },
+        {
+          "name": "SURVIVOR FOLLOW TARGET",
+          "elements": 175
+        },
+        {
+          "name": "SMOLDER SUPER SLAM",
+          "elements": 175
+        },
+        {
+          "name": "CHARGER (MAUGA) CHARGE",
+          "elements": 170
+        },
+        {
+          "name": "BIOMORPHING GOAL START",
+          "elements": 166
+        },
+        {
+          "name": "botRespawnInitialization",
+          "elements": 162
+        },
+        {
+          "name": "GENERATE SUPPLY DROPS",
+          "elements": 159
+        },
+        {
+          "name": "generateMapGrid",
+          "elements": 157
+        },
+        {
+          "name": "beaconofHealing (40-49)",
+          "elements": 155
+        },
+        {
+          "name": "PLAYER DELIVERS RESOURCE VALUE",
+          "elements": 148
+        },
+        {
+          "name": "CHARGE BATTERY",
+          "elements": 148
+        },
+        {
+          "name": "botTeleportCenter",
+          "elements": 146
+        },
+        {
+          "name": "determineChallenge",
+          "elements": 145
+        },
+        {
+          "name": "superNano (70-79)",
+          "elements": 145
+        },
+        {
+          "name": "determineObjectiveType",
+          "elements": 144
+        },
+        {
+          "name": "explosionSequence",
+          "elements": 144
+        },
+        {
+          "name": "STRIKER (WRECKING BALL) PILE DRIVER",
+          "elements": 144
+        },
+        {
+          "name": "BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)",
+          "elements": 142
+        },
+        {
+          "name": "PLAYERS REPAIR TERMINALS",
+          "elements": 141
+        },
+        {
+          "name": "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)",
+          "elements": 138
+        },
+        {
+          "name": "BEHEMOTH GAS STREAM (BOSS)",
+          "elements": 137
+        },
+        {
+          "name": "HITCHHIKER LIFEBONDS",
+          "elements": 137
+        },
+        {
+          "name": "PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)",
+          "elements": 136
+        },
+        {
+          "name": "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)",
+          "elements": 136
+        },
+        {
+          "name": "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)",
+          "elements": 136
+        },
+        {
+          "name": "BOT INITIALIZATION",
+          "elements": 135
+        },
+        {
+          "name": "BOTS MOVE THROUGH SPAWN DOORS",
+          "elements": 135
+        },
+        {
+          "name": "SPAWN BOSS",
+          "elements": 133
+        },
+        {
+          "name": "selectTarget",
+          "elements": 132
+        },
+        {
+          "name": "PLAYER SELECTS/RESELECTS HERO",
+          "elements": 131
+        },
+        {
+          "name": "botHeroRandomization",
+          "elements": 127
+        },
+        {
+          "name": "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS",
+          "elements": 127
+        },
+        {
+          "name": "BASIC (REAPER) SHADOW STEP (BOSS)",
+          "elements": 127
+        },
+        {
+          "name": "playerForceField (10-19)",
+          "elements": 127
+        },
+        {
+          "name": "BOTS MELEE",
+          "elements": 126
+        },
+        {
+          "name": "RIDER ATTACH TO TEAMMATES",
+          "elements": 123
+        },
+        {
+          "name": "RUSHER MOLTEN CORE (BOSS)",
+          "elements": 122
+        },
+        {
+          "name": "SET UP TERMINAL POSITIONS",
+          "elements": 120
+        },
+        {
+          "name": "ENSNARER (HAZARD) BLOCKS PLAYERS",
+          "elements": 120
+        },
+        {
+          "name": "CHARGE BATTERY (USAGE AND COOLDOWNS)",
+          "elements": 120
+        },
+        {
+          "name": "RIDER USE GRAPPLING HOOK",
+          "elements": 118
+        },
+        {
+          "name": "PREGAME SPAWN ROOM ROTATION",
+          "elements": 117
+        },
+        {
+          "name": "P.U.P. TARGET",
+          "elements": 116
+        },
+        {
+          "name": "PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)",
+          "elements": 113
+        },
+        {
+          "name": "playerObjectiveEntityMangement",
+          "elements": 113
+        },
+        {
+          "name": "SURVIVOR REACHES EXTRACTION SITE",
+          "elements": 110
+        },
+        {
+          "name": "PLAYER MENU INITIALIZATION",
+          "elements": 108
+        },
+        {
+          "name": "nukeMap",
+          "elements": 107
+        },
+        {
+          "name": "BIOWASTE IS PICKED UP",
+          "elements": 106
+        },
+        {
+          "name": "determineZombieMode",
+          "elements": 105
+        },
+        {
+          "name": "ZOMBIES SPAWN AT REIGNITED",
+          "elements": 105
+        },
+        {
+          "name": "enableMutations",
+          "elements": 103
+        },
+        {
+          "name": "PLAYER EXTRACTION CONTROL",
+          "elements": 102
+        },
+        {
+          "name": "BOT BECOMES ZOMBIE EGG",
+          "elements": 101
+        },
+        {
+          "name": "CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)",
+          "elements": 101
+        },
+        {
+          "name": "INCREASE OBJECTIVE CAPTURE PERCENTAGE",
+          "elements": 100
+        },
+        {
+          "name": "DECREASES CAPTURE PERCENTAGE",
+          "elements": 99
+        },
+        {
+          "name": "PLAYER AFK",
+          "elements": 96
+        },
+        {
+          "name": "SMOLDER (WINSTON) SEES PLAYER",
+          "elements": 95
+        },
+        {
+          "name": "SPAWN BOTS",
+          "elements": 92
+        },
+        {
+          "name": "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE",
+          "elements": 90
+        },
+        {
+          "name": "noCooldowns (20-29)",
+          "elements": 88
+        },
+        {
+          "name": "PYROTECHNIC APPLIES DAMAGE",
+          "elements": 88
+        },
+        {
+          "name": "PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY)",
+          "elements": 86
+        },
+        {
+          "name": "KILL BOTS THAT ARE STUCK OR ARE NOT MOVING",
+          "elements": 86
+        },
+        {
+          "name": "restoreDefaultFacingMovement",
+          "elements": 86
+        },
+        {
+          "name": "locateAveragePlayerLocation",
+          "elements": 85
+        },
+        {
+          "name": "DESELECT BOT TARGET",
+          "elements": 84
+        },
+        {
+          "name": "RANDOM ABILITIES",
+          "elements": 82
+        },
+        {
+          "name": "enterExitTeleport",
+          "elements": 80
+        },
+        {
+          "name": "randomActions",
+          "elements": 79
+        },
+        {
+          "name": "PLAYER GETS DOWNED",
+          "elements": 79
+        },
+        {
+          "name": "BOT TARGET VISIBLE",
+          "elements": 79
+        },
+        {
+          "name": "DOWNFALLEN (SIGMA) FIRES",
+          "elements": 79
+        },
+        {
+          "name": "SMOLDER BOSS SLAM",
+          "elements": 77
+        },
+        {
+          "name": "PLAGUE DOCTOR REDUCES PLAYERS' INFECTION LEVELS",
+          "elements": 76
+        },
+        {
+          "name": "TRIGGER OVERTIME MUSIC",
+          "elements": 75
+        },
+        {
+          "name": "minibossMutation",
+          "elements": 75
+        },
+        {
+          "name": "PLAYER SAYS GROUP UP TO SURVIVOR",
+          "elements": 74
+        },
+        {
+          "name": "MODIFY KILL ZONE SCORE",
+          "elements": 74
+        },
+        {
+          "name": "BRUTE, GLADIATOR, AND SMOLDER ALTERNATE ATTACK CONTROL",
+          "elements": 74
+        },
+        {
+          "name": "DELETE PATH",
+          "elements": 73
+        },
+        {
+          "name": "TELEPORT BOTS WHEN NOT USED FOR TOO LONG",
+          "elements": 72
+        },
+        {
+          "name": "ASSIGN ZOMBIE TO BECOME EGG",
+          "elements": 71
+        },
+        {
+          "name": "SWARM SHOOTOUT",
+          "elements": 69
+        },
+        {
+          "name": "bossReturn",
+          "elements": 67
+        },
+        {
+          "name": "BOTS TELEPORT TO THE EGG",
+          "elements": 67
+        },
+        {
+          "name": "PLAYERS ON OBJECTIVE CONTROL",
+          "elements": 65
+        },
+        {
+          "name": "RIDER DETATCH FROM TEAMMATES WHILE ALIVE",
+          "elements": 62
+        },
+        {
+          "name": "ATTACK SPAWN ROOM CONTROL",
+          "elements": 60
+        },
+        {
+          "name": "EXTRACTION ZONE INFECTION INCREASE",
+          "elements": 60
+        },
+        {
+          "name": "SMOLDER ACTIVATES FROM DAMAGE",
+          "elements": 60
+        },
+        {
+          "name": "PLAYERS IN EXTRACTION POINT CONTROL",
+          "elements": 59
+        },
+        {
+          "name": "SPECIAL EFFECT CONTROLS",
+          "elements": 58
+        },
+        {
+          "name": "BOTS JUMP",
+          "elements": 57
+        },
+        {
+          "name": "BLASTER ROCKET HITS TARGET",
+          "elements": 56
+        },
+        {
+          "name": "BOSS TELEPORT TO TARGET IF NOT USED",
+          "elements": 55
+        },
+        {
+          "name": "abilityThrowdown",
+          "elements": 55
+        },
+        {
+          "name": "CREATE PATH",
+          "elements": 54
+        },
+        {
+          "name": "updateBotSpawnPoints",
+          "elements": 54
+        },
+        {
+          "name": "instantRevive (0-9)",
+          "elements": 54
+        },
+        {
+          "name": "SPAWN TIME CONTROL",
+          "elements": 53
+        },
+        {
+          "name": "TUNNELER (SYMMETRA) BUILDS PORTAL",
+          "elements": 53
+        },
+        {
+          "name": "PLAYER PICKS UP HEALTH PACK",
+          "elements": 52
+        },
+        {
+          "name": "BOTS RECOIL FROM DAMAGE",
+          "elements": 52
+        },
+        {
+          "name": "ultimateCharger (90-99)",
+          "elements": 52
+        },
+        {
+          "name": "START GAME",
+          "elements": 51
+        },
+        {
+          "name": "END VOTING",
+          "elements": 51
+        },
+        {
+          "name": "PLAYERS AT TERMINALS CONTROLS",
+          "elements": 51
+        },
+        {
+          "name": "BOT WANDERS",
+          "elements": 51
+        },
+        {
+          "name": "GLADIATOR (JUNKERQUEEN) COMMAND SHOUT",
+          "elements": 51
+        },
+        {
+          "name": "CADAVER (ANA) DETONATION",
+          "elements": 51
+        },
+        {
+          "name": "PLAYER INFECTION DAMAGE MANAGEMENT",
+          "elements": 50
+        },
+        {
+          "name": "PREVENT PLAYERS FROM LEAVING START EARLY",
+          "elements": 49
+        },
+        {
+          "name": "DAYTAKER'S REVENGE (BOSS)",
+          "elements": 48
+        },
+        {
+          "name": "SMOLDER BOSS EVENT STARTS",
+          "elements": 48
+        },
+        {
+          "name": "ZOMBIE HYBRID",
+          "elements": 48
+        },
+        {
+          "name": "BRUTE KNOCKDOWN",
+          "elements": 47
+        },
+        {
+          "name": "entityFloat",
+          "elements": 46
+        },
+        {
+          "name": "RUSHER (TORB) SPEED MECHANICS",
+          "elements": 46
+        },
+        {
+          "name": "BRUTE FIRE STRIKE (BOSS)",
+          "elements": 46
+        },
+        {
+          "name": "DOWNFALLEN PULLS PLAYERS",
+          "elements": 46
+        },
+        {
+          "name": "RIDER DETACH WHEN DEAD OR TARGET IS DEAD",
+          "elements": 45
+        },
+        {
+          "name": "BRAIN KILLER EXTRA DAMAGE",
+          "elements": 43
+        },
+        {
+          "name": "PLAYER DROPS POWER UP (MANUAL)",
+          "elements": 42
+        },
+        {
+          "name": "BOSS STUCK",
+          "elements": 41
+        },
+        {
+          "name": "updateUsers",
+          "elements": 41
+        },
+        {
+          "name": "UPDATE SUCCESSFUL TELEPORT STATUS",
+          "elements": 41
+        },
+        {
+          "name": "ENSNARER LUNGE",
+          "elements": 40
+        },
+        {
+          "name": "enablePowerups",
+          "elements": 40
+        },
+        {
+          "name": "PREGAME QUICK TIPS FOR PLAYERS",
+          "elements": 39
+        },
+        {
+          "name": "smolderEnraged",
+          "elements": 38
+        },
+        {
+          "name": "MUSIC/ANNOUNCER CONTROL",
+          "elements": 37
+        },
+        {
+          "name": "enableEnhancements",
+          "elements": 35
+        },
+        {
+          "name": "abilityPlacement",
+          "elements": 35
+        },
+        {
+          "name": "biowasteAssignment",
+          "elements": 34
+        },
+        {
+          "name": "SOMBRA USES TRANSLOCATOR",
+          "elements": 34
+        },
+        {
+          "name": "PROTECTOR (KIRIKO) USES CLEANSE",
+          "elements": 33
+        },
+        {
+          "name": "SURVIVOR JUMP",
+          "elements": 32
+        },
+        {
+          "name": "PLAYER DROPS POWER UP (DEATH)",
+          "elements": 32
+        },
+        {
+          "name": "HITCHHIKER PARENT RECIEVES HEALTH POOL",
+          "elements": 32
+        },
+        {
+          "name": "PLAYER LEAVES THE GAME",
+          "elements": 30
+        },
+        {
+          "name": "REIGNITED USES ULTIMATE NEAR PLAYER",
+          "elements": 30
+        },
+        {
+          "name": "UPDATE PREGAME VOTING STATUS",
+          "elements": 29
+        },
+        {
+          "name": "explosionWarning",
+          "elements": 29
+        },
+        {
+          "name": "PLAYER AUTOMATIC RELOAD",
+          "elements": 28
+        },
+        {
+          "name": "RIDER (WIDOWMAKER) ATTACH TO PLAYERS",
+          "elements": 27
+        },
+        {
+          "name": "Fix bot health",
+          "elements": 26
+        },
+        {
+          "name": "BIOWASTE MANAGEMENT",
+          "elements": 26
+        },
+        {
+          "name": "BOMBER (JUNKRAT) SELF DESTRUCT",
+          "elements": 26
+        },
+        {
+          "name": "REIGNITED ULTIMATE ATTACK COUNTER",
+          "elements": 26
+        },
+        {
+          "name": "TUNNELER PORTAL LETS ZOMBIES THROUGH",
+          "elements": 26
+        },
+        {
+          "name": "PLAYER SWITCHES HERO",
+          "elements": 24
+        },
+        {
+          "name": "SMOLDER STAYS ENRAGE DURING BOSS EVENT",
+          "elements": 24
+        },
+        {
+          "name": "biowasteOutput",
+          "elements": 23
+        },
+        {
+          "name": "MOIRA & VENTURE INVIS WHILE USING SKILL",
+          "elements": 23
+        },
+        {
+          "name": "BOT TAKES DAMAGE AND SWITCHES TARGETS",
+          "elements": 23
+        },
+        {
+          "name": "MINIBOSS MESSAGE",
+          "elements": 23
+        },
+        {
+          "name": "STALKER KNOCKBACK BLAST (BOSS)",
+          "elements": 23
+        },
+        {
+          "name": "PYROTECHNIC SETS ENEMIES ON FIRE",
+          "elements": 23
+        },
+        {
+          "name": "EGG SWITCHES THE POSITION FOR YOU",
+          "elements": 22
+        },
+        {
+          "name": "BIOWASTE HOLDER DIES, ORB IS QUEUED AND RESOURCE AMOUNT REMOVED",
+          "elements": 21
+        },
+        {
+          "name": "OBJECTIVE CHANGES AND PLAYER ENTITIES UPDATE",
+          "elements": 21
+        },
+        {
+          "name": "BOT STUN MANAGEMENT",
+          "elements": 21
+        },
+        {
+          "name": "RUSHER MOLTEN CORE BURNS PLAYERS (BOSS)",
+          "elements": 21
+        },
+        {
+          "name": "STRIKER NORMAL PILE DRIVER",
+          "elements": 21
+        },
+        {
+          "name": "PLAYER TARGET (ADD)",
+          "elements": 20
+        },
+        {
+          "name": "enableDisableAbilities",
+          "elements": 19
+        },
+        {
+          "name": "ZOMBIE SHUFFLE",
+          "elements": 19
+        },
+        {
+          "name": "BOSS HEALTH CONTROL (ALL BOSS OBJECTIVES)",
+          "elements": 19
+        },
+        {
+          "name": "OBJECTIVE COMPLETE",
+          "elements": 18
+        },
+        {
+          "name": "DAYTAKER ATTACKS AT HALF HEALTH (BOSS)",
+          "elements": 18
+        },
+        {
+          "name": "SURVIVOR FOLLOW TARGET LETS GO",
+          "elements": 17
+        },
+        {
+          "name": "PLAYER CLEARS DAMAGE OVER TIME",
+          "elements": 17
+        },
+        {
+          "name": "PLAYER TARGET (REMOVE)",
+          "elements": 17
+        },
+        {
+          "name": "TELEPORT BOTS (GENERAL)",
+          "elements": 16
+        },
+        {
+          "name": "POWER UP EFFECT/TEXT MANAGEMENT",
+          "elements": 16
+        },
+        {
+          "name": "SURVIVOR TO BE RESCUED DIES",
+          "elements": 15
+        },
+        {
+          "name": "teleportToClosestPlayer",
+          "elements": 15
+        },
+        {
+          "name": "BOSS TAKES KNOCKBACK",
+          "elements": 14
+        },
+        {
+          "name": "CHARGER KNOCKBACK",
+          "elements": 14
+        },
+        {
+          "name": "BORN TO BATTLE PLAYER EARNS ELIMINATION",
+          "elements": 14
+        },
+        {
+          "name": "DOOMFIST INVIS WHILE ULTING",
+          "elements": 13
+        },
+        {
+          "name": "TRACER INVIS WHILE RECALLING",
+          "elements": 13
+        },
+        {
+          "name": "SUCCESSOR PUNCHES IN RETALIATION",
+          "elements": 13
+        },
+        {
+          "name": "SMOLDER ACTIVATED FROM BOSS EVENT",
+          "elements": 12
+        },
+        {
+          "name": "SUCCESSOR (DOOMFIST) HOLDS BLOCK IF TARGET USE ULTIMATE",
+          "elements": 12
+        },
+        {
+          "name": "PREVENT MATCH TIME FROM UNPAUSING",
+          "elements": 11
+        },
+        {
+          "name": "STRIKER CANCEL BALL FORM",
+          "elements": 11
+        },
+        {
+          "name": "START GAME IF WAITING FOR PLAYERS",
+          "elements": 9
+        },
+        {
+          "name": "CC COOLDOWN FROM DOWNFALLEN/BRUTE",
+          "elements": 9
+        },
+        {
+          "name": "CASSIDY GRENADE HACK",
+          "elements": 9
+        },
+        {
+          "name": "successfulTeleportStatus",
+          "elements": 7
+        }
+      ]
+    },
+    {
+      "id": "QZD5F",
+      "relativePath": "ZSM examples/ZSMM-remixed (QZD5F)/2026-10-30 ZSMM-remixed (QZD5F).opy",
+      "sourceSha256": "fe2e3eaea1b26c6d588aa7c0c498aefd197ed419b8d427bc241bd8befe049843",
+      "directives": [
+        "#!extension playMoreEffects",
+        "#!extension spawnMoreDummyBots",
+        "#!optimizeStrict"
+      ],
+      "elements": 32260,
+      "warnings": 143,
+      "elementsNotListedIndividually": 20,
+      "ruleCounts": [
+        {
+          "name": "EFFECTS/TEXTS",
+          "elements": 1589
+        },
+        {
+          "name": "PLAYER ENHANCEMENT INITIALIZATION",
+          "elements": 1444
+        },
+        {
+          "name": "globalObjectiveEntityManagement",
+          "elements": 1350
+        },
+        {
+          "name": "setDifficulty",
+          "elements": 1112
+        },
+        {
+          "name": "botEntityManagement",
+          "elements": 605
+        },
+        {
+          "name": "LASER BARRICADE BLOCKS ZOMBIES",
+          "elements": 598
+        },
+        {
+          "name": "sentryTurret (50-59)",
+          "elements": 508
+        },
+        {
+          "name": "objectivesManagement",
+          "elements": 488
+        },
+        {
+          "name": "powerUpAssignment",
+          "elements": 444
+        },
+        {
+          "name": "GLOBAL MENU INITIALIZATION",
+          "elements": 435
+        },
+        {
+          "name": "EFFECT/TEXT (PERMANENT)",
+          "elements": 410
+        },
+        {
+          "name": "REVIVE PLAYER OR ADVANCE DEATH TIMER",
+          "elements": 406
+        },
+        {
+          "name": "fireSatellite",
+          "elements": 384
+        },
+        {
+          "name": "BEHEMOTH (ROAD) TOXIC CLOUD",
+          "elements": 384
+        },
+        {
+          "name": "DAYTAKER (ILLARI) BURST",
+          "elements": 376
+        },
+        {
+          "name": "HITCHHIKER ATTACH/DETATCH",
+          "elements": 332
+        },
+        {
+          "name": "SLIMER (MERCY) TENTACLE GRAB",
+          "elements": 328
+        },
+        {
+          "name": "INITIALIZE SURVIVOR TO BE RESCUED",
+          "elements": 325
+        },
+        {
+          "name": "EFFECTS/TEXTS",
+          "elements": 317
+        },
+        {
+          "name": "WIN/LOSS CONDITIONS",
+          "elements": 315
+        },
+        {
+          "name": "P.U.P. CONTROL",
+          "elements": 307
+        },
+        {
+          "name": "EFFECTS/TEXTS",
+          "elements": 304
+        },
+        {
+          "name": "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)",
+          "elements": 296
+        },
+        {
+          "name": "setAvailableObjectives",
+          "elements": 292
+        },
+        {
+          "name": "setZombieMode",
+          "elements": 290
+        },
+        {
+          "name": "stun (100-109)",
+          "elements": 287
+        },
+        {
+          "name": "EFFECT/TEXT (GLOBAL)",
+          "elements": 282
+        },
+        {
+          "name": "SKIP ASSEMBLING HEROES",
+          "elements": 264
+        },
+        {
+          "name": "powerUpUsage",
+          "elements": 259
+        },
+        {
+          "name": "LASER BARRICADE (PLACEMENT)",
+          "elements": 240
+        },
+        {
+          "name": "teleportBots",
+          "elements": 232
+        },
+        {
+          "name": "beaconofHealing (40-49)",
+          "elements": 232
+        },
+        {
+          "name": "EFFECTS/TEXT",
+          "elements": 230
+        },
+        {
+          "name": "setObjectiveType",
+          "elements": 223
+        },
+        {
+          "name": "PRIME SLIMER (EMRE) FLIGHT (BOSS)",
+          "elements": 221
+        },
+        {
+          "name": "airStrike (30-39)",
+          "elements": 219
+        },
+        {
+          "name": "VARIABLE ASSIGNMENT",
+          "elements": 212
+        },
+        {
+          "name": "PLAYER INITIALIZATION",
+          "elements": 209
+        },
+        {
+          "name": "BRUTE (REIN) SUPER SEISMIC SLAM",
+          "elements": 206
+        },
+        {
+          "name": "STALKER (MOIRA) FADE",
+          "elements": 205
+        },
+        {
+          "name": "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES",
+          "elements": 205
+        },
+        {
+          "name": "BORN TO BATTLE PLAYER USES ABILITY CHARGE",
+          "elements": 196
+        },
+        {
+          "name": "botRespawnInitialization",
+          "elements": 194
+        },
+        {
+          "name": "STRIKER SUPER PILE DRIVER / SMOLDER SUPER SLAM",
+          "elements": 190
+        },
+        {
+          "name": "setPrematchTimer",
+          "elements": 188
+        },
+        {
+          "name": "BOT BECOMES BOSS",
+          "elements": 187
+        },
+        {
+          "name": "bouncePad (80-89)",
+          "elements": 185
+        },
+        {
+          "name": "botStatManagement",
+          "elements": 184
+        },
+        {
+          "name": "mutations",
+          "elements": 182
+        },
+        {
+          "name": "DOWNFALLEN GRABS PLAYER",
+          "elements": 181
+        },
+        {
+          "name": "cloakingDevice (60-69)",
+          "elements": 180
+        },
+        {
+          "name": "SURVIVOR FOLLOW TARGET",
+          "elements": 175
+        },
+        {
+          "name": "BIOMORPHING GOAL START",
+          "elements": 166
+        },
+        {
+          "name": "BOSS DIES (ALL BOSS OBJECTIVES)",
+          "elements": 160
+        },
+        {
+          "name": "BOT DIES",
+          "elements": 160
+        },
+        {
+          "name": "GENERATE SUPPLY DROPS",
+          "elements": 159
+        },
+        {
+          "name": "generateMapGrid",
+          "elements": 157
+        },
+        {
+          "name": "BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)",
+          "elements": 153
+        },
+        {
+          "name": "PLAYER DELIVERS RESOURCE VALUE",
+          "elements": 148
+        },
+        {
+          "name": "CHARGE BATTERY",
+          "elements": 148
+        },
+        {
+          "name": "botTeleportCenter",
+          "elements": 146
+        },
+        {
+          "name": "determineChallenge",
+          "elements": 145
+        },
+        {
+          "name": "superNano (70-79)",
+          "elements": 145
+        },
+        {
+          "name": "determineObjectiveType",
+          "elements": 144
+        },
+        {
+          "name": "explosionSequence",
+          "elements": 144
+        },
+        {
+          "name": "STRIKER (WRECKING BALL) PILE DRIVER",
+          "elements": 144
+        },
+        {
+          "name": "PLAYERS REPAIR TERMINALS",
+          "elements": 141
+        },
+        {
+          "name": "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)",
+          "elements": 138
+        },
+        {
+          "name": "BEHEMOTH GAS STREAM (BOSS)",
+          "elements": 137
+        },
+        {
+          "name": "HITCHHIKER LIFEBONDS",
+          "elements": 137
+        },
+        {
+          "name": "PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)",
+          "elements": 136
+        },
+        {
+          "name": "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)",
+          "elements": 136
+        },
+        {
+          "name": "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)",
+          "elements": 136
+        },
+        {
+          "name": "BOTS MOVE THROUGH SPAWN DOORS",
+          "elements": 135
+        },
+        {
+          "name": "SPAWN BOSS",
+          "elements": 133
+        },
+        {
+          "name": "PLAYER SELECTS/RESELECTS HERO",
+          "elements": 131
+        },
+        {
+          "name": "botHeroRandomization",
+          "elements": 127
+        },
+        {
+          "name": "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS",
+          "elements": 127
+        },
+        {
+          "name": "BOT INITIALIZATION",
+          "elements": 127
+        },
+        {
+          "name": "BASIC (REAPER) SHADOW STEP (BOSS)",
+          "elements": 127
+        },
+        {
+          "name": "playerForceField (10-19)",
+          "elements": 127
+        },
+        {
+          "name": "BOTS MELEE",
+          "elements": 126
+        },
+        {
+          "name": "RIDER ATTACH TO TEAMMATES",
+          "elements": 123
+        },
+        {
+          "name": "RUSHER MOLTEN CORE (BOSS)",
+          "elements": 122
+        },
+        {
+          "name": "SET UP TERMINAL POSITIONS",
+          "elements": 120
+        },
+        {
+          "name": "ENSNARER (HAZARD) BLOCKS PLAYERS",
+          "elements": 120
+        },
+        {
+          "name": "CHARGE BATTERY (USAGE AND COOLDOWNS)",
+          "elements": 120
+        },
+        {
+          "name": "RIDER USE GRAPPLING HOOK",
+          "elements": 118
+        },
+        {
+          "name": "PREGAME SPAWN ROOM ROTATION",
+          "elements": 117
+        },
+        {
+          "name": "P.U.P. TARGET",
+          "elements": 116
+        },
+        {
+          "name": "PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)",
+          "elements": 113
+        },
+        {
+          "name": "playerObjectiveEntityMangement",
+          "elements": 113
+        },
+        {
+          "name": "PLAYERS ON OBJECTIVE CONTROL",
+          "elements": 111
+        },
+        {
+          "name": "SURVIVOR REACHES EXTRACTION SITE",
+          "elements": 110
+        },
+        {
+          "name": "PLAYER MENU INITIALIZATION",
+          "elements": 108
+        },
+        {
+          "name": "nukeMap",
+          "elements": 107
+        },
+        {
+          "name": "BIOWASTE IS PICKED UP",
+          "elements": 106
+        },
+        {
+          "name": "selectTarget",
+          "elements": 106
+        },
+        {
+          "name": "determineZombieMode",
+          "elements": 105
+        },
+        {
+          "name": "enableMutations",
+          "elements": 103
+        },
+        {
+          "name": "PLAYER EXTRACTION CONTROL",
+          "elements": 102
+        },
+        {
+          "name": "BOT BECOMES ZOMBIE EGG",
+          "elements": 101
+        },
+        {
+          "name": "BEHEMOTH HOOK (WHOLE HOG MODE)",
+          "elements": 100
+        },
+        {
+          "name": "CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)",
+          "elements": 99
+        },
+        {
+          "name": "PLAYER AFK",
+          "elements": 96
+        },
+        {
+          "name": "SMOLDER (WINSTON) SEES PLAYER",
+          "elements": 95
+        },
+        {
+          "name": "SPAWN BOTS",
+          "elements": 92
+        },
+        {
+          "name": "MODIFY OBJECTIVE CAPTURE PERCENTAGE",
+          "elements": 91
+        },
+        {
+          "name": "PREGAME QUICK TIPS FOR PLAYERS",
+          "elements": 90
+        },
+        {
+          "name": "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE",
+          "elements": 90
+        },
+        {
+          "name": "noCooldowns (20-29)",
+          "elements": 88
+        },
+        {
+          "name": "PYROTECHNIC APPLIES DAMAGE",
+          "elements": 88
+        },
+        {
+          "name": "PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY)",
+          "elements": 86
+        },
+        {
+          "name": "KILL BOTS THAT ARE STUCK OR ARE NOT MOVING",
+          "elements": 86
+        },
+        {
+          "name": "restoreDefaultFacingMovement",
+          "elements": 86
+        },
+        {
+          "name": "locateAveragePlayerLocation",
+          "elements": 85
+        },
+        {
+          "name": "DESELECT BOT TARGET",
+          "elements": 84
+        },
+        {
+          "name": "minibossMutation",
+          "elements": 83
+        },
+        {
+          "name": "RANDOM ABILITIES",
+          "elements": 82
+        },
+        {
+          "name": "SPECIAL EFFECT CONTROLS",
+          "elements": 80
+        },
+        {
+          "name": "enterExitTeleport",
+          "elements": 80
+        },
+        {
+          "name": "3RD PERSON (第三视角)",
+          "elements": 80
+        },
+        {
+          "name": "PLAYER SAYS GROUP UP TO SURVIVOR",
+          "elements": 79
+        },
+        {
+          "name": "PLAYER GETS DOWNED",
+          "elements": 79
+        },
+        {
+          "name": "BOT TARGET VISIBLE",
+          "elements": 79
+        },
+        {
+          "name": "DOWNFALLEN (SIGMA) FIRES",
+          "elements": 79
+        },
+        {
+          "name": "PLAGUE DOCTOR REDUCES PLAYERS' INFECTION LEVELS",
+          "elements": 76
+        },
+        {
+          "name": "TRIGGER OVERTIME MUSIC",
+          "elements": 75
+        },
+        {
+          "name": "MINIBOSS DECREASES CAPTURE PERCENTAGE",
+          "elements": 75
+        },
+        {
+          "name": "MODIFY KILL ZONE SCORE",
+          "elements": 74
+        },
+        {
+          "name": "BRUTE, GLADIATOR, AND SMOLDER ALTERNATE ATTACK CONTROL",
+          "elements": 74
+        },
+        {
+          "name": "DELETE PATH",
+          "elements": 73
+        },
+        {
+          "name": "TELEPORT BOTS WHEN NOT USED FOR TOO LONG",
+          "elements": 72
+        },
+        {
+          "name": "bossReturn",
+          "elements": 67
+        },
+        {
+          "name": "ASSIGN ZOMBIE TO BECOME EGG",
+          "elements": 67
+        },
+        {
+          "name": "BOTS TELEPORT TO THE EGG",
+          "elements": 67
+        },
+        {
+          "name": "SWARM SHOOTOUT",
+          "elements": 66
+        },
+        {
+          "name": "RIDER DETATCH FROM TEAMMATES WHILE ALIVE",
+          "elements": 62
+        },
+        {
+          "name": "ATTACK SPAWN ROOM CONTROL",
+          "elements": 60
+        },
+        {
+          "name": "EXTRACTION ZONE INFECTION INCREASE",
+          "elements": 60
+        },
+        {
+          "name": "PLAYERS IN EXTRACTION POINT CONTROL",
+          "elements": 59
+        },
+        {
+          "name": "BOTS JUMP",
+          "elements": 57
+        },
+        {
+          "name": "jetpack cat abilities SLICER (VENTURE) ABILITIES",
+          "elements": 56
+        },
+        {
+          "name": "BLASTER ROCKET HITS TARGET",
+          "elements": 56
+        },
+        {
+          "name": "BOSS TELEPORT TO TARGET IF NOT USED",
+          "elements": 55
+        },
+        {
+          "name": "abilityThrowdown",
+          "elements": 55
+        },
+        {
+          "name": "CREATE PATH",
+          "elements": 54
+        },
+        {
+          "name": "updateBotSpawnPoints",
+          "elements": 54
+        },
+        {
+          "name": "instantRevive (0-9)",
+          "elements": 54
+        },
+        {
+          "name": "SPAWN TIME CONTROL",
+          "elements": 53
+        },
+        {
+          "name": "TUNNELER (SYMMETRA) BUILDS PORTAL",
+          "elements": 53
+        },
+        {
+          "name": "PLAYER PICKS UP HEALTH PACK",
+          "elements": 52
+        },
+        {
+          "name": "BOTS RECOIL FROM DAMAGE",
+          "elements": 52
+        },
+        {
+          "name": "ultimateCharger (90-99)",
+          "elements": 52
+        },
+        {
+          "name": "START GAME",
+          "elements": 51
+        },
+        {
+          "name": "END VOTING",
+          "elements": 51
+        },
+        {
+          "name": "PLAYERS AT TERMINALS CONTROLS",
+          "elements": 51
+        },
+        {
+          "name": "BOT WANDERS",
+          "elements": 51
+        },
+        {
+          "name": "GLADIATOR (JUNKERQUEEN) COMMAND SHOUT",
+          "elements": 51
+        },
+        {
+          "name": "CADAVER (ANA) DETONATION",
+          "elements": 51
+        },
+        {
+          "name": "PLAYER INFECTION DAMAGE MANAGEMENT",
+          "elements": 50
+        },
+        {
+          "name": "PREVENT PLAYERS FROM LEAVING START EARLY",
+          "elements": 49
+        },
+        {
+          "name": "SMOLDER ACTIVATES FROM DAMAGE",
+          "elements": 49
+        },
+        {
+          "name": "DAYTAKER'S REVENGE (BOSS)",
+          "elements": 48
+        },
+        {
+          "name": "BRUTE KNOCKDOWN",
+          "elements": 47
+        },
+        {
+          "name": "entityFloat",
+          "elements": 46
+        },
+        {
+          "name": "RUSHER (TORB) SPEED MECHANICS",
+          "elements": 46
+        },
+        {
+          "name": "BRUTE FIRE STRIKE (BOSS)",
+          "elements": 46
+        },
+        {
+          "name": "DOWNFALLEN PULLS PLAYERS",
+          "elements": 46
+        },
+        {
+          "name": "ZOMBIE HYBRID",
+          "elements": 46
+        },
+        {
+          "name": "KELVAR RECKONING (Heal by doing Dmg)",
+          "elements": 46
+        },
+        {
+          "name": "RIDER DETACH WHEN DEAD OR TARGET IS DEAD",
+          "elements": 45
+        },
+        {
+          "name": "BOSS STUCK",
+          "elements": 41
+        },
+        {
+          "name": "updateUsers",
+          "elements": 41
+        },
+        {
+          "name": "UPDATE SUCCESSFUL TELEPORT STATUS",
+          "elements": 41
+        },
+        {
+          "name": "ENSNARER LUNGE",
+          "elements": 40
+        },
+        {
+          "name": "enablePowerups",
+          "elements": 40
+        },
+        {
+          "name": "MUSIC/ANNOUNCER CONTROL",
+          "elements": 37
+        },
+        {
+          "name": "PLAYER DROPS POWER UP (MANUAL)",
+          "elements": 36
+        },
+        {
+          "name": "BRAIN KILLER EXTRA DAMAGE",
+          "elements": 36
+        },
+        {
+          "name": "enableEnhancements",
+          "elements": 35
+        },
+        {
+          "name": "abilityPlacement",
+          "elements": 35
+        },
+        {
+          "name": "biowasteAssignment",
+          "elements": 34
+        },
+        {
+          "name": "SOMBRA USES TRANSLOCATOR",
+          "elements": 34
+        },
+        {
+          "name": "PLAYER DROPS POWER UP (DEATH)",
+          "elements": 34
+        },
+        {
+          "name": "PROTECTOR (KIRIKO) USES CLEANSE",
+          "elements": 33
+        },
+        {
+          "name": "SURVIVOR JUMP",
+          "elements": 32
+        },
+        {
+          "name": "HITCHHIKER PARENT RECIEVES HEALTH POOL",
+          "elements": 32
+        },
+        {
+          "name": "roadhogs hook you - RIDER USE GRAPPLING HOOK",
+          "elements": 31
+        },
+        {
+          "name": "PLAYER LEAVES THE GAME",
+          "elements": 30
+        },
+        {
+          "name": "UPDATE PREGAME VOTING STATUS",
+          "elements": 29
+        },
+        {
+          "name": "explosionWarning",
+          "elements": 29
+        },
+        {
+          "name": "PLAYER AUTOMATIC RELOAD",
+          "elements": 28
+        },
+        {
+          "name": "RIDER (WIDOWMAKER) ATTACH TO PLAYERS",
+          "elements": 27
+        },
+        {
+          "name": "Fix bot health",
+          "elements": 26
+        },
+        {
+          "name": "BIOWASTE MANAGEMENT",
+          "elements": 26
+        },
+        {
+          "name": "BOMBER (JUNKRAT) SELF DESTRUCT",
+          "elements": 26
+        },
+        {
+          "name": "TUNNELER PORTAL LETS ZOMBIES THROUGH",
+          "elements": 26
+        },
+        {
+          "name": "CARRION (JETPACK CAT) TRANSPORT",
+          "elements": 26
+        },
+        {
+          "name": "DOOMFIST INVIS WHILE ULTING",
+          "elements": 25
+        },
+        {
+          "name": "MOIRA & VENTURE INVIS WHILE USING SKILL",
+          "elements": 25
+        },
+        {
+          "name": "PLAYER SWITCHES HERO",
+          "elements": 24
+        },
+        {
+          "name": "biowasteOutput",
+          "elements": 23
+        },
+        {
+          "name": "TRACER INVIS WHILE RECALLING",
+          "elements": 23
+        },
+        {
+          "name": "BOT TAKES DAMAGE AND SWITCHES TARGETS",
+          "elements": 23
+        },
+        {
+          "name": "MINIBOSS MESSAGE",
+          "elements": 23
+        },
+        {
+          "name": "STALKER KNOCKBACK BLAST (BOSS)",
+          "elements": 23
+        },
+        {
+          "name": "PYROTECHNIC SETS ENEMIES ON FIRE",
+          "elements": 23
+        },
+        {
+          "name": "BIOWASTE HOLDER DIES, ORB IS QUEUED AND RESOURCE AMOUNT REMOVED",
+          "elements": 21
+        },
+        {
+          "name": "OBJECTIVE CHANGES AND PLAYER ENTITIES UPDATE",
+          "elements": 21
+        },
+        {
+          "name": "BOT STUN MANAGEMENT",
+          "elements": 21
+        },
+        {
+          "name": "RUSHER MOLTEN CORE BURNS PLAYERS (BOSS)",
+          "elements": 21
+        },
+        {
+          "name": "STRIKER NORMAL PILE DRIVER",
+          "elements": 21
+        },
+        {
+          "name": "PLAYER TARGET (ADD)",
+          "elements": 20
+        },
+        {
+          "name": "SCOURGE (DVA) RUSH",
+          "elements": 20
+        },
+        {
+          "name": "SCOURGE REVENGE",
+          "elements": 20
+        },
+        {
+          "name": "enableDisableAbilities",
+          "elements": 19
+        },
+        {
+          "name": "ZOMBIE SHUFFLE",
+          "elements": 19
+        },
+        {
+          "name": "BOSS HEALTH CONTROL (ALL BOSS OBJECTIVES)",
+          "elements": 19
+        },
+        {
+          "name": "OBJECTIVE COMPLETE",
+          "elements": 18
+        },
+        {
+          "name": "DAYTAKER ATTACKS AT HALF HEALTH (BOSS)",
+          "elements": 18
+        },
+        {
+          "name": "SURVIVOR FOLLOW TARGET LETS GO",
+          "elements": 17
+        },
+        {
+          "name": "EGG SWITCHES THE POSITION FOR YOU",
+          "elements": 17
+        },
+        {
+          "name": "PLAYER CLEARS DAMAGE OVER TIME",
+          "elements": 17
+        },
+        {
+          "name": "PLAYER TARGET (REMOVE)",
+          "elements": 17
+        },
+        {
+          "name": "TELEPORT BOTS (GENERAL)",
+          "elements": 16
+        },
+        {
+          "name": "POWER UP EFFECT/TEXT MANAGEMENT",
+          "elements": 16
+        },
+        {
+          "name": "SURVIVOR TO BE RESCUED DIES",
+          "elements": 15
+        },
+        {
+          "name": "teleportToClosestPlayer",
+          "elements": 15
+        },
+        {
+          "name": "BOSS TAKES KNOCKBACK",
+          "elements": 14
+        },
+        {
+          "name": "BORN TO BATTLE PLAYER EARNS ELIMINATION",
+          "elements": 14
+        },
+        {
+          "name": "SUCCESSOR PUNCHES IN RETALIATION",
+          "elements": 13
+        },
+        {
+          "name": "MIZUKI WALL CLIMB",
+          "elements": 13
+        },
+        {
+          "name": "SUCCESSOR (DOOMFIST) HOLDS BLOCK IF TARGET USE ULTIMATE",
+          "elements": 12
+        },
+        {
+          "name": "PREVENT MATCH TIME FROM UNPAUSING",
+          "elements": 11
+        },
+        {
+          "name": "STRIKER CANCEL BALL FORM",
+          "elements": 11
+        },
+        {
+          "name": "SCOURGE REVENGE SYMMETRA",
+          "elements": 10
+        },
+        {
+          "name": "SCOURGE REVENGE TORBJORN",
+          "elements": 10
+        },
+        {
+          "name": "BEHEMOTH HOOK COUNTER (WHOLE HOG MODE)",
+          "elements": 10
+        },
+        {
+          "name": "START GAME IF WAITING FOR PLAYERS",
+          "elements": 9
+        },
+        {
+          "name": "CC COOLDOWN FROM DOWNFALLEN/BRUTE",
+          "elements": 9
+        },
+        {
+          "name": "CASSIDY GRENADE HACK",
+          "elements": 9
+        },
+        {
+          "name": "SCOURGE REVENGE ROADHOG",
+          "elements": 9
+        },
+        {
+          "name": "SCOURGE REVENGE SIGMA",
+          "elements": 9
+        },
+        {
+          "name": "successfulTeleportStatus",
+          "elements": 7
+        },
+        {
+          "name": "SCOURGE REVENGE JUNKRAT",
+          "elements": 7
+        },
+        {
+          "name": "SCOURGE REVENGE ILLARI",
+          "elements": 7
+        },
+        {
+          "name": "randomActions",
+          "elements": 6
+        }
+      ]
+    }
+  ],
+  "differencesByName": [
+    {
+      "name": "REIGNITED (ANRAN) ABILITIES",
+      "original": 188,
+      "remix": 0,
+      "delta": -188
+    },
+    {
+      "name": "SMOLDER SUPER SLAM",
+      "original": 175,
+      "remix": 0,
+      "delta": -175
+    },
+    {
+      "name": "CHARGER (MAUGA) CHARGE",
+      "original": 170,
+      "remix": 0,
+      "delta": -170
+    },
+    {
+      "name": "ZOMBIES SPAWN AT REIGNITED",
+      "original": 105,
+      "remix": 0,
+      "delta": -105
+    },
+    {
+      "name": "INCREASE OBJECTIVE CAPTURE PERCENTAGE",
+      "original": 100,
+      "remix": 0,
+      "delta": -100
+    },
+    {
+      "name": "DECREASES CAPTURE PERCENTAGE",
+      "original": 99,
+      "remix": 0,
+      "delta": -99
+    },
+    {
+      "name": "BOT DIES",
+      "original": 238,
+      "remix": 160,
+      "delta": -78
+    },
+    {
+      "name": "SMOLDER BOSS SLAM",
+      "original": 77,
+      "remix": 0,
+      "delta": -77
+    },
+    {
+      "name": "randomActions",
+      "original": 79,
+      "remix": 6,
+      "delta": -73
+    },
+    {
+      "name": "globalObjectiveEntityManagement",
+      "original": 1400,
+      "remix": 1350,
+      "delta": -50
+    },
+    {
+      "name": "SMOLDER BOSS EVENT STARTS",
+      "original": 48,
+      "remix": 0,
+      "delta": -48
+    },
+    {
+      "name": "smolderEnraged",
+      "original": 38,
+      "remix": 0,
+      "delta": -38
+    },
+    {
+      "name": "REIGNITED USES ULTIMATE NEAR PLAYER",
+      "original": 30,
+      "remix": 0,
+      "delta": -30
+    },
+    {
+      "name": "selectTarget",
+      "original": 132,
+      "remix": 106,
+      "delta": -26
+    },
+    {
+      "name": "REIGNITED ULTIMATE ATTACK COUNTER",
+      "original": 26,
+      "remix": 0,
+      "delta": -26
+    },
+    {
+      "name": "SMOLDER STAYS ENRAGE DURING BOSS EVENT",
+      "original": 24,
+      "remix": 0,
+      "delta": -24
+    },
+    {
+      "name": "BOSS DIES (ALL BOSS OBJECTIVES)",
+      "original": 177,
+      "remix": 160,
+      "delta": -17
+    },
+    {
+      "name": "botStatManagement",
+      "original": 199,
+      "remix": 184,
+      "delta": -15
+    },
+    {
+      "name": "botEntityManagement",
+      "original": 619,
+      "remix": 605,
+      "delta": -14
+    },
+    {
+      "name": "CHARGER KNOCKBACK",
+      "original": 14,
+      "remix": 0,
+      "delta": -14
+    },
+    {
+      "name": "setZombieMode",
+      "original": 303,
+      "remix": 290,
+      "delta": -13
+    },
+    {
+      "name": "SMOLDER ACTIVATED FROM BOSS EVENT",
+      "original": 12,
+      "remix": 0,
+      "delta": -12
+    },
+    {
+      "name": "SMOLDER ACTIVATES FROM DAMAGE",
+      "original": 60,
+      "remix": 49,
+      "delta": -11
+    },
+    {
+      "name": "teleportBots",
+      "original": 241,
+      "remix": 232,
+      "delta": -9
+    },
+    {
+      "name": "BOT INITIALIZATION",
+      "original": 135,
+      "remix": 127,
+      "delta": -8
+    },
+    {
+      "name": "DAYTAKER (ILLARI) BURST",
+      "original": 383,
+      "remix": 376,
+      "delta": -7
+    },
+    {
+      "name": "SLIMER (MERCY) TENTACLE GRAB",
+      "original": 335,
+      "remix": 328,
+      "delta": -7
+    },
+    {
+      "name": "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES",
+      "original": 212,
+      "remix": 205,
+      "delta": -7
+    },
+    {
+      "name": "BRAIN KILLER EXTRA DAMAGE",
+      "original": 43,
+      "remix": 36,
+      "delta": -7
+    },
+    {
+      "name": "bouncePad (80-89)",
+      "original": 191,
+      "remix": 185,
+      "delta": -6
+    },
+    {
+      "name": "PLAYER DROPS POWER UP (MANUAL)",
+      "original": 42,
+      "remix": 36,
+      "delta": -6
+    },
+    {
+      "name": "HITCHHIKER ATTACH/DETATCH",
+      "original": 337,
+      "remix": 332,
+      "delta": -5
+    },
+    {
+      "name": "EGG SWITCHES THE POSITION FOR YOU",
+      "original": 22,
+      "remix": 17,
+      "delta": -5
+    },
+    {
+      "name": "ASSIGN ZOMBIE TO BECOME EGG",
+      "original": 71,
+      "remix": 67,
+      "delta": -4
+    },
+    {
+      "name": "SWARM SHOOTOUT",
+      "original": 69,
+      "remix": 66,
+      "delta": -3
+    },
+    {
+      "name": "CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)",
+      "original": 101,
+      "remix": 99,
+      "delta": -2
+    },
+    {
+      "name": "ZOMBIE HYBRID",
+      "original": 48,
+      "remix": 46,
+      "delta": -2
+    },
+    {
+      "name": "objectivesManagement",
+      "original": 487,
+      "remix": 488,
+      "delta": 1
+    },
+    {
+      "name": "PLAYER DROPS POWER UP (DEATH)",
+      "original": 32,
+      "remix": 34,
+      "delta": 2
+    },
+    {
+      "name": "MOIRA & VENTURE INVIS WHILE USING SKILL",
+      "original": 23,
+      "remix": 25,
+      "delta": 2
+    },
+    {
+      "name": "PLAYER ENHANCEMENT INITIALIZATION",
+      "original": 1440,
+      "remix": 1444,
+      "delta": 4
+    },
+    {
+      "name": "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)",
+      "original": 291,
+      "remix": 296,
+      "delta": 5
+    },
+    {
+      "name": "PLAYER SAYS GROUP UP TO SURVIVOR",
+      "original": 74,
+      "remix": 79,
+      "delta": 5
+    },
+    {
+      "name": "SCOURGE REVENGE JUNKRAT",
+      "original": 0,
+      "remix": 7,
+      "delta": 7
+    },
+    {
+      "name": "SCOURGE REVENGE ILLARI",
+      "original": 0,
+      "remix": 7,
+      "delta": 7
+    },
+    {
+      "name": "PRIME SLIMER (EMRE) FLIGHT (BOSS)",
+      "original": 213,
+      "remix": 221,
+      "delta": 8
+    },
+    {
+      "name": "minibossMutation",
+      "original": 75,
+      "remix": 83,
+      "delta": 8
+    },
+    {
+      "name": "SCOURGE REVENGE ROADHOG",
+      "original": 0,
+      "remix": 9,
+      "delta": 9
+    },
+    {
+      "name": "SCOURGE REVENGE SIGMA",
+      "original": 0,
+      "remix": 9,
+      "delta": 9
+    },
+    {
+      "name": "TRACER INVIS WHILE RECALLING",
+      "original": 13,
+      "remix": 23,
+      "delta": 10
+    },
+    {
+      "name": "SCOURGE REVENGE SYMMETRA",
+      "original": 0,
+      "remix": 10,
+      "delta": 10
+    },
+    {
+      "name": "SCOURGE REVENGE TORBJORN",
+      "original": 0,
+      "remix": 10,
+      "delta": 10
+    },
+    {
+      "name": "BEHEMOTH HOOK COUNTER (WHOLE HOG MODE)",
+      "original": 0,
+      "remix": 10,
+      "delta": 10
+    },
+    {
+      "name": "BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)",
+      "original": 142,
+      "remix": 153,
+      "delta": 11
+    },
+    {
+      "name": "DOOMFIST INVIS WHILE ULTING",
+      "original": 13,
+      "remix": 25,
+      "delta": 12
+    },
+    {
+      "name": "MIZUKI WALL CLIMB",
+      "original": 0,
+      "remix": 13,
+      "delta": 13
+    },
+    {
+      "name": "powerUpUsage",
+      "original": 245,
+      "remix": 259,
+      "delta": 14
+    },
+    {
+      "name": "SCOURGE (DVA) RUSH",
+      "original": 0,
+      "remix": 20,
+      "delta": 20
+    },
+    {
+      "name": "SCOURGE REVENGE",
+      "original": 0,
+      "remix": 20,
+      "delta": 20
+    },
+    {
+      "name": "SPECIAL EFFECT CONTROLS",
+      "original": 58,
+      "remix": 80,
+      "delta": 22
+    },
+    {
+      "name": "CARRION (JETPACK CAT) TRANSPORT",
+      "original": 0,
+      "remix": 26,
+      "delta": 26
+    },
+    {
+      "name": "roadhogs hook you - RIDER USE GRAPPLING HOOK",
+      "original": 0,
+      "remix": 31,
+      "delta": 31
+    },
+    {
+      "name": "botRespawnInitialization",
+      "original": 162,
+      "remix": 194,
+      "delta": 32
+    },
+    {
+      "name": "setAvailableObjectives",
+      "original": 256,
+      "remix": 292,
+      "delta": 36
+    },
+    {
+      "name": "PLAYERS ON OBJECTIVE CONTROL",
+      "original": 65,
+      "remix": 111,
+      "delta": 46
+    },
+    {
+      "name": "KELVAR RECKONING (Heal by doing Dmg)",
+      "original": 0,
+      "remix": 46,
+      "delta": 46
+    },
+    {
+      "name": "PREGAME QUICK TIPS FOR PLAYERS",
+      "original": 39,
+      "remix": 90,
+      "delta": 51
+    },
+    {
+      "name": "jetpack cat abilities SLICER (VENTURE) ABILITIES",
+      "original": 0,
+      "remix": 56,
+      "delta": 56
+    },
+    {
+      "name": "sentryTurret (50-59)",
+      "original": 440,
+      "remix": 508,
+      "delta": 68
+    },
+    {
+      "name": "MINIBOSS DECREASES CAPTURE PERCENTAGE",
+      "original": 0,
+      "remix": 75,
+      "delta": 75
+    },
+    {
+      "name": "REVIVE PLAYER OR ADVANCE DEATH TIMER",
+      "original": 329,
+      "remix": 406,
+      "delta": 77
+    },
+    {
+      "name": "beaconofHealing (40-49)",
+      "original": 155,
+      "remix": 232,
+      "delta": 77
+    },
+    {
+      "name": "3RD PERSON (第三视角)",
+      "original": 0,
+      "remix": 80,
+      "delta": 80
+    },
+    {
+      "name": "MODIFY OBJECTIVE CAPTURE PERCENTAGE",
+      "original": 0,
+      "remix": 91,
+      "delta": 91
+    },
+    {
+      "name": "BEHEMOTH HOOK (WHOLE HOG MODE)",
+      "original": 0,
+      "remix": 100,
+      "delta": 100
+    },
+    {
+      "name": "EFFECTS/TEXTS",
+      "original": 2034,
+      "remix": 2210,
+      "delta": 176
+    },
+    {
+      "name": "STRIKER SUPER PILE DRIVER / SMOLDER SUPER SLAM",
+      "original": 0,
+      "remix": 190,
+      "delta": 190
+    }
+  ],
+  "delta": -4
+}

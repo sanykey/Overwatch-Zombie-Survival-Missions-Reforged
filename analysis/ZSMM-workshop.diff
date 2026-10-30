@@ -1,0 +1,2433 @@
+diff --git a/ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).ow b/ZSM examples/ZSMM-remixed (QZD5F)/2026-10-30 ZSMM-remixed (QZD5F).ow
+index a5932fe..b5e7479 100644
+--- a/ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).ow	
++++ b/ZSM examples/ZSMM-remixed (QZD5F)/2026-10-30 ZSMM-remixed (QZD5F).ow	
+@@ -4,3 +4,3 @@ settings
+ 	{
+-		Description: "[Original Creator: Mazattack#1183]\r\n[Original Game Code: MPJFR]\r\n[Modified by: Kamenrider#11346]\r\nworkshop.codes/786TW\r\n\r\nFight against an endless horde of zombies while completing various objectives. \r\nUse power-ups found in supply drops while you fight off the horde. \r\nGet to the extraction point and watch the map get nuked. Don't leave anyone behind! \r\n\r\nCommunity ZSM Discord: https://discord.gg/3BhYtNfwMj"
++		Description: "[Original Creator: Mazattack#1183]\r\n[Original Game Code: MPJFR]\r\n[Modified by: Kamenrider#11346]\r\nworkshop.codes/786TW\r\n\r\r\n\rModifications based off of Thoth's version(D8TTA)\n\rCrouch, Jump, and Reload for 3rd person!\n\nFight against an endless horde of zombies while completing various objectives. \r\nUse power-ups found in supply drops while you fight off the horde. \r\nGet to the extraction point and watch the map get nuked. Don't leave anyone behind! \r\n\r\nMazattack's Discord: https://discord.gg/3BhYtNfwMj"
+ 		Mode Name: "Zombie Survival Missions Modded"
+@@ -36,12 +36,2 @@ settings
+ 			Tank Role Passive Health Bonus: Always Enabled
+-
+-			disabled maps
+-			{
+-				Busan Sanctuary Lunar New Year
+-				Lijiang Control Center Lunar New Year
+-				Lijiang Garden Lunar New Year
+-				Oasis City Center
+-				Oasis Gardens
+-				Oasis University
+-			}
+ 		}
+@@ -63,3 +53,3 @@ settings
+ 				Antarctic Peninsula 972777519512068154
+-				Oasis 972777519512068292 972777519512068153 972777519512068154
++				Busan 972777519512100008
+ 				Samoa 972777519512068154
+@@ -84,7 +74,2 @@ settings
+ 			Tank Role Passive Health Bonus: Always Enabled
+-
+-			disabled maps
+-			{
+-				Watchpoint: Gibraltar
+-			}
+ 		}
+@@ -120,5 +105,3 @@ settings
+ 			{
+-				Eichenwalde
+ 				King's Row
+-				Paraíso
+ 			}
+@@ -191,5 +174,15 @@ settings
+ 	{
++		Biomorphing: Off
+ 		Boss Size: 2.500
++		Bosses: Off
+ 		Chance to mutate percentage: 25.000
+ 		Default Enhancement: [1]
++		Kill Zone: Off
++		Number of Powerups Per Supply Drop: 6
++		Number of zombies: 8
++		Satellite Uplink: Off
++		Spawn Zombies When Server Load Average is Less Than: 190
++		Standoff: Off
++		Survivor Rescue: Off
++		Zombie Egg: Off
+ 		Zombie Size: 1.000
+@@ -365,3 +358,3 @@ variables
+ 		37: biowasteType
+-		38: anranPortal
++		38: tempWinter
+ 		39: evacPos
+@@ -427,4 +420,5 @@ variables
+ 		99: switchedHeroes
+-		100: anranPortalRise
++		100: tempWinter2
+ 		101: botResourceEntity
++		102: thirdPersonToggle
+ }
+@@ -490,3 +484,2 @@ subroutines
+ 	56: explosionWarning
+-	57: smolderEnraged
+ }
+@@ -545,3 +538,11 @@ rule("PREGAME QUICK TIPS FOR PLAYERS")
+ 			"Hold [{0}] for 5 seconds to switch heroes while in game.", Input Binding String(Button(Reload))), Custom String(
+-			"Hacked zombies cannot infect players."), Custom String("Overheal abilities protect players from infection.")))));
++			"Hacked {0} zombies cannot infect players.", Ability Icon String(Hero(Sombra), Button(Secondary Fire))), Custom String(
++			"Shields {0} block most zombie attacks including floating and roadhog gas attacks. ", Ability Icon String(Hero(Reinhardt),
++			Button(Secondary Fire))), Custom String("Overheal abilities such as rally {0} protect players from infection.",
++			Ability Icon String(Hero(Brigitte), Button(Ultimate))), Custom String(
++			"Third person can be toggled by pressing Crouch [{0}], Jump [{1}], and Reload [{2}].", Input Binding String(Button(Crouch)),
++			Input Binding String(Button(Jump)), Input Binding String(Button(Reload))), Custom String(
++			"Zombies are unable to see anything behind(or inside) a shield/barrier {0}.", Ability Icon String(Hero(Zarya), Button(
++			Ability 1))), Custom String("If there is a player past their death timer {0}, zombies will begin move faster.", Icon String(
++			Skull)), Custom String("Extraction {0} happens faster if a player is within the extraction zone.", Icon String(Arrow: Up))))));
+ 		Loop;
+@@ -741,3 +742,3 @@ rule("setAvailableObjectives")
+ 		Global.objectiveTypeVotes[1] = Array(Null, Workshop Setting Toggle(Custom String("Available Objective Types"), Custom String(
+-			"Showdown"), True, 0));
++			"Standoff"), True, 0));
+ 		"Set objective type votes empty"
+@@ -746,2 +747,8 @@ rule("setAvailableObjectives")
+ 		"Set objective type votes empty"
++		Global.objectiveTypeVotes[3] = Array(Null, Workshop Setting Toggle(Custom String("Available Objective Types"), Custom String(
++			"Biomorphing"), True, 2));
++		"Set objective type votes empty"
++		Global.objectiveTypeVotes[4] = Array(Null, Workshop Setting Toggle(Custom String("Available Objective Types"), Custom String(
++			"Survivor Rescue"), True, 3));
++		"Set objective type votes empty"
+ 		Global.objectiveTypeVotes[5] = Array(Null, Workshop Setting Toggle(Custom String("Available Objective Types"), Custom String(
+@@ -1040,8 +1047,8 @@ rule("setZombieMode")
+ 		"Bot available hero list"
+-		Global.botHeros = Array(Hero(Reaper), Hero(Junkrat), Hero(Torbjörn), Hero(Roadhog), Hero(Reinhardt), Hero(Anran), Hero(Widowmaker),
+-			Hero(Mauga), Hero(Mercy), Hero(Wrecking Ball), Hero(Moira), Hero(Pharah), Hero(Sigma), Hero(Junker Queen), Hero(Illari), Hero(
+-			Hazard), Hero(Symmetra), Hero(Ana), Hero(Winston), Hero(Doomfist), Hero(Kiriko));
++		Global.botHeros = Array(Hero(Reaper), Hero(Junkrat), Hero(Torbjörn), Hero(Roadhog), Hero(Reinhardt), Hero(Jetpack Cat), Hero(
++			Widowmaker), Hero(D.Va), Hero(Mercy), Hero(Wrecking Ball), Hero(Moira), Hero(Pharah), Hero(Sigma), Hero(Junker Queen), Hero(
++			Illari), Hero(Hazard), Hero(Symmetra), Hero(Ana), Hero(Winston), Hero(Doomfist), Hero(Kiriko), Hero(Emre));
+ 		"Zombie types without a boss variation"
+-		Global.nonBossZombies = Array(Hero(Junkrat), Hero(Anran), Hero(Widowmaker), Hero(Junker Queen), Hero(Symmetra), Hero(Ana), Hero(
+-			Doomfist), Hero(Kiriko), Hero(Mauga), Hero(Sigma), Hero(Wrecking Ball));
++		Global.nonBossZombies = Array(Hero(Junkrat), Hero(Jetpack Cat), Hero(Widowmaker), Hero(Junker Queen), Hero(Symmetra), Hero(Ana),
++			Hero(Doomfist), Hero(Kiriko), Hero(D.Va), Hero(Sigma), Hero(Winston));
+ 		"All Zombies"
+@@ -1049,3 +1056,3 @@ rule("setZombieMode")
+ 			"Bot respawn probablities"
+-			Global.botSpawnRates = Array(11, 10, 5, 4, 3, 5, 4, 4, 6, 3, 5, 6, 3, 4, 4, 6, 4, 9, 4);
++			Global.botSpawnRates = Array(11, 4, 5, 4, 3, 10, 4, 5, 6, 3, 5, 4, 4, 4, 4, 6, 4, 10, 4);
+ 		"New Blood"
+@@ -1053,3 +1060,3 @@ rule("setZombieMode")
+ 			"Bot respawn probablities"
+-			Global.botSpawnRates = Array(Null, Null, Null, Null, Null, 10.100, Null, 10, 2, 2, 2, 3.900, 10, 10, 10, 10, 10, 10, 10);
++			Global.botSpawnRates = Array(Null, Null, Null, 5, 5, 20, Null, Null, 10, 10, Null, Null, 30, Null, 10, 5, 5);
+ 		"What'll it be?"
+@@ -1067,3 +1074,3 @@ rule("setZombieMode")
+ 			"Bot respawn probablities"
+-			Global.botSpawnRates = Array(Null, Null, 15, Null, Null, 16, 15, 4, Null, 3, 15, 9, Null, 3, 10, Null, 10);
++			Global.botSpawnRates = Array(Null, Null, Null, Null, Null, 30, Null, 70);
+ 		"Ham N' Hammer"
+@@ -1071,3 +1078,5 @@ rule("setZombieMode")
+ 			"Bot respawn probablities"
+-			Global.botSpawnRates = Array(Null, Null, Null, Null, 50, Null, Null, Null, Null, 50);
++			Global.botSpawnRates = Array(Null, Null, Null, Null, 60, 20, Null, Null, Null, 20);
++		"Whole Hog"
++		Else If(Global.zombieSetting == 7);
+ 		End;
+@@ -1114,3 +1123,3 @@ rule("determineChallenge")
+ 		If(Global.challengeSetting == 0);
+-			Global.challengeSetting = 1;
++			Global.challengeSetting = 3;
+ 		End;
+@@ -1143,3 +1152,3 @@ rule("setDifficulty")
+ 			"Bot damage dealt"
+-			Global.damageDealt = Array(200, 300, 175, 150, 200, 100, 150, 90, 300, 175, 200, 150, 150, 190, 175, 125, 200, 240, 200, 180, 300);
++			Global.damageDealt = Array(200, 300, 175, 150, 200, 180, 150, 90, 300, 175, 200, 150, 150, 190, 175, 125, 200, 240, 200, 180, 300);
+ 		Else;
+@@ -1157,6 +1166,6 @@ rule("setDifficulty")
+ 				"Bot throttle speeds"
+-				Global.throttleSpeeds = Array(0.750, 0.800, 0.900, 0.500, 0.600, 0.600, 0.300, 0.650, 0.600, 0.550, 0.800, 0.550, 0.550, 0.650,
++				Global.throttleSpeeds = Array(0.750, 0.800, 0.900, 0.500, 0.600, 0.700, 0.300, 0.650, 0.600, 0.550, 0.800, 0.550, 0.550, 0.650,
+ 					0.500, 0.550, 0.500, 0.800, 0.900, 0.600, 0.600);
+ 				"Bot damage dealt"
+-				Global.damageDealt = Array(8.500, 7.500, 1, 1, 50, 8, 1, 25, 1, 50, 1, 75, 25, 50, 25, 8.500, 5, 7.500, 50, 50, 50);
++				Global.damageDealt = Array(8.500, 7.500, 1, 1, 50, 25, 1, 25, 1, 50, 1, 75, 25, 50, 25, 8.500, 5, 7.500, 50, 50, 50);
+ 			"Difficulty: 2 Player \"Hard\""
+@@ -1166,3 +1175,3 @@ rule("setDifficulty")
+ 				"Bot bite damage"
+-				Global.biteDamages = Array(15, 10, 12, 40, 30, 5, 2, 12, 15, 20, 15, 45, 20, 30, 7, 15, 7, 10, 10, 20, 20);
++				Global.biteDamages = Array(15, 10, 12, 40, 30, 7, 2, 12, 15, 20, 15, 45, 20, 30, 7, 15, 7, 10, 10, 20, 20);
+ 				"Bot bite durations"
+@@ -1170,6 +1179,6 @@ rule("setDifficulty")
+ 				"Bot throttle speeds"
+-				Global.throttleSpeeds = Array(0.850, 0.900, 1, 0.600, 0.700, 0.600, 0.400, 0.750, 0.700, 0.650, 0.900, 0.650, 0.650, 0.750, 0.600,
++				Global.throttleSpeeds = Array(0.850, 0.900, 1, 0.600, 0.700, 0.800, 0.400, 0.750, 0.700, 0.650, 0.900, 0.650, 0.650, 0.750, 0.600,
+ 					0.650, 0.600, 0.900, 1, 0.700, 0.700);
+ 				"Bot damage dealt"
+-				Global.damageDealt = Array(67, 66, 25, 25, 90, 12, 25, 50, 25, 100, 25, 75, 50, 75, 50, 50, 50, 66, 75, 75, 75);
++				Global.damageDealt = Array(67, 66, 25, 25, 90, 40, 25, 50, 25, 100, 25, 75, 50, 75, 50, 50, 50, 66, 75, 75, 75);
+ 			"Difficulty: 5+ Player \"Legendary\""
+@@ -1183,6 +1192,6 @@ rule("setDifficulty")
+ 				"Bot throttle speeds"
+-				Global.throttleSpeeds = Array(0.900, 0.950, 1, 0.750, 0.850, 0.800, 0.700, 0.800, 0.800, 0.750, 0.900, 0.650, 0.850, 0.800, 0.750,
++				Global.throttleSpeeds = Array(0.900, 0.950, 1, 0.750, 0.850, 0.900, 0.700, 0.800, 0.800, 0.750, 0.900, 0.650, 0.850, 0.800, 0.750,
+ 					0.900, 0.800, 0.950, 1, 0.900, 0.900);
+ 				"Bot damage dealt"
+-				Global.damageDealt = Array(100, 150, 100, 100, 170, 75, 100, 80, 100, 175, 50, 100, 100, 140, 125, 90, 150, 125, 125, 150, 150);
++				Global.damageDealt = Array(100, 150, 100, 100, 170, 100, 100, 80, 100, 175, 50, 100, 100, 140, 125, 90, 150, 125, 125, 150, 150);
+ 			"Difficulty: 3-4 Player \"Expert\""
+@@ -1196,6 +1205,6 @@ rule("setDifficulty")
+ 				"Bot throttle speeds"
+-				Global.throttleSpeeds = Array(0.850, 0.900, 1, 0.600, 0.700, 0.700, 0.400, 0.750, 0.700, 0.650, 0.900, 0.650, 0.650, 0.750, 0.600,
++				Global.throttleSpeeds = Array(0.850, 0.900, 1, 0.600, 0.700, 0.800, 0.400, 0.750, 0.700, 0.650, 0.900, 0.650, 0.650, 0.750, 0.600,
+ 					0.850, 0.700, 0.900, 1, 0.700, 0.700);
+ 				"Bot damage dealt"
+-				Global.damageDealt = Array(90, 125, 50, 50, 130, 40, 50, 50, 50, 150, 1, 75, 75, 90, 75, 85, 100, 125, 100, 100, 100);
++				Global.damageDealt = Array(90, 125, 50, 50, 130, 75, 50, 50, 50, 150, 1, 75, 75, 90, 75, 85, 100, 125, 100, 100, 100);
+ 			End;
+@@ -1436,3 +1445,7 @@ rule("EFFECTS/TEXTS")
+ 		Create HUD Text(All Players(All Teams), Null, Null, Round To Integer(Total Time Elapsed * 0.200, Up) % 2 == 0 ? Custom String(
+-			"This is a modified version: 786TW") : Custom String("Modified by: KamenRider#11346"), Right, 0, Null, Null, Color(Blue),
++			"Based off a modified version: 786TW") : Custom String("Modified by: KamenRider#11346"), Right, 0, Null, Null, Color(Blue),
++			Visible To and String, Visible Always);
++		"Creator/Game Code Promo"
++		Create HUD Text(All Players(All Teams), Null, Null, Round To Integer(Total Time Elapsed * 0.200, Up) % 2 == 0 ? Custom String(
++			"This Version's Code: QZD5F") : Custom String("Remixed by: Rainbowstar#11740"), Right, 0, Null, Null, Color(Blue),
+ 			Visible To and String, Visible Always);
+@@ -1503,5 +1516,6 @@ rule("EFFECTS/TEXTS")
+ 		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.playerMenuStatus[3] == 2), Custom String(
+-			"Zombie Mode: New Blood"), Custom String("The 13 most recent zombie types will spawn"), Global.voting ? Custom String(
+-			"Change Vote (Press [{0}])", Input Binding String(Button(Ability 1))) : Empty Array, Left, 1, Color(Red), Color(Red), Color(
+-			Red), Visible To and String, Default Visibility);
++			"Zombie Mode: ScaredyCat {0} ", Hero Icon String(Hero(Jetpack Cat))), Custom String(
++			"Cats and other mean zombie types will spawn"), Global.voting ? Custom String("Change Vote (Press [{0}])",
++			Input Binding String(Button(Ability 1))) : Empty Array, Left, 1, Color(Red), Color(Red), Color(Red), Visible To and String,
++			Default Visibility);
+ 		"Vote zombie mode text: What'll it be?"
+@@ -1518,11 +1532,18 @@ rule("EFFECTS/TEXTS")
+ 		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.playerMenuStatus[3] == 5), Custom String(
+-			"Zombie Mode: Dinner Rush!"), Custom String("Only zombies with mobility abilities will spawn"), Global.voting ? Custom String(
+-			"Change Vote (Press [{0}])", Input Binding String(Button(Ability 1))) : Empty Array, Left, 1, Color(Blue), Color(Blue), Color(
+-			Blue), Visible To and String, Default Visibility);
++			"Zombie Mode: Nuketown!"), Custom String("Only Cats {1} and DVA {0} zombies will spawn", Hero Icon String(Hero(D.Va)),
++			Hero Icon String(Hero(Jetpack Cat))), Global.voting ? Custom String("Change Vote (Press [{0}])", Input Binding String(Button(
++			Ability 1))) : Empty Array, Left, 1, Color(Turquoise), Color(Turquoise), Color(Turquoise), Visible To and String,
++			Default Visibility);
+ 		"Vote zombie mode text: Ham N' Hammer!"
+ 		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.playerMenuStatus[3] == 6), Custom String(
+-			"Zombie Mode: Ham N' Hammer!"), Custom String("Only Reinhardt {0} and Wrecking Ball {1} zombies will spawn", Hero Icon String(
+-			Hero(Reinhardt)), Hero Icon String(Hero(Wrecking Ball))), Global.voting ? Custom String("Change Vote (Press [{0}])",
+-			Input Binding String(Button(Ability 1))) : Empty Array, Left, 1, Color(Gray), Color(Gray), Color(Gray), Visible To and String,
+-			Default Visibility);
++			"Zombie Mode: Ham N' Hammer!"), Custom String("Only Reinhardt {0}, Wrecking Ball {1}, and Jetpack Cat {2} zombies will spawn",
++			Hero Icon String(Hero(Reinhardt)), Hero Icon String(Hero(Wrecking Ball)), Hero Icon String(Hero(Jetpack Cat))),
++			Global.voting ? Custom String("Change Vote (Press [{0}])", Input Binding String(Button(Ability 1))) : Empty Array, Left, 1,
++			Color(Gray), Color(Gray), Color(Gray), Visible To and String, Default Visibility);
++		"Vote zombie mode text: Whole Hog"
++		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.playerMenuStatus[3] == 7), Custom String(
++			"Zombie Mode: Torture Mode"), Custom String(
++			"Prepare to die as Sigma {0} zombies and MORE will spawn with certain abilities enabled.", Hero Icon String(Hero(Sigma))),
++			Global.voting ? Custom String("Change Vote (Press [{0}])", Input Binding String(Button(Ability 1))) : Empty Array, Left, 1,
++			Color(White), Custom Color(164, 132, 108, 255), Custom Color(164, 132, 108, 255), Visible To and String, Default Visibility);
+ 		"Vote objective type text: No preference"
+@@ -1531,6 +1552,6 @@ rule("EFFECTS/TEXTS")
+ 			Left, 2, Color(Aqua), Color(Aqua), Color(Aqua), Visible To and String, Default Visibility);
+-		"Vote objective type text: Showdown Only"
++		"Vote objective type text: Standoffs Only"
+ 		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.playerMenuStatus[4] == 1), Custom String(
+-			"Objective Type: Showdown {0}", Ability Icon String(Hero(Brigitte), Button(Ultimate))), Custom String(
+-			"Players must contest a point against zombies"), Global.voting ? Custom String("Change Vote (Press [{0}])",
++			"Objective Type: Standoff {0}", Ability Icon String(Hero(Brigitte), Button(Ultimate))), Custom String(
++			"Players must contest a point against powerful zombies"), Global.voting ? Custom String("Change Vote (Press [{0}])",
+ 			Input Binding String(Button(Ability 2))) : Empty Array, Left, 2, Color(Orange), Color(Orange), Color(Orange),
+@@ -1542,2 +1563,13 @@ rule("EFFECTS/TEXTS")
+ 			Color(Red), Color(Red), Color(Red), Visible To and String, Default Visibility);
++		"Vote objective type text: Biomorphing Objectives"
++		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.playerMenuStatus[4] == 3), Custom String(
++			"Objective Type: Biomorphing {0}", Ability Icon String(Hero(Echo), Button(Ultimate))), Custom String(
++			"Break down biowaste into useful powerups! What could go wrong?"), Global.voting ? Custom String("Change Vote (Press [{0}])",
++			Input Binding String(Button(Ability 2))) : Empty Array, Left, 2, Custom Color(135, 206, 250, 255), Color(White), Color(White),
++			Visible To and String, Default Visibility);
++		"Vote objective type text: Survivor Rescue Objectives"
++		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.playerMenuStatus[4] == 4), Custom String(
++			"Objective Type: Survivor Rescue {0}", Icon String(Halo)), Custom String("Lead a survivor to an extraction site"),
++			Global.voting ? Custom String("Change Vote (Press [{0}])", Input Binding String(Button(Ability 2))) : Empty Array, Left, 2,
++			Color(Violet), Color(Violet), Color(Violet), Visible To and String, Default Visibility);
+ 		"Vote objective type text: Kill Zone Objectives"
+@@ -1572,4 +1604,4 @@ rule("EFFECTS/TEXTS")
+ 		Create HUD Text(Filtered Array(All Players(All Teams), First Of(Current Array Element.enhancementValues) == 1), Custom String(
+-			"Enhancement: Kevlar {0}", Icon String(Stop)), Custom String(
+-			"Survivor is equipped with armor that protects against infections"), Custom String("Change Selection (Press [{0}])",
++			"Enhancement: Survivalist {0}", Icon String(Stop)), Custom String(
++			"Player gains 75 armor and lifesteal that heals more at close range"), Custom String("Change Selection (Press [{0}])",
+ 			Input Binding String(Button(Melee))), Left, 3, Custom Color(240, 129, 26, 255), Custom Color(240, 129, 26, 255), Custom Color(
+@@ -1597,8 +1629,7 @@ rule("EFFECTS/TEXTS")
+ 			Color(Orange), Visible To and String, Default Visibility);
+-		"Enhancement Selection: Plague Doctor"
++		"Enhancement Selection: Nano Nurse (AKA Plague Doctor)"
+ 		Create HUD Text(Filtered Array(All Players(All Teams), First Of(Current Array Element.enhancementValues) == 6), Custom String(
+-			"Enhancement: Plague Doctor {0}", Icon String(Plus)), Custom String(
+-			"Deal more healing to infected players while reducing their infection level"), Custom String("Change Selection (Press [{0}])",
+-			Input Binding String(Button(Melee))), Left, 3, Color(Green), Color(Green), Color(Green), Visible To and String,
+-			Default Visibility);
++			"Enhancement: Nano Nurse {0}", Icon String(Plus)), Custom String("Deal and Recieve 50% more Healing!"), Custom String(
++			"Change Selection (Press [{0}])", Input Binding String(Button(Melee))), Left, 3, Color(Yellow), Color(Yellow), Color(Yellow),
++			Visible To and String, Default Visibility);
+ 		"Enhancement Selection: Born to Battle"
+@@ -1606,3 +1637,3 @@ rule("EFFECTS/TEXTS")
+ 			"Enhancement: Born to Battle {0}", Icon String(Bolt)), Custom String(
+-			"Dealing a final blow will give the player a cooldown reset on the next ability they use"), Custom String(
++			"Contributing to an elimination will give the player a cooldown reset on the next ability they use"), Custom String(
+ 			"Change Selection (Press [{0}])", Input Binding String(Button(Melee))), Left, 3, Color(Gray), Color(Gray), Color(Gray),
+@@ -1612,3 +1643,3 @@ rule("EFFECTS/TEXTS")
+ 			"Enhancement: Charge Battery {0}", Icon String(Spiral)), Custom String(
+-			"Survivor can place a battery that gives ultimate charge"), Custom String("Change Selection (Press [{0}])",
++			"Player can place a battery that gives 25% ultimate charge"), Custom String("Change Selection (Press [{0}])",
+ 			Input Binding String(Button(Melee))), Left, 3, Custom Color(236, 206, 44, 255), Custom Color(236, 206, 44, 255), Custom Color(
+@@ -1617,3 +1648,3 @@ rule("EFFECTS/TEXTS")
+ 		Create HUD Text(Filtered Array(All Players(All Teams), First Of(Current Array Element.enhancementValues) == 9), Custom String(
+-			"Enhancement: Hitchhiker {0}", Icon String(Flag)), Custom String("Survivor can attach to a teammate and fuse their health."),
++			"Enhancement: Hitchhiker {0}", Icon String(Flag)), Custom String("Player can attach to a teammate and fuse their health."),
+ 			Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Melee))), Left, 3, Color(Purple), Color(Purple),
+@@ -1622,3 +1653,3 @@ rule("EFFECTS/TEXTS")
+ 		Create HUD Text(Filtered Array(All Players(All Teams), First Of(Current Array Element.enhancementValues) == 10), Custom String(
+-			"Enhancement: P.U.P. {0}", Icon String(Happy)), Custom String("Survivor is equipped with an autonomous friendly droid"),
++			"Enhancement: P.U.P. {0}", Icon String(Happy)), Custom String("Player is equipped with an autonomous friendly droid"),
+ 			Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Melee))), Left, 3, Color(Blue), Color(Blue), Color(
+@@ -1643,3 +1674,3 @@ rule("SPECIAL EFFECT CONTROLS")
+ 		If(Global.specialGameModeSetup);
+-			Global.randVal = Random Integer(1, 3);
++			Global.randVal = Random Integer(1, 5);
+ 			If(Global.randVal == 1);
+@@ -1647,5 +1678,9 @@ rule("SPECIAL EFFECT CONTROLS")
+ 			Else If(Global.randVal == 2);
+-				Global.specialEffectsStrings = Custom String("You won't win");
++				Global.specialEffectsStrings = Custom String("Dani Moonstar...");
+ 			Else If(Global.randVal == 3);
++				Global.specialEffectsStrings = Custom String("You won't win");
++			Else If(Global.randVal == 4);
+ 				Global.specialEffectsStrings = Custom String("Don't even try it");
++			Else If(Global.randVal == 5);
++				Global.specialEffectsStrings = Custom String("Your funeral...");
+ 			End;
+@@ -2211,3 +2246,3 @@ rule("PREVENT PLAYERS FROM LEAVING START EARLY")
+ 	{
+-		Wait(2, Abort When False);
++		Wait(8, Abort When False);
+ 		If(!Global.specialGameMode);
+@@ -2233,24 +2268,2 @@ rule("randomActions")
+ 		Event Player.randVal = Random Integer(1, 4);
+-		"Random emote"
+-		If(Event Player.randVal <= 1);
+-			Communicate(Event Player, Emote Up);
+-		Else If(Event Player.randVal <= 2);
+-			Communicate(Event Player, Emote Down);
+-		Else If(Event Player.randVal <= 3);
+-			Communicate(Event Player, Emote Left);
+-		Else If(Event Player.randVal <= 4);
+-			Communicate(Event Player, Emote Right);
+-		End;
+-		Wait(1, Ignore Condition);
+-		Event Player.randVal = Random Integer(1, 4);
+-		"Random voice line"
+-		If(Event Player.randVal <= 1);
+-			Communicate(Event Player, Voice Line Up);
+-		Else If(Event Player.randVal <= 2);
+-			Communicate(Event Player, Voice Line Down);
+-		Else If(Event Player.randVal <= 3);
+-			Communicate(Event Player, Voice Line Left);
+-		Else If(Event Player.randVal <= 4);
+-			Communicate(Event Player, Voice Line Right);
+-		End;
+ 	}
+@@ -2507,4 +2520,3 @@ rule("SWARM SHOOTOUT")
+ 		If(Array Contains(Array(Hero(Reinhardt), Hero(Pharah), Hero(Sigma), Hero(Winston)), Hero Of(Event Player)));
+-		Else If(Array Contains(Array(Hero(Torbjörn), Hero(Moira), Hero(Symmetra), Hero(Kiriko), Hero(Mauga), Hero(Anran)), Hero Of(
+-				Event Player)));
++		Else If(Array Contains(Array(Hero(Torbjörn), Hero(Moira), Hero(Symmetra), Hero(Kiriko), Hero(Mauga)), Hero Of(Event Player)));
+ 			Allow Button(Event Player, Button(Secondary Fire));
+@@ -2579,12 +2591,2 @@ rule("PLAYER LEAVES THE GAME")
+ 
+-disabled rule("INFECTION DOME DAMAGE")
+-{
+-	event
+-	{
+-		Ongoing - Each Player;
+-		Team 1;
+-		Jetpack Cat;
+-	}
+-}
+-
+ rule("OBJECTIVE COMPLETE")
+@@ -2655,3 +2657,3 @@ rule("objectivesManagement")
+ 			Global.goalCheck = False;
+-			"Checks if current objective is showdown"
++			"Checks if current objective is standoff"
+ 			If(First Of(Global.objectiveTypes) == 1);
+@@ -2659,3 +2661,3 @@ rule("objectivesManagement")
+ 				Play Effect(All Players(All Teams), Ring Explosion Sound, Color(Orange), First Of(Global.objectivePositions), 200);
+-				Big Message(All Players(All Teams), Custom String("Showdown Conquered!"));
++				Big Message(All Players(All Teams), Custom String("Standoff Conquered!"));
+ 			"Checks if current objective is bosses"
+@@ -2706,9 +2708,8 @@ rule("objectivesManagement")
+ 			If(First Of(Global.objectiveTypes) == 1);
+-				Global.objectiveDescription = Custom String("Keep zombies away in the Showdown!");
++				Global.objectiveDescription = Custom String("Hold your ground in the Standoff!");
+ 				Global.objectiveCaptureValue = 0;
+-				Chase Global Variable At Rate(objectiveRad, Max(5, Global.objectiveCaptureValue / 4), 1, Destination and Rate);
++				Global.objectiveRad = 10;
+ 				Global.objectiveColor = Color(Orange);
+-				Big Message(All Players(All Teams), Custom String("Proceed to the Showdown!"));
+-				Global.goalPost = 25;
+-				Global.queuedGoalType = Empty Array;
++				Global.goalCheck = Global.challengeSetting > 1 ? 50 : 33;
++				Big Message(All Players(All Teams), Custom String("Proceed to the Standoff!"));
+ 			Else If(First Of(Global.objectiveTypes) == 2);
+@@ -2796,6 +2797,2 @@ rule("globalObjectiveEntityManagement")
+ 				Modify Global Variable(objectiveEntities, Append To Array, Last Text ID);
+-				"Extraction zone dome"
+-				Create Effect(Filtered Array(All Living Players(Team 1), Global.extractionZoneRad < 200), Sphere, Color(Lime Green), First Of(
+-					Global.objectivePositions), Global.extractionZoneRad, Visible To Position and Radius);
+-				Modify Global Variable(objectiveEntities, Append To Array, Last Created Entity);
+ 				"Extraction point boundary 1"
+@@ -2812,2 +2809,6 @@ rule("globalObjectiveEntityManagement")
+ 				Modify Global Variable(objectiveEntities, Append To Array, Last Created Entity);
++				"Extraction zone dome"
++				Create Effect(Filtered Array(All Living Players(Team 1), Global.extractionZoneRad < 200), Sphere, Color(Lime Green), First Of(
++					Global.objectivePositions), Global.extractionZoneRad, Visible To Position and Radius);
++				Modify Global Variable(objectiveEntities, Append To Array, Last Created Entity);
+ 				"Extraction icon"
+@@ -2828,11 +2829,5 @@ rule("globalObjectiveEntityManagement")
+ 				Modify Global Variable(objectiveEntities, Append To Array, Last Text ID);
+-				"Zone Ring"
+-				Create Effect(Filtered Array(Local Player, Y Component Of(Position Of(Local Player)) > Y Component Of(First Of(
+-					Global.objectivePositions)) + 4), Ring, Global.objectiveColor, First Of(Global.objectivePositions), Global.objectiveRad,
+-					Visible To Position Radius and Color);
+-				Modify Global Variable(objectiveEntities, Append To Array, Last Created Entity);
+-				"Zone Ring"
+-				Create Effect(All Players(All Teams), Ring, Global.objectiveColor, Vector(X Component Of(First Of(Global.objectivePositions)),
+-					Y Component Of(Position Of(Local Player)), Z Component Of(First Of(Global.objectivePositions))), Global.objectiveRad,
+-					Visible To Position Radius and Color);
++				"Objective boundary (Ring)"
++				Create Effect(All Players(All Teams), Ring, Global.objectiveColor, First Of(Global.objectivePositions) + Vector(0, -1, 0),
++					Global.objectiveRad, Visible To and Color);
+ 				Modify Global Variable(objectiveEntities, Append To Array, Last Created Entity);
+@@ -2840,3 +2835,3 @@ rule("globalObjectiveEntityManagement")
+ 				Create Effect(Global.playersOnObjective, Light Shaft, Global.objectiveColor, First Of(Global.objectivePositions) + Vector(0, -30,
+-					0), Global.objectiveRad, Visible To Position Radius and Color);
++					0), Global.objectiveRad, Visible To and Color);
+ 				Modify Global Variable(objectiveEntities, Append To Array, Last Created Entity);
+@@ -2844,3 +2839,3 @@ rule("globalObjectiveEntityManagement")
+ 				Create Effect(Filtered Array(All Players(All Teams), Count Of(Global.playersOnObjective) > 0), Light Shaft, Global.objectiveColor,
+-					First Of(Global.objectivePositions) + Vector(0, -10, 0), Global.objectiveRad / 20, Visible To Position Radius and Color);
++					First Of(Global.objectivePositions) + Vector(0, -10, 0), Global.objectiveRad / 20, Visible To and Color);
+ 				Modify Global Variable(objectiveEntities, Append To Array, Last Created Entity);
+@@ -2857,6 +2852,5 @@ rule("globalObjectiveEntityManagement")
+ 				Create HUD Text(All Players(All Teams), Custom String("Capture Percentage: {0}%", Round To Integer(Global.objectiveCaptureValue,
+-					Down)), Custom String("Objectives remaining: {0}", Count Of(Global.objectivePositions) - 1), Custom String("{0} {2}", Count Of(
+-					Global.playersOnObjective) > 0 ? Custom String("Allies: {0}", Count Of(Global.playersOnObjective)) : Empty Array, Null,
+-					Count Of(Global.queuedGoalType) > 0 ? Custom String("Foes: {0}", Count Of(Global.queuedGoalType)) : Empty Array), Top, 1,
+-					Global.objectiveColor, Global.objectiveColor, Global.objectiveColor, Visible To String and Color, Default Visibility);
++					Down)), Custom String("Objectives remaining: {0}", Count Of(Global.objectivePositions) - 1), Count Of(
++					Global.playersOnObjective) > 0 ? Count Of(Global.playersOnObjective) : Empty Array, Top, 1, Global.objectiveColor,
++					Global.objectiveColor, Global.objectiveColor, Visible To String and Color, Default Visibility);
+ 				Modify Global Variable(objectiveEntities, Append To Array, Last Text ID);
+@@ -3232,3 +3226,3 @@ rule("WIN/LOSS CONDITIONS")
+ 
+-disabled rule("============================================== OBJECTIVE TYPE: SHOWDOWN  ==============================================")
++disabled rule("============================================== OBJECTIVE TYPE: STANDOFF  ==============================================")
+ {
+@@ -3256,4 +3250,5 @@ rule("PLAYERS ON OBJECTIVE CONTROL")
+ 		Has Spawned(Event Player) == True;
+-		"Objective Cylinder Height As Above, So Below"
+-		Absolute Value(Y Component Of(First Of(Global.objectivePositions)) - Y Component Of(Position Of(Event Player))) < 12;
++		"Objective Cylinder Height as Above"
++		Absolute Value(Y Component Of(First Of(Global.objectivePositions)) - Y Component Of(Position Of(Event Player)))
++			< Global.objectiveRad;
+ 		"Objective Cylinder Radius"
+@@ -3261,2 +3256,6 @@ rule("PLAYERS ON OBJECTIVE CONTROL")
+ 			Z Component Of(First Of(Global.objectivePositions))), Position Of(Event Player)) < Global.objectiveRad;
++		(Array Contains(Global.playersOnObjective, Event Player) || Is In Line of Sight(Eye Position(Event Player), First Of(
++			Global.objectivePositions) + Vector(0, Max(0, Y Component Of(Eye Position(Event Player)) - Y Component Of(First Of(
++			Global.objectivePositions))), 0) + Direction Towards(First Of(Global.objectivePositions), Eye Position(Event Player)) * Min(1,
++			Distance Between(Eye Position(Event Player), First Of(Global.objectivePositions))), Barriers Do Not Block LOS)) == True;
+ 	}
+@@ -3265,10 +3264,5 @@ rule("PLAYERS ON OBJECTIVE CONTROL")
+ 	{
+-		If(Is Dummy Bot(Event Player));
+-			If(!Array Contains(Global.queuedGoalType, Event Player));
+-				Modify Global Variable(queuedGoalType, Append To Array, Event Player);
+-			End;
+-		Else;
+-			If(!Array Contains(Global.playersOnObjective, Event Player));
+-				Modify Global Variable(playersOnObjective, Append To Array, Event Player);
+-			End;
++		Abort If(!Array Contains(Global.miniBoss, Event Player) && Team Of(Event Player) == Team 2);
++		If(!Array Contains(Global.playersOnObjective, Event Player));
++			Modify Global Variable(playersOnObjective, Append To Array, Event Player);
+ 		End;
+@@ -3277,3 +3271,2 @@ rule("PLAYERS ON OBJECTIVE CONTROL")
+ 		Modify Global Variable(playersOnObjective, Remove From Array By Value, Event Player);
+-		Modify Global Variable(queuedGoalType, Remove From Array By Value, Event Player);
+ 	}
+@@ -3281,3 +3274,3 @@ rule("PLAYERS ON OBJECTIVE CONTROL")
+ 
+-rule("INCREASE OBJECTIVE CAPTURE PERCENTAGE")
++rule("MODIFY OBJECTIVE CAPTURE PERCENTAGE")
+ {
+@@ -3300,5 +3293,3 @@ rule("INCREASE OBJECTIVE CAPTURE PERCENTAGE")
+ 		If(Global.objectiveCaptureValue >= 100);
+-			Stop Chasing Global Variable(objectiveRad);
+ 			Global.objectiveComplete = True;
+-			Global.queuedGoalType = Empty Array;
+ 			Global.playersOnObjective = Empty Array;
+@@ -3307,4 +3298,5 @@ rule("INCREASE OBJECTIVE CAPTURE PERCENTAGE")
+ 		Wait(1, Restart When True);
+-		Abort If Condition Is False;
+-		Global.objectiveCaptureValue += Count Of(Global.playersOnObjective) <= 3 ? Count Of(Global.playersOnObjective) + 0.250 : 3.250;
++		Global.objectiveCaptureValue += Count Of(Global.playersOnObjective) <= 3 ? 0.500 * Count Of(Global.playersOnObjective) * (
++			Random Value In Array(Global.miniBoss).botTarget != Null ? 2 : 1) : (Random Value In Array(Global.miniBoss)
++			.botTarget != Null ? 3.250 : 1.750);
+ 		Play Effect(All Players(Team 1), Buff Impact Sound, Color(White), First Of(Global.objectivePositions), (
+@@ -3312,7 +3304,3 @@ rule("INCREASE OBJECTIVE CAPTURE PERCENTAGE")
+ 		If(Global.objectiveCaptureValue >= Global.goalPost);
+-			Global.goalPost += 25;
+-			Play Effect(All Players(All Teams), Ring Explosion, Color(Orange), First Of(Global.objectivePositions), Global.objectiveRad * 2);
+-			Skip If(Global.goalPost >= 100, 2);
+-			Play Effect(All Players(All Teams), Buff Explosion Sound, Null, First Of(Global.objectivePositions), 100);
+-			Small Message(All Players(All Teams), Custom String("  {0} Checkpoint Reached", Icon String(Flag)));
++			Global.goalPost += Global.goalCheck;
+ 		End;
+@@ -3322,3 +3310,3 @@ rule("INCREASE OBJECTIVE CAPTURE PERCENTAGE")
+ 
+-rule("DECREASES CAPTURE PERCENTAGE")
++rule("MINIBOSS DECREASES CAPTURE PERCENTAGE")
+ {
+@@ -3326,3 +3314,5 @@ rule("DECREASES CAPTURE PERCENTAGE")
+ 	{
+-		Ongoing - Global;
++		Ongoing - Each Player;
++		Team 2;
++		All;
+ 	}
+@@ -3331,7 +3321,8 @@ rule("DECREASES CAPTURE PERCENTAGE")
+ 	{
++		Array Contains(Global.miniBoss, Event Player) == True;
++		Array Contains(Global.playersOnObjective, Event Player) == True;
+ 		Global.objectiveTypes[0] == 1;
+ 		Count Of(Global.objectivePositions) > 1;
+-		Count Of(Global.queuedGoalType) > 0;
++		Count Of(Global.playersOnObjective) > 0;
+ 		Global.objectiveComplete == False;
+-		Global.objectiveCaptureValue > Global.goalPost - 25;
+ 	}
+@@ -3340,13 +3331,12 @@ rule("DECREASES CAPTURE PERCENTAGE")
+ 	{
+-		Wait(1, Restart When True);
+-		Abort If(First Of(Global.objectiveTypes) != 1);
+-		Abort If(Count Of(Global.objectivePositions) <= 1);
+-		Global.objectiveCaptureValue -= Global.difficultySetting == 1 ? (Count Of(Global.queuedGoalType) > 3 ? 3 : Count Of(
+-			Global.queuedGoalType)) : Count Of(Global.queuedGoalType) + Global.difficultySetting * 0.750;
+-		Play Effect(All Players(Team 1), Debuff Impact Sound, Null, First Of(Global.objectivePositions), (
+-			0.050 * Global.objectiveCaptureValue) ^ 2);
+-		Global.objectiveColor = Color(Red);
++		Wait(0.500, Abort When False);
++		"decrease capture value"
++		If(Global.objectiveCaptureValue > Global.goalPost - Global.goalCheck);
++			Global.objectiveColor = Color(Red);
++			Global.objectiveCaptureValue -= Global.objectiveCaptureValue <= 0 ? 0 : 0.500 + Global.difficultySetting;
++			Play Effect(All Players(Team 1), Debuff Impact Sound, Color(White), First Of(Global.objectivePositions), (
++				0.050 * Global.objectiveCaptureValue) ^ 2);
++		End;
+ 		Wait(0.500, Ignore Condition);
+-		Abort If(First Of(Global.objectiveTypes) != 1);
+-		Abort If(Count Of(Global.objectivePositions) <= 1);
++		Abort If(Global.objectiveValue != 1);
+ 		Global.objectiveColor = Color(Orange);
+@@ -3438,4 +3428,7 @@ rule("BOT BECOMES BOSS")
+ 		Start Forcing Player To Be Hero(Event Player, Random Value In Array(Global.availableBosses));
++		If(Global.zombieSetting != 6 && Hero Of(Event Player) == Hero(Wrecking Ball));
++			disabled Start Forcing Player To Be Hero(Event Player, Hero(Winston));
++		End;
+ 		"Force a specific boss (FOR TESTING)"
+-		disabled Start Forcing Player To Be Hero(Event Player, Hero(Mercy));
++		disabled Start Forcing Player To Be Hero(Event Player, Hero(Emre));
+ 		Call Subroutine(botRespawnInitialization);
+@@ -3581,3 +3574,2 @@ rule("BOSS DIES (ALL BOSS OBJECTIVES)")
+ 				Event Player.reviveTimer = 10;
+-				Skip(11);
+ 			End;
+@@ -3593,3 +3585,2 @@ rule("BOSS DIES (ALL BOSS OBJECTIVES)")
+ 			Event Player.reviveTimer = 10;
+-			Set Status(Hero Of(Event Player) == Hero(Winston) ? Players On Hero(Hero(Winston), Team 2) : Empty Array, Null, Knocked Down, 12);
+ 		End;
+@@ -4275,3 +4266,5 @@ rule("PLAYER SAYS GROUP UP TO SURVIVOR")
+ 		Global.survivorToRescue.path = Empty Array;
+-		Wait(3, Ignore Condition);
++		Wait(1, Ignore Condition);
++		Press Button(Global.survivorToRescue, Button(Interact));
++		Wait(2, Ignore Condition);
+ 		Global.survivorToRescue.botTempvalue2 = Null;
+@@ -4412,3 +4405,3 @@ rule("ASSIGN ZOMBIE TO BECOME EGG")
+ 		Global.bosses[0] = Random Value In Array(Filtered Array(All Living Players(Team 2),
+-			!Current Array Element.teleporting && !Current Array Element.attached && Current Array Element.botTarget == Null));
++			!Current Array Element.teleporting && Current Array Element.botTarget == Null));
+ 		Loop If Condition Is True;
+@@ -4521,3 +4514,3 @@ rule("EGG SWITCHES THE POSITION FOR YOU")
+ 	{
+-		Global.objectivePositions[0] += Direction Towards(Victim, Attacker) / (Is On Ground(Attacker) ? 3.500 : 9);
++		Global.objectivePositions[0] += Direction Towards(Victim, Attacker) / 3.500;
+ 		"Small stop for high ticks of damage"
+@@ -4893,9 +4886,9 @@ rule("EFFECTS/TEXTS")
+ 			Event Player.infectionLvl >= 1 ? Custom String("{1}Infection Level: {0}", Round To Integer(Event Player.infectionLvl, Down),
+-			Event Player.enhancementValues[0] == 2 ? Icon String(Poison) : Empty Array) : (Event Player.infectionLvl < 0 ? Custom String(
+-			"Vaccine Level: {0}", Absolute Value(Round To Integer(Event Player.infectionLvl, Down))) : (
+-			Event Player.reviving ? Custom String("Reviving: {0}s", Round To Integer(Event Player.reviveTimer, Up)) : Empty Array)), Left,
+-			Normalized Health(Event Player) > 0.970 ? 0 : 1 / (Normalized Health(Event Player) + 1), Normalized Health(Event Player)
+-			> 0.970 ? Color(Blue) : (Normalized Health(Event Player) > 0.660 ? Color(Green) : (Normalized Health(Event Player)
+-			> 0.330 ? Color(Yellow) : (Normalized Health(Event Player) > 0 ? Color(Orange) : Color(Red)))), Color(Red),
+-			Event Player.infectionLvl >= 1 ? Color(Lime Green) : (Event Player.infectionLvl < 0 ? Color(Blue) : Color(Yellow)),
++			Event Player.enhancementValues[0] == 2 ? Ability Icon String(Hero(Reaper), Button(Ability 1)) : Empty Array) : (
++			Event Player.infectionLvl < 0 ? Custom String("Vaccine Level: {0}", Absolute Value(Round To Integer(Event Player.infectionLvl,
++			Down))) : (Event Player.reviving ? Custom String("Reviving: {0}s", Round To Integer(Event Player.reviveTimer, Up))
++			: Empty Array)), Left, Normalized Health(Event Player) > 0.970 ? 0 : 1 / (Normalized Health(Event Player) + 1),
++			Normalized Health(Event Player) > 0.970 ? Color(Blue) : (Normalized Health(Event Player) > 0.660 ? Color(Green) : (
++			Normalized Health(Event Player) > 0.330 ? Color(Yellow) : (Normalized Health(Event Player) > 0 ? Color(Orange) : Color(Red)))),
++			Color(Red), Event Player.infectionLvl >= 1 ? Color(Lime Green) : (Event Player.infectionLvl < 0 ? Color(Blue) : Color(Yellow)),
+ 			Visible To Sort Order String and Color, Default Visibility);
+@@ -4966,4 +4959,7 @@ rule("REVIVE PLAYER OR ADVANCE DEATH TIMER")
+ 			< Global.reviveRadius), 0.500);
+-		If(Is True For Any(Filtered Array(Remove From Array(Global.playerTargetList, Event Player), !Current Array Element.invisible),
+-			Distance Between(Position Of(Event Player), Position Of(Current Array Element)) < Global.reviveRadius));
++		If(Is True For Any(All Players(Team 1), Distance Between(Position Of(Event Player), Vector(X Component Of(
++			Current Array Element.powerUpUsePositionsAndInfo[50]), Y Component Of(Current Array Element.powerUpUsePositionsAndInfo[50]),
++			Z Component Of(Current Array Element.powerUpUsePositionsAndInfo[50]))) < Global.reviveRadius) || Is True For Any(
++			Filtered Array(Remove From Array(Global.playerTargetList, Event Player), !Current Array Element.invisible), Distance Between(
++			Position Of(Event Player), Position Of(Current Array Element)) < Global.reviveRadius));
+ 			Event Player.reviving = True;
+@@ -5001,2 +4997,8 @@ rule("REVIVE PLAYER OR ADVANCE DEATH TIMER")
+ 			Event Player.reviving = False;
++			If(Is True For Any(All Players(Team 1), Distance Between(Position Of(Event Player), Vector(X Component Of(
++				Current Array Element.powerUpUsePositionsAndInfo[50]), Y Component Of(Current Array Element.powerUpUsePositionsAndInfo[50]),
++				Z Component Of(Current Array Element.powerUpUsePositionsAndInfo[50]))) < Global.reviveRadius));
++				Small Message(Event Player, Custom String(" {0} Bobby: Don't worry, I'll revive you! ", Ability Icon String(Hero(Mei), Button(
++					Ultimate))));
++			End;
+ 			Set Status(Event Player, Null, Phased Out, 5);
+@@ -5011,3 +5013,3 @@ rule("REVIVE PLAYER OR ADVANCE DEATH TIMER")
+ 				Big Message(Remove From Array(All Players(All Teams), Event Player), Custom String("Save {0} by finishing the objective!",
+-					Event Player, Hero Icon String(Hero Of(Event Player))));
++					Event Player));
+ 			End;
+@@ -5436,3 +5438,3 @@ rule("DOOMFIST INVIS WHILE ULTING")
+ 		Team 1;
+-		Doomfist;
++		All;
+ 	}
+@@ -5443,2 +5445,3 @@ rule("DOOMFIST INVIS WHILE ULTING")
+ 		Is Using Ultimate(Event Player) == True;
++		Array Contains(Array(Hero(Doomfist), Hero(Jetpack Cat), Hero(Anran)), Hero Of(Event Player)) == True;
+ 	}
+@@ -5466,3 +5469,3 @@ rule("MOIRA & VENTURE INVIS WHILE USING SKILL")
+ 		Is Using Ability 1(Event Player) == True;
+-		Array Contains(Array(Hero(Moira), Hero(Venture)), Hero Of(Event Player)) == True;
++		Array Contains(Array(Hero(Moira), Hero(Venture), Hero(Reaper)), Hero Of(Event Player)) == True;
+ 	}
+@@ -5483,3 +5486,3 @@ rule("TRACER INVIS WHILE RECALLING")
+ 		Team 1;
+-		Tracer;
++		All;
+ 	}
+@@ -5490,2 +5493,3 @@ rule("TRACER INVIS WHILE RECALLING")
+ 		Is Using Ability 2(Event Player) == True;
++		Array Contains(Array(Hero(Tracer), Hero(Anran)), Hero Of(Event Player)) == True;
+ 	}
+@@ -5518,3 +5522,3 @@ rule("CASSIDY GRENADE HACK")
+ 	{
+-		Set Status(Victim, Attacker, Hacked, 1);
++		Set Status(Victim, Attacker, Hacked, 3);
+ 	}
+@@ -5560,8 +5564,8 @@ rule("BOT INITIALIZATION")
+ 		"Bot target warning icon (flashing)"
+-		Create Icon(Array Contains(Global.queuedGoalType, Event Player) ? All Players(All Teams) : Filtered Array(Event Player.botTarget,
+-			Is Alive(Event Player) && !Is In View Angle(Current Array Element, Position Of(Event Player), 55)), Event Player, Warning,
+-			Visible To Position and Color, Round To Integer(Total Time Elapsed * (Distance Between(Position Of(Event Player), Position Of(
+-			Local Player)) > 10 ? 4 : 8), Up) % 2 == 0 ? Color(Red) : Color(Yellow), True);
++		Create Icon(Filtered Array(Event Player.botTarget, Is Alive(Event Player) && !Is In View Angle(Current Array Element, Position Of(
++			Event Player), 55)), Event Player, Warning, Visible To Position and Color, Round To Integer(Total Time Elapsed * (
++			Distance Between(Position Of(Event Player), Position Of(Local Player)) > 10 ? 4 : 8), Up) % 2 == 0 ? Color(Red) : Color(
++			Yellow), True);
+ 		Wait Until(Has Spawned(Event Player), 2);
+-		Set Max Health(Event Player, Array Contains(Array(Hero(Symmetra), Hero(Hazard), Hero(Illari)), Hero Of(Event Player)) ? 30 : 1);
++		Set Max Health(Event Player, Array Contains(Array(Hero(Symmetra), Hero(Hazard), Hero(Illari)), Hero Of(Event Player)) ? 40 : 1);
+ 		Event Player.initialMaxHealth = Max Health(Event Player);
+@@ -5634,23 +5638,2 @@ rule("BOT DIES")
+ 	{
+-		If(Event Player.botTempValue && Hero Of(Event Player) == Hero(Anran) && !Event Was Environment);
+-			Set Ultimate Charge(Event Player, 100);
+-			Press Button(Event Player, Button(Ultimate));
+-			Event Player.botTempValue = 0;
+-			Wait(Random Integer(1, 4), Ignore Condition);
+-			Press Button(Event Player, Button(Ultimate));
+-			Abort;
+-		End;
+-		If(Array Contains(Global.queuedGoalType, Event Player));
+-			Event Player.randVal = Random Integer(150, Event Player.health);
+-			If(Event Player.randVal > 175 || Global.difficultySetting <= 3);
+-				Global.objectiveCaptureValue += Event Player.health > 500 ? 10 : Event Player.health * (
+-					Global.difficultySetting <= 2 ? 0.040 : 0.035);
+-				Small Message(All Players(All Teams), Custom String(" {0}  Kill Bonus", Icon String(Plus)));
+-				"Miniboss kill bonus"
+-				If(Array Contains(Global.miniBoss, Event Player));
+-					Global.objectiveCaptureValue += 10;
+-				End;
+-				Play Effect(All Players(All Teams), Buff Explosion Sound, Null, First Of(Global.objectivePositions), 100);
+-			End;
+-		End;
+ 		Wait(Array Contains(Array(Hero(Symmetra), Hero(Ana)), Hero Of(Event Player)) ? 3 : 0, Ignore Condition);
+@@ -5662,2 +5645,8 @@ rule("BOT DIES")
+ 		If(!Event Was Environment || Team Of(Attacker) == Team 1);
++			"Miniboss kill bonus"
++			If(Array Contains(Global.miniBoss, Event Player) && Global.objectiveTypes[0] == 1);
++				Play Effect(All Players(All Teams), Buff Impact Sound, Null, Global.objectivePositions, 100);
++				Global.objectiveCaptureValue += 10;
++				Wait(2, Ignore Condition);
++			End;
+ 			"Remove miniboss from zombie"
+@@ -5828,3 +5817,3 @@ rule("BOT TARGET VISIBLE")
+ 			Position Of(Current Array Element)) < 150 && Is In Line of Sight(Eye Position(Current Array Element), Position Of(Event Player)
+-			+ Vector(0, Global.losHeightCheck, 0), Barriers Do Not Block LOS)) == True;
++			+ Vector(0, Global.losHeightCheck, 0), Enemy Barriers Block LOS)) == True;
+ 	}
+@@ -5885,8 +5874,2 @@ rule("selectTarget")
+ 			Current Array Element)));
+-		"For projectile firing heroes"
+-		If(!Array Contains(Global.bosses, Event Player) && Hero Of(Event Player) == Hero(Pharah));
+-			"Players in Air"
+-			Modify Player Variable(Event Player, potentialTargets, Append To Array, Filtered Array(Global.playerTargetList, Distance Between(
+-				Position Of(Current Array Element), Nearest Walkable Position(Position Of(Current Array Element))) > 5));
+-		End;
+ 		"Add players who are below bot to target list"
+@@ -5903,3 +5886,3 @@ rule("selectTarget")
+ 			If(Is In Line of Sight(Eye Position(Event Player.testTarget), Position Of(Event Player) + Vector(0, Global.losHeightCheck, 0),
+-				Barriers Do Not Block LOS));
++				Enemy Barriers Block LOS));
+ 				Break;
+@@ -5961,3 +5944,3 @@ rule("DESELECT BOT TARGET")
+ 			Eye Position(Event Player.botTarget), Position Of(Event Player) + Vector(0, Global.losHeightCheck, 0),
+-			Barriers Do Not Block LOS)) == True;
++			Enemy Barriers Block LOS)) == True;
+ 	}
+@@ -6139,3 +6122,3 @@ rule("BOTS MELEE")
+ 		End;
+-		Wait(0.125, Abort When False);
++		Wait(0.300, Abort When False);
+ 		Press Button(Event Player, Button(Melee));
+@@ -6254,3 +6237,2 @@ rule("teleportBots")
+ 	{
+-		Abort If(Hero Of(Event Player) == Hero(Anran) && Is Using Ultimate(Event Player));
+ 		Event Player.teleporting = True;
+@@ -6472,6 +6454,6 @@ rule("botRespawnInitialization")
+ 		Event Player.bossHealth = -1;
+-		"Chance for a minboss on high difficulties"
+-		If(Global.difficultySetting >= 3 && Array Contains(Global.bosses, Event Player) == False && Count Of(Filtered Array(
+-			Global.miniBoss, Entity Exists(Current Array Element))) == 0);
+-			Event Player.randVal = Random Integer(1, Global.objectiveTypes[0] == 1 ? 27 : 189);
++		"Chance for a minboss on high difficulties without standoff"
++		If(Global.objectiveValue != 1 && Global.difficultySetting >= 3 && Array Contains(Global.bosses, Event Player) == False && Count Of(
++			Filtered Array(Global.miniBoss, Entity Exists(Current Array Element))) == 0);
++			Event Player.randVal = Random Integer(1, 199);
+ 			If(Event Player.randVal == 1);
+@@ -6481,2 +6463,7 @@ rule("botRespawnInitialization")
+ 		End;
++		"Chance for a Standoff miniboss"
++		If(Global.objectiveValue == 1 && Count Of(Global.playersOnObjective) >= 1 && Count Of(Global.objectivePositions) != 1 && Count Of(
++			Filtered Array(Global.miniBoss, Entity Exists(Current Array Element))) == 0);
++			Call Subroutine(minibossMutation);
++		End;
+ 		Call Subroutine(botStatManagement);
+@@ -6561,3 +6548,3 @@ rule("botEntityManagement")
+ 					Create Effect(Filtered Array(All Players(All Teams), Is Using Ultimate(Event Player) && Is In View Angle(Current Array Element,
+-						Position Of(Event Player), 60)), Good Aura, Color(Black), Position Of(Event Player), 12 * Event Player.size,
++						Position Of(Event Player), 60)), Good Aura, Color(Yellow), Position Of(Event Player), 12 * Event Player.size,
+ 						Visible To Position and Radius);
+@@ -6575,7 +6562,2 @@ rule("botEntityManagement")
+ 			Else If(Hero Of(Event Player) == Hero(Reaper));
+-				If(Array Contains(Global.miniBoss, Event Player));
+-					Start Forcing Player To Be Hero(Event Player, Hero(Jetpack Cat));
+-					Set Move Speed(Event Player, 90 * Event Player.movementSpeed);
+-					Disable Movement Collision With Environment(Event Player, False);
+-				End;
+ 				"Boss Only"
+@@ -6633,2 +6615,3 @@ rule("botEntityManagement")
+ 		End;
++		If(Event Player.botHero != Hero Of(Event Player) || Array Contains(Global.bosses, Event Player));
+ 	}
+@@ -6668,3 +6651,3 @@ rule("botStatManagement")
+ 		Else If(Hero Of(Event Player) == Hero(Mercy));
+-			Set Projectile Speed(Event Player, Array Contains(Global.bosses, Event Player) ? 75 : 20);
++			Set Projectile Speed(Event Player, 20);
+ 		Else If(Hero Of(Event Player) == Hero(Illari));
+@@ -6684,4 +6667,2 @@ rule("botStatManagement")
+ 			Chase Player Variable At Rate(Event Player, abilityArray1, 0, 1, Destination and Rate);
+-		Else If(Hero Of(Event Player) == Hero(Anran));
+-			Set Knockback Dealt(Event Player, 150);
+ 		End;
+@@ -6784,5 +6765,7 @@ rule("minibossMutation")
+ 		Start Forcing Player To Be Hero(Event Player, Random Value In Array(Array(Hero(Reinhardt), Hero(Wrecking Ball), Hero(Junker Queen),
+-			Hero(Doomfist), Hero(Kiriko), Hero(Mauga), Hero(Hazard), Hero(Reaper))));
++			Hero(Doomfist), Hero(Kiriko), Hero(D.Va), Hero(Hazard), Hero(Jetpack Cat))));
+ 		If(Global.zombieSetting == 6);
+ 			Start Forcing Player To Be Hero(Event Player, Random Value In Array(Array(Hero(Reinhardt), Hero(Wrecking Ball))));
++		Else If(Global.zombieSetting == 7);
++			Start Forcing Player To Be Hero(Event Player, Hero(Roadhog));
+ 		End;
+@@ -7443,3 +7426,3 @@ rule("BRUTE FIRE STRIKE (BOSS)")
+ 
+-rule("REIGNITED (ANRAN) ABILITIES")
++rule("jetpack cat abilities SLICER (VENTURE) ABILITIES")
+ {
+@@ -7449,3 +7432,3 @@ rule("REIGNITED (ANRAN) ABILITIES")
+ 		Team 2;
+-		Anran;
++		Jetpack Cat;
+ 	}
+@@ -7454,10 +7437,5 @@ rule("REIGNITED (ANRAN) ABILITIES")
+ 	{
+-		Is Alive(Event Player) == True;
+-		Array Contains(Global.bosses, Event Player) == False;
+ 		Event Player.botTarget != Null;
+-		((Is On Ground(Event Player) && Event Player.botTarget != Null && Distance Between(Position Of(Event Player), Position Of(
+-			Event Player.botTarget)) > 6 * Event Player.size && Distance Between(Position Of(Event Player), Position Of(
+-			Event Player.botTarget)) < 30 * Event Player.size && Absolute Value(Angle Between Vectors(Facing Direction Of(Event Player),
+-			Direction Towards(Eye Position(Event Player), Eye Position(Event Player.botTarget)))) < 20) || Is Using Ultimate(Event Player))
+-			== True;
++		Distance Between(Position Of(Event Player), Position Of(Event Player.botTarget)) > 4 * Event Player.size;
++		Distance Between(Position Of(Event Player), Position Of(Event Player.botTarget)) < 15 * Event Player.size;
+ 	}
+@@ -7466,136 +7444,15 @@ rule("REIGNITED (ANRAN) ABILITIES")
+ 	{
+-		Wait(0.250, Abort When False);
+-		Event Player.specialThrottling = True;
+-		Event Player.specialFacing = True;
+-		Stop Throttle In Direction(Event Player);
+-		Event Player.canWallPhase = False;
+-		Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Vector(X Component Of(Eye Position(
+-			Event Player.botTarget)), 10000, Z Component Of(Eye Position(Event Player.botTarget)))), 10000, To World,
+-			Direction and Turn Rate);
+-		Start Holding Button(Event Player, Button(Crouch));
+-		Wait(0.500, Ignore Condition);
+-		Stop Holding Button(Event Player, Button(Crouch));
+-		Wait Until(!Is Using Ultimate(Event Player), 99999);
+-		If(!Event Player.crowdControlled);
+-			Press Button(Event Player, Button(Ability 1));
+-			Stop Throttle In Direction(Event Player);
+-			Apply Impulse(Event Player, Up, 10, To World, Cancel Contrary Motion);
++		Press Button(Event Player, Button(Ability 1));
++		If(Random Integer(1, 10) > 6);
++			Set Ultimate Charge(Event Player, 100);
+ 			Wait(0.500, Ignore Condition);
+-			Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Event Player.lastTarget)), 10000, To World,
+-				Direction and Turn Rate);
+-			Cancel Primary Action(Event Player);
+-			If(!Event Player.crowdControlled && Event Player.botTarget != Null);
+-				Press Button(Event Player, Button(Ability 1));
+-				Apply Impulse(Event Player, Normalize(Direction Towards(Position Of(Event Player), Position Of(Event Player.botTarget)) + Vector(0,
+-					0.250, 0)), Event Player.size * (15 + 25 * Absolute Value(Cosine From Degrees(Vertical Angle From Direction(Direction Towards(
+-					Position Of(Event Player), Position Of(Event Player.botTarget)))))), To World, Cancel Contrary Motion);
+-				Event Player.specialThrottling = False;
+-				Event Player.specialFacing = True;
+-				Start Rule(restoreDefaultFacingMovement, Do Nothing);
+-				Press Button(Event Player, Button(Ability 1));
+-			End;
+-		End;
+-		disabled Wait(0.500, Ignore Condition);
+-		Wait Until(Is On Ground(Event Player), 1);
+-		Cancel Primary Action(Event Player);
+-		Event Player.specialThrottling = False;
+-		Event Player.specialFacing = True;
+-		Start Rule(restoreDefaultFacingMovement, Do Nothing);
+-		Wait(4, Ignore Condition);
+-		Loop;
+-	}
+-}
+-
+-rule("REIGNITED ULTIMATE ATTACK COUNTER")
+-{
+-	event
+-	{
+-		Player Took Damage;
+-		Team 2;
+-		Anran;
+-	}
+-
+-	conditions
+-	{
+-		Event Ability == Button(Ultimate);
+-		Event Player.botTempValue == False;
+-	}
+-
+-	actions
+-	{
+-		Event Player.botTempValue = True;
+-		"Pre-explosion sound"
+-		Play Effect(All Players(All Teams), Debuff Impact Sound, Color(Orange), Event Player, 200);
+-		"Scaled"
+-		Play Effect(All Players(All Teams), Bad Explosion, Color(Orange), Event Player, 0.500 * Event Player.size);
+-		Set Status(Event Player, Null, Burning, 5);
+-		Wait(5, Ignore Condition);
+-		Event Player.botTempValue = False;
+-	}
+-}
+-
+-rule("REIGNITED USES ULTIMATE NEAR PLAYER")
+-{
+-	event
+-	{
+-		Ongoing - Each Player;
+-		Team 2;
+-		Anran;
+-	}
+-
+-	conditions
+-	{
+-		Is Using Ultimate(Event Player) == True;
+-	}
+-
+-	actions
+-	{
+-		If(Is On Ground(Event Player) && Is True For Any(All Living Players(Team 1), Distance Between(Position Of(Event Player),
+-			Position Of(Current Array Element)) < 12));
+-			Event Player.botTempvalue2 = True;
++			Press Button(Event Player, Button(Ultimate));
++			Wait(1, Ignore Condition);
++			Press Button(Event Player, Button(Primary Fire));
+ 		End;
+-		Wait(0.250, Ignore Condition);
+-		Event Player.botTempvalue2 = False;
+-		Wait Until(!Is Using Ultimate(Event Player), 99999);
+-		Add Health Pool To Player(Event Player, Armor, 100, False, False);
+-	}
+-}
+-
+-rule("ZOMBIES SPAWN AT REIGNITED")
+-{
+-	event
+-	{
+-		Ongoing - Each Player;
+-		Team 2;
+-		All;
+-	}
+-
+-	conditions
+-	{
+-		(Is Using Ultimate(Event Player) && Hero Of(Event Player) == Hero(Anran)) != True;
+-		Array Contains(Global.bosses, Event Player) != True;
+-		Array Contains(Global.miniBoss, Event Player) != True;
+-		Count Of(Filtered Array(Players On Hero(Hero(Anran), Team 2), Current Array Element.botTempvalue2)) > Null;
+-		Is Alive(Event Player) == True;
+-		Event Player.crowdControlled != True;
+-		Has Status(Event Player, Hacked) != True;
+-		Event Player.anranPortal == False;
+-	}
+-
+-	actions
+-	{
+-		"Scaled"
+-		Play Effect(All Players(All Teams), Bad Pickup Effect, Color(Orange), Event Player, 0.500);
+-		Set Status(Event Player, Null, Phased Out, 2);
+-		Set Status(Event Player, Null, Burning, 2.300);
+-		Event Player.anranPortalRise = First Of(Filtered Array(Players On Hero(Hero(Anran), Team 2), Current Array Element.botTempvalue2));
+-		Event Player.anranPortal = Random Value In Array(Filtered Array(Global.mapGrid, Distance Between(Position Of(
+-			Event Player.anranPortalRise), Current Array Element) > 2 && Distance Between(Position Of(Event Player.anranPortalRise),
+-			Current Array Element) < 7));
+-		Event Player.anranPortalRise = Event Player.anranPortal - Vector(0, 2, 0);
+-		Start Forcing Player Position(Event Player, Event Player.anranPortalRise, True);
+-		Chase Player Variable Over Time(Event Player, anranPortalRise, Event Player.anranPortal, 1.500, Destination and Duration);
++		Start Holding Button(Event Player, Button(Secondary Fire));
++		disabled Event Player.canWallPhase = True;
+ 		Wait(2, Ignore Condition);
+-		Event Player.anranPortal = False;
+-		Stop Forcing Player Position(Event Player);
++		Stop Holding Button(Event Player, Button(Secondary Fire));
++		disabled Event Player.canWallPhase = False;
+ 	}
+@@ -7763,3 +7620,3 @@ rule("RIDER USE GRAPPLING HOOK")
+ 
+-rule("CHARGER (MAUGA) CHARGE")
++rule("SLIMER (MERCY) TENTACLE GRAB")
+ {
+@@ -7769,3 +7626,3 @@ rule("CHARGER (MAUGA) CHARGE")
+ 		Team 2;
+-		Mauga;
++		Mercy;
+ 	}
+@@ -7775,12 +7632,9 @@ rule("CHARGER (MAUGA) CHARGE")
+ 		Event Player.botTarget != Null;
++		Event Player.botTempValue == Null;
+ 		Event Player.crowdControlled != True;
+ 		Event Player.specialThrottling != True;
+-		Is On Ground(Event Player) == True;
+-		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
+-		Is Using Ability 1(Event Player) == False;
+-		Throttle Of(Event Player) != Vector(0, 0, 0);
++		Is Using Ultimate(Event Player) != True;
++		Distance Between(Eye Position(Event Player), Eye Position(Event Player.botTarget)) < 20 * Event Player.size;
+ 		Absolute Value(Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position(
+-			Event Player.botTarget)))) < 35;
+-		(Distance Between(Position Of(Event Player), Position Of(Event Player.botTarget)) < 5 || Vertical Angle From Direction(
+-			Direction Towards(Position Of(Event Player), Position Of(Event Player.botTarget))) > -35) == True;
++			Event Player.botTarget)))) < 20;
+ 	}
+@@ -7789,111 +7643,25 @@ rule("CHARGER (MAUGA) CHARGE")
+ 	{
+-		Wait(0.250, Abort When False);
+-		Event Player.canWallPhase = False;
+-		Enable Movement Collision With Environment(Event Player);
+-		Event Player.wallCollisionEnabled = True;
+-		Event Player.specialFacing = True;
+-		Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Event Player.lastTarget)),
+-			Event Player.attached ? 1500 : (Event Player.crowdControlled ? 0 : 100), To World, Direction and Turn Rate);
++		Wait(Is Using Ultimate(Event Player) ? 0.016 : 0.500, Abort When False);
+ 		Event Player.specialThrottling = True;
+-		Start Throttle In Direction(Event Player, Vector(0, 0, -1), 0.350, To Player, Replace existing throttle, None);
+-		"Charger walk backwards duration"
+-		For Player Variable(Event Player, pNoCooldownsCount_bCount2, 0, 1, 0.064);
+-			If(Event Player.crowdControlled || Is Dead(Event Player));
+-				Event Player.specialFacing = False;
+-				Event Player.specialThrottling = False;
+-				Start Rule(restoreDefaultFacingMovement, Do Nothing);
+-				Abort;
++		Stop Throttle In Direction(Event Player);
++		Event Player.botSpecialTarget = Null;
++		Event Player.chase1 = Is In Air(Event Player) ? Eye Position(Event Player) + Vector(0, 0.500, 0)
++			* Event Player.size : Eye Position(Event Player);
++		Event Player.botTempValue = Eye Position(Event Player) + Facing Direction Of(Event Player) * 20 * Event Player.size;
++		"Tentacle extends"
++		Chase Player Variable At Rate(Event Player, chase1, Event Player.botTempValue, 50, Destination and Rate);
++		Wait(0.016, Ignore Condition);
++		While(Is Alive(Event Player) && !Event Player.crowdControlled && Distance Between(Eye Position(Event Player),
++			Ray Cast Hit Position(Eye Position(Event Player), Event Player.botTempValue, All Living Players(Team 1), All Players(
++			All Teams), True)) > Distance Between(Eye Position(Event Player), Event Player.chase1));
++			If(Is True For Any(Global.playerTargetList, !Has Status(Current Array Element, Phased Out) && Distance Between(Event Player.chase1,
++				Eye Position(Current Array Element)) < 1 && Is In Line of Sight(Event Player.chase1, Eye Position(Current Array Element),
++				Enemy Barriers Block LOS)));
++				Event Player.botSpecialTarget = First Of(Filtered Array(Global.playerTargetList, !Has Status(Current Array Element, Phased Out)
++					&& Distance Between(Event Player.chase1, Eye Position(Current Array Element)) < 1 && Is In Line of Sight(Event Player.chase1,
++					Eye Position(Event Player), Enemy Barriers Block LOS)));
++				Event Player.botTempValue = Eye Position(Event Player.botSpecialTarget);
++				Break;
+ 			End;
+-			Wait(0.064, Ignore Condition);
+-		End;
+-		Start Throttle In Direction(Event Player, Direction Towards(Position Of(Event Player),
+-			Event Player.botTempValue == Null ? Position Of(Event Player.botTarget) : Event Player.botTempValue),
+-			Event Player.botThrottleSpeed, To World, Replace existing throttle, None);
+-		Event Player.specialFacing = True;
+-		Start Facing(Event Player, Throttle Of(Event Player), 100, To Player, Direction and Turn Rate);
+-		Press Button(Event Player, Button(Ability 1));
+-		"Charge End"
+-		Wait Until(!Is Using Ability 1(Event Player), Array Contains(Global.bosses, Event Player) ? 2 : 3.500);
+-		Stop Throttle In Direction(Event Player);
+-		Stop Facing(Event Player);
+-		Press Button(Event Player, Button(Primary Fire));
+-		Set Move Speed(Event Player, 100);
+-		Event Player.specialFacing = False;
+-		Event Player.specialThrottling = False;
+-		Start Rule(restoreDefaultFacingMovement, Do Nothing);
+-		Event Player.canWallPhase = True;
+-		Wait Until(!Is Using Ability 1(Event Player), 10);
+-		Set Ability Cooldown(Event Player, Button(Ability 1), Array Contains(Global.bosses, Event Player) ? 4 : 6);
+-	}
+-}
+-
+-rule("CHARGER KNOCKBACK")
+-{
+-	event
+-	{
+-		Player Dealt Damage;
+-		Team 2;
+-		Mauga;
+-	}
+-
+-	conditions
+-	{
+-		Event Ability == Button(Ability 1);
+-	}
+-
+-	actions
+-	{
+-		"Damage players"
+-		Damage(Victim, Event Player, Event Player.biteDamage * 0.750);
+-		Abort If(!Is Using Ability 1(Event Player));
+-		Press Button(Event Player, Button(Primary Fire));
+-	}
+-}
+-
+-rule("SLIMER (MERCY) TENTACLE GRAB")
+-{
+-	event
+-	{
+-		Ongoing - Each Player;
+-		Team 2;
+-		Mercy;
+-	}
+-
+-	conditions
+-	{
+-		Event Player.botTarget != Null;
+-		Event Player.botTempValue == Null;
+-		Event Player.crowdControlled != True;
+-		Event Player.specialThrottling != True;
+-		Is Using Ultimate(Event Player) != True;
+-		Distance Between(Eye Position(Event Player), Eye Position(Event Player.botTarget)) < 20 * Event Player.size;
+-		Absolute Value(Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position(
+-			Event Player.botTarget)))) < 20;
+-	}
+-
+-	actions
+-	{
+-		Wait(Is Using Ultimate(Event Player) ? 0.016 : 0.500, Abort When False);
+-		Event Player.specialThrottling = True;
+-		Stop Throttle In Direction(Event Player);
+-		Event Player.botSpecialTarget = Null;
+-		Event Player.chase1 = Is In Air(Event Player) ? Eye Position(Event Player) + Vector(0, 0.500, 0)
+-			* Event Player.size : Eye Position(Event Player);
+-		Event Player.botTempValue = Eye Position(Event Player) + Facing Direction Of(Event Player) * 20 * Event Player.size;
+-		"Tentacle extends"
+-		Chase Player Variable At Rate(Event Player, chase1, Event Player.botTempValue, 50, Destination and Rate);
+-		Wait(0.016, Ignore Condition);
+-		While(Is Alive(Event Player) && !Event Player.crowdControlled && Distance Between(Eye Position(Event Player),
+-			Ray Cast Hit Position(Eye Position(Event Player), Event Player.botTempValue, All Living Players(Team 1), All Players(
+-			All Teams), True)) > Distance Between(Eye Position(Event Player), Event Player.chase1));
+-			If(Is True For Any(Global.playerTargetList, !Has Status(Current Array Element, Phased Out) && Distance Between(Event Player.chase1,
+-				Eye Position(Current Array Element)) < 1 && Is In Line of Sight(Event Player.chase1, Eye Position(Current Array Element),
+-				Enemy Barriers Block LOS)));
+-				Event Player.botSpecialTarget = First Of(Filtered Array(Global.playerTargetList, !Has Status(Current Array Element, Phased Out)
+-					&& Distance Between(Event Player.chase1, Eye Position(Current Array Element)) < 1 && Is In Line of Sight(Event Player.chase1,
+-					Eye Position(Event Player), Enemy Barriers Block LOS)));
+-				Event Player.botTempValue = Eye Position(Event Player.botSpecialTarget);
+-				Break;
+-			End;
+-			Wait(0.032, Ignore Condition);
++			Wait(0.032, Ignore Condition);
+ 		End;
+@@ -7928,85 +7696,4 @@ rule("SLIMER (MERCY) TENTACLE GRAB")
+ 			Start Rule(restoreDefaultFacingMovement, Do Nothing);
+-			Wait(Is In Air(Event Player.botTarget) ? 2.250 : 4.500, Ignore Condition);
+-		End;
+-		Loop If Condition Is True;
+-	}
+-}
+-
+-rule("PRIME SLIMER (EMRE) FLIGHT (BOSS)")
+-{
+-	event
+-	{
+-		Ongoing - Each Player;
+-		Team 2;
+-		Emre;
+-	}
+-
+-	conditions
+-	{
+-		Event Player.botTarget != Null;
+-		Event Player.botTempValue == Null;
+-		Event Player.specialThrottling != True;
+-		Event Player.crowdControlled != True;
+-		Is On Ground(Event Player) == True;
+-		Array Contains(Global.bosses, Event Player) == True;
+-		Distance Between(Position Of(Event Player), Position Of(Event Player.botTarget)) < 15;
+-	}
+-
+-	actions
+-	{
+-		Wait(0.250, Abort When False);
+-		Set Ultimate Charge(Event Player, 100);
+-		Wait Until(!Has Status(Event Player, Hacked), 1);
+-		Event Player.specialThrottling = True;
+-		While(!Is Jumping(Event Player));
+-			Event Player.wallCollisionEnabled = True;
+-			Enable Movement Collision With Environment(Event Player);
+-			Press Button(Event Player, Button(Jump));
+-			Wait Until(Is Jumping(Event Player), 1);
+-		End;
+-		Apply Impulse(Event Player, Vector(0, 1, 0), Random Real(6, 10) * Event Player.size, To World, Cancel Contrary Motion);
+-		Wait(0.016, Ignore Condition);
+-		Wait Until(Y Component Of(Velocity Of(Event Player)) < 0, 3);
+-		Press Button(Event Player, Button(Ultimate));
+-		Wait Until(Is Using Ultimate(Event Player), 1);
+-		Play Effect(All Players(All Teams), Bad Pickup Effect, Color(Black), Event Player, 5 * Event Player.size);
+-		While(Is Using Ultimate(Event Player));
+-			Event Player.specialThrottling = True;
+-			Event Player.specialFacing = True;
+-			Stop Throttle In Direction(Event Player);
+-			While(Event Player.botTarget != Null && Is Using Ultimate(Event Player) && !Event Player.crowdControlled);
+-				Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Event Player.botTarget) + Evaluate Once(
+-					Direction From Angles(Random Real(0, 360), Random Real(-90, 90))) * 1), Event Player.crowdControlled ? 0 : 200, To World,
+-					Direction and Turn Rate);
+-				Press Button(Event Player, Button(Secondary Fire));
+-				"Altitude too low"
+-				If(Altitude Of(Event Player) < 3);
+-					Event Player.wallCollisionEnabled = True;
+-					Enable Movement Collision With Environment(Event Player);
+-					Press Button(Event Player, Button(Jump));
+-				End;
+-				"Entities that will be floated"
+-				Call Subroutine(entityFloat);
+-				For Player Variable(Event Player, pForceFieldCount2_bCount1, 0, Count Of(Event Player.botSpecialPotentialTargets), 1);
+-					Event Player.botSpecialTarget = Event Player.botSpecialPotentialTargets[Event Player.pForceFieldCount2_bCount1];
+-					If(Y Component Of(Position Of(Event Player.botSpecialTarget)) < Y Component Of(Position Of(Event Player)));
+-						"Make target float up"
+-						Apply Impulse(Event Player.botSpecialTarget, Direction From Angles(Horizontal Angle From Direction(Direction Towards(Position Of(
+-							Event Player.botSpecialTarget), Position Of(Event Player))), -75), 0.750, To World, Incorporate Contrary Motion);
+-					Else;
+-						"Push target away"
+-						Apply Impulse(Event Player.botSpecialTarget, Direction From Angles(Horizontal Angle From Direction(Direction Towards(Position Of(
+-							Event Player), Position Of(Event Player.botSpecialTarget))), -20), 0.750, To World, Incorporate Contrary Motion);
+-					End;
+-				End;
+-				Wait(0.032, Ignore Condition);
+-			End;
+-			Event Player.specialThrottling = False;
+-			Event Player.specialFacing = False;
+-			Start Rule(restoreDefaultFacingMovement, Do Nothing);
+-			Wait(0.250, Ignore Condition);
++			Wait(4.500, Ignore Condition);
+ 		End;
+-		Event Player.specialThrottling = False;
+-		Start Rule(restoreDefaultFacingMovement, Do Nothing);
+-		Wait(10, Ignore Condition);
+ 		Loop If Condition Is True;
+@@ -8110,2 +7797,44 @@ rule("STRIKER NORMAL PILE DRIVER")
+ 
++rule("STRIKER SUPER PILE DRIVER / SMOLDER SUPER SLAM")
++{
++	event
++	{
++		Ongoing - Each Player;
++		Team 2;
++		All;
++	}
++
++	conditions
++	{
++		Event Player.botTempValue != 0;
++		Event Player.crowdControlled != True;
++		Is Alive(Event Player) == True;
++		Is On Ground(Event Player) == True;
++		Array Contains(Global.bosses, Event Player) == True;
++		(Hero(Winston) == Hero Of(Event Player) || (Hero Of(Event Player) == Hero(Wrecking Ball) && Is Using Ability 1(Event Player)))
++			== True;
++	}
++
++	actions
++	{
++		Play Effect(All Players(All Teams), Bad Explosion, Color(Orange), Position Of(Event Player), 7.500 * Event Player.size);
++		Play Effect(All Players(All Teams), Ring Explosion Sound, Color(Orange), Position Of(Event Player), 100);
++		Event Player.botSpecialPotentialTargets = Filtered Array(Remove From Array(Append To Array(Global.playerTargetList,
++			All Living Players(Team 2)), Event Player), !Has Status(Current Array Element, Phased Out) && Distance Between(Position Of(
++			Event Player), Position Of(Current Array Element)) < 7.500 * Event Player.size && Is In Line of Sight(Position Of(Event Player)
++			+ Vector(0, Global.losHeightCheck, 0), Position Of(Current Array Element) + Vector(0, Global.losHeightCheck, 0),
++			Barriers Do Not Block LOS));
++		Set Status(Filtered Array(Event Player.botSpecialPotentialTargets, Distance Between(Position Of(Event Player), Position Of(
++			Current Array Element)) < 5 * Event Player.size && Is In Line of Sight(Position Of(Event Player) + Vector(0,
++			Global.losHeightCheck, 0), Position Of(Current Array Element) + Vector(0, Global.losHeightCheck, 0),
++			Enemy Barriers Block LOS)), Event Player, Knocked Down, 0.350);
++		For Player Variable(Event Player, pForceFieldCount2_bCount1, 0, Count Of(Event Player.botSpecialPotentialTargets), 1);
++			Event Player.botSpecialTarget = Event Player.botSpecialPotentialTargets[Event Player.pForceFieldCount2_bCount1];
++			Apply Impulse(Event Player.botSpecialTarget, Direction From Angles(Horizontal Angle From Direction(Direction Towards(Position Of(
++				Event Player), Position Of(Event Player.botSpecialTarget))), -25), (Distance Between(Position Of(Event Player), Position Of(
++				Event Player.botSpecialTarget)) < 5 * Event Player.size ? 15 : 7.500) * Event Player.size, To World, Cancel Contrary Motion);
++		End;
++	}
++}
++
+ rule("STALKER (MOIRA) FADE")
+@@ -8236,3 +7965,3 @@ rule("BLASTER (PHARAH) CHARGES ROCKET THEN FIRES")
+ 		"charge up attack"
+-		Chase Player Variable Over Time(Event Player, chase1, 2, Is In Air(Event Player.botTarget) ? 1 : 2, None);
++		Chase Player Variable Over Time(Event Player, chase1, 2, Array Contains(Global.bosses, Event Player) ? 2 : 2, None);
+ 		Wait Until(Is Dead(Event Player) || Event Player.chase1 >= 2, 99999);
+@@ -8578,4 +8307,3 @@ rule("DAYTAKER (ILLARI) BURST")
+ 		Stop Throttle In Direction(Event Player);
+-		Set Ability Cooldown(Event Player, Button(Ability 1), Array Contains(Global.bosses, 0) ? 7 : (Is In Air(Event Player.botTarget)
+-			? 1 : 3));
++		Set Ability Cooldown(Event Player, Button(Ability 1), Array Contains(Global.bosses, 0) ? 7 : 3);
+ 		"Boss Collision"
+@@ -8764,3 +8492,3 @@ rule("ENSNARER (HAZARD) BLOCKS PLAYERS")
+ 				Press Button(Event Player, Button(Ability 2));
+-				Wait(0.500, Ignore Condition);
++				Wait(0.200, Ignore Condition);
+ 				If(Event Player.crowdControlled || Has Status(Event Player, Hacked));
+@@ -8870,6 +8598,2 @@ rule("SMOLDER ACTIVATES FROM DAMAGE")
+ 		Stop Holding Button(Event Player, Button(Crouch));
+-		Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Attacker)), 9999, To World,
+-			Direction and Turn Rate);
+-		Event Player.lastTarget = Attacker;
+-		Event Player.botTarget = Attacker;
+ 		Play Effect(All Players(All Teams), Bad Pickup Effect, Color(Red), Event Player, 1.500 * Event Player.size);
+@@ -8882,4 +8606,2 @@ rule("SMOLDER ACTIVATES FROM DAMAGE")
+ 		Set Move Speed(Event Player, Event Player.movementSpeed * 100);
+-		Wait(0.250, Ignore Condition);
+-		Call Subroutine(restoreDefaultFacingMovement);
+ 		Wait(5, Ignore Condition);
+@@ -8889,3 +8611,3 @@ rule("SMOLDER ACTIVATES FROM DAMAGE")
+ 
+-rule("SMOLDER BOSS SLAM")
++rule("PROTECTOR (KIRIKO) USES CLEANSE")
+ {
+@@ -8895,3 +8617,3 @@ rule("SMOLDER BOSS SLAM")
+ 		Team 2;
+-		Winston;
++		Kiriko;
+ 	}
+@@ -8900,9 +8622,7 @@ rule("SMOLDER BOSS SLAM")
+ 	{
+-		Event Player.botTempValue == 0;
+-		Global.gameSmolderEvent != True;
+-		Event Player.lastTarget != Null;
+-		Event Player.crowdControlled != True;
+-		Has Status(Event Player, Hacked) != True;
+-		Array Contains(Global.bosses, Event Player) == True;
+-		Distance Between(Position Of(Event Player), Position Of(Event Player.botTarget)) < 15 * Event Player.size;
++		Array Contains(Global.miniBoss, Event Player) == True;
++		Is True For Any(Players Within Radius(Event Player, 5, Team 2, Surfaces And Enemy Barriers),
++			Current Array Element.crowdControlled || Has Status(Current Array Element, Hacked) || Normalized Health(Current Array Element)
++			< 0.500) == True;
++		Has Status(Event Player, Hacked) == False;
+ 	}
+@@ -8911,20 +8631,4 @@ rule("SMOLDER BOSS SLAM")
+ 	{
+-		Set Status(Event Player, Null, Rooted, 0.500);
+-		Start Facing(Event Player, Facing Direction Of(Event Player) + Up, 300, To World, Direction and Turn Rate);
+-		Wait(0.600, Ignore Condition);
+-		Press Button(Event Player, Button(Ability 1));
+-		Wait Until(Is Using Ability 1(Event Player), 0.250);
+-		If(Is Using Ability 1(Event Player) == True);
+-			Call Subroutine(restoreDefaultFacingMovement);
+-			Event Player.botTempValue = 1;
+-			Enable Movement Collision With Environment(Event Player);
+-			Wait Until(!Is Using Ability 1(Event Player), 1);
+-			If(!Event Player.crowdControlled && !Has Status(Event Player, Hacked));
+-				Apply Impulse(Event Player, Down, 4, To World, Cancel Contrary Motion);
+-				Wait Until(Is On Ground(Event Player), 2);
+-			End;
+-		End;
+-		Wait(0.250, Ignore Condition);
+-		Event Player.botTempValue = 0;
+-		Wait(4, Ignore Condition);
++		Call Subroutine(abilityThrowdown);
++		Wait(5, Ignore Condition);
+ 	}
+@@ -8932,3 +8636,3 @@ rule("SMOLDER BOSS SLAM")
+ 
+-rule("SMOLDER SUPER SLAM")
++rule("SUCCESSOR (DOOMFIST) HOLDS BLOCK IF TARGET USE ULTIMATE")
+ {
+@@ -8938,3 +8642,3 @@ rule("SMOLDER SUPER SLAM")
+ 		Team 2;
+-		Winston;
++		Doomfist;
+ 	}
+@@ -8943,8 +8647,4 @@ rule("SMOLDER SUPER SLAM")
+ 	{
+-		Event Player.botTempValue != 0;
+-		Event Player.crowdControlled != True;
+-		Is Alive(Event Player) == True;
+-		Is On Ground(Event Player) == True;
+-		Array Contains(Global.bosses, Event Player) == True;
+-		Is Using Ability 1(Event Player) == True;
++		Event Player.botTarget != Null;
++		Is Using Ultimate(Event Player.botTarget) == True;
+ 	}
+@@ -8953,19 +8653,4 @@ rule("SMOLDER SUPER SLAM")
+ 	{
+-		Play Effect(All Players(All Teams), Bad Explosion, Color(Orange), Position Of(Event Player), 7.500 * Event Player.size);
+-		Play Effect(All Players(All Teams), Ring Explosion Sound, Color(Orange), Position Of(Event Player), 100);
+-		Event Player.botSpecialPotentialTargets = Filtered Array(Remove From Array(Append To Array(Global.playerTargetList,
+-			All Living Players(Team 2)), Event Player), !Has Status(Current Array Element, Phased Out) && Distance Between(Position Of(
+-			Event Player), Position Of(Current Array Element)) < 7.500 * Event Player.size && Is In Line of Sight(Position Of(Event Player)
+-			+ Vector(0, Global.losHeightCheck, 0), Position Of(Current Array Element) + Vector(0, Global.losHeightCheck, 0),
+-			Barriers Do Not Block LOS));
+-		Set Status(Filtered Array(Event Player.botSpecialPotentialTargets, Distance Between(Position Of(Event Player), Position Of(
+-			Current Array Element)) < 5 * Event Player.size && Is In Line of Sight(Position Of(Event Player) + Vector(0,
+-			Global.losHeightCheck, 0), Position Of(Current Array Element) + Vector(0, Global.losHeightCheck, 0),
+-			Enemy Barriers Block LOS)), Event Player, Knocked Down, 0.350);
+-		For Player Variable(Event Player, pForceFieldCount2_bCount1, 0, Count Of(Event Player.botSpecialPotentialTargets), 1);
+-			Event Player.botSpecialTarget = Event Player.botSpecialPotentialTargets[Event Player.pForceFieldCount2_bCount1];
+-			Apply Impulse(Event Player.botSpecialTarget, Direction From Angles(Horizontal Angle From Direction(Direction Towards(Position Of(
+-				Event Player), Position Of(Event Player.botSpecialTarget))), -25), (Distance Between(Position Of(Event Player), Position Of(
+-				Event Player.botSpecialTarget)) < 5 * Event Player.size ? 15 : 7.500) * Event Player.size, To World, Cancel Contrary Motion);
+-		End;
++		Start Holding Button(Event Player, Button(Ability 2));
++		Wait(10, Ignore Condition);
+ 	}
+@@ -8973,3 +8658,3 @@ rule("SMOLDER SUPER SLAM")
+ 
+-rule("SMOLDER STAYS ENRAGE DURING BOSS EVENT")
++rule("SUCCESSOR PUNCHES IN RETALIATION")
+ {
+@@ -8977,5 +8662,5 @@ rule("SMOLDER STAYS ENRAGE DURING BOSS EVENT")
+ 	{
+-		Ongoing - Each Player;
+-		All;
+-		All;
++		Player Took Damage;
++		Team 2;
++		Doomfist;
+ 	}
+@@ -8984,5 +8669,3 @@ rule("SMOLDER STAYS ENRAGE DURING BOSS EVENT")
+ 	{
+-		Global.gameSmolderEvent == True;
+-		!Is Using Ultimate(Event Player) == True;
+-		(Array Contains(Global.bosses, Event Player) || Event Player.botTempValue == 2) == True;
++		Is Using Ability 2(Event Player) == True;
+ 	}
+@@ -8991,6 +8674,6 @@ rule("SMOLDER STAYS ENRAGE DURING BOSS EVENT")
+ 	{
+-		Set Ultimate Charge(Event Player, 100);
+-		Press Button(Event Player, Button(Ultimate));
+-		Wait(0.500, Ignore Condition);
+-		Loop If Condition Is True;
++		Wait Until(!Is Using Ability 2(Event Player), 99999);
++		Start Holding Button(Event Player, Button(Secondary Fire));
++		Wait(1, Ignore Condition);
++		Stop Holding Button(Event Player, Button(Secondary Fire));
+ 	}
+@@ -8998,3 +8681,3 @@ rule("SMOLDER STAYS ENRAGE DURING BOSS EVENT")
+ 
+-rule("SMOLDER BOSS EVENT STARTS")
++rule("BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)")
+ {
+@@ -9004,3 +8687,3 @@ rule("SMOLDER BOSS EVENT STARTS")
+ 		Team 2;
+-		Winston;
++		All;
+ 	}
+@@ -9009,164 +8692,11 @@ rule("SMOLDER BOSS EVENT STARTS")
+ 	{
+-		Array Contains(Global.bosses, Event Player) == True;
+ 		Event Player.botTarget != Null;
+-	}
+-
+-	actions
+-	{
+-		Wait(4, Ignore Condition);
+-		Global.gameSmolderEvent = False;
+-		Set Ultimate Charge(Filtered Array(All Players(Team 2), Hero Of(Current Array Element) == Hero(Winston)), 100);
+-		While(!Is Using Ultimate(Event Player));
+-			Clear Status(Event Player, Hacked);
+-			Press Button(Event Player, Button(Ultimate));
+-			Wait(0.500, Ignore Condition);
+-		End;
+-		Play Effect(All Players(All Teams), Ring Explosion, Color(Red), Event Player, 50);
+-		Global.gameSmolderEvent = True;
+-		Kill(Filtered Array(All Players(Team 2), Hero Of(Current Array Element) != Hero(Winston)), Event Player);
+-		Wait(25, Ignore Condition);
+-		Global.gameSmolderEvent = False;
+-		Wait(16, Ignore Condition);
+-		Loop If Condition Is True;
+-	}
+-}
+-
+-rule("SMOLDER ACTIVATED FROM BOSS EVENT")
+-{
+-	event
+-	{
+-		Ongoing - Each Player;
+-		Team 2;
+-		Winston;
+-	}
+-
+-	conditions
+-	{
+-		Event Player.botTempValue == 1;
+-		Global.gameSmolderEvent == True;
+-		Array Contains(Global.bosses, Event Player) != True;
+-	}
+-
+-	actions
+-	{
+-		Call Subroutine(smolderEnraged);
+-	}
+-}
+-
+-rule("smolderEnraged")
+-{
+-	event
+-	{
+-		Subroutine;
+-		smolderEnraged;
+-	}
+-
+-	actions
+-	{
+-		Event Player.botTempValue = 2;
+-		Stop Chasing Player Variable(Event Player, chase1);
+-		Stop Holding Button(Event Player, Button(Crouch));
+-		Play Effect(All Players(All Teams), Bad Pickup Effect, Color(Red), Event Player, 1.500 * Event Player.size);
+-		Press Button(Event Player, Button(Ability 1));
+-		Set Ultimate Charge(Event Player, 100);
+-		Press Button(Event Player, Button(Ultimate));
+-		Event Player.size *= 1.500;
+-		Start Scaling Player(Event Player, Event Player.size, False);
+-		Event Player.movementSpeed *= 9;
+-		Set Move Speed(Event Player, Event Player.movementSpeed * 100);
+-		Wait(5, Ignore Condition);
+-		Press Button(Event Player, Button(Ability 1));
+-	}
+-}
+-
+-rule("PROTECTOR (KIRIKO) USES CLEANSE")
+-{
+-	event
+-	{
+-		Ongoing - Each Player;
+-		Team 2;
+-		Kiriko;
+-	}
+-
+-	conditions
+-	{
+-		Array Contains(Global.miniBoss, Event Player) == True;
+-		Is True For Any(Players Within Radius(Event Player, 5, Team 2, Surfaces And Enemy Barriers),
+-			Current Array Element.crowdControlled || Has Status(Current Array Element, Hacked) || Normalized Health(Current Array Element)
+-			< 0.500) == True;
+-		Has Status(Event Player, Hacked) == False;
+-	}
+-
+-	actions
+-	{
+-		Call Subroutine(abilityThrowdown);
+-		Wait(5, Ignore Condition);
+-	}
+-}
+-
+-rule("SUCCESSOR (DOOMFIST) HOLDS BLOCK IF TARGET USE ULTIMATE")
+-{
+-	event
+-	{
+-		Ongoing - Each Player;
+-		Team 2;
+-		Doomfist;
+-	}
+-
+-	conditions
+-	{
+-		Event Player.botTarget != Null;
+-		Is Using Ultimate(Event Player.botTarget) == True;
+-	}
+-
+-	actions
+-	{
+-		Start Holding Button(Event Player, Button(Ability 2));
+-		Wait(10, Ignore Condition);
+-	}
+-}
+-
+-rule("SUCCESSOR PUNCHES IN RETALIATION")
+-{
+-	event
+-	{
+-		Player Took Damage;
+-		Team 2;
+-		Doomfist;
+-	}
+-
+-	conditions
+-	{
+-		Is Using Ability 2(Event Player) == True;
+-	}
+-
+-	actions
+-	{
+-		Wait Until(!Is Using Ability 2(Event Player), 99999);
+-		Start Holding Button(Event Player, Button(Secondary Fire));
+-		Wait(1, Ignore Condition);
+-		Stop Holding Button(Event Player, Button(Secondary Fire));
+-	}
+-}
+-
+-rule("BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)")
+-{
+-	event
+-	{
+-		Ongoing - Each Player;
+-		Team 2;
+-		All;
+-	}
+-
+-	conditions
+-	{
+-		Event Player.botTarget != Null;
+-		Is Alive(Event Player) == True;
+-		Is On Ground(Event Player) == True;
+-		Absolute Value(Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position(
+-			Event Player.botTarget)))) < 20;
+-		Distance Between(Position Of(Event Player), Position Of(Event Player.botTarget)) < 30 * Event Player.size;
+-		Array Contains(Global.miniBoss, Event Player) == True;
+-		Array Contains(Array(Hero(Reinhardt), Hero(Junker Queen), Hero(Kiriko), Hero(Doomfist), Hero(Hazard)), Hero Of(Event Player))
+-			== True;
++		Is Alive(Event Player) == True;
++		Is On Ground(Event Player) == True;
++		Absolute Value(Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position(
++			Event Player.botTarget)))) < 20;
++		Distance Between(Position Of(Event Player), Position Of(Event Player.botTarget)) < 30 * Event Player.size;
++		Array Contains(Global.miniBoss, Event Player) == True;
++		Array Contains(Array(Hero(Reinhardt), Hero(Junker Queen), Hero(Kiriko), Hero(Doomfist), Hero(Hazard), Hero(D.Va)), Hero Of(
++			Event Player)) == True;
+ 	}
+@@ -9191,3 +8721,3 @@ rule("BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)
+ 			Hero Of(Event Player) == Hero(Hazard) ? 5 : 10, To Player, Incorporate Contrary Motion);
+-		Wait Until(Is Dead(Event Player), Hero Of(Event Player) == Hero(Doomfist) ? 15 : 30);
++		Wait Until(Is Dead(Event Player), Hero Of(Event Player) == Hero(Doomfist) || Hero Of(Event Player) == Hero(D.Va) ? 15 : 30);
+ 		Set Ultimate Charge(Event Player, 0);
+@@ -9209,5 +8739,4 @@ rule("CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)")
+ 		Array Contains(Global.miniBoss, Event Player) == True;
+-		(Distance Between(Event Player, First Of(Global.objectivePositions)) <= Global.objectiveRad || (Count Of(Global.objectivePositions)
+-			== 1 && Is On Objective(Event Player))) == True;
+-		Array Contains(Array(Hero(Doomfist), Hero(Wrecking Ball), Hero(Mauga)), Hero Of(Event Player)) == True;
++		Array Contains(Global.playersOnObjective, Event Player) == True;
++		Array Contains(Array(Hero(Doomfist), Hero(Wrecking Ball), Hero(Mauga), Hero(D.Va)), Hero Of(Event Player)) == True;
+ 	}
+@@ -9238,2 +8767,6 @@ rule("CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)")
+ 		End;
++		If(Hero Of(Event Player) == Hero(D.Va));
++			Wait(3, Ignore Condition);
++			Press Button(Event Player, Button(Ultimate));
++		End;
+ 		Wait(30, Ignore Condition);
+@@ -9242,2 +8775,84 @@ rule("CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)")
+ 
++rule("PRIME SLIMER (EMRE) FLIGHT (BOSS)")
++{
++	event
++	{
++		Ongoing - Each Player;
++		Team 2;
++		Emre;
++	}
++
++	conditions
++	{
++		Event Player.botTarget != Null;
++		Event Player.botTempValue == Null;
++		Event Player.specialThrottling != True;
++		Event Player.crowdControlled != True;
++		Is On Ground(Event Player) == True;
++		Array Contains(Global.bosses, Event Player) == True;
++		Distance Between(Position Of(Event Player), Position Of(Event Player.botTarget)) < 15;
++	}
++
++	actions
++	{
++		Set Damage Dealt(Event Player, 0.200 * Global.difficultySetting + 150);
++		Wait(0.250, Abort When False);
++		Set Ultimate Charge(Event Player, 100);
++		Wait Until(!Has Status(Event Player, Hacked), 1);
++		Event Player.specialThrottling = True;
++		While(!Is Jumping(Event Player));
++			Event Player.wallCollisionEnabled = True;
++			Enable Movement Collision With Environment(Event Player);
++			Press Button(Event Player, Button(Jump));
++			Wait Until(Is Jumping(Event Player), 1);
++		End;
++		Apply Impulse(Event Player, Vector(0, 1, 0), Random Real(6, 10) * Event Player.size, To World, Cancel Contrary Motion);
++		Wait(0.016, Ignore Condition);
++		Wait Until(Y Component Of(Velocity Of(Event Player)) < 0, 3);
++		Press Button(Event Player, Button(Ultimate));
++		Wait Until(Is Using Ultimate(Event Player), 1);
++		Play Effect(All Players(All Teams), Bad Pickup Effect, Color(Black), Event Player, 5 * Event Player.size);
++		While(Is Using Ultimate(Event Player));
++			Event Player.specialThrottling = True;
++			Event Player.specialFacing = True;
++			Stop Throttle In Direction(Event Player);
++			While(Event Player.botTarget != Null && Is Using Ultimate(Event Player) && !Event Player.crowdControlled);
++				Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Event Player.botTarget) + Evaluate Once(
++					Direction From Angles(Random Real(0, 360), Random Real(-90, 90))) * 1), Event Player.crowdControlled ? 0 : 200, To World,
++					Direction and Turn Rate);
++				Press Button(Event Player, Button(Secondary Fire));
++				"Altitude too low"
++				If(Altitude Of(Event Player) < 3);
++					Event Player.wallCollisionEnabled = True;
++					Enable Movement Collision With Environment(Event Player);
++					Press Button(Event Player, Button(Jump));
++				End;
++				"Entities that will be floated"
++				Call Subroutine(entityFloat);
++				For Player Variable(Event Player, pForceFieldCount2_bCount1, 0, Count Of(Event Player.botSpecialPotentialTargets), 1);
++					Event Player.botSpecialTarget = Event Player.botSpecialPotentialTargets[Event Player.pForceFieldCount2_bCount1];
++					If(Y Component Of(Position Of(Event Player.botSpecialTarget)) < Y Component Of(Position Of(Event Player)));
++						"Make target float up"
++						Apply Impulse(Event Player.botSpecialTarget, Direction From Angles(Horizontal Angle From Direction(Direction Towards(Position Of(
++							Event Player.botSpecialTarget), Position Of(Event Player))), -75), 0.750, To World, Incorporate Contrary Motion);
++					Else;
++						"Push target away"
++						Apply Impulse(Event Player.botSpecialTarget, Direction From Angles(Horizontal Angle From Direction(Direction Towards(Position Of(
++							Event Player), Position Of(Event Player.botSpecialTarget))), -20), 0.750, To World, Incorporate Contrary Motion);
++					End;
++				End;
++				Wait(0.032, Ignore Condition);
++			End;
++			Event Player.specialThrottling = False;
++			Event Player.specialFacing = False;
++			Start Rule(restoreDefaultFacingMovement, Do Nothing);
++			Wait(0.250, Ignore Condition);
++		End;
++		Event Player.specialThrottling = False;
++		Start Rule(restoreDefaultFacingMovement, Do Nothing);
++		Wait(10, Ignore Condition);
++		Loop If Condition Is True;
++	}
++}
++
+ disabled rule("============================================== SUPPLY DROPS ====================================================")
+@@ -9387,4 +9002,6 @@ rule("PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
+ 			Play Effect(All Players(Team 1), Buff Explosion Sound, Color(Aqua), Global.supplyDropPosition, 50);
++			"Range of power ups"
++			Modify Global Variable(powerUpIDs, Append To Array, 8);
+ 			"Power ups per supply drop"
+-			For Global Variable(count1, 0, Global.numberOfPowerUpsPerSupplyDrop, 1);
++			For Global Variable(count1, 0, Global.numberOfPowerUpsPerSupplyDrop - 1, 1);
+ 				"Range of power ups"
+@@ -9487,6 +9104,6 @@ rule("EFFECT/TEXT (PERMANENT)")
+ 		"Revive hud text"
+-		Create HUD Text(Filtered Array(All Living Players(Team 1), Current Array Element.currentPowerUp == 2), Custom String("REVIVE"),
+-			Custom String("Hold [{0}] to drop your power up", Input Binding String(Button(Reload))), Custom String(
+-			"Look at a teammate and hold [{0}] to revive them", Input Binding String(Button(Interact))), Left, 100, Color(Yellow), Color(
+-			Yellow), Color(Yellow), Visible To and String, Default Visibility);
++		Create HUD Text(Filtered Array(All Living Players(Team 1), Current Array Element.currentPowerUp == 2), Custom String(
++			"ORBITAL REVIVE"), Custom String("Hold [{0}] to drop your power up", Input Binding String(Button(Reload))), Custom String(
++			"Look at a teammate within 50 meters and hold [{0}] to revive them", Input Binding String(Button(Interact))), Left, 100, Color(
++			Yellow), Color(Yellow), Color(Yellow), Visible To and String, Default Visibility);
+ 		"Force field hud text"
+@@ -9508,5 +9125,5 @@ rule("EFFECT/TEXT (PERMANENT)")
+ 		Create HUD Text(Filtered Array(All Living Players(Team 1), Current Array Element.currentPowerUp == 6), Custom String(
+-			"Beacon of Healing"), Custom String("Hold [{0}] to drop your power up", Input Binding String(Button(Reload))), Custom String(
+-			"Hold [{0}] to place a healing beacon and gain bonus healing", Input Binding String(Button(Interact))), Left, 100, Color(
+-			Yellow), Color(Yellow), Color(Yellow), Visible To and String, Default Visibility);
++			"Immortality Beacon"), Custom String("Hold [{0}] to drop your power up", Input Binding String(Button(Reload))), Custom String(
++			"Hold [{0}] to place an Immortality Beacon and become immortal for a short duration", Input Binding String(Button(Interact))),
++			Left, 100, Color(Yellow), Color(Yellow), Color(Yellow), Visible To and String, Default Visibility);
+ 		"Vaccine hud text"
+@@ -9518,5 +9135,5 @@ rule("EFFECT/TEXT (PERMANENT)")
+ 		Create HUD Text(Filtered Array(All Living Players(Team 1), Current Array Element.currentPowerUp == 8), Custom String(
+-			"Sentry Turret"), Custom String("Hold [{0}] to drop your power up", Input Binding String(Button(Reload))), Custom String(
+-			"Hold [{0}] to place a sentry turret", Input Binding String(Button(Interact))), Left, 100, Color(Orange), Color(Orange), Color(
+-			Orange), Visible To and String, Default Visibility);
++			"Bobby the Snowman"), Custom String("Hold [{0}] to drop your power up", Input Binding String(Button(Reload))), Custom String(
++			"Hold [{0}] to build a snowman", Input Binding String(Button(Interact))), Left, 100, Color(Sky Blue), Color(Sky Blue), Color(
++			Sky Blue), Visible To and String, Default Visibility);
+ 		"Cloaking Device hud text"
+@@ -9563,2 +9180,3 @@ rule("PLAYER DROPS POWER UP (MANUAL)")
+ 		Is Alive(Event Player) == True;
++		disabled Is On Ground(Event Player) == True;
+ 		Event Player.currentPowerUp != 0;
+@@ -9570,4 +9188,3 @@ rule("PLAYER DROPS POWER UP (MANUAL)")
+ 		Modify Global Variable(powerUpIDs, Append To Array, Event Player.currentPowerUp);
+-		Modify Global Variable(powerUpPositions, Append To Array, Is On Ground(Event Player) ? Position Of(Event Player) + Vector(0, 0.250,
+-			0) : Nearest Walkable Position(Position Of(Event Player)));
++		Modify Global Variable(powerUpPositions, Append To Array, Position Of(Event Player) + Vector(0, 0.250, 0));
+ 		Wait(0.016, Ignore Condition);
+@@ -9597,2 +9214,3 @@ rule("PLAYER DROPS POWER UP (DEATH)")
+ 		End;
++		Wait(3, Ignore Condition);
+ 		Modify Global Variable(powerUpIDs, Append To Array, Event Player.currentPowerUp);
+@@ -9616,4 +9234,4 @@ rule("instantRevive (0-9)")
+ 		Event Player.interactEntity = First Of(Sorted Array(Filtered Array(All Dead Players(Team 1), Distance Between(Position Of(
+-			Event Player), Position Of(Current Array Element)) <= Global.reviveRadius), Angle Between Vectors(Facing Direction Of(
+-			Event Player), Direction Towards(Eye Position(Event Player), Position Of(Current Array Element)))));
++			Event Player), Position Of(Current Array Element)) <= 50), Angle Between Vectors(Facing Direction Of(Event Player),
++			Direction Towards(Eye Position(Event Player), Position Of(Current Array Element)))));
+ 		Wait(0.016, Ignore Condition);
+@@ -9773,3 +9391,3 @@ rule("beaconofHealing (40-49)")
+ 			Event Player.powerUpEffects[41] = Last Created Entity;
+-			Create HUD Text(Event Player, Custom String("Beacon of Healing: {0}s", Round To Integer(Event Player.pHealBeaconCount, Up)), Null,
++			Create HUD Text(Event Player, Custom String("Immortality Beacon: {0}s", Round To Integer(Event Player.pHealBeaconCount, Up)), Null,
+ 				Null, Right, 0.200, Color(Yellow), Null, Null, Visible To and String, Default Visibility);
+@@ -9784,3 +9402,4 @@ rule("beaconofHealing (40-49)")
+ 		"Heal Beacon duration"
+-		For Player Variable(Event Player, pHealBeaconCount, 30, 0, -1);
++		For Player Variable(Event Player, pHealBeaconCount, 15, 0, -1);
++			Set Status(Players Within Radius(Event Player.powerUpUsePositionsAndInfo[40], 10, Team 1, Off), Null, Unkillable, 2);
+ 			Wait(1, Ignore Condition);
+@@ -9788,2 +9407,9 @@ rule("beaconofHealing (40-49)")
+ 				0.100);
++			Play Effect(All Players(All Teams), Good Explosion, Color(Yellow), Event Player.powerUpUsePositionsAndInfo[40] + Vector(0, 2, 0),
++				0.100);
++			Play Effect(All Players(All Teams), Good Explosion, Color(Yellow), Event Player.powerUpUsePositionsAndInfo[40] + Vector(0, 3, 0),
++				0.100);
++			Play Effect(All Players(All Teams), Good Explosion, Color(Yellow), Event Player.powerUpUsePositionsAndInfo[40] + Vector(0, 4, 0),
++				0.100);
++			Play Effect(All Players(All Teams), Buff Explosion Sound, Color(Yellow), Event Player.powerUpUsePositionsAndInfo[40], 40);
+ 			Start Heal Over Time(Players Within Radius(Event Player.powerUpUsePositionsAndInfo[40], 10, Team Of(Event Player), Off),
+@@ -9810,21 +9436,22 @@ rule("sentryTurret (50-59)")
+ 	{
+-		Event Player.powerUpUsePositionsAndInfo[50] = Is On Ground(Event Player) ? Position Of(Event Player)
+-			+ Up : Nearest Walkable Position(Position Of(Event Player)) + Up;
++		Event Player.powerUpUsePositionsAndInfo[50] = Position Of(Event Player) + Vector(0, 1, 0);
+ 		If(!Entity Exists(Event Player.powerUpEffects[50]));
+-			Create Effect(All Players(All Teams), Sphere, Color(Orange), Event Player.powerUpUsePositionsAndInfo[50], 0.150,
++			Create Effect(All Players(All Teams), Sphere, Color(White), Event Player.powerUpUsePositionsAndInfo[50], 0.200,
+ 				Visible To Position and Radius);
+ 			Event Player.powerUpEffects[50] = Last Created Entity;
+-			Create Beam Effect(All Players(All Teams), Grapple Beam, Event Player.powerUpUsePositionsAndInfo[50],
+-				Event Player.powerUpUsePositionsAndInfo[50] + Direction From Angles(0, 60) * 1.500, Color(White),
+-				Visible To Position and Radius);
++			Create Effect(All Players(All Teams), Sphere, Color(White), Event Player.powerUpUsePositionsAndInfo[50] + Vector(0, -0.800, 0),
++				0.400, Visible To Position and Radius);
+ 			Event Player.powerUpEffects[51] = Last Created Entity;
+-			Create Beam Effect(All Players(All Teams), Grapple Beam, Event Player.powerUpUsePositionsAndInfo[50],
+-				Event Player.powerUpUsePositionsAndInfo[50] + Direction From Angles(120, 60) * 1.500, Color(White),
++			Create Effect(All Players(All Teams), Sphere, Color(White), Event Player.powerUpUsePositionsAndInfo[50] + Vector(0, -0.400, 0),
++				0.300, Visible To Position and Radius);
++			Event Player.powerUpEffects[56] = Last Created Entity;
++			Create Beam Effect(All Players(All Teams), Grapple Beam, Event Player.powerUpUsePositionsAndInfo[50] + Vector(0, -0.300, 0),
++				Event Player.powerUpUsePositionsAndInfo[50] + Direction From Angles(180, -20) * -0.750, Color(White),
+ 				Visible To Position and Radius);
+ 			Event Player.powerUpEffects[52] = Last Created Entity;
+-			Create Beam Effect(All Players(All Teams), Grapple Beam, Event Player.powerUpUsePositionsAndInfo[50],
+-				Event Player.powerUpUsePositionsAndInfo[50] + Direction From Angles(240, 60) * 1.500, Color(White),
++			Create Beam Effect(All Players(All Teams), Grapple Beam, Event Player.powerUpUsePositionsAndInfo[50] + Vector(0, -0.300, 0),
++				Event Player.powerUpUsePositionsAndInfo[50] + Direction From Angles(0, -20) * -0.750, Color(White),
+ 				Visible To Position and Radius);
+ 			Event Player.powerUpEffects[53] = Last Created Entity;
+-			Create Beam Effect(All Players(All Teams), Grapple Beam, Event Player.powerUpUsePositionsAndInfo[50],
++			Create Beam Effect(All Players(All Teams), Bad Beam, Event Player.powerUpUsePositionsAndInfo[50],
+ 				Event Player.powerUpUsePositionsAndInfo[50] + (Count Of(Filtered Array(All Living Players(Team 2), Is In Line of Sight(
+@@ -9832,9 +9459,9 @@ rule("sentryTurret (50-59)")
+ 				&& !Current Array Element.teleporting)) ? Event Player.powerUpUsePositionsAndInfo[51] * 0.500 : Facing Direction Of(
+-				Event Player) * 0.500), Color(White), Visible To Position and Radius);
++				Event Player) * 0.500), Color(Orange), Visible To Position and Radius);
+ 			Event Player.powerUpEffects[54] = Last Created Entity;
+-			Create HUD Text(Event Player, Custom String("Sentry Turret: {0}s", Round To Integer(Event Player.pSentryTurretCount, Up)), Null,
+-				Null, Right, 0.200, Color(Orange), Null, Null, Visible To and String, Default Visibility);
++			Create HUD Text(Event Player, Custom String("Bobby the Snowman: {0}s", Round To Integer(Event Player.pSentryTurretCount, Up)),
++				Null, Null, Right, 0.200, Color(Sky Blue), Null, Null, Visible To and String, Default Visibility);
+ 			Event Player.powerUpEffects[55] = Last Text ID;
+ 		End;
+-		Play Effect(All Players(All Teams), Good Explosion, Color(Orange), Event Player.powerUpUsePositionsAndInfo[50], 5);
++		Play Effect(All Players(All Teams), Good Explosion, Color(White), Event Player.powerUpUsePositionsAndInfo[50], 2.500);
+ 		Play Effect(All Players(All Teams), Debuff Impact Sound, Color(Blue), Event Player.powerUpUsePositionsAndInfo[50], 50);
+@@ -9855,9 +9482,16 @@ rule("sentryTurret (50-59)")
+ 					Event Player.powerUpUsePositionsAndInfo[50] + Event Player.powerUpUsePositionsAndInfo[51] * 0.500, 25);
+-				Play Effect(All Players(All Teams), Bad Explosion, Color(Orange),
+-					Event Player.powerUpUsePositionsAndInfo[50] + Event Player.powerUpUsePositionsAndInfo[51] * 0.500, 0.100);
+-				Play Effect(All Players(All Teams), Bad Explosion, Color(Orange), Event Player.powerUpUsePositionsAndInfo[52], 0.100);
+-				Damage(Ray Cast Hit Player(Event Player.powerUpUsePositionsAndInfo[50],
++				Play Effect(All Players(All Teams), Good Explosion, Color(Orange),
++					Event Player.powerUpUsePositionsAndInfo[50] + Event Player.powerUpUsePositionsAndInfo[51] * 0.500, 0.050);
++				Play Effect(All Players(All Teams), Bad Explosion, Color(White), Event Player.powerUpUsePositionsAndInfo[52], 0.100);
++				Event Player.tempWinter2 = Random Integer(0, 20);
++				Event Player.tempWinter = Ray Cast Hit Player(Event Player.powerUpUsePositionsAndInfo[50],
+ 					Event Player.powerUpUsePositionsAndInfo[50] + Direction Towards(Event Player.powerUpUsePositionsAndInfo[50],
+ 					Event Player.powerUpUsePositionsAndInfo[52]) * 100, All Living Players(Opposite Team Of(Team Of(Event Player))), All Players(
+-					Team Of(Event Player)), True), Event Player, 20);
++					Team Of(Event Player)), True);
++				If(!Event Player.tempWinter2);
++					Set Status(Event Player.tempWinter, Event Player, Frozen, 2);
++					Play Effect(All Players(All Teams), Ring Explosion, Color(White), Event Player.powerUpUsePositionsAndInfo[50] + Down, 4);
++					Play Effect(All Players(All Teams), Buff Impact Sound, Color(White), Event Player.powerUpUsePositionsAndInfo[50], 50);
++				End;
++				Damage(Event Player.tempWinter, Event Player, 20);
+ 			End;
+@@ -9871,2 +9505,3 @@ rule("sentryTurret (50-59)")
+ 		Destroy HUD Text(Event Player.powerUpEffects[55]);
++		Destroy Effect(Event Player.powerUpEffects[56]);
+ 		Event Player.powerUpUsePositionsAndInfo[50] = 0;
+@@ -9990,4 +9625,3 @@ rule("bouncePad (80-89)")
+ 	{
+-		Event Player.powerUpUsePositionsAndInfo[80] = Is On Ground(Event Player) ? Position Of(Event Player) : Nearest Walkable Position(
+-			Position Of(Event Player));
++		Event Player.powerUpUsePositionsAndInfo[80] = Position Of(Event Player);
+ 		If(Event Player.powerUpEffects[80] == 0);
+@@ -10099,3 +9733,3 @@ rule("stun (100-109)")
+ 			Set Status(Event Player.powerUpUsePositionsAndInfo[101], Event Player, Stunned, Array Contains(Global.bosses,
+-				Event Player.powerUpUsePositionsAndInfo[101]) ? 0.500 : 1.500);
++				Event Player.powerUpUsePositionsAndInfo[101]) ? 1 : 1.500);
+ 			Play Effect(All Players(All Teams), Bad Explosion, Color(White), Event Player.powerUpUsePositionsAndInfo[101], 0.500);
+@@ -10129,3 +9763,4 @@ rule("powerUpAssignment")
+ 		If(Global.powerUpIDs[Count Of(Global.powerUpEffect)] == 1);
+-			Create Effect(All Players(All Teams), Orb, Color(Green), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 1, Visible To);
++			Create Effect(All Players(All Teams), Sphere, Color(Green), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 0.400,
++				Visible To);
+ 			Create In-World Text(All Players(All Teams), Custom String("CURE"), Global.powerUpPositions[Count Of(Global.powerUpText)], 1,
+@@ -10134,8 +9769,10 @@ rule("powerUpAssignment")
+ 		Else If(Global.powerUpIDs[Count Of(Global.powerUpEffect)] == 2);
+-			Create Effect(All Players(All Teams), Orb, Color(Yellow), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 1, Visible To);
+-			Create In-World Text(All Players(All Teams), Custom String("Revive"), Global.powerUpPositions[Count Of(Global.powerUpText)], 1,
+-				Clip Against Surfaces, Visible To, Color(White), Default Visibility);
++			Create Effect(All Players(All Teams), Sphere, Color(Yellow), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 0.400,
++				Visible To);
++			Create In-World Text(All Players(All Teams), Custom String("Orbital Revive"), Global.powerUpPositions[Count Of(Global.powerUpText)
++				], 1, Clip Against Surfaces, Visible To, Color(White), Default Visibility);
+ 		"Force Field"
+ 		Else If(Global.powerUpIDs[Count Of(Global.powerUpEffect)] == 3);
+-			Create Effect(All Players(All Teams), Orb, Color(Blue), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 1, Visible To);
++			Create Effect(All Players(All Teams), Sphere, Color(Blue), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 0.400,
++				Visible To);
+ 			Create In-World Text(All Players(All Teams), Custom String("Force Field"), Global.powerUpPositions[Count Of(Global.powerUpText)],
+@@ -10144,3 +9781,4 @@ rule("powerUpAssignment")
+ 		Else If(Global.powerUpIDs[Count Of(Global.powerUpEffect)] == 4);
+-			Create Effect(All Players(All Teams), Orb, Color(Red), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 1, Visible To);
++			Create Effect(All Players(All Teams), Sphere, Color(Red), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 0.400,
++				Visible To);
+ 			Create In-World Text(All Players(All Teams), Custom String("No Cooldowns"), Global.powerUpPositions[Count Of(Global.powerUpText)],
+@@ -10149,3 +9787,4 @@ rule("powerUpAssignment")
+ 		Else If(Global.powerUpIDs[Count Of(Global.powerUpEffect)] == 5);
+-			Create Effect(All Players(All Teams), Orb, Color(Orange), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 1, Visible To);
++			Create Effect(All Players(All Teams), Sphere, Color(Orange), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 0.400,
++				Visible To);
+ 			Create In-World Text(All Players(All Teams), Custom String("Air Strike"), Global.powerUpPositions[Count Of(Global.powerUpText)], 1,
+@@ -10154,4 +9793,5 @@ rule("powerUpAssignment")
+ 		Else If(Global.powerUpIDs[Count Of(Global.powerUpEffect)] == 6);
+-			Create Effect(All Players(All Teams), Orb, Color(Yellow), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 1, Visible To);
+-			Create In-World Text(All Players(All Teams), Custom String("Beacon of Healing"), Global.powerUpPositions[Count Of(
++			Create Effect(All Players(All Teams), Sphere, Color(Yellow), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 0.400,
++				Visible To);
++			Create In-World Text(All Players(All Teams), Custom String("Immortality Beacon"), Global.powerUpPositions[Count Of(
+ 				Global.powerUpText)], 1, Clip Against Surfaces, Visible To, Color(White), Default Visibility);
+@@ -10159,3 +9799,4 @@ rule("powerUpAssignment")
+ 		Else If(Global.powerUpIDs[Count Of(Global.powerUpEffect)] == 7);
+-			Create Effect(All Players(All Teams), Orb, Color(Green), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 1, Visible To);
++			Create Effect(All Players(All Teams), Sphere, Color(Green), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 0.400,
++				Visible To);
+ 			Create In-World Text(All Players(All Teams), Custom String("Vaccine"), Global.powerUpPositions[Count Of(Global.powerUpText)], 1,
+@@ -10164,8 +9805,10 @@ rule("powerUpAssignment")
+ 		Else If(Global.powerUpIDs[Count Of(Global.powerUpEffect)] == 8);
+-			Create Effect(All Players(All Teams), Orb, Color(Orange), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 1, Visible To);
+-			Create In-World Text(All Players(All Teams), Custom String("Sentry Turret"), Global.powerUpPositions[Count Of(Global.powerUpText)],
+-				1, Clip Against Surfaces, Visible To, Color(White), Default Visibility);
++			Create Effect(All Players(All Teams), Sphere, Color(Sky Blue), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 0.400,
++				Visible To);
++			Create In-World Text(All Players(All Teams), Custom String("Bobby the Snowman"), Global.powerUpPositions[Count Of(
++				Global.powerUpText)], 1, Clip Against Surfaces, Visible To, Color(White), Default Visibility);
+ 		"Cloaking Device"
+ 		Else If(Global.powerUpIDs[Count Of(Global.powerUpEffect)] == 9);
+-			Create Effect(All Players(All Teams), Orb, Color(Blue), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 1, Visible To);
++			Create Effect(All Players(All Teams), Sphere, Color(Blue), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 0.400,
++				Visible To);
+ 			Create In-World Text(All Players(All Teams), Custom String("Cloaking Device"), Global.powerUpPositions[Count Of(Global.powerUpText)
+@@ -10174,3 +9817,4 @@ rule("powerUpAssignment")
+ 		Else If(Global.powerUpIDs[Count Of(Global.powerUpEffect)] == 10);
+-			Create Effect(All Players(All Teams), Orb, Color(Red), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 1, Visible To);
++			Create Effect(All Players(All Teams), Sphere, Color(Red), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 0.400,
++				Visible To);
+ 			Create In-World Text(All Players(All Teams), Custom String("Super Nano"), Global.powerUpPositions[Count Of(Global.powerUpText)], 1,
+@@ -10179,3 +9823,4 @@ rule("powerUpAssignment")
+ 		Else If(Global.powerUpIDs[Count Of(Global.powerUpEffect)] == 11);
+-			Create Effect(All Players(All Teams), Orb, Color(Purple), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 1, Visible To);
++			Create Effect(All Players(All Teams), Sphere, Color(Purple), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 0.400,
++				Visible To);
+ 			Create In-World Text(All Players(All Teams), Custom String("Bounce Pad"), Global.powerUpPositions[Count Of(Global.powerUpText)], 1,
+@@ -10184,3 +9829,4 @@ rule("powerUpAssignment")
+ 		Else If(Global.powerUpIDs[Count Of(Global.powerUpEffect)] == 12);
+-			Create Effect(All Players(All Teams), Orb, Color(Red), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 1, Visible To);
++			Create Effect(All Players(All Teams), Sphere, Color(Red), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 0.400,
++				Visible To);
+ 			Create In-World Text(All Players(All Teams), Custom String("Ultimate Charger"), Global.powerUpPositions[Count Of(
+@@ -10189,3 +9835,4 @@ rule("powerUpAssignment")
+ 		Else If(Global.powerUpIDs[Count Of(Global.powerUpEffect)] == 13);
+-			Create Effect(All Players(All Teams), Orb, Color(White), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 1, Visible To);
++			Create Effect(All Players(All Teams), Sphere, Color(White), Global.powerUpPositions[Count Of(Global.powerUpEffect)], 0.400,
++				Visible To);
+ 			Create In-World Text(All Players(All Teams), Custom String("Stun"), Global.powerUpPositions[Count Of(Global.powerUpText)], 1,
+@@ -10208,2 +9855,3 @@ rule("powerUpUsage")
+ 		If(Event Player.currentPowerUp == 1);
++			Add Health Pool To Player(Event Player, Health, 100, False, False);
+ 			Play Effect(All Players(All Teams), Good Pickup Effect, Color(Green), Event Player, 1);
+@@ -10220,3 +9868,3 @@ rule("powerUpUsage")
+ 			Abort If(Count Of(Filtered Array(All Dead Players(Team 1), Distance Between(Position Of(Event Player), Position Of(
+-				Current Array Element)) <= Global.reviveRadius)) == 0);
++				Current Array Element)) <= 50)) == 0);
+ 			Start Rule(instantRevive, Restart Rule);
+@@ -10241,2 +9889,3 @@ rule("powerUpUsage")
+ 		Else If(Event Player.currentPowerUp == 7);
++			Add Health Pool To Player(Event Player, Health, 100, False, False);
+ 			Play Effect(All Players(All Teams), Ring Explosion, Color(Green), Event Player, 6);
+@@ -10244,3 +9893,3 @@ rule("powerUpUsage")
+ 			Small Message(Event Player, Custom String("Your infection is reduced!"));
+-			Players Within Radius(Event Player, 3, Team 1, Surfaces).infectionLvl -= 1.500;
++			Players Within Radius(Event Player, 6, Team 1, Surfaces).infectionLvl -= 1.500;
+ 		"Sentry Turret"
+@@ -10256,3 +9905,8 @@ rule("powerUpUsage")
+ 		Else If(Event Player.currentPowerUp == 11);
+-			Start Rule(bouncePad, Restart Rule);
++			If(Is On Ground(Event Player));
++				Start Rule(bouncePad, Restart Rule);
++			Else;
++				Small Message(Event Player, Custom String("You must be on the ground to place a bounce pad"));
++				Abort;
++			End;
+ 		"Ultimate Charger"
+@@ -10332,5 +9986,5 @@ rule("PLAYER ENHANCEMENT INITIALIZATION")
+ 			Event Player.enhancementValues[0] = Workshop Setting Combo(Custom String("Enhancements"), Custom String("Default Enhancement"), 9,
+-				Array(Custom String("No Enhancement"), Custom String("Kevlar"), Custom String("Zombie Hybrid"), Custom String(
+-				"Laser Barricade"), Custom String("Brain Killer"), Custom String("Pyrotechnic"), Custom String("Plague Doctor"), Custom String(
+-				"Born to Battle"), Custom String("Charge Battery"), Custom String("Hitchhiker"), Custom String("P.U.P.")), 0);
++				Array(Custom String("No Enhancement"), Custom String("Survivalist (aka Kevlar)"), Custom String("Zombie Hybrid"),
++				Custom String("Laser Barricade"), Custom String("Brain Killer"), Custom String("Pyrotechnic"), Custom String("Plague Doctor"),
++				Custom String("Born to Battle"), Custom String("Charge Battery"), Custom String("Hitchhiker"), Custom String("P.U.P.")), 0);
+ 		End;
+@@ -10339,3 +9993,3 @@ rule("PLAYER ENHANCEMENT INITIALIZATION")
+ 			"Enhancement Selection: Kevlar"
+-			Create HUD Text(Event Player, Custom String("Kevlar {0}", Icon String(Stop)), Null, Null, Left, 99, Custom Color(240, 129, 26,
++			Create HUD Text(Event Player, Custom String("Survivalist {0}", Icon String(Stop)), Null, Null, Left, 99, Custom Color(240, 129, 26,
+ 				255), Color(Sky Blue), Color(Sky Blue), String, Default Visibility);
+@@ -10422,9 +10076,9 @@ rule("PLAYER ENHANCEMENT INITIALIZATION")
+ 			Event Player.enhancementChase2 = Empty Array;
+-		"Plague Doctor"
++		"Nano Nurse (AKA Plague Doctor)"
+ 		Else If(Event Player.enhancementValues[0] == 6);
+-			"Enhancement: Plague Doctor"
+-			Create HUD Text(Event Player, Custom String("Plague Doctor {0}", Icon String(Plus)), Null, Custom String(
+-				"Infection Reduced: {0} lvls", Event Player.enhancementValues[1]), Left, 99, Color(Green), Color(Green), Color(Green), String,
+-				Default Visibility);
+-			"Plague doctor does 100 + x% more healing to infected players"
++			"Enhancement: Nano Nurse"
++			Create HUD Text(Event Player, Custom String("Nano Nurse {0}", Icon String(Plus)), Null, Custom String(
++				"Infection Reduced: {0} lvls", Event Player.enhancementValues[1]), Left, 99, Color(Yellow), Color(Yellow), Color(Yellow),
++				String, Default Visibility);
++			"Nano Nurse does 100 + x% more healing to infected players"
+ 			Start Healing Modification(Filtered Array(All Players(Team 1), Current Array Element.infected), Event Player, 150,
+@@ -10432,2 +10086,4 @@ rule("PLAYER ENHANCEMENT INITIALIZATION")
+ 			Event Player.enhancementValues[1] = 0;
++			Set Healing Dealt(Event Player, 150);
++			Set Healing Received(Event Player, 150);
+ 		"Born to Battle"
+@@ -10559,3 +10215,4 @@ rule("ZOMBIE HYBRID")
+ 		Call Subroutine(explosionSequence);
+-		Stop Damage Over Time(Event Player.infectionDamage);
++		Stop All Damage Over Time(Event Player);
++		disabled Stop Damage Over Time(Event Player.infectionDamage);
+ 		Event Player.infectionLvl = 0;
+@@ -10599,3 +10256,3 @@ rule("LASER BARRICADE (PLACEMENT)")
+ 		"Laser Barrier health"
+-		Event Player.enhancementChase1 = 10000;
++		Event Player.enhancementChase1 = 25000;
+ 		"Barrier center point"
+@@ -10726,3 +10383,3 @@ rule("LASER BARRICADE BLOCKS ZOMBIES")
+ 		End;
+-		Chase Player Variable At Rate(Event Player, enhancementChase1, 10000, 500, None);
++		Chase Player Variable At Rate(Event Player, enhancementChase1, 25000, 500, None);
+ 		Loop If Condition Is True;
+@@ -10749,3 +10406,3 @@ rule("BRAIN KILLER EXTRA DAMAGE")
+ 		"Critical hits deal 50% more damage, 20% if vicitm is a boss"
+-		Damage(Victim, Event Player, Event Damage * (Array Contains(Global.bosses, Victim) ? 0.200 : 0.600));
++		Damage(Victim, Event Player, Event Damage * 1);
+ 		Play Effect(Event Player, Bad Explosion, Custom Color(100, 14, 14, 255), Eye Position(Victim) + Direction Towards(Eye Position(
+@@ -10820,4 +10477,4 @@ rule("BORN TO BATTLE PLAYER EARNS ELIMINATION")
+ 	{
+-		Player Dealt Final Blow;
+-		Team 1;
++		Player Earned Elimination;
++		All;
+ 		All;
+@@ -11001,3 +10658,3 @@ rule("CHARGE BATTERY (USAGE AND COOLDOWNS)")
+ 		Play Effect(All Players(All Teams), Good Pickup Effect, Color(Yellow), Event Player.interactEntity, 1);
+-		Set Ultimate Charge(Event Player.interactEntity, Ultimate Charge Percent(Event Player.interactEntity) + 15);
++		Set Ultimate Charge(Event Player.interactEntity, Ultimate Charge Percent(Event Player.interactEntity) + 25);
+ 		Event Player.enhancementValues[2] = Event Player.enhancementValues[3];
+@@ -11025,6 +10682,5 @@ rule("HITCHHIKER ATTACH/DETATCH")
+ 			Event Player.enhancementValues[1]) || Is Dead(Event Player) || Is Dead(Event Player.enhancementValues[1]) || !Entity Exists(
+-			Event Player.enhancementValues[1]) || Has Status(Event Player, Knocked Down) || Has Status(Event Player.enhancementValues[1],
+-			Knocked Down) || Distance Between(Position Of(Event Player), Position Of(Event Player.enhancementValues[1]))
++			Event Player.enhancementValues[1]) || Has Status(Event Player, Hacked) || Has Status(Event Player.enhancementValues[1], Hacked)
++			|| Distance Between(Position Of(Event Player), Position Of(Event Player.enhancementValues[1]))
+ 			> 3 * Event Player.enhancementValues[1].size))) == True;
+-		Hero Of(Event Player) != Hero(Mei);
+ 	}
+@@ -11052,3 +10708,2 @@ rule("HITCHHIKER ATTACH/DETATCH")
+ 				End;
+-				Event Player.enhancementValues[2] += Up;
+ 				Event Player.attached = True;
+@@ -11275,2 +10930,387 @@ rule("P.U.P. CONTROL")
+ 	}
++}
++
++disabled rule("============================================== THOTH'S ADDITIONS ====================================================")
++{
++	event
++	{
++		Ongoing - Global;
++	}
++}
++
++rule("3RD PERSON (第三视角)")
++{
++	event
++	{
++		Ongoing - Each Player;
++		All;
++		All;
++	}
++
++	conditions
++	{
++		Is Button Held(Event Player, Button(Reload)) == True;
++		Is Button Held(Event Player, Button(Crouch)) == True;
++		Is Button Held(Event Player, Button(Jump)) == True;
++	}
++
++	actions
++	{
++		If(Event Player.thirdPersonToggle == 0);
++			"来自 overclocking"
++			Start Camera(Event Player, Ray Cast Hit Position(Event Player + Up * (Distance Between(Eye Position(Event Player), Event Player)
++				+ 0.500), Ray Cast Hit Position(Event Player + Up * (Distance Between(Eye Position(Event Player), Event Player) + 0.500),
++				Event Player + Up * (Distance Between(Eye Position(Event Player), Event Player) + 0.500) + Facing Direction Of(Event Player)
++				* -3, Null, Event Player, True), Null, Event Player, True), Event Player + Facing Direction Of(Event Player) * 100, 100);
++			Event Player.thirdPersonToggle = 1;
++		Else;
++			Stop Camera(Event Player);
++			Event Player.thirdPersonToggle = 0;
++		End;
++	}
++}
++
++rule("KELVAR RECKONING (Heal by doing Dmg)")
++{
++	event
++	{
++		Player Dealt Damage;
++		Team 1;
++		All;
++	}
++
++	conditions
++	{
++		Event Player.enhancementValues[0] == 1;
++	}
++
++	actions
++	{
++		If(Distance Between(Position Of(Event Player), Position Of(Victim)) < 10);
++			Heal(Event Player, Event Player, Event Damage * 0.500);
++		Else;
++			Heal(Event Player, Event Player, Event Damage * 0.250);
++		End;
++		If(Heal Over Time Count <= 1);
++			If(Distance Between(Position Of(Event Player), Position Of(Victim)) < 10);
++				Start Heal Over Time(Event Player, Event Player, 2, 20);
++			Else;
++				Start Heal Over Time(Event Player, Event Player, 2, 10);
++			End;
++		End;
++	}
++}
++
++rule("MIZUKI WALL CLIMB")
++{
++	event
++	{
++		Ongoing - Each Player;
++		Team 1;
++		Mizuki;
++	}
++
++	conditions
++	{
++		Is Game In Progress == True;
++		Is Using Ability 1(Event Player) == True;
++	}
++
++	actions
++	{
++		While(Is Using Ability 1(Event Player) == True);
++			Set Jump Vertical Speed(Event Player, 250);
++			Wait(1, Ignore Condition);
++		End;
++		Set Jump Vertical Speed(Event Player, 100);
++	}
++}
++
++rule("CARRION (JETPACK CAT) TRANSPORT")
++{
++	event
++	{
++		Ongoing - Each Player;
++		Team 2;
++		All;
++	}
++
++	conditions
++	{
++		Distance Between(Position Of(Event Player), Position Of(Event Player.botTarget)) > 4 * Event Player.size;
++		Array Contains(Global.bosses, Event Player) == False;
++		Is Hero Being Played(Hero(Jetpack Cat), Team 2) == True;
++	}
++
++	actions
++	{
++		Press Button(Event Player, Button(Interact));
++		Wait(0.250, Ignore Condition);
++	}
++}
++
++rule("SCOURGE (DVA) RUSH")
++{
++	event
++	{
++		Ongoing - Each Player;
++		Team 2;
++		D.Va;
++	}
++
++	conditions
++	{
++		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
++		Distance Between(Eye Position(Event Player), Position Of(Event Player.botTarget)) < 20;
++	}
++
++	actions
++	{
++		Press Button(Event Player, Button(Ability 1));
++		Event Player.canWallPhase = True;
++		Wait(2, Ignore Condition);
++		Event Player.canWallPhase = False;
++	}
++}
++
++rule("SCOURGE REVENGE")
++{
++	event
++	{
++		Player Died;
++		Team 2;
++		D.Va;
++	}
++
++	conditions
++	{
++		disabled Global.zombieSetting == 5;
++		Is Game In Progress == True;
++	}
++
++	actions
++	{
++		Set Ultimate Charge(All Living Players(Team 2), 100);
++		Wait(0.125, Ignore Condition);
++		Event Player.canWallPhase = True;
++		Press Button(All Living Players(Team 2), Button(Ultimate));
++		Wait(2, Ignore Condition);
++		Event Player.canWallPhase = False;
++		Press Button(All Living Players(Team 2), Button(Primary Fire));
++	}
++}
++
++rule("SCOURGE REVENGE JUNKRAT")
++{
++	event
++	{
++		Ongoing - Each Player;
++		Team 2;
++		Junkrat;
++	}
++
++	conditions
++	{
++		Is Using Ultimate(Event Player) == True;
++	}
++
++	actions
++	{
++		Wait(2.750, Ignore Condition);
++		Press Button(Event Player, Button(Primary Fire));
++	}
++}
++
++rule("SCOURGE REVENGE SYMMETRA")
++{
++	event
++	{
++		Ongoing - Each Player;
++		Team 2;
++		Symmetra;
++	}
++
++	conditions
++	{
++		Is Using Ultimate(Event Player) == True;
++	}
++
++	actions
++	{
++		Wait(0.500, Ignore Condition);
++		Press Button(Event Player, Button(Primary Fire));
++		Wait(0.250, Ignore Condition);
++		Loop If Condition Is True;
++	}
++}
++
++rule("SCOURGE REVENGE TORBJORN")
++{
++	event
++	{
++		Ongoing - Each Player;
++		Team 2;
++		Torbjörn;
++	}
++
++	conditions
++	{
++		Is Using Ultimate(Event Player) == True;
++	}
++
++	actions
++	{
++		Start Holding Button(Event Player, Button(Primary Fire));
++		Wait(0.300, Ignore Condition);
++		Loop If Condition Is True;
++		Stop Holding Button(Event Player, Button(Primary Fire));
++	}
++}
++
++rule("SCOURGE REVENGE ROADHOG")
++{
++	event
++	{
++		Ongoing - Each Player;
++		Team 2;
++		Roadhog;
++	}
++
++	conditions
++	{
++		Is Using Ultimate(Event Player) == True;
++	}
++
++	actions
++	{
++		Start Holding Button(Event Player, Button(Primary Fire));
++		Wait(8, Ignore Condition);
++		Stop Holding Button(Event Player, Button(Primary Fire));
++	}
++}
++
++rule("SCOURGE REVENGE ILLARI")
++{
++	event
++	{
++		Ongoing - Each Player;
++		Team 2;
++		Illari;
++	}
++
++	conditions
++	{
++		Is Using Ultimate(Event Player) == True;
++	}
++
++	actions
++	{
++		Wait(1.500, Ignore Condition);
++		Press Button(Event Player, Button(Primary Fire));
++	}
++}
++
++rule("SCOURGE REVENGE SIGMA")
++{
++	event
++	{
++		Ongoing - Each Player;
++		Team 2;
++		Sigma;
++	}
++
++	conditions
++	{
++		Is Using Ultimate(Event Player) == True;
++	}
++
++	actions
++	{
++		Wait(2, Ignore Condition);
++		Abort If Condition Is False;
++		Press Button(Event Player, Button(Primary Fire));
++		Loop If Condition Is True;
++	}
++}
++
++disabled rule("BEHEMOTH HOOK (WHOLE HOG MODE)")
++{
++	event
++	{
++		Ongoing - Each Player;
++		Team 2;
++		Roadhog;
++	}
++
++	conditions
++	{
++		Event Player.botTarget != Null;
++		Event Player.crowdControlled != True;
++		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
++		Absolute Value(Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position(
++			Event Player.botTarget)))) < 30;
++		Distance Between(Eye Position(Event Player), Eye Position(Event Player.botTarget)) < 18 * Event Player.size;
++		Global.zombieSetting == 7;
++	}
++
++	actions
++	{
++		Play Effect(All Players(All Teams), Bad Pickup Effect, Color(Lime Green), Event Player, 2);
++		Event Player.botSpecialTarget = 1;
++		Wait Until(Event Player.crowdControlled == True || Event Player.botSpecialTarget == 0, 0.750);
++		Set Status(Event Player.botSpecialTarget == 0 ? Event Player : Null, Null, Stunned, 0.500);
++		Skip If(Event Player.crowdControlled == True || Event Player.botSpecialTarget == 0, 2);
++		Press Button(Event Player, Button(Ability 1));
++		Set Ability Cooldown(Players On Hero(Hero(Roadhog), Team 2), Button(Ability 1), 2);
++		Event Player.botSpecialTarget = 0;
++		Wait(15, Ignore Condition);
++	}
++}
++
++disabled rule("BEHEMOTH HOOK COUNTER (WHOLE HOG MODE)")
++{
++	event
++	{
++		Player Took Damage;
++		Team 2;
++		Roadhog;
++	}
++
++	conditions
++	{
++		Global.zombieSetting == 7;
++		Event Player.botSpecialTarget == 1;
++	}
++
++	actions
++	{
++		Event Player.botSpecialTarget = 0;
++	}
++}
++
++disabled rule("roadhogs hook you - RIDER USE GRAPPLING HOOK")
++{
++	event
++	{
++		Ongoing - Each Player;
++		Team 2;
++		Roadhog;
++	}
++
++	conditions
++	{
++		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
++		Distance Between(Eye Position(Event Player), Position Of(Event Player.botTarget)) < 20;
++	}
++
++	actions
++	{
++		Create Effect(All Players(All Teams), Bad Aura, Color(Orange), Event Player, 1, Visible To Position and Radius);
++		Wait(2, Ignore Condition);
++		Destroy Effect(Last Created Entity);
++		Wait(0.500, Ignore Condition);
++		Press Button(Event Player, Button(Ability 1));
++		Wait(0.250, Ignore Condition);
++		Set Ability Cooldown(Event Player, Button(Ability 1), 8);
++	}
+ }
+\ No newline at end of file

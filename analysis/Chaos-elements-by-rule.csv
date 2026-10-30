@@ -1,0 +1,273 @@
+﻿rule,original,remix,delta
+"setDifficulty",1112,0,-1112
+"powerUpAssignment",444,0,-444
+"sentryTurret (50-59)",440,0,-440
+"EFFECT/TEXT (PERMANENT)",410,0,-410
+"INITIALIZE SURVIVOR TO BE RESCUED",325,0,-325
+"P.U.P. CONTROL",307,0,-307
+"setZombieMode",303,0,-303
+"PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)",291,0,-291
+"stun (100-109)",287,0,-287
+"EFFECT/TEXT (GLOBAL)",282,0,-282
+"powerUpUsage",245,0,-245
+"airStrike (30-39)",219,0,-219
+"PRIME SLIMER (EMRE) FLIGHT (BOSS)",213,0,-213
+"bouncePad (80-89)",191,0,-191
+"REIGNITED (ANRAN) ABILITIES",188,0,-188
+"cloakingDevice (60-69)",180,0,-180
+"SURVIVOR FOLLOW TARGET",175,0,-175
+"SMOLDER SUPER SLAM",175,0,-175
+"PLAYER ENHANCEMENT INITIALIZATION",1440,1275,-165
+"GENERATE SUPPLY DROPS",159,0,-159
+"beaconofHealing (40-49)",155,0,-155
+"superNano (70-79)",145,0,-145
+"BEHEMOTH GAS STREAM (BOSS)",137,0,-137
+"botHeroRandomization",127,0,-127
+"BASIC (REAPER) SHADOW STEP (BOSS)",127,0,-127
+"playerForceField (10-19)",127,0,-127
+"RIDER ATTACH TO TEAMMATES",123,0,-123
+"RUSHER MOLTEN CORE (BOSS)",122,0,-122
+"RIDER USE GRAPPLING HOOK",118,0,-118
+"P.U.P. TARGET",116,0,-116
+"SURVIVOR REACHES EXTRACTION SITE",110,0,-110
+"ZOMBIES SPAWN AT REIGNITED",105,0,-105
+"INCREASE OBJECTIVE CAPTURE PERCENTAGE",100,0,-100
+"DECREASES CAPTURE PERCENTAGE",99,0,-99
+"PLAYER AFK",96,0,-96
+"SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE",90,0,-90
+"noCooldowns (20-29)",88,0,-88
+"BOT DIES",238,160,-78
+"SMOLDER BOSS SLAM",77,0,-77
+"PLAYER SAYS GROUP UP TO SURVIVOR",74,0,-74
+"DELETE PATH",73,0,-73
+"botEntityManagement",619,550,-69
+"RIDER DETATCH FROM TEAMMATES WHILE ALIVE",62,0,-62
+"SMOLDER ACTIVATES FROM DAMAGE",60,0,-60
+"CREATE PATH",54,0,-54
+"instantRevive (0-9)",54,0,-54
+"ultimateCharger (90-99)",52,0,-52
+"globalObjectiveEntityManagement",1400,1350,-50
+"SMOLDER BOSS EVENT STARTS",48,0,-48
+"ZOMBIE HYBRID",48,0,-48
+"RUSHER (TORB) SPEED MECHANICS",46,0,-46
+"RIDER DETACH WHEN DEAD OR TARGET IS DEAD",45,0,-45
+"PLAYER DROPS POWER UP (MANUAL)",42,0,-42
+"enablePowerups",40,0,-40
+"PREGAME QUICK TIPS FOR PLAYERS",39,0,-39
+"smolderEnraged",38,0,-38
+"SURVIVOR JUMP",32,0,-32
+"PLAYER DROPS POWER UP (DEATH)",32,0,-32
+"REIGNITED USES ULTIMATE NEAR PLAYER",30,0,-30
+"WIN/LOSS CONDITIONS",315,286,-29
+"RIDER (WIDOWMAKER) ATTACH TO PLAYERS",27,0,-27
+"selectTarget",132,106,-26
+"REIGNITED ULTIMATE ATTACK COUNTER",26,0,-26
+"SMOLDER STAYS ENRAGE DURING BOSS EVENT",24,0,-24
+"RUSHER MOLTEN CORE BURNS PLAYERS (BOSS)",21,0,-21
+"BOSS DIES (ALL BOSS OBJECTIVES)",177,160,-17
+"SURVIVOR FOLLOW TARGET LETS GO",17,0,-17
+"CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)",101,85,-16
+"POWER UP EFFECT/TEXT MANAGEMENT",16,0,-16
+"botStatManagement",199,184,-15
+"BOT BECOMES BOSS",187,172,-15
+"SURVIVOR TO BE RESCUED DIES",15,0,-15
+"SMOLDER ACTIVATED FROM BOSS EVENT",12,0,-12
+"teleportBots",241,232,-9
+"BOT INITIALIZATION",135,127,-8
+"DAYTAKER (ILLARI) BURST",383,376,-7
+"SLIMER (MERCY) TENTACLE GRAB",335,328,-7
+"BLASTER (PHARAH) CHARGES ROCKET THEN FIRES",212,205,-7
+"HITCHHIKER ATTACH/DETATCH",337,332,-5
+"BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)",138,133,-5
+"EGG SWITCHES THE POSITION FOR YOU",22,17,-5
+"SMOLDER (WINSTON) SEES PLAYER",95,91,-4
+"ASSIGN ZOMBIE TO BECOME EGG",71,67,-4
+"RANDOM ABILITIES",82,79,-3
+"SWARM SHOOTOUT",69,66,-3
+"Illari HealStack",0,2,2
+"DOWNFALLEN GRABS PLAYER",181,186,5
+"minibossMutation",75,80,5
+"Kiriko Vaccine Suzu",0,5,5
+"PLAYER SWITCHES HERO",24,30,6
+"Reaper Fixed Ult",0,6,6
+"Reinhardt STUN",0,6,6
+"KILL BOTS THAT ARE STUCK OR ARE NOT MOVING",86,93,7
+"Sojourn PullPos",0,7,7
+"Doom Knock",0,8,8
+"LifeWeaver PULL",0,8,8
+"Sombra DPS",0,8,8
+"Torb Burn",0,8,8
+"Description Start",0,8,8
+"HOPPER DIES TO ENVIRONMENT",0,8,8
+"enableEnhancements",35,44,9
+"Lucio Effect",0,9,9
+"Mei Freeze",0,9,9
+"Mercy Fly",0,9,9
+"RoadHog Flying",0,9,9
+"IM A GOD",0,9,9
+"BEHEMOTH HOOK COUNTER (WHOLE HOG MODE)",0,10,10
+"Dva Knock",0,10,10
+"Echo  DMG",0,11,11
+"Genji ULT dmg",0,11,11
+"Mauga Dash Invinvinvin",0,11,11
+"Sigma Shield COnfig",0,11,11
+"Ana Ult",0,12,12
+"Brig Inspireproc",0,12,12
+"Tracer Ultcharge",0,13,13
+"WreckingBallz SPEED",0,13,13
+"Zenyatta orb+ Lifesteal",0,13,13
+"PLAYER Initialize when changing hero",0,13,13
+"Bastion Config No CD Nade",0,14,14
+"Reinhardt MoveSpeed",0,14,14
+"LifeWeaver KnockBack",0,15,15
+"Venture DASH Throught walls?",0,15,15
+"Winton Stun",0,15,15
+"Zenyatta Discord Lifesteal",0,15,15
+"Hanzo Explode",0,16,16
+"Juno Pulsar Heal Invulnerable",0,16,16
+"Mei Freeze 1",0,16,16
+"WreckingBallz Kncok",0,16,16
+"SKIP ASSEMBLING HEROES",264,281,17
+"Dva DemchUlt",0,17,17
+"Echo CopyZise",0,17,17
+"Pharah Ult",0,18,18
+"WIDOWMAKER Charge",0,18,18
+"Junkrat Shoot",0,19,19
+"Rammatra Hp Increase",0,19,19
+"Torb The Engineer",0,19,19
+"DAYTAKER Burst",0,19,19
+"ANA Nade",0,20,20
+"Genji Inf Dash",0,20,20
+"Sigma Shoots",0,20,20
+"VENTURE EFFECT",0,20,20
+"Zarya HPBuffOther",0,20,20
+"BEHEMOTH CLOUD EFFECT",0,20,20
+"Cassidy Ult",0,21,21
+"Symetra Photon fLIGHT",0,21,21
+"Tracer Explode",0,21,21
+"WUYANG Secondary",0,21,21
+"Zenyatta Orb+",0,21,21
+"DAYTAKER BURSTSpin",0,21,21
+"SPECIAL EFFECT CONTROLS",58,80,22
+"Junkrat Mine",0,22,22
+"WIDOWMAKER ULT Charge",0,22,22
+"Bomber Ult",0,22,22
+"Bastion Ult Field",0,23,23
+"Brig Ult",0,23,23
+"Venture No CD",0,23,23
+"HOPPER BOMB SPIN",0,23,23
+"NANOMANCER PULL",0,23,23
+"Mercy Machinegun",0,24,24
+"Sombra HackHeal",0,24,24
+"Brig Damage Convert",0,25,25
+"Junkrat UltPlode",0,25,25
+"Torb Godzilla",0,25,25
+"Hooper BOMB",0,25,25
+"Hopper BOSS",0,25,25
+"Bap Immo 4 all",0,26,26
+"Junkrat Trap",0,26,26
+"Sombra ULT",0,26,26
+"WUYANG ULT",0,26,26
+"Ashe Multiple Shot",0,27,27
+"Lucio Ovrhlt",0,27,27
+"Ana Sleep CD",0,28,28
+"Bap Doubleshot",0,28,28
+"Cassidy Stacks",0,28,28
+"Illari Charged Bomb",0,28,28
+"Juno JumpSpeed",0,28,28
+"Juno Pulsar Dmg Vulenrable",0,28,28
+"Sombra Hack",0,28,28
+"Wreckingball Phased",0,28,28
+"Venture DIG",0,29,29
+"Zarya BlackHole",0,29,29
+"Rammatra Nemesis",0,30,30
+"Sojourn PullStart",0,30,30
+"Sombra TP HACK",0,30,30
+"Zenyatta Discord",0,30,30
+"NANOMANCER BOSS Chain Effect",0,30,30
+"Ana Took Damage",0,31,31
+"MOIRA ORB +",0,31,31
+"Zarya HPBuffself",0,31,31
+"Zenyatta Orb + Bubble",0,31,31
+"botRespawnInitialization",162,194,32
+"KirikoVaccine Swiftstep",0,32,32
+"Mauga TP Ult",0,32,32
+"BLASTER FLYING",0,32,32
+"Brig Inspire Konkcback",0,33,33
+"Freja ult",0,33,33
+"Sojorn LaserDMg",0,33,33
+"WIDOWMAKER WALLHACKSSSSSSSSS",0,33,33
+"NANOMANCER PUNCHES IN NEMESIS FORM",0,33,33
+"STALKER Boss ORB",0,33,33
+"Doom Armor",0,34,34
+"Hazard Jump",0,34,34
+"Kiriko Vaccine Effect",0,34,34
+"ORISA JAvelin dmg",0,34,34
+"Soldier Speed",0,34,34
+"Winton Primal",0,34,34
+"setAvailableObjectives",256,292,36
+"Illari Stack count",0,36,36
+"Reaper Noclip",0,36,36
+"WUYANG Bubble",0,37,37
+"LifeWeaver Tree Effect",0,38,38
+"Winton Barrier Push",0,38,38
+"JunkerQueen BleeedManual",0,39,39
+"Orisa Fortibuff",0,39,39
+"WUYANG WAVE",0,39,39
+"D.va Push Matrix",0,40,40
+"JunkerQueen WoundExplode",0,40,40
+"Reaper Ult",0,40,40
+"Sigmazucckk",0,40,40
+"Orisa Ult",0,41,41
+"Soldier ULT",0,41,41
+"Brig Ability reseter",0,42,42
+"Lucio SpeedUp",0,42,42
+"Hazard wall",0,43,43
+"SMOLDER TAKES DAMAGE",0,45,45
+"Brig Ult Effect",0,45,45
+"Sojourn AutoLaser",0,45,45
+"Symmetra Proton",0,45,45
+"PLAYERS ON OBJECTIVE CONTROL",65,111,46
+"Bastion Config Knock",0,47,47
+"BEHEMOTH BLIDNING",0,47,47
+"ZOMBIE HYRBID",0,48,48
+"Freja MultiBolt",0,48,48
+"Mercy Bring Rez",0,48,48
+"Bastion UltDrop",0,49,49
+"Illari Ignite",0,49,49
+"Pharah Roket",0,49,49
+"Sigma Shiled Push",0,50,50
+"NANOMANCER BOSS",0,50,50
+"Ashe StunEye",0,51,51
+"HOPPER DEMECH INITIALIZATION",0,51,51
+"Mauga Pickup",0,52,52
+"Soldier MultiTarget",0,52,52
+"HOPPER SPAWNS",0,52,52
+"Lucio Reduction",0,54,54
+"Moira ORB - and Grasp",0,54,54
+"Winton Barrier",0,54,54
+"Hazard Wall Up",0,55,55
+"Roadhog HoleEffet",0,56,56
+"HOPPER DEMECH CONTROL",0,58,58
+"Rammatra Shield Stun",0,60,60
+"Mei Freeze E",0,61,61
+"RoadHog HoleConfig",0,62,62
+"WIDOWMAKER grapling hook stick",0,64,64
+"Hanzo TP",0,68,68
+"Reinhard Stick",0,70,70
+"Symmetra Photon Damage",0,72,72
+"Genji Shurkens",0,73,73
+"MINIBOSS DECREASES CAPTURE PERCENTAGE",0,75,75
+"LiveWeaver Tree config",0,79,79
+"MODIFY OBJECTIVE CAPTURE PERCENTAGE",0,91,91
+"BEHEMOTH HOOK (WHOLE HOG MODE)",0,100,100
+"botHeroRandomization Spawn Rate",0,109,109
+"NANOMANCER (RAMATTRA) FIRES NANITE SWARM",0,113,113
+"EFFECTS/TEXTS",2034,2150,116
+"SLICER (VENTURE) ABILITIES",0,155,155
+"NANOMANCER TRANSFORMS",0,162,162
+"HOPPER (D.VA) JUMPS AROUND",0,165,165
+"SLIMER FLIGHT (BOSS)",0,214,214
+"setZombieMode zombie variable",0,322,322
+"Text",0,913,913
+"setDifficulty Bot Setup",0,1112,1112

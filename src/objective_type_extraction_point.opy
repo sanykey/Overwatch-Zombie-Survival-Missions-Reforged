@@ -72,8 +72,8 @@ rule "WIN/LOSS CONDITIONS":
     destroyAllProgressBarInWorldTexts()
     destroyAllHudTexts()
     bigMessage(getPlayers(Team.1).filter(lambda player: playerTargetList > 0 and not player in playersOnObjective), "You were left behind!")
-    getPlayers(Team.1).setStatusEffect(null, Status.ROOTED, 9999)
-    getPlayers(Team.1).setStatusEffect(null, Status.PHASED_OUT, 9999)
+    getPlayers(Team.1).setStatusEffect(null, Status.ROOTED, 99999)
+    getPlayers(Team.1).setStatusEffect(null, Status.PHASED_OUT, 99999)
     if len(playerTargetList) == 0 or playersOnObjective == []:
         getPlayers(Team.1).teleport(vect(0, 500, 0))
         getAllPlayers().setInvisibility(Invis.ALL)

@@ -255,7 +255,7 @@ rule "PLAYER AFK":
         eventPlayer.afk = true
         eventPlayer.setInvisibility(Invis.ALL)
         playerTargetList.remove(eventPlayer)
-        eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 9999)
+        eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 99999)
     else:
         wait(1)
     if ruleCondition:

@@ -114,7 +114,7 @@ rule "SKIP ASSEMBLING HEROES":
         setMatchTime(0)
         wait(0.25)
     setMatchTime(3599)
-    waitUntil(len(getPlayers(Team.1).filter(lambda player: player.hasSpawned())) > 0 and len(mapGrid) > 0, 9999)
+    waitUntil(len(getPlayers(Team.1).filter(lambda player: player.hasSpawned())) > 0 and len(mapGrid) > 0, 99999)
     setMatchTime(60)
     wait()
     chase1 = getMatchTime()

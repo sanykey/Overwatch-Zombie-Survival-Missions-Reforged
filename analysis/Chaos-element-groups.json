@@ -1,0 +1,24 @@
+{
+  "compiler": "9.7.20",
+  "deleted": {
+    "supplyAndPowerups": 3899,
+    "survivorRescue": 965,
+    "pupHandlers": 423,
+    "afk": 96,
+    "anran": 349,
+    "rider": 375,
+    "torb": 189,
+    "reaperBoss": 127,
+    "roadhogGasStream": 137,
+    "winstonBoss": 374
+  },
+  "added": {
+    "heroRules": 4174,
+    "heroDescriptions": 921,
+    "newEnemyRules": 1012
+  },
+  "majorSavings": 6934,
+  "majorAdditions": 6107,
+  "otherDelta": -23,
+  "net": -850
+}

@@ -45,7 +45,7 @@ rule "INITIALIZE SURVIVOR TO BE RESCUED":
     eventPlayer.enhancementValues[0] = 9
     eventPlayer.enhancementValues[1] = 0
     eventPlayer.enhancementValues[2] = false
-    survivorToRescue.setStatusEffect(null, Status.UNKILLABLE, 9999)
+    survivorToRescue.setStatusEffect(null, Status.UNKILLABLE, 99999)
     survivorToRescue.setHealingReceived(110)
     #Objective/Survivor distance
     createInWorldText(getAllPlayers().filter(lambda _: not eventPlayer.botTempValue and distance(localPlayer.getPosition(), objectivePositions[0]) > 5), "Distance: {0}m".format(distance(localPlayer.getPosition(), eventPlayer.getPosition() if distance(eventPlayer.getPosition(), localPlayer.getPosition()) > objectiveRad else objectivePositions[0])), eventPlayer.getPosition() if distance(eventPlayer.getPosition(), localPlayer.getPosition()) > objectiveRad else objectivePositions[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.VIOLET, SpecVisibility.NEVER)
@@ -107,8 +107,8 @@ rule "SURVIVOR FOLLOW TARGET":
     survivorToRescue.potentialTargets = []
     if survivorToRescue.getHealth() <= 1:
         survivorToRescue.randVal = iconString(Icon.DIZZY)
-        survivorToRescue.setStatusEffect(null, Status.KNOCKED_DOWN, 9999)
-        survivorToRescue.setStatusEffect(null, Status.PHASED_OUT, 9999)
+        survivorToRescue.setStatusEffect(null, Status.KNOCKED_DOWN, 99999)
+        survivorToRescue.setStatusEffect(null, Status.PHASED_OUT, 99999)
         waitUntil(survivorToRescue.getNormalizedHealth() > 0.75, 20)
         survivorToRescue.clearStatusEffect(Status.KNOCKED_DOWN)
         if ruleCondition:

@@ -69,8 +69,8 @@ rule "PLAYER SELECTS/RESELECTS HERO":
     eventPlayer.setInvisibility(Invis.ALL)
     eventPlayer.startCamera(startCamPos, startPos + vect(0, 1, 0))
     eventPlayer.startHealingOverTime(null, 5, 1000)
-    eventPlayer.setStatusEffect(null, Status.INVINCIBLE, 9999)
-    eventPlayer.setStatusEffect(null, Status.ROOTED, 9999)
+    eventPlayer.setStatusEffect(null, Status.INVINCIBLE, 99999)
+    eventPlayer.setStatusEffect(null, Status.ROOTED, 99999)
     #If current game mode is team deathmatch
     if specialGameMode:
         eventPlayer.attachTo(getPlayers(Team.2)[0], localVector(eventPlayer.startPos, getPlayers(Team.2)[0], Transform.ROTATION_AND_TRANSLATION))

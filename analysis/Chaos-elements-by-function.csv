@@ -1,0 +1,270 @@
+﻿name,original,chaos,delta
+"def powerUpAssignment():",444,0,-444
+"def sentryTurret():",440,0,-440
+"rule ""EFFECT/TEXT (PERMANENT)"":",410,0,-410
+"rule ""INITIALIZE SURVIVOR TO BE RESCUED"":",325,0,-325
+"rule ""P.U.P. CONTROL"":",307,0,-307
+"rule ""PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)"":",291,0,-291
+"def stun():",287,0,-287
+"rule ""EFFECT/TEXT (GLOBAL)"":",282,0,-282
+"def powerUpUsage():",245,0,-245
+"def airStrike():",219,0,-219
+"rule ""PRIME SLIMER (EMRE) FLIGHT (BOSS)"":",213,0,-213
+"def bouncePad():",191,0,-191
+"rule ""REIGNITED (ANRAN) ABILITIES"":",188,0,-188
+"def cloakingDevice():",180,0,-180
+"rule ""SURVIVOR FOLLOW TARGET"":",175,0,-175
+"rule ""SMOLDER SUPER SLAM"":",175,0,-175
+"rule ""PLAYER ENHANCEMENT INITIALIZATION"":",1440,1275,-165
+"rule ""GENERATE SUPPLY DROPS"":",159,0,-159
+"def healBeacon():",155,0,-155
+"def superNano():",145,0,-145
+"rule ""BEHEMOTH GAS STREAM (BOSS)"":",137,0,-137
+"rule ""BASIC (REAPER) SHADOW STEP (BOSS)"":",127,0,-127
+"def playerForceField():",127,0,-127
+"rule ""RIDER ATTACH TO TEAMMATES"":",123,0,-123
+"rule ""RUSHER MOLTEN CORE (BOSS)"":",122,0,-122
+"rule ""RIDER USE GRAPPLING HOOK"":",118,0,-118
+"rule ""P.U.P. TARGET"":",116,0,-116
+"rule ""SURVIVOR REACHES EXTRACTION SITE"":",110,0,-110
+"rule ""ZOMBIES SPAWN AT REIGNITED"":",105,0,-105
+"rule ""INCREASE OBJECTIVE CAPTURE PERCENTAGE"":",100,0,-100
+"rule ""DECREASES CAPTURE PERCENTAGE"":",99,0,-99
+"rule ""PLAYER AFK"":",96,0,-96
+"rule ""SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE"":",90,0,-90
+"def noCooldowns():",88,0,-88
+"rule ""BOT DIES"":",238,160,-78
+"rule ""SMOLDER BOSS SLAM"":",77,0,-77
+"rule ""PLAYER SAYS GROUP UP TO SURVIVOR"":",74,0,-74
+"rule ""DELETE PATH"":",73,0,-73
+"def botEntityManagement():",619,550,-69
+"rule ""RIDER DETATCH FROM TEAMMATES WHILE ALIVE"":",62,0,-62
+"rule ""SMOLDER ACTIVATES FROM DAMAGE"":",60,0,-60
+"rule ""CREATE PATH"":",54,0,-54
+"def instantRevive():",54,0,-54
+"def ultimateCharger():",52,0,-52
+"def globalObjectiveEntityManagement():",1400,1350,-50
+"rule ""SMOLDER BOSS EVENT STARTS"":",48,0,-48
+"rule ""ZOMBIE HYBRID"":",48,0,-48
+"rule ""RUSHER (TORB) SPEED MECHANICS"":",46,0,-46
+"rule ""RIDER DETACH WHEN DEAD OR TARGET IS DEAD"":",45,0,-45
+"rule ""PLAYER DROPS POWER UP (MANUAL)"":",42,0,-42
+"def enablePowerups():",40,0,-40
+"rule ""PREGAME QUICK TIPS FOR PLAYERS"":",39,0,-39
+"def smolderEnraged():",38,0,-38
+"rule ""SURVIVOR JUMP"":",32,0,-32
+"rule ""PLAYER DROPS POWER UP (DEATH)"":",32,0,-32
+"rule ""REIGNITED USES ULTIMATE NEAR PLAYER"":",30,0,-30
+"rule ""WIN/LOSS CONDITIONS"":",315,286,-29
+"rule ""RIDER (WIDOWMAKER) ATTACH TO PLAYERS"":",27,0,-27
+"def selectTarget():",132,106,-26
+"rule ""REIGNITED ULTIMATE ATTACK COUNTER"":",26,0,-26
+"rule ""SMOLDER STAYS ENRAGE DURING BOSS EVENT"":",24,0,-24
+"rule ""RUSHER MOLTEN CORE BURNS PLAYERS (BOSS)"":",21,0,-21
+"def botHeroRandomization():",127,109,-18
+"rule ""BOSS DIES (ALL BOSS OBJECTIVES)"":",177,160,-17
+"rule ""SURVIVOR FOLLOW TARGET LETS GO"":",17,0,-17
+"rule ""CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)"":",101,85,-16
+"rule ""POWER UP EFFECT/TEXT MANAGEMENT"":",16,0,-16
+"def botStatManagement():",199,184,-15
+"rule ""BOT BECOMES BOSS"":",187,172,-15
+"rule ""SURVIVOR TO BE RESCUED DIES"":",15,0,-15
+"rule ""SMOLDER ACTIVATED FROM BOSS EVENT"":",12,0,-12
+"def teleportBots():",241,232,-9
+"rule ""BOT INITIALIZATION"":",135,127,-8
+"rule ""DAYTAKER (ILLARI) BURST"":",383,376,-7
+"rule ""SLIMER (MERCY) TENTACLE GRAB"":",335,328,-7
+"rule ""BLASTER (PHARAH) CHARGES ROCKET THEN FIRES"":",212,205,-7
+"rule ""HITCHHIKER ATTACH/DETATCH"":",337,332,-5
+"rule ""BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)"":",138,133,-5
+"rule ""EGG SWITCHES THE POSITION FOR YOU"":",22,17,-5
+"rule ""SMOLDER (WINSTON) SEES PLAYER"":",95,91,-4
+"rule ""ASSIGN ZOMBIE TO BECOME EGG"":",71,67,-4
+"rule ""RANDOM ABILITIES"":",82,79,-3
+"rule ""SWARM SHOOTOUT"":",69,66,-3
+"Other empty rules",20,17,-3
+"rule ""Illari HealStack"":",0,2,2
+"rule ""DOWNFALLEN GRABS PLAYER"":",181,186,5
+"def minibossMutation():",75,80,5
+"rule ""Kiriko Vaccine Suzu"":",0,5,5
+"rule ""PLAYER SWITCHES HERO"":",24,30,6
+"rule ""Reaper Fixed Ult"":",0,6,6
+"rule ""Reinhardt STUN"":",0,6,6
+"rule ""KILL BOTS THAT ARE STUCK OR ARE NOT MOVING"":",86,93,7
+"rule ""Sojourn PullPos"":",0,7,7
+"rule ""Doom Knock"":",0,8,8
+"rule ""LifeWeaver PULL"":",0,8,8
+"rule ""Sombra DPS"":",0,8,8
+"rule ""Torb Burn"":",0,8,8
+"rule ""Description Start"":",0,8,8
+"rule ""HOPPER DIES TO ENVIRONMENT"":",0,8,8
+"def enableEnhancements():",35,44,9
+"rule ""Lucio Effect"":",0,9,9
+"rule ""Mei Freeze"":",0,9,9
+"rule ""Mercy Fly"":",0,9,9
+"rule ""RoadHog Flying"":",0,9,9
+"rule ""IM A GOD"":",0,9,9
+"rule ""BEHEMOTH HOOK COUNTER (WHOLE HOG MODE)"":",0,10,10
+"rule ""Dva Knock"":",0,10,10
+"rule ""Echo  DMG"":",0,11,11
+"rule ""Genji ULT dmg"":",0,11,11
+"rule ""Mauga Dash Invinvinvin"":",0,11,11
+"rule ""Sigma Shield COnfig"":",0,11,11
+"rule ""Ana Ult"":",0,12,12
+"rule ""Brig Inspireproc"":",0,12,12
+"rule ""Tracer Ultcharge"":",0,13,13
+"rule ""WreckingBallz SPEED"":",0,13,13
+"rule ""Zenyatta orb+ Lifesteal"":",0,13,13
+"rule ""PLAYER Initialize when changing hero"":",0,13,13
+"rule ""Bastion Config No CD Nade"":",0,14,14
+"rule ""Reinhardt MoveSpeed"":",0,14,14
+"rule ""LifeWeaver KnockBack"":",0,15,15
+"rule ""Venture DASH Throught walls?"":",0,15,15
+"rule ""Winton Stun"":",0,15,15
+"rule ""Zenyatta Discord Lifesteal"":",0,15,15
+"rule ""Hanzo Explode"":",0,16,16
+"rule ""Juno Pulsar Heal Invulnerable"":",0,16,16
+"rule ""Mei Freeze 1"":",0,16,16
+"rule ""WreckingBallz Kncok"":",0,16,16
+"rule ""SKIP ASSEMBLING HEROES"":",264,281,17
+"rule ""Dva DemchUlt"":",0,17,17
+"rule ""Echo CopyZise"":",0,17,17
+"rule ""Pharah Ult"":",0,18,18
+"rule ""WIDOWMAKER Charge"":",0,18,18
+"def setZombieMode():",303,322,19
+"rule ""Junkrat Shoot"":",0,19,19
+"rule ""Rammatra Hp Increase"":",0,19,19
+"rule ""Torb The Engineer"":",0,19,19
+"rule ""DAYTAKER Burst"":",0,19,19
+"rule ""ANA Nade"":",0,20,20
+"rule ""Genji Inf Dash"":",0,20,20
+"rule ""Sigma Shoots"":",0,20,20
+"rule ""VENTURE EFFECT"":",0,20,20
+"rule ""Zarya HPBuffOther"":",0,20,20
+"rule ""BEHEMOTH CLOUD EFFECT"":",0,20,20
+"rule ""Cassidy Ult"":",0,21,21
+"rule ""Symetra Photon fLIGHT"":",0,21,21
+"rule ""Tracer Explode"":",0,21,21
+"rule ""WUYANG Secondary"":",0,21,21
+"rule ""Zenyatta Orb+"":",0,21,21
+"rule ""DAYTAKER BURSTSpin"":",0,21,21
+"rule ""SPECIAL EFFECT CONTROLS"":",58,80,22
+"rule ""Junkrat Mine"":",0,22,22
+"rule ""WIDOWMAKER ULT Charge"":",0,22,22
+"rule ""Bomber Ult"":",0,22,22
+"rule ""Bastion Ult Field"":",0,23,23
+"rule ""Brig Ult"":",0,23,23
+"rule ""Venture No CD"":",0,23,23
+"rule ""HOPPER BOMB SPIN"":",0,23,23
+"rule ""NANOMANCER PULL"":",0,23,23
+"rule ""Mercy Machinegun"":",0,24,24
+"rule ""Sombra HackHeal"":",0,24,24
+"rule ""Brig Damage Convert"":",0,25,25
+"rule ""Junkrat UltPlode"":",0,25,25
+"rule ""Torb Godzilla"":",0,25,25
+"rule ""Hooper BOMB"":",0,25,25
+"rule ""Hopper BOSS"":",0,25,25
+"rule ""Bap Immo 4 all"":",0,26,26
+"rule ""Junkrat Trap"":",0,26,26
+"rule ""Sombra ULT"":",0,26,26
+"rule ""WUYANG ULT"":",0,26,26
+"rule ""Ashe Multiple Shot"":",0,27,27
+"rule ""Lucio Ovrhlt"":",0,27,27
+"rule ""Ana Sleep CD"":",0,28,28
+"rule ""Bap Doubleshot"":",0,28,28
+"rule ""Cassidy Stacks"":",0,28,28
+"rule ""Illari Charged Bomb"":",0,28,28
+"rule ""Juno JumpSpeed"":",0,28,28
+"rule ""Juno Pulsar Dmg Vulenrable"":",0,28,28
+"rule ""Sombra Hack"":",0,28,28
+"rule ""Wreckingball Phased"":",0,28,28
+"rule ""Venture DIG"":",0,29,29
+"rule ""Zarya BlackHole"":",0,29,29
+"rule ""Rammatra Nemesis"":",0,30,30
+"rule ""Sojourn PullStart"":",0,30,30
+"rule ""Sombra TP HACK"":",0,30,30
+"rule ""Zenyatta Discord"":",0,30,30
+"rule ""NANOMANCER BOSS Chain Effect"":",0,30,30
+"rule ""Ana Took Damage"":",0,31,31
+"rule ""MOIRA ORB +"":",0,31,31
+"rule ""Zarya HPBuffself"":",0,31,31
+"rule ""Zenyatta Orb + Bubble"":",0,31,31
+"def botRespawnInitialization():",162,194,32
+"rule ""KirikoVaccine Swiftstep"":",0,32,32
+"rule ""Mauga TP Ult"":",0,32,32
+"rule ""BLASTER FLYING"":",0,32,32
+"rule ""Brig Inspire Konkcback"":",0,33,33
+"rule ""Freja ult"":",0,33,33
+"rule ""Sojorn LaserDMg"":",0,33,33
+"rule ""WIDOWMAKER WALLHACKSSSSSSSSS"":",0,33,33
+"rule ""NANOMANCER PUNCHES IN NEMESIS FORM"":",0,33,33
+"rule ""STALKER Boss ORB"":",0,33,33
+"rule ""Doom Armor"":",0,34,34
+"rule ""Hazard Jump"":",0,34,34
+"rule ""Kiriko Vaccine Effect"":",0,34,34
+"rule ""ORISA JAvelin dmg"":",0,34,34
+"rule ""Soldier Speed"":",0,34,34
+"rule ""Winton Primal"":",0,34,34
+"def setAvailableObjectives():",256,292,36
+"rule ""Illari Stack count"":",0,36,36
+"rule ""Reaper Noclip"":",0,36,36
+"rule ""WUYANG Bubble"":",0,37,37
+"rule ""LifeWeaver Tree Effect"":",0,38,38
+"rule ""Winton Barrier Push"":",0,38,38
+"rule ""JunkerQueen BleeedManual"":",0,39,39
+"rule ""Orisa Fortibuff"":",0,39,39
+"rule ""WUYANG WAVE"":",0,39,39
+"rule ""D.va Push Matrix"":",0,40,40
+"rule ""JunkerQueen WoundExplode"":",0,40,40
+"rule ""Reaper Ult"":",0,40,40
+"rule ""Sigmazucckk"":",0,40,40
+"rule ""Orisa Ult"":",0,41,41
+"rule ""Soldier ULT"":",0,41,41
+"rule ""Brig Ability reseter"":",0,42,42
+"rule ""Lucio SpeedUp"":",0,42,42
+"rule ""Hazard wall"":",0,43,43
+"rule ""SMOLDER TAKES DAMAGE"":",0,45,45
+"rule ""Brig Ult Effect"":",0,45,45
+"rule ""Sojourn AutoLaser"":",0,45,45
+"rule ""Symmetra Proton"":",0,45,45
+"rule ""PLAYERS ON OBJECTIVE CONTROL"":",65,111,46
+"rule ""Bastion Config Knock"":",0,47,47
+"rule ""BEHEMOTH BLIDNING"":",0,47,47
+"rule ""ZOMBIE HYRBID"":",0,48,48
+"rule ""Freja MultiBolt"":",0,48,48
+"rule ""Mercy Bring Rez"":",0,48,48
+"rule ""Bastion UltDrop"":",0,49,49
+"rule ""Illari Ignite"":",0,49,49
+"rule ""Pharah Roket"":",0,49,49
+"rule ""Sigma Shiled Push"":",0,50,50
+"rule ""NANOMANCER BOSS"":",0,50,50
+"rule ""Ashe StunEye"":",0,51,51
+"rule ""HOPPER DEMECH INITIALIZATION"":",0,51,51
+"rule ""Mauga Pickup"":",0,52,52
+"rule ""Soldier MultiTarget"":",0,52,52
+"rule ""HOPPER SPAWNS"":",0,52,52
+"rule ""Lucio Reduction"":",0,54,54
+"rule ""Moira ORB - and Grasp"":",0,54,54
+"rule ""Winton Barrier"":",0,54,54
+"rule ""Hazard Wall Up"":",0,55,55
+"rule ""Roadhog HoleEffet"":",0,56,56
+"rule ""HOPPER DEMECH CONTROL"":",0,58,58
+"rule ""Rammatra Shield Stun"":",0,60,60
+"rule ""Mei Freeze E"":",0,61,61
+"rule ""RoadHog HoleConfig"":",0,62,62
+"rule ""WIDOWMAKER grapling hook stick"":",0,64,64
+"rule ""Hanzo TP"":",0,68,68
+"rule ""Reinhard Stick"":",0,70,70
+"rule ""Symmetra Photon Damage"":",0,72,72
+"rule ""Genji Shurkens"":",0,73,73
+"rule ""MINIBOSS DECREASES CAPTURE PERCENTAGE"":",0,75,75
+"rule ""LiveWeaver Tree config"":",0,79,79
+"rule ""MODIFY OBJECTIVE CAPTURE PERCENTAGE"":",0,91,91
+"rule ""BEHEMOTH HOOK (WHOLE HOG MODE)"":",0,100,100
+"rule ""NANOMANCER (RAMATTRA) FIRES NANITE SWARM"":",0,113,113
+"rule ""EFFECTS/TEXTS"":",2034,2150,116
+"rule ""SLICER (VENTURE) ABILITIES"":",0,155,155
+"rule ""NANOMANCER TRANSFORMS"":",0,162,162
+"rule ""HOPPER (D.VA) JUMPS AROUND"":",0,165,165
+"rule ""SLIMER FLIGHT (BOSS)"":",0,214,214
+"def ModDesc():",0,913,913

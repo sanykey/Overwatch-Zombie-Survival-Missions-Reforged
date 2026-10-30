@@ -20,7 +20,7 @@ rule "BOT INITIALIZATION":
     @Condition specialGameModeSetup != true
     
     wait(1, Wait.ABORT_WHEN_FALSE)
-    eventPlayer.startHealingOverTime(null, 9999, 9999)
+    eventPlayer.startHealingOverTime(null, 99999, 9999)
     eventPlayer.reviveTimer = 0
     if len(customTelePositions) > 0:
         eventPlayer.customTelePos = customTelePositions[0]

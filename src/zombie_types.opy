@@ -104,7 +104,7 @@ rule "RUSHER MOLTEN CORE (BOSS)":
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.setUltCharge(100)
     while not eventPlayer.isUsingAbility2():
-        waitUntil(not eventPlayer.isMeleeing() and not eventPlayer.crowdControlled, 9999)
+        waitUntil(not eventPlayer.isMeleeing() and not eventPlayer.crowdControlled, 99999)
         eventPlayer.forceButtonPress(Button.ABILITY_2)
         wait(0.25)
         if eventPlayer.isDead():
@@ -117,7 +117,7 @@ rule "RUSHER MOLTEN CORE (BOSS)":
     eventPlayer.specialFacing = true
     eventPlayer.startFacing(directionFromAngles(evalOnce(random.uniform(0, 360)), evalOnce(random.uniform(-80, -87))), 0 if eventPlayer.crowdControlled else 144, Relativity.TO_PLAYER)
     while not eventPlayer.isUsingUltimate() and eventPlayer.isAlive():
-        waitUntil(not eventPlayer.isMeleeing() and not eventPlayer.crowdControlled, 9999)
+        waitUntil(not eventPlayer.isMeleeing() and not eventPlayer.crowdControlled, 99999)
         eventPlayer.forceButtonPress(Button.ULTIMATE)
         wait(0.25)
     wait(1)
@@ -845,7 +845,7 @@ rule "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES":
         eventPlayer.specialFacing = false
         return
     if isInLoS(eventPlayer.getPosition(), eventPlayer.getEyePosition() + worldVector(vect(0, 11, 5), eventPlayer, Transform.ROTATION)) and isInLoS(eventPlayer.lastTarget.getEyePosition(), eventPlayer.getEyePosition() + worldVector(vect(0, 11, 5), eventPlayer, Transform.ROTATION)):
-        waitUntil(not eventPlayer.crowdControlled, 9999)
+        waitUntil(not eventPlayer.crowdControlled, 99999)
         eventPlayer.startThrottleInDirection(vect(0, 0, 1), 1, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
         eventPlayer.forceButtonPress(Button.ABILITY_1)
         eventPlayer.setAmmo(0, eventPlayer.getMaxAmmo())
@@ -951,7 +951,7 @@ rule "DOWNFALLEN GRABS PLAYER":
         eventPlayer.botSpecialTarget.stopFacing()
         eventPlayer.botSpecialTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botSpecialTarget.getPosition())), 25), 50, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
         eventPlayer.botSpecialTarget.setStatusEffect(null, Status.KNOCKED_DOWN, 1.75)
-    waitUntil(not eventPlayer.isUsingUltimate(), 9999)
+    waitUntil(not eventPlayer.isUsingUltimate(), 99999)
     eventPlayer.botTempvalue2 = null
     eventPlayer.specialThrottling = false
     startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
@@ -1042,7 +1042,7 @@ rule "DAYTAKER (ILLARI) BURST":
         eventPlayer.specialFacing = false
         eventPlayer.botSpecialTarget.attached = false
         return
-    waitUntil(not eventPlayer.crowdControlled, 9999)
+    waitUntil(not eventPlayer.crowdControlled, 99999)
     eventPlayer.startThrottleInDirection(vect(0, 0, 1), 1, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
     #Eject zombies
     if eventPlayer.isAlive() and eventPlayer.botSpecialTarget.isAlive():
