@@ -1,9 +1,5 @@
 #!mainFile "main.opy"
 
-rule "============================================== OBJECTIVE TYPE: KILL ZONE ===================================================":
-    @Disabled
-    @Delimiter
-
 
 rule "MODIFY KILL ZONE SCORE":
     @Event playerDealtFinalBlow

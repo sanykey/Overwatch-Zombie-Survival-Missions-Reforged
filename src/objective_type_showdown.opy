@@ -1,9 +1,5 @@
 #!mainFile "main.opy"
 
-rule "============================================== OBJECTIVE TYPE: SHOWDOWN  ==============================================":
-    @Disabled
-    @Delimiter
-
 
 rule "PLAYERS ON OBJECTIVE CONTROL":
     @Event eachPlayer

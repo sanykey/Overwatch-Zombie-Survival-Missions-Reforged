@@ -6,11 +6,6 @@ subroutine explosionWarning 56
 subroutine smolderEnraged 57
 
 
-rule "============================================== ZOMBIE TYPES ====================================================":
-    @Disabled
-    @Delimiter
-
-
 rule "BASIC (REAPER) SHADOW STEP (BOSS)":
     @Event eachPlayer
     @Team 2

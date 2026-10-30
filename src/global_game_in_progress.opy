@@ -1,9 +1,5 @@
 #!mainFile "main.opy"
 
-rule "============================================== GLOBAL GAME IN PROGRESS ====================================================":
-    @Disabled
-    @Delimiter
-
 
 rule "EFFECTS/TEXTS":
     @Condition isGameInProgress() == true
@@ -144,14 +140,6 @@ rule "PLAYER LEAVES THE GAME":
     if ruleCondition:
         loop()
     startRule(setDifficulty)
-
-
-rule "INFECTION DOME DAMAGE":
-    @Event eachPlayer
-    @Team 1
-    @Hero jetpackCat
-    @Disabled
-    @Delimiter
 
 
 rule "OBJECTIVE COMPLETE":

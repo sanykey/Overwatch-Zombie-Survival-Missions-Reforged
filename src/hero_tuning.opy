@@ -1,9 +1,5 @@
 #!mainFile "main.opy"
 
-rule "============================================== HERO TUNING ====================================================":
-    @Disabled
-    @Delimiter
-
 
 rule "CC COOLDOWN FROM DOWNFALLEN/BRUTE":
     @Event eachPlayer

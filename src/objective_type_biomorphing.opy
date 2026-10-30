@@ -4,11 +4,6 @@ subroutine biowasteAssignment 53
 subroutine biowasteOutput 54
 
 
-rule "== THANK YOU FLOURFLO AND HUNTYCRAFT <3 ===== OBJECTIVE TYPE: BIOMORPHING =======================================":
-    @Disabled
-    @Delimiter
-
-
 rule "BIOMORPHING GOAL START":
     @Condition objectiveTypes[0] == 3
     @Condition objectiveComplete == false

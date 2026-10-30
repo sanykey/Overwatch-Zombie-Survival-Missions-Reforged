@@ -1,9 +1,5 @@
 #!mainFile "main.opy"
 
-rule "============================================== OBJECTIVE TYPE: ZOMBIE EGG ===================================================":
-    @Disabled
-    @Delimiter
-
 
 rule "ASSIGN ZOMBIE TO BECOME EGG":
     @Condition objectiveTypes[0] == 6

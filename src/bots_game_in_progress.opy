@@ -8,11 +8,6 @@ subroutine botTeleportCenter 31
 subroutine locateAveragePlayerLocation 32
 
 
-rule "============================================== BOTS GAME IN PROGRESS ====================================================":
-    @Disabled
-    @Delimiter
-
-
 rule "BOT INITIALIZATION":
     @Event eachPlayer
     @Team 2

@@ -8,11 +8,6 @@ subroutine enableEnhancements 38
 subroutine setAvailableObjectives 40
 
 
-rule "============================================== GLOBAL STARTUP ====================================================":
-    @Disabled
-    @Delimiter
-
-
 rule "PREGAME QUICK TIPS FOR PLAYERS":
     @Condition specialGameModeSetup == true
     

@@ -5,11 +5,6 @@ subroutine teleportToClosestPlayer 39
 subroutine updateUsers 42
 
 
-rule "============================================== PLAYERS GAME IN PROGRESS ====================================================":
-    @Disabled
-    @Delimiter
-
-
 rule "PLAYER INITIALIZATION":
     @Event eachPlayer
     @Team 1

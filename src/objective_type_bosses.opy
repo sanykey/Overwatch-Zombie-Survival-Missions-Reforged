@@ -3,11 +3,6 @@
 subroutine bossReturn 18
 
 
-rule "============================================== OBJECTIVE TYPE: BOSSES ==================================================":
-    @Disabled
-    @Delimiter
-
-
 rule "SPAWN BOSS":
     @Condition objectiveTypes[0] == 2
     @Condition objectiveComplete == false

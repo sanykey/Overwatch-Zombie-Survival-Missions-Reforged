@@ -3,11 +3,6 @@
 subroutine fireSatellite 44
 
 
-rule "============================================== OBJECTIVE TYPE: SATELLITE UPLINK ==============================================":
-    @Disabled
-    @Delimiter
-
-
 rule "SET UP TERMINAL POSITIONS":
     @Condition objectiveTypes[0] == 7
     @Condition gameStatus == true

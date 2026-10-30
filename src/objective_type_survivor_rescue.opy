@@ -1,9 +1,5 @@
 #!mainFile "main.opy"
 
-rule "============================================== OBJECTIVE TYPE: SURVIVOR RESCUE =================================================":
-    @Disabled
-    @Delimiter
-
 
 rule "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE":
     @Condition objectiveTypes[0] == 4

@@ -3,11 +3,6 @@
 subroutine nukeMap 2
 
 
-rule "============================================== OBJECTIVE TYPE: EXTRACTION POINT =============================================":
-    @Disabled
-    @Delimiter
-
-
 rule "PLAYERS IN EXTRACTION POINT CONTROL":
     @Event eachPlayer
     @Team 1
