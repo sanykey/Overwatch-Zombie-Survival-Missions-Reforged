@@ -1,0 +1,162 @@
+#!mainFile "main.opy"
+
+rule "============================================== GLOBAL GAME IN PROGRESS ====================================================":
+    @Disabled
+    @Delimiter
+
+
+rule "EFFECTS/TEXTS":
+    @Condition isGameInProgress() == true
+    @Condition specialGameModeSetup != true
+    
+    wait(1)
+    #Objective description and match timer
+    hudSubtext(getAllPlayers(), "{0}{1}".format(objectiveDescription, (" | {0}".format("{0}s".format(getMatchTime()) if getMatchTime() <= 60 else "{0}:{2}{1}".format(floor(getMatchTime() / 60), floor(getMatchTime() % 60), 0 if floor(getMatchTime() % 60) < 10 else []))) if getMatchTime() > 0 + matchEndTime else []), HudPosition.TOP, -1, rgb(215, 215, 215), HudReeval.VISIBILITY_AND_STRING)
+    #Infected Hud
+    hudHeader(getAllPlayers().filter(lambda player: ((player.enhancementValues[0] != 2 and (len(healthpackPositions) == 0 or player.getHealth() < floor(player.infectionLvl) ** 2 * 20)) and player.infected) and getMatchTime() > matchEndTime), "{0} Find a healthpack {0}".format(iconString(Icon.PLUS)), HudPosition.RIGHT, 0, (Color.RED if localPlayer.getHealth() < floor(localPlayer.infectionLvl) ** 2 * 10 else Color.LIME_GREEN) if ceil(getTotalTimeElapsed() * 2) % 2 == 0 else Color.WHITE, HudReeval.VISIBILITY_AND_COLOR)
+    #Nearest Healthpack Distance
+    createInWorldText(getPlayers(Team.1).filter(lambda player: player.enhancementValues[0] != 2 and len(healthpackPositions) > 0 and player.infected and getMatchTime() > matchEndTime), "Cure: {0}m".format(distance(localPlayer.getPosition(), sorted(healthpackPositions, lambda x: angleBetweenVectors(localPlayer.getFacingDirection(), directionTowards(localPlayer.getEyePosition(), x)))[0])), sorted(healthpackPositions, lambda x: angleBetweenVectors(localPlayer.getFacingDirection(), directionTowards(localPlayer.getEyePosition(), x)))[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.GREEN, SpecVisibility.NEVER)
+    #Nearest health pack icon
+    createIcon(getPlayers(Team.1).filter(lambda player: player.enhancementValues[0] != 2 and len(healthpackPositions) > 0 and player.infected and getMatchTime() > matchEndTime), sorted(healthpackPositions, lambda x: angleBetweenVectors(localPlayer.getFacingDirection(), directionTowards(localPlayer.getEyePosition(), x)))[0] + vect(0, 0.75, 0) + vect(0, 0.5, 0), Icon.POISON, IconReeval.VISIBILITY_AND_POSITION, Color.GREEN)
+    hudSubtext(getAllPlayers(), "Modified version. workshop.codes/786tw", HudPosition.RIGHT, 0.1, Color.TEAM_1, HudReeval.VISIBILITY_AND_STRING)
+    hudSubtext(getAllPlayers().filter(lambda _: challengeSetting >= 2), "Challenge round!", HudPosition.RIGHT, 0.2, Color.TEAM_1, HudReeval.VISIBILITY_AND_STRING)
+
+
+rule "PLAYER EXTRACTION CONTROL":
+    @Event eachPlayer
+    @Team 1
+    @Condition eventPlayer in evacuatingSurvivorList == true
+    
+    eventPlayer.chase2 = eventPlayer.getPosition()
+    chaseAtRate(eventPlayer.chase2, eventPlayer.chase2 + vect(0, 200, 0), evacRate)
+    eventPlayer.startForcingPosition(eventPlayer.chase2)
+    waitUntil(evacRate > 2, 99999)
+    chaseOverTime(eventPlayer.chase2, objectivePositions[0] + vect(0, 50, 0) + directionFromAngles(360 / len(evacuatingSurvivorList) * evacuatingSurvivorList.index(eventPlayer), 0) * 3, 5)
+    waitUntil(evacRate < 10, 99999)
+    chaseAtRate(eventPlayer.chase2, eventPlayer.chase2 + vect(0, 200, 0), evacRate)
+    eventPlayer.evacPos = eventPlayer.chase2 + directionTowards(objectivePositions[0], evacDestination) * 700
+    waitUntil(evacRate > 2, 99999)
+    chaseAtRate(eventPlayer.chase2, eventPlayer.evacPos, evacRate)
+
+
+rule "ATTACK SPAWN ROOM CONTROL":
+    @Condition specialGameModeSetup != true
+    #Does not apply if game mode is special mode
+    @Condition specialGameMode != true
+    @Condition playerTargetList.any(lambda x: distance(x.getPosition(), activeAttackSpawnRoom) < 45) == true
+    
+    spawnRoomIndex++
+    if spawnRoomIndex >= len(attackSpawnRooms):
+        spawnRoomIndex = 0
+    #Make sure players are clear of test spawn room before activating
+    if getPlayers(Team.1).filter(lambda player: player.hasSpawned()).all(lambda x: distance(x.getPosition(), attackSpawnRooms[spawnRoomIndex]) > 45):
+        activeAttackSpawnRoom = attackSpawnRooms[spawnRoomIndex]
+        startForcingSpawn(Team.2, spawnRoomIndex)
+    wait(1)
+    if ruleCondition:
+        loop()
+
+
+rule "PREVENT MATCH TIME FROM UNPAUSING":
+    @Condition gameStatus == true
+    @Condition getMatchTime() < matchEndTime
+    
+    pauseMatchTime()
+    setMatchTime(matchEndTime)
+    wait()
+    if ruleCondition:
+        loop()
+
+
+rule "TRIGGER OVERTIME MUSIC":
+    @Condition gameStatus == true
+    @Condition overtime == false
+    @Condition getMatchTime() < matchEndTime + 3
+    @Condition (len(getLivingPlayers(Team.2).filter(lambda player: player.botTarget == null and not player in bosses))) > 0
+    
+    enableMusic()
+    if not specialGameMode:
+        overtime = true
+        if getCurrentGamemode() == Gamemode.ESCORT:
+            ((getLivingPlayers(Team.2).filter(lambda player: player.botTarget == null and not player in bosses))[0]).teleport(getPayloadPosition())
+        else:
+            ((getLivingPlayers(Team.2).filter(lambda player: player.botTarget == null and not player in bosses))[0]).teleport(getObjectivePosition(0))
+
+
+rule "ZOMBIE SHUFFLE":
+    @Condition gameStatus == true
+    @Condition zombieSetting == 4
+    
+    #Bot respawn probablities
+    botSpawnRates = random.shuffle(botSpawnRates)
+    bigMessage(getAllPlayers(), "The spawn rates have been shuffled!")
+    #1 min 30 sec wait
+    wait(90)
+    if ruleCondition:
+        loop()
+
+
+rule "SWARM SHOOTOUT":
+    @Event eachPlayer
+    @Team 2
+    @Condition (challengeSetting == 2 or challengeSetting == 5) == true
+    
+    startDamageModification(getPlayers(Team.1), eventPlayer, 72)
+    waitUntil(eventPlayer.botTarget != false, 99999)
+    if eventPlayer.getHero() in [Hero.REINHARDT, Hero.PHARAH, Hero.SIGMA, Hero.WINSTON]:
+    elif eventPlayer.getHero() in [Hero.TORBJORN, Hero.MOIRA, Hero.SYMMETRA, Hero.KIRIKO, Hero.MAUGA, Hero.ANRAN]:
+        eventPlayer.allowButton(Button.SECONDARY_FIRE)
+        eventPlayer.startForcingButton(Button.SECONDARY_FIRE)
+    else:
+        eventPlayer.allowButton(Button.PRIMARY_FIRE)
+        eventPlayer.startForcingButton(Button.PRIMARY_FIRE)
+
+
+rule "RANDOM ABILITIES":
+    @Event eachPlayer
+    @Team 2
+    @Condition (challengeSetting == 3 or challengeSetting == 5 or gameSmolderEvent) == true
+    @Condition eventPlayer in bosses != true
+    @Condition specialGameModeSetup == false
+    
+    wait(random.uniform(2, 8))
+    if eventPlayer.getHero() in [Hero.MERCY]:
+        eventPlayer.setUltCharge(100)
+        eventPlayer.forceButtonPress(Button.ULTIMATE)
+    else:
+        eventPlayer.forceButtonPress(random.choice([Button.ABILITY_2, Button.ABILITY_1]))
+        if eventPlayer.getHero() in [Hero.SYMMETRA] and eventPlayer.isUsingAbility2():
+            abilityPlacement()
+        elif eventPlayer.getHero() == Hero.JUNKRAT and eventPlayer.isUsingAbility1() or eventPlayer.getHero() == Hero.MOIRA and eventPlayer.isUsingAbility2():
+            wait(1)
+            eventPlayer.forceButtonPress(Button.SECONDARY_FIRE)
+        if ruleCondition:
+            loop()
+
+
+rule "PLAYER LEAVES THE GAME":
+    @Event playerLeft
+    @Condition (playerTargetList.any(lambda x: not entityExists(x)) or playersOnObjective.any(lambda x: not entityExists(x))) == true
+    
+    playerTargetList.remove(playerTargetList.filter(lambda x: not entityExists(x)))
+    playersOnObjective.remove(playersOnObjective.filter(lambda x: not entityExists(x)))
+    wait(1, Wait.RESTART_WHEN_TRUE)
+    if ruleCondition:
+        loop()
+    startRule(setDifficulty)
+
+
+rule "INFECTION DOME DAMAGE":
+    @Event eachPlayer
+    @Team 1
+    @Hero jetpackCat
+    @Disabled
+    @Delimiter
+
+
+rule "OBJECTIVE COMPLETE":
+    @Condition gameStatus == true
+    @Condition objectiveComplete == true
+    
+    startRule(objectivesManagement)
+    (getDeadPlayers(Team.1).filter(lambda player: player.deathTimer < 50)).deathTimer += 10
