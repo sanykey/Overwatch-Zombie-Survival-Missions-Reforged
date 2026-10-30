@@ -8,6 +8,7 @@ settings {
     "lobby": {
         "allowPlayersInQueue": true,
         "mapRotation": "afterGame",
+        "team1Slots": 6,
         "spectatorSlots": 7,
         "team2Slots": 0,
         "returnToLobby": "never",
