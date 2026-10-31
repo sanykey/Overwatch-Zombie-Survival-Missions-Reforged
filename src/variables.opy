@@ -2,6 +2,8 @@
 
 #!define BOT_MAX_TELEPORT_RANGE 40
 #!define CURRENT_OBJECTIVE_TYPE objectiveTypes[0]
+#!define LASER_BARRICADE_HEIGHT 2
+#!define LASER_BARRICADE_WIDTH 5
 
 # Enhancement IDs also index enhancementOptions and the default-setting choices.
 # Zero means no preference in the menu; initialization resolves the configured default.
@@ -81,7 +83,7 @@ globalvar reviveRadius
 globalvar botHeros
 globalvar chase1
 globalvar gameSmolderEvent
-globalvar gameStatus
+globalvar isGameplayActive # Formerly gameStatus in the original mod
 globalvar startTime
 globalvar mustReviveTime
 globalvar supplyDropLanding
@@ -234,16 +236,14 @@ playervar botHero
 playervar playerObjectiveResourceValue
 playervar pBouncePadCount1
 playervar infectionDamage
-playervar enhancementValues
+
 playervar botSpecialPotentialTargets
 playervar movementSpeed
 playervar mutationValue
 playervar health
 playervar damageOverTimeDuration
 playervar pUltimateChargerCount
-playervar enhancementChase1
 playervar pStunCount
-playervar enhancementChase2
 playervar initializing
 playervar userIndex
 playervar knockbackRecieved
@@ -264,8 +264,13 @@ playervar switchedHeroes
 playervar anranPortalRise
 playervar botResourceEntity
 
+
+# enhancements:
 # Frequently accessed array fields use individual variables to reduce element count.
-# enhancementValues retains slots 7+; playerMenuStatus retains votes in slots 2-4.
+# Laser Barricade: 1 = horizontal push direction, 2 = along-barrier direction.
+# Laser Barricade: 3 = placement cooldown, 4 = center, 5-6 = lower corners, 7 = health.
+# P.U.P.: 5 = drone position, 6 = ability cooldown.
+# playerMenuStatus retains votes in slots 2-4.
 playervar enhancementId
 playervar enhancementValue1
 playervar enhancementValue2
@@ -273,6 +278,15 @@ playervar enhancementValue3
 playervar enhancementValue4
 playervar enhancementValue5
 playervar enhancementValue6
+# Used only by Laser Barricade: current barrier health.
+playervar enhancementValue7
+# Hitchhiker passenger attached to this player; null when no passenger is attached.
+playervar hitchhikerPassenger
+# ID of the extra health pool granted to this carrier by a Hitchhiker passenger.
+playervar hitchhikerCarrierHealthPool
+
+
+
 playervar sentryTurretPosition
 playervar stunTarget
 playervar healBeaconPosition
@@ -282,6 +296,8 @@ playervar stunOrigin
 playervar sentryTurretDirection
 playervar airStrikePosition
 playervar powerUpTradeIndex
+
+
 # Current PregameState; zero is also the default for players joining after the pregame menu.
 playervar pregameState
 playervar isVoting

@@ -66,7 +66,7 @@ macro fireSatelliteMacro():
 
 rule "SET UP TERMINAL POSITIONS":
     @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SATELLITE_UPLINK
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition objectiveComplete == false
     @Condition (len(objectiveCaptureValue) != len(objectiveResourcePositions) or objectiveResourcePositions.any(lambda x: x.x == null)) == true
     

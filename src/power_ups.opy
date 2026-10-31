@@ -10,7 +10,7 @@ macro powerUpAssignmentMacro():
 
 
 rule "POWER UP EFFECT/TEXT MANAGEMENT":
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition len(powerUpPositions) > len(powerUpEffect)
     @Condition len(availablePowerups) > 0
     
@@ -22,7 +22,7 @@ rule "POWER UP EFFECT/TEXT MANAGEMENT":
 
 
 rule "EFFECT/TEXT (PERMANENT)":
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition len(availablePowerups) > 0
     
     #One row per item ID (1-13); capture the index and the resolved color.
@@ -76,7 +76,7 @@ rule "PLAYER DROPS POWER UP (MANUAL)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isHoldingButton(Button.RELOAD) == true
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.currentPowerUp != 0
     

@@ -95,7 +95,7 @@ rule "PREGAME QUICK TIPS FOR PLAYERS":
 
 
 rule "SPAWN BOTS":
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition getAverageServerLoad() <= createWorkshopSettingInt("General", "Spawn Zombies When Server Load Average is Less Than", 180, 100, 255, 2)
     #@Condition getNumberOfPlayers(Team.2) < numberOfBots
     @Condition getNumberOfPlayers(Team.ALL) < 24
@@ -241,7 +241,7 @@ rule "VARIABLE ASSIGNMENT":
     bosses = []
     healthpackPositions = []
     #overtime = false  #Uninitialized Workshop variables already compare equal to false at match start.
-    #gameStatus = false  #Uninitialized Workshop variables already compare equal to false at match start.
+    #isGameplayActive = false  #Uninitialized Workshop variables already compare equal to false at match start.
     users = []
     globalPlayerStats = []
     # tmp0: player-slot counter, to create 12 initial entries in globalPlayerStats.

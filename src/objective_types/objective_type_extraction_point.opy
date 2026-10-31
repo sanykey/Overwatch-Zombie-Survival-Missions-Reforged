@@ -7,7 +7,7 @@ rule "PLAYERS IN EXTRACTION POINT CONTROL":
     @Event eachPlayer
     @Team 1
     @Condition objectiveComplete == false
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition eventPlayer.hasSpawned() == true
     @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SHOWDOWN
     @Condition len(objectivePositions) == 1
@@ -20,14 +20,14 @@ rule "PLAYERS IN EXTRACTION POINT CONTROL":
     wait(0.5)
     if ruleCondition:
         loop()
-    if gameStatus:
+    if isGameplayActive:
         playersOnObjective.remove(eventPlayer)
 
 
 rule "EXTRACTION ZONE INFECTION INCREASE":
     @Event eachPlayer
     @Team 1
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition eventPlayer.isAlive() == true
     @Condition len(objectivePositions) == 1
     @Condition extractionZoneRad < 200
@@ -47,13 +47,13 @@ rule "EXTRACTION ZONE INFECTION INCREASE":
 
 rule "WIN/LOSS CONDITIONS":
     @Condition objectiveComplete == false
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition (len(objectivePositions) == 1 and (len(playersOnObjective) == (len(getPlayers(Team.1).filter(lambda player: player.hasSpawned() and player.deathTimer > 0 and not player.afk)))) or (len(playerTargetList) == 0 or extractionZoneRad <= 0)) == true
     
     if (len(playerTargetList) == 0 or playerTargetList == []) and getPlayersOnHero(Hero.ANRAN, Team.1).any(lambda player: player.getUltCharge() == 100):
         wait(5.5, Wait.ABORT_WHEN_FALSE)
     wait(0.25, Wait.ABORT_WHEN_FALSE)
-    gameStatus = false
+    isGameplayActive = false
     enableAnnouncer()
     getAllPlayers().disableNameplatesFor(getAllPlayers())
     getAllPlayers().disableGamemodeHud()

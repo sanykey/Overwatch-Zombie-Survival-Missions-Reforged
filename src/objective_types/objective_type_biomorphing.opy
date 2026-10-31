@@ -24,7 +24,7 @@ rule "BIOMORPHING GOAL START":
     @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.BIOMORPHING
     @Condition objectiveComplete == false
     @Condition goalCheck == true
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     
     #Destroy all biowaste
     for biowasteCount in range(len(biowasteEffects)):
@@ -71,7 +71,7 @@ rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS":
     @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.BIOMORPHING
     @Condition objectiveComplete == false
     @Condition (len(objectiveResourcePositions) + (len(getLivingPlayers(Team.ALL).filter(lambda player: player.playerObjectiveResourceValue > 0))) < 3 or objectiveCaptureValue >= 100) == true
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition (queuedGoalType[0] != 3 or objectiveCaptureValue >= 100) == true
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
@@ -100,7 +100,7 @@ rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS":
 rule "BIOWASTE IS PICKED UP":
     @Event eachPlayer
     @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.BIOMORPHING
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition objectiveComplete == false
     @Condition eventPlayer.playerObjectiveResourceValue <= 0
     @Condition eventPlayer.hasSpawned() == true

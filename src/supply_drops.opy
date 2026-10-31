@@ -18,7 +18,7 @@ rule "GENERATE SUPPLY DROPS":
     #Only activates if last supply drop has been opened
     @Condition supplyDropStatus == true
     #Waits for all objectives to be determined before activating
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition len(availablePowerups) > 0
     #Limited to 12 power ups on the ground at a time
     @Condition len(powerUpPositions) < 12
@@ -55,7 +55,7 @@ rule "GENERATE SUPPLY DROPS":
 
 
 rule "EFFECT/TEXT (GLOBAL)":
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition len(availablePowerups) > 0
     
     #Closed supply drop orb
@@ -81,7 +81,7 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
     @Team 1
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
     @Condition eventPlayer.isAlive() == true
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition eventPlayer.isDummy() == false
     
     if distance(supplyDropLanding, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), supplyDropLanding)) < 0.5 and not supplyDropStatus and distance(eventPlayer.getPosition(), supplyDropLanding) <= 6 and supplyDropLanding != null and distance(supplyDropLanding, supplyDropPosition) < 1:

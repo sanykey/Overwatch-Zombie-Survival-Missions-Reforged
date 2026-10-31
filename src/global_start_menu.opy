@@ -343,4 +343,4 @@ def setObjectiveType():
     #Last objective must be extraction objective
     objectiveTypes[len(objectiveTypes) - 1] = ObjectiveType.SHOWDOWN
     objectivesManagement()
-    gameStatus = true
+    isGameplayActive = true

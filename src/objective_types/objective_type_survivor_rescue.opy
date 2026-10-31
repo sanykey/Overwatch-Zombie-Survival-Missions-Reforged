@@ -3,7 +3,7 @@
 
 rule "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE":
     @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition objectiveComplete == false
     @Condition (survivorToRescue == null or not entityExists(survivorToRescue)) == true
     

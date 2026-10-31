@@ -44,7 +44,7 @@ macro botTeleportCenterMacro():
 rule "Fix bot health":
     @Event eachPlayer
     @Team 2
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition eventPlayer.initializing != true
     @Condition eventPlayer.teleporting != true
     @Condition eventPlayer.getHealth() > eventPlayer.health + 5
@@ -91,7 +91,7 @@ rule "BOT INITIALIZATION":
 rule "KILL BOTS THAT ARE STUCK OR ARE NOT MOVING":
     @Event eachPlayer
     @Team 2
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition eventPlayer.teleporting != true
     @Condition eventPlayer.specialThrottling != true
     @Condition eventPlayer.attached != true
@@ -168,7 +168,7 @@ rule "BOT DIES":
 rule "TELEPORT BOTS (GENERAL)":
     @Event eachPlayer
     @Team 2
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer in bosses == false
     @Condition getNumberOfLivingPlayers(Team.1) > 0
@@ -181,7 +181,7 @@ rule "TELEPORT BOTS WHEN NOT USED FOR TOO LONG":
     @Event eachPlayer
     @Team 2
     @Condition eventPlayer.teleporting != true
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition eventPlayer.attached != true
     @Condition eventPlayer.targeting != true
     @Condition eventPlayer.botTarget == null
@@ -394,7 +394,7 @@ rule "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)":
     victim.startDamageOverTime(eventPlayer, eventPlayer.biteDuration, eventPlayer.biteDamage)
     if eventPlayer.damageOverTimeDuration < eventPlayer.biteDuration:
         eventPlayer.damageOverTimeDuration = eventPlayer.biteDuration
-    if createWorkshopSettingBool("Infection", "Melee Infection Enabled", true) and not eventPlayer.hasStatus(Status.HACKED) and not victim.isDummy() and (victim.getHealth() <= (victim.getMaxHealth() if victim.enhancementValues[13] != null else victim.initialMaxHealth)):
+    if createWorkshopSettingBool("Infection", "Melee Infection Enabled", true) and not eventPlayer.hasStatus(Status.HACKED) and not victim.isDummy() and (victim.getHealth() <= (victim.getMaxHealth() if victim.hitchhikerPassenger != null else victim.initialMaxHealth)):
         victim.infectionLvl += (2 if eventPlayer in bosses or eventPlayer in miniBoss or eventPlayer.mutationValue == 4 else 1) / ((3 if not victim.infected and victim.getHero() in [Hero.REINHARDT, Hero.HAZARD, Hero.VENDETTA, Hero.DMON] else 2) if victim.enhancementId != Enhancement.ZOMBIE_HYBRID else 1)
         if not victim.infected and victim.infectionLvl >= 1:
             victim.infected = true
@@ -524,7 +524,7 @@ rule "MINIBOSS MESSAGE":
     @Team 2
     @Condition eventPlayer in miniBoss == true
     @Condition CURRENT_OBJECTIVE_TYPE != ObjectiveType.SHOWDOWN
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition eventPlayer.initializing != false
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)

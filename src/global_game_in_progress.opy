@@ -54,7 +54,7 @@ rule "ATTACK SPAWN ROOM CONTROL":
 
 
 rule "PREVENT MATCH TIME FROM UNPAUSING":
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition getMatchTime() < matchEndTime
     
     pauseMatchTime()
@@ -65,7 +65,7 @@ rule "PREVENT MATCH TIME FROM UNPAUSING":
 
 
 rule "TRIGGER OVERTIME MUSIC":
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition overtime == false
     @Condition getMatchTime() < matchEndTime + 3
     @Condition (len(getLivingPlayers(Team.2).filter(lambda player: player.botTarget == null and not player in bosses))) > 0
@@ -80,7 +80,7 @@ rule "TRIGGER OVERTIME MUSIC":
 
 
 rule "ZOMBIE SHUFFLE":
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition zombieSetting == 4
     
     #Bot respawn probablities
@@ -143,7 +143,7 @@ rule "PLAYER LEAVES THE GAME":
 
 
 rule "OBJECTIVE COMPLETE":
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition objectiveComplete == true
     
     startRule(objectivesManagement)

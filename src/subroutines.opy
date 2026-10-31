@@ -523,7 +523,7 @@ def enableDisableAbilities():
 def objectivesManagement():
     @Name "objectivesManagement"
 
-    if gameStatus:
+    if isGameplayActive:
         playersOnObjective = []
         objectiveCaptureValue = 0
         gameSmolderEvent = false

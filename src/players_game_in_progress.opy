@@ -145,7 +145,7 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isDead() == true
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition eventPlayer.playerActiveStatus == true
     @Condition eventPlayer.deathTimer > 0
     @Condition eventPlayer.isDummy() == false
@@ -288,7 +288,7 @@ rule "PLAYER AFK":
 rule "PLAYER SWITCHES HERO":
     @Event eachPlayer
     @Team 1
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition eventPlayer.isHoldingButton(Button.RELOAD) == true
     @Condition eventPlayer.isAlive() == true
     
@@ -316,7 +316,7 @@ rule "PLAYER AUTOMATIC RELOAD":
 
 rule "OBJECTIVE CHANGES AND PLAYER ENTITIES UPDATE":
     @Event eachPlayer
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition eventPlayer.hasSpawned() == true
     @Condition (eventPlayer.objectiveValue != objectiveValue or len(objectivePositions) == 1) == true
     
@@ -326,7 +326,7 @@ rule "OBJECTIVE CHANGES AND PLAYER ENTITIES UPDATE":
 rule "PLAYER TARGET (ADD)":
     @Event eachPlayer
     @Team 1
-    @Condition gameStatus == true
+    @Condition isGameplayActive == true
     @Condition eventPlayer.afk != true
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isAlive() == true
