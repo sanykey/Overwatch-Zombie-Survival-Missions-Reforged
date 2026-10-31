@@ -1,7 +1,6 @@
 #!extension playMoreEffects
 #!extension spawnMoreDummyBots
 
-# optimizeStrict: 32264 -> 30757
 #!optimizeForSize  
 #!debugElementCount
 #!writeToOutputFile

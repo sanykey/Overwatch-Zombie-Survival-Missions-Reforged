@@ -14,11 +14,6 @@ subroutine ultimateCharger 36
 subroutine stun 41
 
 
-rule "============================================== SUPPLY DROPS ====================================================":
-    @Disabled
-    @Delimiter
-
-
 rule "GENERATE SUPPLY DROPS":
     #Only activates if last supply drop has been opened
     @Condition supplyDropStatus == true
@@ -258,12 +253,9 @@ def sentryTurret():
     if not entityExists(eventPlayer.powerUpEffects[50]):
         createEffect(getAllPlayers(), Effect.SPHERE, Color.ORANGE, eventPlayer.powerUpUsePositionsAndInfo[50], 0.15, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.powerUpEffects[50] = getLastCreatedEntity()
-        createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.powerUpUsePositionsAndInfo[50], eventPlayer.powerUpUsePositionsAndInfo[50] + directionFromAngles(0, 60) * 1.5, Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEffects[51] = getLastCreatedEntity()
-        createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.powerUpUsePositionsAndInfo[50], eventPlayer.powerUpUsePositionsAndInfo[50] + directionFromAngles(120, 60) * 1.5, Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEffects[52] = getLastCreatedEntity()
-        createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.powerUpUsePositionsAndInfo[50], eventPlayer.powerUpUsePositionsAndInfo[50] + directionFromAngles(240, 60) * 1.5, Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEffects[53] = getLastCreatedEntity()
+        for I in range(3):
+            createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.powerUpUsePositionsAndInfo[50], eventPlayer.powerUpUsePositionsAndInfo[50] + directionFromAngles(evalOnce(I) * 120, 60) * 1.5, Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            eventPlayer.powerUpEffects[51 + I] = getLastCreatedEntity()
         createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.powerUpUsePositionsAndInfo[50], eventPlayer.powerUpUsePositionsAndInfo[50] + (eventPlayer.powerUpUsePositionsAndInfo[51] * 0.5 if len(getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.powerUpUsePositionsAndInfo[50], player) and not player.teleporting)) else eventPlayer.getFacingDirection() * 0.5), Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.powerUpEffects[54] = getLastCreatedEntity()
         hudHeader(eventPlayer, "Sentry Turret: {0}s".format(ceil(eventPlayer.pSentryTurretCount)), HudPosition.RIGHT, 0.2, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING)

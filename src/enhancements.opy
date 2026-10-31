@@ -1,9 +1,5 @@
 #!mainFile "main.opy"
 
-rule "============================================== ENHANCEMENTS ====================================================":
-    @Disabled
-    @Delimiter
-
 
 rule "PLAYER ENHANCEMENT INITIALIZATION":
     @Event eachPlayer
@@ -230,10 +226,10 @@ rule "LASER BARRICADE BLOCKS ZOMBIES":
             damage(eventPlayer.botTarget, eventPlayer, 10)
         if eventPlayer.botTarget.getThrottle() == vect(0, 0, 0):
             #If bot is not throttling
-            eventPlayer.botTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementValues[4], (sorted(eventPlayer.enhancementValues.filter(lambda _, i: i >= 7 and i <= 8), lambda x: distance(eventPlayer.botTarget.getPosition(), x)))[0])), (-1 if eventPlayer.botTarget.getPosition().y > eventPlayer.enhancementValues[4].y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(eventPlayer.botTarget.getPosition(), eventPlayer.botTarget.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
+            eventPlayer.botTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementValues[4], (sorted(eventPlayer.enhancementValues.slice(7, 2), lambda x: distance(eventPlayer.botTarget.getPosition(), x)))[0])), (-1 if eventPlayer.botTarget.getPosition().y > eventPlayer.enhancementValues[4].y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(eventPlayer.botTarget.getPosition(), eventPlayer.botTarget.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
         else:
             #If bot is throttling
-            eventPlayer.botTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementValues[4], (sorted(eventPlayer.enhancementValues.filter(lambda _, i: i >= 7 and i <= 8), lambda x: angleBetweenVectors(worldVector(eventPlayer.botTarget.getThrottle(), eventPlayer.botTarget, Transform.ROTATION), directionTowards(eventPlayer.enhancementValues[4], x)))).last())), (-1 if eventPlayer.botTarget.getPosition().y > eventPlayer.enhancementValues[4].y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(eventPlayer.botTarget.getPosition(), eventPlayer.botTarget.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+            eventPlayer.botTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementValues[4], (sorted(eventPlayer.enhancementValues.slice(7, 2), lambda x: angleBetweenVectors(worldVector(eventPlayer.botTarget.getThrottle(), eventPlayer.botTarget, Transform.ROTATION), directionTowards(eventPlayer.enhancementValues[4], x)))).last())), (-1 if eventPlayer.botTarget.getPosition().y > eventPlayer.enhancementValues[4].y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(eventPlayer.botTarget.getPosition(), eventPlayer.botTarget.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     wait()
     if ruleCondition:
         loop()

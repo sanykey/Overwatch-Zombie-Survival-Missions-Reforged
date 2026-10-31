@@ -1,3 +1,5 @@
+#!suppressWarnings w_wait_9999 w_9999 w_cancel_contrary_motion w_closest_player w_dark_color w_mismatched_subroutine_event w_ow2_rule_condition_chase w_start_rule_crash w_type_check w_wait_until w_workshop_setting_enum_default
+
 settings {
     "main": {
         "description": "[Original Creator: Mazattack#1183]\r\n[Original Game Code: MPJFR]\r\n[Modified by: Kamenrider#11346]\r\nworkshop.codes/786TW\r\n\r\nFight against an endless horde of zombies while completing various objectives. \r\nUse power-ups found in supply drops while you fight off the horde. \r\nGet to the extraction point and watch the map get nuked. Don't leave anyone behind! \r\n\r\nCommunity ZSM Discord: https://discord.gg/3BhYtNfwMj",

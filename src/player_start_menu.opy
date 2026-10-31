@@ -3,11 +3,6 @@
 subroutine randomActions 9
 
 
-rule "============================================== PLAYER START MENU ====================================================":
-    @Disabled
-    @Delimiter
-
-
 rule "PLAYER MENU INITIALIZATION":
     @Event eachPlayer
     @Team 1
@@ -136,25 +131,13 @@ rule "PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)":
     #Update player voting status
     eventPlayer.playerMenuStatus[1] = 1
     if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE):
-        if eventPlayer.playerMenuStatus[2] < len(challengeVotes) - 1:
-            eventPlayer.playerMenuStatus[2]++
-        else:
-            eventPlayer.playerMenuStatus[2] = 0
+        eventPlayer.playerMenuStatus[2] = (eventPlayer.playerMenuStatus[2] + 1) % len(challengeVotes)
         while not challengeVotes[eventPlayer.playerMenuStatus[2]][1]:
-            if eventPlayer.playerMenuStatus[2] < len(challengeVotes) - 1:
-                eventPlayer.playerMenuStatus[2]++
-            else:
-                eventPlayer.playerMenuStatus[2] = 0
+            eventPlayer.playerMenuStatus[2] = (eventPlayer.playerMenuStatus[2] + 1) % len(challengeVotes)
     else:
-        if eventPlayer.playerMenuStatus[2] > 0:
-            eventPlayer.playerMenuStatus[2] += -1
-        else:
-            eventPlayer.playerMenuStatus[2] = len(challengeVotes) - 1
+        eventPlayer.playerMenuStatus[2] = (eventPlayer.playerMenuStatus[2] + len(challengeVotes) - 1) % len(challengeVotes)
         while not challengeVotes[eventPlayer.playerMenuStatus[2]][1]:
-            if eventPlayer.playerMenuStatus[2] > 0:
-                eventPlayer.playerMenuStatus[2] += -1
-            else:
-                eventPlayer.playerMenuStatus[2] = len(challengeVotes) - 1
+            eventPlayer.playerMenuStatus[2] = (eventPlayer.playerMenuStatus[2] + len(challengeVotes) - 1) % len(challengeVotes)
 
 
 rule "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)":
@@ -168,25 +151,13 @@ rule "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)":
     #Update player voting status
     eventPlayer.playerMenuStatus[1] = 1
     if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE):
-        if eventPlayer.playerMenuStatus[3] < len(zombieVotes) - 1:
-            eventPlayer.playerMenuStatus[3]++
-        else:
-            eventPlayer.playerMenuStatus[3] = 0
+        eventPlayer.playerMenuStatus[3] = (eventPlayer.playerMenuStatus[3] + 1) % len(zombieVotes)
         while not zombieVotes[eventPlayer.playerMenuStatus[3]][1]:
-            if eventPlayer.playerMenuStatus[3] < len(zombieVotes) - 1:
-                eventPlayer.playerMenuStatus[3]++
-            else:
-                eventPlayer.playerMenuStatus[3] = 0
+            eventPlayer.playerMenuStatus[3] = (eventPlayer.playerMenuStatus[3] + 1) % len(zombieVotes)
     else:
-        if eventPlayer.playerMenuStatus[3] > 0:
-            eventPlayer.playerMenuStatus[3] += -1
-        else:
-            eventPlayer.playerMenuStatus[3] = len(zombieVotes) - 1
+        eventPlayer.playerMenuStatus[3] = (eventPlayer.playerMenuStatus[3] + len(zombieVotes) - 1) % len(zombieVotes)
         while not zombieVotes[eventPlayer.playerMenuStatus[3]][1]:
-            if eventPlayer.playerMenuStatus[3] > 0:
-                eventPlayer.playerMenuStatus[3] += -1
-            else:
-                eventPlayer.playerMenuStatus[3] = len(zombieVotes) - 1
+            eventPlayer.playerMenuStatus[3] = (eventPlayer.playerMenuStatus[3] + len(zombieVotes) - 1) % len(zombieVotes)
 
 
 rule "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)":
@@ -200,25 +171,13 @@ rule "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)":
     #Update player voting status
     eventPlayer.playerMenuStatus[1] = 1
     if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE):
-        if eventPlayer.playerMenuStatus[4] < len(objectiveTypeVotes) - 1:
-            eventPlayer.playerMenuStatus[4]++
-        else:
-            eventPlayer.playerMenuStatus[4] = 0
+        eventPlayer.playerMenuStatus[4] = (eventPlayer.playerMenuStatus[4] + 1) % len(objectiveTypeVotes)
         while not objectiveTypeVotes[eventPlayer.playerMenuStatus[4]][1]:
-            if eventPlayer.playerMenuStatus[4] < len(objectiveTypeVotes) - 1:
-                eventPlayer.playerMenuStatus[4]++
-            else:
-                eventPlayer.playerMenuStatus[4] = 0
+            eventPlayer.playerMenuStatus[4] = (eventPlayer.playerMenuStatus[4] + 1) % len(objectiveTypeVotes)
     else:
-        if eventPlayer.playerMenuStatus[4] > 0:
-            eventPlayer.playerMenuStatus[4] += -1
-        else:
-            eventPlayer.playerMenuStatus[4] = len(objectiveTypeVotes) - 1
+        eventPlayer.playerMenuStatus[4] = (eventPlayer.playerMenuStatus[4] + len(objectiveTypeVotes) - 1) % len(objectiveTypeVotes)
         while not objectiveTypeVotes[eventPlayer.playerMenuStatus[4]][1]:
-            if eventPlayer.playerMenuStatus[4] > 0:
-                eventPlayer.playerMenuStatus[4] += -1
-            else:
-                eventPlayer.playerMenuStatus[4] = len(objectiveTypeVotes) - 1
+            eventPlayer.playerMenuStatus[4] = (eventPlayer.playerMenuStatus[4] + len(objectiveTypeVotes) - 1) % len(objectiveTypeVotes)
 
 
 rule "PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)":
@@ -229,25 +188,13 @@ rule "PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)":
     @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
     
     if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE):
-        if eventPlayer.enhancementValues[0] < len(enhancementOptions) - 1:
-            eventPlayer.enhancementValues[0]++
-        else:
-            eventPlayer.enhancementValues[0] = 0
+        eventPlayer.enhancementValues[0] = (eventPlayer.enhancementValues[0] + 1) % len(enhancementOptions)
         while not enhancementOptions[eventPlayer.enhancementValues[0]]:
-            if eventPlayer.enhancementValues[0] < len(enhancementOptions) - 1:
-                eventPlayer.enhancementValues[0]++
-            else:
-                eventPlayer.enhancementValues[0] = 0
+            eventPlayer.enhancementValues[0] = (eventPlayer.enhancementValues[0] + 1) % len(enhancementOptions)
     else:
-        if eventPlayer.enhancementValues[0] > 0:
-            eventPlayer.enhancementValues[0] += -1
-        else:
-            eventPlayer.enhancementValues[0] = len(enhancementOptions) - 1
+        eventPlayer.enhancementValues[0] = (eventPlayer.enhancementValues[0] + len(enhancementOptions) - 1) % len(enhancementOptions)
         while not enhancementOptions[eventPlayer.enhancementValues[0]]:
-            if eventPlayer.enhancementValues[0] > 0:
-                eventPlayer.enhancementValues[0] += -1
-            else:
-                eventPlayer.enhancementValues[0] = len(enhancementOptions) - 1
+            eventPlayer.enhancementValues[0] = (eventPlayer.enhancementValues[0] + len(enhancementOptions) - 1) % len(enhancementOptions)
 
 
 rule "UPDATE PREGAME VOTING STATUS":

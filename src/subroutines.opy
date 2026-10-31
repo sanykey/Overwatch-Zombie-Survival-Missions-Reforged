@@ -41,10 +41,12 @@ def setDifficulty():
             goto lbl_0
         smallMessage(getAllPlayers(), " Difficulty adjusted for player count, change affects new zombies. ")
         lbl_0:
+        #Shared HP for 1-4 players; only Winston (index 18) changes below.
+        botHealthValues = [225, 170, 125, 900, 2000, 160, 140, 700, 160, 650, 135, 275, 400, 650, 275, 225, 170, 170, 500]
+        #Shared bite durations for 3+ players; 1 and 2 players override them.
+        biteDurations = [3, 3, 3, 3, null, 1.5, 4, 2, 2, 2, 1, null, 2, null, 3, 3, 3, 3, 3, 3, 3]
         #Difficulty: 1 Player "Normal"
         if difficultySetting == 1:
-            #Bot Health Values
-            botHealthValues = [225, 170, 125, 900, 2000, 160, 140, 700, 160, 650, 135, 275, 400, 650, 275, 225, 170, 170, 500]
             #Bot bite damage
             biteDamages = [5, 2.5, 2, 20, 15, 3, 2, 7.5, 5, 10, 10, 30, 10, 15, 5, 5, 5, 2.5, 10, 10, 10]
             #Bot bite durations
@@ -56,7 +58,7 @@ def setDifficulty():
         #Difficulty: 2 Player "Hard"
         elif difficultySetting == 2:
             #Bot Health Values
-            botHealthValues = [225, 170, 125, 900, 2000, 160, 140, 700, 160, 650, 135, 275, 400, 650, 275, 225, 170, 170, 750]
+            botHealthValues[18] = 750
             #Bot bite damage
             biteDamages = [15, 10, 12, 40, 30, 5, 2, 12, 15, 20, 15, 45, 20, 30, 7, 15, 7, 10, 10, 20, 20]
             #Bot bite durations
@@ -71,8 +73,6 @@ def setDifficulty():
             botHealthValues = [300, 200, 125, 900, 2000, 180, 150, 800, 200, 750, 175, 300, 400, 750, 300, 350, 200, 200, 1100]
             #Bot bite damage
             biteDamages = [42, 22, 25, 55, 50, 20, 20, 40, 35, 25, 90, 70, 50, 50, 20, 40, 20, 22, 25, 40, 40]
-            #Bot bite durations
-            biteDurations = [3, 3, 3, 3, null, 1.5, 4, 2, 2, 2, 1, null, 2, null, 3, 3, 3, 3, 3, 3, 3]
             #Bot throttle speeds
             throttleSpeeds = [0.9, 0.95, 1, 0.75, 0.85, 0.8, 0.7, 0.8, 0.8, 0.75, 0.9, 0.65, 0.85, 0.8, 0.75, 0.9, 0.8, 0.95, 1, 0.9, 0.9]
             #Bot damage dealt
@@ -80,11 +80,9 @@ def setDifficulty():
         #Difficulty: 3-4 Player "Expert"
         else:
             #Bot Health Values
-            botHealthValues = [225, 170, 125, 900, 2000, 160, 140, 700, 160, 650, 135, 275, 400, 650, 275, 225, 170, 170, 1000]
+            botHealthValues[18] = 1000
             #Bot bite damage
             biteDamages = [30, 15, 20, 50, 40, 15, 17.5, 30, 30, 20, 40, 60, 40, 40, 10, 40, 10, 15, 15, 20, 20]
-            #Bot bite durations
-            biteDurations = [3, 3, 3, 3, null, 1.5, 4, 2, 2, 2, 1, null, 2, null, 3, 3, 3, 3, 3, 3, 3]
             #Bot throttle speeds
             throttleSpeeds = [0.85, 0.9, 1, 0.6, 0.7, 0.7, 0.4, 0.75, 0.7, 0.65, 0.9, 0.65, 0.65, 0.75, 0.6, 0.85, 0.7, 0.9, 1, 0.7, 0.7]
             #Bot damage dealt
@@ -261,13 +259,13 @@ def globalObjectiveEntityManagement():
     
     objectiveValue = objectiveTypes[0]
     #Destroy all current objective effects and texts
-    for objectiveEntityCount in range(len(objectiveEntities)):
-        destroyProgressBarHud(objectiveEntities[objectiveEntityCount])
-        destroyProgressBarInWorldText(objectiveEntities[objectiveEntityCount])
-        destroyEffect(objectiveEntities[objectiveEntityCount])
-        destroyHudText(objectiveEntities[objectiveEntityCount])
-        destroyIcon(objectiveEntities[objectiveEntityCount])
-        destroyInWorldText(objectiveEntities[objectiveEntityCount])
+    for I in range(len(objectiveEntities)):
+        destroyProgressBarHud(objectiveEntities[I])
+        destroyProgressBarInWorldText(objectiveEntities[I])
+        destroyEffect(objectiveEntities[I])
+        destroyHudText(objectiveEntities[I])
+        destroyIcon(objectiveEntities[I])
+        destroyInWorldText(objectiveEntities[I])
         wait()
     objectiveEntities = []
     #Capture Point/Extraction Point
@@ -280,15 +278,9 @@ def globalObjectiveEntityManagement():
             #Extraction zone dome
             createEffect(getLivingPlayers(Team.1).filter(lambda _: extractionZoneRad < 200), Effect.SPHERE, Color.LIME_GREEN, objectivePositions[0], extractionZoneRad, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             objectiveEntities.append(getLastCreatedEntity())
-            #Extraction point boundary 1
-            createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.SKY_BLUE, objectivePositions[0] + vect(0, -2, 0), objectiveRad, EffectReeval.VISIBILITY)
-            objectiveEntities.append(getLastCreatedEntity())
-            #Extraction point boundary 2
-            createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.SKY_BLUE, objectivePositions[0] + vect(0, 22, 0), objectiveRad, EffectReeval.VISIBILITY)
-            objectiveEntities.append(getLastCreatedEntity())
-            #Extraction point boundary 3
-            createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.SKY_BLUE, objectivePositions[0] + vect(0, 46, 0), objectiveRad, EffectReeval.VISIBILITY)
-            objectiveEntities.append(getLastCreatedEntity())
+            for I in range(3):
+                createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.SKY_BLUE, objectivePositions[0] + vect(0, [-2, 22, 46][I], 0), objectiveRad, EffectReeval.VISIBILITY)
+                objectiveEntities.append(getLastCreatedEntity())
             #Extraction icon
             createIcon(getAllPlayers().exclude(playersOnObjective), objectivePositions[0] + vect(0, 1, 0), Icon.ARROW_DOWN, IconReeval.VISIBILITY, Color.SKY_BLUE)
             objectiveEntities.append(getLastCreatedEntity())
@@ -424,18 +416,18 @@ def globalObjectiveEntityManagement():
         createInWorldText(playersOnObjective, "{0}%".format(floor(objectiveCaptureValue[objectiveResourcePositions.index(sorted(objectiveResourcePositions, lambda x: distance(localPlayer.getPosition(), x))[0])])), updateEveryFrame(localPlayer.getEyePosition() + ((directionFromAngles(localPlayer.getHorizontalFacingAngle(), localPlayer.getVerticalFacingAngle() + 15)) * 200)), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, objectiveColor)
         objectiveEntities.append(getLastCreatedText())
         #Terminal effects
-        for objectiveEntityCount in range(len(objectiveCaptureValue)):
+        for I in range(len(objectiveCaptureValue)):
             #Terminal icon
-            createIcon(getPlayers(Team.1).filter(lambda player: distance(player.getPosition(), objectiveResourcePositions[evalOnce(objectiveEntityCount)]) > objectiveRad and objectiveCaptureValue[evalOnce(objectiveEntityCount)] < 100), objectiveResourcePositions[evalOnce(objectiveEntityCount)] + vect(0, 1, 0), Icon.BOLT, IconReeval.VISIBILITY_AND_POSITION, objectiveColor)
+            createIcon(getPlayers(Team.1).filter(lambda player: distance(player.getPosition(), objectiveResourcePositions[evalOnce(I)]) > objectiveRad and objectiveCaptureValue[evalOnce(I)] < 100), objectiveResourcePositions[evalOnce(I)] + vect(0, 1, 0), Icon.BOLT, IconReeval.VISIBILITY_AND_POSITION, objectiveColor)
             objectiveEntities.append(getLastCreatedEntity())
             #Terminal repair area ring
-            createEffect(getAllPlayers(), Effect.RING, objectiveColor, objectiveResourcePositions[evalOnce(objectiveEntityCount)], objectiveRad, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            createEffect(getAllPlayers(), Effect.RING, objectiveColor, objectiveResourcePositions[evalOnce(I)], objectiveRad, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             objectiveEntities.append(getLastCreatedEntity())
             #Terminal "screen" light shaft
-            createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, objectiveColor, objectiveResourcePositions[evalOnce(objectiveEntityCount)] + directionTowards(objectiveResourcePositions[evalOnce(objectiveEntityCount)], objectivePositions[0]) * objectiveRad * 0.8 + vect(0, -1.5, 0), 0.25, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, objectiveColor, objectiveResourcePositions[evalOnce(I)] + directionTowards(objectiveResourcePositions[evalOnce(I)], objectivePositions[0]) * objectiveRad * 0.8 + vect(0, -1.5, 0), 0.25, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             objectiveEntities.append(getLastCreatedEntity())
             #Objective distance
-            createInWorldText(getAllPlayers().filter(lambda player: objectiveCaptureValue[evalOnce(objectiveEntityCount)] < 100 and distance(player.getPosition(), objectiveResourcePositions[evalOnce(objectiveEntityCount)]) > objectiveRad), "Distance: {0}m".format(distance(localPlayer.getPosition(), objectiveResourcePositions[evalOnce(objectiveEntityCount)])), objectiveResourcePositions[evalOnce(objectiveEntityCount)], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, objectiveColor, SpecVisibility.NEVER)
+            createInWorldText(getAllPlayers().filter(lambda player: objectiveCaptureValue[evalOnce(I)] < 100 and distance(player.getPosition(), objectiveResourcePositions[evalOnce(I)]) > objectiveRad), "Distance: {0}m".format(distance(localPlayer.getPosition(), objectiveResourcePositions[evalOnce(I)])), objectiveResourcePositions[evalOnce(I)], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, objectiveColor, SpecVisibility.NEVER)
             objectiveEntities.append(getLastCreatedText())
 
 
