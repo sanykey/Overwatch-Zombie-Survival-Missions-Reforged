@@ -223,27 +223,29 @@ def setZombieMode():
     #All Zombies
     if zombieSetting == 1:
         #Bot respawn probablities
-        botSpawnRates = [11, 10, 5, 4, 3, 5, 4, 4, 6, 3, 5, 6, 3, 4, 4, 6, 4, 9, 4]
+        botSpawnRates = numbersList.slice(NL_SPAWN_RATES_ALL_ZOMBIES_OFFSET, NL_SPAWN_RATES_ALL_ZOMBIES_LEN)
     #New Blood
     elif zombieSetting == 2:
         #Bot respawn probablities
-        botSpawnRates = [null, null, null, null, null, 10.1, null, 10, 2, 2, 2, 3.9, 10, 10, 10, 10, 10, 10, 10]
+        botSpawnRates = numbersList.slice(NL_SPAWN_RATES_NEW_BLOOD_OFFSET, NL_SPAWN_RATES_NEW_BLOOD_LEN)
     #What'll it be?
     elif zombieSetting == 3:
         #Bot respawn probablities
-        botSpawnRates = [5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263]
+        botSpawnRates = []
+        for I in range(19):
+            botSpawnRates.append(5.263)
     #Zombie Shuffle
     elif zombieSetting == 4:
         #Bot respawn probablities
-        botSpawnRates = [50, 25, 15, 10, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+        botSpawnRates = numbersList.slice(NL_SPAWN_RATES_SHUFFLE_OFFSET, NL_SPAWN_RATES_SHUFFLE_LEN)
     #Dinner Rush!
     elif zombieSetting == 5:
         #Bot respawn probablities
-        botSpawnRates = [null, null, 15, null, null, 16, 15, 4, null, 3, 15, 9, null, 3, 10, null, 10]
+        botSpawnRates = numbersList.slice(NL_SPAWN_RATES_DINNER_RUSH_OFFSET, NL_SPAWN_RATES_DINNER_RUSH_LEN)
     #Ham N' Hammer
     elif zombieSetting == 6:
         #Bot respawn probablities
-        botSpawnRates = [null, null, null, null, 50, null, null, null, null, 50]
+        botSpawnRates = numbersList.slice(NL_SPAWN_RATES_HAM_N_HAMMER_OFFSET, NL_SPAWN_RATES_HAM_N_HAMMER_LEN)
 
 
 def determineChallenge():

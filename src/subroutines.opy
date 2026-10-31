@@ -26,15 +26,17 @@ def setDifficulty():
     #Difficulty: Insanity
     if challengeSetting >= 4:
         #Bot Health Values
-        botHealthValues = [300, 250, 200, 900, 1500, 220, 250, 900, 250, 700, 200, 350, 350, 700, 350, 400, 275, 250, 1000]
+        botHealthValues = numbersList.slice(NL_BOT_HEALTH_INSANITY_OFFSET, NL_BOT_HEALTH_INSANITY_LEN)
         #Bot bite damage
-        biteDamages = [48, 30, 45, 75, null, 20, 35, 51, 45, 50, 110, 80, 65, null, 30, 55, 35, 30, 30, 80, 80]
+        biteDamages = numbersList.slice(NL_BITE_DAMAGE_INSANITY_OFFSET, NL_BITE_DAMAGE_INSANITY_LEN)
         #Bot bite durations
-        biteDurations = [3, 3, 3, 3, null, 1.5, 4, 3, 2, 2, 1, null, 2, null, 3, 3, 3, 3, 3, 3, 3]
+        biteDurations = numbersList.slice(NL_BITE_DURATIONS_INSANITY_OFFSET, NL_BITE_DURATIONS_INSANITY_LEN)
         #Bot throttle speeds
-        throttleSpeeds = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        throttleSpeeds = []
+        for I in range(21):
+            throttleSpeeds.append(1)
         #Bot damage dealt
-        damageDealt = [200, 300, 175, 150, 200, 100, 150, 90, 300, 175, 200, 150, 150, 190, 175, 125, 200, 240, 200, 180, 300]
+        damageDealt = numbersList.slice(NL_DAMAGE_DEALT_INSANITY_OFFSET, NL_DAMAGE_DEALT_INSANITY_LEN)
     else:
         #Message does not play if server is not 70 seconds old, this is a bad fix but I'm struggling to find a simple one.
         if getTotalTimeElapsed() < 100:
@@ -42,51 +44,51 @@ def setDifficulty():
         smallMessage(getAllPlayers(), " Difficulty adjusted for player count, change affects new zombies. ")
         lbl_0:
         #Shared HP for 1-4 players; only Winston (index 18) changes below.
-        botHealthValues = [225, 170, 125, 900, 2000, 160, 140, 700, 160, 650, 135, 275, 400, 650, 275, 225, 170, 170, 500]
+        botHealthValues = numbersList.slice(NL_BOT_HEALTH_BASE_OFFSET, NL_BOT_HEALTH_BASE_LEN)
         #Shared bite durations for 3+ players; 1 and 2 players override them.
-        biteDurations = [3, 3, 3, 3, null, 1.5, 4, 2, 2, 2, 1, null, 2, null, 3, 3, 3, 3, 3, 3, 3]
+        biteDurations = numbersList.slice(NL_BITE_DURATIONS_BASE_OFFSET, NL_BITE_DURATIONS_BASE_LEN)
         #Difficulty: 1 Player "Normal"
         if difficultySetting == 1:
             #Bot bite damage
-            biteDamages = [5, 2.5, 2, 20, 15, 3, 2, 7.5, 5, 10, 10, 30, 10, 15, 5, 5, 5, 2.5, 10, 10, 10]
+            biteDamages = numbersList.slice(NL_BITE_DAMAGE_NORMAL_OFFSET, NL_BITE_DAMAGE_NORMAL_LEN)
             #Bot bite durations
-            biteDurations = [1, 1, 1.5, 1.5, null, 0.5, 1.5, 1, 1, 0.5, 0, null, 1, null, 1, 1, 1, 1, 1, 1, 1]
+            biteDurations = numbersList.slice(NL_BITE_DURATIONS_NORMAL_OFFSET, NL_BITE_DURATIONS_NORMAL_LEN)
             #Bot throttle speeds
-            throttleSpeeds = [0.75, 0.8, 0.9, 0.5, 0.6, 0.6, 0.3, 0.65, 0.6, 0.55, 0.8, 0.55, 0.55, 0.65, 0.5, 0.55, 0.5, 0.8, 0.9, 0.6, 0.6]
+            throttleSpeeds = numbersList.slice(NL_THROTTLE_SPEEDS_NORMAL_OFFSET, NL_THROTTLE_SPEEDS_NORMAL_LEN)
             #Bot damage dealt
-            damageDealt = [8.5, 7.5, 1, 1, 50, 8, 1, 25, 1, 50, 1, 75, 25, 50, 25, 8.5, 5, 7.5, 50, 50, 50]
+            damageDealt = numbersList.slice(NL_DAMAGE_DEALT_NORMAL_OFFSET, NL_DAMAGE_DEALT_NORMAL_LEN)
         #Difficulty: 2 Player "Hard"
         elif difficultySetting == 2:
             #Bot Health Values
             botHealthValues[18] = 750
             #Bot bite damage
-            biteDamages = [15, 10, 12, 40, 30, 5, 2, 12, 15, 20, 15, 45, 20, 30, 7, 15, 7, 10, 10, 20, 20]
+            biteDamages = numbersList.slice(NL_BITE_DAMAGE_HARD_OFFSET, NL_BITE_DAMAGE_HARD_LEN)
             #Bot bite durations
-            biteDurations = [2.5, 2.5, 3, 3, null, 1.5, 4, 2, 2, 2, 1, null, 2, null, 3, 2.5, 3, 2.5, 3, 3, 3]
+            biteDurations = numbersList.slice(NL_BITE_DURATIONS_HARD_OFFSET, NL_BITE_DURATIONS_HARD_LEN)
             #Bot throttle speeds
-            throttleSpeeds = [0.85, 0.9, 1, 0.6, 0.7, 0.6, 0.4, 0.75, 0.7, 0.65, 0.9, 0.65, 0.65, 0.75, 0.6, 0.65, 0.6, 0.9, 1, 0.7, 0.7]
+            throttleSpeeds = numbersList.slice(NL_THROTTLE_SPEEDS_HARD_OFFSET, NL_THROTTLE_SPEEDS_HARD_LEN)
             #Bot damage dealt
-            damageDealt = [67, 66, 25, 25, 90, 12, 25, 50, 25, 100, 25, 75, 50, 75, 50, 50, 50, 66, 75, 75, 75]
+            damageDealt = numbersList.slice(NL_DAMAGE_DEALT_HARD_OFFSET, NL_DAMAGE_DEALT_HARD_LEN)
         #Difficulty: 5+ Player "Legendary"
         elif difficultySetting >= 5:
             #Bot Health Values
-            botHealthValues = [300, 200, 125, 900, 2000, 180, 150, 800, 200, 750, 175, 300, 400, 750, 300, 350, 200, 200, 1100]
+            botHealthValues = numbersList.slice(NL_BOT_HEALTH_LEGENDARY_OFFSET, NL_BOT_HEALTH_LEGENDARY_LEN)
             #Bot bite damage
-            biteDamages = [42, 22, 25, 55, 50, 20, 20, 40, 35, 25, 90, 70, 50, 50, 20, 40, 20, 22, 25, 40, 40]
+            biteDamages = numbersList.slice(NL_BITE_DAMAGE_LEGENDARY_OFFSET, NL_BITE_DAMAGE_LEGENDARY_LEN)
             #Bot throttle speeds
-            throttleSpeeds = [0.9, 0.95, 1, 0.75, 0.85, 0.8, 0.7, 0.8, 0.8, 0.75, 0.9, 0.65, 0.85, 0.8, 0.75, 0.9, 0.8, 0.95, 1, 0.9, 0.9]
+            throttleSpeeds = numbersList.slice(NL_THROTTLE_SPEEDS_LEGENDARY_OFFSET, NL_THROTTLE_SPEEDS_LEGENDARY_LEN)
             #Bot damage dealt
-            damageDealt = [100, 150, 100, 100, 170, 75, 100, 80, 100, 175, 50, 100, 100, 140, 125, 90, 150, 125, 125, 150, 150]
+            damageDealt = numbersList.slice(NL_DAMAGE_DEALT_LEGENDARY_OFFSET, NL_DAMAGE_DEALT_LEGENDARY_LEN)
         #Difficulty: 3-4 Player "Expert"
         else:
             #Bot Health Values
             botHealthValues[18] = 1000
             #Bot bite damage
-            biteDamages = [30, 15, 20, 50, 40, 15, 17.5, 30, 30, 20, 40, 60, 40, 40, 10, 40, 10, 15, 15, 20, 20]
+            biteDamages = numbersList.slice(NL_BITE_DAMAGE_EXPERT_OFFSET, NL_BITE_DAMAGE_EXPERT_LEN)
             #Bot throttle speeds
-            throttleSpeeds = [0.85, 0.9, 1, 0.6, 0.7, 0.7, 0.4, 0.75, 0.7, 0.65, 0.9, 0.65, 0.65, 0.75, 0.6, 0.85, 0.7, 0.9, 1, 0.7, 0.7]
+            throttleSpeeds = numbersList.slice(NL_THROTTLE_SPEEDS_EXPERT_OFFSET, NL_THROTTLE_SPEEDS_EXPERT_LEN)
             #Bot damage dealt
-            damageDealt = [90, 125, 50, 50, 130, 40, 50, 50, 50, 150, 1, 75, 75, 90, 75, 85, 100, 125, 100, 100, 100]
+            damageDealt = numbersList.slice(NL_DAMAGE_DEALT_EXPERT_OFFSET, NL_DAMAGE_DEALT_EXPERT_LEN)
 
 
 def setPrematchTimer():

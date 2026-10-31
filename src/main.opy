@@ -8,6 +8,7 @@
 
 #!include "settings.opy"
 #!include "variables.opy"
+#!include "vas/compressed numbers.opy"
 #!include "subroutines.opy"
 
 #!include "bot_health.opy"

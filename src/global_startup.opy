@@ -220,7 +220,9 @@ rule "VARIABLE ASSIGNMENT":
     overtime = false
     gameStatus = false
     users = []
-    globalPlayerStats = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+    globalPlayerStats = []
+    for I in range(12):
+        globalPlayerStats.append(-1)
     objectivePositions = []
     objectiveTypes = []
     objectiveRad = 10
