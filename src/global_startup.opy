@@ -227,15 +227,15 @@ rule "VARIABLE ASSIGNMENT":
     if getCurrentGamemode() == Gamemode.CONTROL:
         walkCenter = getObjectivePosition(getCurrentObjective())
     startRule(generateMapGrid, StartRuleBehavior.NOOP)
-    objectiveValue = 0
+    #objectiveValue = 0  #Uninitialized Workshop variables already compare equal to 0 at match start.
     objectiveEntities = []
     botSpawnPoints = []
     waypoints = []
     botSpawnPointTimers = []
     bosses = []
     healthpackPositions = []
-    overtime = false
-    gameStatus = false
+    #overtime = false  #Uninitialized Workshop variables already compare equal to false at match start.
+    #gameStatus = false  #Uninitialized Workshop variables already compare equal to false at match start.
     users = []
     globalPlayerStats = []
     for I in range(12):
@@ -249,8 +249,8 @@ rule "VARIABLE ASSIGNMENT":
     losList = []
     botMaxTeleportRange = [20, 40]
     supplyDropStatus = true
-    supplyDropLanding = null
-    supplyDropPosition = null
+    #supplyDropLanding = null  #Uninitialized Workshop variables already compare equal to null at match start.
+    #supplyDropPosition = null  #Uninitialized Workshop variables already compare equal to null at match start.
     powerUpIDs = []
     powerUpPositions = []
     powerUpEffect = []
@@ -264,7 +264,7 @@ rule "VARIABLE ASSIGNMENT":
     enableMutationsMacro()
     numberOfPowerUpsPerSupplyDrop = createWorkshopSettingInt("Power Ups", "Number of Powerups Per Supply Drop", 5, 1, 10, -1)
     uniqueSkinCap = createWorkshopSettingInt("General", "Maximum Number of Unique Hero Skins", 11, 1, 11)
-    objectiveComplete = false
+    #objectiveComplete = false  #Uninitialized Workshop variables already compare equal to false at match start.
     numberOfBots = createWorkshopSettingInt("General", "Number of zombies", 6, 1, 23, 1)
     extractionSpeedUp = 2.5
 
