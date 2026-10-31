@@ -1,6 +1,6 @@
-#!mainFile "main.opy"
+﻿#!mainFile "main.opy"
 
-subroutine powerUpAssignment 3
+subroutine powerUpAssignment
 
 
 rule "POWER UP EFFECT/TEXT MANAGEMENT":

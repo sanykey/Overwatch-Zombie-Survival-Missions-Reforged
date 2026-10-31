@@ -1,17 +1,17 @@
-#!mainFile "main.opy"
+﻿#!mainFile "main.opy"
 
-subroutine powerUpUsage 4
-subroutine playerForceField 5
-subroutine noCooldowns 6
-subroutine airStrike 7
-subroutine instantRevive 8
-subroutine healBeacon 16
-subroutine sentryTurret 17
-subroutine cloakingDevice 19
-subroutine superNano 23
-subroutine bouncePad 30
-subroutine ultimateCharger 36
-subroutine stun 41
+subroutine powerUpUsage
+subroutine playerForceField
+subroutine noCooldowns
+subroutine airStrike
+subroutine instantRevive
+subroutine healBeacon
+subroutine sentryTurret
+subroutine cloakingDevice
+subroutine superNano
+subroutine bouncePad
+subroutine ultimateCharger
+subroutine stun
 
 
 rule "GENERATE SUPPLY DROPS":

@@ -1,10 +1,10 @@
-#!mainFile "main.opy"
+﻿#!mainFile "main.opy"
 
-subroutine determineChallenge 11
-subroutine determineZombieMode 14
-subroutine setZombieMode 15
-subroutine determineObjectiveType 20
-subroutine setObjectiveType 21
+subroutine determineChallenge
+subroutine determineZombieMode
+subroutine setZombieMode
+subroutine determineObjectiveType
+subroutine setObjectiveType
 
 
 rule "============================================== GLOBAL START MENU ====================================================":

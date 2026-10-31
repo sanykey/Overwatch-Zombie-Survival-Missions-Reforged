@@ -1,6 +1,6 @@
-#!mainFile "main.opy"
+﻿#!mainFile "main.opy"
 
-subroutine bossReturn 18
+subroutine bossReturn
 
 
 rule "SPAWN BOSS":

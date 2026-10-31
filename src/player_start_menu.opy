@@ -1,6 +1,6 @@
-#!mainFile "main.opy"
+﻿#!mainFile "main.opy"
 
-subroutine randomActions 9
+subroutine randomActions
 
 
 rule "PLAYER MENU INITIALIZATION":

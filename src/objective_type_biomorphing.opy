@@ -1,7 +1,7 @@
-#!mainFile "main.opy"
+﻿#!mainFile "main.opy"
 
-subroutine biowasteAssignment 53
-subroutine biowasteOutput 54
+subroutine biowasteAssignment
+subroutine biowasteOutput
 
 
 rule "BIOMORPHING GOAL START":

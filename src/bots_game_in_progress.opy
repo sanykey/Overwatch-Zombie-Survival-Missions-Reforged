@@ -1,11 +1,11 @@
-#!mainFile "main.opy"
+﻿#!mainFile "main.opy"
 
-subroutine enterExitTeleport 0
-subroutine teleportBots 1
-subroutine successfulTeleportStatus 25
-subroutine updateBotSpawnPoints 26
-subroutine botTeleportCenter 31
-subroutine locateAveragePlayerLocation 32
+subroutine enterExitTeleport
+subroutine teleportBots
+subroutine successfulTeleportStatus
+subroutine updateBotSpawnPoints
+subroutine botTeleportCenter
+subroutine locateAveragePlayerLocation
 
 
 rule "BOT INITIALIZATION":

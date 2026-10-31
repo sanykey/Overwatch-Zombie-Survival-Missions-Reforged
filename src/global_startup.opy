@@ -1,11 +1,11 @@
-#!mainFile "main.opy"
+﻿#!mainFile "main.opy"
 
-subroutine generateMapGrid 24
-subroutine enablePowerups 33
-subroutine enableMutations 35
-subroutine botHeroRandomization 37
-subroutine enableEnhancements 38
-subroutine setAvailableObjectives 40
+subroutine generateMapGrid
+subroutine enablePowerups
+subroutine enableMutations
+subroutine botHeroRandomization
+subroutine enableEnhancements
+subroutine setAvailableObjectives
 
 
 rule "PREGAME QUICK TIPS FOR PLAYERS":

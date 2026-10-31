@@ -1,22 +1,22 @@
-#!mainFile "main.opy"
+﻿#!mainFile "main.opy"
 
 # Shared subroutines used by multiple sections (including their dependencies).
 
-subroutine enableDisableAbilities 10
-subroutine setDifficulty 12
-subroutine botRespawnInitialization 13
-subroutine objectivesManagement 22
-subroutine globalObjectiveEntityManagement 27
-subroutine botEntityManagement 29
-subroutine mutations 34
-subroutine botStatManagement 43
-subroutine selectTarget 45
-subroutine restoreDefaultFacingMovement 46
-subroutine setPrematchTimer 47
-subroutine explosionSequence 48
-subroutine minibossMutation 49
-subroutine illariUlt 51
-subroutine abilityPlacement 55
+subroutine enableDisableAbilities
+subroutine setDifficulty
+subroutine botRespawnInitialization
+subroutine objectivesManagement
+subroutine globalObjectiveEntityManagement
+subroutine botEntityManagement
+subroutine mutations
+subroutine botStatManagement
+subroutine selectTarget
+subroutine restoreDefaultFacingMovement
+subroutine setPrematchTimer
+subroutine explosionSequence
+subroutine minibossMutation
+subroutine illariUlt
+subroutine abilityPlacement
 
 
 def setDifficulty():

@@ -1,6 +1,6 @@
-#!mainFile "main.opy"
+﻿#!mainFile "main.opy"
 
-subroutine fireSatellite 44
+subroutine fireSatellite
 
 
 rule "SET UP TERMINAL POSITIONS":

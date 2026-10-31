@@ -1,9 +1,9 @@
-#!mainFile "main.opy"
+﻿#!mainFile "main.opy"
 
-subroutine abilityThrowdown 50
-subroutine entityFloat 52
-subroutine explosionWarning 56
-subroutine smolderEnraged 57
+subroutine abilityThrowdown
+subroutine entityFloat
+subroutine explosionWarning
+subroutine smolderEnraged
 
 
 rule "BASIC (REAPER) SHADOW STEP (BOSS)":

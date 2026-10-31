@@ -1,8 +1,8 @@
-#!mainFile "main.opy"
+﻿#!mainFile "main.opy"
 
-subroutine playerObjectiveEntityManagement 28
-subroutine teleportToClosestPlayer 39
-subroutine updateUsers 42
+subroutine playerObjectiveEntityManagement
+subroutine teleportToClosestPlayer
+subroutine updateUsers
 
 
 rule "PLAYER INITIALIZATION":

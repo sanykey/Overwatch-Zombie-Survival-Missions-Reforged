@@ -1,6 +1,6 @@
-#!mainFile "main.opy"
+﻿#!mainFile "main.opy"
 
-subroutine nukeMap 2
+subroutine nukeMap
 
 
 rule "PLAYERS IN EXTRACTION POINT CONTROL":
