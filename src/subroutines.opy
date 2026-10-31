@@ -1,4 +1,4 @@
-﻿#!mainFile "main.opy"
+#!mainFile "main.opy"
 
 # Shared subroutines used by multiple sections (including their dependencies).
 
@@ -8,7 +8,7 @@ subroutine botRespawnInitialization
 subroutine objectivesManagement
 subroutine globalObjectiveEntityManagement
 subroutine botEntityManagement
-subroutine mutations
+subroutine mutations 
 subroutine botStatManagement
 subroutine selectTarget
 subroutine restoreDefaultFacingMovement
