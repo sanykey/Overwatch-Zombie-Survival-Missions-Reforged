@@ -9,7 +9,7 @@
 
 #!include "settings.opy"
 #!include "variables.opy"
-#!include "vas/compressed numbers.opy"
+#!include "compressed numbers.opy"
 #!include "subroutines.opy"
 
 #!include "global_startup.opy"

@@ -1,6 +1,7 @@
 #!mainFile "main.opy"
 
 #!define BOT_MAX_TELEPORT_RANGE 40
+#!define CURRENT_OBJECTIVE_TYPE objectiveTypes[0]
 
 # Enhancement IDs also index enhancementOptions and the default-setting choices.
 # Zero means no preference in the menu; initialization resolves the configured default.
@@ -17,6 +18,20 @@ enum Enhancement:
     CHARGE_BATTERY = 8,
     HITCHHIKER = 9,
     PUP = 10,
+
+# Objective IDs also index objectiveTypeVotes and identify entries in objectiveTypes.
+# Biomorphing and Survivor Rescue are only selectable through the mixed pool.
+# Keep the existing IDs; 8 is unused and Mixed Objectives is a voting option only.
+enum ObjectiveType:
+    NO_PREFERENCE = 0,
+    SHOWDOWN = 1,
+    BOSSES = 2,
+    BIOMORPHING = 3,
+    SURVIVOR_RESCUE = 4,
+    KILL_ZONE = 5,
+    ZOMBIE_EGG = 6,
+    SATELLITE_UPLINK = 7,
+    MIXED_OBJECTIVES = 9,
 
 # Vote indices in playerMenuStatus; slots 0-1 are unused after extracting pregameState/isVoting.
 enum PlayerMenuStatusField:

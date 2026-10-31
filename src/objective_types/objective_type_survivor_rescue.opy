@@ -2,7 +2,7 @@
 
 
 rule "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE":
-    @Condition objectiveTypes[0] == 4
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
     @Condition gameStatus == true
     @Condition objectiveComplete == false
     @Condition (survivorToRescue == null or not entityExists(survivorToRescue)) == true
@@ -28,7 +28,7 @@ rule "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE":
 rule "INITIALIZE SURVIVOR TO BE RESCUED":
     @Event eachPlayer
     @Team 1
-    @Condition objectiveTypes[0] == 4
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
     @Condition survivorToRescue == eventPlayer
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
@@ -64,7 +64,7 @@ rule "INITIALIZE SURVIVOR TO BE RESCUED":
 rule "SURVIVOR TO BE RESCUED DIES":
     @Event playerDied
     @Team 1
-    @Condition objectiveTypes[0] == 4
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
     @Condition survivorToRescue == eventPlayer
     
     eventPlayer.teleport(nearestWalkablePosition(eventPlayer.getPosition()))
@@ -75,7 +75,7 @@ rule "SURVIVOR TO BE RESCUED DIES":
 
 
 rule "SURVIVOR FOLLOW TARGET":
-    @Condition objectiveTypes[0] == 4
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
     @Condition survivorToRescue.botTempValue == false
     @Condition survivorToRescue.hasSpawned() == true
     @Condition survivorToRescue.getHealth() > 1
@@ -112,7 +112,7 @@ rule "SURVIVOR FOLLOW TARGET":
 
 
 rule "CREATE PATH":
-    @Condition objectiveTypes[0] == 4
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
     @Condition survivorToRescue.botFollowTarget != null
     @Condition survivorToRescue.botThrottleSpeed > 0
     @Condition survivorToRescue.botFollowTarget.getAltitude() <= 1.5
@@ -125,7 +125,7 @@ rule "CREATE PATH":
 
 
 rule "DELETE PATH":
-    @Condition objectiveTypes[0] == 4
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
     @Condition (survivorToRescue.path.any(lambda x: distance(survivorToRescue.getPosition(), vect(x.x, survivorToRescue.getPosition().y, x.z)) < 0.25 and abs(survivorToRescue.getPosition().y - x.y) < 2)) == true
     
     survivorToRescue.telePos = survivorToRescue.path.index(sorted(survivorToRescue.path, lambda x: distance(survivorToRescue.getPosition(), x))[0])
@@ -136,7 +136,7 @@ rule "DELETE PATH":
 
 
 rule "SURVIVOR FOLLOW TARGET LETS GO":
-    @Condition objectiveTypes[0] == 4
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
     @Condition survivorToRescue.botFollowTarget != null
     @Condition survivorToRescue.botFollowTarget.isCommunicating(Comms.GOODBYE) == true
     
@@ -144,7 +144,7 @@ rule "SURVIVOR FOLLOW TARGET LETS GO":
 
 
 rule "PLAYER SAYS GROUP UP TO SURVIVOR":
-    @Condition objectiveTypes[0] == 4
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
     @Condition survivorToRescue.botFollowTarget != null
     @Condition (survivorToRescue.potentialTargets.any(lambda x: x.isCommunicating(Comms.GROUP_UP) and distance(x.getPosition(), survivorToRescue.getPosition()) < 12)) == true
     
@@ -156,7 +156,7 @@ rule "PLAYER SAYS GROUP UP TO SURVIVOR":
 
 
 rule "SURVIVOR JUMP":
-    @Condition objectiveTypes[0] == 4
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
     @Condition survivorToRescue.isOnGround() == true
     @Condition survivorToRescue.getThrottle() != vect(0, 0, 0)
     @Condition survivorToRescue.getHorizontalSpeed() < survivorToRescue.botThrottleSpeed * 3.5
@@ -167,7 +167,7 @@ rule "SURVIVOR JUMP":
 
 
 rule "SURVIVOR REACHES EXTRACTION SITE":
-    @Condition objectiveTypes[0] == 4
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
     @Condition objectiveComplete == false
     @Condition survivorToRescue.hasSpawned() == true
     @Condition distance(survivorToRescue.getPosition(), objectivePositions[0]) < 5

@@ -217,7 +217,7 @@ macro botEntityManagementMacro():
 
 
 macro globalObjectiveEntityManagementMacro():
-    objectiveValue = objectiveTypes[0]
+    objectiveValue = CURRENT_OBJECTIVE_TYPE
     #Destroy all current objective effects and texts
     for objectiveEntitiesCount in range(len(objectiveEntities)):
         destroyProgressBarHud(objectiveEntities[objectiveEntitiesCount])
@@ -229,7 +229,7 @@ macro globalObjectiveEntityManagementMacro():
         wait()
     objectiveEntities = []
     #Capture Point/Extraction Point
-    if objectiveValue == 1:
+    if objectiveValue == ObjectiveType.SHOWDOWN:
         #Extraction Point
         if len(objectivePositions) == 1:
             #Extraction distance
@@ -275,12 +275,12 @@ macro globalObjectiveEntityManagementMacro():
             hudText(getAllPlayers(), "Capture Percentage: {0}%".format(floor(objectiveCaptureValue)), "Objectives remaining: {0}".format(len(objectivePositions) - 1), "{0} {2}".format("Allies: {0}".format(len(playersOnObjective)) if len(playersOnObjective) > 0 else [], null, "Foes: {0}".format(len(queuedGoalType)) if len(queuedGoalType) > 0 else []), HudPosition.TOP, 1, objectiveColor, objectiveColor, objectiveColor, HudReeval.VISIBILITY_STRING_AND_COLOR)
             objectiveEntities.append(getLastCreatedText())
     #Bosses
-    elif objectiveValue == 2:
+    elif objectiveValue == ObjectiveType.BOSSES:
         #Boss health progress bar
         progressBarHud(getAllPlayers().filter(lambda _: len(bosses) > 0), bosses[0].getNormalizedHealth() * 100, "Boss Health {0}".format(heroIcon(bosses[0].getHero())), HudPosition.TOP, 2, Color.RED, Color.RED)
         objectiveEntities.append(getLastCreatedText())
         #Objectives remaining hud text
-        hudSubheader(getAllPlayers(), "Objectives Remaining: {0}".format(len(objectivePositions) - 1) if objectiveTypeSetting != 3 else "Giant Zombies Remaining: {0}".format(len(objectivePositions) - 1), HudPosition.TOP, 1, Color.RED, HudReeval.VISIBILITY)
+        hudSubheader(getAllPlayers(), "Objectives Remaining: {0}".format(len(objectivePositions) - 1) if objectiveTypeSetting != ObjectiveType.BIOMORPHING else "Giant Zombies Remaining: {0}".format(len(objectivePositions) - 1), HudPosition.TOP, 1, Color.RED, HudReeval.VISIBILITY)
         objectiveEntities.append(getLastCreatedText())
         #Boss icon
         createIcon(getAllPlayers(), bosses[0].getEyePosition() + Vector.UP if len(bosses) > 0 else objectivePositions[0], Icon.SKULL, IconReeval.VISIBILITY_AND_POSITION, Color.RED)
@@ -289,7 +289,7 @@ macro globalObjectiveEntityManagementMacro():
         createInWorldText(getAllPlayers().filter(lambda player: len(bosses) == 0 or not player in bosses[0].potentialTargets), "Distance: {0}m".format(distance(localPlayer.getPosition(), bosses[0].getPosition()) if len(bosses) > 0 else distance(localPlayer.getPosition(), objectivePositions[0])), bosses[0].getPosition() if len(bosses) > 0 else objectivePositions[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.RED, SpecVisibility.NEVER)
         objectiveEntities.append(getLastCreatedText())
     #Biomoprhing
-    elif objectiveValue == 3:
+    elif objectiveValue == ObjectiveType.BIOMORPHING:
         #Global progress bar
         hudText(getAllPlayers(), "{0} | {1}%".format(goalText, floor(objectiveCaptureValue)), "Objectives remaining: {0}".format(len(objectivePositions) - 1), null, HudPosition.TOP, 1, goalColor, objectiveColor, null, HudReeval.VISIBILITY_STRING_AND_COLOR)
         objectiveEntities.append(getLastCreatedText())
@@ -312,7 +312,7 @@ macro globalObjectiveEntityManagementMacro():
         createInWorldText(localPlayer.filter(lambda x: not x in playersOnObjective and (localPlayer.playerObjectiveResourceValue > 0 or len(objectiveResourcePositions) > 0)), "Distance: {0}m".format(distance(objectivePositions[0] if localPlayer.playerObjectiveResourceValue > 0 else sorted(objectiveResourcePositions, lambda x: angleBetweenVectors(directionTowards(localPlayer.getEyePosition(), x), localPlayer.getFacingDirection()))[0], localPlayer.getPosition())), objectivePositions[0] if localPlayer.playerObjectiveResourceValue > 0 else sorted(objectiveResourcePositions, lambda x: angleBetweenVectors(directionTowards(localPlayer.getEyePosition(), x), localPlayer.getFacingDirection()))[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.NEVER)
         objectiveEntities.append(getLastCreatedText())
     #Survivor Rescue
-    elif objectiveValue == 4:
+    elif objectiveValue == ObjectiveType.SURVIVOR_RESCUE:
         #Extraction site light shaft 2
         createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.VIOLET, objectivePositions[0] + vect(0, -2, 0), 5, EffectReeval.VISIBILITY)
         objectiveEntities.append(getLastCreatedEntity())
@@ -323,7 +323,7 @@ macro globalObjectiveEntityManagementMacro():
         createIcon(getAllPlayers().filter(lambda player: distance(player.getPosition(), survivorToRescue[0].getPosition()) < objectiveRad and distance(player.getPosition(), objectivePositions[0]) > 5), objectivePositions[0] + vect(0, 1, 0), Icon.ARROW_DOWN, IconReeval.VISIBILITY_AND_POSITION, Color.VIOLET)
         objectiveEntities.append(getLastCreatedEntity())
     #Killzone
-    elif objectiveValue == 5:
+    elif objectiveValue == ObjectiveType.KILL_ZONE:
         #Kill Zone Progress Bar
         progressBarHud(getAllPlayers(), objectiveCaptureValue / eliminationsNeededPerObjective * 100, "Kill Zone Elimination Progress", HudPosition.TOP, 2, Color.RED, Color.RED, ProgressHudReeval.VISIBILITY_AND_VALUES)
         objectiveEntities.append(getLastCreatedText())
@@ -346,7 +346,7 @@ macro globalObjectiveEntityManagementMacro():
         createEffect(getAllPlayers().filter(lambda player: distance(player.getPosition(), objectiveChase1) < objectiveRad), Effect.LIGHT_SHAFT, Color.RED, vect(objectiveChase1.x, localPlayer.getPosition().y + -29, objectiveChase1.z), sqrt(objectiveRad ** 2 - ((abs(localPlayer.getPosition().y - objectiveChase1.y)) ** 2)), EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         objectiveEntities.append(getLastCreatedEntity())
     #Zombie Egg
-    elif objectiveValue == 6:
+    elif objectiveValue == ObjectiveType.ZOMBIE_EGG:
         #Zombie Egg Progress Bar
         progressBarHud(getAllPlayers().filter(lambda _: bosses[0] != null), bosses[0].getNormalizedHealth() * 100, "Zombie Egg Health", HudPosition.TOP, 2, Color.LIME_GREEN, Color.LIME_GREEN)
         objectiveEntities.append(getLastCreatedText())
@@ -366,7 +366,7 @@ macro globalObjectiveEntityManagementMacro():
         createEffect(getAllPlayers(), Effect.CLOUD, Color.LIME_GREEN, objectivePositions[0] + vect(0, -1, 0), 25, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         objectiveEntities.append(getLastCreatedEntity())
     #Satellite Uplink
-    elif objectiveValue == 7:
+    elif objectiveValue == ObjectiveType.SATELLITE_UPLINK:
         #Capture percentage hud text
         hudText(getAllPlayers(), "{0}% | {1}% | {2}%".format(floor(objectiveCaptureValue[0]), floor(objectiveCaptureValue[1]), floor(objectiveCaptureValue[2])), "Objectives remaining: {0}".format(len(objectivePositions) - 1), [], HudPosition.TOP, 1, objectiveColor, objectiveColor, objectiveColor, HudReeval.VISIBILITY_AND_STRING)
         objectiveEntities.append(getLastCreatedText())
@@ -530,43 +530,43 @@ def objectivesManagement():
         goalPost = 0
         goalCheck = false
         #Checks if current objective is showdown
-        switch objectiveTypes[0]:
-            case 1:
+        switch CURRENT_OBJECTIVE_TYPE:
+            case ObjectiveType.SHOWDOWN:
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, objectivePositions[0], objectiveRad * 2)
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, objectivePositions[0], 200)
                 bigMessage(getAllPlayers(), "Showdown Conquered!")
                 break
             #Checks if current objective is bosses
-            case 2:
+            case ObjectiveType.BOSSES:
                 bigMessage(getAllPlayers(), "Giant zombie eliminated!")
                 break
             #Checks if current objective is biomorphing
-            case 3:
+            case ObjectiveType.BIOMORPHING:
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.GREEN, objectivePositions[0], objectiveRad)
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ROSE, objectivePositions[0], 200)
                 bigMessage(getAllPlayers(), "Biomorphing completed!")
                 break
             #Checks if current objective is survivor rescue
-            case 4:
+            case ObjectiveType.SURVIVOR_RESCUE:
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.VIOLET, objectivePositions[0], objectiveRad)
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.VIOLET, objectivePositions[0], 200)
                 bigMessage(getAllPlayers(), "The survivors have been rescued!")
                 break
             #Checks if current objective is kill zone
-            case 5:
+            case ObjectiveType.KILL_ZONE:
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.RED, objectiveChase1, 200)
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.RED, objectiveChase1, objectiveRad * 2)
                 bigMessage(getAllPlayers(), "The kill zone has been cleared!")
                 break
             #Checks if current objective is Zombie Egg
-            case 6:
+            case ObjectiveType.ZOMBIE_EGG:
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.LIME_GREEN, objectivePositions[0], 200)
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.LIME_GREEN, objectivePositions[0], objectiveRad * 2)
                 playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.LIME_GREEN, objectivePositions[0], 3)
                 bigMessage(getAllPlayers(), "The egg has been destroyed!")
                 break
             #Checks if current objective is Satellite Uplink
-            case 7:
+            case ObjectiveType.SATELLITE_UPLINK:
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.LIME_GREEN, objectivePositions[0], 200)
                 bigMessage(getAllPlayers(), "Firing sequence complete!")
         wait()
@@ -583,8 +583,8 @@ def objectivesManagement():
         objectiveRad = 10
         bigMessage(getAllPlayers(), "Get to the extraction point!")
     else:
-        switch objectiveTypes[0]:
-            case 1:
+        switch CURRENT_OBJECTIVE_TYPE:
+            case ObjectiveType.SHOWDOWN:
                 objectiveDescription = "Keep zombies away in the Showdown!"
                 objectiveCaptureValue = 0
                 chaseAtRate(objectiveRad, max(5, objectiveCaptureValue / 4), 1)
@@ -593,11 +593,11 @@ def objectivesManagement():
                 goalPost = 25
                 queuedGoalType = []
                 break
-            case 2:
+            case ObjectiveType.BOSSES:
                 objectiveDescription = "Eliminate the boss"
                 bigMessage(getAllPlayers(), "Eliminate the giant zombie!")
                 break
-            case 3:
+            case ObjectiveType.BIOMORPHING:
                 objectiveDescription = "Convert biowaste into powerups!"
                 objectiveCaptureValue = 0
                 objectiveResourcePositions = []
@@ -611,14 +611,14 @@ def objectivesManagement():
                 goalCheck = true
                 goalPost = 25
                 break
-            case 4:
+            case ObjectiveType.SURVIVOR_RESCUE:
                 objectiveDescription = "Rescue survivors"
                 survivorToRescue = null
                 objectiveRad = 10
                 objectiveChase1 = objectiveRad
                 bigMessage(getAllPlayers(), "Locate survivors and bring them to the extraction site!")
                 break
-            case 5:
+            case ObjectiveType.KILL_ZONE:
                 objectiveDescription = "Clear the kill zone"
                 objectiveRad = 20
                 eliminationsNeededPerObjective = 50
@@ -626,12 +626,12 @@ def objectivesManagement():
                 bigMessage(getAllPlayers(), "Get to the kill zone and clear zombies!")
                 objectiveCaptureValue = 0
                 break
-            case 6:
+            case ObjectiveType.ZOMBIE_EGG:
                 objectiveDescription = "Destroy the egg"
                 objectiveRad = 0
                 bigMessage(getAllPlayers(), "Destroy the zombie egg!")
                 break
-            case 7:
+            case ObjectiveType.SATELLITE_UPLINK:
                 objectiveDescription = "Repair satellite control terminals"
                 objectiveRad = 3
                 objectiveColor = rgb(28, 169, 201)
@@ -724,7 +724,7 @@ def botRespawnInitialization():
     #Chance for a minboss on high difficulties
     if difficultySetting >= 3 and eventPlayer in bosses == false and len(miniBoss.filter(lambda x: entityExists(x))) == 0:
         # tmp0: miniboss promotion roll, consumed before the possible initialization wait.
-        tmp0 = random.randint(1, 27 if objectiveTypes[0] == 1 else 189)
+        tmp0 = random.randint(1, 27 if CURRENT_OBJECTIVE_TYPE == ObjectiveType.SHOWDOWN else 189)
         if tmp0 == 1:
             minibossMutationMacro()
             wait(2)

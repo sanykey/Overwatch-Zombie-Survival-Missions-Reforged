@@ -21,7 +21,7 @@ macro biowasteAssignmentMacro():
 
 
 rule "BIOMORPHING GOAL START":
-    @Condition objectiveTypes[0] == 3
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.BIOMORPHING
     @Condition objectiveComplete == false
     @Condition goalCheck == true
     @Condition gameStatus == true
@@ -68,7 +68,7 @@ rule "BIOMORPHING GOAL START":
 
 
 rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS":
-    @Condition objectiveTypes[0] == 3
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.BIOMORPHING
     @Condition objectiveComplete == false
     @Condition (len(objectiveResourcePositions) + (len(getLivingPlayers(Team.ALL).filter(lambda player: player.playerObjectiveResourceValue > 0))) < 3 or objectiveCaptureValue >= 100) == true
     @Condition gameStatus == true
@@ -99,7 +99,7 @@ rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS":
 
 rule "BIOWASTE IS PICKED UP":
     @Event eachPlayer
-    @Condition objectiveTypes[0] == 3
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.BIOMORPHING
     @Condition gameStatus == true
     @Condition objectiveComplete == false
     @Condition eventPlayer.playerObjectiveResourceValue <= 0
@@ -130,7 +130,7 @@ rule "BIOWASTE IS PICKED UP":
 rule "PLAYER DELIVERS RESOURCE VALUE":
     @Event eachPlayer
     @Team 1
-    @Condition objectiveTypes[0] == 3
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.BIOMORPHING
     @Condition eventPlayer.invisible != true
     @Condition eventPlayer.playerObjectiveResourceValue > 0
     @Condition eventPlayer.isAlive() == true
@@ -169,7 +169,7 @@ rule "PLAYER DELIVERS RESOURCE VALUE":
 
 rule "BIOWASTE HOLDER DIES, ORB IS QUEUED AND RESOURCE AMOUNT REMOVED":
     @Event playerDied
-    @Condition objectiveTypes[0] == 3
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.BIOMORPHING
     @Condition eventPlayer.playerObjectiveResourceValue >= amountPerResource
     @Condition queuedGoalType[0] != 3
     

@@ -4,31 +4,31 @@ subroutine generateMapGrid
 
 macro setAvailableObjectivesMacro():
     #Set objective type votes empty
-    objectiveTypeVotes[0] = [null, true]
+    objectiveTypeVotes[ObjectiveType.NO_PREFERENCE] = [null, true]
     #Set objective type votes empty
-    objectiveTypeVotes[1] = [null, createWorkshopSettingBool("Available Objective Types", "Showdown", true)]
+    objectiveTypeVotes[ObjectiveType.SHOWDOWN] = [null, createWorkshopSettingBool("Available Objective Types", "Showdown", true)]
     #Set objective type votes empty
-    objectiveTypeVotes[2] = [null, createWorkshopSettingBool("Available Objective Types", "Bosses", true, 1)]
+    objectiveTypeVotes[ObjectiveType.BOSSES] = [null, createWorkshopSettingBool("Available Objective Types", "Bosses", true, 1)]
     #Set objective type votes empty
-    objectiveTypeVotes[5] = [null, createWorkshopSettingBool("Available Objective Types", "Kill Zone", true, 4)]
+    objectiveTypeVotes[ObjectiveType.KILL_ZONE] = [null, createWorkshopSettingBool("Available Objective Types", "Kill Zone", true, 4)]
     #Set objective type votes empty
-    objectiveTypeVotes[6] = [null, createWorkshopSettingBool("Available Objective Types", "Zombie Egg", true, 5)]
+    objectiveTypeVotes[ObjectiveType.ZOMBIE_EGG] = [null, createWorkshopSettingBool("Available Objective Types", "Zombie Egg", true, 5)]
     #Set objective type votes empty
-    objectiveTypeVotes[7] = [null, createWorkshopSettingBool("Available Objective Types", "Satellite Uplink", true, 6)]
+    objectiveTypeVotes[ObjectiveType.SATELLITE_UPLINK] = [null, createWorkshopSettingBool("Available Objective Types", "Satellite Uplink", true, 6)]
     #Set objective type votes empty
-    objectiveTypeVotes[9] = [null, createWorkshopSettingBool("Available Objective Types", "Mixed Objectives", true, 8)]
+    objectiveTypeVotes[ObjectiveType.MIXED_OBJECTIVES] = [null, createWorkshopSettingBool("Available Objective Types", "Mixed Objectives", true, 8)]
     #Mixed Objectives pool
     mixedObjectivesPool = [
-        1 if createWorkshopSettingBool("Mixed Objectives Pool", "Standoff.", true, 1) else 0,
-        2 if createWorkshopSettingBool("Mixed Objectives Pool", "Bosses.", true, 2) else 0,
-        3 if createWorkshopSettingBool("Mixed Objectives Pool", "Biomorphing.", true, 3) else 0,
-        4 if createWorkshopSettingBool("Mixed Objectives Pool", "Survivor Rescue.", true, 4) else 0,
-        5 if createWorkshopSettingBool("Mixed Objectives Pool", "Kill Zone.", true, 5) else 0,
-        6 if createWorkshopSettingBool("Mixed Objectives Pool", "Zombie Egg.", true, 6) else 0,
-        7 if createWorkshopSettingBool("Mixed Objectives Pool", "Satellite Uplink.", true, 7) else 0,
+        ObjectiveType.SHOWDOWN if createWorkshopSettingBool("Mixed Objectives Pool", "Standoff.", true, 1) else ObjectiveType.NO_PREFERENCE,
+        ObjectiveType.BOSSES if createWorkshopSettingBool("Mixed Objectives Pool", "Bosses.", true, 2) else ObjectiveType.NO_PREFERENCE,
+        ObjectiveType.BIOMORPHING if createWorkshopSettingBool("Mixed Objectives Pool", "Biomorphing.", true, 3) else ObjectiveType.NO_PREFERENCE,
+        ObjectiveType.SURVIVOR_RESCUE if createWorkshopSettingBool("Mixed Objectives Pool", "Survivor Rescue.", true, 4) else ObjectiveType.NO_PREFERENCE,
+        ObjectiveType.KILL_ZONE if createWorkshopSettingBool("Mixed Objectives Pool", "Kill Zone.", true, 5) else ObjectiveType.NO_PREFERENCE,
+        ObjectiveType.ZOMBIE_EGG if createWorkshopSettingBool("Mixed Objectives Pool", "Zombie Egg.", true, 6) else ObjectiveType.NO_PREFERENCE,
+        ObjectiveType.SATELLITE_UPLINK if createWorkshopSettingBool("Mixed Objectives Pool", "Satellite Uplink.", true, 7) else ObjectiveType.NO_PREFERENCE,
     ]
     #Removed disabled objectives
-    mixedObjectivesPool.remove(0)
+    mixedObjectivesPool.remove(ObjectiveType.NO_PREFERENCE)
 
 
 macro enableEnhancementsMacro():
@@ -157,7 +157,7 @@ rule "SKIP ASSEMBLING HEROES":
     #Set/Reset to default 0
     zombieSetting = 0
     #Set/Reset to default 0
-    objectiveTypeSetting = 0
+    objectiveTypeSetting = ObjectiveType.NO_PREFERENCE
     if isAssemblingHeroes():
         disableInspector()
         setMatchTime(0)
@@ -233,7 +233,7 @@ rule "VARIABLE ASSIGNMENT":
     if getCurrentGamemode() == Gamemode.CONTROL:
         walkCenter = getObjectivePosition(getCurrentObjective())
     startRule(generateMapGrid, StartRuleBehavior.NOOP)
-    #objectiveValue = 0  #Uninitialized Workshop variables already compare equal to 0 at match start.
+    #objectiveValue = ObjectiveType.NO_PREFERENCE  #Uninitialized Workshop variables already compare equal to 0 at match start.
     objectiveEntities = []
     botSpawnPoints = []
     waypoints = []

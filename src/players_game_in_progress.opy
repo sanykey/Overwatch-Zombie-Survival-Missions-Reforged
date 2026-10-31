@@ -6,7 +6,7 @@ subroutine updateUsers
 
 macro playerObjectiveEntityManagementMacro():
     if eventPlayer.objectiveValue != objectiveValue or len(objectivePositions) == 1:
-        eventPlayer.objectiveValue = objectiveTypes[0]
+        eventPlayer.objectiveValue = CURRENT_OBJECTIVE_TYPE
         if eventPlayer.getTeam() == Team.1:
             #Destroy all current objective effects and texts
             for eventPlayer.entityCount in range(len(eventPlayer.generalPlayerBotEntities)):
@@ -19,7 +19,7 @@ macro playerObjectiveEntityManagementMacro():
                 destroyIcon(eventPlayer.botResourceEntity[eventPlayer.entityCount])
                 wait()
             eventPlayer.botResourceEntity = []
-        if eventPlayer.objectiveValue == 3:
+        if eventPlayer.objectiveValue == ObjectiveType.BIOMORPHING:
             #Player carrying resources icon
             createIcon(getAllPlayers().filter(lambda player: eventPlayer.isAlive() and player != eventPlayer and eventPlayer.playerObjectiveResourceValue > 0), eventPlayer, Icon.RECYCLE, IconReeval.VISIBILITY_POSITION_AND_COLOR, biowasteColorLookUp[eventPlayer.biowasteType] if eventPlayer.getTeam() == Team.1 else Color.WHITE)
             if eventPlayer.getTeam() == Team.1:

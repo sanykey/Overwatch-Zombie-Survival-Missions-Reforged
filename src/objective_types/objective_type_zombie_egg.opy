@@ -2,7 +2,7 @@
 
 
 rule "ASSIGN ZOMBIE TO BECOME EGG":
-    @Condition objectiveTypes[0] == 6
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.ZOMBIE_EGG
     @Condition objectiveComplete == false
     @Condition entityExists(bosses[0]) == false
     @Condition (getLivingPlayers(Team.2).any(lambda player: not player.teleporting and player.botTarget == null)) == true
@@ -17,7 +17,7 @@ rule "ASSIGN ZOMBIE TO BECOME EGG":
 rule "BOT BECOMES ZOMBIE EGG":
     @Event eachPlayer
     @Team 2
-    @Condition objectiveTypes[0] == 6
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.ZOMBIE_EGG
     @Condition objectiveComplete == false
     @Condition bosses[0] == eventPlayer
     
@@ -53,7 +53,7 @@ rule "BOT BECOMES ZOMBIE EGG":
 rule "BOTS TELEPORT TO THE EGG":
     @Event eachPlayer
     @Team 2
-    @Condition objectiveTypes[0] == 6
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.ZOMBIE_EGG
     @Condition objectiveComplete != true
     @Condition eventPlayer.initializing != true
     @Condition eventPlayer.teleporting != true
@@ -76,7 +76,7 @@ rule "BOTS TELEPORT TO THE EGG":
 rule "EGG SWITCHES THE POSITION FOR YOU":
     @Event playerDealtDamage
     @Team 1
-    @Condition objectiveTypes[0] == 6
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.ZOMBIE_EGG
     @Condition bosses[0] == victim
     
     objectivePositions[0] += directionTowards(victim, attacker) / (3.5 if attacker.isOnGround() else 9)

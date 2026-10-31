@@ -4,7 +4,7 @@ subroutine bossReturn
 
 
 rule "SPAWN BOSS":
-    @Condition objectiveTypes[0] == 2
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.BOSSES
     @Condition objectiveComplete == false
     @Condition len(bosses.filter(lambda x: entityExists(x))) == 0
     @Condition (getLivingPlayers(Team.2).any(lambda player: player.hasSpawned() and not player.teleporting and player.botTarget == null)) == true
@@ -29,7 +29,7 @@ rule "SPAWN BOSS":
 rule "BOT BECOMES BOSS":
     @Event eachPlayer
     @Team 2
-    @Condition objectiveTypes[0] == 2
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.BOSSES
     @Condition objectiveComplete == false
     @Condition eventPlayer in bosses == true
     
@@ -86,7 +86,7 @@ rule "BOT BECOMES BOSS":
 rule "BOSS STUCK":
     @Event eachPlayer
     @Team 2
-    @Condition objectiveTypes[0] == 2
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.BOSSES
     @Condition eventPlayer.wallCollisionEnabled == true
     @Condition eventPlayer.canWallPhase == true
     @Condition eventPlayer.botTarget != null
@@ -169,7 +169,7 @@ rule "BOSS DIES (ALL BOSS OBJECTIVES)":
 rule "BOSS TAKES KNOCKBACK":
     @Event playerReceivedKnockback
     @Team 2
-    @Condition objectiveTypes[0] == 2
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.BOSSES
     @Condition eventPlayer.wallCollisionEnabled == false
     @Condition eventPlayer in bosses == true
     

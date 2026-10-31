@@ -3,7 +3,7 @@
 
 rule "PLAYERS ON OBJECTIVE CONTROL":
     @Event eachPlayer
-    @Condition objectiveTypes[0] == 1
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SHOWDOWN
     @Condition len(objectivePositions) > 1
     @Condition eventPlayer.invisible != true
     @Condition eventPlayer.isAlive() == true
@@ -27,7 +27,7 @@ rule "PLAYERS ON OBJECTIVE CONTROL":
 
 
 rule "INCREASE OBJECTIVE CAPTURE PERCENTAGE":
-    @Condition objectiveTypes[0] == 1
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SHOWDOWN
     @Condition len(objectivePositions) > 1
     @Condition len(playersOnObjective) > 0
     @Condition objectiveComplete == false
@@ -57,14 +57,14 @@ rule "INCREASE OBJECTIVE CAPTURE PERCENTAGE":
 
 
 rule "DECREASES CAPTURE PERCENTAGE":
-    @Condition objectiveTypes[0] == 1
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SHOWDOWN
     @Condition len(objectivePositions) > 1
     @Condition len(queuedGoalType) > 0
     @Condition objectiveComplete == false
     @Condition objectiveCaptureValue > goalPost - 25
     
     wait(1, Wait.RESTART_WHEN_TRUE)
-    if objectiveTypes[0] != 1:
+    if CURRENT_OBJECTIVE_TYPE != ObjectiveType.SHOWDOWN:
         return
     if len(objectivePositions) <= 1:
         return
@@ -72,7 +72,7 @@ rule "DECREASES CAPTURE PERCENTAGE":
     playEffect(getPlayers(Team.1), DynamicEffect.DEBUFF_IMPACT_SOUND, null, objectivePositions[0], (0.05 * objectiveCaptureValue) ** 2)
     objectiveColor = Color.RED
     wait(0.5)
-    if objectiveTypes[0] != 1:
+    if CURRENT_OBJECTIVE_TYPE != ObjectiveType.SHOWDOWN:
         return
     if len(objectivePositions) <= 1:
         return

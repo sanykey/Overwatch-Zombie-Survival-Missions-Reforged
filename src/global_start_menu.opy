@@ -97,19 +97,19 @@ rule "EFFECTS/TEXTS":
     #Vote zombie mode text: Ham N' Hammer!
     hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] == 6), "Zombie Mode: Ham N' Hammer!", "Only Reinhardt {0} and Wrecking Ball {1} zombies will spawn".format(heroIcon(Hero.REINHARDT), heroIcon(Hero.WRECKING_BALL)), "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_1)) if voting else [], HudPosition.LEFT, 1, Color.GRAY, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_AND_STRING)
     #Vote objective type text: No preference
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == 0), "Objective Type: No Preference", null, "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)), HudPosition.LEFT, 2, Color.AQUA, Color.AQUA, Color.AQUA, HudReeval.VISIBILITY_AND_STRING)
+    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == ObjectiveType.NO_PREFERENCE), "Objective Type: No Preference", null, "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)), HudPosition.LEFT, 2, Color.AQUA, Color.AQUA, Color.AQUA, HudReeval.VISIBILITY_AND_STRING)
     #Vote objective type text: Showdown Only
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == 1), "Objective Type: Showdown {0}".format(abilityIconString(Hero.BRIGITTE, Button.ULTIMATE)), "Players must contest a point against zombies", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, Color.ORANGE, Color.ORANGE, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING)
+    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == ObjectiveType.SHOWDOWN), "Objective Type: Showdown {0}".format(abilityIconString(Hero.BRIGITTE, Button.ULTIMATE)), "Players must contest a point against zombies", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, Color.ORANGE, Color.ORANGE, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING)
     #Vote objective type text: Boss Objectives
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == 2), "Objective Type: Bosses {0}".format(iconString(Icon.WARNING)), "Spawns giant versions of zombies", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, Color.RED, Color.RED, Color.RED, HudReeval.VISIBILITY_AND_STRING)
+    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == ObjectiveType.BOSSES), "Objective Type: Bosses {0}".format(iconString(Icon.WARNING)), "Spawns giant versions of zombies", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, Color.RED, Color.RED, Color.RED, HudReeval.VISIBILITY_AND_STRING)
     #Vote objective type text: Kill Zone Objectives
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == 5), "Objective Type: Kill Zone {0}".format(iconString(Icon.RING_THICK) if ceil(getTotalTimeElapsed() * 1.25) % 2 == 0 else iconString(Icon.RING_THIN)), "Clear zombies from a designated area", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, Color.RED, Color.RED, Color.RED, HudReeval.VISIBILITY_AND_STRING)
+    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == ObjectiveType.KILL_ZONE), "Objective Type: Kill Zone {0}".format(iconString(Icon.RING_THICK) if ceil(getTotalTimeElapsed() * 1.25) % 2 == 0 else iconString(Icon.RING_THIN)), "Clear zombies from a designated area", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, Color.RED, Color.RED, Color.RED, HudReeval.VISIBILITY_AND_STRING)
     #Vote objective type text: Zombie Egg Objectives
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == 6), "Objective Type: Zombie Egg {0}".format(iconString(Icon.RADIOACTIVE)), "Survivors must destroy an object that is spawning zombies", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, Color.LIME_GREEN, Color.LIME_GREEN, Color.LIME_GREEN, HudReeval.VISIBILITY_AND_STRING)
+    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == ObjectiveType.ZOMBIE_EGG), "Objective Type: Zombie Egg {0}".format(iconString(Icon.RADIOACTIVE)), "Survivors must destroy an object that is spawning zombies", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, Color.LIME_GREEN, Color.LIME_GREEN, Color.LIME_GREEN, HudReeval.VISIBILITY_AND_STRING)
     #Vote objective type text: Satellite Uplink Objectives
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == 7), "Objective Type: Satellite Uplink {0}".format(iconString(Icon.MOON)), "Survivors must repair terminals to communicate with a satellite", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, colorSatelliteUplinkConst, colorSatelliteUplinkConst, colorSatelliteUplinkConst, HudReeval.VISIBILITY_AND_STRING)
+    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == ObjectiveType.SATELLITE_UPLINK), "Objective Type: Satellite Uplink {0}".format(iconString(Icon.MOON)), "Survivors must repair terminals to communicate with a satellite", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, colorSatelliteUplinkConst, colorSatelliteUplinkConst, colorSatelliteUplinkConst, HudReeval.VISIBILITY_AND_STRING)
     #Vote objective type text: Mixed Objectives
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == len(objectiveTypeVotes) - 1), "Objective Type: Mixed Objectives {0}".format(iconString(Icon.SPIRAL)), "Randomly assigns all types of objectives", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, Color.PURPLE, Color.PURPLE, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING)
+    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == ObjectiveType.MIXED_OBJECTIVES), "Objective Type: Mixed Objectives {0}".format(iconString(Icon.SPIRAL)), "Randomly assigns all types of objectives", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, Color.PURPLE, Color.PURPLE, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING)
     #Enhancement Selection: No Preference
     hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.NO_PREFERENCE), "Enhancement: No Preference", null, "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.AQUA, Color.AQUA, Color.AQUA, HudReeval.VISIBILITY_AND_STRING)
     #Enhancement Selection: Kevlar
@@ -284,28 +284,28 @@ def determineChallenge():
 def determineObjectiveType():
     @Name "determineObjectiveType"
     
-    objectiveTypeSetting = 0
+    objectiveTypeSetting = ObjectiveType.NO_PREFERENCE
     # tmp0: objective-type vote index, to count active players voting for each enabled objective type.
-    for tmp0 in range(1, len(objectiveTypeVotes)):
+    for tmp0 in range(ObjectiveType.SHOWDOWN, len(objectiveTypeVotes)):
         if objectiveTypeVotes[tmp0][1]:
             objectiveTypeVotes[tmp0] = len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus and player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == tmp0))
         else:
             objectiveTypeVotes[tmp0] = -1
     # tmp0: candidate objective-type index, to select the winner and resolve tied vote counts.
-    for tmp0 in range(1, len(objectiveTypeVotes)):
+    for tmp0 in range(ObjectiveType.SHOWDOWN, len(objectiveTypeVotes)):
         if objectiveTypeVotes[objectiveTypeSetting] < objectiveTypeVotes[tmp0]:
             objectiveTypeSetting = tmp0
         elif objectiveTypeVotes[objectiveTypeSetting] == objectiveTypeVotes[tmp0]:
             #Pick random objective type to break tie
-            if objectiveTypeSetting != 0 and random.randint(0, 1) == 0:
+            if objectiveTypeSetting != ObjectiveType.NO_PREFERENCE and random.randint(0, 1) == 0:
                 objectiveTypeSetting = tmp0
     #If all players choose no preference, randomize
-    if objectiveTypeSetting == 0:
-        if objectiveTypeVotes.last() != -1:
-            objectiveTypeSetting = len(objectiveTypeVotes) - 1
+    if objectiveTypeSetting == ObjectiveType.NO_PREFERENCE:
+        if objectiveTypeVotes[ObjectiveType.MIXED_OBJECTIVES] != -1:
+            objectiveTypeSetting = ObjectiveType.MIXED_OBJECTIVES
         else:
-            while objectiveTypeSetting == 0 or objectiveTypeVotes[objectiveTypeSetting] == -1:
-                objectiveTypeSetting = random.randint(1, len(objectiveTypeVotes) - 1)
+            while objectiveTypeSetting == ObjectiveType.NO_PREFERENCE or objectiveTypeVotes[objectiveTypeSetting] == -1:
+                objectiveTypeSetting = random.randint(ObjectiveType.SHOWDOWN, len(objectiveTypeVotes) - 1)
     voting = false
     startRule(setObjectiveType)
 
@@ -317,7 +317,7 @@ def setObjectiveType():
     waitUntil(isGameInProgress() and not specialGameModeSetup, 99999)
     #Create objective positions
     while len(objectiveTypes) < createWorkshopSettingInt("General", "Number of Objectives", 5, 0, 100) + 1:
-        if objectiveTypeSetting != len(objectiveTypeVotes) - 1:
+        if objectiveTypeSetting != ObjectiveType.MIXED_OBJECTIVES:
             objectiveTypes.append(objectiveTypeSetting)
         else:
             #Mixed objective assignment
@@ -331,7 +331,7 @@ def setObjectiveType():
             #Minimum objective spacing
             if len(objectivePositions) == 0 or objectivePositions.slice(len(objectivePositions) - 5, 5).all(lambda x: distance(testPos, x) > objectiveSpacing[1]):
                 #Ensures bosses spawn with head room
-                if objectiveTypes.last() != 2 or isInLoS(testPos + vect(0, 0, 0), testPos + vect(0, 10, 0)):
+                if objectiveTypes.last() != ObjectiveType.BOSSES or isInLoS(testPos + vect(0, 0, 0), testPos + vect(0, 10, 0)):
                     objectivePositions.append(testPos)
                     objectiveCount1 = 0
             objectiveCount1++
@@ -341,6 +341,6 @@ def setObjectiveType():
                 del objectivePositions[len(objectivePositions) - 1]
                 objectiveCount1 = 0
     #Last objective must be extraction objective
-    objectiveTypes[len(objectiveTypes) - 1] = 1
+    objectiveTypes[len(objectiveTypes) - 1] = ObjectiveType.SHOWDOWN
     objectivesManagement()
     gameStatus = true

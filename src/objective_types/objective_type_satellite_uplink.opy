@@ -65,7 +65,7 @@ macro fireSatelliteMacro():
 
 
 rule "SET UP TERMINAL POSITIONS":
-    @Condition objectiveTypes[0] == 7
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SATELLITE_UPLINK
     @Condition gameStatus == true
     @Condition objectiveComplete == false
     @Condition (len(objectiveCaptureValue) != len(objectiveResourcePositions) or objectiveResourcePositions.any(lambda x: x.x == null)) == true
@@ -98,7 +98,7 @@ rule "SET UP TERMINAL POSITIONS":
 rule "PLAYERS AT TERMINALS CONTROLS":
     @Event eachPlayer
     @Team 1
-    @Condition objectiveTypes[0] == 7
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SATELLITE_UPLINK
     @Condition objectiveComplete == false
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.hasSpawned() == true
@@ -114,7 +114,7 @@ rule "PLAYERS AT TERMINALS CONTROLS":
 
 
 rule "PLAYERS REPAIR TERMINALS":
-    @Condition objectiveTypes[0] == 7
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SATELLITE_UPLINK
     @Condition objectiveComplete == false
     @Condition len(playersOnObjective) > 0
     

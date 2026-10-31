@@ -9,7 +9,7 @@ rule "PLAYERS IN EXTRACTION POINT CONTROL":
     @Condition objectiveComplete == false
     @Condition gameStatus == true
     @Condition eventPlayer.hasSpawned() == true
-    @Condition objectiveTypes[0] == 1
+    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SHOWDOWN
     @Condition len(objectivePositions) == 1
     @Condition objectivePositions[0].y - eventPlayer.getEyePosition().y < 2
     @Condition distance(eventPlayer.getPosition(), vect(objectivePositions[0].x, eventPlayer.getPosition().y, objectivePositions[0].z)) < objectiveRad

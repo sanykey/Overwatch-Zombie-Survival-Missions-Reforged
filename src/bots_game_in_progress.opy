@@ -9,19 +9,19 @@ subroutine locateAveragePlayerLocation
 
 macro botTeleportCenterMacro():
     #Standoff, Extraction, Biomorphing, Zombie Egg
-    if objectiveTypes[0] in [1, 3, 6]:
+    if CURRENT_OBJECTIVE_TYPE in [ObjectiveType.SHOWDOWN, ObjectiveType.BIOMORPHING, ObjectiveType.ZOMBIE_EGG]:
         eventPlayer.averagePlayersPos = sorted(playerTargetList, lambda x: distance(x.getPosition(), objectivePositions[0]))[0].getPosition()
     #Boss
-    elif objectiveTypes[0] == 2:
+    elif CURRENT_OBJECTIVE_TYPE == ObjectiveType.BOSSES:
         eventPlayer.averagePlayersPos = sorted(playerTargetList, lambda x: distance(x.getPosition(), bosses[0].getPosition()))[0].getPosition()
     #Survivor Rescue
-    elif objectiveTypes[0] == 4:
+    elif CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE:
         if survivorToRescue.botFollowTarget == null:
             eventPlayer.averagePlayersPos = sorted(playerTargetList, lambda x: distance(x.getPosition(), survivorToRescue.getPosition()))[0].getPosition()
         else:
             eventPlayer.averagePlayersPos = survivorToRescue.botFollowTarget.getPosition()
     #Killzone
-    elif objectiveTypes[0] == 5:
+    elif CURRENT_OBJECTIVE_TYPE == ObjectiveType.KILL_ZONE:
         #If players are in the killzone
         if len(playerTargetList.filter(lambda x: distance(x.getPosition(), objectiveChase1) < objectiveRad)) > 0:
             #Player closeset to the center of the killzone
@@ -30,7 +30,7 @@ macro botTeleportCenterMacro():
             #Average player positon
             locateAveragePlayerLocation()
     #Satellite Uplink
-    elif objectiveTypes[0] == 7:
+    elif CURRENT_OBJECTIVE_TYPE == ObjectiveType.SATELLITE_UPLINK:
         #Checks if any players are currently repairing terminals
         if len(playersOnObjective) > 0:
             eventPlayer.averagePlayersPos = random.choice(playersOnObjective).getPosition()
@@ -523,7 +523,7 @@ rule "MINIBOSS MESSAGE":
     @Event eachPlayer
     @Team 2
     @Condition eventPlayer in miniBoss == true
-    @Condition objectiveTypes[0] != 1
+    @Condition CURRENT_OBJECTIVE_TYPE != ObjectiveType.SHOWDOWN
     @Condition gameStatus == true
     @Condition eventPlayer.initializing != false
     
