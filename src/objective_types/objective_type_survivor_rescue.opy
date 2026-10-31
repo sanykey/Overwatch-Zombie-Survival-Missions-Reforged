@@ -1,4 +1,4 @@
-#!mainFile "main.opy"
+#!mainFile "../main.opy"
 
 
 rule "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE":
