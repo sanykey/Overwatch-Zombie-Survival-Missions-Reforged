@@ -6,12 +6,6 @@ subroutine setZombieMode
 subroutine determineObjectiveType
 subroutine setObjectiveType
 
-
-rule "============================================== GLOBAL START MENU ====================================================":
-    @Disabled
-    @Delimiter
-
-
 rule "GLOBAL MENU INITIALIZATION":
     @Condition specialGameModeSetup == true
     @Condition len(mapGrid) > 0

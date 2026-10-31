@@ -11,7 +11,6 @@
 #!include "vas/compressed numbers.opy"
 #!include "subroutines.opy"
 
-#!include "bot_health.opy"
 #!include "global_startup.opy"
 #!include "global_start_menu.opy"
 #!include "player_start_menu.opy"
