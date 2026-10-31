@@ -1,0 +1,473 @@
+{
+  "compiler": "zezombye.overpy-9.7.20",
+  "applied": true,
+  "method": "Each candidate compiled separately against the last accepted snapshot; only strict element reductions retained. No gameplay validation.",
+  "initialSourceSha256": {
+    "bots_game_in_progress.opy": "60e68b2719ee8877b78f79587a0f732c46e59bd97028c0a225ef731fc8fc422d",
+    "bot_health.opy": "425f289b9b6f5a44bf39e20f80f07231cb62d3dccae9f7aa192f6dc25bd13ed2",
+    "enhancements.opy": "1d8770f37bc321d99d62e3f95929ed79a447d00c2b6c2b5db038095f2cb3be14",
+    "global_game_in_progress.opy": "b70ded831d1b9d11c98c6eff71642837cebb5480117df49f7ab031a96387ee53",
+    "global_startup.opy": "bafe904fcbda443f0a06f7776463a0ca3fa4ae3f5ee0bfe2e6fb425371b7418f",
+    "global_start_menu.opy": "5589ed09fa6bdcc714e73dded899639afe69c9209ab9b5114f7576b8ee903016",
+    "hero_tuning.opy": "c5e547232e8f8ac7961578c59d839f1dc91c4c98a80726b7f7ea482ebbc74d1b",
+    "main.opy": "7a7558ceda7b11c5d7a2567a269df49ea6bd476528bbede0afad2d560d01b577",
+    "objective_type_biomorphing.opy": "ae90c923574a09bb2b6c43a70fab8accde8495e4a2d2adf25ca60ed42dae5dbe",
+    "objective_type_bosses.opy": "73bb79c61a30541aac66a70f3a626eec8a2ece17e62dcc9526e5cfc1f818292c",
+    "objective_type_extraction_point.opy": "ef37b1d5d2673c6df0bcb8df499628b0c75f0a63f103fd080de76e0d008a5a62",
+    "objective_type_kill_zone.opy": "99a0130317da9101da9f87a194d949cf61971a78610b670eef61b97c753f03cb",
+    "objective_type_satellite_uplink.opy": "90d4800eb2fcbd4ffc15aec0cf31e0288babd09117834105f12a0c4315a3d689",
+    "objective_type_showdown.opy": "d4abdbef754de10d2213b8a14611143971b02b34147d7c9c64fa556164f2f9a2",
+    "objective_type_survivor_rescue.opy": "50ff892234522e476a35f21a3fe316796240337cc0a9db09980e74348f2e616f",
+    "objective_type_zombie_egg.opy": "5a9a1f5b687addaf3e4e4038e6364dffe4efcf97bd7176b5ad5ccb1d6dd2144e",
+    "players_game_in_progress.opy": "8c385494c42602abaf91e49eebb176ece9d9c767621c89af80fda54aaedfdfd6",
+    "player_start_menu.opy": "6a81f2ac0d897abf8c09f0450c7630cce1c8a11c05ebba1f4431c8e674e09263",
+    "power_ups.opy": "e52538c124334f9cc274a4d691525205c866769577f7fc8acaad97c41f06b291",
+    "settings.opy": "397da915c195aa7808335b06126b0b1878a244db798f08fa69c57f6ca6343e22",
+    "subroutines.opy": "8fd95ad8e10f1950e023963fcdbdc5a386fc7b93b5424c81355567e197d258ff",
+    "supply_drops.opy": "c489c9b3ac8bf542a94e3bc0303816e99818e5b76091874035a628093175fb13",
+    "variables.opy": "17bba784e9b77e7ec7d56c1d81d4940d844029d6f3ae998de62f9786eb78998a",
+    "zombie_types.opy": "97218ed44e081b7a7b44f59fa0165d76d756ee0c6bde0c1b4ca2ad61f1850df8"
+  },
+  "results": [
+    {
+      "file": "bots_game_in_progress.opy",
+      "line": 447,
+      "owner": "def botTeleportCenter():",
+      "selector": "survivorToRescue.botFollowTarget",
+      "cases": 1,
+      "before": 29177,
+      "after": 29187,
+      "saved": -10,
+      "warnings": 0,
+      "kept": false,
+      "changedRules": [
+        {
+          "name": "botTeleportCenter",
+          "before": 144,
+          "after": 154
+        }
+      ]
+    },
+    {
+      "file": "bots_game_in_progress.opy",
+      "line": 440,
+      "owner": "def botTeleportCenter():",
+      "selector": "objectiveTypes[0]",
+      "cases": 7,
+      "before": 29177,
+      "after": 29180,
+      "saved": -3,
+      "warnings": 0,
+      "kept": false,
+      "changedRules": [
+        {
+          "name": "botTeleportCenter",
+          "before": 144,
+          "after": 147
+        }
+      ]
+    },
+    {
+      "file": "enhancements.opy",
+      "line": 34,
+      "owner": "rule \"PLAYER ENHANCEMENT INITIALIZATION\":",
+      "selector": "eventPlayer.enhancementValues[0]",
+      "cases": 8,
+      "before": 29177,
+      "after": 29166,
+      "saved": 11,
+      "warnings": 0,
+      "kept": true,
+      "changedRules": [
+        {
+          "name": "PLAYER ENHANCEMENT INITIALIZATION",
+          "before": 1306,
+          "after": 1295
+        }
+      ]
+    },
+    {
+      "file": "enhancements.opy",
+      "line": 23,
+      "owner": "rule \"PLAYER ENHANCEMENT INITIALIZATION\":",
+      "selector": "eventPlayer.enhancementValues[0]",
+      "cases": 1,
+      "before": 29166,
+      "after": 29176,
+      "saved": -10,
+      "warnings": 0,
+      "kept": false,
+      "changedRules": [
+        {
+          "name": "PLAYER ENHANCEMENT INITIALIZATION",
+          "before": 1295,
+          "after": 1305
+        }
+      ]
+    },
+    {
+      "file": "global_game_in_progress.opy",
+      "line": 119,
+      "owner": "rule \"RANDOM ABILITIES\":",
+      "selector": "eventPlayer.getHero()",
+      "cases": 1,
+      "before": 29166,
+      "after": 29177,
+      "saved": -11,
+      "warnings": 0,
+      "kept": false,
+      "changedRules": [
+        {
+          "name": "RANDOM ABILITIES",
+          "before": 81,
+          "after": 92
+        }
+      ]
+    },
+    {
+      "file": "global_game_in_progress.opy",
+      "line": 102,
+      "owner": "rule \"SWARM SHOOTOUT\":",
+      "selector": "eventPlayer.getHero()",
+      "cases": 10,
+      "before": 29166,
+      "after": 29187,
+      "saved": -21,
+      "warnings": 0,
+      "kept": false,
+      "changedRules": [
+        {
+          "name": "SWARM SHOOTOUT",
+          "before": 69,
+          "after": 90
+        }
+      ]
+    },
+    {
+      "file": "global_game_in_progress.opy",
+      "line": 76,
+      "owner": "rule \"TRIGGER OVERTIME MUSIC\":",
+      "selector": "getCurrentGamemode()",
+      "cases": 1,
+      "before": 29166,
+      "after": 29177,
+      "saved": -11,
+      "warnings": 0,
+      "kept": false,
+      "changedRules": [
+        {
+          "name": "TRIGGER OVERTIME MUSIC",
+          "before": 73,
+          "after": 84
+        }
+      ]
+    },
+    {
+      "file": "global_startup.opy",
+      "line": 191,
+      "owner": "rule \"VARIABLE ASSIGNMENT\":",
+      "selector": "getCurrentGamemode()",
+      "cases": 2,
+      "before": 29166,
+      "after": 29176,
+      "saved": -10,
+      "warnings": 0,
+      "kept": false,
+      "changedRules": [
+        {
+          "name": "VARIABLE ASSIGNMENT",
+          "before": 191,
+          "after": 201
+        }
+      ]
+    },
+    {
+      "file": "global_start_menu.opy",
+      "line": 224,
+      "owner": "def setZombieMode():",
+      "selector": "zombieSetting",
+      "cases": 6,
+      "before": 29166,
+      "after": 29171,
+      "saved": -5,
+      "warnings": 0,
+      "kept": false,
+      "changedRules": [
+        {
+          "name": "setZombieMode",
+          "before": 162,
+          "after": 167
+        }
+      ]
+    },
+    {
+      "file": "global_start_menu.opy",
+      "line": 147,
+      "owner": "rule \"SPECIAL EFFECT CONTROLS\":",
+      "selector": "randVal",
+      "cases": 3,
+      "before": 29166,
+      "after": 29174,
+      "saved": -8,
+      "warnings": 0,
+      "kept": false,
+      "changedRules": [
+        {
+          "name": "SPECIAL EFFECT CONTROLS",
+          "before": 57,
+          "after": 65
+        }
+      ]
+    },
+    {
+      "file": "global_start_menu.opy",
+      "line": 22,
+      "owner": "rule \"GLOBAL MENU INITIALIZATION\":",
+      "selector": "getCurrentGamemode()",
+      "cases": 3,
+      "before": 29166,
+      "after": 29173,
+      "saved": -7,
+      "warnings": 0,
+      "kept": false,
+      "changedRules": [
+        {
+          "name": "GLOBAL MENU INITIALIZATION",
+          "before": 381,
+          "after": 388
+        }
+      ]
+    },
+    {
+      "file": "objective_type_biomorphing.opy",
+      "line": 35,
+      "owner": "rule \"BIOMORPHING GOAL START\":",
+      "selector": "queuedGoalType[0]",
+      "cases": 3,
+      "before": 29166,
+      "after": 29172,
+      "saved": -6,
+      "warnings": 0,
+      "kept": false,
+      "changedRules": [
+        {
+          "name": "BIOMORPHING GOAL START",
+          "before": 157,
+          "after": 163
+        }
+      ]
+    },
+    {
+      "file": "objective_type_bosses.opy",
+      "line": 42,
+      "owner": "rule \"BOT BECOMES BOSS\":",
+      "selector": "zombieSetting",
+      "cases": 1,
+      "before": 29166,
+      "after": 29176,
+      "saved": -10,
+      "warnings": 0,
+      "kept": false,
+      "changedRules": [
+        {
+          "name": "BOT BECOMES BOSS",
+          "before": 179,
+          "after": 189
+        }
+      ]
+    },
+    {
+      "file": "objective_type_survivor_rescue.opy",
+      "line": 11,
+      "owner": "rule \"SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE\":",
+      "selector": "survivorToRescue",
+      "cases": 1,
+      "before": 29166,
+      "after": 29176,
+      "saved": -10,
+      "warnings": 0,
+      "kept": false,
+      "changedRules": [
+        {
+          "name": "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE",
+          "before": 81,
+          "after": 91
+        }
+      ]
+    },
+    {
+      "file": "players_game_in_progress.opy",
+      "line": 40,
+      "owner": "rule \"PLAYER INITIALIZATION\":",
+      "selector": "eventPlayer.playerMenuStatus[0]",
+      "cases": 1,
+      "before": 29166,
+      "after": 29176,
+      "saved": -10,
+      "warnings": 0,
+      "kept": false,
+      "changedRules": [
+        {
+          "name": "PLAYER INITIALIZATION",
+          "before": 202,
+          "after": 212
+        }
+      ]
+    },
+    {
+      "file": "subroutines.opy",
+      "line": 679,
+      "owner": "def mutations():",
+      "selector": "eventPlayer.mutationValue",
+      "cases": 5,
+      "before": 29166,
+      "after": 29168,
+      "saved": -2,
+      "warnings": 0,
+      "kept": false,
+      "changedRules": [
+        {
+          "name": "mutations",
+          "before": 180,
+          "after": 182
+        }
+      ]
+    },
+    {
+      "file": "subroutines.opy",
+      "line": 648,
+      "owner": "def botStatManagement():",
+      "selector": "eventPlayer.getHero()",
+      "cases": 10,
+      "before": 29166,
+      "after": 29169,
+      "saved": -3,
+      "warnings": 0,
+      "kept": false,
+      "changedRules": [
+        {
+          "name": "botStatManagement",
+          "before": 196,
+          "after": 199
+        }
+      ]
+    },
+    {
+      "file": "subroutines.opy",
+      "line": 544,
+      "owner": "def botEntityManagement():",
+      "selector": "eventPlayer.getHero()",
+      "cases": 9,
+      "before": 29166,
+      "after": 29172,
+      "saved": -6,
+      "warnings": 0,
+      "kept": false,
+      "changedRules": [
+        {
+          "name": "botEntityManagement",
+          "before": 573,
+          "after": 579
+        }
+      ]
+    },
+    {
+      "file": "subroutines.opy",
+      "line": 274,
+      "owner": "def globalObjectiveEntityManagement():",
+      "selector": "objectiveValue",
+      "cases": 7,
+      "before": 29166,
+      "after": 29170,
+      "saved": -4,
+      "warnings": 0,
+      "kept": false,
+      "changedRules": [
+        {
+          "name": "globalObjectiveEntityManagement",
+          "before": 1310,
+          "after": 1314
+        }
+      ]
+    },
+    {
+      "file": "subroutines.opy",
+      "line": 204,
+      "owner": "def objectivesManagement():",
+      "selector": "objectiveTypes[0]",
+      "cases": 7,
+      "before": 29166,
+      "after": 29164,
+      "saved": 2,
+      "warnings": 0,
+      "kept": true,
+      "changedRules": [
+        {
+          "name": "objectivesManagement",
+          "before": 471,
+          "after": 469
+        }
+      ]
+    },
+    {
+      "file": "subroutines.opy",
+      "line": 158,
+      "owner": "def objectivesManagement():",
+      "selector": "objectiveTypes[0]",
+      "cases": 7,
+      "before": 29164,
+      "after": 29162,
+      "saved": 2,
+      "warnings": 0,
+      "kept": true,
+      "changedRules": [
+        {
+          "name": "objectivesManagement",
+          "before": 469,
+          "after": 467
+        }
+      ]
+    },
+    {
+      "file": "subroutines.opy",
+      "line": 103,
+      "owner": "def setPrematchTimer():",
+      "selector": "eventPlayer.playerMenuStatus[1]",
+      "cases": 1,
+      "before": 29162,
+      "after": 29172,
+      "saved": -10,
+      "warnings": 0,
+      "kept": false,
+      "changedRules": [
+        {
+          "name": "setPrematchTimer",
+          "before": 180,
+          "after": 190
+        }
+      ]
+    },
+    {
+      "file": "zombie_types.opy",
+      "line": 879,
+      "owner": "rule \"BLASTER ROCKET HITS TARGET\":",
+      "selector": "eventAbility",
+      "cases": 2,
+      "before": 29162,
+      "after": 29173,
+      "saved": -11,
+      "warnings": 0,
+      "kept": false,
+      "changedRules": [
+        {
+          "name": "BLASTER ROCKET HITS TARGET",
+          "before": 55,
+          "after": 66
+        }
+      ]
+    }
+  ],
+  "before": 29177,
+  "after": 29162,
+  "saved": 15
+}

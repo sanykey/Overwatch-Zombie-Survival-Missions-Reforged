@@ -4,8 +4,42 @@ subroutine enterExitTeleport
 subroutine teleportBots
 subroutine successfulTeleportStatus
 subroutine updateBotSpawnPoints
-subroutine botTeleportCenter
 subroutine locateAveragePlayerLocation
+
+
+macro botTeleportCenterMacro():
+    #Standoff, Extraction, Biomorphing, Zombie Egg
+    if objectiveTypes[0] in [1, 3, 6]:
+        eventPlayer.averagePlayersPos = sorted(playerTargetList, lambda x: distance(x.getPosition(), objectivePositions[0]))[0].getPosition()
+    #Boss
+    elif objectiveTypes[0] == 2:
+        eventPlayer.averagePlayersPos = sorted(playerTargetList, lambda x: distance(x.getPosition(), bosses[0].getPosition()))[0].getPosition()
+    #Survivor Rescue
+    elif objectiveTypes[0] == 4:
+        if survivorToRescue.botFollowTarget == null:
+            eventPlayer.averagePlayersPos = sorted(playerTargetList, lambda x: distance(x.getPosition(), survivorToRescue.getPosition()))[0].getPosition()
+        else:
+            eventPlayer.averagePlayersPos = survivorToRescue.botFollowTarget.getPosition()
+    #Killzone
+    elif objectiveTypes[0] == 5:
+        #If players are in the killzone
+        if len(playerTargetList.filter(lambda x: distance(x.getPosition(), objectiveChase1) < objectiveRad)) > 0:
+            #Player closeset to the center of the killzone
+            eventPlayer.averagePlayersPos = sorted(playerTargetList, lambda x: distance(x.getPosition(), objectiveChase1))[0].getPosition()
+        else:
+            #Average player positon
+            locateAveragePlayerLocation()
+    #Satellite Uplink
+    elif objectiveTypes[0] == 7:
+        #Checks if any players are currently repairing terminals
+        if len(playersOnObjective) > 0:
+            eventPlayer.averagePlayersPos = random.choice(playersOnObjective).getPosition()
+        else:
+            #Closest player to sattelite firing position
+            eventPlayer.averagePlayersPos = sorted(playerTargetList, lambda x: distance(x.getPosition(), objectivePositions[0]))[0].getPosition()
+    #Default
+    else:
+        locateAveragePlayerLocation()
 
 
 rule "BOT INITIALIZATION":
@@ -401,7 +435,7 @@ def teleportBots():
     waitUntil(not eventPlayer.initializing and eventPlayer.canTeleport, 99999)
     if eventPlayer.customTelePos == null:
         while eventPlayer.teleporting:
-            botTeleportCenter()
+            botTeleportCenterMacro()
             wait()
             eventPlayer.telePos = 0
             #Teleport with max distance constraint no view angle constraint
@@ -431,43 +465,6 @@ def teleportBots():
         eventPlayer.teleporting = false
     wait()
     enterExitTeleport()
-
-
-def botTeleportCenter():
-    @Name "botTeleportCenter"
-    
-    #Standoff, Extraction, Biomorphing, Zombie Egg
-    if objectiveTypes[0] in [1, 3, 6]:
-        eventPlayer.averagePlayersPos = sorted(playerTargetList, lambda x: distance(x.getPosition(), objectivePositions[0]))[0].getPosition()
-    #Boss
-    elif objectiveTypes[0] == 2:
-        eventPlayer.averagePlayersPos = sorted(playerTargetList, lambda x: distance(x.getPosition(), bosses[0].getPosition()))[0].getPosition()
-    #Survivor Rescue
-    elif objectiveTypes[0] == 4:
-        if survivorToRescue.botFollowTarget == null:
-            eventPlayer.averagePlayersPos = sorted(playerTargetList, lambda x: distance(x.getPosition(), survivorToRescue.getPosition()))[0].getPosition()
-        else:
-            eventPlayer.averagePlayersPos = survivorToRescue.botFollowTarget.getPosition()
-    #Killzone
-    elif objectiveTypes[0] == 5:
-        #If players are in the killzone
-        if len(playerTargetList.filter(lambda x: distance(x.getPosition(), objectiveChase1) < objectiveRad)) > 0:
-            #Player closeset to the center of the killzone
-            eventPlayer.averagePlayersPos = sorted(playerTargetList, lambda x: distance(x.getPosition(), objectiveChase1))[0].getPosition()
-        else:
-            #Average player positon
-            locateAveragePlayerLocation()
-    #Satellite Uplink
-    elif objectiveTypes[0] == 7:
-        #Checks if any players are currently repairing terminals
-        if len(playersOnObjective) > 0:
-            eventPlayer.averagePlayersPos = random.choice(playersOnObjective).getPosition()
-        else:
-            #Closest player to sattelite firing position
-            eventPlayer.averagePlayersPos = sorted(playerTargetList, lambda x: distance(x.getPosition(), objectivePositions[0]))[0].getPosition()
-    #Default
-    else:
-        locateAveragePlayerLocation()
 
 
 def locateAveragePlayerLocation():

@@ -1,12 +1,84 @@
 #!mainFile "main.opy"
 
 subroutine generateMapGrid
-subroutine enablePowerups
-subroutine enableMutations
-subroutine botHeroRandomization
-subroutine enableEnhancements
-subroutine setAvailableObjectives
 
+macro setAvailableObjectivesMacro():
+    #Set objective type votes empty
+    objectiveTypeVotes[0] = [null, true]
+    #Set objective type votes empty
+    objectiveTypeVotes[1] = [null, createWorkshopSettingBool("Available Objective Types", "Showdown", true)]
+    #Set objective type votes empty
+    objectiveTypeVotes[2] = [null, createWorkshopSettingBool("Available Objective Types", "Bosses", true, 1)]
+    #Set objective type votes empty
+    objectiveTypeVotes[5] = [null, createWorkshopSettingBool("Available Objective Types", "Kill Zone", true, 4)]
+    #Set objective type votes empty
+    objectiveTypeVotes[6] = [null, createWorkshopSettingBool("Available Objective Types", "Zombie Egg", true, 5)]
+    #Set objective type votes empty
+    objectiveTypeVotes[7] = [null, createWorkshopSettingBool("Available Objective Types", "Satellite Uplink", true, 6)]
+    #Set objective type votes empty
+    objectiveTypeVotes[9] = [null, createWorkshopSettingBool("Available Objective Types", "Mixed Objectives", true, 8)]
+    #Mixed Objectives pool
+    mixedObjectivesPool = [
+        1 if createWorkshopSettingBool("Mixed Objectives Pool", "Standoff.", true, 1) else 0,
+        2 if createWorkshopSettingBool("Mixed Objectives Pool", "Bosses.", true, 2) else 0,
+        3 if createWorkshopSettingBool("Mixed Objectives Pool", "Biomorphing.", true, 3) else 0,
+        4 if createWorkshopSettingBool("Mixed Objectives Pool", "Survivor Rescue.", true, 4) else 0,
+        5 if createWorkshopSettingBool("Mixed Objectives Pool", "Kill Zone.", true, 5) else 0,
+        6 if createWorkshopSettingBool("Mixed Objectives Pool", "Zombie Egg.", true, 6) else 0,
+        7 if createWorkshopSettingBool("Mixed Objectives Pool", "Satellite Uplink.", true, 7) else 0,
+    ]
+    #Removed disabled objectives
+    mixedObjectivesPool.remove(0)
+
+
+macro enableEnhancementsMacro():
+    enhancementOptions = [
+        iconString(Icon.QUESTION_MARK),
+        iconString(Icon.STOP),
+        iconString(Icon.POISON),
+        iconString(Icon.DIAMOND),
+        iconString(Icon.SKULL),
+        iconString(Icon.FIRE),
+        iconString(Icon.PLUS),
+        iconString(Icon.BOLT),
+        iconString(Icon.SPIRAL),
+        iconString(Icon.FLAG),
+        iconString(Icon.HAPPY),
+    ]
+
+
+macro botHeroRandomizationMacro():
+    currentBotHeroList = botHeros.filter(lambda x: getNumberOfHeroes(x, Team.2) > 0)
+    if gameSmolderEvent:
+        createDummy(Hero.WINSTON, Team.2, -1, vect(500, 500, 500))
+    #Determines if count of current different zombie types is less than the maximum amount allowed
+    elif len(currentBotHeroList) < (uniqueSkinCap - (getNumberOfSlots(Team.1) if getNumberOfPlayers(Team.1) <= getNumberOfSlots(Team.1) else getNumberOfPlayers(Team.1))):
+        randVal = random.uniform(0, 100)
+        botCurrentSpawnRate = 0
+        botRespawnCount = -1
+        while randVal > botCurrentSpawnRate or botRespawnCount < 0:
+            botRespawnCount++
+            botCurrentSpawnRate += botSpawnRates[botRespawnCount]
+        createDummy(botHeros[botRespawnCount], Team.2, -1, vect(500, 500, 500))
+    else:
+        createDummy(sorted(botHeros, lambda _, i: botSpawnRates[i]).last(), Team.2, -1, vect(500, 500, 500))
+    currentBotHeroList = []
+
+
+macro enableMutationsMacro():
+    availableMutations = [
+        1 if createWorkshopSettingBool("Mutations", "Speed", true) else 0,
+        2 if createWorkshopSettingBool("Mutations", "Size Growth", true, 1) else 0,
+        3 if createWorkshopSettingBool("Mutations", "Size Reduction", true, 2) else 0,
+        4 if createWorkshopSettingBool("Mutations", "Radioactive", true, 3) else 0,
+        5 if createWorkshopSettingBool("Mutations", "Heavy", true, 4) else 0,
+    ]
+    availableMutations.remove(0)
+
+
+macro enablePowerupsMacro():
+    for I in range(13):
+        availablePowerups[I] = I + 1
 
 rule "PREGAME QUICK TIPS FOR PLAYERS":
     @Condition specialGameModeSetup == true
@@ -23,7 +95,7 @@ rule "SPAWN BOTS":
     @Condition getNumberOfPlayers(Team.ALL) < 24
     @Condition (len(spawnTimes) > 0 and spawnTimes[0] <= 0 or len(spawnTimes) + getNumberOfPlayers(Team.2) < numberOfBots) == true
     
-    botHeroRandomization()
+    botHeroRandomizationMacro()
     if len(spawnTimes) > 0 and spawnTimes[0] <= 0:
         del spawnTimes[0]
         wait(0.25)
@@ -37,26 +109,6 @@ rule "SPAWN BOTS":
         spawnTimes[0] = 0
     if ruleCondition:
         loop()
-
-
-def botHeroRandomization():
-    @Name "botHeroRandomization"
-    
-    currentBotHeroList = botHeros.filter(lambda x: getNumberOfHeroes(x, Team.2) > 0)
-    if gameSmolderEvent:
-        createDummy(Hero.WINSTON, Team.2, -1, vect(500, 500, 500))
-    #Determines if count of current different zombie types is less than the maximum amount allowed
-    elif len(currentBotHeroList) < (uniqueSkinCap - (getNumberOfSlots(Team.1) if getNumberOfPlayers(Team.1) <= getNumberOfSlots(Team.1) else getNumberOfPlayers(Team.1))):
-        randVal = random.uniform(0, 100)
-        botCurrentSpawnRate = 0
-        botRespawnCount = -1
-        while randVal > botCurrentSpawnRate or botRespawnCount < 0:
-            botRespawnCount++
-            botCurrentSpawnRate += botSpawnRates[botRespawnCount]
-        createDummy(botHeros[botRespawnCount], Team.2, -1, vect(500, 500, 500))
-    else:
-        createDummy(sorted(botHeros, lambda _, i: botSpawnRates[i]).last(), Team.2, -1, vect(500, 500, 500))
-    currentBotHeroList = []
 
 
 rule "SPAWN TIME CONTROL":
@@ -88,12 +140,12 @@ rule "SKIP ASSEMBLING HEROES":
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
     voting = true
-    enableEnhancements()
+    enableEnhancementsMacro()
     #Set difficulty votes empty
     challengeVotes = [[null, true], [null, true], [null, createWorkshopSettingBool("Challenge Toggle", "Swarm Shootout", true, 1)], [null, createWorkshopSettingBool("Challenge Toggle", "Random Abilities", true, 2)], [null, createWorkshopSettingBool("Challenge Toggle", "Insanity", true, 3)], [null, createWorkshopSettingBool("Challenge Toggle", "Pandora's Box", true, 4)]]
     #Set zombie modes empty
     zombieVotes = [[null, true], [null, "All Zombies"], [null, createWorkshopSettingBool("Zombie Mode Toggle", "New Blood", true, 1)], [null, createWorkshopSettingBool("Zombie Mode Toggle", "What'll it be?", true, 2)], [null, createWorkshopSettingBool("Zombie Mode Toggle", "Zombie Shuffle", true, 3)], [null, createWorkshopSettingBool("Zombie Mode Toggle", "Dinner Rush!", true, 4)], [null, createWorkshopSettingBool("Zombie Mode Toggle", "Ham N' Hammer!", true, 5)]]
-    setAvailableObjectives()
+    setAvailableObjectivesMacro()
     #Set/Reset to default 0
     difficultySetting = 0
     #Set/Reset to default 0
@@ -116,41 +168,6 @@ rule "SKIP ASSEMBLING HEROES":
     chaseAtRate(chase1, 0, 1, ChaseRateReeval.NONE)
     disableAnnouncer()
     disableGamemodeCompletion()
-
-
-def setAvailableObjectives():
-    @Name "setAvailableObjectives"
-    
-    #Set objective type votes empty
-    objectiveTypeVotes[0] = [null, true]
-    #Set objective type votes empty
-    objectiveTypeVotes[1] = [null, createWorkshopSettingBool("Available Objective Types", "Showdown", true)]
-    #Set objective type votes empty
-    objectiveTypeVotes[2] = [null, createWorkshopSettingBool("Available Objective Types", "Bosses", true, 1)]
-    #Set objective type votes empty
-    objectiveTypeVotes[5] = [null, createWorkshopSettingBool("Available Objective Types", "Kill Zone", true, 4)]
-    #Set objective type votes empty
-    objectiveTypeVotes[6] = [null, createWorkshopSettingBool("Available Objective Types", "Zombie Egg", true, 5)]
-    #Set objective type votes empty
-    objectiveTypeVotes[7] = [null, createWorkshopSettingBool("Available Objective Types", "Satellite Uplink", true, 6)]
-    #Set objective type votes empty
-    objectiveTypeVotes[9] = [null, createWorkshopSettingBool("Available Objective Types", "Mixed Objectives", true, 8)]
-    #Mixed Objectives pool
-    mixedObjectivesPool[0] = 1 if createWorkshopSettingBool("Mixed Objectives Pool", "Standoff.", true, 1) else 0
-    #Mixed Objectives pool
-    mixedObjectivesPool[1] = 2 if createWorkshopSettingBool("Mixed Objectives Pool", "Bosses.", true, 2) else 0
-    #Mixed Objectives pool
-    mixedObjectivesPool[2] = 3 if createWorkshopSettingBool("Mixed Objectives Pool", "Biomorphing.", true, 3) else 0
-    #Mixed Objectives pool
-    mixedObjectivesPool[3] = 4 if createWorkshopSettingBool("Mixed Objectives Pool", "Survivor Rescue.", true, 4) else 0
-    #Mixed Objectives pool
-    mixedObjectivesPool[4] = 5 if createWorkshopSettingBool("Mixed Objectives Pool", "Kill Zone.", true, 5) else 0
-    #Mixed Objectives pool
-    mixedObjectivesPool[5] = 6 if createWorkshopSettingBool("Mixed Objectives Pool", "Zombie Egg.", true, 6) else 0
-    #Mixed Objectives pool
-    mixedObjectivesPool[6] = 7 if createWorkshopSettingBool("Mixed Objectives Pool", "Satellite Uplink.", true, 7) else 0
-    #Removed disabled objectives
-    mixedObjectivesPool.remove(0)
 
 
 rule "PREGAME SPAWN ROOM ROTATION":
@@ -243,8 +260,8 @@ rule "VARIABLE ASSIGNMENT":
     spawnTimes = []
     customTelePositions = []
     losHeightCheck = 1.2
-    enablePowerups()
-    enableMutations()
+    enablePowerupsMacro()
+    enableMutationsMacro()
     numberOfPowerUpsPerSupplyDrop = createWorkshopSettingInt("Power Ups", "Number of Powerups Per Supply Drop", 5, 1, 10, -1)
     uniqueSkinCap = createWorkshopSettingInt("General", "Maximum Number of Unique Hero Skins", 11, 1, 11)
     objectiveComplete = false
@@ -299,49 +316,3 @@ def generateMapGrid():
         wait()
     #0: Consecutive, 1: Minimum
     objectiveSpacing = [min(60, len(mapGrid) / 11), min(30, len(mapGrid) / 20)]
-
-
-def enableEnhancements():
-    @Name "enableEnhancements"
-    
-    enhancementOptions = []
-    enhancementOptions[0] = iconString(Icon.QUESTION_MARK)
-    enhancementOptions[1] = iconString(Icon.STOP)
-    enhancementOptions[2] = iconString(Icon.POISON)
-    enhancementOptions[3] = iconString(Icon.DIAMOND)
-    enhancementOptions[4] = iconString(Icon.SKULL)
-    enhancementOptions[5] = iconString(Icon.FIRE)
-    enhancementOptions[6] = iconString(Icon.PLUS)
-    enhancementOptions[7] = iconString(Icon.BOLT)
-    enhancementOptions[8] = iconString(Icon.SPIRAL)
-    enhancementOptions[9] = iconString(Icon.FLAG)
-    enhancementOptions[10] = iconString(Icon.HAPPY)
-
-
-def enableMutations():
-    @Name "enableMutations"
-    
-    availableMutations[0] = 1 if createWorkshopSettingBool("Mutations", "Speed", true) else -1
-    availableMutations[1] = 2 if createWorkshopSettingBool("Mutations", "Size Growth", true, 1) else -1
-    availableMutations[2] = 3 if createWorkshopSettingBool("Mutations", "Size Reduction", true, 2) else -1
-    availableMutations[3] = 4 if createWorkshopSettingBool("Mutations", "Radioactive", true, 3) else -1
-    availableMutations[4] = 5 if createWorkshopSettingBool("Mutations", "Heavy", true, 4) else -1
-    availableMutations.remove(-1)
-
-
-def enablePowerups():
-    @Name "enablePowerups"
-    
-    availablePowerups[0] = 1
-    availablePowerups[1] = 2
-    availablePowerups[2] = 3
-    availablePowerups[3] = 4
-    availablePowerups[4] = 5
-    availablePowerups[5] = 6
-    availablePowerups[6] = 7
-    availablePowerups[7] = 8
-    availablePowerups[8] = 9
-    availablePowerups[9] = 10
-    availablePowerups[10] = 11
-    availablePowerups[11] = 12
-    availablePowerups[12] = 13

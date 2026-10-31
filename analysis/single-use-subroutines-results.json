@@ -1,0 +1,1368 @@
+{
+  "compiler": "zezombye.overpy-9.7.20",
+  "applied": true,
+  "method": "Current working-tree baseline (including existing enablePowerupsMacro); cumulative compilation after each conversion. Asynchronous calls and rule-dependent control flow excluded. No in-game validation.",
+  "initialSourceSha256": {
+    "bots_game_in_progress.opy": "60e68b2719ee8877b78f79587a0f732c46e59bd97028c0a225ef731fc8fc422d",
+    "bot_health.opy": "425f289b9b6f5a44bf39e20f80f07231cb62d3dccae9f7aa192f6dc25bd13ed2",
+    "enhancements.opy": "a8445a3df02a7f17c73659828251b059ed437a9fec4593f441ce521a94872dd9",
+    "global_game_in_progress.opy": "b70ded831d1b9d11c98c6eff71642837cebb5480117df49f7ab031a96387ee53",
+    "global_startup.opy": "505bc67ab8eb27977e86a39023ea135d9db249a3bd618036d8368cf9dc997a2a",
+    "global_start_menu.opy": "5589ed09fa6bdcc714e73dded899639afe69c9209ab9b5114f7576b8ee903016",
+    "hero_tuning.opy": "c5e547232e8f8ac7961578c59d839f1dc91c4c98a80726b7f7ea482ebbc74d1b",
+    "main.opy": "7a7558ceda7b11c5d7a2567a269df49ea6bd476528bbede0afad2d560d01b577",
+    "objective_type_biomorphing.opy": "ae90c923574a09bb2b6c43a70fab8accde8495e4a2d2adf25ca60ed42dae5dbe",
+    "objective_type_bosses.opy": "73bb79c61a30541aac66a70f3a626eec8a2ece17e62dcc9526e5cfc1f818292c",
+    "objective_type_extraction_point.opy": "ef37b1d5d2673c6df0bcb8df499628b0c75f0a63f103fd080de76e0d008a5a62",
+    "objective_type_kill_zone.opy": "99a0130317da9101da9f87a194d949cf61971a78610b670eef61b97c753f03cb",
+    "objective_type_satellite_uplink.opy": "90d4800eb2fcbd4ffc15aec0cf31e0288babd09117834105f12a0c4315a3d689",
+    "objective_type_showdown.opy": "d4abdbef754de10d2213b8a14611143971b02b34147d7c9c64fa556164f2f9a2",
+    "objective_type_survivor_rescue.opy": "50ff892234522e476a35f21a3fe316796240337cc0a9db09980e74348f2e616f",
+    "objective_type_zombie_egg.opy": "5a9a1f5b687addaf3e4e4038e6364dffe4efcf97bd7176b5ad5ccb1d6dd2144e",
+    "players_game_in_progress.opy": "8c385494c42602abaf91e49eebb176ece9d9c767621c89af80fda54aaedfdfd6",
+    "player_start_menu.opy": "6a81f2ac0d897abf8c09f0450c7630cce1c8a11c05ebba1f4431c8e674e09263",
+    "power_ups.opy": "e52538c124334f9cc274a4d691525205c866769577f7fc8acaad97c41f06b291",
+    "settings.opy": "397da915c195aa7808335b06126b0b1878a244db798f08fa69c57f6ca6343e22",
+    "subroutines.opy": "ae99c18057aec90c26b8c6cbbb17212dc6903da17507bbf2b505ee5f8690ebed",
+    "supply_drops.opy": "c489c9b3ac8bf542a94e3bc0303816e99818e5b76091874035a628093175fb13",
+    "variables.opy": "17bba784e9b77e7ec7d56c1d81d4940d844029d6f3ae998de62f9786eb78998a",
+    "zombie_types.opy": "97218ed44e081b7a7b44f59fa0165d76d756ee0c6bde0c1b4ca2ad61f1850df8"
+  },
+  "inventory": [
+    {
+      "name": "enterExitTeleport",
+      "file": "bots_game_in_progress.opy",
+      "references": [
+        {
+          "file": "bots_game_in_progress.opy",
+          "line": 399,
+          "call": "enterExitTeleport()",
+          "direct": true
+        },
+        {
+          "file": "bots_game_in_progress.opy",
+          "line": 433,
+          "call": "enterExitTeleport()",
+          "direct": true
+        }
+      ],
+      "reasons": [
+        "2 references"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "teleportBots",
+      "file": "bots_game_in_progress.opy",
+      "references": [
+        {
+          "file": "bots_game_in_progress.opy",
+          "line": 129,
+          "call": "teleportBots()",
+          "direct": true
+        },
+        {
+          "file": "bots_game_in_progress.opy",
+          "line": 151,
+          "call": "teleportBots()",
+          "direct": true
+        }
+      ],
+      "reasons": [
+        "2 references",
+        "early return would abort the caller"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "successfulTeleportStatus",
+      "file": "bots_game_in_progress.opy",
+      "references": [],
+      "reasons": [
+        "0 references"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "updateBotSpawnPoints",
+      "file": "bots_game_in_progress.opy",
+      "references": [
+        {
+          "file": "bots_game_in_progress.opy",
+          "line": 109,
+          "call": "updateBotSpawnPoints()",
+          "direct": true
+        },
+        {
+          "file": "bots_game_in_progress.opy",
+          "line": 181,
+          "call": "updateBotSpawnPoints()",
+          "direct": true
+        },
+        {
+          "file": "bots_game_in_progress.opy",
+          "line": 398,
+          "call": "updateBotSpawnPoints()",
+          "direct": true
+        }
+      ],
+      "reasons": [
+        "3 references"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "botTeleportCenter",
+      "file": "bots_game_in_progress.opy",
+      "references": [
+        {
+          "file": "bots_game_in_progress.opy",
+          "line": 404,
+          "call": "botTeleportCenter()",
+          "direct": true
+        }
+      ],
+      "reasons": [],
+      "eligible": true
+    },
+    {
+      "name": "locateAveragePlayerLocation",
+      "file": "bots_game_in_progress.opy",
+      "references": [
+        {
+          "file": "bots_game_in_progress.opy",
+          "line": 459,
+          "call": "locateAveragePlayerLocation()",
+          "direct": true
+        },
+        {
+          "file": "bots_game_in_progress.opy",
+          "line": 470,
+          "call": "locateAveragePlayerLocation()",
+          "direct": true
+        }
+      ],
+      "reasons": [
+        "2 references"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "generateMapGrid",
+      "file": "global_startup.opy",
+      "references": [
+        {
+          "file": "global_startup.opy",
+          "line": 210,
+          "call": "startRule(generateMapGrid, StartRuleBehavior.NOOP)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "enableMutations",
+      "file": "global_startup.opy",
+      "references": [
+        {
+          "file": "global_startup.opy",
+          "line": 245,
+          "call": "enableMutations()",
+          "direct": true
+        }
+      ],
+      "reasons": [],
+      "eligible": true
+    },
+    {
+      "name": "botHeroRandomization",
+      "file": "global_startup.opy",
+      "references": [
+        {
+          "file": "global_startup.opy",
+          "line": 28,
+          "call": "botHeroRandomization()",
+          "direct": true
+        }
+      ],
+      "reasons": [],
+      "eligible": true
+    },
+    {
+      "name": "enableEnhancements",
+      "file": "global_startup.opy",
+      "references": [
+        {
+          "file": "global_startup.opy",
+          "line": 93,
+          "call": "enableEnhancements()",
+          "direct": true
+        }
+      ],
+      "reasons": [],
+      "eligible": true
+    },
+    {
+      "name": "setAvailableObjectives",
+      "file": "global_startup.opy",
+      "references": [
+        {
+          "file": "global_startup.opy",
+          "line": 98,
+          "call": "setAvailableObjectives()",
+          "direct": true
+        }
+      ],
+      "reasons": [],
+      "eligible": true
+    },
+    {
+      "name": "determineChallenge",
+      "file": "global_start_menu.opy",
+      "references": [
+        {
+          "file": "global_start_menu.opy",
+          "line": 212,
+          "call": "startRule(determineChallenge)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "determineZombieMode",
+      "file": "global_start_menu.opy",
+      "references": [
+        {
+          "file": "global_start_menu.opy",
+          "line": 167,
+          "call": "startRule(determineZombieMode)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "setZombieMode",
+      "file": "global_start_menu.opy",
+      "references": [
+        {
+          "file": "global_start_menu.opy",
+          "line": 213,
+          "call": "startRule(setZombieMode)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "determineObjectiveType",
+      "file": "global_start_menu.opy",
+      "references": [
+        {
+          "file": "global_start_menu.opy",
+          "line": 275,
+          "call": "startRule(determineObjectiveType)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "setObjectiveType",
+      "file": "global_start_menu.opy",
+      "references": [
+        {
+          "file": "global_start_menu.opy",
+          "line": 303,
+          "call": "startRule(setObjectiveType)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "biowasteAssignment",
+      "file": "objective_type_biomorphing.opy",
+      "references": [
+        {
+          "file": "objective_type_biomorphing.opy",
+          "line": 184,
+          "call": "biowasteAssignment()",
+          "direct": true
+        }
+      ],
+      "reasons": [],
+      "eligible": true
+    },
+    {
+      "name": "biowasteOutput",
+      "file": "objective_type_biomorphing.opy",
+      "references": [
+        {
+          "file": "objective_type_biomorphing.opy",
+          "line": 68,
+          "call": "biowasteOutput()",
+          "direct": true
+        }
+      ],
+      "reasons": [],
+      "eligible": true
+    },
+    {
+      "name": "bossReturn",
+      "file": "objective_type_bosses.opy",
+      "references": [
+        {
+          "file": "objective_type_bosses.opy",
+          "line": 134,
+          "call": "bossReturn()",
+          "direct": true
+        },
+        {
+          "file": "objective_type_bosses.opy",
+          "line": 189,
+          "call": "bossReturn()",
+          "direct": true
+        }
+      ],
+      "reasons": [
+        "2 references"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "nukeMap",
+      "file": "objective_type_extraction_point.opy",
+      "references": [
+        {
+          "file": "objective_type_extraction_point.opy",
+          "line": 78,
+          "call": "startRule(nukeMap, StartRuleBehavior.NOOP)",
+          "direct": false
+        },
+        {
+          "file": "objective_type_extraction_point.opy",
+          "line": 100,
+          "call": "startRule(nukeMap, StartRuleBehavior.NOOP)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "2 references",
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "fireSatellite",
+      "file": "objective_type_satellite_uplink.opy",
+      "references": [
+        {
+          "file": "objective_type_satellite_uplink.opy",
+          "line": 77,
+          "call": "fireSatellite()",
+          "direct": true
+        }
+      ],
+      "reasons": [],
+      "eligible": true
+    },
+    {
+      "name": "playerObjectiveEntityManagement",
+      "file": "players_game_in_progress.opy",
+      "references": [
+        {
+          "file": "players_game_in_progress.opy",
+          "line": 300,
+          "call": "playerObjectiveEntityManagement()",
+          "direct": true
+        }
+      ],
+      "reasons": [],
+      "eligible": true
+    },
+    {
+      "name": "teleportToClosestPlayer",
+      "file": "players_game_in_progress.opy",
+      "references": [
+        {
+          "file": "players_game_in_progress.opy",
+          "line": 43,
+          "call": "teleportToClosestPlayer()",
+          "direct": true
+        },
+        {
+          "file": "players_game_in_progress.opy",
+          "line": 53,
+          "call": "teleportToClosestPlayer()",
+          "direct": true
+        },
+        {
+          "file": "players_game_in_progress.opy",
+          "line": 116,
+          "call": "teleportToClosestPlayer()",
+          "direct": true
+        },
+        {
+          "file": "players_game_in_progress.opy",
+          "line": 170,
+          "call": "teleportToClosestPlayer()",
+          "direct": true
+        }
+      ],
+      "reasons": [
+        "4 references"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "updateUsers",
+      "file": "players_game_in_progress.opy",
+      "references": [
+        {
+          "file": "players_game_in_progress.opy",
+          "line": 42,
+          "call": "updateUsers()",
+          "direct": true
+        },
+        {
+          "file": "players_game_in_progress.opy",
+          "line": 74,
+          "call": "updateUsers()",
+          "direct": true
+        }
+      ],
+      "reasons": [
+        "2 references"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "randomActions",
+      "file": "player_start_menu.opy",
+      "references": [
+        {
+          "file": "player_start_menu.opy",
+          "line": 106,
+          "call": "startRule(randomActions)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "powerUpAssignment",
+      "file": "power_ups.opy",
+      "references": [
+        {
+          "file": "power_ups.opy",
+          "line": 11,
+          "call": "powerUpAssignment()",
+          "direct": true
+        }
+      ],
+      "reasons": [],
+      "eligible": true
+    },
+    {
+      "name": "enableDisableAbilities",
+      "file": "subroutines.opy",
+      "references": [
+        {
+          "file": "players_game_in_progress.opy",
+          "line": 38,
+          "call": "enableDisableAbilities()",
+          "direct": true
+        },
+        {
+          "file": "player_start_menu.opy",
+          "line": 27,
+          "call": "enableDisableAbilities()",
+          "direct": true
+        }
+      ],
+      "reasons": [
+        "2 references"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "setDifficulty",
+      "file": "subroutines.opy",
+      "references": [
+        {
+          "file": "global_game_in_progress.opy",
+          "line": 142,
+          "call": "startRule(setDifficulty)",
+          "direct": false
+        },
+        {
+          "file": "players_game_in_progress.opy",
+          "line": 28,
+          "call": "startRule(setDifficulty)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "2 references",
+        "asynchronous startRule or non-call reference",
+        "labels or goto require separate review"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "botRespawnInitialization",
+      "file": "subroutines.opy",
+      "references": [
+        {
+          "file": "bots_game_in_progress.opy",
+          "line": 40,
+          "call": "botRespawnInitialization()",
+          "direct": true
+        },
+        {
+          "file": "objective_type_bosses.opy",
+          "line": 53,
+          "call": "botRespawnInitialization()",
+          "direct": true
+        },
+        {
+          "file": "objective_type_zombie_egg.opy",
+          "line": 29,
+          "call": "botRespawnInitialization()",
+          "direct": true
+        }
+      ],
+      "reasons": [
+        "3 references",
+        "labels or goto require separate review"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "objectivesManagement",
+      "file": "subroutines.opy",
+      "references": [
+        {
+          "file": "global_game_in_progress.opy",
+          "line": 149,
+          "call": "startRule(objectivesManagement)",
+          "direct": false
+        },
+        {
+          "file": "global_start_menu.opy",
+          "line": 338,
+          "call": "objectivesManagement()",
+          "direct": true
+        }
+      ],
+      "reasons": [
+        "2 references",
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "globalObjectiveEntityManagement",
+      "file": "subroutines.opy",
+      "references": [
+        {
+          "file": "subroutines.opy",
+          "line": 269,
+          "call": "globalObjectiveEntityManagement()",
+          "direct": true
+        }
+      ],
+      "reasons": [],
+      "eligible": true
+    },
+    {
+      "name": "botEntityManagement",
+      "file": "subroutines.opy",
+      "references": [
+        {
+          "file": "subroutines.opy",
+          "line": 539,
+          "call": "botEntityManagement()",
+          "direct": true
+        }
+      ],
+      "reasons": [],
+      "eligible": true
+    },
+    {
+      "name": "mutations",
+      "file": "subroutines.opy",
+      "references": [
+        {
+          "file": "subroutines.opy",
+          "line": 536,
+          "call": "mutations()",
+          "direct": true
+        }
+      ],
+      "reasons": [],
+      "eligible": true
+    },
+    {
+      "name": "botStatManagement",
+      "file": "subroutines.opy",
+      "references": [
+        {
+          "file": "subroutines.opy",
+          "line": 533,
+          "call": "botStatManagement()",
+          "direct": true
+        }
+      ],
+      "reasons": [],
+      "eligible": true
+    },
+    {
+      "name": "selectTarget",
+      "file": "subroutines.opy",
+      "references": [
+        {
+          "file": "bots_game_in_progress.opy",
+          "line": 196,
+          "call": "startRule(selectTarget)",
+          "direct": false
+        },
+        {
+          "file": "bots_game_in_progress.opy",
+          "line": 210,
+          "call": "startRule(selectTarget, StartRuleBehavior.NOOP)",
+          "direct": false
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 1442,
+          "call": "startRule(selectTarget, StartRuleBehavior.NOOP)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "3 references",
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "restoreDefaultFacingMovement",
+      "file": "subroutines.opy",
+      "references": [
+        {
+          "file": "bots_game_in_progress.opy",
+          "line": 330,
+          "call": "restoreDefaultFacingMovement()",
+          "direct": true
+        },
+        {
+          "file": "bots_game_in_progress.opy",
+          "line": 389,
+          "call": "startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)",
+          "direct": false
+        },
+        {
+          "file": "subroutines.opy",
+          "line": 479,
+          "call": "startRule(restoreDefaultFacingMovement)",
+          "direct": false
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 48,
+          "call": "startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)",
+          "direct": false
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 126,
+          "call": "startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)",
+          "direct": false
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 196,
+          "call": "startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)",
+          "direct": false
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 352,
+          "call": "startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)",
+          "direct": false
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 359,
+          "call": "startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)",
+          "direct": false
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 500,
+          "call": "startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)",
+          "direct": false
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 539,
+          "call": "startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)",
+          "direct": false
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 554,
+          "call": "startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)",
+          "direct": false
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 620,
+          "call": "startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)",
+          "direct": false
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 678,
+          "call": "startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)",
+          "direct": false
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 681,
+          "call": "startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)",
+          "direct": false
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 791,
+          "call": "startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)",
+          "direct": false
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 869,
+          "call": "startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)",
+          "direct": false
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 952,
+          "call": "startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)",
+          "direct": false
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 1069,
+          "call": "startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)",
+          "direct": false
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 1163,
+          "call": "restoreDefaultFacingMovement()",
+          "direct": true
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 1172,
+          "call": "restoreDefaultFacingMovement()",
+          "direct": true
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 1239,
+          "call": "restoreDefaultFacingMovement()",
+          "direct": true
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 1262,
+          "call": "restoreDefaultFacingMovement()",
+          "direct": true
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 1417,
+          "call": "restoreDefaultFacingMovement()",
+          "direct": true
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 1464,
+          "call": "restoreDefaultFacingMovement()",
+          "direct": true
+        }
+      ],
+      "reasons": [
+        "24 references",
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "setPrematchTimer",
+      "file": "subroutines.opy",
+      "references": [
+        {
+          "file": "global_start_menu.opy",
+          "line": 174,
+          "call": "startRule(setPrematchTimer)",
+          "direct": false
+        },
+        {
+          "file": "player_start_menu.opy",
+          "line": 63,
+          "call": "startRule(setPrematchTimer)",
+          "direct": false
+        },
+        {
+          "file": "player_start_menu.opy",
+          "line": 105,
+          "call": "startRule(setPrematchTimer)",
+          "direct": false
+        },
+        {
+          "file": "player_start_menu.opy",
+          "line": 113,
+          "call": "startRule(setPrematchTimer)",
+          "direct": false
+        },
+        {
+          "file": "player_start_menu.opy",
+          "line": 209,
+          "call": "startRule(setPrematchTimer)",
+          "direct": false
+        },
+        {
+          "file": "player_start_menu.opy",
+          "line": 212,
+          "call": "startRule(setPrematchTimer)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "6 references",
+        "asynchronous startRule or non-call reference",
+        "early return would abort the caller"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "explosionSequence",
+      "file": "subroutines.opy",
+      "references": [
+        {
+          "file": "enhancements.opy",
+          "line": 154,
+          "call": "explosionSequence()",
+          "direct": true
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 1496,
+          "call": "explosionSequence()",
+          "direct": true
+        }
+      ],
+      "reasons": [
+        "2 references"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "minibossMutation",
+      "file": "subroutines.opy",
+      "references": [
+        {
+          "file": "subroutines.opy",
+          "line": 531,
+          "call": "minibossMutation()",
+          "direct": true
+        }
+      ],
+      "reasons": [],
+      "eligible": true
+    },
+    {
+      "name": "illariUlt",
+      "file": "subroutines.opy",
+      "references": [
+        {
+          "file": "objective_type_bosses.opy",
+          "line": 146,
+          "call": "illariUlt()",
+          "direct": true
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 1082,
+          "call": "illariUlt()",
+          "direct": true
+        }
+      ],
+      "reasons": [
+        "2 references",
+        "early return would abort the caller",
+        "labels or goto require separate review"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "abilityPlacement",
+      "file": "subroutines.opy",
+      "references": [
+        {
+          "file": "global_game_in_progress.opy",
+          "line": 125,
+          "call": "abilityPlacement()",
+          "direct": true
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 1101,
+          "call": "abilityPlacement()",
+          "direct": true
+        }
+      ],
+      "reasons": [
+        "2 references",
+        "early return would abort the caller"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "powerUpUsage",
+      "file": "supply_drops.opy",
+      "references": [
+        {
+          "file": "supply_drops.opy",
+          "line": 121,
+          "call": "powerUpUsage()",
+          "direct": true
+        }
+      ],
+      "reasons": [
+        "early return would abort the caller"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "playerForceField",
+      "file": "supply_drops.opy",
+      "references": [
+        {
+          "file": "supply_drops.opy",
+          "line": 457,
+          "call": "startRule(playerForceField)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "noCooldowns",
+      "file": "supply_drops.opy",
+      "references": [
+        {
+          "file": "supply_drops.opy",
+          "line": 461,
+          "call": "startRule(noCooldowns)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "asynchronous startRule or non-call reference",
+        "labels or goto require separate review"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "airStrike",
+      "file": "supply_drops.opy",
+      "references": [
+        {
+          "file": "supply_drops.opy",
+          "line": 468,
+          "call": "startRule(airStrike)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "instantRevive",
+      "file": "supply_drops.opy",
+      "references": [
+        {
+          "file": "supply_drops.opy",
+          "line": 453,
+          "call": "startRule(instantRevive)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "healBeacon",
+      "file": "supply_drops.opy",
+      "references": [
+        {
+          "file": "supply_drops.opy",
+          "line": 472,
+          "call": "startRule(healBeacon)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "sentryTurret",
+      "file": "supply_drops.opy",
+      "references": [
+        {
+          "file": "supply_drops.opy",
+          "line": 483,
+          "call": "startRule(sentryTurret)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "cloakingDevice",
+      "file": "supply_drops.opy",
+      "references": [
+        {
+          "file": "supply_drops.opy",
+          "line": 487,
+          "call": "startRule(cloakingDevice)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "superNano",
+      "file": "supply_drops.opy",
+      "references": [
+        {
+          "file": "supply_drops.opy",
+          "line": 491,
+          "call": "startRule(superNano)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "bouncePad",
+      "file": "supply_drops.opy",
+      "references": [
+        {
+          "file": "supply_drops.opy",
+          "line": 495,
+          "call": "startRule(bouncePad)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "ultimateCharger",
+      "file": "supply_drops.opy",
+      "references": [
+        {
+          "file": "supply_drops.opy",
+          "line": 499,
+          "call": "startRule(ultimateCharger)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "stun",
+      "file": "supply_drops.opy",
+      "references": [
+        {
+          "file": "supply_drops.opy",
+          "line": 505,
+          "call": "startRule(stun)",
+          "direct": false
+        }
+      ],
+      "reasons": [
+        "asynchronous startRule or non-call reference"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "abilityThrowdown",
+      "file": "zombie_types.opy",
+      "references": [
+        {
+          "file": "zombie_types.opy",
+          "line": 1135,
+          "call": "abilityThrowdown()",
+          "direct": true
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 1368,
+          "call": "abilityThrowdown()",
+          "direct": true
+        }
+      ],
+      "reasons": [
+        "2 references",
+        "early return would abort the caller"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "entityFloat",
+      "file": "zombie_types.opy",
+      "references": [
+        {
+          "file": "zombie_types.opy",
+          "line": 36,
+          "call": "entityFloat()",
+          "direct": true
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 666,
+          "call": "entityFloat()",
+          "direct": true
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 1153,
+          "call": "entityFloat()",
+          "direct": true
+        }
+      ],
+      "reasons": [
+        "3 references"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "explosionWarning",
+      "file": "zombie_types.opy",
+      "references": [
+        {
+          "file": "zombie_types.opy",
+          "line": 65,
+          "call": "explosionWarning()",
+          "direct": true
+        }
+      ],
+      "reasons": [
+        "early return would abort the caller"
+      ],
+      "eligible": false
+    },
+    {
+      "name": "smolderEnraged",
+      "file": "zombie_types.opy",
+      "references": [
+        {
+          "file": "zombie_types.opy",
+          "line": 1339,
+          "call": "smolderEnraged()",
+          "direct": true
+        }
+      ],
+      "reasons": [],
+      "eligible": true
+    }
+  ],
+  "results": [
+    {
+      "name": "botTeleportCenter",
+      "macro": "botTeleportCenterMacro",
+      "file": "bots_game_in_progress.opy",
+      "before": 29114,
+      "after": 29112,
+      "saved": 2
+    },
+    {
+      "name": "enableMutations",
+      "macro": "enableMutationsMacro",
+      "file": "global_startup.opy",
+      "before": 29112,
+      "after": 29110,
+      "saved": 2
+    },
+    {
+      "name": "botHeroRandomization",
+      "macro": "botHeroRandomizationMacro",
+      "file": "global_startup.opy",
+      "before": 29110,
+      "after": 29108,
+      "saved": 2
+    },
+    {
+      "name": "enableEnhancements",
+      "macro": "enableEnhancementsMacro",
+      "file": "global_startup.opy",
+      "before": 29108,
+      "after": 29106,
+      "saved": 2
+    },
+    {
+      "name": "setAvailableObjectives",
+      "macro": "setAvailableObjectivesMacro",
+      "file": "global_startup.opy",
+      "before": 29106,
+      "after": 29104,
+      "saved": 2
+    },
+    {
+      "name": "biowasteAssignment",
+      "macro": "biowasteAssignmentMacro",
+      "file": "objective_type_biomorphing.opy",
+      "before": 29104,
+      "after": 29102,
+      "saved": 2
+    },
+    {
+      "name": "biowasteOutput",
+      "macro": "biowasteOutputMacro",
+      "file": "objective_type_biomorphing.opy",
+      "before": 29102,
+      "after": 29100,
+      "saved": 2
+    },
+    {
+      "name": "fireSatellite",
+      "macro": "fireSatelliteMacro",
+      "file": "objective_type_satellite_uplink.opy",
+      "before": 29100,
+      "after": 29098,
+      "saved": 2
+    },
+    {
+      "name": "playerObjectiveEntityManagement",
+      "macro": "playerObjectiveEntityManagementMacro",
+      "file": "players_game_in_progress.opy",
+      "before": 29098,
+      "after": 29093,
+      "saved": 5
+    },
+    {
+      "name": "powerUpAssignment",
+      "macro": "powerUpAssignmentMacro",
+      "file": "power_ups.opy",
+      "before": 29093,
+      "after": 29091,
+      "saved": 2
+    },
+    {
+      "name": "globalObjectiveEntityManagement",
+      "macro": "globalObjectiveEntityManagementMacro",
+      "file": "subroutines.opy",
+      "before": 29091,
+      "after": 29089,
+      "saved": 2
+    },
+    {
+      "name": "botEntityManagement",
+      "macro": "botEntityManagementMacro",
+      "file": "subroutines.opy",
+      "before": 29089,
+      "after": 29087,
+      "saved": 2
+    },
+    {
+      "name": "mutations",
+      "macro": "mutationsMacro",
+      "file": "subroutines.opy",
+      "before": 29087,
+      "after": 29086,
+      "saved": 1
+    },
+    {
+      "name": "botStatManagement",
+      "macro": "botStatManagementMacro",
+      "file": "subroutines.opy",
+      "before": 29086,
+      "after": 29084,
+      "saved": 2
+    },
+    {
+      "name": "minibossMutation",
+      "macro": "minibossMutationMacro",
+      "file": "subroutines.opy",
+      "before": 29084,
+      "after": 29082,
+      "saved": 2
+    },
+    {
+      "name": "smolderEnraged",
+      "macro": "smolderEnragedMacro",
+      "file": "zombie_types.opy",
+      "before": 29082,
+      "after": 29080,
+      "saved": 2
+    }
+  ],
+  "before": 29114,
+  "warningsBefore": [],
+  "after": 29080,
+  "saved": 34,
+  "warningsAfter": []
+}

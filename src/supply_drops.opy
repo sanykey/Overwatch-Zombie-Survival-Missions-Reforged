@@ -272,11 +272,8 @@ def sentryTurret():
             playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer.powerUpUsePositionsAndInfo[52], 0.1)
             damage(raycastHitPlayer(eventPlayer.powerUpUsePositionsAndInfo[50], eventPlayer.powerUpUsePositionsAndInfo[50] + directionTowards(eventPlayer.powerUpUsePositionsAndInfo[50], eventPlayer.powerUpUsePositionsAndInfo[52]) * 100, getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())), getPlayers(eventPlayer.getTeam()), true), eventPlayer, 20)
         wait(0.125)
-    destroyEffect(eventPlayer.powerUpEffects[50])
-    destroyEffect(eventPlayer.powerUpEffects[51])
-    destroyEffect(eventPlayer.powerUpEffects[52])
-    destroyEffect(eventPlayer.powerUpEffects[53])
-    destroyEffect(eventPlayer.powerUpEffects[54])
+    for I in range(50, 55):
+        destroyEffect(eventPlayer.powerUpEffects[I])
     destroyHudText(eventPlayer.powerUpEffects[55])
     eventPlayer.powerUpUsePositionsAndInfo[50] = 0
 
@@ -437,63 +434,77 @@ def stun():
 def powerUpUsage():
     @Name "powerUpUsage"
     
-    #Cure
-    if eventPlayer.currentPowerUp == 1:
-        playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, Color.GREEN, eventPlayer, 1)
-        eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 1)
-        if eventPlayer.infectionLvl > 0:
-            eventPlayer.infected = false
-            eventPlayer.infectionLvl = 0
-        eventPlayer.startHealingOverTime(eventPlayer, 5, 20)
-        smallMessage(eventPlayer, "You are cured!")
-        playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.AQUA, eventPlayer.getPosition(), 50)
-    #Instant Revive
-    elif eventPlayer.currentPowerUp == 2:
-        if len(getDeadPlayers(Team.1).filter(lambda player: distance(eventPlayer.getPosition(), player.getPosition()) <= reviveRadius)) == 0:
-            return
-        startRule(instantRevive)
-    #Force Field
-    elif eventPlayer.currentPowerUp == 3:
-        startRule(playerForceField)
-    #No Cooldowns
-    elif eventPlayer.currentPowerUp == 4:
-        startRule(noCooldowns)
-    #Air Strike
-    elif eventPlayer.currentPowerUp == 5:
-        if distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 41, null, getAllPlayers(), false)) > 40:
-            smallMessage(eventPlayer, "Aim at a surface to call in an aistrike")
-            return
-        startRule(airStrike)
-    #Beacon of Healing
-    elif eventPlayer.currentPowerUp == 6:
-        startRule(healBeacon)
-    #Vaccine
-    elif eventPlayer.currentPowerUp == 7:
-        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.GREEN, eventPlayer, 6)
-        playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.AQUA, eventPlayer.getPosition(), 50)
-        smallMessage(eventPlayer, "Your infection is reduced!")
-        getPlayersInRadius(eventPlayer, 3, Team.1, LosCheck.SURFACES).infectionLvl -= 1.5
-    #Sentry Turret
-    elif eventPlayer.currentPowerUp == 8:
-        startRule(sentryTurret)
-    #Cloaking Device
-    elif eventPlayer.currentPowerUp == 9:
-        startRule(cloakingDevice)
-    #Super Nano
-    elif eventPlayer.currentPowerUp == 10:
-        startRule(superNano)
-    #Bounce Pad
-    elif eventPlayer.currentPowerUp == 11:
-        startRule(bouncePad)
-    #Ultimate Charger
-    elif eventPlayer.currentPowerUp == 12:
-        startRule(ultimateCharger)
-    #Stun
-    elif eventPlayer.currentPowerUp == 13:
-        #Check if their are targets nearby and in view angle
-        if getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).any(lambda player: distance(eventPlayer.getPosition(), player.getPosition()) < 15 * eventPlayer.size and angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), player.getEyePosition())) < 45):
-            startRule(stun)
-        else:
-            smallMessage(eventPlayer, "Aim at a nearby target")
-            return
+    switch eventPlayer.currentPowerUp:
+        #Cure
+        case 1:
+            playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, Color.GREEN, eventPlayer, 1)
+            eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 1)
+            if eventPlayer.infectionLvl > 0:
+                eventPlayer.infected = false
+                eventPlayer.infectionLvl = 0
+            eventPlayer.startHealingOverTime(eventPlayer, 5, 20)
+            smallMessage(eventPlayer, "You are cured!")
+            playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.AQUA, eventPlayer.getPosition(), 50)
+            break
+        #Instant Revive
+        case 2:
+            if len(getDeadPlayers(Team.1).filter(lambda player: distance(eventPlayer.getPosition(), player.getPosition()) <= reviveRadius)) == 0:
+                return
+            startRule(instantRevive)
+            break
+        #Force Field
+        case 3:
+            startRule(playerForceField)
+            break
+        #No Cooldowns
+        case 4:
+            startRule(noCooldowns)
+            break
+        #Air Strike
+        case 5:
+            if distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 41, null, getAllPlayers(), false)) > 40:
+                smallMessage(eventPlayer, "Aim at a surface to call in an aistrike")
+                return
+            startRule(airStrike)
+            break
+        #Beacon of Healing
+        case 6:
+            startRule(healBeacon)
+            break
+        #Vaccine
+        case 7:
+            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.GREEN, eventPlayer, 6)
+            playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.AQUA, eventPlayer.getPosition(), 50)
+            smallMessage(eventPlayer, "Your infection is reduced!")
+            getPlayersInRadius(eventPlayer, 3, Team.1, LosCheck.SURFACES).infectionLvl -= 1.5
+            break
+        #Sentry Turret
+        case 8:
+            startRule(sentryTurret)
+            break
+        #Cloaking Device
+        case 9:
+            startRule(cloakingDevice)
+            break
+        #Super Nano
+        case 10:
+            startRule(superNano)
+            break
+        #Bounce Pad
+        case 11:
+            startRule(bouncePad)
+            break
+        #Ultimate Charger
+        case 12:
+            startRule(ultimateCharger)
+            break
+        #Stun
+        case 13:
+            #Check if their are targets nearby and in view angle
+            if getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).any(lambda player: distance(eventPlayer.getPosition(), player.getPosition()) < 15 * eventPlayer.size and angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), player.getEyePosition())) < 45):
+                startRule(stun)
+            else:
+                smallMessage(eventPlayer, "Aim at a nearby target")
+                return
+            break
     eventPlayer.currentPowerUp = 0

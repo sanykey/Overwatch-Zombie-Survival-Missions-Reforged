@@ -1,7 +1,21 @@
 #!mainFile "main.opy"
 
-subroutine biowasteAssignment
-subroutine biowasteOutput
+
+
+macro biowasteOutputMacro():
+    biowasteOutput0 = queuedBioType[0]
+    del queuedBioType[0]
+    if len(queuedBioType) == 0:
+        queuedBioType = random.shuffle([0, 1, 2])
+
+
+macro biowasteAssignmentMacro():
+    biowasteTypes.append(biowasteInput0)
+    objectiveResourcePositions.append(biowasteInput1)
+    createEffect(getAllPlayers(), Effect.ORB, biowasteColorLookUp[biowasteInput0], biowasteInput1, 1, EffectReeval.NONE)
+    biowasteEffects.append(getLastCreatedEntity())
+    createInWorldText(getAllPlayers(), biowasteTextLookUp[biowasteInput0], biowasteInput1 + vect(0, 0.75, 0), 1, Clip.NONE, WorldTextReeval.NONE)
+    biowasteString.append(getLastCreatedText())
 
 
 rule "BIOMORPHING GOAL START":
@@ -65,7 +79,7 @@ rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS":
         biowasteLocal1 = getPlayers(Team.2)
         biowasteLocal1 = biowasteLocal1[biowasteLocal0]
         biowasteLocal1.playerObjectiveResourceValue = amountPerResource
-        biowasteOutput()
+        biowasteOutputMacro()
         biowasteLocal1.biowasteType = biowasteOutput0
     else:
         if len(availablePowerups) > 0:
@@ -143,26 +157,6 @@ rule "PLAYER DELIVERS RESOURCE VALUE":
     playersOnObjective.remove(eventPlayer)
 
 
-def biowasteAssignment():
-    @Name "biowasteAssignment"
-    
-    biowasteTypes.append(biowasteInput0)
-    objectiveResourcePositions.append(biowasteInput1)
-    createEffect(getAllPlayers(), Effect.ORB, biowasteColorLookUp[biowasteInput0], biowasteInput1, 1, EffectReeval.NONE)
-    biowasteEffects.append(getLastCreatedEntity())
-    createInWorldText(getAllPlayers(), biowasteTextLookUp[biowasteInput0], biowasteInput1 + vect(0, 0.75, 0), 1, Clip.NONE, WorldTextReeval.NONE)
-    biowasteString.append(getLastCreatedText())
-
-
-def biowasteOutput():
-    @Name "biowasteOutput"
-    
-    biowasteOutput0 = queuedBioType[0]
-    del queuedBioType[0]
-    if len(queuedBioType) == 0:
-        queuedBioType = random.shuffle([0, 1, 2])
-
-
 rule "BIOWASTE HOLDER DIES, ORB IS QUEUED AND RESOURCE AMOUNT REMOVED":
     @Event playerDied
     @Condition objectiveTypes[0] == 3
@@ -181,7 +175,7 @@ rule "BIOWASTE MANAGEMENT":
     while len(deferredType) > 0:
         biowasteInput0 = deferredType[0]
         biowasteInput1 = deferredPositions[0]
-        biowasteAssignment()
+        biowasteAssignmentMacro()
         del deferredType[0]
         del deferredPositions[0]
         wait(0.15)

@@ -1,8 +1,31 @@
 #!mainFile "main.opy"
 
-subroutine playerObjectiveEntityManagement
 subroutine teleportToClosestPlayer
 subroutine updateUsers
+
+
+macro playerObjectiveEntityManagementMacro():
+    if eventPlayer.objectiveValue != objectiveValue or len(objectivePositions) == 1:
+        eventPlayer.objectiveValue = objectiveTypes[0]
+        if eventPlayer.getTeam() == Team.1:
+            #Destroy all current objective effects and texts
+            for eventPlayer.entityCount in range(len(eventPlayer.generalPlayerBotEntities)):
+                destroyIcon(eventPlayer.generalPlayerBotEntities[eventPlayer.entityCount])
+                wait()
+            eventPlayer.generalPlayerBotEntities = []
+        else:
+            #Destroy all current objective effects and texts
+            for eventPlayer.entityCount in range(len(eventPlayer.botResourceEntity)):
+                destroyIcon(eventPlayer.botResourceEntity[eventPlayer.entityCount])
+                wait()
+            eventPlayer.botResourceEntity = []
+        if eventPlayer.objectiveValue == 3:
+            #Player carrying resources icon
+            createIcon(getAllPlayers().filter(lambda player: eventPlayer.isAlive() and player != eventPlayer and eventPlayer.playerObjectiveResourceValue > 0), eventPlayer, Icon.RECYCLE, IconReeval.VISIBILITY_POSITION_AND_COLOR, biowasteColorLookUp[eventPlayer.biowasteType] if eventPlayer.getTeam() == Team.1 else Color.WHITE)
+            if eventPlayer.getTeam() == Team.1:
+                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+            else:
+                eventPlayer.botResourceEntity.append(getLastCreatedEntity())
 
 
 rule "PLAYER INITIALIZATION":
@@ -297,7 +320,7 @@ rule "OBJECTIVE CHANGES AND PLAYER ENTITIES UPDATE":
     @Condition eventPlayer.hasSpawned() == true
     @Condition (eventPlayer.objectiveValue != objectiveValue or len(objectivePositions) == 1) == true
     
-    playerObjectiveEntityManagement()
+    playerObjectiveEntityManagementMacro()
 
 
 rule "PLAYER TARGET (ADD)":
@@ -327,32 +350,6 @@ rule "PLAYER TARGET (REMOVE)":
     playerTargetList.remove(eventPlayer)
     if ruleCondition:
         loop()
-
-
-def playerObjectiveEntityManagement():
-    @Name "playerObjectiveEntityMangement"
-    
-    if eventPlayer.objectiveValue != objectiveValue or len(objectivePositions) == 1:
-        eventPlayer.objectiveValue = objectiveTypes[0]
-        if eventPlayer.getTeam() == Team.1:
-            #Destroy all current objective effects and texts
-            for eventPlayer.entityCount in range(len(eventPlayer.generalPlayerBotEntities)):
-                destroyIcon(eventPlayer.generalPlayerBotEntities[eventPlayer.entityCount])
-                wait()
-            eventPlayer.generalPlayerBotEntities = []
-        else:
-            #Destroy all current objective effects and texts
-            for eventPlayer.entityCount in range(len(eventPlayer.botResourceEntity)):
-                destroyIcon(eventPlayer.botResourceEntity[eventPlayer.entityCount])
-                wait()
-            eventPlayer.botResourceEntity = []
-        if eventPlayer.objectiveValue == 3:
-            #Player carrying resources icon
-            createIcon(getAllPlayers().filter(lambda player: eventPlayer.isAlive() and player != eventPlayer and eventPlayer.playerObjectiveResourceValue > 0), eventPlayer, Icon.RECYCLE, IconReeval.VISIBILITY_POSITION_AND_COLOR, biowasteColorLookUp[eventPlayer.biowasteType] if eventPlayer.getTeam() == Team.1 else Color.WHITE)
-            if eventPlayer.getTeam() == Team.1:
-                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
-            else:
-                eventPlayer.botResourceEntity.append(getLastCreatedEntity())
 
 
 def teleportToClosestPlayer():

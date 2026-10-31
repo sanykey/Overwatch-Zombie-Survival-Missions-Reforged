@@ -31,105 +31,113 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
     else:
         chaseAtRate(eventPlayer.infectionLvl, 0, 0.015 if eventPlayer.infectionLvl > 0 else 0)
     #Laser Barricade
-    if eventPlayer.enhancementValues[0] == 3:
-        #Enhancement: Laser Barricade
-        hudText(eventPlayer, "Laser Barricade {0}{1}".format(iconString(Icon.DIAMOND), " {0}s".format(eventPlayer.enhancementValues[3]) if eventPlayer.enhancementValues[3] > 0 else []), " {0}HP".format(ceil(eventPlayer.enhancementChase1)) if eventPlayer.enhancementChase1 > 0 else [], "Hold [{0}] to place a barricade".format(inputBindingString(Button.MELEE)) if eventPlayer.enhancementValues[3] <= 0 else [], HudPosition.LEFT, 99, Color.RED if eventPlayer.enhancementValues[3] > 0 else Color.BLUE, Color.BLUE, Color.BLUE, HudReeval.VISIBILITY_STRING_AND_COLOR)
-        #Barricade placement visual
-        createBeam(eventPlayer.filter(lambda _: eventPlayer.isHoldingButton(Button.MELEE) and eventPlayer.enhancementValues[3] <= 0 and distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) <= 30), Beam.BAD, worldVector(vect(-0.5 * eventPlayer.enhancementValues[2], 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), worldVector(vect(0.5 * eventPlayer.enhancementValues[2], 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), Color.GREEN, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        #Barricade bottom
-        createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementValues[4] != null), Beam.BAD, eventPlayer.enhancementValues[5], eventPlayer.enhancementValues[6], Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        #Barricade side 1
-        createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementChase1 > 0), Beam.BAD, eventPlayer.enhancementValues[5] + vect(0, eventPlayer.enhancementValues[1], 0), eventPlayer.enhancementValues[5], Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        #Barricade side 2
-        createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementChase1 > 0), Beam.BAD, eventPlayer.enhancementValues[6], eventPlayer.enhancementValues[6] + vect(0, eventPlayer.enhancementValues[1], 0), Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        #Barricade top
-        createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementChase1 > 0), Beam.BAD, eventPlayer.enhancementValues[6] + vect(0, eventPlayer.enhancementValues[1], 0), eventPlayer.enhancementValues[5] + vect(0, eventPlayer.enhancementValues[1], 0), Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        #Barricade health
-        createInWorldText(getAllPlayers() if eventPlayer.enhancementChase1 > 0 else null, "{0}HP".format(ceil(eventPlayer.enhancementChase1)), eventPlayer.enhancementValues[4] + vect(0, 1, 0), 1.5, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.BLUE)
-        #Barrier height
-        eventPlayer.enhancementValues[1] = 2
-        #Barrier width
-        eventPlayer.enhancementValues[2] = 5
-    #Brain Killer
-    elif eventPlayer.enhancementValues[0] == 4:
-        #Enhancement: Brain Killer
-        hudHeader(eventPlayer, "Brain Killer {0}".format(iconString(Icon.SKULL)), HudPosition.LEFT, 99, Color.RED, HudReeval.STRING)
-    #Pyrotechnic
-    elif eventPlayer.enhancementValues[0] == 5:
-        #Enhancement: Pyrotechnic
-        hudHeader(eventPlayer, "Pyrotechnic {0}".format(iconString(Icon.FIRE)), HudPosition.LEFT, 99, Color.ORANGE if eventPlayer.enhancementValues[1] else Color.RED, HudReeval.STRING_AND_COLOR)
-        #Pyro Active
-        eventPlayer.enhancementValues[1] = true
-        #Special enhancement color
-        eventPlayer.enhancementValues[2] = rgb(252, 78, 3)
-        #Fire Fuel
-        eventPlayer.enhancementChase1 = 100
-        eventPlayer.enhancementChase2 = []
-    #Plague Doctor
-    elif eventPlayer.enhancementValues[0] == 6:
-        #Enhancement: Plague Doctor
-        hudText(eventPlayer, "Plague Doctor {0}".format(iconString(Icon.PLUS)), null, "Infection Reduced: {0} lvls".format(eventPlayer.enhancementValues[1]), HudPosition.LEFT, 99, Color.GREEN, Color.GREEN, Color.GREEN, HudReeval.STRING)
-        #Plague doctor does 100 + x% more healing to infected players
-        startHealingModification(getPlayers(Team.1).filter(lambda player: player.infected), eventPlayer, 150, HealingReeval.RECEIVERS_AND_HEALERS)
-        eventPlayer.enhancementValues[1] = 0
-    #Born to Battle
-    elif eventPlayer.enhancementValues[0] == 7:
-        #Enhancement: Born to Battle
-        hudText(eventPlayer, "Born to Battle {0}".format(iconString(Icon.BOLT)), null, iconString(Icon.CHECKMARK) if eventPlayer.enhancementValues[1] else [], HudPosition.LEFT, 99, Color.GRAY, Color.GRAY, Color.GRAY, HudReeval.STRING)
-        eventPlayer.enhancementValues[1] = false
-    #Charge Battery
-    elif eventPlayer.enhancementValues[0] == 8:
-        #Enhancement: Charge Battery
-        hudText(eventPlayer, "Charge Battery {0}".format(iconString(Icon.SPIRAL) if eventPlayer.enhancementValues[4] <= 0 else "{0}s".format(ceil(eventPlayer.enhancementValues[4]))), null, "Hold [{0}]".format(inputBindingString(Button.MELEE)) if eventPlayer.enhancementValues[4] <= 0 else [], HudPosition.LEFT, 99, rgb(236, 206, 44) if eventPlayer.enhancementValues[4] <= 0 else Color.RED, rgb(236, 206, 44), rgb(236, 206, 44) if eventPlayer.enhancementValues[4] <= 0 else Color.RED, HudReeval.STRING_AND_COLOR)
-        #Battery placement visual
-        createEffect(eventPlayer.filter(lambda _: eventPlayer.isHoldingButton(Button.MELEE) and eventPlayer.enhancementValues[4] <= 0 and distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) <= 30), Effect.RING, rgb(0, 255, 0, 204), worldVector(vect(0, 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), 0.45, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        #Battery ring
-        createEffect(getAllPlayers().filter(lambda _: eventPlayer.enhancementValues[1] != 0), Effect.RING, Color.YELLOW, eventPlayer.enhancementValues[1], 0.45, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        #Battery sphere
-        createEffect(getAllPlayers().filter(lambda _: eventPlayer.enhancementValues[1] != 0 and eventPlayer.enhancementValues[2] <= 0), Effect.ORB, Color.GRAY, eventPlayer.enhancementValues[1] + (vect(0, 0.5 + sin(getTotalTimeElapsed() * 1) * 0.15, 0)), 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        #Charge battery text
-        createInWorldText(getAllPlayers().filter(lambda player: eventPlayer.enhancementValues[1] != 0 and eventPlayer.enhancementValues[2] <= 0 and distance(player.getPosition(), eventPlayer.enhancementValues[1]) < 6), "Charge Battery", eventPlayer.enhancementValues[1] + (vect(0, 0.5 + sin(getTotalTimeElapsed() * 1) * 0.15, 0)), 1, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING)
-        #Charge battery progress bar
-        createProgressBarInWorldText(getAllPlayers().filter(lambda player: eventPlayer.enhancementValues[1] != 0 and eventPlayer.enhancementValues[2] > 0 and distance(player.getPosition(), eventPlayer.enhancementValues[1]) < 6), 100 - eventPlayer.enhancementValues[2] / eventPlayer.enhancementValues[3] * 100, [], eventPlayer.enhancementValues[1] + vect(0, 0.4, 0), 0.5, Clip.SURFACES, Color.WHITE, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_POSITION_AND_VALUES)
-        eventPlayer.enhancementValues[3] = 10
-    #Hitchhiker
-    elif eventPlayer.enhancementValues[0] == 9:
-        #Enhancement Selection: Hitchhiker
-        hudText(eventPlayer, "Hitchhiker {0}".format(iconString(Icon.FLAG)), null, "Press [{0}] to dismount".format(inputBindingString(Button.CROUCH)) if eventPlayer.attached else "Press [{0}] to attach".format(inputBindingString(Button.CROUCH)) if playerTargetList.exclude(eventPlayer).any(lambda x: not x.attached and distance(eventPlayer.getPosition(), x.getPosition()) < 2 * x.size) else [], HudPosition.LEFT, 99, Color.PURPLE, Color.PURPLE, Color.RED if eventPlayer.attached else Color.PURPLE, HudReeval.VISIBILITY_STRING_AND_COLOR)
-        #Shared Health Bar Rider
-        hudSubheader(eventPlayer.filter(lambda _: eventPlayer.attached), "Attached to {0} {1}".format(heroIcon(eventPlayer.enhancementValues[1].getHero()), eventPlayer.enhancementValues[1]), HudPosition.LEFT, 100, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING)
-        #Shared Health Bar Runner
-        hudSubheader(eventPlayer.enhancementValues[1].filter(lambda _: eventPlayer.attached), "{0} {1} is attached".format(heroIcon(eventPlayer.getHero()), eventPlayer), HudPosition.LEFT, 100, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING)
-        eventPlayer.enhancementValues[1] = 0
-        eventPlayer.enhancementValues[2] = 0
-        eventPlayer.enhancementValues[1].startGrantingAssistFor(eventPlayer)
-    #P.U.P.
-    elif eventPlayer.enhancementValues[0] == 10:
-        #Enhancement Selection: P.U.P.
-        hudHeader(eventPlayer, "P.U.P. {0}".format(iconString(Icon.HAPPY)), HudPosition.LEFT, 99, Color.BLUE if eventPlayer.enhancementValues[1] == Color.SKY_BLUE and eventPlayer.enhancementChase2 > 0 else eventPlayer.enhancementValues[1], HudReeval.VISIBILITY_STRING_AND_COLOR)
-        #Postion of P.U.P.
-        eventPlayer.enhancementChase1 = eventPlayer.getPosition() + vect(0, 200, 0)
-        #P.U.P. Default movment
-        chaseAtRate(eventPlayer.enhancementChase1, eventPlayer.getEyePosition() + directionTowards(eventPlayer.getEyePosition(), eventPlayer.enhancementChase1), abs(distance(eventPlayer.getEyePosition(), eventPlayer.enhancementChase1) - 1))
-        eventPlayer.enhancementChase2 = 0
-        #P.U.P. ability cooldown
-        chaseAtRate(eventPlayer.enhancementChase2, 0, 0 if eventPlayer.enhancementValues[2] else 1)
-        #P.U.P. visual
-        createEffect(getAllPlayers(), Effect.SPHERE, eventPlayer.enhancementValues[1], eventPlayer.enhancementChase1, 0.25)
-        #P.U.P. Beam
-        createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementValues[2] and eventPlayer.enhancementValues[3] != null), Beam.GOOD, eventPlayer.enhancementChase1, eventPlayer.enhancementValues[3], eventPlayer.enhancementValues[1])
-        #P.U.P using beam sound
-        createEffect(getAllPlayers().filter(lambda _: eventPlayer.enhancementValues[2]), Effect.BEACON_SOUND, Color.SKY_BLUE, eventPlayer.enhancementChase1, 200, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        #Freeze aura
-        createEffect(getAllPlayers().filter(lambda _: eventPlayer.enhancementValues[4]), Effect.BAD_AURA, Color.SKY_BLUE, eventPlayer.enhancementValues[3], eventPlayer.enhancementValues[3].size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        #Default color
-        eventPlayer.enhancementValues[1] = Color.SKY_BLUE
-        #Beam visibility
-        eventPlayer.enhancementValues[2] = false
-        #P.U.P. target null
-        eventPlayer.enhancementValues[3] = null
-        #Freeze aura visibility
-        eventPlayer.enhancementValues[4] = false
+    switch eventPlayer.enhancementValues[0]:
+        case 3:
+            #Enhancement: Laser Barricade
+            hudText(eventPlayer, "Laser Barricade {0}{1}".format(iconString(Icon.DIAMOND), " {0}s".format(eventPlayer.enhancementValues[3]) if eventPlayer.enhancementValues[3] > 0 else []), " {0}HP".format(ceil(eventPlayer.enhancementChase1)) if eventPlayer.enhancementChase1 > 0 else [], "Hold [{0}] to place a barricade".format(inputBindingString(Button.MELEE)) if eventPlayer.enhancementValues[3] <= 0 else [], HudPosition.LEFT, 99, Color.RED if eventPlayer.enhancementValues[3] > 0 else Color.BLUE, Color.BLUE, Color.BLUE, HudReeval.VISIBILITY_STRING_AND_COLOR)
+            #Barricade placement visual
+            createBeam(eventPlayer.filter(lambda _: eventPlayer.isHoldingButton(Button.MELEE) and eventPlayer.enhancementValues[3] <= 0 and distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) <= 30), Beam.BAD, worldVector(vect(-0.5 * eventPlayer.enhancementValues[2], 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), worldVector(vect(0.5 * eventPlayer.enhancementValues[2], 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), Color.GREEN, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            #Barricade bottom
+            createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementValues[4] != null), Beam.BAD, eventPlayer.enhancementValues[5], eventPlayer.enhancementValues[6], Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            #Barricade side 1
+            createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementChase1 > 0), Beam.BAD, eventPlayer.enhancementValues[5] + vect(0, eventPlayer.enhancementValues[1], 0), eventPlayer.enhancementValues[5], Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            #Barricade side 2
+            createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementChase1 > 0), Beam.BAD, eventPlayer.enhancementValues[6], eventPlayer.enhancementValues[6] + vect(0, eventPlayer.enhancementValues[1], 0), Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            #Barricade top
+            createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementChase1 > 0), Beam.BAD, eventPlayer.enhancementValues[6] + vect(0, eventPlayer.enhancementValues[1], 0), eventPlayer.enhancementValues[5] + vect(0, eventPlayer.enhancementValues[1], 0), Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            #Barricade health
+            createInWorldText(getAllPlayers() if eventPlayer.enhancementChase1 > 0 else null, "{0}HP".format(ceil(eventPlayer.enhancementChase1)), eventPlayer.enhancementValues[4] + vect(0, 1, 0), 1.5, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.BLUE)
+            #Barrier height
+            eventPlayer.enhancementValues[1] = 2
+            #Barrier width
+            eventPlayer.enhancementValues[2] = 5
+            break
+        #Brain Killer
+        case 4:
+            #Enhancement: Brain Killer
+            hudHeader(eventPlayer, "Brain Killer {0}".format(iconString(Icon.SKULL)), HudPosition.LEFT, 99, Color.RED, HudReeval.STRING)
+            break
+        #Pyrotechnic
+        case 5:
+            #Enhancement: Pyrotechnic
+            hudHeader(eventPlayer, "Pyrotechnic {0}".format(iconString(Icon.FIRE)), HudPosition.LEFT, 99, Color.ORANGE if eventPlayer.enhancementValues[1] else Color.RED, HudReeval.STRING_AND_COLOR)
+            #Pyro Active
+            eventPlayer.enhancementValues[1] = true
+            #Special enhancement color
+            eventPlayer.enhancementValues[2] = rgb(252, 78, 3)
+            #Fire Fuel
+            eventPlayer.enhancementChase1 = 100
+            eventPlayer.enhancementChase2 = []
+            break
+        #Plague Doctor
+        case 6:
+            #Enhancement: Plague Doctor
+            hudText(eventPlayer, "Plague Doctor {0}".format(iconString(Icon.PLUS)), null, "Infection Reduced: {0} lvls".format(eventPlayer.enhancementValues[1]), HudPosition.LEFT, 99, Color.GREEN, Color.GREEN, Color.GREEN, HudReeval.STRING)
+            #Plague doctor does 100 + x% more healing to infected players
+            startHealingModification(getPlayers(Team.1).filter(lambda player: player.infected), eventPlayer, 150, HealingReeval.RECEIVERS_AND_HEALERS)
+            eventPlayer.enhancementValues[1] = 0
+            break
+        #Born to Battle
+        case 7:
+            #Enhancement: Born to Battle
+            hudText(eventPlayer, "Born to Battle {0}".format(iconString(Icon.BOLT)), null, iconString(Icon.CHECKMARK) if eventPlayer.enhancementValues[1] else [], HudPosition.LEFT, 99, Color.GRAY, Color.GRAY, Color.GRAY, HudReeval.STRING)
+            eventPlayer.enhancementValues[1] = false
+            break
+        #Charge Battery
+        case 8:
+            #Enhancement: Charge Battery
+            hudText(eventPlayer, "Charge Battery {0}".format(iconString(Icon.SPIRAL) if eventPlayer.enhancementValues[4] <= 0 else "{0}s".format(ceil(eventPlayer.enhancementValues[4]))), null, "Hold [{0}]".format(inputBindingString(Button.MELEE)) if eventPlayer.enhancementValues[4] <= 0 else [], HudPosition.LEFT, 99, rgb(236, 206, 44) if eventPlayer.enhancementValues[4] <= 0 else Color.RED, rgb(236, 206, 44), rgb(236, 206, 44) if eventPlayer.enhancementValues[4] <= 0 else Color.RED, HudReeval.STRING_AND_COLOR)
+            #Battery placement visual
+            createEffect(eventPlayer.filter(lambda _: eventPlayer.isHoldingButton(Button.MELEE) and eventPlayer.enhancementValues[4] <= 0 and distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) <= 30), Effect.RING, rgb(0, 255, 0, 204), worldVector(vect(0, 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), 0.45, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            #Battery ring
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.enhancementValues[1] != 0), Effect.RING, Color.YELLOW, eventPlayer.enhancementValues[1], 0.45, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            #Battery sphere
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.enhancementValues[1] != 0 and eventPlayer.enhancementValues[2] <= 0), Effect.ORB, Color.GRAY, eventPlayer.enhancementValues[1] + (vect(0, 0.5 + sin(getTotalTimeElapsed() * 1) * 0.15, 0)), 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            #Charge battery text
+            createInWorldText(getAllPlayers().filter(lambda player: eventPlayer.enhancementValues[1] != 0 and eventPlayer.enhancementValues[2] <= 0 and distance(player.getPosition(), eventPlayer.enhancementValues[1]) < 6), "Charge Battery", eventPlayer.enhancementValues[1] + (vect(0, 0.5 + sin(getTotalTimeElapsed() * 1) * 0.15, 0)), 1, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING)
+            #Charge battery progress bar
+            createProgressBarInWorldText(getAllPlayers().filter(lambda player: eventPlayer.enhancementValues[1] != 0 and eventPlayer.enhancementValues[2] > 0 and distance(player.getPosition(), eventPlayer.enhancementValues[1]) < 6), 100 - eventPlayer.enhancementValues[2] / eventPlayer.enhancementValues[3] * 100, [], eventPlayer.enhancementValues[1] + vect(0, 0.4, 0), 0.5, Clip.SURFACES, Color.WHITE, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_POSITION_AND_VALUES)
+            eventPlayer.enhancementValues[3] = 10
+            break
+        #Hitchhiker
+        case 9:
+            #Enhancement Selection: Hitchhiker
+            hudText(eventPlayer, "Hitchhiker {0}".format(iconString(Icon.FLAG)), null, "Press [{0}] to dismount".format(inputBindingString(Button.CROUCH)) if eventPlayer.attached else "Press [{0}] to attach".format(inputBindingString(Button.CROUCH)) if playerTargetList.exclude(eventPlayer).any(lambda x: not x.attached and distance(eventPlayer.getPosition(), x.getPosition()) < 2 * x.size) else [], HudPosition.LEFT, 99, Color.PURPLE, Color.PURPLE, Color.RED if eventPlayer.attached else Color.PURPLE, HudReeval.VISIBILITY_STRING_AND_COLOR)
+            #Shared Health Bar Rider
+            hudSubheader(eventPlayer.filter(lambda _: eventPlayer.attached), "Attached to {0} {1}".format(heroIcon(eventPlayer.enhancementValues[1].getHero()), eventPlayer.enhancementValues[1]), HudPosition.LEFT, 100, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING)
+            #Shared Health Bar Runner
+            hudSubheader(eventPlayer.enhancementValues[1].filter(lambda _: eventPlayer.attached), "{0} {1} is attached".format(heroIcon(eventPlayer.getHero()), eventPlayer), HudPosition.LEFT, 100, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING)
+            eventPlayer.enhancementValues[1] = 0
+            eventPlayer.enhancementValues[2] = 0
+            eventPlayer.enhancementValues[1].startGrantingAssistFor(eventPlayer)
+            break
+        #P.U.P.
+        case 10:
+            #Enhancement Selection: P.U.P.
+            hudHeader(eventPlayer, "P.U.P. {0}".format(iconString(Icon.HAPPY)), HudPosition.LEFT, 99, Color.BLUE if eventPlayer.enhancementValues[1] == Color.SKY_BLUE and eventPlayer.enhancementChase2 > 0 else eventPlayer.enhancementValues[1], HudReeval.VISIBILITY_STRING_AND_COLOR)
+            #Postion of P.U.P.
+            eventPlayer.enhancementChase1 = eventPlayer.getPosition() + vect(0, 200, 0)
+            #P.U.P. Default movment
+            chaseAtRate(eventPlayer.enhancementChase1, eventPlayer.getEyePosition() + directionTowards(eventPlayer.getEyePosition(), eventPlayer.enhancementChase1), abs(distance(eventPlayer.getEyePosition(), eventPlayer.enhancementChase1) - 1))
+            eventPlayer.enhancementChase2 = 0
+            #P.U.P. ability cooldown
+            chaseAtRate(eventPlayer.enhancementChase2, 0, 0 if eventPlayer.enhancementValues[2] else 1)
+            #P.U.P. visual
+            createEffect(getAllPlayers(), Effect.SPHERE, eventPlayer.enhancementValues[1], eventPlayer.enhancementChase1, 0.25)
+            #P.U.P. Beam
+            createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementValues[2] and eventPlayer.enhancementValues[3] != null), Beam.GOOD, eventPlayer.enhancementChase1, eventPlayer.enhancementValues[3], eventPlayer.enhancementValues[1])
+            #P.U.P using beam sound
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.enhancementValues[2]), Effect.BEACON_SOUND, Color.SKY_BLUE, eventPlayer.enhancementChase1, 200, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            #Freeze aura
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.enhancementValues[4]), Effect.BAD_AURA, Color.SKY_BLUE, eventPlayer.enhancementValues[3], eventPlayer.enhancementValues[3].size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            #Default color
+            eventPlayer.enhancementValues[1] = Color.SKY_BLUE
+            #Beam visibility
+            eventPlayer.enhancementValues[2] = false
+            #P.U.P. target null
+            eventPlayer.enhancementValues[3] = null
+            #Freeze aura visibility
+            eventPlayer.enhancementValues[4] = false
     eventPlayer.enhancementValues[11] = 0
     eventPlayer.enhancementValues[12] = false
 

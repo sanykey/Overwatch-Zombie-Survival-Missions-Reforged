@@ -1,6 +1,12 @@
 #!mainFile "main.opy"
 
-subroutine powerUpAssignment
+
+
+macro powerUpAssignmentMacro():
+    #Names/colors follow item IDs 1-13; effect and text positions keep separate indices.
+    if powerUpIDs[len(powerUpEffect)] >= 1 and powerUpIDs[len(powerUpEffect)] <= 13:
+        createEffect(getAllPlayers(), Effect.ORB, [Color.GREEN, Color.YELLOW, Color.BLUE, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.BLUE, Color.RED, Color.PURPLE, Color.RED, Color.WHITE][powerUpIDs[len(powerUpEffect)] - 1], powerUpPositions[len(powerUpEffect)], 1, EffectReeval.VISIBILITY)
+        createInWorldText(getAllPlayers(), ["CURE", "Revive", "Force Field", "No Cooldowns", "Air Strike", "Beacon of Healing", "Vaccine", "Sentry Turret", "Cloaking Device", "Super Nano", "Bounce Pad", "Ultimate Charger", "Stun"][powerUpIDs[len(powerUpEffect)] - 1], powerUpPositions[len(powerUpText)], 1, Clip.SURFACES, WorldTextReeval.VISIBILITY)
 
 
 rule "POWER UP EFFECT/TEXT MANAGEMENT":
@@ -8,7 +14,7 @@ rule "POWER UP EFFECT/TEXT MANAGEMENT":
     @Condition len(powerUpPositions) > len(powerUpEffect)
     @Condition len(availablePowerups) > 0
     
-    powerUpAssignment()
+    powerUpAssignmentMacro()
     powerUpEffect.append(getLastCreatedEntity())
     powerUpText.append(getLastCreatedText())
     if ruleCondition:
@@ -92,12 +98,3 @@ rule "PLAYER DROPS POWER UP (DEATH)":
     wait()
     eventPlayer.currentPowerUp = 0
     playEffect(eventPlayer, DynamicEffect.DEBUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.getPosition(), 25)
-
-
-def powerUpAssignment():
-    @Name "powerUpAssignment"
-
-    #Names/colors follow item IDs 1-13; effect and text positions keep separate indices.
-    if powerUpIDs[len(powerUpEffect)] >= 1 and powerUpIDs[len(powerUpEffect)] <= 13:
-        createEffect(getAllPlayers(), Effect.ORB, [Color.GREEN, Color.YELLOW, Color.BLUE, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.BLUE, Color.RED, Color.PURPLE, Color.RED, Color.WHITE][powerUpIDs[len(powerUpEffect)] - 1], powerUpPositions[len(powerUpEffect)], 1, EffectReeval.VISIBILITY)
-        createInWorldText(getAllPlayers(), ["CURE", "Revive", "Force Field", "No Cooldowns", "Air Strike", "Beacon of Healing", "Vaccine", "Sentry Turret", "Cloaking Device", "Super Nano", "Bounce Pad", "Ultimate Charger", "Stun"][powerUpIDs[len(powerUpEffect)] - 1], powerUpPositions[len(powerUpText)], 1, Clip.SURFACES, WorldTextReeval.VISIBILITY)

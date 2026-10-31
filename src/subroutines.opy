@@ -6,259 +6,213 @@ subroutine enableDisableAbilities
 subroutine setDifficulty
 subroutine botRespawnInitialization
 subroutine objectivesManagement
-subroutine globalObjectiveEntityManagement
-subroutine botEntityManagement
-subroutine mutations 
-subroutine botStatManagement
 subroutine selectTarget
 subroutine restoreDefaultFacingMovement
 subroutine setPrematchTimer
 subroutine explosionSequence
-subroutine minibossMutation
 subroutine illariUlt
 subroutine abilityPlacement
 
 
-def setDifficulty():
-    @Name "setDifficulty"
-    
-    difficultySetting = len(getPlayers(Team.1).filter(lambda player: player.hasSpawned()))
-    #Difficulty: Insanity
-    if challengeSetting >= 4:
-        #Bot Health Values
-        botHealthValues = numbersList.slice(NL_BOT_HEALTH_INSANITY_OFFSET, NL_BOT_HEALTH_INSANITY_LEN)
-        #Bot bite damage
-        biteDamages = numbersList.slice(NL_BITE_DAMAGE_INSANITY_OFFSET, NL_BITE_DAMAGE_INSANITY_LEN)
-        #Bot bite durations
-        biteDurations = numbersList.slice(NL_BITE_DURATIONS_INSANITY_OFFSET, NL_BITE_DURATIONS_INSANITY_LEN)
-        #Bot throttle speeds
-        throttleSpeeds = []
-        for I in range(21):
-            throttleSpeeds.append(1)
-        #Bot damage dealt
-        damageDealt = numbersList.slice(NL_DAMAGE_DEALT_INSANITY_OFFSET, NL_DAMAGE_DEALT_INSANITY_LEN)
-    else:
-        #Message does not play if server is not 70 seconds old, this is a bad fix but I'm struggling to find a simple one.
-        if getTotalTimeElapsed() < 100:
-            goto lbl_0
-        smallMessage(getAllPlayers(), " Difficulty adjusted for player count, change affects new zombies. ")
-        lbl_0:
-        #Shared HP for 1-4 players; only Winston (index 18) changes below.
-        botHealthValues = numbersList.slice(NL_BOT_HEALTH_BASE_OFFSET, NL_BOT_HEALTH_BASE_LEN)
-        #Shared bite durations for 3+ players; 1 and 2 players override them.
-        biteDurations = numbersList.slice(NL_BITE_DURATIONS_BASE_OFFSET, NL_BITE_DURATIONS_BASE_LEN)
-        #Difficulty: 1 Player "Normal"
-        if difficultySetting == 1:
-            #Bot bite damage
-            biteDamages = numbersList.slice(NL_BITE_DAMAGE_NORMAL_OFFSET, NL_BITE_DAMAGE_NORMAL_LEN)
-            #Bot bite durations
-            biteDurations = numbersList.slice(NL_BITE_DURATIONS_NORMAL_OFFSET, NL_BITE_DURATIONS_NORMAL_LEN)
-            #Bot throttle speeds
-            throttleSpeeds = numbersList.slice(NL_THROTTLE_SPEEDS_NORMAL_OFFSET, NL_THROTTLE_SPEEDS_NORMAL_LEN)
-            #Bot damage dealt
-            damageDealt = numbersList.slice(NL_DAMAGE_DEALT_NORMAL_OFFSET, NL_DAMAGE_DEALT_NORMAL_LEN)
-        #Difficulty: 2 Player "Hard"
-        elif difficultySetting == 2:
-            #Bot Health Values
-            botHealthValues[18] = 750
-            #Bot bite damage
-            biteDamages = numbersList.slice(NL_BITE_DAMAGE_HARD_OFFSET, NL_BITE_DAMAGE_HARD_LEN)
-            #Bot bite durations
-            biteDurations = numbersList.slice(NL_BITE_DURATIONS_HARD_OFFSET, NL_BITE_DURATIONS_HARD_LEN)
-            #Bot throttle speeds
-            throttleSpeeds = numbersList.slice(NL_THROTTLE_SPEEDS_HARD_OFFSET, NL_THROTTLE_SPEEDS_HARD_LEN)
-            #Bot damage dealt
-            damageDealt = numbersList.slice(NL_DAMAGE_DEALT_HARD_OFFSET, NL_DAMAGE_DEALT_HARD_LEN)
-        #Difficulty: 5+ Player "Legendary"
-        elif difficultySetting >= 5:
-            #Bot Health Values
-            botHealthValues = numbersList.slice(NL_BOT_HEALTH_LEGENDARY_OFFSET, NL_BOT_HEALTH_LEGENDARY_LEN)
-            #Bot bite damage
-            biteDamages = numbersList.slice(NL_BITE_DAMAGE_LEGENDARY_OFFSET, NL_BITE_DAMAGE_LEGENDARY_LEN)
-            #Bot throttle speeds
-            throttleSpeeds = numbersList.slice(NL_THROTTLE_SPEEDS_LEGENDARY_OFFSET, NL_THROTTLE_SPEEDS_LEGENDARY_LEN)
-            #Bot damage dealt
-            damageDealt = numbersList.slice(NL_DAMAGE_DEALT_LEGENDARY_OFFSET, NL_DAMAGE_DEALT_LEGENDARY_LEN)
-        #Difficulty: 3-4 Player "Expert"
-        else:
-            #Bot Health Values
-            botHealthValues[18] = 1000
-            #Bot bite damage
-            biteDamages = numbersList.slice(NL_BITE_DAMAGE_EXPERT_OFFSET, NL_BITE_DAMAGE_EXPERT_LEN)
-            #Bot throttle speeds
-            throttleSpeeds = numbersList.slice(NL_THROTTLE_SPEEDS_EXPERT_OFFSET, NL_THROTTLE_SPEEDS_EXPERT_LEN)
-            #Bot damage dealt
-            damageDealt = numbersList.slice(NL_DAMAGE_DEALT_EXPERT_OFFSET, NL_DAMAGE_DEALT_EXPERT_LEN)
+macro minibossMutationMacro():
+    miniBoss.append(eventPlayer)
+    eventPlayer.startForcingHero(random.choice([Hero.REINHARDT, Hero.WRECKING_BALL, Hero.JUNKER_QUEEN, Hero.DOOMFIST, Hero.KIRIKO, Hero.MAUGA, Hero.HAZARD, Hero.REAPER]))
+    if zombieSetting == 6:
+        eventPlayer.startForcingHero(random.choice([Hero.REINHARDT, Hero.WRECKING_BALL]))
+    eventPlayer.health = 2500
+    eventPlayer.size *= 1.55
+    eventPlayer.startForcingOutlineFor(getAllPlayers(), true, Color.ORANGE)
+    eventPlayer.startForcingName("Contestor")
+    #Skull Icon
+    createIcon(getAllPlayers().filter(lambda _: eventPlayer.initializing == false and eventPlayer in bosses == false), eventPlayer.getEyePosition() + Vector.UP, Icon.SKULL, IconReeval.VISIBILITY_AND_POSITION, Color.ORANGE)
+    eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
 
 
-def setPrematchTimer():
-    @Name "setPrematchTimer"
-    
-    #Cancel if hidden timer has not been set
-    if not chase1:
-        return
-    #Voting in progress
-    if voting:
-        #Event player is voting
-        if eventPlayer.playerMenuStatus[1] == 1:
-            #Set match time to hidden timer
-            setMatchTime(chase1)
-        #Event Player is not voting
-        else:
-            #All players are finished voting
-            if getMatchTime() > 5 + votingEndTime and ((len(getPlayers(Team.1).filter(lambda player: player.playerMenuStatus[1] == 0 and player.playerMenuStatus[0] > 0))) == getNumberOfPlayers(Team.1)):
-                setMatchTime(5 + votingEndTime)
-            elif getMatchTime() > 20 + votingEndTime and ((len(getPlayers(Team.1).filter(lambda player: player.playerMenuStatus[1] == 0 and player.playerMenuStatus[0] > 0))) == len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus))):
-                setMatchTime(20 + votingEndTime)
-    #Voting complete
-    else:
-        #Event Player deselects hero
-        if eventPlayer.playerMenuStatus[0] < 2:
-            setMatchTime(chase1)
-        else:
-            if getMatchTime() > 10 and len(getPlayers(Team.1).filter(lambda player: player.playerMenuStatus[0] == 2)) == getNumberOfPlayers(Team.1):
-                setMatchTime(15)
-                wait()
-                setMatchTime(10)
-            elif getMatchTime() > 20 and len(getPlayers(Team.1).filter(lambda player: player.playerMenuStatus[0] == 2)) == len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus)):
-                setMatchTime(20)
-
-
-def enableDisableAbilities():
-    @Name "enableDisableAbilities"
-    
-    if specialGameModeSetup:
-        eventPlayer.disableHeroHud()
-        eventPlayer.setPrimaryFireEnabled(false)
-        eventPlayer.setSecondaryFireEnabled(false)
-        eventPlayer.setAbility1Enabled(false)
-        eventPlayer.setAbility2Enabled(false)
-        eventPlayer.setUltEnabled(false)
-        eventPlayer.setMeleeEnabled(false)
-    else:
+macro botStatManagementMacro():
+    eventPlayer.biteDamage = biteDamages[botHeros.index(eventPlayer.getHero())]
+    #Re-calibrate bite damage
+    eventPlayer.biteDamage *= 100 / damageDealt[botHeros.index(eventPlayer.getHero())]
+    eventPlayer.biteDuration = biteDurations[botHeros.index(eventPlayer.getHero())]
+    #Range from 0 to 1 in terms of throttle
+    eventPlayer.botThrottleSpeed = throttleSpeeds[botHeros.index(eventPlayer.getHero())]
+    eventPlayer.damageDealt = damageDealt[botHeros.index(eventPlayer.getHero())] / 100
+    eventPlayer.setDamageDealt(eventPlayer.damageDealt * 100)
+    eventPlayer.setDamageReceived(100)
+    eventPlayer.movementSpeed = 1
+    eventPlayer.setMoveSpeed(eventPlayer.movementSpeed * 100 + ((len(getDeadPlayers(Team.1).filter(lambda player: player.deathTimer <= 0))) * 3))
+    eventPlayer.setJumpVerticalSpeed(100)
+    eventPlayer.setHealingReceived(100)
+    eventPlayer.setProjectileSpeed(100)
+    eventPlayer.setProjectileGravity(100)
+    eventPlayer.knockbackRecieved = 1
+    eventPlayer.setKnockbackReceived(100)
+    if eventPlayer.getHero() == Hero.REINHARDT:
+        eventPlayer.knockbackRecieved = 0.7
+        eventPlayer.setKnockbackReceived(100 * eventPlayer.knockbackRecieved)
+    elif eventPlayer.getHero() == Hero.MERCY:
+        eventPlayer.setProjectileSpeed(75 if eventPlayer in bosses else 20)
+    elif eventPlayer.getHero() == Hero.ILLARI:
+        eventPlayer.setKnockbackDealt(25)
+    elif eventPlayer.getHero() == Hero.WINSTON:
+        eventPlayer.size *= 0.7
+        eventPlayer.chase1 = 2
+        eventPlayer.startScalingBarriers(eventPlayer.size)
+    elif eventPlayer.getHero() == Hero.ANA or eventPlayer.getHero() == Hero.KIRIKO:
+        eventPlayer.setProjectileGravity(500)
+    elif eventPlayer.getHero() == Hero.SIGMA:
+        eventPlayer.setProjectileSpeed(100 * eventPlayer.size * 0.5)
         eventPlayer.setPrimaryFireEnabled(true)
-        eventPlayer.setSecondaryFireEnabled(true)
-        eventPlayer.setAbility1Enabled(true)
-        eventPlayer.setAbility2Enabled(true)
-        eventPlayer.setUltEnabled(true)
-        eventPlayer.setMeleeEnabled(true)
-        eventPlayer.enableHeroHud()
+    elif eventPlayer.getHero() == Hero.MAUGA:
+        eventPlayer.setKnockbackDealt(120)
+    elif eventPlayer.getHero() == Hero.HAZARD:
+        chaseAtRate(eventPlayer.abilityArray1, 0, 1)
+    elif eventPlayer.getHero() == Hero.ANRAN:
+        eventPlayer.setKnockbackDealt(150)
 
 
-def objectivesManagement():
-    @Name "objectivesManagement"
-    
-    if gameStatus:
-        playersOnObjective = []
-        objectiveCaptureValue = 0
-        gameSmolderEvent = false
-        goalPost = 0
-        goalCheck = false
-        #Checks if current objective is showdown
-        if objectiveTypes[0] == 1:
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, objectivePositions[0], objectiveRad * 2)
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, objectivePositions[0], 200)
-            bigMessage(getAllPlayers(), "Showdown Conquered!")
-        #Checks if current objective is bosses
-        elif objectiveTypes[0] == 2:
-            bigMessage(getAllPlayers(), "Giant zombie eliminated!")
-        #Checks if current objective is biomorphing
-        elif objectiveTypes[0] == 3:
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.GREEN, objectivePositions[0], objectiveRad)
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ROSE, objectivePositions[0], 200)
-            bigMessage(getAllPlayers(), "Biomorphing completed!")
-        #Checks if current objective is survivor rescue
-        elif objectiveTypes[0] == 4:
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.VIOLET, objectivePositions[0], objectiveRad)
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.VIOLET, objectivePositions[0], 200)
-            bigMessage(getAllPlayers(), "The survivors have been rescued!")
-        #Checks if current objective is kill zone
-        elif objectiveTypes[0] == 5:
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.RED, objectiveChase1, 200)
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.RED, objectiveChase1, objectiveRad * 2)
-            bigMessage(getAllPlayers(), "The kill zone has been cleared!")
-        #Checks if current objective is Zombie Egg
-        elif objectiveTypes[0] == 6:
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.LIME_GREEN, objectivePositions[0], 200)
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.LIME_GREEN, objectivePositions[0], objectiveRad * 2)
-            playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.LIME_GREEN, objectivePositions[0], 3)
-            bigMessage(getAllPlayers(), "The egg has been destroyed!")
-        #Checks if current objective is Satellite Uplink
-        elif objectiveTypes[0] == 7:
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.LIME_GREEN, objectivePositions[0], 200)
-            bigMessage(getAllPlayers(), "Firing sequence complete!")
-        wait()
-        del objectivePositions[0]
-        del objectiveTypes[0]
-        bosses = []
-        survivorToRescue = null
-    wait(0.25)
-    if len(objectivePositions) == 1:
-        playersOnObjective = []
-        objectiveDescription = "Proceed to the extraction point"
-        #Shrink extraction zone radius down to size of extraction point
-        chaseAtRate(extractionZoneRad, 0, extractionSpeedUp)
-        objectiveRad = 10
-        bigMessage(getAllPlayers(), "Get to the extraction point!")
+macro mutationsMacro():
+    #Zombies have a chance to mutate. Bosses cannot mutate
+    if len(availableMutations) > 0 and not eventPlayer in bosses and (random.uniform(0, 100) < (100 if challengeSetting == 3 or challengeSetting == 5 else createWorkshopSettingFloat("Mutations", "Chance to mutate percentage", 25, 0, 100))):
+        eventPlayer.mutationValue = random.choice(availableMutations)
+        #Speed
+        if eventPlayer.mutationValue == 1:
+            eventPlayer.movementSpeed *= 1.5
+            eventPlayer.setMoveSpeed(eventPlayer.movementSpeed * 100)
+            eventPlayer.defaultOutlineColor = Color.PURPLE
+            eventPlayer.startForcingName("SPEED")
+        #Size Growth
+        elif eventPlayer.mutationValue == 2:
+            eventPlayer.size *= 1.5
+            eventPlayer.health *= eventPlayer.size
+            eventPlayer.defaultOutlineColor = Color.VIOLET
+            eventPlayer.startForcingName("XL")
+        #Size Reduction
+        elif eventPlayer.mutationValue == 3:
+            eventPlayer.size *= 0.6
+            eventPlayer.health *= eventPlayer.size
+            eventPlayer.defaultOutlineColor = Color.ROSE
+            eventPlayer.startForcingName("XS")
+        #Radioactive
+        elif eventPlayer.mutationValue == 4:
+            eventPlayer.biteDuration *= 1.5
+            eventPlayer.defaultOutlineColor = Color.LIME_GREEN
+            eventPlayer.startForcingName("Radioactive")
+        #Heavy
+        elif eventPlayer.mutationValue == 5:
+            eventPlayer.knockbackRecieved *= 0.5
+            eventPlayer.setKnockbackReceived(100 * eventPlayer.knockbackRecieved)
+            #Scale move speed
+            eventPlayer.movementSpeed *= eventPlayer.knockbackRecieved
+            eventPlayer.setMoveSpeed(100 * eventPlayer.movementSpeed)
+            #Scale health
+            eventPlayer.health /= eventPlayer.knockbackRecieved
+            eventPlayer.defaultOutlineColor = Color.BLACK
+            eventPlayer.startForcingName("Heavy")
+        #Mutation outline for players
+        eventPlayer.startForcingOutlineFor(getAllPlayers(), true, eventPlayer.defaultOutlineColor)
     else:
-        if objectiveTypes[0] == 1:
-            objectiveDescription = "Keep zombies away in the Showdown!"
-            objectiveCaptureValue = 0
-            chaseAtRate(objectiveRad, max(5, objectiveCaptureValue / 4), 1)
-            objectiveColor = Color.ORANGE
-            bigMessage(getAllPlayers(), "Proceed to the Showdown!")
-            goalPost = 25
-            queuedGoalType = []
-        elif objectiveTypes[0] == 2:
-            objectiveDescription = "Eliminate the boss"
-            bigMessage(getAllPlayers(), "Eliminate the giant zombie!")
-        elif objectiveTypes[0] == 3:
-            objectiveDescription = "Convert biowaste into powerups!"
-            objectiveCaptureValue = 0
-            objectiveResourcePositions = []
-            getAllPlayers().playerObjectiveResourceValue = 0
-            objectiveColor = rgb(135, 206, 250)
-            objectiveRad = 3.5
-            bigMessage(getAllPlayers(), "Find the indicated material and deposit it!")
-            biowasteColorLookUp = [Color.BLUE, Color.TURQUOISE, Color.SKY_BLUE, Color.RED]
-            biowasteTextLookUp = ["Head", "Arm", "Leg"]
-            queuedGoalType = random.shuffle([0, 1, 2, 3])
-            goalCheck = true
-            goalPost = 25
-        elif objectiveTypes[0] == 4:
-            objectiveDescription = "Rescue survivors"
-            survivorToRescue = null
-            objectiveRad = 10
-            objectiveChase1 = objectiveRad
-            bigMessage(getAllPlayers(), "Locate survivors and bring them to the extraction site!")
-        elif objectiveTypes[0] == 5:
-            objectiveDescription = "Clear the kill zone"
-            objectiveRad = 20
-            eliminationsNeededPerObjective = 50
-            objectiveChase1 = objectivePositions[0]
-            bigMessage(getAllPlayers(), "Get to the kill zone and clear zombies!")
-            objectiveCaptureValue = 0
-        elif objectiveTypes[0] == 6:
-            objectiveDescription = "Destroy the egg"
-            objectiveRad = 0
-            bigMessage(getAllPlayers(), "Destroy the zombie egg!")
-        elif objectiveTypes[0] == 7:
-            objectiveDescription = "Repair satellite control terminals"
-            objectiveRad = 3
-            objectiveColor = rgb(28, 169, 201)
-            objectiveResourcePositions = []
-            objectiveCaptureValue = [0, 0, 0]
-            #Initial terminal spacing
-            testPos2 = 50
-            bigMessage(getAllPlayers(), "Repair the satellite control terminals!")
-    #Updates global objective entities
-    globalObjectiveEntityManagement()
-    objectiveComplete = false
+        eventPlayer.mutationValue = 0
+        eventPlayer.defaultOutlineColor = null
+        #Default ouline for players
+        eventPlayer.stopForcingOutlineFor(getAllPlayers())
+        eventPlayer.stopForcingName()
 
 
-def globalObjectiveEntityManagement():
-    @Name "globalObjectiveEntityManagement"
-    
+macro botEntityManagementMacro():
+    if eventPlayer.botHero != eventPlayer.getHero() or eventPlayer in bosses:
+        eventPlayer.botHero = eventPlayer.getHero()
+        #Destroy all current hero effects and texts
+        for eventPlayer.entityCount in range(len(eventPlayer.generalPlayerBotEntities)):
+            destroyEffect(eventPlayer.generalPlayerBotEntities[eventPlayer.entityCount])
+            wait()
+        eventPlayer.explosionColor1 = Color.YELLOW
+        eventPlayer.explosionColor2 = Color.ORANGE
+        eventPlayer.generalPlayerBotEntities = []
+        if eventPlayer.getHero() == Hero.ROADHOG:
+            eventPlayer.setHealingReceived(30)
+            if eventPlayer in bosses:
+                #Gas Projectile 1
+                createEffect(getAllPlayers().filter(lambda _: eventPlayer.chase1 != null), Effect.BAD_AURA, Color.LIME_GREEN, eventPlayer.chase1, 0.4 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+                #Gas Projectile 2
+                createEffect(getAllPlayers().filter(lambda _: eventPlayer.chase1 != null), Effect.GOOD_AURA, Color.LIME_GREEN, eventPlayer.chase1, 0.2 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+                #Gas Clouds
+                for eventPlayer.entityCount in range(3):
+                    #Cloud Effect
+                    createEffect(getAllPlayers().filter(lambda _: eventPlayer.abilityArray1[evalOnce(eventPlayer.entityCount)] != null), Effect.CLOUD, Color.LIME_GREEN, eventPlayer.abilityArray1[evalOnce(eventPlayer.entityCount)], eventPlayer.abilityArray2[evalOnce(eventPlayer.entityCount)] + 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                    eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+                    #Cloud Effect ring
+                    createEffect(getAllPlayers().filter(lambda _: eventPlayer.abilityArray1[evalOnce(eventPlayer.entityCount)] != null), Effect.RING, Color.LIME_GREEN, eventPlayer.abilityArray1[evalOnce(eventPlayer.entityCount)], eventPlayer.abilityArray2[evalOnce(eventPlayer.entityCount)] + 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                    eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+            else:
+                #Roadhog toxic cloud
+                createEffect(getAllPlayers().filter(lambda _: eventPlayer.chase2 > 0), Effect.CLOUD, Color.LIME_GREEN, eventPlayer, 10 * eventPlayer.size + 2.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+        elif eventPlayer.getHero() == Hero.MERCY:
+            #Mercy tentacle
+            createBeam(getAllPlayers().filter(lambda _: eventPlayer.botTempValue != 0), Beam.BAD, eventPlayer.getEyePosition() + vect(0, 0.5, 0) * eventPlayer.size if eventPlayer.isInAir() else eventPlayer.getEyePosition(), eventPlayer.chase1, Color.LIME_GREEN, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+            #Tentacle sound effect
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botTempValue != 0), Effect.ENERGY_SOUND, Color.WHITE, eventPlayer.chase1, 400, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+            #Tentacle end visual effect
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botTempValue != 0), Effect.GOOD_AURA, Color.LIME_GREEN, eventPlayer.chase1, 0.1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+            #Boss only
+            if eventPlayer in bosses:
+                #Ultimate lift aura
+                createEffect(getAllPlayers().filter(lambda player: eventPlayer.isUsingUltimate() and player.isInViewAngle(eventPlayer.getPosition(), 60)), Effect.GOOD_AURA, Color.BLACK, eventPlayer.getPosition(), 12 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+                eventPlayer.startForcingHero(Hero.EMRE)
+        elif eventPlayer.getHero() == Hero.WRECKING_BALL:
+            #Ground strike location
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botTempValue), Effect.RING, Color.TEAM_2, raycastHitPosition(eventPlayer.getPosition(), eventPlayer.getPosition() + vect(0, -100, 0), getAllPlayers(), getAllPlayers(), false) if eventPlayer.botTempValue else evalOnce(vect(0, -100, 0)), 1 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+            eventPlayer.setMaxAmmo(0, 40)
+        elif eventPlayer.getHero() == Hero.REAPER:
+            if eventPlayer in miniBoss:
+                eventPlayer.startForcingHero(Hero.JETPACK_CAT)
+                eventPlayer.setMoveSpeed(90 * eventPlayer.movementSpeed)
+                eventPlayer.disableEnvironmentCollision(false)
+            #Boss Only
+            if eventPlayer in bosses:
+                #Using Wraith Form
+                createEffect(getAllPlayers().filter(lambda player: eventPlayer.isUsingAbility1() and player.isInViewAngle(eventPlayer.getPosition(), 60)), Effect.BAD_AURA, Color.GRAY, eventPlayer.getPosition(), 12 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+                #Using Wraith Form
+                createEffect(getAllPlayers().filter(lambda _: eventPlayer.isUsingAbility1()), Effect.CLOUD, Color.WHITE, eventPlayer, 12 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+        elif eventPlayer.getHero() == Hero.PHARAH:
+            #Charging attack effect
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.chase1 > 0), Effect.GOOD_AURA, Color.BLUE, eventPlayer, eventPlayer.chase1 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+        elif eventPlayer.getHero() == Hero.SIGMA:
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.isUsingAbility1()), Effect.CLOUD, Color.TURQUOISE, eventPlayer.botTarget.getEyePosition(), 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+        elif eventPlayer.getHero() == Hero.ILLARI:
+            #Charging attack effect
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.chase1 > 0), Effect.GOOD_AURA, Color.ORANGE, eventPlayer, eventPlayer.chase1 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+        elif eventPlayer.getHero() == Hero.WINSTON:
+            #Charging attack effect
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.isAlive() and not eventPlayer in bosses and eventPlayer.botTempValue <= 1), Effect.GOOD_AURA, Color.RED, eventPlayer, eventPlayer.chase1 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+            #Boss only
+            if eventPlayer in bosses:
+                #Darkness visual
+                createEffect(getAllPlayers().filter(lambda _: gameSmolderEvent), Effect.BAD_AURA, Color.BLACK, localPlayer.getEyePosition() + localPlayer.getFacingDirection() * 30, 200, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+                #Darkness visual
+                createEffect(getAllPlayers().filter(lambda _: gameSmolderEvent), Effect.BAD_AURA, Color.RED, localPlayer.getEyePosition() + (localPlayer.getFacingDirection() * (33 + evalOnce(random.uniform(-0.5, 0.5)))), 200, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+        elif eventPlayer.getHero() == Hero.DOOMFIST:
+            #Meteor strike/Seismic Slam location
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.isUsingUltimate() or eventPlayer.isUsingAbility1()), Effect.RING, Color.ORANGE, raycastHitPosition(eventPlayer.getPosition(), eventPlayer.getPosition() + vect(0, -100, 0), getAllPlayers(), getAllPlayers(), false) if eventPlayer.isUsingUltimate() or eventPlayer.isUsingAbility1() else evalOnce(vect(0, -100, 0)), 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+
+
+macro globalObjectiveEntityManagementMacro():
     objectiveValue = objectiveTypes[0]
     #Destroy all current objective effects and texts
     for I in range(len(objectiveEntities)):
@@ -433,6 +387,257 @@ def globalObjectiveEntityManagement():
             objectiveEntities.append(getLastCreatedText())
 
 
+def setDifficulty():
+    @Name "setDifficulty"
+
+    difficultySetting = len(getPlayers(Team.1).filter(lambda player: player.hasSpawned()))
+    #Difficulty: Insanity
+    if challengeSetting >= 4:
+        #Bot Health Values
+        botHealthValues = numbersList.slice(NL_BOT_HEALTH_INSANITY_OFFSET, NL_BOT_HEALTH_INSANITY_LEN)
+        #Bot bite damage
+        biteDamages = numbersList.slice(NL_BITE_DAMAGE_INSANITY_OFFSET, NL_BITE_DAMAGE_INSANITY_LEN)
+        #Bot bite durations
+        biteDurations = numbersList.slice(NL_BITE_DURATIONS_INSANITY_OFFSET, NL_BITE_DURATIONS_INSANITY_LEN)
+        #Bot throttle speeds
+        throttleSpeeds = []
+        for I in range(21):
+            throttleSpeeds.append(1)
+        #Bot damage dealt
+        damageDealt = numbersList.slice(NL_DAMAGE_DEALT_INSANITY_OFFSET, NL_DAMAGE_DEALT_INSANITY_LEN)
+    else:
+        #Message does not play if server is not 70 seconds old, this is a bad fix but I'm struggling to find a simple one.
+        if getTotalTimeElapsed() < 100:
+            goto lbl_0
+        smallMessage(getAllPlayers(), " Difficulty adjusted for player count, change affects new zombies. ")
+        lbl_0:
+        #Shared HP for 1-4 players; only Winston (index 18) changes below.
+        botHealthValues = numbersList.slice(NL_BOT_HEALTH_BASE_OFFSET, NL_BOT_HEALTH_BASE_LEN)
+        #Shared bite durations for 3+ players; 1 and 2 players override them.
+        biteDurations = numbersList.slice(NL_BITE_DURATIONS_BASE_OFFSET, NL_BITE_DURATIONS_BASE_LEN)
+        #Difficulty: 1 Player "Normal"
+        if difficultySetting == 1:
+            #Bot bite damage
+            biteDamages = numbersList.slice(NL_BITE_DAMAGE_NORMAL_OFFSET, NL_BITE_DAMAGE_NORMAL_LEN)
+            #Bot bite durations
+            biteDurations = numbersList.slice(NL_BITE_DURATIONS_NORMAL_OFFSET, NL_BITE_DURATIONS_NORMAL_LEN)
+            #Bot throttle speeds
+            throttleSpeeds = numbersList.slice(NL_THROTTLE_SPEEDS_NORMAL_OFFSET, NL_THROTTLE_SPEEDS_NORMAL_LEN)
+            #Bot damage dealt
+            damageDealt = numbersList.slice(NL_DAMAGE_DEALT_NORMAL_OFFSET, NL_DAMAGE_DEALT_NORMAL_LEN)
+        #Difficulty: 2 Player "Hard"
+        elif difficultySetting == 2:
+            #Bot Health Values
+            botHealthValues[18] = 750
+            #Bot bite damage
+            biteDamages = numbersList.slice(NL_BITE_DAMAGE_HARD_OFFSET, NL_BITE_DAMAGE_HARD_LEN)
+            #Bot bite durations
+            biteDurations = numbersList.slice(NL_BITE_DURATIONS_HARD_OFFSET, NL_BITE_DURATIONS_HARD_LEN)
+            #Bot throttle speeds
+            throttleSpeeds = numbersList.slice(NL_THROTTLE_SPEEDS_HARD_OFFSET, NL_THROTTLE_SPEEDS_HARD_LEN)
+            #Bot damage dealt
+            damageDealt = numbersList.slice(NL_DAMAGE_DEALT_HARD_OFFSET, NL_DAMAGE_DEALT_HARD_LEN)
+        #Difficulty: 5+ Player "Legendary"
+        elif difficultySetting >= 5:
+            #Bot Health Values
+            botHealthValues = numbersList.slice(NL_BOT_HEALTH_LEGENDARY_OFFSET, NL_BOT_HEALTH_LEGENDARY_LEN)
+            #Bot bite damage
+            biteDamages = numbersList.slice(NL_BITE_DAMAGE_LEGENDARY_OFFSET, NL_BITE_DAMAGE_LEGENDARY_LEN)
+            #Bot throttle speeds
+            throttleSpeeds = numbersList.slice(NL_THROTTLE_SPEEDS_LEGENDARY_OFFSET, NL_THROTTLE_SPEEDS_LEGENDARY_LEN)
+            #Bot damage dealt
+            damageDealt = numbersList.slice(NL_DAMAGE_DEALT_LEGENDARY_OFFSET, NL_DAMAGE_DEALT_LEGENDARY_LEN)
+        #Difficulty: 3-4 Player "Expert"
+        else:
+            #Bot Health Values
+            botHealthValues[18] = 1000
+            #Bot bite damage
+            biteDamages = numbersList.slice(NL_BITE_DAMAGE_EXPERT_OFFSET, NL_BITE_DAMAGE_EXPERT_LEN)
+            #Bot throttle speeds
+            throttleSpeeds = numbersList.slice(NL_THROTTLE_SPEEDS_EXPERT_OFFSET, NL_THROTTLE_SPEEDS_EXPERT_LEN)
+            #Bot damage dealt
+            damageDealt = numbersList.slice(NL_DAMAGE_DEALT_EXPERT_OFFSET, NL_DAMAGE_DEALT_EXPERT_LEN)
+
+
+def setPrematchTimer():
+    @Name "setPrematchTimer"
+
+    #Cancel if hidden timer has not been set
+    if not chase1:
+        return
+    #Voting in progress
+    if voting:
+        #Event player is voting
+        if eventPlayer.playerMenuStatus[1] == 1:
+            #Set match time to hidden timer
+            setMatchTime(chase1)
+        #Event Player is not voting
+        else:
+            #All players are finished voting
+            if getMatchTime() > 5 + votingEndTime and ((len(getPlayers(Team.1).filter(lambda player: player.playerMenuStatus[1] == 0 and player.playerMenuStatus[0] > 0))) == getNumberOfPlayers(Team.1)):
+                setMatchTime(5 + votingEndTime)
+            elif getMatchTime() > 20 + votingEndTime and ((len(getPlayers(Team.1).filter(lambda player: player.playerMenuStatus[1] == 0 and player.playerMenuStatus[0] > 0))) == len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus))):
+                setMatchTime(20 + votingEndTime)
+    #Voting complete
+    else:
+        #Event Player deselects hero
+        if eventPlayer.playerMenuStatus[0] < 2:
+            setMatchTime(chase1)
+        else:
+            if getMatchTime() > 10 and len(getPlayers(Team.1).filter(lambda player: player.playerMenuStatus[0] == 2)) == getNumberOfPlayers(Team.1):
+                setMatchTime(15)
+                wait()
+                setMatchTime(10)
+            elif getMatchTime() > 20 and len(getPlayers(Team.1).filter(lambda player: player.playerMenuStatus[0] == 2)) == len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus)):
+                setMatchTime(20)
+
+
+def enableDisableAbilities():
+    @Name "enableDisableAbilities"
+
+    if specialGameModeSetup:
+        eventPlayer.disableHeroHud()
+        eventPlayer.setPrimaryFireEnabled(false)
+        eventPlayer.setSecondaryFireEnabled(false)
+        eventPlayer.setAbility1Enabled(false)
+        eventPlayer.setAbility2Enabled(false)
+        eventPlayer.setUltEnabled(false)
+        eventPlayer.setMeleeEnabled(false)
+    else:
+        eventPlayer.setPrimaryFireEnabled(true)
+        eventPlayer.setSecondaryFireEnabled(true)
+        eventPlayer.setAbility1Enabled(true)
+        eventPlayer.setAbility2Enabled(true)
+        eventPlayer.setUltEnabled(true)
+        eventPlayer.setMeleeEnabled(true)
+        eventPlayer.enableHeroHud()
+
+
+def objectivesManagement():
+    @Name "objectivesManagement"
+
+    if gameStatus:
+        playersOnObjective = []
+        objectiveCaptureValue = 0
+        gameSmolderEvent = false
+        goalPost = 0
+        goalCheck = false
+        #Checks if current objective is showdown
+        switch objectiveTypes[0]:
+            case 1:
+                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, objectivePositions[0], objectiveRad * 2)
+                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, objectivePositions[0], 200)
+                bigMessage(getAllPlayers(), "Showdown Conquered!")
+                break
+            #Checks if current objective is bosses
+            case 2:
+                bigMessage(getAllPlayers(), "Giant zombie eliminated!")
+                break
+            #Checks if current objective is biomorphing
+            case 3:
+                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.GREEN, objectivePositions[0], objectiveRad)
+                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ROSE, objectivePositions[0], 200)
+                bigMessage(getAllPlayers(), "Biomorphing completed!")
+                break
+            #Checks if current objective is survivor rescue
+            case 4:
+                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.VIOLET, objectivePositions[0], objectiveRad)
+                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.VIOLET, objectivePositions[0], 200)
+                bigMessage(getAllPlayers(), "The survivors have been rescued!")
+                break
+            #Checks if current objective is kill zone
+            case 5:
+                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.RED, objectiveChase1, 200)
+                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.RED, objectiveChase1, objectiveRad * 2)
+                bigMessage(getAllPlayers(), "The kill zone has been cleared!")
+                break
+            #Checks if current objective is Zombie Egg
+            case 6:
+                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.LIME_GREEN, objectivePositions[0], 200)
+                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.LIME_GREEN, objectivePositions[0], objectiveRad * 2)
+                playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.LIME_GREEN, objectivePositions[0], 3)
+                bigMessage(getAllPlayers(), "The egg has been destroyed!")
+                break
+            #Checks if current objective is Satellite Uplink
+            case 7:
+                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.LIME_GREEN, objectivePositions[0], 200)
+                bigMessage(getAllPlayers(), "Firing sequence complete!")
+        wait()
+        del objectivePositions[0]
+        del objectiveTypes[0]
+        bosses = []
+        survivorToRescue = null
+    wait(0.25)
+    if len(objectivePositions) == 1:
+        playersOnObjective = []
+        objectiveDescription = "Proceed to the extraction point"
+        #Shrink extraction zone radius down to size of extraction point
+        chaseAtRate(extractionZoneRad, 0, extractionSpeedUp)
+        objectiveRad = 10
+        bigMessage(getAllPlayers(), "Get to the extraction point!")
+    else:
+        switch objectiveTypes[0]:
+            case 1:
+                objectiveDescription = "Keep zombies away in the Showdown!"
+                objectiveCaptureValue = 0
+                chaseAtRate(objectiveRad, max(5, objectiveCaptureValue / 4), 1)
+                objectiveColor = Color.ORANGE
+                bigMessage(getAllPlayers(), "Proceed to the Showdown!")
+                goalPost = 25
+                queuedGoalType = []
+                break
+            case 2:
+                objectiveDescription = "Eliminate the boss"
+                bigMessage(getAllPlayers(), "Eliminate the giant zombie!")
+                break
+            case 3:
+                objectiveDescription = "Convert biowaste into powerups!"
+                objectiveCaptureValue = 0
+                objectiveResourcePositions = []
+                getAllPlayers().playerObjectiveResourceValue = 0
+                objectiveColor = rgb(135, 206, 250)
+                objectiveRad = 3.5
+                bigMessage(getAllPlayers(), "Find the indicated material and deposit it!")
+                biowasteColorLookUp = [Color.BLUE, Color.TURQUOISE, Color.SKY_BLUE, Color.RED]
+                biowasteTextLookUp = ["Head", "Arm", "Leg"]
+                queuedGoalType = random.shuffle([0, 1, 2, 3])
+                goalCheck = true
+                goalPost = 25
+                break
+            case 4:
+                objectiveDescription = "Rescue survivors"
+                survivorToRescue = null
+                objectiveRad = 10
+                objectiveChase1 = objectiveRad
+                bigMessage(getAllPlayers(), "Locate survivors and bring them to the extraction site!")
+                break
+            case 5:
+                objectiveDescription = "Clear the kill zone"
+                objectiveRad = 20
+                eliminationsNeededPerObjective = 50
+                objectiveChase1 = objectivePositions[0]
+                bigMessage(getAllPlayers(), "Get to the kill zone and clear zombies!")
+                objectiveCaptureValue = 0
+                break
+            case 6:
+                objectiveDescription = "Destroy the egg"
+                objectiveRad = 0
+                bigMessage(getAllPlayers(), "Destroy the zombie egg!")
+                break
+            case 7:
+                objectiveDescription = "Repair satellite control terminals"
+                objectiveRad = 3
+                objectiveColor = rgb(28, 169, 201)
+                objectiveResourcePositions = []
+                objectiveCaptureValue = [0, 0, 0]
+                #Initial terminal spacing
+                testPos2 = 50
+                bigMessage(getAllPlayers(), "Repair the satellite control terminals!")
+    #Updates global objective entities
+    globalObjectiveEntityManagementMacro()
+    objectiveComplete = false
+
+
 def selectTarget():
     @Name "selectTarget"
     
@@ -514,225 +719,19 @@ def botRespawnInitialization():
     if difficultySetting >= 3 and eventPlayer in bosses == false and len(miniBoss.filter(lambda x: entityExists(x))) == 0:
         eventPlayer.randVal = random.randint(1, 27 if objectiveTypes[0] == 1 else 189)
         if eventPlayer.randVal == 1:
-            minibossMutation()
+            minibossMutationMacro()
             wait(2)
-    botStatManagement()
+    botStatManagementMacro()
     if eventPlayer in miniBoss == true:
         goto lbl_0
-    mutations()
+    mutationsMacro()
     lbl_0:
     eventPlayer.startScalingSize(eventPlayer.size, false)
-    botEntityManagement()
+    botEntityManagementMacro()
     waitUntil(eventPlayer.getHealth() >= eventPlayer.health, 5)
     eventPlayer.stopAllHealingOverTime()
     eventPlayer.setHealth(eventPlayer.health)
     eventPlayer.initializing = false
-
-
-def botEntityManagement():
-    @Name "botEntityManagement"
-    
-    if eventPlayer.botHero != eventPlayer.getHero() or eventPlayer in bosses:
-        eventPlayer.botHero = eventPlayer.getHero()
-        #Destroy all current hero effects and texts
-        for eventPlayer.entityCount in range(len(eventPlayer.generalPlayerBotEntities)):
-            destroyEffect(eventPlayer.generalPlayerBotEntities[eventPlayer.entityCount])
-            wait()
-        eventPlayer.explosionColor1 = Color.YELLOW
-        eventPlayer.explosionColor2 = Color.ORANGE
-        eventPlayer.generalPlayerBotEntities = []
-        if eventPlayer.getHero() == Hero.ROADHOG:
-            eventPlayer.setHealingReceived(30)
-            if eventPlayer in bosses:
-                #Gas Projectile 1
-                createEffect(getAllPlayers().filter(lambda _: eventPlayer.chase1 != null), Effect.BAD_AURA, Color.LIME_GREEN, eventPlayer.chase1, 0.4 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
-                #Gas Projectile 2
-                createEffect(getAllPlayers().filter(lambda _: eventPlayer.chase1 != null), Effect.GOOD_AURA, Color.LIME_GREEN, eventPlayer.chase1, 0.2 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
-                #Gas Clouds
-                for eventPlayer.entityCount in range(3):
-                    #Cloud Effect
-                    createEffect(getAllPlayers().filter(lambda _: eventPlayer.abilityArray1[evalOnce(eventPlayer.entityCount)] != null), Effect.CLOUD, Color.LIME_GREEN, eventPlayer.abilityArray1[evalOnce(eventPlayer.entityCount)], eventPlayer.abilityArray2[evalOnce(eventPlayer.entityCount)] + 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                    eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
-                    #Cloud Effect ring
-                    createEffect(getAllPlayers().filter(lambda _: eventPlayer.abilityArray1[evalOnce(eventPlayer.entityCount)] != null), Effect.RING, Color.LIME_GREEN, eventPlayer.abilityArray1[evalOnce(eventPlayer.entityCount)], eventPlayer.abilityArray2[evalOnce(eventPlayer.entityCount)] + 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                    eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
-            else:
-                #Roadhog toxic cloud
-                createEffect(getAllPlayers().filter(lambda _: eventPlayer.chase2 > 0), Effect.CLOUD, Color.LIME_GREEN, eventPlayer, 10 * eventPlayer.size + 2.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
-        elif eventPlayer.getHero() == Hero.MERCY:
-            #Mercy tentacle
-            createBeam(getAllPlayers().filter(lambda _: eventPlayer.botTempValue != 0), Beam.BAD, eventPlayer.getEyePosition() + vect(0, 0.5, 0) * eventPlayer.size if eventPlayer.isInAir() else eventPlayer.getEyePosition(), eventPlayer.chase1, Color.LIME_GREEN, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
-            #Tentacle sound effect
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botTempValue != 0), Effect.ENERGY_SOUND, Color.WHITE, eventPlayer.chase1, 400, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
-            #Tentacle end visual effect
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botTempValue != 0), Effect.GOOD_AURA, Color.LIME_GREEN, eventPlayer.chase1, 0.1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
-            #Boss only
-            if eventPlayer in bosses:
-                #Ultimate lift aura
-                createEffect(getAllPlayers().filter(lambda player: eventPlayer.isUsingUltimate() and player.isInViewAngle(eventPlayer.getPosition(), 60)), Effect.GOOD_AURA, Color.BLACK, eventPlayer.getPosition(), 12 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
-                eventPlayer.startForcingHero(Hero.EMRE)
-        elif eventPlayer.getHero() == Hero.WRECKING_BALL:
-            #Ground strike location
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botTempValue), Effect.RING, Color.TEAM_2, raycastHitPosition(eventPlayer.getPosition(), eventPlayer.getPosition() + vect(0, -100, 0), getAllPlayers(), getAllPlayers(), false) if eventPlayer.botTempValue else evalOnce(vect(0, -100, 0)), 1 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
-            eventPlayer.setMaxAmmo(0, 40)
-        elif eventPlayer.getHero() == Hero.REAPER:
-            if eventPlayer in miniBoss:
-                eventPlayer.startForcingHero(Hero.JETPACK_CAT)
-                eventPlayer.setMoveSpeed(90 * eventPlayer.movementSpeed)
-                eventPlayer.disableEnvironmentCollision(false)
-            #Boss Only
-            if eventPlayer in bosses:
-                #Using Wraith Form
-                createEffect(getAllPlayers().filter(lambda player: eventPlayer.isUsingAbility1() and player.isInViewAngle(eventPlayer.getPosition(), 60)), Effect.BAD_AURA, Color.GRAY, eventPlayer.getPosition(), 12 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
-                #Using Wraith Form
-                createEffect(getAllPlayers().filter(lambda _: eventPlayer.isUsingAbility1()), Effect.CLOUD, Color.WHITE, eventPlayer, 12 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
-        elif eventPlayer.getHero() == Hero.PHARAH:
-            #Charging attack effect
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.chase1 > 0), Effect.GOOD_AURA, Color.BLUE, eventPlayer, eventPlayer.chase1 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
-        elif eventPlayer.getHero() == Hero.SIGMA:
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.isUsingAbility1()), Effect.CLOUD, Color.TURQUOISE, eventPlayer.botTarget.getEyePosition(), 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
-        elif eventPlayer.getHero() == Hero.ILLARI:
-            #Charging attack effect
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.chase1 > 0), Effect.GOOD_AURA, Color.ORANGE, eventPlayer, eventPlayer.chase1 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
-        elif eventPlayer.getHero() == Hero.WINSTON:
-            #Charging attack effect
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.isAlive() and not eventPlayer in bosses and eventPlayer.botTempValue <= 1), Effect.GOOD_AURA, Color.RED, eventPlayer, eventPlayer.chase1 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
-            #Boss only
-            if eventPlayer in bosses:
-                #Darkness visual
-                createEffect(getAllPlayers().filter(lambda _: gameSmolderEvent), Effect.BAD_AURA, Color.BLACK, localPlayer.getEyePosition() + localPlayer.getFacingDirection() * 30, 200, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
-                #Darkness visual
-                createEffect(getAllPlayers().filter(lambda _: gameSmolderEvent), Effect.BAD_AURA, Color.RED, localPlayer.getEyePosition() + (localPlayer.getFacingDirection() * (33 + evalOnce(random.uniform(-0.5, 0.5)))), 200, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
-        elif eventPlayer.getHero() == Hero.DOOMFIST:
-            #Meteor strike/Seismic Slam location
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.isUsingUltimate() or eventPlayer.isUsingAbility1()), Effect.RING, Color.ORANGE, raycastHitPosition(eventPlayer.getPosition(), eventPlayer.getPosition() + vect(0, -100, 0), getAllPlayers(), getAllPlayers(), false) if eventPlayer.isUsingUltimate() or eventPlayer.isUsingAbility1() else evalOnce(vect(0, -100, 0)), 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
-
-
-def botStatManagement():
-    @Name "botStatManagement"
-    
-    eventPlayer.biteDamage = biteDamages[botHeros.index(eventPlayer.getHero())]
-    #Re-calibrate bite damage
-    eventPlayer.biteDamage *= 100 / damageDealt[botHeros.index(eventPlayer.getHero())]
-    eventPlayer.biteDuration = biteDurations[botHeros.index(eventPlayer.getHero())]
-    #Range from 0 to 1 in terms of throttle
-    eventPlayer.botThrottleSpeed = throttleSpeeds[botHeros.index(eventPlayer.getHero())]
-    eventPlayer.damageDealt = damageDealt[botHeros.index(eventPlayer.getHero())] / 100
-    eventPlayer.setDamageDealt(eventPlayer.damageDealt * 100)
-    eventPlayer.setDamageReceived(100)
-    eventPlayer.movementSpeed = 1
-    eventPlayer.setMoveSpeed(eventPlayer.movementSpeed * 100 + ((len(getDeadPlayers(Team.1).filter(lambda player: player.deathTimer <= 0))) * 3))
-    eventPlayer.setJumpVerticalSpeed(100)
-    eventPlayer.setHealingReceived(100)
-    eventPlayer.setProjectileSpeed(100)
-    eventPlayer.setProjectileGravity(100)
-    eventPlayer.knockbackRecieved = 1
-    eventPlayer.setKnockbackReceived(100)
-    if eventPlayer.getHero() == Hero.REINHARDT:
-        eventPlayer.knockbackRecieved = 0.7
-        eventPlayer.setKnockbackReceived(100 * eventPlayer.knockbackRecieved)
-    elif eventPlayer.getHero() == Hero.MERCY:
-        eventPlayer.setProjectileSpeed(75 if eventPlayer in bosses else 20)
-    elif eventPlayer.getHero() == Hero.ILLARI:
-        eventPlayer.setKnockbackDealt(25)
-    elif eventPlayer.getHero() == Hero.WINSTON:
-        eventPlayer.size *= 0.7
-        eventPlayer.chase1 = 2
-        eventPlayer.startScalingBarriers(eventPlayer.size)
-    elif eventPlayer.getHero() == Hero.ANA or eventPlayer.getHero() == Hero.KIRIKO:
-        eventPlayer.setProjectileGravity(500)
-    elif eventPlayer.getHero() == Hero.SIGMA:
-        eventPlayer.setProjectileSpeed(100 * eventPlayer.size * 0.5)
-        eventPlayer.setPrimaryFireEnabled(true)
-    elif eventPlayer.getHero() == Hero.MAUGA:
-        eventPlayer.setKnockbackDealt(120)
-    elif eventPlayer.getHero() == Hero.HAZARD:
-        chaseAtRate(eventPlayer.abilityArray1, 0, 1)
-    elif eventPlayer.getHero() == Hero.ANRAN:
-        eventPlayer.setKnockbackDealt(150)
-
-
-def mutations():
-    @Name "mutations"
-    
-    #Zombies have a chance to mutate. Bosses cannot mutate
-    if len(availableMutations) > 0 and not eventPlayer in bosses and (random.uniform(0, 100) < (100 if challengeSetting == 3 or challengeSetting == 5 else createWorkshopSettingFloat("Mutations", "Chance to mutate percentage", 25, 0, 100))):
-        eventPlayer.mutationValue = random.choice(availableMutations)
-        #Speed
-        if eventPlayer.mutationValue == 1:
-            eventPlayer.movementSpeed *= 1.5
-            eventPlayer.setMoveSpeed(eventPlayer.movementSpeed * 100)
-            eventPlayer.defaultOutlineColor = Color.PURPLE
-            eventPlayer.startForcingName("SPEED")
-        #Size Growth
-        elif eventPlayer.mutationValue == 2:
-            eventPlayer.size *= 1.5
-            eventPlayer.health *= eventPlayer.size
-            eventPlayer.defaultOutlineColor = Color.VIOLET
-            eventPlayer.startForcingName("XL")
-        #Size Reduction
-        elif eventPlayer.mutationValue == 3:
-            eventPlayer.size *= 0.6
-            eventPlayer.health *= eventPlayer.size
-            eventPlayer.defaultOutlineColor = Color.ROSE
-            eventPlayer.startForcingName("XS")
-        #Radioactive
-        elif eventPlayer.mutationValue == 4:
-            eventPlayer.biteDuration *= 1.5
-            eventPlayer.defaultOutlineColor = Color.LIME_GREEN
-            eventPlayer.startForcingName("Radioactive")
-        #Heavy
-        elif eventPlayer.mutationValue == 5:
-            eventPlayer.knockbackRecieved *= 0.5
-            eventPlayer.setKnockbackReceived(100 * eventPlayer.knockbackRecieved)
-            #Scale move speed
-            eventPlayer.movementSpeed *= eventPlayer.knockbackRecieved
-            eventPlayer.setMoveSpeed(100 * eventPlayer.movementSpeed)
-            #Scale health
-            eventPlayer.health /= eventPlayer.knockbackRecieved
-            eventPlayer.defaultOutlineColor = Color.BLACK
-            eventPlayer.startForcingName("Heavy")
-        #Mutation outline for players
-        eventPlayer.startForcingOutlineFor(getAllPlayers(), true, eventPlayer.defaultOutlineColor)
-    else:
-        eventPlayer.mutationValue = 0
-        eventPlayer.defaultOutlineColor = null
-        #Default ouline for players
-        eventPlayer.stopForcingOutlineFor(getAllPlayers())
-        eventPlayer.stopForcingName()
-
-
-def minibossMutation():
-    @Name "minibossMutation"
-    
-    miniBoss.append(eventPlayer)
-    eventPlayer.startForcingHero(random.choice([Hero.REINHARDT, Hero.WRECKING_BALL, Hero.JUNKER_QUEEN, Hero.DOOMFIST, Hero.KIRIKO, Hero.MAUGA, Hero.HAZARD, Hero.REAPER]))
-    if zombieSetting == 6:
-        eventPlayer.startForcingHero(random.choice([Hero.REINHARDT, Hero.WRECKING_BALL]))
-    eventPlayer.health = 2500
-    eventPlayer.size *= 1.55
-    eventPlayer.startForcingOutlineFor(getAllPlayers(), true, Color.ORANGE)
-    eventPlayer.startForcingName("Contestor")
-    #Skull Icon
-    createIcon(getAllPlayers().filter(lambda _: eventPlayer.initializing == false and eventPlayer in bosses == false), eventPlayer.getEyePosition() + Vector.UP, Icon.SKULL, IconReeval.VISIBILITY_AND_POSITION, Color.ORANGE)
-    eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
 
 
 def abilityPlacement():

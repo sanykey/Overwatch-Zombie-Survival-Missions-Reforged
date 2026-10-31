@@ -3,7 +3,22 @@
 subroutine abilityThrowdown
 subroutine entityFloat
 subroutine explosionWarning
-subroutine smolderEnraged
+
+
+macro smolderEnragedMacro():
+    eventPlayer.botTempValue = 2
+    stopChasing(eventPlayer.chase1)
+    eventPlayer.stopForcingButton(Button.CROUCH)
+    playEffect(getAllPlayers(), DynamicEffect.BAD_PICKUP_EFFECT, Color.RED, eventPlayer, 1.5 * eventPlayer.size)
+    eventPlayer.forceButtonPress(Button.ABILITY_1)
+    eventPlayer.setUltCharge(100)
+    eventPlayer.forceButtonPress(Button.ULTIMATE)
+    eventPlayer.size *= 1.5
+    eventPlayer.startScalingSize(eventPlayer.size, false)
+    eventPlayer.movementSpeed *= 9
+    eventPlayer.setMoveSpeed(eventPlayer.movementSpeed * 100)
+    wait(5)
+    eventPlayer.forceButtonPress(Button.ABILITY_1)
 
 
 rule "BASIC (REAPER) SHADOW STEP (BOSS)":
@@ -1336,25 +1351,7 @@ rule "SMOLDER ACTIVATED FROM BOSS EVENT":
     @Condition gameSmolderEvent == true
     @Condition eventPlayer in bosses != true
     
-    smolderEnraged()
-
-
-def smolderEnraged():
-    @Name "smolderEnraged"
-    
-    eventPlayer.botTempValue = 2
-    stopChasing(eventPlayer.chase1)
-    eventPlayer.stopForcingButton(Button.CROUCH)
-    playEffect(getAllPlayers(), DynamicEffect.BAD_PICKUP_EFFECT, Color.RED, eventPlayer, 1.5 * eventPlayer.size)
-    eventPlayer.forceButtonPress(Button.ABILITY_1)
-    eventPlayer.setUltCharge(100)
-    eventPlayer.forceButtonPress(Button.ULTIMATE)
-    eventPlayer.size *= 1.5
-    eventPlayer.startScalingSize(eventPlayer.size, false)
-    eventPlayer.movementSpeed *= 9
-    eventPlayer.setMoveSpeed(eventPlayer.movementSpeed * 100)
-    wait(5)
-    eventPlayer.forceButtonPress(Button.ABILITY_1)
+    smolderEnragedMacro()
 
 
 rule "PROTECTOR (KIRIKO) USES CLEANSE":
