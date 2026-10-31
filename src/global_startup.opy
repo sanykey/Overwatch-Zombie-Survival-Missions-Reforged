@@ -48,21 +48,26 @@ macro enableEnhancementsMacro():
 
 
 macro botHeroRandomizationMacro():
-    currentBotHeroList = botHeros.filter(lambda x: getNumberOfHeroes(x, Team.2) > 0)
+    # tmp0: hero types already present among zombies, to check the unique-skin limit.
+    tmp0 = botHeros.filter(lambda x: getNumberOfHeroes(x, Team.2) > 0)
     if gameSmolderEvent:
-        createDummy(Hero.WINSTON, Team.2, -1, vect(500, 500, 500))
+        createDummy(Hero.WINSTON, Team.2, -1, dummyHoldingPositionConst)
     #Determines if count of current different zombie types is less than the maximum amount allowed
-    elif len(currentBotHeroList) < (uniqueSkinCap - (getNumberOfSlots(Team.1) if getNumberOfPlayers(Team.1) <= getNumberOfSlots(Team.1) else getNumberOfPlayers(Team.1))):
-        randVal = random.uniform(0, 100)
-        botCurrentSpawnRate = 0
-        botRespawnCount = -1
-        while randVal > botCurrentSpawnRate or botRespawnCount < 0:
-            botRespawnCount++
-            botCurrentSpawnRate += botSpawnRates[botRespawnCount]
-        createDummy(botHeros[botRespawnCount], Team.2, -1, vect(500, 500, 500))
+    elif len(tmp0) < (uniqueSkinCap - (getNumberOfSlots(Team.1) if getNumberOfPlayers(Team.1) <= getNumberOfSlots(Team.1) else getNumberOfPlayers(Team.1))):
+        # tmp0: random threshold for weighted hero selection; the hero list is no longer needed.
+        tmp0 = random.uniform(0, 100)
+        # tmp1: cumulative spawn weight, compared with tmp0 to find the selected hero.
+        tmp1 = 0
+        # tmp2: hero-table index, starting before the first entry so the loop visits index 0.
+        tmp2 = -1
+        while tmp0 > tmp1 or tmp2 < 0:
+            # tmp2: next hero-table index whose spawn weight must be included.
+            tmp2++
+            # tmp1: cumulative weight including this hero, to test whether tmp0 falls in its range.
+            tmp1 += botSpawnRates[tmp2]
+        createDummy(botHeros[tmp2], Team.2, -1, dummyHoldingPositionConst)
     else:
-        createDummy(sorted(botHeros, lambda _, i: botSpawnRates[i]).last(), Team.2, -1, vect(500, 500, 500))
-    currentBotHeroList = []
+        createDummy(sorted(botHeros, lambda _, i: botSpawnRates[i]).last(), Team.2, -1, dummyHoldingPositionConst)
 
 
 macro enableMutationsMacro():
@@ -77,8 +82,9 @@ macro enableMutationsMacro():
 
 
 macro enablePowerupsMacro():
-    for I in range(13):
-        availablePowerups[I] = I + 1
+    # tmp0: zero-based item index, to populate availablePowerups with item IDs 1-13.
+    for tmp0 in range(13):
+        availablePowerups[tmp0] = tmp0 + 1
 
 rule "PREGAME QUICK TIPS FOR PLAYERS":
     @Condition specialGameModeSetup == true
@@ -238,7 +244,8 @@ rule "VARIABLE ASSIGNMENT":
     #gameStatus = false  #Uninitialized Workshop variables already compare equal to false at match start.
     users = []
     globalPlayerStats = []
-    for I in range(12):
+    # tmp0: player-slot counter, to create 12 initial entries in globalPlayerStats.
+    for tmp0 in range(12):
         globalPlayerStats.append(-1)
     objectivePositions = []
     objectiveTypes = []
@@ -246,8 +253,6 @@ rule "VARIABLE ASSIGNMENT":
     reviveRadius = 5
     mustReviveTime = 60
     playersOnObjective = []
-    losList = []
-    botMaxTeleportRange = [20, 40]
     supplyDropStatus = true
     #supplyDropLanding = null  #Uninitialized Workshop variables already compare equal to null at match start.
     #supplyDropPosition = null  #Uninitialized Workshop variables already compare equal to null at match start.
@@ -306,11 +311,12 @@ def generateMapGrid():
     
     mapGrid = []
     while len(mapGrid) < 900:
-        testPos = nearestWalkablePosition((random.choice(mapGrid) if len(mapGrid) > 5 else walkCenter) + directionFromAngles(random.uniform(0, 360), random.uniform(-35, 35)) * random.uniform(10, 100))
+        # tmp0: candidate walkable grid point, to check spawn-room clearance and point spacing.
+        tmp0 = nearestWalkablePosition((random.choice(mapGrid) if len(mapGrid) > 5 else walkCenter) + directionFromAngles(random.uniform(0, 360), random.uniform(-35, 35)) * random.uniform(10, 100))
         #Do not grid points inside spawn rooms on CTF maps
-        if getCurrentGamemode() != Gamemode.CTF and getCurrentGamemode() != Gamemode.CLASH and getCurrentGamemode() != Gamemode.PUSH and getCurrentGamemode() != Gamemode.CONTROL and getCurrentGamemode() != Gamemode.FLASHPOINT or getSpawnPoints(Team.2).all(lambda x: distance(x.getPosition(), testPos) > 50) and getSpawnPoints(Team.1).all(lambda x: distance(x.getPosition(), testPos) > 40):
-            if len(mapGrid) == 0 or mapGrid.all(lambda x: distance(x, testPos) > 2.5):
-                mapGrid.append(testPos)
+        if getCurrentGamemode() != Gamemode.CTF and getCurrentGamemode() != Gamemode.CLASH and getCurrentGamemode() != Gamemode.PUSH and getCurrentGamemode() != Gamemode.CONTROL and getCurrentGamemode() != Gamemode.FLASHPOINT or getSpawnPoints(Team.2).all(lambda x: distance(x.getPosition(), tmp0) > 50) and getSpawnPoints(Team.1).all(lambda x: distance(x.getPosition(), tmp0) > 40):
+            if len(mapGrid) == 0 or mapGrid.all(lambda x: distance(x, tmp0) > 2.5):
+                mapGrid.append(tmp0)
         if specialGameModeSetup and getMatchTime() + matchEndTime < 2:
             break
         wait()

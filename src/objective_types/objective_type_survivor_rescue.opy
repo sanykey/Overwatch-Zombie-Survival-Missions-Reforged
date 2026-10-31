@@ -32,15 +32,14 @@ rule "INITIALIZE SURVIVOR TO BE RESCUED":
     @Condition survivorToRescue == eventPlayer
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
-    eventPlayer.detectionRadius1 = 5
     survivorToRescue.path = []
     survivorToRescue.startPos = survivorToRescue.getPosition()
     survivorToRescue.botTempValue = false
     eventPlayer.botFollowTarget = null
     eventPlayer.movementSpeed = 1
-    eventPlayer.enhancementValues[0] = 9
-    eventPlayer.enhancementValues[1] = 0
-    eventPlayer.enhancementValues[2] = false
+    eventPlayer.enhancementId = Enhancement.HITCHHIKER
+    eventPlayer.enhancementValue1 = 0
+    eventPlayer.enhancementValue2 = false
     survivorToRescue.setStatusEffect(null, Status.UNKILLABLE, 99999)
     survivorToRescue.setHealingReceived(110)
     #Objective/Survivor distance
@@ -54,9 +53,10 @@ rule "INITIALIZE SURVIVOR TO BE RESCUED":
     createEffect(getAllPlayers(), Effect.RING, Color.VIOLET if eventPlayer.botFollowTarget != null else Color.RED, eventPlayer, objectiveRad)
     #Zombie slowing ring
     createEffect(getAllPlayers().filter(lambda _: eventPlayer.getNormalizedHealth() < 1), Effect.BAD_AURA, Color.PURPLE, eventPlayer, 1)
-    for eventPlayer.entityCount in range(10):
+    # tmp0: survivor path-marker index, to create rings every three path points using evalOnce.
+    for tmp0 in range(10):
         #Path Markers
-        createEffect(getAllPlayers().filter(lambda _: len(eventPlayer.path) > evalOnce(eventPlayer.entityCount * 3)), Effect.RING, Color.VIOLET, eventPlayer.path[evalOnce(eventPlayer.entityCount) * 3], 0.2)
+        createEffect(getAllPlayers().filter(lambda _: len(eventPlayer.path) > evalOnce(tmp0 * 3)), Effect.RING, Color.VIOLET, eventPlayer.path[evalOnce(tmp0) * 3], 0.2)
     eventPlayer.startFacing(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botFollowTarget.getEyePosition())), 80 if eventPlayer.botFollowTarget == null else verticalAngleOfDirection(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botFollowTarget.getEyePosition()))), 100)
     eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), (eventPlayer.path.filter(lambda x: distance(eventPlayer.getPosition(), x) < 2)).last() if eventPlayer.path.any(lambda x: distance(eventPlayer.getPosition(), x) < 2) else eventPlayer.botFollowTarget.getPosition()), 0 if eventPlayer.botFollowTarget == null or distance(eventPlayer.getPosition(), eventPlayer.botFollowTarget.getPosition()) < 1.5 else eventPlayer.botThrottleSpeed, Relativity.TO_WORLD)
 

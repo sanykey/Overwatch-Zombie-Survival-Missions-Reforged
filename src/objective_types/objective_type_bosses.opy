@@ -13,7 +13,7 @@ rule "SPAWN BOSS":
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     bosses[0] = (getLivingPlayers(Team.2).filter(lambda player: player.hasSpawned() and not miniBoss[player] and not player.teleporting and player.botTarget == null))[0]
-    bosses.teleport(vect(500, 500, 500))
+    bosses.teleport(dummyHoldingPositionConst)
     waitUntil(bosses[0].initializing, 3)
     waitUntil(not bosses[0].initializing, 5)
     bosses.teleport(objectivePositions[0])

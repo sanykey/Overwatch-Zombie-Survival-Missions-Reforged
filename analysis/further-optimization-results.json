@@ -1,0 +1,286 @@
+{
+  "compiler": "zezombye.overpy-9.7.20",
+  "baselineRef": "cf699010",
+  "baseline": 29073,
+  "method": "Separate candidates compiled against selected baseline. No in-game validation. src/ unchanged. Source hashes normalize CRLF to LF.",
+  "warningsSuppressedByMainSource": true,
+  "sourceSha256": {
+    "bots_game_in_progress.opy": "78a54da94842f8d661f2c1643934cb9e45ea58a63381cabd1b1c13fc07f83304",
+    "enhancements.opy": "637310a73c6335ab22efc8b9596da092cf89f5246f8cceb2be580908f5636987",
+    "global_game_in_progress.opy": "b8d08b6a80aa80bf8bcc1a0f98fd7ad3c2fd0340664522f2651eb2bdb5fdccf9",
+    "global_startup.opy": "3599ecfe44fd39777d4836a7de59fe7156b480d71d5098c1fb1dbdf5a8ade667",
+    "global_start_menu.opy": "362ad9857cb585085efe41c3c91c2e3c51d7c8abeaba1dbed4decb677588e7c3",
+    "hero_tuning.opy": "03e5e01ba97fb38ad4f08c0ad86451092ce3f1178f911c66a93848a02d6be556",
+    "main.opy": "102b98af206c28eb2087014712e7b888bde5b3883d57e919dc099e2b2b9089ef",
+    "objective_types/objective_type_biomorphing.opy": "6f92d0cc1fc8c7b2e2a02af46d03e94ac9259ba9c38ed34b6aec562e2ed21efc",
+    "objective_types/objective_type_bosses.opy": "66e669f56979d9ab93287b4f00eca293edd3cf9919178de3dca0aee9cd770568",
+    "objective_types/objective_type_extraction_point.opy": "1052ff8ace7bf614646677444005b780c0ca7fe0949a6549098f49510e94dd9a",
+    "objective_types/objective_type_kill_zone.opy": "97c70bfd22647ba68e332a95b46ae719c137e038c38bdddecc2f99d13a150366",
+    "objective_types/objective_type_satellite_uplink.opy": "66a94c6c26170e453e485c8c835ebd59d180396818e860749f2b0d086d7afb62",
+    "objective_types/objective_type_showdown.opy": "54cc34d6ba76b07bf1e814da71972b588159719d2cbe7b630f235b1bde8cd02b",
+    "objective_types/objective_type_survivor_rescue.opy": "98b092d965be1c2bcbd0f758c85b139746b46d8278fa398a286d7835246599ff",
+    "objective_types/objective_type_zombie_egg.opy": "f1811c7d0116ecdd95cdc10fe19284c7b44d927c39585149a85ca4a96058f519",
+    "players_game_in_progress.opy": "a024a5be3f2a4b618ea5e99f850fe5779c609433d9754aee33d665083a0071d5",
+    "player_start_menu.opy": "f0ff8c0b792cb8b3548640c947504aabbf568ff5f37d771a2a061f6550b93341",
+    "power_ups.opy": "93843127c087a8a144a9a8f3badffd7d37bbba42c745d0d3294686d2922d3418",
+    "settings.opy": "bafdf47e377bfce8871f5e6c8a79684934e6c283130151ce2824d8778cc659a7",
+    "subroutines.opy": "b2438178bb5d6c483c98590f62bd3034fd8e963646ddbd8fa3a3ea4b0a2055cd",
+    "supply_drops.opy": "8cce584755707bc3e13e2fcf9d341cce54bec68274f74fe8b60cc2057677ad9f",
+    "variables.opy": "716dc2e3c00a98d006ff62270268242051952ff4fbaefa0b4724eff7f6b7de79",
+    "vas/compressed numbers.opy": "cdd0ab512010388261efcbfb3fe8fcf527693bdae4e102ded2e5c4bde3028c4d",
+    "zombie_types.opy": "b51221aad6b3a04206a30373a53207a948d2be6b0ee1824ffd30e25565254efe",
+    "vas/create numbers.js": "e29ee00f1a5af294aa16bebd8bf677ed4369710618a0f4dadc0f5d49e32a7bb8",
+    "reconstructed-baseline.ws.txt": "6cdedbd9aae2b9435e01d0426403dd1e9ab9a930f370fd842530ebaeb45ada24"
+  },
+  "results": [
+    {
+      "name": "aggressive",
+      "elements": 28874,
+      "saved": 199,
+      "warnings": 0,
+      "changedFiles": [
+        "main.opy"
+      ]
+    },
+    {
+      "name": "hero_index",
+      "elements": 29068,
+      "saved": 5,
+      "warnings": 0,
+      "changedFiles": [
+        "subroutines.opy",
+        "variables.opy"
+      ]
+    },
+    {
+      "name": "constant_colors",
+      "elements": 29016,
+      "saved": 57,
+      "warnings": 0,
+      "changedFiles": [
+        "enhancements.opy",
+        "global_start_menu.opy",
+        "variables.opy"
+      ]
+    },
+    {
+      "name": "constant_vectors",
+      "elements": 29036,
+      "saved": 37,
+      "warnings": 0,
+      "changedFiles": [
+        "bots_game_in_progress.opy",
+        "global_game_in_progress.opy",
+        "global_startup.opy",
+        "global_start_menu.opy",
+        "objective_types/objective_type_biomorphing.opy",
+        "objective_types/objective_type_bosses.opy",
+        "objective_types/objective_type_zombie_egg.opy",
+        "player_start_menu.opy",
+        "subroutines.opy",
+        "supply_drops.opy",
+        "variables.opy",
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "path_slice",
+      "elements": 29073,
+      "saved": 0,
+      "warnings": 0,
+      "changedFiles": [
+        "objective_types/objective_type_survivor_rescue.opy"
+      ]
+    },
+    {
+      "name": "enhancement_fields",
+      "elements": 28427,
+      "saved": 646,
+      "warnings": 0,
+      "changedFiles": [
+        "bots_game_in_progress.opy",
+        "enhancements.opy",
+        "global_game_in_progress.opy",
+        "global_start_menu.opy",
+        "objective_types/objective_type_survivor_rescue.opy",
+        "players_game_in_progress.opy",
+        "player_start_menu.opy",
+        "variables.opy"
+      ]
+    },
+    {
+      "name": "powerup_fields",
+      "elements": 28853,
+      "saved": 220,
+      "warnings": 0,
+      "changedFiles": [
+        "supply_drops.opy",
+        "variables.opy"
+      ]
+    },
+    {
+      "name": "trade_index",
+      "elements": 29059,
+      "saved": 14,
+      "warnings": 0,
+      "changedFiles": [
+        "supply_drops.opy",
+        "variables.opy"
+      ]
+    },
+    {
+      "name": "menu_state_fields",
+      "elements": 29036,
+      "saved": 37,
+      "warnings": 0,
+      "changedFiles": [
+        "global_start_menu.opy",
+        "players_game_in_progress.opy",
+        "player_start_menu.opy",
+        "subroutines.opy",
+        "variables.opy"
+      ]
+    },
+    {
+      "name": "shared_smolder_actions",
+      "elements": 29048,
+      "saved": 25,
+      "warnings": 0,
+      "changedFiles": [
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "redundant_wallphase",
+      "elements": 29072,
+      "saved": 1,
+      "warnings": 0,
+      "changedFiles": [
+        "subroutines.opy"
+      ]
+    },
+    {
+      "name": "shared_gas_cloud",
+      "elements": 29054,
+      "saved": 19,
+      "warnings": 0,
+      "changedFiles": [
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "barricade_filters",
+      "elements": 29064,
+      "saved": 9,
+      "warnings": 0,
+      "changedFiles": [
+        "enhancements.opy"
+      ]
+    }
+  ],
+  "combinations": [
+    {
+      "name": "basic",
+      "choices": [
+        "enhancement_fields",
+        "powerup_fields",
+        "trade_index",
+        "menu_state_fields",
+        "shared_smolder_actions",
+        "shared_gas_cloud",
+        "barricade_filters",
+        "redundant_wallphase",
+        "hero_index"
+      ],
+      "elements": 28097,
+      "saved": 976,
+      "warnings": 0,
+      "declaredGlobals": 122,
+      "declaredPlayerVars": 121
+    },
+    {
+      "name": "with_colors",
+      "choices": [
+        "enhancement_fields",
+        "powerup_fields",
+        "trade_index",
+        "menu_state_fields",
+        "shared_smolder_actions",
+        "shared_gas_cloud",
+        "barricade_filters",
+        "redundant_wallphase",
+        "hero_index",
+        "constant_colors"
+      ],
+      "elements": 28040,
+      "saved": 1033,
+      "warnings": 0,
+      "declaredGlobals": 125,
+      "declaredPlayerVars": 121
+    },
+    {
+      "name": "colors_and_aggressive",
+      "choices": [
+        "enhancement_fields",
+        "powerup_fields",
+        "trade_index",
+        "menu_state_fields",
+        "shared_smolder_actions",
+        "shared_gas_cloud",
+        "barricade_filters",
+        "redundant_wallphase",
+        "hero_index",
+        "constant_colors",
+        "aggressive"
+      ],
+      "elements": 27840,
+      "saved": 1233,
+      "warnings": 0,
+      "declaredGlobals": 125,
+      "declaredPlayerVars": 121
+    },
+    {
+      "name": "with_constants",
+      "choices": [
+        "enhancement_fields",
+        "powerup_fields",
+        "trade_index",
+        "menu_state_fields",
+        "shared_smolder_actions",
+        "shared_gas_cloud",
+        "barricade_filters",
+        "redundant_wallphase",
+        "hero_index",
+        "constant_colors",
+        "constant_vectors"
+      ],
+      "elements": 28003,
+      "saved": 1070,
+      "warnings": 0,
+      "declaredGlobals": 128,
+      "declaredPlayerVars": 121
+    },
+    {
+      "name": "with_aggressive",
+      "choices": [
+        "enhancement_fields",
+        "powerup_fields",
+        "trade_index",
+        "menu_state_fields",
+        "shared_smolder_actions",
+        "shared_gas_cloud",
+        "barricade_filters",
+        "redundant_wallphase",
+        "hero_index",
+        "constant_colors",
+        "constant_vectors",
+        "aggressive"
+      ],
+      "elements": 27803,
+      "saved": 1270,
+      "warnings": 0,
+      "declaredGlobals": 128,
+      "declaredPlayerVars": 121
+    }
+  ]
+}

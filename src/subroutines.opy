@@ -29,14 +29,17 @@ macro minibossMutationMacro():
 
 
 macro botStatManagementMacro():
-    eventPlayer.biteDamage = biteDamages[botHeros.index(eventPlayer.getHero())]
+    # tmp0: current bot hero's table index, to look up bite, movement and damage settings without repeating the hero search.
+    tmp0 = botHeros.index(eventPlayer.getHero())
+    eventPlayer.biteDamage = biteDamages[tmp0]
     #Re-calibrate bite damage
-    eventPlayer.biteDamage *= 100 / damageDealt[botHeros.index(eventPlayer.getHero())]
-    eventPlayer.biteDuration = biteDurations[botHeros.index(eventPlayer.getHero())]
+    eventPlayer.biteDamage *= 100 / damageDealt[tmp0]
+    eventPlayer.biteDuration = biteDurations[tmp0]
     #Range from 0 to 1 in terms of throttle
-    eventPlayer.botThrottleSpeed = throttleSpeeds[botHeros.index(eventPlayer.getHero())]
-    eventPlayer.damageDealt = damageDealt[botHeros.index(eventPlayer.getHero())] / 100
-    eventPlayer.setDamageDealt(eventPlayer.damageDealt * 100)
+    eventPlayer.botThrottleSpeed = throttleSpeeds[tmp0]
+    # tmp0: normalized damage multiplier; the hero index is no longer needed after this lookup.
+    tmp0 = damageDealt[tmp0] / 100
+    eventPlayer.setDamageDealt(tmp0 * 100)
     eventPlayer.setDamageReceived(100)
     eventPlayer.movementSpeed = 1
     eventPlayer.setMoveSpeed(eventPlayer.movementSpeed * 100 + ((len(getDeadPlayers(Team.1).filter(lambda player: player.deathTimer <= 0))) * 3))
@@ -138,12 +141,13 @@ macro botEntityManagementMacro():
                 createEffect(getAllPlayers().filter(lambda _: eventPlayer.chase1 != null), Effect.GOOD_AURA, Color.LIME_GREEN, eventPlayer.chase1, 0.2 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
                 eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
                 #Gas Clouds
-                for eventPlayer.entityCount in range(3):
+                # tmp0: gas-cloud visual index, to create each cloud and ring with a captured array index.
+                for tmp0 in range(3):
                     #Cloud Effect
-                    createEffect(getAllPlayers().filter(lambda _: eventPlayer.abilityArray1[evalOnce(eventPlayer.entityCount)] != null), Effect.CLOUD, Color.LIME_GREEN, eventPlayer.abilityArray1[evalOnce(eventPlayer.entityCount)], eventPlayer.abilityArray2[evalOnce(eventPlayer.entityCount)] + 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                    createEffect(getAllPlayers().filter(lambda _: eventPlayer.abilityArray1[evalOnce(tmp0)] != null), Effect.CLOUD, Color.LIME_GREEN, eventPlayer.abilityArray1[evalOnce(tmp0)], eventPlayer.abilityArray2[evalOnce(tmp0)] + 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
                     eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
                     #Cloud Effect ring
-                    createEffect(getAllPlayers().filter(lambda _: eventPlayer.abilityArray1[evalOnce(eventPlayer.entityCount)] != null), Effect.RING, Color.LIME_GREEN, eventPlayer.abilityArray1[evalOnce(eventPlayer.entityCount)], eventPlayer.abilityArray2[evalOnce(eventPlayer.entityCount)] + 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                    createEffect(getAllPlayers().filter(lambda _: eventPlayer.abilityArray1[evalOnce(tmp0)] != null), Effect.RING, Color.LIME_GREEN, eventPlayer.abilityArray1[evalOnce(tmp0)], eventPlayer.abilityArray2[evalOnce(tmp0)] + 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
                     eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
             else:
                 #Roadhog toxic cloud
@@ -151,7 +155,7 @@ macro botEntityManagementMacro():
                 eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
         elif eventPlayer.getHero() == Hero.MERCY:
             #Mercy tentacle
-            createBeam(getAllPlayers().filter(lambda _: eventPlayer.botTempValue != 0), Beam.BAD, eventPlayer.getEyePosition() + vect(0, 0.5, 0) * eventPlayer.size if eventPlayer.isInAir() else eventPlayer.getEyePosition(), eventPlayer.chase1, Color.LIME_GREEN, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            createBeam(getAllPlayers().filter(lambda _: eventPlayer.botTempValue != 0), Beam.BAD, eventPlayer.getEyePosition() + offsetUpHalfConst * eventPlayer.size if eventPlayer.isInAir() else eventPlayer.getEyePosition(), eventPlayer.chase1, Color.LIME_GREEN, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
             #Tentacle sound effect
             createEffect(getAllPlayers().filter(lambda _: eventPlayer.botTempValue != 0), Effect.ENERGY_SOUND, Color.WHITE, eventPlayer.chase1, 400, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -215,13 +219,13 @@ macro botEntityManagementMacro():
 macro globalObjectiveEntityManagementMacro():
     objectiveValue = objectiveTypes[0]
     #Destroy all current objective effects and texts
-    for I in range(len(objectiveEntities)):
-        destroyProgressBarHud(objectiveEntities[I])
-        destroyProgressBarInWorldText(objectiveEntities[I])
-        destroyEffect(objectiveEntities[I])
-        destroyHudText(objectiveEntities[I])
-        destroyIcon(objectiveEntities[I])
-        destroyInWorldText(objectiveEntities[I])
+    for objectiveEntitiesCount in range(len(objectiveEntities)):
+        destroyProgressBarHud(objectiveEntities[objectiveEntitiesCount])
+        destroyProgressBarInWorldText(objectiveEntities[objectiveEntitiesCount])
+        destroyEffect(objectiveEntities[objectiveEntitiesCount])
+        destroyHudText(objectiveEntities[objectiveEntitiesCount])
+        destroyIcon(objectiveEntities[objectiveEntitiesCount])
+        destroyInWorldText(objectiveEntities[objectiveEntitiesCount])
         wait()
     objectiveEntities = []
     #Capture Point/Extraction Point
@@ -234,8 +238,9 @@ macro globalObjectiveEntityManagementMacro():
             #Extraction zone dome
             createEffect(getLivingPlayers(Team.1).filter(lambda _: extractionZoneRad < 200), Effect.SPHERE, Color.LIME_GREEN, objectivePositions[0], extractionZoneRad, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             objectiveEntities.append(getLastCreatedEntity())
-            for I in range(3):
-                createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.SKY_BLUE, objectivePositions[0] + vect(0, [-2, 22, 46][I], 0), objectiveRad, EffectReeval.VISIBILITY)
+            # tmp0: extraction light-shaft layer index, to select heights -2, 22 and 46.
+            for tmp0 in range(3):
+                createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.SKY_BLUE, objectivePositions[0] + vect(0, [-2, 22, 46][tmp0], 0), objectiveRad, EffectReeval.VISIBILITY)
                 objectiveEntities.append(getLastCreatedEntity())
             #Extraction icon
             createIcon(getAllPlayers().exclude(playersOnObjective), objectivePositions[0] + vect(0, 1, 0), Icon.ARROW_DOWN, IconReeval.VISIBILITY, Color.SKY_BLUE)
@@ -372,18 +377,19 @@ macro globalObjectiveEntityManagementMacro():
         createInWorldText(playersOnObjective, "{0}%".format(floor(objectiveCaptureValue[objectiveResourcePositions.index(sorted(objectiveResourcePositions, lambda x: distance(localPlayer.getPosition(), x))[0])])), updateEveryFrame(localPlayer.getEyePosition() + ((directionFromAngles(localPlayer.getHorizontalFacingAngle(), localPlayer.getVerticalFacingAngle() + 15)) * 200)), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, objectiveColor)
         objectiveEntities.append(getLastCreatedText())
         #Terminal effects
-        for I in range(len(objectiveCaptureValue)):
+        # tmp0: terminal index, to create its icon, repair ring, screen and distance text.
+        for tmp0 in range(len(objectiveCaptureValue)):
             #Terminal icon
-            createIcon(getPlayers(Team.1).filter(lambda player: distance(player.getPosition(), objectiveResourcePositions[evalOnce(I)]) > objectiveRad and objectiveCaptureValue[evalOnce(I)] < 100), objectiveResourcePositions[evalOnce(I)] + vect(0, 1, 0), Icon.BOLT, IconReeval.VISIBILITY_AND_POSITION, objectiveColor)
+            createIcon(getPlayers(Team.1).filter(lambda player: distance(player.getPosition(), objectiveResourcePositions[evalOnce(tmp0)]) > objectiveRad and objectiveCaptureValue[evalOnce(tmp0)] < 100), objectiveResourcePositions[evalOnce(tmp0)] + vect(0, 1, 0), Icon.BOLT, IconReeval.VISIBILITY_AND_POSITION, objectiveColor)
             objectiveEntities.append(getLastCreatedEntity())
             #Terminal repair area ring
-            createEffect(getAllPlayers(), Effect.RING, objectiveColor, objectiveResourcePositions[evalOnce(I)], objectiveRad, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            createEffect(getAllPlayers(), Effect.RING, objectiveColor, objectiveResourcePositions[evalOnce(tmp0)], objectiveRad, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             objectiveEntities.append(getLastCreatedEntity())
             #Terminal "screen" light shaft
-            createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, objectiveColor, objectiveResourcePositions[evalOnce(I)] + directionTowards(objectiveResourcePositions[evalOnce(I)], objectivePositions[0]) * objectiveRad * 0.8 + vect(0, -1.5, 0), 0.25, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, objectiveColor, objectiveResourcePositions[evalOnce(tmp0)] + directionTowards(objectiveResourcePositions[evalOnce(tmp0)], objectivePositions[0]) * objectiveRad * 0.8 + vect(0, -1.5, 0), 0.25, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             objectiveEntities.append(getLastCreatedEntity())
             #Objective distance
-            createInWorldText(getAllPlayers().filter(lambda player: objectiveCaptureValue[evalOnce(I)] < 100 and distance(player.getPosition(), objectiveResourcePositions[evalOnce(I)]) > objectiveRad), "Distance: {0}m".format(distance(localPlayer.getPosition(), objectiveResourcePositions[evalOnce(I)])), objectiveResourcePositions[evalOnce(I)], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, objectiveColor, SpecVisibility.NEVER)
+            createInWorldText(getAllPlayers().filter(lambda player: objectiveCaptureValue[evalOnce(tmp0)] < 100 and distance(player.getPosition(), objectiveResourcePositions[evalOnce(tmp0)]) > objectiveRad), "Distance: {0}m".format(distance(localPlayer.getPosition(), objectiveResourcePositions[evalOnce(tmp0)])), objectiveResourcePositions[evalOnce(tmp0)], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, objectiveColor, SpecVisibility.NEVER)
             objectiveEntities.append(getLastCreatedText())
 
 
@@ -401,7 +407,8 @@ def setDifficulty():
         biteDurations = numbersList.slice(NL_BITE_DURATIONS_INSANITY_OFFSET, NL_BITE_DURATIONS_INSANITY_LEN)
         #Bot throttle speeds
         throttleSpeeds = []
-        for I in range(21):
+        # tmp0: hero-entry counter, to fill all 21 Insanity throttle speeds with 1.
+        for tmp0 in range(21):
             throttleSpeeds.append(1)
         #Bot damage dealt
         damageDealt = numbersList.slice(NL_DAMAGE_DEALT_INSANITY_OFFSET, NL_DAMAGE_DEALT_INSANITY_LEN)
@@ -468,27 +475,27 @@ def setPrematchTimer():
     #Voting in progress
     if voting:
         #Event player is voting
-        if eventPlayer.playerMenuStatus[1] == 1:
+        if eventPlayer.menuVoting == 1:
             #Set match time to hidden timer
             setMatchTime(chase1)
         #Event Player is not voting
         else:
             #All players are finished voting
-            if getMatchTime() > 5 + votingEndTime and ((len(getPlayers(Team.1).filter(lambda player: player.playerMenuStatus[1] == 0 and player.playerMenuStatus[0] > 0))) == getNumberOfPlayers(Team.1)):
+            if getMatchTime() > 5 + votingEndTime and ((len(getPlayers(Team.1).filter(lambda player: player.menuVoting == 0 and player.menuStage > 0))) == getNumberOfPlayers(Team.1)):
                 setMatchTime(5 + votingEndTime)
-            elif getMatchTime() > 20 + votingEndTime and ((len(getPlayers(Team.1).filter(lambda player: player.playerMenuStatus[1] == 0 and player.playerMenuStatus[0] > 0))) == len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus))):
+            elif getMatchTime() > 20 + votingEndTime and ((len(getPlayers(Team.1).filter(lambda player: player.menuVoting == 0 and player.menuStage > 0))) == len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus))):
                 setMatchTime(20 + votingEndTime)
     #Voting complete
     else:
         #Event Player deselects hero
-        if eventPlayer.playerMenuStatus[0] < 2:
+        if eventPlayer.menuStage < 2:
             setMatchTime(chase1)
         else:
-            if getMatchTime() > 10 and len(getPlayers(Team.1).filter(lambda player: player.playerMenuStatus[0] == 2)) == getNumberOfPlayers(Team.1):
+            if getMatchTime() > 10 and len(getPlayers(Team.1).filter(lambda player: player.menuStage == 2)) == getNumberOfPlayers(Team.1):
                 setMatchTime(15)
                 wait()
                 setMatchTime(10)
-            elif getMatchTime() > 20 and len(getPlayers(Team.1).filter(lambda player: player.playerMenuStatus[0] == 2)) == len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus)):
+            elif getMatchTime() > 20 and len(getPlayers(Team.1).filter(lambda player: player.menuStage == 2)) == len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus)):
                 setMatchTime(20)
 
 
@@ -659,8 +666,9 @@ def selectTarget():
     eventPlayer.potentialTargets.append(sorted(playerTargetList.exclude(eventPlayer.potentialTargets), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))
     #Remove invisible players
     eventPlayer.potentialTargets = eventPlayer.potentialTargets.filter(lambda x: not x.invisible)
-    for eventPlayer.pPowerUpCount_bTeleCount in range(len(eventPlayer.potentialTargets)):
-        eventPlayer.testTarget = eventPlayer.potentialTargets[eventPlayer.pPowerUpCount_bTeleCount]
+    # tmp0: candidate-target index, to select the first target visible to this bot.
+    for tmp0 in range(len(eventPlayer.potentialTargets)):
+        eventPlayer.testTarget = eventPlayer.potentialTargets[tmp0]
         if isInLoS(eventPlayer.testTarget.getEyePosition(), eventPlayer.getPosition() + vect(0, losHeightCheck, 0)):
             break
         #wait()
@@ -704,7 +712,6 @@ def botRespawnInitialization():
     eventPlayer.wallCollisionEnabled = true
     eventPlayer.enablePlayerCollision()
     eventPlayer.playerCollisionEnabled = true
-    eventPlayer.canWallPhase = true
     eventPlayer.attached = false
     eventPlayer.specialFacing = false
     eventPlayer.specialThrottling = false
@@ -717,8 +724,9 @@ def botRespawnInitialization():
     eventPlayer.bossHealth = -1
     #Chance for a minboss on high difficulties
     if difficultySetting >= 3 and eventPlayer in bosses == false and len(miniBoss.filter(lambda x: entityExists(x))) == 0:
-        eventPlayer.randVal = random.randint(1, 27 if objectiveTypes[0] == 1 else 189)
-        if eventPlayer.randVal == 1:
+        # tmp0: miniboss promotion roll, consumed before the possible initialization wait.
+        tmp0 = random.randint(1, 27 if objectiveTypes[0] == 1 else 189)
+        if tmp0 == 1:
             minibossMutationMacro()
             wait(2)
     botStatManagementMacro()

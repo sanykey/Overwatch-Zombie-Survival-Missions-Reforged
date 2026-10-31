@@ -21,7 +21,7 @@ rule "BOT BECOMES ZOMBIE EGG":
     @Condition objectiveComplete == false
     @Condition bosses[0] == eventPlayer
     
-    eventPlayer.teleport(vect(500, 500, 500))
+    eventPlayer.teleport(dummyHoldingPositionConst)
     while eventPlayer.isDead():
         eventPlayer.resurrect()
         waitUntil(eventPlayer.isAlive(), 1)
@@ -65,7 +65,7 @@ rule "BOTS TELEPORT TO THE EGG":
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.successfullyTeleported = true
-    eventPlayer.customTelePos = vect(500, 500, 500)
+    eventPlayer.customTelePos = dummyHoldingPositionConst
     eventPlayer.telePos = objectivePositions[0]
     eventPlayer.averagePlayersPos = eventPlayer.telePos
     eventPlayer.reviveTimer = 1

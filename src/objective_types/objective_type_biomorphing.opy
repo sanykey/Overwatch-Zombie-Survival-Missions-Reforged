@@ -3,18 +3,20 @@
 
 
 macro biowasteOutputMacro():
-    biowasteOutput0 = queuedBioType[0]
+    # tmp0: next queued biowaste type, returned synchronously to assign to the holder kept in tmp1.
+    tmp0 = queuedBioType[0]
     del queuedBioType[0]
     if len(queuedBioType) == 0:
         queuedBioType = random.shuffle([0, 1, 2])
 
 
 macro biowasteAssignmentMacro():
-    biowasteTypes.append(biowasteInput0)
-    objectiveResourcePositions.append(biowasteInput1)
-    createEffect(getAllPlayers(), Effect.ORB, biowasteColorLookUp[biowasteInput0], biowasteInput1, 1, EffectReeval.NONE)
+    # Synchronous inputs: tmp0 = type, tmp1 = position. No reevaluated arguments.
+    biowasteTypes.append(tmp0)
+    objectiveResourcePositions.append(tmp1)
+    createEffect(getAllPlayers(), Effect.ORB, biowasteColorLookUp[tmp0], tmp1, 1, EffectReeval.NONE)
     biowasteEffects.append(getLastCreatedEntity())
-    createInWorldText(getAllPlayers(), biowasteTextLookUp[biowasteInput0], biowasteInput1 + vect(0, 0.75, 0), 1, Clip.NONE, WorldTextReeval.NONE)
+    createInWorldText(getAllPlayers(), biowasteTextLookUp[tmp0], tmp1 + offsetUpThreeQuartersConst, 1, Clip.NONE, WorldTextReeval.NONE)
     biowasteString.append(getLastCreatedText())
 
 
@@ -75,17 +77,21 @@ rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS":
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     if objectiveCaptureValue < 100:
         waitUntil(goalCheck == false, 99999)
-        biowasteLocal0 = getPlayers(Team.2).index((getPlayers(Team.2).filter(lambda player: player.playerObjectiveResourceValue != amountPerResource))[0])
-        biowasteLocal1 = getPlayers(Team.2)
-        biowasteLocal1 = biowasteLocal1[biowasteLocal0]
-        biowasteLocal1.playerObjectiveResourceValue = amountPerResource
+        # tmp0: index of a zombie not holding a full resource, to choose the next resource carrier.
+        tmp0 = getPlayers(Team.2).index((getPlayers(Team.2).filter(lambda player: player.playerObjectiveResourceValue != amountPerResource))[0])
+        # tmp1: current zombie list, to resolve the carrier index in tmp0 to a player.
+        tmp1 = getPlayers(Team.2)
+        # tmp1: selected zombie, kept while biowasteOutputMacro replaces tmp0 with its resource type.
+        tmp1 = tmp1[tmp0]
+        tmp1.playerObjectiveResourceValue = amountPerResource
         biowasteOutputMacro()
-        biowasteLocal1.biowasteType = biowasteOutput0
+        tmp1.biowasteType = tmp0
     else:
         if len(availablePowerups) > 0:
-            for resourcePowerUpDropCount in range(4):
+            # tmp0: reward-item index, to place four power-ups at 90-degree intervals around the objective.
+            for tmp0 in range(4):
                 powerUpIDs.append(random.choice(availablePowerups))
-                powerUpPositions.append(objectivePositions[0] + directionFromAngles(90 * resourcePowerUpDropCount, 0))
+                powerUpPositions.append(objectivePositions[0] + directionFromAngles(90 * tmp0, 0))
         objectiveComplete = true
     if ruleCondition:
         loop()
@@ -104,15 +110,17 @@ rule "BIOWASTE IS PICKED UP":
     @Condition (not eventPlayer.isDummy() or eventPlayer.getTeam() == Team.2) == true
     
     wait(0.1, Wait.ABORT_WHEN_FALSE)
-    biowasteLocal0 = sorted(objectiveResourcePositions, lambda x: distance(eventPlayer.getPosition(), x))[0]
-    biowasteLocal1 = objectiveResourcePositions.index(biowasteLocal0)
-    eventPlayer.biowasteType = biowasteTypes[biowasteLocal1]
-    destroyEffect(biowasteEffects[biowasteLocal1])
-    destroyInWorldText(biowasteString[biowasteLocal1])
-    del biowasteTypes[biowasteLocal1]
-    del objectiveResourcePositions[biowasteLocal1]
-    del biowasteEffects[biowasteLocal1]
-    del biowasteString[biowasteLocal1]
+    # tmp0: nearest dropped biowaste position, to identify the resource being picked up.
+    tmp0 = sorted(objectiveResourcePositions, lambda x: distance(eventPlayer.getPosition(), x))[0]
+    # tmp1: resource index shared by position, type and visual arrays, to pick up and remove the same orb.
+    tmp1 = objectiveResourcePositions.index(tmp0)
+    eventPlayer.biowasteType = biowasteTypes[tmp1]
+    destroyEffect(biowasteEffects[tmp1])
+    destroyInWorldText(biowasteString[tmp1])
+    del biowasteTypes[tmp1]
+    del objectiveResourcePositions[tmp1]
+    del biowasteEffects[tmp1]
+    del biowasteString[tmp1]
     eventPlayer.playerObjectiveResourceValue = amountPerResource
     smallMessage(eventPlayer, "  Go to the deposit area!")
     playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.WHITE, eventPlayer.getPosition(), 50)
@@ -133,16 +141,18 @@ rule "PLAYER DELIVERS RESOURCE VALUE":
     if not eventPlayer in playersOnObjective:
         playersOnObjective.append(eventPlayer)
     wait(0.125)
-    eventPlayer.playerWasteValue = 8.9
+    # tmp0: deposit-time divisor for ordinary biowaste, used to calculate this tick's progress.
+    tmp0 = 8.9
     #Extra points if correct biowaste type
     if queuedGoalType[0] == eventPlayer.biowasteType:
-        eventPlayer.playerWasteValue = 2.9
+        # tmp0: shorter deposit-time divisor for the requested resource, to award faster progress.
+        tmp0 = 2.9
     #Damage player if resource is blood, damage more if above health.
     damage(eventPlayer, eventPlayer, (50.33 if eventPlayer.getHealth() > 200 else 10.33) if queuedGoalType[0] == 3 else 0)
     #(Amount per resource / dump time) x tick speed
     eventPlayer.playerObjectiveResourceValue -= amountPerResource / 3 * 0.125
     #(Amount per resource / dump time) x tick speed, if resource is blood then this will go slower x the number of players
-    objectiveCaptureValue += (amountPerResource / (getNumberOfPlayers(Team.1) * 4.167 if queuedGoalType[0] == 3 else eventPlayer.playerWasteValue)) * 0.125
+    objectiveCaptureValue += (amountPerResource / (getNumberOfPlayers(Team.1) * 4.167 if queuedGoalType[0] == 3 else tmp0)) * 0.125
     if objectiveCaptureValue >= goalPost:
         del queuedGoalType[0]
         objectiveCaptureValue = goalPost
@@ -173,8 +183,10 @@ rule "BIOWASTE MANAGEMENT":
     @Condition len(deferredType) > 0
     
     while len(deferredType) > 0:
-        biowasteInput0 = deferredType[0]
-        biowasteInput1 = deferredPositions[0]
+        # tmp0: first queued biowaste type, passed to biowasteAssignmentMacro to create the dropped orb.
+        tmp0 = deferredType[0]
+        # tmp1: matching queued drop position, passed to biowasteAssignmentMacro to place the orb.
+        tmp1 = deferredPositions[0]
         biowasteAssignmentMacro()
         del deferredType[0]
         del deferredPositions[0]

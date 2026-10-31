@@ -25,11 +25,13 @@ rule "EFFECT/TEXT (PERMANENT)":
     @Condition gameStatus == true
     @Condition len(availablePowerups) > 0
     
-    #One row per item ID (1-13); freeze only the loop index.
-    tmp0 = [Color.GREEN, Color.YELLOW, Color.BLUE, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.BLUE, Color.RED, Color.PURPLE, Color.RED, Color.WHITE]
-    for I in range(13):
+    #One row per item ID (1-13); capture the index and the resolved color.
+    # tmp1: colors indexed by item ID minus 1, to give each power-up HUD row its item color.
+    tmp1 = [Color.GREEN, Color.YELLOW, Color.BLUE, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.BLUE, Color.RED, Color.PURPLE, Color.RED, Color.WHITE]
+    # tmp0: zero-based item index, to choose the row's visibility, name, instructions and color.
+    for tmp0 in range(13):
         hudText(
-            getLivingPlayers(Team.1).filter(lambda player: player.currentPowerUp == evalOnce(I) + 1),
+            getLivingPlayers(Team.1).filter(lambda player: player.currentPowerUp == evalOnce(tmp0) + 1),
             [
                 "CURE",
                 "REVIVE",
@@ -44,7 +46,7 @@ rule "EFFECT/TEXT (PERMANENT)":
                 "Bounce Pad",
                 "Ultimate Charger",
                 "Stun"
-            ][evalOnce(I)],
+            ][evalOnce(tmp0)],
             "Hold [{0}] to drop your power up".format(inputBindingString(Button.RELOAD)),
             [
                 "Hold [{0}] to stop all damage over time and cure yourself".format(inputBindingString(Button.INTERACT)),
@@ -60,12 +62,12 @@ rule "EFFECT/TEXT (PERMANENT)":
                 "Hold [{0}] to place a bounce pad".format(inputBindingString(Button.INTERACT)),
                 "Hold [{0}] to rapidly charge your ultimate".format(inputBindingString(Button.INTERACT)),
                 "Hold [{0}] to stun nearby enemies".format(inputBindingString(Button.INTERACT))
-            ][evalOnce(I)],
+            ][evalOnce(tmp0)],
             HudPosition.LEFT,
             100,
-            tmp0[evalOnce(I)],
-            tmp0[evalOnce(I)],
-            tmp0[evalOnce(I)],
+            evalOnce(tmp1[tmp0]),
+            evalOnce(tmp1[tmp0]),
+            evalOnce(tmp1[tmp0]),
             HudReeval.VISIBILITY_AND_STRING
         )
 

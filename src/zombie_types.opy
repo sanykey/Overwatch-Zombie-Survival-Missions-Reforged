@@ -1,5 +1,7 @@
 #!mainFile "main.opy"
 
+subroutine smolderBoost
+subroutine spawnGasCloud
 subroutine abilityThrowdown
 subroutine entityFloat
 subroutine explosionWarning
@@ -9,14 +11,7 @@ macro smolderEnragedMacro():
     eventPlayer.botTempValue = 2
     stopChasing(eventPlayer.chase1)
     eventPlayer.stopForcingButton(Button.CROUCH)
-    playEffect(getAllPlayers(), DynamicEffect.BAD_PICKUP_EFFECT, Color.RED, eventPlayer, 1.5 * eventPlayer.size)
-    eventPlayer.forceButtonPress(Button.ABILITY_1)
-    eventPlayer.setUltCharge(100)
-    eventPlayer.forceButtonPress(Button.ULTIMATE)
-    eventPlayer.size *= 1.5
-    eventPlayer.startScalingSize(eventPlayer.size, false)
-    eventPlayer.movementSpeed *= 9
-    eventPlayer.setMoveSpeed(eventPlayer.movementSpeed * 100)
+    smolderBoost()
     wait(5)
     eventPlayer.forceButtonPress(Button.ABILITY_1)
 
@@ -49,8 +44,9 @@ rule "BASIC (REAPER) SHADOW STEP (BOSS)":
     eventPlayer.startFacing(vect(-1, 0, 0), 180, Relativity.TO_PLAYER)
     while eventPlayer.isUsingAbility1():
         entityFloat()
-        for eventPlayer.pForceFieldCount2_bCount1 in range(len(eventPlayer.botSpecialPotentialTargets)):
-            eventPlayer.botSpecialTarget = eventPlayer.botSpecialPotentialTargets[eventPlayer.pForceFieldCount2_bCount1]
+        # tmp0: floated-player index, to push each affected player upward during the shadow-step ability.
+        for tmp0 in range(len(eventPlayer.botSpecialPotentialTargets)):
+            eventPlayer.botSpecialTarget = eventPlayer.botSpecialPotentialTargets[tmp0]
             if eventPlayer.botSpecialTarget.getPosition().y < eventPlayer.getPosition().y + 4 * eventPlayer.size:
                 #Make target float up
                 eventPlayer.botSpecialTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.botSpecialTarget.getPosition(), eventPlayer.getPosition())), -50), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
@@ -214,17 +210,11 @@ rule "BEHEMOTH (ROAD) TOXIC CLOUD":
         #Gas Cloud Areas of Effect
         eventPlayer.abilityArray2 = []
         while distance(eventPlayer.chase1, eventPlayer.botTempValue) > 0.1 and len(eventPlayer.abilityArray1) < 3:
-            eventPlayer.abilityArray1.append(eventPlayer.chase1)
-            eventPlayer.abilityArray2.append(0)
-            playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.LIME_GREEN, eventPlayer.chase1, 0.4 * eventPlayer.size)
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.LIME_GREEN, eventPlayer.chase1, 75)
+            spawnGasCloud()
             waitUntil(distance(eventPlayer.chase1, eventPlayer.botTempValue) <= 0.1 or len(eventPlayer.abilityArray1) >= 3, 0.9)
         #If projectile hits wall
         if len(eventPlayer.abilityArray1) < 3:
-            eventPlayer.abilityArray1.append(eventPlayer.chase1)
-            eventPlayer.abilityArray2.append(0)
-            playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.LIME_GREEN, eventPlayer.chase1, 0.4 * eventPlayer.size)
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.LIME_GREEN, eventPlayer.chase1, 75)
+            spawnGasCloud()
         stopChasing(eventPlayer.chase1)
         eventPlayer.chase1 = null
         waitUntil(eventPlayer.isDead(), 3)
@@ -242,10 +232,11 @@ rule "BEHEMOTH GAS STREAM (BOSS)":
     @Condition len(eventPlayer.abilityArray1) > 0
     
     eventPlayer.botSpecialPotentialTargets = []
-    for eventPlayer.pForceFieldCount2_bCount1 in range(len(eventPlayer.abilityArray1)):
-        if eventPlayer.abilityArray2[eventPlayer.pForceFieldCount2_bCount1] < 6 * eventPlayer.size:
-            eventPlayer.abilityArray2[eventPlayer.pForceFieldCount2_bCount1] += 0.2 * eventPlayer.size
-        eventPlayer.botSpecialPotentialTargets.append(playerTargetList.filter(lambda x: not x in eventPlayer.botSpecialPotentialTargets and distance(eventPlayer.abilityArray1[eventPlayer.pForceFieldCount2_bCount1], vect(x.getEyePosition().x, eventPlayer.abilityArray1[eventPlayer.pForceFieldCount2_bCount1].y, x.getEyePosition().z)) < eventPlayer.abilityArray2[eventPlayer.pForceFieldCount2_bCount1] and abs(eventPlayer.abilityArray1[eventPlayer.pForceFieldCount2_bCount1].y - x.getEyePosition().y) < eventPlayer.abilityArray2[eventPlayer.pForceFieldCount2_bCount1] / 5))
+    # tmp0: gas-cloud index, to expand its radius and collect newly hit players.
+    for tmp0 in range(len(eventPlayer.abilityArray1)):
+        if eventPlayer.abilityArray2[tmp0] < 6 * eventPlayer.size:
+            eventPlayer.abilityArray2[tmp0] += 0.2 * eventPlayer.size
+        eventPlayer.botSpecialPotentialTargets.append(playerTargetList.filter(lambda x: not x in eventPlayer.botSpecialPotentialTargets and distance(eventPlayer.abilityArray1[tmp0], vect(x.getEyePosition().x, eventPlayer.abilityArray1[tmp0].y, x.getEyePosition().z)) < eventPlayer.abilityArray2[tmp0] and abs(eventPlayer.abilityArray1[tmp0].y - x.getEyePosition().y) < eventPlayer.abilityArray2[tmp0] / 5))
     eventPlayer.botSpecialPotentialTargets.startDamageOverTime(eventPlayer, 2.5, eventPlayer.biteDamage * 0.1)
     if eventPlayer.damageOverTimeDuration < 2.5 and len(eventPlayer.botSpecialPotentialTargets) > 0:
         eventPlayer.damageOverTimeDuration = 2.5
@@ -601,7 +592,7 @@ rule "SLIMER (MERCY) TENTACLE GRAB":
     eventPlayer.specialThrottling = true
     eventPlayer.stopThrottleInDirection()
     eventPlayer.botSpecialTarget = null
-    eventPlayer.chase1 = eventPlayer.getEyePosition() + vect(0, 0.5, 0) * eventPlayer.size if eventPlayer.isInAir() else eventPlayer.getEyePosition()
+    eventPlayer.chase1 = eventPlayer.getEyePosition() + offsetUpHalfConst * eventPlayer.size if eventPlayer.isInAir() else eventPlayer.getEyePosition()
     eventPlayer.botTempValue = eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 20 * eventPlayer.size
     #Tentacle extends
     chaseAtRate(eventPlayer.chase1, eventPlayer.botTempValue, 50)
@@ -614,7 +605,7 @@ rule "SLIMER (MERCY) TENTACLE GRAB":
         wait(0.032)
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.LIME_GREEN, eventPlayer.chase1, 0.25)
     #Tentacle retract
-    chaseAtRate(eventPlayer.chase1, eventPlayer.getEyePosition() + vect(0, 0.5, 0) * eventPlayer.size if eventPlayer.isInAir() else eventPlayer.getEyePosition(), 50)
+    chaseAtRate(eventPlayer.chase1, eventPlayer.getEyePosition() + offsetUpHalfConst * eventPlayer.size if eventPlayer.isInAir() else eventPlayer.getEyePosition(), 50)
     if eventPlayer.isAlive() and not eventPlayer.crowdControlled and eventPlayer.botSpecialTarget != null:
         #Knocks target down if facing away from Mercy
         if abs(angleDifference(eventPlayer.botSpecialTarget.getHorizontalFacingAngle(), horizontalAngleOfDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botSpecialTarget.getPosition())))) < 75:
@@ -623,7 +614,7 @@ rule "SLIMER (MERCY) TENTACLE GRAB":
         eventPlayer.botSpecialTarget.applyImpulse(directionTowards(eventPlayer.botSpecialTarget.getEyePosition(), eventPlayer.getEyePosition()), eventPlayer.size * (15 if eventPlayer.botSpecialTarget.getMaxHealth() < 400 else 10), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
         wait(0.35)
         eventPlayer.botSpecialTarget.setGravity(100)
-    while (distance(eventPlayer.chase1, eventPlayer.getEyePosition() + vect(0, 0.5, 0) * eventPlayer.size if eventPlayer.isInAir() else eventPlayer.getEyePosition())) > 0.25:
+    while (distance(eventPlayer.chase1, eventPlayer.getEyePosition() + offsetUpHalfConst * eventPlayer.size if eventPlayer.isInAir() else eventPlayer.getEyePosition())) > 0.25:
         wait(0.25)
     eventPlayer.botTempValue = null
     stopChasing(eventPlayer.chase1)
@@ -679,8 +670,9 @@ rule "PRIME SLIMER (EMRE) FLIGHT (BOSS)":
                 eventPlayer.forceButtonPress(Button.JUMP)
             #Entities that will be floated
             entityFloat()
-            for eventPlayer.pForceFieldCount2_bCount1 in range(len(eventPlayer.botSpecialPotentialTargets)):
-                eventPlayer.botSpecialTarget = eventPlayer.botSpecialPotentialTargets[eventPlayer.pForceFieldCount2_bCount1]
+            # tmp0: floated-player index, to lift low targets and push higher targets away during flight.
+            for tmp0 in range(len(eventPlayer.botSpecialPotentialTargets)):
+                eventPlayer.botSpecialTarget = eventPlayer.botSpecialPotentialTargets[tmp0]
                 if eventPlayer.botSpecialTarget.getPosition().y < eventPlayer.getPosition().y:
                     #Make target float up
                     eventPlayer.botSpecialTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.botSpecialTarget.getPosition(), eventPlayer.getPosition())), -75), 0.75, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
@@ -1242,14 +1234,7 @@ rule "SMOLDER ACTIVATES FROM DAMAGE":
     eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), attacker.getEyePosition()), 9999)
     eventPlayer.lastTarget = attacker
     eventPlayer.botTarget = attacker
-    playEffect(getAllPlayers(), DynamicEffect.BAD_PICKUP_EFFECT, Color.RED, eventPlayer, 1.5 * eventPlayer.size)
-    eventPlayer.forceButtonPress(Button.ABILITY_1)
-    eventPlayer.setUltCharge(100)
-    eventPlayer.forceButtonPress(Button.ULTIMATE)
-    eventPlayer.size *= 1.5
-    eventPlayer.startScalingSize(eventPlayer.size, false)
-    eventPlayer.movementSpeed *= 9
-    eventPlayer.setMoveSpeed(eventPlayer.movementSpeed * 100)
+    smolderBoost()
     wait(0.25)
     restoreDefaultFacingMovement()
     wait(5)
@@ -1301,8 +1286,9 @@ rule "SMOLDER SUPER SLAM":
     playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, eventPlayer.getPosition(), 100)
     eventPlayer.botSpecialPotentialTargets = playerTargetList.concat(getLivingPlayers(Team.2)).exclude(eventPlayer).filter(lambda x: not x.hasStatus(Status.PHASED_OUT) and distance(eventPlayer.getPosition(), x.getPosition()) < 7.5 * eventPlayer.size and isInLoS(eventPlayer.getPosition() + vect(0, losHeightCheck, 0), x.getPosition() + vect(0, losHeightCheck, 0)))
     (eventPlayer.botSpecialPotentialTargets.filter(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < 5 * eventPlayer.size and isInLoS(eventPlayer.getPosition() + vect(0, losHeightCheck, 0), x.getPosition() + vect(0, losHeightCheck, 0), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS))).setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 0.35)
-    for eventPlayer.pForceFieldCount2_bCount1 in range(len(eventPlayer.botSpecialPotentialTargets)):
-        eventPlayer.botSpecialTarget = eventPlayer.botSpecialPotentialTargets[eventPlayer.pForceFieldCount2_bCount1]
+    # tmp0: shockwave target index, to apply distance-scaled knockback to each affected player.
+    for tmp0 in range(len(eventPlayer.botSpecialPotentialTargets)):
+        eventPlayer.botSpecialTarget = eventPlayer.botSpecialPotentialTargets[tmp0]
         eventPlayer.botSpecialTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botSpecialTarget.getPosition())), -25), (15 if distance(eventPlayer.getPosition(), eventPlayer.botSpecialTarget.getPosition()) < 5 * eventPlayer.size else 7.5) * eventPlayer.size, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
 
 
@@ -1491,3 +1477,21 @@ def explosionWarning():
         return
     kill(eventPlayer, eventPlayer)
     explosionSequence()
+
+
+def smolderBoost():
+    playEffect(getAllPlayers(), DynamicEffect.BAD_PICKUP_EFFECT, Color.RED, eventPlayer, 1.5 * eventPlayer.size)
+    eventPlayer.forceButtonPress(Button.ABILITY_1)
+    eventPlayer.setUltCharge(100)
+    eventPlayer.forceButtonPress(Button.ULTIMATE)
+    eventPlayer.size *= 1.5
+    eventPlayer.startScalingSize(eventPlayer.size, false)
+    eventPlayer.movementSpeed *= 9
+    eventPlayer.setMoveSpeed(eventPlayer.movementSpeed * 100)
+
+
+def spawnGasCloud():
+    eventPlayer.abilityArray1.append(eventPlayer.chase1)
+    eventPlayer.abilityArray2.append(0)
+    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.LIME_GREEN, eventPlayer.chase1, 0.4 * eventPlayer.size)
+    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.LIME_GREEN, eventPlayer.chase1, 75)

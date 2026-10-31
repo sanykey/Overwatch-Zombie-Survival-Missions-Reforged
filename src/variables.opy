@@ -1,15 +1,47 @@
 #!mainFile "main.opy"
 
+#!define BOT_MAX_TELEPORT_RANGE 40
+
+# Enhancement IDs also index enhancementOptions and the default-setting choices.
+# Zero means no preference in the menu; initialization resolves the configured default.
+# If that setting is "No Enhancement", zero leaves the player without an enhancement.
+enum Enhancement:
+    NO_PREFERENCE = 0,
+    KEVLAR = 1,
+    ZOMBIE_HYBRID = 2,
+    LASER_BARRICADE = 3,
+    BRAIN_KILLER = 4,
+    PYROTECHNIC = 5,
+    PLAGUE_DOCTOR = 6,
+    BORN_TO_BATTLE = 7,
+    CHARGE_BATTERY = 8,
+    HITCHHIKER = 9,
+    PUP = 10,
+
 #Global variables
 
-globalvar I
+# Shared scratch slots: assign before use and finish using them before any yield
+# (wait/waitUntil or an async call), including inside loops and called macros.
+# Reevaluated HUD/effect arguments must capture scratch values with evalOnce.
+# Use distinct slots for values that are live at the same time.
+# Document every tmp assignment, update and loop counter locally: what it stores and why.
 globalvar tmp0
+globalvar tmp1
+globalvar tmp2
 
+# Shared immutable colors and offsets.
+globalvar colorKevlarConst = rgb(240, 129, 26)
+globalvar colorChargeBatteryConst = rgb(236, 206, 44)
+globalvar colorSatelliteUplinkConst = rgb(12, 129, 132)
+globalvar offsetUpThreeQuartersConst = vect(0, 0.75, 0)
+globalvar offsetUpHalfConst = vect(0, 0.5, 0)
+globalvar dummyHoldingPositionConst = vect(500, 500, 500)
+
+globalvar objectiveEntitiesCount
 globalvar objectivePositions
 globalvar walkCenter
 globalvar objectiveCaptureValue
 globalvar startPos
-globalvar count1
 globalvar count2
 globalvar specialEffectsStrings
 globalvar playersOnObjective
@@ -17,7 +49,6 @@ globalvar testPos
 globalvar testPos2
 globalvar objectiveTypes
 globalvar objectiveRad
-globalvar losList
 globalvar reviveRadius
 globalvar botHeros
 globalvar chase1
@@ -38,14 +69,12 @@ globalvar startMenuSpacingAngle
 globalvar startCamDistance
 globalvar overtime
 globalvar challengeVotes
-globalvar botMaxTeleportRange
 globalvar difficultySetting
 globalvar biteDamages
 globalvar biteDurations
 globalvar damageDealt
 globalvar botHealthValues
 globalvar throttleSpeeds
-globalvar randVal
 globalvar specialEffectsTiming
 globalvar evacRate
 globalvar evacuatingSurvivorList
@@ -63,7 +92,6 @@ globalvar mapGrid
 globalvar challengeSetting
 globalvar attackSpawnRooms
 globalvar activeAttackSpawnRoom
-globalvar closestPlayerToObjective
 globalvar botSpawnPoints
 globalvar objectiveValue
 globalvar objectiveEntities
@@ -73,7 +101,6 @@ globalvar objectiveResourcePositions
 globalvar amountPerResource
 globalvar extractionZoneRad
 globalvar specialGameModeSetup
-globalvar resourcePowerUpDropCount
 globalvar availablePowerups
 globalvar specialGameMode
 globalvar objectiveSpacing
@@ -93,16 +120,12 @@ globalvar objectiveColor
 globalvar objectiveCount1
 globalvar objectiveChase1
 globalvar spawnRoomIndex
-globalvar averageChalllenge
 globalvar matchEndTime
 globalvar waypoints
 globalvar availableBosses
 globalvar spawnTimes
 globalvar numberOfBots
 globalvar customTelePositions
-globalvar currentBotHeroList
-globalvar botCurrentSpawnRate
-globalvar botRespawnCount
 globalvar botSpawnPointTimers
 globalvar extractionSpeedUp
 globalvar queuedBioType
@@ -116,14 +139,9 @@ globalvar queuedGoalType
 globalvar deferredPositions
 globalvar biowasteString
 globalvar biowasteEffects
-globalvar biowasteOutput0
 globalvar biowasteCount
 globalvar biowasteColorLookUp
 globalvar biowasteTextLookUp
-globalvar biowasteLocal0
-globalvar biowasteLocal1
-globalvar biowasteInput0
-globalvar biowasteInput1
 
 #Player variables
 
@@ -131,7 +149,6 @@ playervar averagePlayersPos
 playervar targeting
 playervar mutationChase
 playervar teleporting
-playervar pPowerUpCount_bTeleCount
 playervar pForceFieldCount1
 playervar pForceFieldCount2_bCount1
 playervar botTarget
@@ -151,7 +168,6 @@ playervar infectionLvl
 playervar currentPowerUp
 playervar powerUpTradeValues
 playervar powerUpEffects
-playervar powerUpUsePositionsAndInfo
 playervar pNoCooldownsCount_bCount2
 playervar pAirStrikeCount
 playervar specialCooldown
@@ -182,7 +198,6 @@ playervar bossHealth
 playervar wallCollisionEnabled
 playervar specialFacing
 playervar specialThrottling
-playervar filteredBotSpawnPointGrid
 playervar botTempValue
 playervar objectiveValue
 playervar generalPlayerBotEntities
@@ -205,13 +220,8 @@ playervar enhancementChase2
 playervar initializing
 playervar userIndex
 playervar knockbackRecieved
-playervar detectionRadius1
-playervar pBouncePadCount2
-playervar bouncePadBouncer
 playervar pStunChase1
-playervar enhancementCount1
 playervar customTelePos
-playervar damageDealt
 playervar lastTarget
 playervar abilityArray1
 playervar abilityArray2
@@ -219,7 +229,6 @@ playervar waypoint
 playervar testTarget
 playervar canTeleport
 playervar defaultOutlineColor
-playervar playerWasteValue
 playervar explosionColor1
 playervar explosionColor2
 playervar afk
@@ -227,3 +236,24 @@ playervar explosionSize
 playervar switchedHeroes
 playervar anranPortalRise
 playervar botResourceEntity
+
+# Frequently accessed array fields use individual variables to reduce element count.
+# enhancementValues retains slots 7+; playerMenuStatus retains votes in slots 2-4.
+playervar enhancementId
+playervar enhancementValue1
+playervar enhancementValue2
+playervar enhancementValue3
+playervar enhancementValue4
+playervar enhancementValue5
+playervar enhancementValue6
+playervar sentryTurretPosition
+playervar stunTarget
+playervar healBeaconPosition
+playervar forceFieldPosition
+playervar bouncePadPosition
+playervar stunOrigin
+playervar sentryTurretDirection
+playervar airStrikePosition
+playervar powerUpTradeIndex
+playervar menuStage
+playervar menuVoting

@@ -1,4 +1,5 @@
 {
   "overpy.workshopLanguage": "en-US",
-  "overpy.onlySaveOnMainFile": true
+  "overpy.onlySaveOnMainFile": true,
+  "editor.wordWrap": "on"
 }

@@ -125,8 +125,9 @@ rule "BOT DIES":
         eventPlayer.forceButtonPress(Button.ULTIMATE)
         return
     if eventPlayer in queuedGoalType:
-        eventPlayer.randVal = random.randint(150, eventPlayer.health)
-        if eventPlayer.randVal > 175 or difficultySetting <= 3:
+        # tmp0: random kill-bonus roll, to decide whether this zombie awards objective progress.
+        tmp0 = random.randint(150, eventPlayer.health)
+        if tmp0 > 175 or difficultySetting <= 3:
             objectiveCaptureValue += 10 if eventPlayer.health > 500 else eventPlayer.health * (0.04 if difficultySetting <= 2 else 0.035)
             smallMessage(getAllPlayers(), " {0}  Kill Bonus".format(iconString(Icon.PLUS)))
             #Miniboss kill bonus
@@ -223,7 +224,7 @@ rule "UPDATE SUCCESSFUL TELEPORT STATUS":
     wait(0.5, Wait.ABORT_WHEN_FALSE)
     if not eventPlayer.successfullyTeleported:
         eventPlayer.successfullyTeleported = true
-    if distance(eventPlayer.telePos, eventPlayer.averagePlayersPos) < botMaxTeleportRange[1]:
+    if distance(eventPlayer.telePos, eventPlayer.averagePlayersPos) < BOT_MAX_TELEPORT_RANGE:
         eventPlayer.waypoint = eventPlayer.getPosition()
         updateBotSpawnPoints()
 
@@ -332,7 +333,7 @@ rule "BOTS MOVE THROUGH SPAWN DOORS":
     @Condition eventPlayer.getSpeedInDirection(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION)) < eventPlayer.botThrottleSpeed * eventPlayer.movementSpeed * 3
     #Makes sure bot is moving forward
     @Condition eventPlayer.getSpeedInDirection(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION)) >= 0
-    @Condition isInLoS(eventPlayer.getPosition() + vect(0, 0.75, 0) * eventPlayer.size, eventPlayer.getPosition() + vect(0, 0.75, 0) * eventPlayer.size + normalize(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION)) * 3 * eventPlayer.size) == true
+    @Condition isInLoS(eventPlayer.getPosition() + offsetUpThreeQuartersConst * eventPlayer.size, eventPlayer.getPosition() + offsetUpThreeQuartersConst * eventPlayer.size + normalize(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION)) * 3 * eventPlayer.size) == true
     
     wait(0.125, Wait.ABORT_WHEN_FALSE)
     eventPlayer.disableEnvironmentCollision(false)
@@ -394,7 +395,7 @@ rule "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)":
     if eventPlayer.damageOverTimeDuration < eventPlayer.biteDuration:
         eventPlayer.damageOverTimeDuration = eventPlayer.biteDuration
     if createWorkshopSettingBool("Infection", "Melee Infection Enabled", true) and not eventPlayer.hasStatus(Status.HACKED) and not victim.isDummy() and (victim.getHealth() <= (victim.getMaxHealth() if victim.enhancementValues[13] != null else victim.initialMaxHealth)):
-        victim.infectionLvl += (2 if eventPlayer in bosses or eventPlayer in miniBoss or eventPlayer.mutationValue == 4 else 1) / ((3 if not victim.infected and victim.getHero() in [Hero.REINHARDT, Hero.HAZARD, Hero.VENDETTA, Hero.DMON] else 2) if victim.enhancementValues[0] != 2 else 1)
+        victim.infectionLvl += (2 if eventPlayer in bosses or eventPlayer in miniBoss or eventPlayer.mutationValue == 4 else 1) / ((3 if not victim.infected and victim.getHero() in [Hero.REINHARDT, Hero.HAZARD, Hero.VENDETTA, Hero.DMON] else 2) if victim.enhancementId != Enhancement.ZOMBIE_HYBRID else 1)
         if not victim.infected and victim.infectionLvl >= 1:
             victim.infected = true
 
@@ -452,17 +453,19 @@ def teleportBots():
             wait()
             eventPlayer.telePos = 0
             #Teleport with max distance constraint no view angle constraint
-            while eventPlayer.telePos == 0 or playerTargetList.any(lambda x: distance(eventPlayer.telePos, x.getPosition()) < 15) or playerTargetList.all(lambda x: distance(eventPlayer.telePos, x.getPosition()) > botMaxTeleportRange[1]):
-                eventPlayer.filteredBotSpawnPointGrid = botSpawnPoints.filter(lambda x: distance(x, eventPlayer.averagePlayersPos) < botMaxTeleportRange[1])
+            while eventPlayer.telePos == 0 or playerTargetList.any(lambda x: distance(eventPlayer.telePos, x.getPosition()) < 15) or playerTargetList.all(lambda x: distance(eventPlayer.telePos, x.getPosition()) > BOT_MAX_TELEPORT_RANGE):
+                # tmp0: saved spawn points within teleport range, to choose a nearby destination.
+                tmp0 = botSpawnPoints.filter(lambda x: distance(x, eventPlayer.averagePlayersPos) < BOT_MAX_TELEPORT_RANGE)
                 #Filter out spawn points on cooldown
-                eventPlayer.filteredBotSpawnPointGrid = eventPlayer.filteredBotSpawnPointGrid.filter(lambda x: botSpawnPointTimers[botSpawnPoints.index(x)] < 15)
+                # tmp0: nearby spawn points whose cooldown permits use, to choose a ready destination.
+                tmp0 = tmp0.filter(lambda x: botSpawnPointTimers[botSpawnPoints.index(x)] < 15)
                 #Bots utilize saved spawn points
-                if len(botSpawnPoints) > 0 and len(eventPlayer.filteredBotSpawnPointGrid) > 0:
-                    eventPlayer.telePos = random.choice(eventPlayer.filteredBotSpawnPointGrid)
+                if len(botSpawnPoints) > 0 and len(tmp0) > 0:
+                    eventPlayer.telePos = random.choice(tmp0)
                     botSpawnPointTimers[botSpawnPoints.index(eventPlayer.telePos)] += 5
                     break
                 else:
-                    eventPlayer.telePos = nearestWalkablePosition(eventPlayer.averagePlayersPos + directionFromAngles(random.uniform(0, 360), random.uniform(-20, 10)) * random.uniform(0, botMaxTeleportRange[1]))
+                    eventPlayer.telePos = nearestWalkablePosition(eventPlayer.averagePlayersPos + directionFromAngles(random.uniform(0, 360), random.uniform(-20, 10)) * random.uniform(0, BOT_MAX_TELEPORT_RANGE))
                 wait(0.25)
             if playerTargetList.all(lambda x: distance(eventPlayer.telePos, x.getPosition()) > 10) and playerTargetList.filter(lambda x: x.isInViewAngle(eventPlayer.telePos, 55)).all(lambda x: not isInLoS(x.getEyePosition(), eventPlayer.telePos + vect(0, losHeightCheck, 0))):
                 eventPlayer.teleport(eventPlayer.telePos)
@@ -485,12 +488,14 @@ def locateAveragePlayerLocation():
     
     eventPlayer.averagePlayersPos = vect(0, 0, 0)
     if len(playersOnObjective) == 0 and playerTargetList.any(lambda x: x.getThrottle() != vect(0, 0, 0)):
-        for eventPlayer.pPowerUpCount_bTeleCount in range(len(playerTargetList.filter(lambda x: x.getThrottle() != vect(0, 0, 0)))):
-            eventPlayer.averagePlayersPos += ((playerTargetList.filter(lambda x: x.getThrottle() != vect(0, 0, 0)))[eventPlayer.pPowerUpCount_bTeleCount]).getPosition()
+        # tmp0: moving-player index, then their count after the loop, to average their positions.
+        for tmp0 in range(len(playerTargetList.filter(lambda x: x.getThrottle() != vect(0, 0, 0)))):
+            eventPlayer.averagePlayersPos += ((playerTargetList.filter(lambda x: x.getThrottle() != vect(0, 0, 0)))[tmp0]).getPosition()
     else:
-        for eventPlayer.pPowerUpCount_bTeleCount in range(len(playerTargetList)):
-            eventPlayer.averagePlayersPos += playerTargetList[eventPlayer.pPowerUpCount_bTeleCount].getPosition()
-    eventPlayer.averagePlayersPos /= eventPlayer.pPowerUpCount_bTeleCount
+        # tmp0: player index, then the player count after the loop, to average all target positions.
+        for tmp0 in range(len(playerTargetList)):
+            eventPlayer.averagePlayersPos += playerTargetList[tmp0].getPosition()
+    eventPlayer.averagePlayersPos /= tmp0
 
 
 def successfulTeleportStatus():

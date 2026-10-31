@@ -39,11 +39,12 @@ rule "GLOBAL MENU INITIALIZATION":
             startCamPos = raycastHitPosition(startCamPos, startCamPos - vect(0, 5, 0), null, null, false) + vect(0, 1.5, 0)
             startPos = vect(startPos.x, startCamPos.y - 1.5, startPos.z)
             startPos = raycastHitPosition(startPos + vect(0, 0.4, 0), startPos - vect(0, 5, 0), null, null, false)
-            startPos = raycastHitPosition(startCamPos - vect(0, 0.75, 0), startPos + vect(0, 0.75, 0), null, null, false) - vect(0, 0.75, 0)
+            startPos = raycastHitPosition(startCamPos - offsetUpThreeQuartersConst, startPos + offsetUpThreeQuartersConst, null, null, false) - offsetUpThreeQuartersConst
             startCamPos = startPos + vect(0, 1.5, 0) + directionFromAngles(horizontalAngleOfDirection(directionTowards(startPos, startCamPos)), 0) * startCamDistance
             #Line of Sight Checks for each player position
-            for count1 in range(-26, 27, 2):
-                if not isInLoS(startCamPos, startCamPos + vect(0, -0.75, 0) + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + count1, 0)) * startCamDistance)) or not isInLoS(startCamPos + vect(0, -0.75, 0) + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + count1, 0)) * startCamDistance), startCamPos):
+            # tmp0: horizontal angle offset in degrees, to test visibility of each menu position.
+            for tmp0 in range(-26, 27, 2):
+                if not isInLoS(startCamPos, startCamPos + vect(0, -0.75, 0) + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + tmp0, 0)) * startCamDistance)) or not isInLoS(startCamPos + vect(0, -0.75, 0) + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + tmp0, 0)) * startCamDistance), startCamPos):
                     startPos = null
                     break
             wait()
@@ -61,15 +62,15 @@ rule "EFFECTS/TEXTS":
     #Creator/Game Code Promo
     hudSubtext(getAllPlayers(), "This is a modified version: 786TW" if ceil(getTotalTimeElapsed() * 0.2) % 2 == 0 else "Modified by: KamenRider#11346", HudPosition.RIGHT, 0, Color.BLUE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
     #Workshop.codes
-    createInWorldText(getAllPlayers().filter(lambda player: player.playerMenuStatus[0] < 2), "For information on changes: workshop.codes/786TW", startCamPos + directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)), 30), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.ORANGE, SpecVisibility.NEVER)
+    createInWorldText(getAllPlayers().filter(lambda player: player.menuStage < 2), "For information on changes: workshop.codes/786TW", startCamPos + directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)), 30), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.ORANGE, SpecVisibility.NEVER)
     #Voting options reminder
-    createInWorldText(getAllPlayers().filter(lambda player: player.playerMenuStatus[0] == 2), "Voting options are available in the top left corner of your screen" if voting else "Voting is complete. Difficulty is actively scaled by amount of players.", startCamPos + directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)), 30), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.AQUA if voting else Color.PURPLE, SpecVisibility.NEVER)
+    createInWorldText(getAllPlayers().filter(lambda player: player.menuStage == 2), "Voting options are available in the top left corner of your screen" if voting else "Voting is complete. Difficulty is actively scaled by amount of players.", startCamPos + directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)), 30), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.AQUA if voting else Color.PURPLE, SpecVisibility.NEVER)
     #Ready In World Text
-    createInWorldText(getAllPlayers().filter(lambda player: player.playerMenuStatus[0] == 1), "Ready [{0}]".format(inputBindingString(Button.JUMP)), localPlayer.startPos + vect(0, 1.92, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.GREEN, SpecVisibility.NEVER)
+    createInWorldText(getAllPlayers().filter(lambda player: player.menuStage == 1), "Ready [{0}]".format(inputBindingString(Button.JUMP)), localPlayer.startPos + vect(0, 1.92, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.GREEN, SpecVisibility.NEVER)
     #Change Hero In World Text
-    createInWorldText(getAllPlayers().filter(lambda player: player.playerMenuStatus[0] == 1 and getMatchTime() > 2.5), "Change Hero [{0}]".format(inputBindingString(Button.CROUCH)), localPlayer.startPos + vect(0, 1.8, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.ORANGE, SpecVisibility.NEVER)
+    createInWorldText(getAllPlayers().filter(lambda player: player.menuStage == 1 and getMatchTime() > 2.5), "Change Hero [{0}]".format(inputBindingString(Button.CROUCH)), localPlayer.startPos + vect(0, 1.8, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.ORANGE, SpecVisibility.NEVER)
     #Cancel In World Text
-    createInWorldText(getAllPlayers().filter(lambda player: player.playerMenuStatus[0] == 2 and getMatchTime() > 2.5), "Cancel [{0}]".format(inputBindingString(Button.CROUCH)), localPlayer.startPos + vect(0, -0.6, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, rgb(255, 49, 49), SpecVisibility.NEVER)
+    createInWorldText(getAllPlayers().filter(lambda player: player.menuStage == 2 and getMatchTime() > 2.5), "Cancel [{0}]".format(inputBindingString(Button.CROUCH)), localPlayer.startPos + vect(0, -0.6, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, rgb(255, 49, 49), SpecVisibility.NEVER)
     hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[2] == 0), "Challenge: No Preference", null, "Change Vote (Press [{0}])".format(inputBindingString(Button.ULTIMATE)), HudPosition.LEFT, 0, Color.AQUA, Color.AQUA, Color.AQUA, HudReeval.VISIBILITY_AND_STRING)
     #Vote challenge text: None
     hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[2] == 1), "Challenge: None", null, "Change Vote (Press [{0}])".format(inputBindingString(Button.ULTIMATE)) if voting else [], HudPosition.LEFT, 0, Color.YELLOW, null, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)
@@ -106,43 +107,44 @@ rule "EFFECTS/TEXTS":
     #Vote objective type text: Zombie Egg Objectives
     hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[4] == 6), "Objective Type: Zombie Egg {0}".format(iconString(Icon.RADIOACTIVE)), "Survivors must destroy an object that is spawning zombies", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, Color.LIME_GREEN, Color.LIME_GREEN, Color.LIME_GREEN, HudReeval.VISIBILITY_AND_STRING)
     #Vote objective type text: Satellite Uplink Objectives
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[4] == 7), "Objective Type: Satellite Uplink {0}".format(iconString(Icon.MOON)), "Survivors must repair terminals to communicate with a satellite", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, rgb(12, 129, 132), rgb(12, 129, 132), rgb(12, 129, 132), HudReeval.VISIBILITY_AND_STRING)
+    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[4] == 7), "Objective Type: Satellite Uplink {0}".format(iconString(Icon.MOON)), "Survivors must repair terminals to communicate with a satellite", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, colorSatelliteUplinkConst, colorSatelliteUplinkConst, colorSatelliteUplinkConst, HudReeval.VISIBILITY_AND_STRING)
     #Vote objective type text: Mixed Objectives
     hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[4] == len(objectiveTypeVotes) - 1), "Objective Type: Mixed Objectives {0}".format(iconString(Icon.SPIRAL)), "Randomly assigns all types of objectives", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, Color.PURPLE, Color.PURPLE, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING)
     #Enhancement Selection: No Preference
-    hudText(getAllPlayers().filter(lambda player: player.enhancementValues[0] == 0), "Enhancement: No Preference", null, "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.AQUA, Color.AQUA, Color.AQUA, HudReeval.VISIBILITY_AND_STRING)
+    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.NO_PREFERENCE), "Enhancement: No Preference", null, "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.AQUA, Color.AQUA, Color.AQUA, HudReeval.VISIBILITY_AND_STRING)
     #Enhancement Selection: Kevlar
-    hudText(getAllPlayers().filter(lambda player: player.enhancementValues[0] == 1), "Enhancement: Kevlar {0}".format(iconString(Icon.STOP)), "Survivor is equipped with armor that protects against infections", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, rgb(240, 129, 26), rgb(240, 129, 26), rgb(240, 129, 26), HudReeval.VISIBILITY_AND_STRING)
+    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.KEVLAR), "Enhancement: Kevlar {0}".format(iconString(Icon.STOP)), "Survivor is equipped with armor that protects against infections", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, colorKevlarConst, colorKevlarConst, colorKevlarConst, HudReeval.VISIBILITY_AND_STRING)
     #Enhancement Selection: Zombie Hyrbid
-    hudText(getAllPlayers().filter(lambda player: player.enhancementValues[0] == 2), "Enhancement: Zombie Hybrid {0}".format(iconString(Icon.POISON)), "Get infected faster, and convert it to explosive damage", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.GRAY, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_AND_STRING)
+    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.ZOMBIE_HYBRID), "Enhancement: Zombie Hybrid {0}".format(iconString(Icon.POISON)), "Get infected faster, and convert it to explosive damage", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.GRAY, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_AND_STRING)
     #Enhancement Selection: Laser Barricade
-    hudText(getAllPlayers().filter(lambda player: player.enhancementValues[0] == 3), "Enhancement: Laser Barricade {0}".format(iconString(Icon.DIAMOND)), "Player can place a wall that blocks zombies", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.BLUE, Color.BLUE, Color.BLUE, HudReeval.VISIBILITY_AND_STRING)
+    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.LASER_BARRICADE), "Enhancement: Laser Barricade {0}".format(iconString(Icon.DIAMOND)), "Player can place a wall that blocks zombies", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.BLUE, Color.BLUE, Color.BLUE, HudReeval.VISIBILITY_AND_STRING)
     #Enhancement Selection: Brain Killer
-    hudText(getAllPlayers().filter(lambda player: player.enhancementValues[0] == 4), "Enhancement: Brain Killer {0}".format(iconString(Icon.SKULL)), "Critical hits do more damage", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.RED, Color.RED, Color.RED, HudReeval.VISIBILITY_AND_STRING)
+    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.BRAIN_KILLER), "Enhancement: Brain Killer {0}".format(iconString(Icon.SKULL)), "Critical hits do more damage", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.RED, Color.RED, Color.RED, HudReeval.VISIBILITY_AND_STRING)
     #Enhancement Selection: Pyrotechnic
-    hudText(getAllPlayers().filter(lambda player: player.enhancementValues[0] == 5), "Enhancement: Pyrotechnic {0}".format(iconString(Icon.FIRE)), "Dealing damage, within 15 meters, sets enemies on fire", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.ORANGE, Color.ORANGE, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING)
+    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.PYROTECHNIC), "Enhancement: Pyrotechnic {0}".format(iconString(Icon.FIRE)), "Dealing damage, within 15 meters, sets enemies on fire", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.ORANGE, Color.ORANGE, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING)
     #Enhancement Selection: Plague Doctor
-    hudText(getAllPlayers().filter(lambda player: player.enhancementValues[0] == 6), "Enhancement: Plague Doctor {0}".format(iconString(Icon.PLUS)), "Deal more healing to infected players while reducing their infection level", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.GREEN, Color.GREEN, Color.GREEN, HudReeval.VISIBILITY_AND_STRING)
+    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.PLAGUE_DOCTOR), "Enhancement: Plague Doctor {0}".format(iconString(Icon.PLUS)), "Deal more healing to infected players while reducing their infection level", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.GREEN, Color.GREEN, Color.GREEN, HudReeval.VISIBILITY_AND_STRING)
     #Enhancement Selection: Born to Battle
-    hudText(getAllPlayers().filter(lambda player: player.enhancementValues[0] == 7), "Enhancement: Born to Battle {0}".format(iconString(Icon.BOLT)), "Dealing a final blow will give the player a cooldown reset on the next ability they use", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.GRAY, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_AND_STRING)
+    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.BORN_TO_BATTLE), "Enhancement: Born to Battle {0}".format(iconString(Icon.BOLT)), "Dealing a final blow will give the player a cooldown reset on the next ability they use", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.GRAY, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_AND_STRING)
     #Enhancement Selection: Charge Battery
-    hudText(getAllPlayers().filter(lambda player: player.enhancementValues[0] == 8), "Enhancement: Charge Battery {0}".format(iconString(Icon.SPIRAL)), "Survivor can place a battery that gives ultimate charge", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, rgb(236, 206, 44), rgb(236, 206, 44), rgb(236, 206, 44), HudReeval.VISIBILITY_AND_STRING)
+    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.CHARGE_BATTERY), "Enhancement: Charge Battery {0}".format(iconString(Icon.SPIRAL)), "Survivor can place a battery that gives ultimate charge", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, colorChargeBatteryConst, colorChargeBatteryConst, colorChargeBatteryConst, HudReeval.VISIBILITY_AND_STRING)
     #Enhancement Selection: Hitchhiker
-    hudText(getAllPlayers().filter(lambda player: player.enhancementValues[0] == 9), "Enhancement: Hitchhiker {0}".format(iconString(Icon.FLAG)), "Survivor can attach to a teammate and fuse their health.", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.PURPLE, Color.PURPLE, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING)
+    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.HITCHHIKER), "Enhancement: Hitchhiker {0}".format(iconString(Icon.FLAG)), "Survivor can attach to a teammate and fuse their health.", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.PURPLE, Color.PURPLE, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING)
     #Enhancement Selection: P.U.P.
-    hudText(getAllPlayers().filter(lambda player: player.enhancementValues[0] == 10), "Enhancement: P.U.P. {0}".format(iconString(Icon.HAPPY)), "Survivor is equipped with an autonomous friendly droid", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.BLUE, Color.BLUE, Color.BLUE, HudReeval.VISIBILITY_AND_STRING)
+    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.PUP), "Enhancement: P.U.P. {0}".format(iconString(Icon.HAPPY)), "Survivor is equipped with an autonomous friendly droid", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.BLUE, Color.BLUE, Color.BLUE, HudReeval.VISIBILITY_AND_STRING)
 
 
 rule "SPECIAL EFFECT CONTROLS":
     @Condition specialGameModeSetup == true
     
     if specialGameModeSetup:
-        randVal = random.randint(1, 3)
-        if randVal == 1:
+        # tmp0: random message choice 1-3, to select the special-effect text for this flash.
+        tmp0 = random.randint(1, 3)
+        if tmp0 == 1:
             specialEffectsStrings = "alglChene oteV: KaMeNrldEr"
-        elif randVal == 2:
+        elif tmp0 == 2:
             specialEffectsStrings = "You won't win"
-        elif randVal == 3:
+        elif tmp0 == 3:
             specialEffectsStrings = "Don't even try it"
     specialEffectsTiming = true
     wait(random.uniform(0.063, 0.325), Wait.ABORT_WHEN_FALSE)
@@ -155,7 +157,7 @@ rule "END VOTING":
     @Condition voting == true
     @Condition specialGameModeSetup == true
     @Condition getMatchTime() < votingEndTime
-    @Condition len(getPlayers(Team.1).filter(lambda player: player.playerMenuStatus[0] > 0)) > 0
+    @Condition len(getPlayers(Team.1).filter(lambda player: player.menuStage > 0)) > 0
     
     chase1 = votingEndTime
     startRule(determineZombieMode)
@@ -188,18 +190,20 @@ def determineZombieMode():
     @Name "determineZombieMode"
     
     zombieSetting = 0
-    for count1 in range(1, len(zombieVotes)):
-        if zombieVotes[count1][1]:
-            zombieVotes[count1] = len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus and player.playerMenuStatus[3] == count1))
+    # tmp0: zombie-mode vote index, to count active players voting for each enabled mode.
+    for tmp0 in range(1, len(zombieVotes)):
+        if zombieVotes[tmp0][1]:
+            zombieVotes[tmp0] = len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus and player.playerMenuStatus[3] == tmp0))
         else:
-            zombieVotes[count1] = -1
-    for count1 in range(1, len(zombieVotes)):
-        if zombieVotes[zombieSetting] < zombieVotes[count1]:
-            zombieSetting = count1
-        elif zombieVotes[zombieSetting] == zombieVotes[count1]:
+            zombieVotes[tmp0] = -1
+    # tmp0: candidate zombie-mode index, to select the winner and resolve tied vote counts.
+    for tmp0 in range(1, len(zombieVotes)):
+        if zombieVotes[zombieSetting] < zombieVotes[tmp0]:
+            zombieSetting = tmp0
+        elif zombieVotes[zombieSetting] == zombieVotes[tmp0]:
             #Randomly pick mode to break tie
             if zombieSetting != 0 and random.randint(0, 1) == 0:
-                zombieSetting = count1
+                zombieSetting = tmp0
     #If all players choose no preference, randomize
     if zombieSetting == 0:
         zombieSetting = 1
@@ -226,7 +230,8 @@ def setZombieMode():
     elif zombieSetting == 3:
         #Bot respawn probablities
         botSpawnRates = []
-        for I in range(19):
+        # tmp0: hero-entry counter, to append 19 equal spawn weights for this zombie mode.
+        for tmp0 in range(19):
             botSpawnRates.append(5.263)
     #Zombie Shuffle
     elif zombieSetting == 4:
@@ -246,23 +251,29 @@ def determineChallenge():
     @Name "determineChallenge"
     
     challengeSetting = 0
-    for count1 in range(1, len(challengeVotes)):
-        if challengeVotes[count1][1]:
-            challengeVotes[count1] = len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus and player.playerMenuStatus[2] == count1))
+    # tmp0: challenge vote index, to count active players voting for each enabled difficulty.
+    for tmp0 in range(1, len(challengeVotes)):
+        if challengeVotes[tmp0][1]:
+            challengeVotes[tmp0] = len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus and player.playerMenuStatus[2] == tmp0))
         else:
-            challengeVotes[count1] = -1
-    averageChalllenge = 0
-    for count1 in range(1, len(challengeVotes)):
-        averageChalllenge += challengeVotes[count1] * count1
-    averageChalllenge /= len(getPlayers(Team.1).filter(lambda player: player.playerMenuStatus[2] > 0))
-    for count1 in range(1, len(challengeVotes)):
+            challengeVotes[tmp0] = -1
+    # tmp1: sum of difficulty levels weighted by votes, to calculate the average difficulty vote.
+    tmp1 = 0
+    # tmp0: difficulty index, to include each difficulty's weighted votes in tmp1.
+    for tmp0 in range(1, len(challengeVotes)):
+        # tmp1: running weighted sum including this difficulty, for the average used to break ties.
+        tmp1 += challengeVotes[tmp0] * tmp0
+    # tmp1: average difficulty vote, to choose the closer difficulty when vote counts tie.
+    tmp1 /= len(getPlayers(Team.1).filter(lambda player: player.playerMenuStatus[2] > 0))
+    # tmp0: candidate difficulty index, to choose the winner using votes and distance from tmp1.
+    for tmp0 in range(1, len(challengeVotes)):
         #If difficulty being compared has more votes than current difficulty
-        if challengeVotes[challengeSetting] < challengeVotes[count1]:
-            challengeSetting = count1
-        elif challengeVotes[count1] > 0 and challengeVotes[challengeSetting] == challengeVotes[count1]:
+        if challengeVotes[challengeSetting] < challengeVotes[tmp0]:
+            challengeSetting = tmp0
+        elif challengeVotes[tmp0] > 0 and challengeVotes[challengeSetting] == challengeVotes[tmp0]:
             #Pick difficulty closest to the average difficulty vote
-            if abs(challengeSetting - averageChalllenge) > abs(count1 - averageChalllenge):
-                challengeSetting = count1
+            if abs(challengeSetting - tmp1) > abs(tmp0 - tmp1):
+                challengeSetting = tmp0
     #Default difficulty
     if challengeSetting == 0:
         challengeSetting = 1
@@ -274,18 +285,20 @@ def determineObjectiveType():
     @Name "determineObjectiveType"
     
     objectiveTypeSetting = 0
-    for count1 in range(1, len(objectiveTypeVotes)):
-        if objectiveTypeVotes[count1][1]:
-            objectiveTypeVotes[count1] = len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus and player.playerMenuStatus[4] == count1))
+    # tmp0: objective-type vote index, to count active players voting for each enabled objective type.
+    for tmp0 in range(1, len(objectiveTypeVotes)):
+        if objectiveTypeVotes[tmp0][1]:
+            objectiveTypeVotes[tmp0] = len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus and player.playerMenuStatus[4] == tmp0))
         else:
-            objectiveTypeVotes[count1] = -1
-    for count1 in range(1, len(objectiveTypeVotes)):
-        if objectiveTypeVotes[objectiveTypeSetting] < objectiveTypeVotes[count1]:
-            objectiveTypeSetting = count1
-        elif objectiveTypeVotes[objectiveTypeSetting] == objectiveTypeVotes[count1]:
+            objectiveTypeVotes[tmp0] = -1
+    # tmp0: candidate objective-type index, to select the winner and resolve tied vote counts.
+    for tmp0 in range(1, len(objectiveTypeVotes)):
+        if objectiveTypeVotes[objectiveTypeSetting] < objectiveTypeVotes[tmp0]:
+            objectiveTypeSetting = tmp0
+        elif objectiveTypeVotes[objectiveTypeSetting] == objectiveTypeVotes[tmp0]:
             #Pick random objective type to break tie
             if objectiveTypeSetting != 0 and random.randint(0, 1) == 0:
-                objectiveTypeSetting = count1
+                objectiveTypeSetting = tmp0
     #If all players choose no preference, randomize
     if objectiveTypeSetting == 0:
         if objectiveTypeVotes.last() != -1:

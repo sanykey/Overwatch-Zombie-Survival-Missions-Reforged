@@ -1,0 +1,231 @@
+{
+  "elements": 27701,
+  "globals": 115,
+  "playerVariables": 109,
+  "warnings": [],
+  "method": "Backward scratch liveness in compiled Workshop control flow, including expanded macros, branches, loops, skips and implicit trailing Ends. Calls are conservative boundaries. Reevaluated HUD/effect/icon fields are checked for uncaptured scratch references. No in-game validation.",
+  "rules": [
+    {
+      "name": "setDifficulty",
+      "controlFlowNodes": 38,
+      "boundaries": 0,
+      "visualActions": 0
+    },
+    {
+      "name": "objectivesManagement",
+      "controlFlowNodes": 221,
+      "boundaries": 3,
+      "visualActions": 5
+    },
+    {
+      "name": "selectTarget",
+      "controlFlowNodes": 24,
+      "boundaries": 1,
+      "visualActions": 0
+    },
+    {
+      "name": "botRespawnInitialization",
+      "controlFlowNodes": 202,
+      "boundaries": 3,
+      "visualActions": 2
+    },
+    {
+      "name": "SPAWN BOTS",
+      "controlFlowNodes": 26,
+      "boundaries": 3,
+      "visualActions": 0
+    },
+    {
+      "name": "VARIABLE ASSIGNMENT",
+      "controlFlowNodes": 56,
+      "boundaries": 2,
+      "visualActions": 0
+    },
+    {
+      "name": "generateMapGrid",
+      "controlFlowNodes": 14,
+      "boundaries": 1,
+      "visualActions": 0
+    },
+    {
+      "name": "GLOBAL MENU INITIALIZATION",
+      "controlFlowNodes": 44,
+      "boundaries": 4,
+      "visualActions": 0
+    },
+    {
+      "name": "SPECIAL EFFECT CONTROLS",
+      "controlFlowNodes": 15,
+      "boundaries": 2,
+      "visualActions": 0
+    },
+    {
+      "name": "determineZombieMode",
+      "controlFlowNodes": 21,
+      "boundaries": 2,
+      "visualActions": 0
+    },
+    {
+      "name": "setZombieMode",
+      "controlFlowNodes": 18,
+      "boundaries": 0,
+      "visualActions": 0
+    },
+    {
+      "name": "determineChallenge",
+      "controlFlowNodes": 25,
+      "boundaries": 1,
+      "visualActions": 0
+    },
+    {
+      "name": "determineObjectiveType",
+      "controlFlowNodes": 28,
+      "boundaries": 1,
+      "visualActions": 0
+    },
+    {
+      "name": "randomActions",
+      "controlFlowNodes": 21,
+      "boundaries": 1,
+      "visualActions": 0
+    },
+    {
+      "name": "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS",
+      "controlFlowNodes": 22,
+      "boundaries": 2,
+      "visualActions": 0
+    },
+    {
+      "name": "BIOWASTE IS PICKED UP",
+      "controlFlowNodes": 14,
+      "boundaries": 1,
+      "visualActions": 0
+    },
+    {
+      "name": "PLAYER DELIVERS RESOURCE VALUE",
+      "controlFlowNodes": 23,
+      "boundaries": 1,
+      "visualActions": 0
+    },
+    {
+      "name": "BIOWASTE MANAGEMENT",
+      "controlFlowNodes": 13,
+      "boundaries": 1,
+      "visualActions": 2
+    },
+    {
+      "name": "INITIALIZE SURVIVOR TO BE RESCUED",
+      "controlFlowNodes": 22,
+      "boundaries": 1,
+      "visualActions": 1
+    },
+    {
+      "name": "SET UP TERMINAL POSITIONS",
+      "controlFlowNodes": 20,
+      "boundaries": 1,
+      "visualActions": 0
+    },
+    {
+      "name": "PLAYERS REPAIR TERMINALS",
+      "controlFlowNodes": 70,
+      "boundaries": 8,
+      "visualActions": 2
+    },
+    {
+      "name": "BOT DIES",
+      "controlFlowNodes": 48,
+      "boundaries": 7,
+      "visualActions": 0
+    },
+    {
+      "name": "teleportBots",
+      "controlFlowNodes": 63,
+      "boundaries": 9,
+      "visualActions": 0
+    },
+    {
+      "name": "locateAveragePlayerLocation",
+      "controlFlowNodes": 11,
+      "boundaries": 0,
+      "visualActions": 0
+    },
+    {
+      "name": "BASIC (REAPER) SHADOW STEP (BOSS)",
+      "controlFlowNodes": 35,
+      "boundaries": 7,
+      "visualActions": 0
+    },
+    {
+      "name": "BEHEMOTH GAS STREAM (BOSS)",
+      "controlFlowNodes": 12,
+      "boundaries": 1,
+      "visualActions": 0
+    },
+    {
+      "name": "PRIME SLIMER (EMRE) FLIGHT (BOSS)",
+      "controlFlowNodes": 48,
+      "boundaries": 12,
+      "visualActions": 0
+    },
+    {
+      "name": "SMOLDER SUPER SLAM",
+      "controlFlowNodes": 8,
+      "boundaries": 0,
+      "visualActions": 0
+    },
+    {
+      "name": "GENERATE SUPPLY DROPS",
+      "controlFlowNodes": 23,
+      "boundaries": 5,
+      "visualActions": 0
+    },
+    {
+      "name": "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)",
+      "controlFlowNodes": 33,
+      "boundaries": 6,
+      "visualActions": 0
+    },
+    {
+      "name": "playerForceField (10-19)",
+      "controlFlowNodes": 18,
+      "boundaries": 1,
+      "visualActions": 0
+    },
+    {
+      "name": "airStrike (30-39)",
+      "controlFlowNodes": 26,
+      "boundaries": 3,
+      "visualActions": 0
+    },
+    {
+      "name": "sentryTurret (50-59)",
+      "controlFlowNodes": 30,
+      "boundaries": 1,
+      "visualActions": 1
+    },
+    {
+      "name": "bouncePad (80-89)",
+      "controlFlowNodes": 27,
+      "boundaries": 3,
+      "visualActions": 0
+    },
+    {
+      "name": "EFFECT/TEXT (PERMANENT)",
+      "controlFlowNodes": 4,
+      "boundaries": 0,
+      "visualActions": 1
+    },
+    {
+      "name": "LASER BARRICADE BLOCKS ZOMBIES",
+      "controlFlowNodes": 25,
+      "boundaries": 3,
+      "visualActions": 0
+    },
+    {
+      "name": "CHARGE BATTERY (USAGE AND COOLDOWNS)",
+      "controlFlowNodes": 11,
+      "boundaries": 1,
+      "visualActions": 0
+    }
+  ]
+}
