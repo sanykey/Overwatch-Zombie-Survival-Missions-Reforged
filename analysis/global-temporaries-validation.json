@@ -1,7 +1,7 @@
 {
-  "elements": 27701,
+  "elements": 27697,
   "globals": 115,
-  "playerVariables": 109,
+  "playerVariables": 108,
   "warnings": [],
   "method": "Backward scratch liveness in compiled Workshop control flow, including expanded macros, branches, loops, skips and implicit trailing Ends. Calls are conservative boundaries. Reevaluated HUD/effect/icon fields are checked for uncaptured scratch references. No in-game validation.",
   "rules": [
@@ -25,7 +25,7 @@
     },
     {
       "name": "botRespawnInitialization",
-      "controlFlowNodes": 202,
+      "controlFlowNodes": 201,
       "boundaries": 3,
       "visualActions": 2
     },
@@ -193,7 +193,7 @@
     },
     {
       "name": "airStrike (30-39)",
-      "controlFlowNodes": 26,
+      "controlFlowNodes": 25,
       "boundaries": 3,
       "visualActions": 0
     },

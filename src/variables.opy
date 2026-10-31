@@ -18,6 +18,18 @@ enum Enhancement:
     HITCHHIKER = 9,
     PUP = 10,
 
+# Vote indices in playerMenuStatus; slots 0-1 are unused after extracting pregameState/isVoting.
+enum PlayerMenuStatusField:
+    CHALLENGE_VOTE = 2,
+    ZOMBIE_MODE_VOTE = 3,
+    OBJECTIVE_TYPE_VOTE = 4,
+
+# Ordered states for pregame hero selection and readiness; jump/crouch move one step at a time.
+enum PregameState:
+    SELECTING_HERO = 0,
+    HERO_SELECTED = 1,
+    READY = 2,
+
 #Global variables
 
 # Shared scratch slots: assign before use and finish using them before any yield
@@ -29,13 +41,14 @@ globalvar tmp0
 globalvar tmp1
 globalvar tmp2
 
-# Shared immutable colors and offsets.
-globalvar colorKevlarConst = rgb(240, 129, 26)
-globalvar colorChargeBatteryConst = rgb(236, 206, 44)
-globalvar colorSatelliteUplinkConst = rgb(12, 129, 132)
-globalvar offsetUpThreeQuartersConst = vect(0, 0.75, 0)
-globalvar offsetUpHalfConst = vect(0, 0.5, 0)
-globalvar dummyHoldingPositionConst = vect(500, 500, 500)
+# Shared immutable constants for HUD colors, vertical offsets, and the off-map holding position.
+# Sorted by descending number of references across src (excluding each declaration).
+globalvar offsetUpThreeQuartersConst = vect(0, 0.75, 0)     # 7 uses
+globalvar offsetUpHalfConst = vect(0, 0.5, 0)               # 7 uses
+globalvar colorChargeBatteryConst = rgb(236, 206, 44)     # 6 uses
+globalvar dummyHoldingPositionConst = vect(500, 500, 500)   # 6 uses
+globalvar colorKevlarConst = rgb(240, 129, 26)            # 4 uses
+globalvar colorSatelliteUplinkConst = rgb(12, 129, 132)   # 3 uses
 
 globalvar objectiveEntitiesCount
 globalvar objectivePositions
@@ -214,7 +227,6 @@ playervar health
 playervar damageOverTimeDuration
 playervar pUltimateChargerCount
 playervar enhancementChase1
-playervar playerCollisionEnabled
 playervar pStunCount
 playervar enhancementChase2
 playervar initializing
@@ -255,5 +267,6 @@ playervar stunOrigin
 playervar sentryTurretDirection
 playervar airStrikePosition
 playervar powerUpTradeIndex
-playervar menuStage
-playervar menuVoting
+# Current PregameState; zero is also the default for players joining after the pregame menu.
+playervar pregameState
+playervar isVoting

@@ -24,7 +24,7 @@
     "optGasCloud": "spawnGasCloud",
     "opt_powerUpTradeValues_1": "powerUpTradeIndex",
     "opt_playerMenuStatus_0": "menuStage",
-    "opt_playerMenuStatus_1": "menuVoting",
+    "opt_playerMenuStatus_1": "isVoting",
     "opt_enhancementValues_0": "enhancementId",
     "opt_enhancementValues_1": "enhancementValue1",
     "opt_enhancementValues_2": "enhancementValue2",

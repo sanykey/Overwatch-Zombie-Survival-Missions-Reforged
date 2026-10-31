@@ -196,7 +196,6 @@ def airStrike():
     smallMessage(getAllPlayers(), "{0} {1}: \"I've called in an air strike!\"".format(eventPlayer, heroIcon(eventPlayer.getHero())))
     #Air Strike Location
     eventPlayer.airStrikePosition = raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 40, null, getAllPlayers(), false)
-    eventPlayer.pAirStrikeCount = 0
     if eventPlayer.powerUpEffects[30] == 0:
         createEffect(getAllPlayers(), Effect.RING, Color.RED, eventPlayer.airStrikePosition, 10, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.powerUpEffects[30] = getLastCreatedEntity()

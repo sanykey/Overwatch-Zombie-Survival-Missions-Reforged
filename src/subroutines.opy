@@ -475,27 +475,27 @@ def setPrematchTimer():
     #Voting in progress
     if voting:
         #Event player is voting
-        if eventPlayer.menuVoting == 1:
+        if eventPlayer.isVoting == true:
             #Set match time to hidden timer
             setMatchTime(chase1)
         #Event Player is not voting
         else:
             #All players are finished voting
-            if getMatchTime() > 5 + votingEndTime and ((len(getPlayers(Team.1).filter(lambda player: player.menuVoting == 0 and player.menuStage > 0))) == getNumberOfPlayers(Team.1)):
+            if getMatchTime() > 5 + votingEndTime and ((len(getPlayers(Team.1).filter(lambda player: player.isVoting == false and player.pregameState > PregameState.SELECTING_HERO))) == getNumberOfPlayers(Team.1)):
                 setMatchTime(5 + votingEndTime)
-            elif getMatchTime() > 20 + votingEndTime and ((len(getPlayers(Team.1).filter(lambda player: player.menuVoting == 0 and player.menuStage > 0))) == len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus))):
+            elif getMatchTime() > 20 + votingEndTime and ((len(getPlayers(Team.1).filter(lambda player: player.isVoting == false and player.pregameState > PregameState.SELECTING_HERO))) == len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus))):
                 setMatchTime(20 + votingEndTime)
     #Voting complete
     else:
         #Event Player deselects hero
-        if eventPlayer.menuStage < 2:
+        if eventPlayer.pregameState < PregameState.READY:
             setMatchTime(chase1)
         else:
-            if getMatchTime() > 10 and len(getPlayers(Team.1).filter(lambda player: player.menuStage == 2)) == getNumberOfPlayers(Team.1):
+            if getMatchTime() > 10 and len(getPlayers(Team.1).filter(lambda player: player.pregameState == PregameState.READY)) == getNumberOfPlayers(Team.1):
                 setMatchTime(15)
                 wait()
                 setMatchTime(10)
-            elif getMatchTime() > 20 and len(getPlayers(Team.1).filter(lambda player: player.menuStage == 2)) == len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus)):
+            elif getMatchTime() > 20 and len(getPlayers(Team.1).filter(lambda player: player.pregameState == PregameState.READY)) == len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus)):
                 setMatchTime(20)
 
 
@@ -711,7 +711,6 @@ def botRespawnInitialization():
     eventPlayer.enableEnvironmentCollision()
     eventPlayer.wallCollisionEnabled = true
     eventPlayer.enablePlayerCollision()
-    eventPlayer.playerCollisionEnabled = true
     eventPlayer.attached = false
     eventPlayer.specialFacing = false
     eventPlayer.specialThrottling = false

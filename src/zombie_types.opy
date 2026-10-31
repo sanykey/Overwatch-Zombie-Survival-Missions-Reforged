@@ -760,7 +760,6 @@ rule "STALKER (MOIRA) FADE":
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.specialFacing = true
-    eventPlayer.playerCollisionEnabled = false
     eventPlayer.disablePlayerCollision()
     eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.lastTarget.getEyePosition()), 0 if eventPlayer.crowdControlled or eventPlayer.isUsingUltimate() else 75 if eventPlayer.isUsingAbility1() else 1500)
     eventPlayer.specialThrottling = true
@@ -798,7 +797,6 @@ rule "STALKER (MOIRA) FADE":
     startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
     eventPlayer.canWallPhase = true
     eventPlayer.enablePlayerCollision()
-    eventPlayer.playerCollisionEnabled = true
     eventPlayer.setAbilityCooldown(Button.ABILITY_1, 10 if eventPlayer in bosses else 5)
 
 

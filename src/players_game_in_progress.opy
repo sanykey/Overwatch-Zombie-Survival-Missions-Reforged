@@ -60,7 +60,7 @@ rule "PLAYER INITIALIZATION":
     eventPlayer.infectionLvl = 0
     enableDisableAbilities()
     eventPlayer.size = 1
-    if eventPlayer.menuStage == 0:
+    if eventPlayer.pregameState == PregameState.SELECTING_HERO:
         if not "{0}".format(eventPlayer) in users:
             updateUsers()
             teleportToClosestPlayer()
