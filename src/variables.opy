@@ -70,9 +70,9 @@ globalvar tmp2  # Third simultaneously live scratch value; may hold a scalar, pl
 globalvar offsetUpThreeQuartersConst = vect(0, 0.75, 0)    # Vertical offset of 0.75 m for labels, icons and visibility checks.
 globalvar offsetUpHalfConst = vect(0, 0.5, 0)              # Vertical offset of 0.5 m for labels and effects.
 globalvar losOffsetConst = vect(0, 1.2, 0)                 # Vertical offset of 1.2 m used by line-of-sight checks.
-globalvar colorChargeBatteryConst = rgb(236, 206, 44)      # Shared Charge Battery color used by the menu and enhancement visuals.
+globalvar colorChargeBatteryConst = rgb(236, 206, 44)    # Shared Charge Battery color used by the menu and enhancement visuals.
 globalvar dummyHoldingPositionConst = vect(500, 500, 500)  # Off-map holding position for newly created or reconfigured dummy bots.
-globalvar colorKevlarConst = rgb(240, 129, 26)             # Shared Kevlar color used by the menu and enhancement visuals.
+globalvar colorKevlarConst = rgb(240, 129, 26)           # Shared Kevlar color used by the menu and enhancement visuals.
 
 # Match state and configuration.
 globalvar isPregameSetup        # Pregame hero selection/voting is active; cleared by START GAME before gameplay activation.
@@ -88,6 +88,18 @@ globalvar matchEndTime          # Native-gamemode timer offset: zero or 0.1, use
 globalvar uniqueSkinCap         # Configured maximum number of different hero skins shared by players and zombies.
 globalvar numberOfBots          # Configured zombie population target, including queued replacements.
 
+# Map grid and spawn-position caches.
+globalvar walkCenter                  # Walkable map center used for grid generation, the menu and player teleportation.
+globalvar mapGridList                 # Cached walkable map positions used by objectives, teleports, supplies and the finale.
+globalvar attackSpawnRooms            # Standard modes: list of spawn-room positions; the unused CTF fallback stores one position.
+globalvar activeAttackSpawnRoom       # Currently activated spawn-room position; may differ from the room being tested.
+globalvar spawnRoomIndex              # Room index during pregame recording/rotation and in-match safe-room selection.
+globalvar botSpawnPointList           # Cached successful zombie spawn/teleport positions.
+globalvar botSpawnPointTimerList      # Per-spawn-point cooldown/load values, indexed with botSpawnPointList.
+globalvar botSpawnWaypointList        # Movement waypoint associated with each cached botSpawnPointList entry.
+globalvar customTeleportPositionList  # Special teleport positions transferred from dying bots to replacement bots.
+globalvar botSpawnTimeList            # Remaining delays for queued zombie replacements, decremented once per second.
+
 # Pregame scene, palettes and voting.
 globalvar startPos                       # Center/aim position of the pregame hero-selection scene.
 globalvar startCamPos                    # Pregame camera position used to place players and world text.
@@ -101,18 +113,6 @@ globalvar objectiveTypeVoteList          # Objective-type availability/count ent
 globalvar enhancementOptionList          # Enhancement icons/availability used by pregame selection and world text.
 globalvar pregameGlitchText              # Random distorted Challenge text shown during the pregame flashing effect.
 globalvar isPregameGlitchActive          # Enables the pregame Challenge text/color flash.
-
-# Map grid and spawn-position caches.
-globalvar walkCenter                  # Walkable map center used for grid generation, the menu and player teleportation.
-globalvar mapGridList                 # Cached walkable map positions used by objectives, teleports, supplies and the finale.
-globalvar attackSpawnRooms            # Standard modes: list of spawn-room positions; the unused CTF fallback stores one position.
-globalvar activeAttackSpawnRoom       # Currently activated spawn-room position; may differ from the room being tested.
-globalvar spawnRoomIndex              # Room index during pregame recording/rotation and in-match safe-room selection.
-globalvar botSpawnPointList           # Cached successful zombie spawn/teleport positions.
-globalvar botSpawnPointTimerList      # Per-spawn-point cooldown/load values, indexed with botSpawnPointList.
-globalvar botSpawnWaypointList        # Movement waypoint associated with each cached botSpawnPointList entry.
-globalvar customTeleportPositionList  # Special teleport positions transferred from dying bots to replacement bots.
-globalvar botSpawnTimeList            # Remaining delays for queued zombie replacements, decremented once per second.
 
 # Shared objective generation and runtime state.
 globalvar objectivePositionList          # Queued objective positions; index zero is current, the final entry is extraction.
@@ -131,11 +131,43 @@ globalvar objectiveEntitiesCount         # Index of the yielding global objectiv
 globalvar objectiveResourcePositionList  # Dropped-resource positions in Biomorphing or terminal positions in Satellite Uplink.
 globalvar testPos                        # Candidate position retained across waits during mission placement or survivor spawning.
 globalvar testPos2                       # Minimum survivor-spawn distance or minimum spacing between satellite terminals.
-globalvar objectiveCount1                # Mission-placement attempt count, then remaining satellite firing-loop steps.
+globalvar objectiveCount1                # Shared counter: placement attempts, Biomorphing cleanup, or remaining Satellite firing steps.
 globalvar objectiveChase1                # Saved Rescue radius (number), Kill Zone center (vector), or Satellite laser position (vector).
 globalvar goalPost                       # Next 25-percent progress checkpoint shared by Showdown and Biomorphing.
 globalvar queuedGoalList                 # Showdown: contesting zombies; Biomorphing: queued resource-goal IDs.
 globalvar survivorToRescue               # Rescue NPC or current zombie target followed by the Satellite laser.
+
+# Biomorphing objective: goals, resources and deferred drops.
+globalvar biomorphingQueuedTypeList        # Shuffled resource types 0/1/2 assigned to successive zombie resource carriers.
+globalvar biomorphingGoalText              # Current requested-material/blood message displayed by the Biomorphing HUD.
+globalvar biomorphingGoalColor             # Current Biomorphing goal color used by its HUD and announcements.
+globalvar isBiomorphingGoalPending         # Requests Biomorphing resource cleanup and initialization of the next resource goal.
+globalvar biomorphingResourceTypeList      # Types of dropped resources, indexed with the shared resource-position list.
+globalvar biomorphingDeferredTypeList      # Queued resource types awaiting orb creation after their holders die.
+globalvar biomorphingDeferredPositionList  # World positions aligned with biomorphingDeferredTypeList.
+globalvar biomorphingResourceTextIdList    # World-text IDs for dropped resources, retained until pickup or goal cleanup.
+globalvar biomorphingResourceEffectIdList  # Effect IDs for dropped resource orbs, retained until pickup or goal cleanup.
+globalvar biomorphingResourceColorList     # Colors indexed by resource type, including the blood goal.
+globalvar biomorphingResourceNameList      # Resource names indexed by ordinary resource type: head, arm and leg.
+
+# Extraction and shared match-ending visuals.
+globalvar extractionZoneRad            # Shrinking extraction-dome radius; initialized to 300 and also checked by defeat rules.
+globalvar extractionSpeedUp            # Dome shrink speed, initially 2.5 and increased by players at extraction.
+globalvar extractionFlightSpeed        # Successful extraction flight-stage speed, switched between 2, 10 and 50.
+globalvar extractionFlightDestination  # Random shared destination used by the successful extraction flight.
+globalvar evacSurvivorList             # Snapshot of extracted players, also used to exclude survivors from finale kills.
+globalvar evacCount                    # Counter for 400 finale explosions, used on both victory and defeat.
+globalvar chase1                       # Pregame hidden timer (number), then the finale projectile position (vector).
+
+# Supply drops and ground power-ups.
+globalvar supplyDropLandingPosition  # Target ground position where the current supply drop will land.
+globalvar supplyDropPosition         # Current supply-drop position, animated while it falls.
+globalvar isSupplyDropOpen           # Drop is open, or no drop has spawned yet; allows generation of the next drop.
+globalvar supplyDropPowerUpCount     # Configured number of power-ups spawned when a supply drop is opened.
+globalvar supplyPowerUpIdList        # Item type IDs of ground power-ups from supplies, player drops and Biomorphing rewards.
+globalvar supplyPowerUpPositionList  # Ground power-up positions indexed by the same item list.
+globalvar supplyPowerUpTextIdList    # World-text IDs for removing item labels on pickup or exchange.
+globalvar supplyPowerUpEffectIdList  # Effect IDs for removing item orbs on pickup or exchange.
 
 # Player roster, reconnect state and revival.
 globalvar playerTargetList        # Active zombie targets; can temporarily include the NPC being rescued.
@@ -160,39 +192,6 @@ globalvar isSmolderEventActive   # Global Winston/Smolder phase affecting spawns
 # Bosses objective: hero rotation.
 globalvar bossesAvailableHeroList  # Bosses-only hero rotation; retained between Bosses objectives until the pool is exhausted.
 globalvar bossesExcludedHeroList   # Hero types excluded from the Bosses objective hero pool when enough alternatives exist.
-
-# Biomorphing objective: goals, resources and deferred drops.
-globalvar biomorphingQueuedTypeList        # Shuffled resource types 0/1/2 assigned to successive zombie resource carriers.
-globalvar biomorphingGoalText              # Current requested-material/blood message displayed by the Biomorphing HUD.
-globalvar biomorphingGoalColor             # Current Biomorphing goal color used by its HUD and announcements.
-globalvar isBiomorphingGoalPending         # Requests Biomorphing resource cleanup and initialization of the next resource goal.
-globalvar biomorphingResourceTypeList      # Types of dropped resources, indexed with the shared resource-position list.
-globalvar biomorphingDeferredTypeList      # Queued resource types awaiting orb creation after their holders die.
-globalvar biomorphingDeferredPositionList  # World positions aligned with biomorphingDeferredTypeList.
-globalvar biomorphingResourceTextIdList    # World-text IDs for dropped resources, retained until pickup or goal cleanup.
-globalvar biomorphingResourceEffectIdList  # Effect IDs for dropped resource orbs, retained until pickup or goal cleanup.
-globalvar biomorphingCleanupIndex          # Index retained across waits while old resource effects and labels are destroyed.
-globalvar biomorphingResourceColorList     # Colors indexed by resource type, including the blood goal.
-globalvar biomorphingResourceNameList      # Resource names indexed by ordinary resource type: head, arm and leg.
-
-# Extraction and shared match-ending visuals.
-globalvar extractionZoneRad            # Shrinking extraction-dome radius; initialized to 300 and also checked by defeat rules.
-globalvar extractionSpeedUp            # Dome shrink speed, initially 2.5 and increased by players at extraction.
-globalvar extractionFlightSpeed        # Successful extraction flight-stage speed, switched between 2, 10 and 50.
-globalvar extractionFlightDestination  # Random shared destination used by the successful extraction flight.
-globalvar evacSurvivorList             # Snapshot of extracted players, also used to exclude survivors from finale kills.
-globalvar evacCount                    # Counter for 400 finale explosions, used on both victory and defeat.
-globalvar chase1                       # Pregame hidden timer (number), then the finale projectile position (vector).
-
-# Supply drops and ground power-ups.
-globalvar supplyDropLandingPosition  # Target ground position where the current supply drop will land.
-globalvar supplyDropPosition         # Current supply-drop position, animated while it falls.
-globalvar isSupplyDropOpen           # Drop is open, or no drop has spawned yet; allows generation of the next drop.
-globalvar supplyDropPowerUpCount     # Configured number of power-ups spawned when a supply drop is opened.
-globalvar supplyPowerUpIdList        # Item type IDs of ground power-ups from supplies, player drops and Biomorphing rewards.
-globalvar supplyPowerUpPositionList  # Ground power-up positions indexed by the same item list.
-globalvar supplyPowerUpTextIdList    # World-text IDs for removing item labels on pickup or exchange.
-globalvar supplyPowerUpEffectIdList  # Effect IDs for removing item orbs on pickup or exchange.
 
 #Player variables
 

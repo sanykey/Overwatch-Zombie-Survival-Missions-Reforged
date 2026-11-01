@@ -26,10 +26,11 @@ rule "BIOMORPHING GOAL START":
     @Condition isBiomorphingGoalPending == true
     @Condition isGameplayActive == true
     
+    # objectiveCount1: cleanup index shared with mission generation and the Satellite firing loop.
     #Destroy all biowaste
-    for biomorphingCleanupIndex in range(len(biomorphingResourceEffectIdList)):
-        destroyEffect(biomorphingResourceEffectIdList[biomorphingCleanupIndex])
-        destroyInWorldText(biomorphingResourceTextIdList[biomorphingCleanupIndex])
+    for objectiveCount1 in range(len(biomorphingResourceEffectIdList)):
+        destroyEffect(biomorphingResourceEffectIdList[objectiveCount1])
+        destroyInWorldText(biomorphingResourceTextIdList[objectiveCount1])
         wait()
     biomorphingQueuedTypeList = random.shuffle([0, 1, 2])
     biomorphingDeferredTypeList = []

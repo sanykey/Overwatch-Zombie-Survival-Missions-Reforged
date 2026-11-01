@@ -1,77 +1,14 @@
 {
-  "baseline": 27224,
+  "date": "2026-11-02",
+  "baseline": 27213,
+  "baselineGlobals": 110,
+  "method": "Remaining candidates compiled in memory against current sources. Successful compilation confirms size and name resolution, not asynchronous lifetime safety or runtime performance. Shared objectiveCount1 already serves mission generation, Biomorphing cleanup and Satellite firing in the baseline.",
   "results": [
     {
-      "name": "constant_reviveRadius",
-      "elements": 27219,
-      "delta": -5,
-      "globals": 114,
-      "warnings": [],
-      "changedFiles": [
-        "global_startup.opy",
-        "players_game_in_progress.opy",
-        "supply_drops.opy",
-        "variables.opy"
-      ]
-    },
-    {
-      "name": "constant_startTime",
-      "elements": 27222,
-      "delta": -2,
-      "globals": 114,
-      "warnings": [],
-      "changedFiles": [
-        "global_startup.opy",
-        "global_start_menu.opy",
-        "variables.opy"
-      ]
-    },
-    {
-      "name": "constant_startCamDistance",
-      "elements": 27222,
-      "delta": -2,
-      "globals": 114,
-      "warnings": [],
-      "changedFiles": [
-        "global_start_menu.opy",
-        "player_start_menu.opy",
-        "variables.opy"
-      ]
-    },
-    {
-      "name": "constant_eliminationsNeededPerObjective",
-      "elements": 27222,
-      "delta": -2,
-      "globals": 114,
-      "warnings": [],
-      "changedFiles": [
-        "objective_types/objective_type_kill_zone.opy",
-        "subroutines.opy",
-        "variables.opy"
-      ]
-    },
-    {
-      "name": "four_numeric_constants",
-      "elements": 27213,
-      "delta": -11,
-      "globals": 111,
-      "warnings": [],
-      "changedFiles": [
-        "global_startup.opy",
-        "global_start_menu.opy",
-        "objective_types/objective_type_kill_zone.opy",
-        "players_game_in_progress.opy",
-        "player_start_menu.opy",
-        "subroutines.opy",
-        "supply_drops.opy",
-        "variables.opy"
-      ]
-    },
-    {
       "name": "inline_offsetUpThreeQuartersConst",
-      "elements": 27231,
+      "elements": 27220,
       "delta": 7,
-      "globals": 114,
+      "globals": 109,
       "warnings": [],
       "changedFiles": [
         "bots_game_in_progress.opy",
@@ -83,9 +20,9 @@
     },
     {
       "name": "inline_offsetUpHalfConst",
-      "elements": 27231,
+      "elements": 27220,
       "delta": 7,
-      "globals": 114,
+      "globals": 109,
       "warnings": [],
       "changedFiles": [
         "global_game_in_progress.opy",
@@ -98,9 +35,9 @@
     },
     {
       "name": "inline_losOffsetConst",
-      "elements": 27249,
+      "elements": 27238,
       "delta": 25,
-      "globals": 114,
+      "globals": 109,
       "warnings": [],
       "changedFiles": [
         "bots_game_in_progress.opy",
@@ -112,9 +49,9 @@
     },
     {
       "name": "inline_colorChargeBatteryConst",
-      "elements": 27236,
+      "elements": 27225,
       "delta": 12,
-      "globals": 114,
+      "globals": 109,
       "warnings": [],
       "changedFiles": [
         "enhancements.opy",
@@ -124,9 +61,9 @@
     },
     {
       "name": "inline_dummyHoldingPositionConst",
-      "elements": 27247,
+      "elements": 27236,
       "delta": 23,
-      "globals": 114,
+      "globals": 109,
       "warnings": [],
       "changedFiles": [
         "global_startup.opy",
@@ -137,9 +74,9 @@
     },
     {
       "name": "inline_colorKevlarConst",
-      "elements": 27229,
+      "elements": 27218,
       "delta": 5,
-      "globals": 114,
+      "globals": 109,
       "warnings": [],
       "changedFiles": [
         "enhancements.opy",
@@ -149,9 +86,9 @@
     },
     {
       "name": "inline_six_colors_vectors",
-      "elements": 27303,
+      "elements": 27292,
       "delta": 79,
-      "globals": 109,
+      "globals": 104,
       "warnings": [],
       "changedFiles": [
         "bots_game_in_progress.opy",
@@ -171,9 +108,9 @@
     },
     {
       "name": "reuse_three_menu_palettes",
-      "elements": 27224,
+      "elements": 27213,
       "delta": 0,
-      "globals": 112,
+      "globals": 107,
       "warnings": [],
       "changedFiles": [
         "global_start_menu.opy",
@@ -182,9 +119,9 @@
     },
     {
       "name": "reuse_five_other_menu_slots",
-      "elements": 27224,
+      "elements": 27213,
       "delta": 0,
-      "globals": 110,
+      "globals": 105,
       "warnings": [],
       "changedFiles": [
         "global_startup.opy",
@@ -195,9 +132,9 @@
     },
     {
       "name": "reuse_mixed_pool_for_final_counter",
-      "elements": 27224,
+      "elements": 27213,
       "delta": 0,
-      "globals": 114,
+      "globals": 109,
       "warnings": [],
       "changedFiles": [
         "global_startup.opy",
@@ -207,9 +144,9 @@
     },
     {
       "name": "reuse_spacing_after_moving_extraction_init",
-      "elements": 27224,
+      "elements": 27213,
       "delta": 0,
-      "globals": 114,
+      "globals": 109,
       "warnings": [],
       "changedFiles": [
         "global_startup.opy",
@@ -220,82 +157,76 @@
     },
     {
       "name": "reuse_enhancement_options_with_goal_text_reset",
-      "elements": 27225,
-      "delta": 1,
-      "globals": 114,
-      "warnings": [],
-      "changedFiles": [
-        "global_startup.opy",
-        "player_start_menu.opy",
-        "variables.opy"
-      ]
-    },
-    {
-      "name": "combined_four_constants_eight_aliases",
-      "elements": 27213,
-      "delta": -11,
-      "globals": 103,
-      "warnings": [],
-      "changedFiles": [
-        "global_startup.opy",
-        "global_start_menu.opy",
-        "objective_types/objective_type_kill_zone.opy",
-        "players_game_in_progress.opy",
-        "player_start_menu.opy",
-        "subroutines.opy",
-        "supply_drops.opy",
-        "variables.opy"
-      ]
-    },
-    {
-      "name": "combined_four_constants_ten_aliases",
       "elements": 27214,
-      "delta": -10,
+      "delta": 1,
+      "globals": 109,
+      "warnings": [],
+      "changedFiles": [
+        "global_startup.opy",
+        "player_start_menu.opy",
+        "variables.opy"
+      ]
+    },
+    {
+      "name": "combined_nine_phase_aliases",
+      "elements": 27213,
+      "delta": 0,
       "globals": 101,
       "warnings": [],
       "changedFiles": [
         "global_startup.opy",
         "global_start_menu.opy",
-        "objective_types/objective_type_kill_zone.opy",
-        "players_game_in_progress.opy",
         "player_start_menu.opy",
-        "subroutines.opy",
-        "supply_drops.opy",
         "variables.opy"
       ]
     },
     {
-      "name": "combined_four_constants_nine_aliases",
-      "elements": 27213,
-      "delta": -11,
-      "globals": 102,
+      "name": "combined_eleven_phase_aliases",
+      "elements": 27214,
+      "delta": 1,
+      "globals": 99,
       "warnings": [],
       "changedFiles": [
         "global_startup.opy",
         "global_start_menu.opy",
-        "objective_types/objective_type_kill_zone.opy",
-        "players_game_in_progress.opy",
         "player_start_menu.opy",
-        "subroutines.opy",
-        "supply_drops.opy",
         "variables.opy"
       ]
     },
     {
-      "name": "combined_four_constants_eleven_aliases",
-      "elements": 27214,
-      "delta": -10,
+      "name": "combined_nine_aliases_and_kevlar_literal",
+      "elements": 27218,
+      "delta": 5,
       "globals": 100,
       "warnings": [],
       "changedFiles": [
+        "enhancements.opy",
         "global_startup.opy",
         "global_start_menu.opy",
-        "objective_types/objective_type_kill_zone.opy",
-        "players_game_in_progress.opy",
+        "player_start_menu.opy",
+        "variables.opy"
+      ]
+    },
+    {
+      "name": "combined_nine_aliases_and_six_literals",
+      "elements": 27292,
+      "delta": 79,
+      "globals": 95,
+      "warnings": [],
+      "changedFiles": [
+        "bots_game_in_progress.opy",
+        "enhancements.opy",
+        "global_game_in_progress.opy",
+        "global_startup.opy",
+        "global_start_menu.opy",
+        "objective_types/objective_type_biomorphing.opy",
+        "objective_types/objective_type_bosses.opy",
+        "objective_types/objective_type_zombie_egg.opy",
         "player_start_menu.opy",
         "subroutines.opy",
         "supply_drops.opy",
-        "variables.opy"
+        "variables.opy",
+        "zombie_types.opy"
       ]
     }
   ]
