@@ -1,0 +1,144 @@
+{
+  "compiler": "OverPy 9.7.20",
+  "method": "Full project variants compiled independently in memory with current optimization directives; baseline restores the two literal filters. Existing numeric data is retained. src/ unchanged.",
+  "appendedSequenceOffset": 519,
+  "sourceSha256": {
+    "bots_game_in_progress.opy": "43a27a8960b013ad2932163bf144cf55235fe8a6c5319803235d79371bd6b02d",
+    "compressed numbers.opy": "cdd0ab512010388261efcbfb3fe8fcf527693bdae4e102ded2e5c4bde3028c4d",
+    "enhancements.opy": "27392dcb6e14b8e785e3c1007b91c47042369618766a05ed97f47da7c26ed175",
+    "global_game_in_progress.opy": "2d8876be17fc001b859815ea8288af1b2d06026c8e12212afb397ced5cb92c8b",
+    "global_startup.opy": "7080c584c079967d98eead876dcddbed1d002f0ca9fd4e5c3bc4a0d556211105",
+    "global_start_menu.opy": "6eb3ce9552389934a25b8af60ff8b6195305a8b4d1b37d75b7c6bf6e6f7fa51c",
+    "hero_tuning.opy": "28d92c1cc23f27f9c444332eff0edd3c9f1f569044d9dde96841b4ad808454aa",
+    "main.opy": "54204bc4bfab65d8c4cb37ac802935af71645c2fd7f7bf00f9c9c3a82eb131a1",
+    "objective_types/objective_type_biomorphing.opy": "86f1c79cf70bd7b66a0248444c6ddc5c54aafd484c86d123da9b1c842f85c2dd",
+    "objective_types/objective_type_bosses.opy": "fcdc6ffaec515ecc7855ca243f5b3da17fbf94fe5c1c301367185d6fcbc6e4d5",
+    "objective_types/objective_type_extraction_point.opy": "2f2536017d27f5afedb9de4d45b7869c245ce9c9aaa537b3191fba4716ab8085",
+    "objective_types/objective_type_kill_zone.opy": "ca21ebe87d7ef108f0fd0487d21db266d2c12636ceb28f10869263fe0a8d2ab1",
+    "objective_types/objective_type_satellite_uplink.opy": "ee249575b1fc597a2d5d85ea9ded5f9bfb8178fff53a0c97543ee73ceac1308b",
+    "objective_types/objective_type_showdown.opy": "e1aa3e444b784fa46404c2c5933e006648b768aa217b4fd86e43c828f68cdc2d",
+    "objective_types/objective_type_survivor_rescue.opy": "aca7cae9ea12361f815a8b9d8cff2f518884f5f5809f5def1518c123854d55ec",
+    "objective_types/objective_type_zombie_egg.opy": "0a245c17622b223a445eb8928606c267047ed588e71f821a358d0abcdc927995",
+    "players_game_in_progress.opy": "3ae971623e5e3842c914adce22ab753bf4103ca642af58736c1168c12063062b",
+    "player_start_menu.opy": "b295fe9851b8271bceac35005c48b5210f9fdb2d4172fafefb16772116169f6a",
+    "power_ups.opy": "cbfb4f5934e437c1808ebed061368001942106894a8c0ac903e571caf7f63634",
+    "settings.opy": "bafdf47e377bfce8871f5e6c8a79684934e6c283130151ce2824d8778cc659a7",
+    "subroutines.opy": "4a01656dda01e472aeace86e66630441b4a27d6da36abcef8ceb0f9c25b49d5b",
+    "supply_drops.opy": "721783f9d637c02d2e30490bac11fb4200cfd284b87f34013bb300bf4e44fa93",
+    "variables.opy": "56b2441598b3d4088a0528421bb28e802ec3d15d4fbe751ae869937f2c08d5c1",
+    "zombie_types.opy": "0ff753162c3885259ceac6dc2c938973b2b564719a03ff5b05a161332862f562",
+    "create numbers.js": "2e93687dd5dd789f83a13de9ba4b0104fef99de686c80dbc6279bad5681107cb"
+  },
+  "results": [
+    {
+      "name": "baseline",
+      "elements": 27274,
+      "saved": 0,
+      "challengeHudElements": 195,
+      "zombieHudElements": 134,
+      "warnings": [],
+      "equivalence": "Exact original membership.",
+      "expressions": [
+        "player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] in [0, 1, 2, 3, 4, 5]",
+        "player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] in [0, 1, 2, 3, 4, 5, 6]"
+      ]
+    },
+    {
+      "name": "bounds",
+      "elements": 27272,
+      "saved": 2,
+      "challengeHudElements": 195,
+      "zombieHudElements": 132,
+      "warnings": [],
+      "equivalence": "Equivalent only for integer IDs; admits fractional values.",
+      "expressions": [
+        "player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] >= 0 and player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] <= 5",
+        "player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] >= 0 and player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] <= 6"
+      ]
+    },
+    {
+      "name": "bounds_integer",
+      "elements": 27306,
+      "saved": -32,
+      "challengeHudElements": 212,
+      "zombieHudElements": 149,
+      "warnings": [],
+      "equivalence": "Exact for numeric IDs, including fractions and negative values.",
+      "expressions": [
+        "player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] >= 0 and player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] <= 5 and floor(player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE]) == player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE]",
+        "player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] >= 0 and player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] <= 6 and floor(player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]) == player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]"
+      ]
+    },
+    {
+      "name": "centered_bound",
+      "elements": 27260,
+      "saved": 14,
+      "challengeHudElements": 189,
+      "zombieHudElements": 126,
+      "warnings": [],
+      "equivalence": "Equivalent only for integer IDs; admits fractional values.",
+      "expressions": [
+        "abs(player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] - 2.5) <= 2.5",
+        "abs(player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] - 3) <= 3"
+      ]
+    },
+    {
+      "name": "compressed_inline",
+      "error": "Cannot nest .filter() or .map()\n    | line 1671, col 620, at main.opy",
+      "expected": true
+    },
+    {
+      "name": "compressed_precomputed",
+      "elements": 27282,
+      "saved": -8,
+      "challengeHudElements": 188,
+      "zombieHudElements": 125,
+      "warnings": [],
+      "equivalence": "Exact; includes initialization and decompression cost plus one new global variable.",
+      "expressions": [
+        "player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] in probeMenuVoteIds.slice(0, 6)",
+        "player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] in probeMenuVoteIds.slice(0, 7)"
+      ]
+    },
+    {
+      "name": "shared_compressed_slice",
+      "elements": 27260,
+      "saved": 14,
+      "challengeHudElements": 189,
+      "zombieHudElements": 126,
+      "warnings": [],
+      "equivalence": "Exact; reuses the existing 0..6 group or appends it if not yet implemented.",
+      "expressions": [
+        "player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] in numbersList.slice(519, 6)",
+        "player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] in numbersList.slice(519, 7)"
+      ]
+    },
+    {
+      "name": "mapped_vote_indices",
+      "error": "Cannot nest .filter() or .map()\n    | line 1671, col 112, at main.opy",
+      "expected": true
+    },
+    {
+      "name": "upper_bound_only",
+      "elements": 27252,
+      "saved": 22,
+      "challengeHudElements": 185,
+      "zombieHudElements": 122,
+      "warnings": [],
+      "equivalence": "Requires nonnegative integer IDs; admits negative values and fractions.",
+      "expressions": [
+        "player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] <= 5",
+        "player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] <= 6"
+      ]
+    },
+    {
+      "name": "no_vote_filters",
+      "elements": 27230,
+      "saved": 44,
+      "challengeHudElements": 174,
+      "zombieHudElements": 111,
+      "warnings": [],
+      "equivalence": "Requires every player to have an ID in the original allowed set; removes invalid-ID protection."
+    }
+  ]
+}

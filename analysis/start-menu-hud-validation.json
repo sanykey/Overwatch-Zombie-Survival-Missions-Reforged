@@ -1,0 +1,32 @@
+{
+  "baselineRef": "2930c02",
+  "compiler": "OverPy 9.7.20",
+  "baseline": 27564,
+  "current": 27260,
+  "saved": 304,
+  "menuRule": {
+    "before": 34,
+    "after": 7,
+    "menuObjectsBefore": 31,
+    "menuObjectsAfter": 4
+  },
+  "renderedComparisons": 19320,
+  "warnings": [],
+  "variables": {
+    "global": 118,
+    "player": 108
+  },
+  "numberData": {
+    "before": 519,
+    "after": 526,
+    "menuVoteIdsOffset": 519,
+    "menuVoteIdsLength": 7,
+    "existingValuesAndOffsetsPreserved": true
+  },
+  "sourceSha256": {
+    "global_start_menu.opy": "6eb3ce9552389934a25b8af60ff8b6195305a8b4d1b37d75b7c6bf6e6f7fa51c",
+    "variables.opy": "56b2441598b3d4088a0528421bb28e802ec3d15d4fbe751ae869937f2c08d5c1",
+    "create numbers.js": "c678ac9482d4e3e189a656918dae28291dfc4d0ff0d5ffc6e94a7e5936109452"
+  },
+  "limitations": "Expression comparison only; does not simulate the Overwatch renderer, reevaluation scheduling, key bindings, or spectator camera behavior. In-game validation is still required."
+}

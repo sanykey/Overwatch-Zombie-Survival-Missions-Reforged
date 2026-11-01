@@ -71,67 +71,141 @@ rule "EFFECTS/TEXTS":
     createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.HERO_SELECTED and getMatchTime() > 2.5), "Change Hero [{0}]".format(inputBindingString(Button.CROUCH)), localPlayer.startPos + vect(0, 1.8, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.ORANGE, SpecVisibility.NEVER)
     #Cancel In World Text
     createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.READY and getMatchTime() > 2.5), "Cancel [{0}]".format(inputBindingString(Button.CROUCH)), localPlayer.startPos + vect(0, -0.6, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, rgb(255, 49, 49), SpecVisibility.NEVER)
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] == 0), "Challenge: No Preference", null, "Change Vote (Press [{0}])".format(inputBindingString(Button.ULTIMATE)), HudPosition.LEFT, 0, Color.AQUA, Color.AQUA, Color.AQUA, HudReeval.VISIBILITY_AND_STRING)
-    #Vote challenge text: None
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] == 1), "Challenge: None", null, "Change Vote (Press [{0}])".format(inputBindingString(Button.ULTIMATE)) if voting else [], HudPosition.LEFT, 0, Color.YELLOW, null, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)
-    #Vote challenge text: Swarm Shootout
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] == 2), "Challenge: Swarm Shootout", "Zombies fire their guns!", "Change Vote (Press [{0}])".format(inputBindingString(Button.ULTIMATE)) if voting else [], HudPosition.LEFT, 0, Color.LIME_GREEN, Color.LIME_GREEN, Color.LIME_GREEN, HudReeval.VISIBILITY_AND_STRING)
-    #Vote challenge text: Random Abilities
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] == 3), "Challenge: Random Abilities", "Non-boss zombies use abilities", "Change Vote (Press [{0}])".format(inputBindingString(Button.ULTIMATE)) if voting else [], HudPosition.LEFT, 0, Color.ORANGE, Color.ORANGE, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING)
-    #Vote Challenge text: Insanity
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] == 4), specialEffectsStrings if specialEffectsTiming else "Challenge: Insanity", "Faster, stronger, and deadlier", "Change Vote (Press [{0}])".format(inputBindingString(Button.ULTIMATE)) if voting else [], HudPosition.LEFT, 0, Color.WHITE if specialEffectsTiming else Color.TURQUOISE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR)
-    #Vote Challenge text: Pandora's Box
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] == 5), specialEffectsStrings if specialEffectsTiming else "Challenge: Pandora's Box", "All challenges at Once!", "Change Vote (Press [{0}])".format(inputBindingString(Button.ULTIMATE)) if voting else [], HudPosition.LEFT, 0, Color.GRAY if specialEffectsTiming else Color.PURPLE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR)
-    #Vote zombie mode text: No preference
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] == 0), "Zombie Mode: No Preference", null, "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_1)), HudPosition.LEFT, 1, Color.AQUA, Color.AQUA, Color.AQUA, HudReeval.VISIBILITY_AND_STRING)
-    #Vote zombie mode text: All Zombies
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] == 1), "Zombie Mode: All Zombies", "Normal game featuring all zombie types", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_1)) if voting else [], HudPosition.LEFT, 1, Color.ORANGE, Color.ORANGE, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING)
-    #Vote zombie mode text: New Blood
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] == 2), "Zombie Mode: New Blood", "The 13 most recent zombie types will spawn", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_1)) if voting else [], HudPosition.LEFT, 1, Color.RED, Color.RED, Color.RED, HudReeval.VISIBILITY_AND_STRING)
-    #Vote zombie mode text: What'll it be?
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] == 3), "Zombie Mode: What'll it be?", "All zombie types have equal spawn rates", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_1)) if voting else [], HudPosition.LEFT, 1, Color.PURPLE, Color.PURPLE, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING)
-    #Vote zombie mode text: Zombie Shuffle!
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] == 4), "Zombie Mode: Zombie Shuffle", "The zombie spawn rates twist and turn with wild abandon!", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_1)) if voting else [], HudPosition.LEFT, 1, Color.LIME_GREEN, Color.LIME_GREEN, Color.LIME_GREEN, HudReeval.VISIBILITY_AND_STRING)
-    #Vote zombie mode text: Dinner Rush!
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] == 5), "Zombie Mode: Dinner Rush!", "Only zombies with mobility abilities will spawn", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_1)) if voting else [], HudPosition.LEFT, 1, Color.BLUE, Color.BLUE, Color.BLUE, HudReeval.VISIBILITY_AND_STRING)
-    #Vote zombie mode text: Ham N' Hammer!
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] == 6), "Zombie Mode: Ham N' Hammer!", "Only Reinhardt {0} and Wrecking Ball {1} zombies will spawn".format(heroIcon(Hero.REINHARDT), heroIcon(Hero.WRECKING_BALL)), "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_1)) if voting else [], HudPosition.LEFT, 1, Color.GRAY, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_AND_STRING)
-    #Vote objective type text: No preference
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == ObjectiveType.NO_PREFERENCE), "Objective Type: No Preference", null, "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)), HudPosition.LEFT, 2, Color.AQUA, Color.AQUA, Color.AQUA, HudReeval.VISIBILITY_AND_STRING)
-    #Vote objective type text: Showdown Only
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == ObjectiveType.SHOWDOWN), "Objective Type: Showdown {0}".format(abilityIconString(Hero.BRIGITTE, Button.ULTIMATE)), "Players must contest a point against zombies", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, Color.ORANGE, Color.ORANGE, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING)
-    #Vote objective type text: Boss Objectives
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == ObjectiveType.BOSSES), "Objective Type: Bosses {0}".format(iconString(Icon.WARNING)), "Spawns giant versions of zombies", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, Color.RED, Color.RED, Color.RED, HudReeval.VISIBILITY_AND_STRING)
-    #Vote objective type text: Kill Zone Objectives
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == ObjectiveType.KILL_ZONE), "Objective Type: Kill Zone {0}".format(iconString(Icon.RING_THICK) if ceil(getTotalTimeElapsed() * 1.25) % 2 == 0 else iconString(Icon.RING_THIN)), "Clear zombies from a designated area", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, Color.RED, Color.RED, Color.RED, HudReeval.VISIBILITY_AND_STRING)
-    #Vote objective type text: Zombie Egg Objectives
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == ObjectiveType.ZOMBIE_EGG), "Objective Type: Zombie Egg {0}".format(iconString(Icon.RADIOACTIVE)), "Survivors must destroy an object that is spawning zombies", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, Color.LIME_GREEN, Color.LIME_GREEN, Color.LIME_GREEN, HudReeval.VISIBILITY_AND_STRING)
-    #Vote objective type text: Satellite Uplink Objectives
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == ObjectiveType.SATELLITE_UPLINK), "Objective Type: Satellite Uplink {0}".format(iconString(Icon.MOON)), "Survivors must repair terminals to communicate with a satellite", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, colorSatelliteUplinkConst, colorSatelliteUplinkConst, colorSatelliteUplinkConst, HudReeval.VISIBILITY_AND_STRING)
-    #Vote objective type text: Mixed Objectives
-    hudText(getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == ObjectiveType.MIXED_OBJECTIVES), "Objective Type: Mixed Objectives {0}".format(iconString(Icon.SPIRAL)), "Randomly assigns all types of objectives", "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting else [], HudPosition.LEFT, 2, Color.PURPLE, Color.PURPLE, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING)
-    #Enhancement Selection: No Preference
-    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.NO_PREFERENCE), "Enhancement: No Preference", null, "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.AQUA, Color.AQUA, Color.AQUA, HudReeval.VISIBILITY_AND_STRING)
-    #Enhancement Selection: Kevlar
-    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.KEVLAR), "Enhancement: Kevlar {0}".format(iconString(Icon.STOP)), "Survivor is equipped with armor that protects against infections", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, colorKevlarConst, colorKevlarConst, colorKevlarConst, HudReeval.VISIBILITY_AND_STRING)
-    #Enhancement Selection: Zombie Hyrbid
-    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.ZOMBIE_HYBRID), "Enhancement: Zombie Hybrid {0}".format(iconString(Icon.POISON)), "Get infected faster, and convert it to explosive damage", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.GRAY, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_AND_STRING)
-    #Enhancement Selection: Laser Barricade
-    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.LASER_BARRICADE), "Enhancement: Laser Barricade {0}".format(iconString(Icon.DIAMOND)), "Player can place a wall that blocks zombies", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.BLUE, Color.BLUE, Color.BLUE, HudReeval.VISIBILITY_AND_STRING)
-    #Enhancement Selection: Brain Killer
-    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.BRAIN_KILLER), "Enhancement: Brain Killer {0}".format(iconString(Icon.SKULL)), "Critical hits do more damage", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.RED, Color.RED, Color.RED, HudReeval.VISIBILITY_AND_STRING)
-    #Enhancement Selection: Pyrotechnic
-    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.PYROTECHNIC), "Enhancement: Pyrotechnic {0}".format(iconString(Icon.FIRE)), "Dealing damage, within 15 meters, sets enemies on fire", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.ORANGE, Color.ORANGE, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING)
-    #Enhancement Selection: Plague Doctor
-    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.PLAGUE_DOCTOR), "Enhancement: Plague Doctor {0}".format(iconString(Icon.PLUS)), "Deal more healing to infected players while reducing their infection level", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.GREEN, Color.GREEN, Color.GREEN, HudReeval.VISIBILITY_AND_STRING)
-    #Enhancement Selection: Born to Battle
-    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.BORN_TO_BATTLE), "Enhancement: Born to Battle {0}".format(iconString(Icon.BOLT)), "Dealing a final blow will give the player a cooldown reset on the next ability they use", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.GRAY, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_AND_STRING)
-    #Enhancement Selection: Charge Battery
-    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.CHARGE_BATTERY), "Enhancement: Charge Battery {0}".format(iconString(Icon.SPIRAL)), "Survivor can place a battery that gives ultimate charge", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, colorChargeBatteryConst, colorChargeBatteryConst, colorChargeBatteryConst, HudReeval.VISIBILITY_AND_STRING)
-    #Enhancement Selection: Hitchhiker
-    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.HITCHHIKER), "Enhancement: Hitchhiker {0}".format(iconString(Icon.FLAG)), "Survivor can attach to a teammate and fuse their health.", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.PURPLE, Color.PURPLE, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING)
-    #Enhancement Selection: P.U.P.
-    hudText(getAllPlayers().filter(lambda player: player.enhancementId == Enhancement.PUP), "Enhancement: P.U.P. {0}".format(iconString(Icon.HAPPY)), "Survivor is equipped with an autonomous friendly droid", "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)), HudPosition.LEFT, 3, Color.BLUE, Color.BLUE, Color.BLUE, HudReeval.VISIBILITY_AND_STRING)
+    #One reevaluated HUD per category; localPlayer selects the viewer's current option.
+    #Do not capture vote indices or dynamic text/colors with evalOnce.
+    #Empty descriptions must be strings: null selected from an array displays as 0.
+    #Both vote filters share the 0-6 sequence; Challenge excludes the final entry.
+    #Challenge
+    hudText(
+        getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] in numbersList.slice(NL_MENU_VOTE_IDS_OFFSET, NL_MENU_VOTE_IDS_LEN - 1)),
+        [
+            "Challenge: No Preference",
+            "Challenge: None",
+            "Challenge: Swarm Shootout",
+            "Challenge: Random Abilities",
+            specialEffectsStrings if specialEffectsTiming else "Challenge: Insanity",
+            specialEffectsStrings if specialEffectsTiming else "Challenge: Pandora's Box"
+        ][localPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE]],
+        [
+            "",
+            "",
+            "Zombies fire their guns!",
+            "Non-boss zombies use abilities",
+            "Faster, stronger, and deadlier",
+            "All challenges at Once!"
+        ][localPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE]],
+        "Change Vote (Press [{0}])".format(inputBindingString(Button.ULTIMATE)) if voting or localPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] == 0 else [],
+        HudPosition.LEFT,
+        0,
+        [Color.AQUA, Color.YELLOW, Color.LIME_GREEN, Color.ORANGE, Color.WHITE if specialEffectsTiming else Color.TURQUOISE, Color.GRAY if specialEffectsTiming else Color.PURPLE][localPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE]],
+        [Color.AQUA, null, Color.LIME_GREEN, Color.ORANGE, Color.WHITE, Color.WHITE][localPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE]],
+        [Color.AQUA, Color.YELLOW, Color.LIME_GREEN, Color.ORANGE, Color.WHITE, Color.WHITE][localPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE]],
+        HudReeval.VISIBILITY_STRING_AND_COLOR
+    )
+    #Zombie Mode
+    startMenuZombieColors = [Color.AQUA, Color.ORANGE, Color.RED, Color.PURPLE, Color.LIME_GREEN, Color.BLUE, Color.GRAY]
+    hudText(
+        getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] in numbersList.slice(NL_MENU_VOTE_IDS_OFFSET, NL_MENU_VOTE_IDS_LEN)),
+        [
+            "Zombie Mode: No Preference",
+            "Zombie Mode: All Zombies",
+            "Zombie Mode: New Blood",
+            "Zombie Mode: What'll it be?",
+            "Zombie Mode: Zombie Shuffle",
+            "Zombie Mode: Dinner Rush!",
+            "Zombie Mode: Ham N' Hammer!"
+        ][localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
+        [
+            "",
+            "Normal game featuring all zombie types",
+            "The 13 most recent zombie types will spawn",
+            "All zombie types have equal spawn rates",
+            "The zombie spawn rates twist and turn with wild abandon!",
+            "Only zombies with mobility abilities will spawn",
+            "Only Reinhardt {0} and Wrecking Ball {1} zombies will spawn".format(heroIcon(Hero.REINHARDT), heroIcon(Hero.WRECKING_BALL))
+        ][localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
+        "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_1)) if voting or localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] == 0 else [],
+        HudPosition.LEFT,
+        1,
+        startMenuZombieColors[localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
+        startMenuZombieColors[localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
+        startMenuZombieColors[localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
+        HudReeval.VISIBILITY_STRING_AND_COLOR
+    )
+    #Objective Type: arrays use raw IDs; 3, 4 and 8 have no standalone menu row.
+    startMenuObjectiveColors = [Color.AQUA, Color.ORANGE, Color.RED, null, null, Color.RED, Color.LIME_GREEN, colorSatelliteUplinkConst, null, Color.PURPLE]
+    hudText(
+        getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] in [ObjectiveType.NO_PREFERENCE, ObjectiveType.SHOWDOWN, ObjectiveType.BOSSES, ObjectiveType.KILL_ZONE, ObjectiveType.ZOMBIE_EGG, ObjectiveType.SATELLITE_UPLINK, ObjectiveType.MIXED_OBJECTIVES]),
+        [
+            "Objective Type: No Preference",
+            "Objective Type: Showdown {0}".format(abilityIconString(Hero.BRIGITTE, Button.ULTIMATE)),
+            "Objective Type: Bosses {0}".format(iconString(Icon.WARNING)),
+            null,
+            null,
+            "Objective Type: Kill Zone {0}".format(iconString(Icon.RING_THICK) if ceil(getTotalTimeElapsed() * 1.25) % 2 == 0 else iconString(Icon.RING_THIN)),
+            "Objective Type: Zombie Egg {0}".format(iconString(Icon.RADIOACTIVE)),
+            "Objective Type: Satellite Uplink {0}".format(iconString(Icon.MOON)),
+            null,
+            "Objective Type: Mixed Objectives {0}".format(iconString(Icon.SPIRAL))
+        ][localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
+        [
+            "",
+            "Players must contest a point against zombies",
+            "Spawns giant versions of zombies",
+            null,
+            null,
+            "Clear zombies from a designated area",
+            "Survivors must destroy an object that is spawning zombies",
+            "Survivors must repair terminals to communicate with a satellite",
+            null,
+            "Randomly assigns all types of objectives"
+        ][localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
+        "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting or localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == 0 else [],
+        HudPosition.LEFT,
+        2,
+        startMenuObjectiveColors[localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
+        startMenuObjectiveColors[localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
+        startMenuObjectiveColors[localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
+        HudReeval.VISIBILITY_STRING_AND_COLOR
+    )
+    #Enhancement
+    startMenuEnhancementColors = [Color.AQUA, colorKevlarConst, Color.GRAY, Color.BLUE, Color.RED, Color.ORANGE, Color.GREEN, Color.GRAY, colorChargeBatteryConst, Color.PURPLE, Color.BLUE]
+    hudText(
+        getAllPlayers().filter(lambda player: player.enhancementId in [Enhancement.NO_PREFERENCE, Enhancement.KEVLAR, Enhancement.ZOMBIE_HYBRID, Enhancement.LASER_BARRICADE, Enhancement.BRAIN_KILLER, Enhancement.PYROTECHNIC, Enhancement.PLAGUE_DOCTOR, Enhancement.BORN_TO_BATTLE, Enhancement.CHARGE_BATTERY, Enhancement.HITCHHIKER, Enhancement.PUP]),
+        [
+            "Enhancement: No Preference",
+            "Enhancement: Kevlar {0}".format(iconString(Icon.STOP)),
+            "Enhancement: Zombie Hybrid {0}".format(iconString(Icon.POISON)),
+            "Enhancement: Laser Barricade {0}".format(iconString(Icon.DIAMOND)),
+            "Enhancement: Brain Killer {0}".format(iconString(Icon.SKULL)),
+            "Enhancement: Pyrotechnic {0}".format(iconString(Icon.FIRE)),
+            "Enhancement: Plague Doctor {0}".format(iconString(Icon.PLUS)),
+            "Enhancement: Born to Battle {0}".format(iconString(Icon.BOLT)),
+            "Enhancement: Charge Battery {0}".format(iconString(Icon.SPIRAL)),
+            "Enhancement: Hitchhiker {0}".format(iconString(Icon.FLAG)),
+            "Enhancement: P.U.P. {0}".format(iconString(Icon.HAPPY))
+        ][localPlayer.enhancementId],
+        [
+            "",
+            "Survivor is equipped with armor that protects against infections",
+            "Get infected faster, and convert it to explosive damage",
+            "Player can place a wall that blocks zombies",
+            "Critical hits do more damage",
+            "Dealing damage, within 15 meters, sets enemies on fire",
+            "Deal more healing to infected players while reducing their infection level",
+            "Dealing a final blow will give the player a cooldown reset on the next ability they use",
+            "Survivor can place a battery that gives ultimate charge",
+            "Survivor can attach to a teammate and fuse their health.",
+            "Survivor is equipped with an autonomous friendly droid"
+        ][localPlayer.enhancementId],
+        "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)),
+        HudPosition.LEFT,
+        3,
+        startMenuEnhancementColors[localPlayer.enhancementId],
+        startMenuEnhancementColors[localPlayer.enhancementId],
+        startMenuEnhancementColors[localPlayer.enhancementId],
+        HudReeval.VISIBILITY_STRING_AND_COLOR
+    )
 
 
 rule "SPECIAL EFFECT CONTROLS":

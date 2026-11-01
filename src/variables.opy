@@ -59,13 +59,18 @@ globalvar tmp1
 globalvar tmp2
 
 # Shared immutable constants for HUD colors, vertical offsets, and the off-map holding position.
-# Sorted by descending number of references across src (excluding each declaration).
+# Reference counts across src exclude each declaration.
 globalvar offsetUpThreeQuartersConst = vect(0, 0.75, 0)     # 7 uses
 globalvar offsetUpHalfConst = vect(0, 0.5, 0)               # 7 uses
-globalvar colorChargeBatteryConst = rgb(236, 206, 44)     # 6 uses
+globalvar colorChargeBatteryConst = rgb(236, 206, 44)     # 4 uses
 globalvar dummyHoldingPositionConst = vect(500, 500, 500)   # 6 uses
-globalvar colorKevlarConst = rgb(240, 129, 26)            # 4 uses
-globalvar colorSatelliteUplinkConst = rgb(12, 129, 132)   # 3 uses
+globalvar colorKevlarConst = rgb(240, 129, 26)            # 2 uses
+globalvar colorSatelliteUplinkConst = rgb(12, 129, 132)   # 1 use
+
+# Static pregame HUD palettes, indexed by zombie mode, raw objective ID and Enhancement.
+globalvar startMenuZombieColors
+globalvar startMenuObjectiveColors
+globalvar startMenuEnhancementColors
 
 globalvar objectiveEntitiesCount
 globalvar objectivePositions
@@ -266,11 +271,6 @@ playervar botResourceEntity
 
 
 # enhancements:
-# Frequently accessed array fields use individual variables to reduce element count.
-# Laser Barricade: 1 = horizontal push direction, 2 = along-barrier direction.
-# Laser Barricade: 3 = placement cooldown, 4 = center, 5-6 = lower corners, 7 = health.
-# P.U.P.: 5 = drone position, 6 = ability cooldown.
-# playerMenuStatus retains votes in slots 2-4.
 playervar enhancementId
 playervar enhancementValue1
 playervar enhancementValue2
@@ -278,15 +278,12 @@ playervar enhancementValue3
 playervar enhancementValue4
 playervar enhancementValue5
 playervar enhancementValue6
-# Used only by Laser Barricade: current barrier health.
-playervar enhancementValue7
-# Hitchhiker passenger attached to this player; null when no passenger is attached.
-playervar hitchhikerPassenger
-# ID of the extra health pool granted to this carrier by a Hitchhiker passenger.
-playervar hitchhikerCarrierHealthPool
+playervar enhancementValue7 # Used only by Laser Barricade: current barrier health.
+playervar hitchhikerPassenger # Hitchhiker passenger attached to this player; null when no passenger is attached.
+playervar hitchhikerCarrierHealthPool # ID of the extra health pool granted to this carrier by a Hitchhiker passenger.
 
 
-
+# power_ups:
 playervar sentryTurretPosition
 playervar stunTarget
 playervar healBeaconPosition
