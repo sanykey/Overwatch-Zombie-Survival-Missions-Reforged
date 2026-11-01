@@ -82,6 +82,7 @@ macro enableMutationsMacro():
 
 
 macro enablePowerupsMacro():
+    availablePowerups = []
     # tmp0: zero-based item index, to populate availablePowerups with item IDs 1-13.
     for tmp0 in range(13):
         availablePowerups[tmp0] = tmp0 + 1
@@ -218,13 +219,9 @@ rule "VARIABLE ASSIGNMENT":
         matchEndTime = 0.1
     #Determines if current game mode is base or arcade
     specialGameMode = true if getCurrentGamemode() in [Gamemode.TDM, Gamemode.CTF, Gamemode.PUSH, Gamemode.CONTROL] else false
-    #Total amount of powerups
-    availablePowerups = 11
-    amountPerResource = 25
     #Initial extraction zone radius
     extractionZoneRad = 300
     objectiveResourcePositions = []
-    votingEndTime = 30
     #Relative center of the map
     while walkCenter == null:
         wait(1)
@@ -264,7 +261,6 @@ rule "VARIABLE ASSIGNMENT":
     availableBosses = []
     spawnTimes = []
     customTelePositions = []
-    losHeightCheck = 1.2
     enablePowerupsMacro()
     enableMutationsMacro()
     numberOfPowerUpsPerSupplyDrop = createWorkshopSettingInt("Power Ups", "Number of Powerups Per Supply Drop", 5, 1, 10, -1)

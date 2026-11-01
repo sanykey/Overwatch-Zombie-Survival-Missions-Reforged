@@ -306,7 +306,7 @@ macro globalObjectiveEntityManagementMacro():
         createEffect(playersOnObjective, Effect.LIGHT_SHAFT, biowasteColorLookUp[localPlayer.biowasteType], objectivePositions[0] + vect(0, -2, 0), objectiveRad, EffectReeval.VISIBILITY_AND_COLOR)
         objectiveEntities.append(getLastCreatedEntity())
         #Depositing resources progress bar
-        createProgressBarInWorldText(localPlayer.filter(lambda x: x in playersOnObjective), ceil(localPlayer.getNormalizedHealth() * 100) if queuedGoalType[0] == 3 else localPlayer.playerObjectiveResourceValue / amountPerResource * 100, "Depositing Biowaste...", updateEveryFrame(localPlayer.getEyePosition() + (directionFromAngles(horizontalAngleOfDirection(localPlayer.getFacingDirection()), verticalAngleOfDirection(localPlayer.getFacingDirection()) + 15))) if localPlayer in playersOnObjective else evalOnce(localPlayer.getPosition()), 1, Clip.NONE, biowasteColorLookUp[localPlayer.biowasteType], Color.WHITE, ProgressWorldTextReeval.VISIBILITY_POSITION_VALUES_AND_COLOR, SpecVisibility.NEVER)
+        createProgressBarInWorldText(localPlayer.filter(lambda x: x in playersOnObjective), ceil(localPlayer.getNormalizedHealth() * 100) if queuedGoalType[0] == 3 else localPlayer.playerObjectiveResourceValue / BIOMORPHING_RESOURCE_AMOUNT * 100, "Depositing Biowaste...", updateEveryFrame(localPlayer.getEyePosition() + (directionFromAngles(horizontalAngleOfDirection(localPlayer.getFacingDirection()), verticalAngleOfDirection(localPlayer.getFacingDirection()) + 15))) if localPlayer in playersOnObjective else evalOnce(localPlayer.getPosition()), 1, Clip.NONE, biowasteColorLookUp[localPlayer.biowasteType], Color.WHITE, ProgressWorldTextReeval.VISIBILITY_POSITION_VALUES_AND_COLOR, SpecVisibility.NEVER)
         objectiveEntities.append(getLastCreatedText())
         #Collection site distance (or closest resource distance)
         createInWorldText(localPlayer.filter(lambda x: not x in playersOnObjective and (localPlayer.playerObjectiveResourceValue > 0 or len(objectiveResourcePositions) > 0)), "Distance: {0}m".format(distance(objectivePositions[0] if localPlayer.playerObjectiveResourceValue > 0 else sorted(objectiveResourcePositions, lambda x: angleBetweenVectors(directionTowards(localPlayer.getEyePosition(), x), localPlayer.getFacingDirection()))[0], localPlayer.getPosition())), objectivePositions[0] if localPlayer.playerObjectiveResourceValue > 0 else sorted(objectiveResourcePositions, lambda x: angleBetweenVectors(directionTowards(localPlayer.getEyePosition(), x), localPlayer.getFacingDirection()))[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.NEVER)
@@ -481,10 +481,10 @@ def setPrematchTimer():
         #Event Player is not voting
         else:
             #All players are finished voting
-            if getMatchTime() > 5 + votingEndTime and ((len(getPlayers(Team.1).filter(lambda player: player.isVoting == false and player.pregameState > PregameState.SELECTING_HERO))) == getNumberOfPlayers(Team.1)):
-                setMatchTime(5 + votingEndTime)
-            elif getMatchTime() > 20 + votingEndTime and ((len(getPlayers(Team.1).filter(lambda player: player.isVoting == false and player.pregameState > PregameState.SELECTING_HERO))) == len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus))):
-                setMatchTime(20 + votingEndTime)
+            if getMatchTime() > 5 + VOTING_END_TIME and ((len(getPlayers(Team.1).filter(lambda player: player.isVoting == false and player.pregameState > PregameState.SELECTING_HERO))) == getNumberOfPlayers(Team.1)):
+                setMatchTime(5 + VOTING_END_TIME)
+            elif getMatchTime() > 20 + VOTING_END_TIME and ((len(getPlayers(Team.1).filter(lambda player: player.isVoting == false and player.pregameState > PregameState.SELECTING_HERO))) == len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus))):
+                setMatchTime(20 + VOTING_END_TIME)
     #Voting complete
     else:
         #Event Player deselects hero
@@ -669,7 +669,7 @@ def selectTarget():
     # tmp0: candidate-target index, to select the first target visible to this bot.
     for tmp0 in range(len(eventPlayer.potentialTargets)):
         eventPlayer.testTarget = eventPlayer.potentialTargets[tmp0]
-        if isInLoS(eventPlayer.testTarget.getEyePosition(), eventPlayer.getPosition() + vect(0, losHeightCheck, 0)):
+        if isInLoS(eventPlayer.testTarget.getEyePosition(), eventPlayer.getPosition() + losOffsetConst):
             break
         #wait()
     if eventPlayer.isAlive():

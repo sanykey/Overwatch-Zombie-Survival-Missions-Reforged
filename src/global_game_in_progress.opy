@@ -18,23 +18,6 @@ rule "EFFECTS/TEXTS":
     hudSubtext(getAllPlayers().filter(lambda _: challengeSetting >= 2), "Challenge round!", HudPosition.RIGHT, 0.2, Color.TEAM_1, HudReeval.VISIBILITY_AND_STRING)
 
 
-rule "PLAYER EXTRACTION CONTROL":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer in evacuatingSurvivorList == true
-    
-    eventPlayer.chase2 = eventPlayer.getPosition()
-    chaseAtRate(eventPlayer.chase2, eventPlayer.chase2 + vect(0, 200, 0), evacRate)
-    eventPlayer.startForcingPosition(eventPlayer.chase2)
-    waitUntil(evacRate > 2, 99999)
-    chaseOverTime(eventPlayer.chase2, objectivePositions[0] + vect(0, 50, 0) + directionFromAngles(360 / len(evacuatingSurvivorList) * evacuatingSurvivorList.index(eventPlayer), 0) * 3, 5)
-    waitUntil(evacRate < 10, 99999)
-    chaseAtRate(eventPlayer.chase2, eventPlayer.chase2 + vect(0, 200, 0), evacRate)
-    eventPlayer.evacPos = eventPlayer.chase2 + directionTowards(objectivePositions[0], evacDestination) * 700
-    waitUntil(evacRate > 2, 99999)
-    chaseAtRate(eventPlayer.chase2, eventPlayer.evacPos, evacRate)
-
-
 rule "ATTACK SPAWN ROOM CONTROL":
     @Condition specialGameModeSetup != true
     #Does not apply if game mode is special mode

@@ -1282,8 +1282,8 @@ rule "SMOLDER SUPER SLAM":
     
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer.getPosition(), 7.5 * eventPlayer.size)
     playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, eventPlayer.getPosition(), 100)
-    eventPlayer.botSpecialPotentialTargets = playerTargetList.concat(getLivingPlayers(Team.2)).exclude(eventPlayer).filter(lambda x: not x.hasStatus(Status.PHASED_OUT) and distance(eventPlayer.getPosition(), x.getPosition()) < 7.5 * eventPlayer.size and isInLoS(eventPlayer.getPosition() + vect(0, losHeightCheck, 0), x.getPosition() + vect(0, losHeightCheck, 0)))
-    (eventPlayer.botSpecialPotentialTargets.filter(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < 5 * eventPlayer.size and isInLoS(eventPlayer.getPosition() + vect(0, losHeightCheck, 0), x.getPosition() + vect(0, losHeightCheck, 0), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS))).setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 0.35)
+    eventPlayer.botSpecialPotentialTargets = playerTargetList.concat(getLivingPlayers(Team.2)).exclude(eventPlayer).filter(lambda x: not x.hasStatus(Status.PHASED_OUT) and distance(eventPlayer.getPosition(), x.getPosition()) < 7.5 * eventPlayer.size and isInLoS(eventPlayer.getPosition() + losOffsetConst, x.getPosition() + losOffsetConst))
+    (eventPlayer.botSpecialPotentialTargets.filter(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < 5 * eventPlayer.size and isInLoS(eventPlayer.getPosition() + losOffsetConst, x.getPosition() + losOffsetConst, BarrierLos.BLOCKED_BY_ENEMY_BARRIERS))).setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 0.35)
     # tmp0: shockwave target index, to apply distance-scaled knockback to each affected player.
     for tmp0 in range(len(eventPlayer.botSpecialPotentialTargets)):
         eventPlayer.botSpecialTarget = eventPlayer.botSpecialPotentialTargets[tmp0]
@@ -1456,7 +1456,7 @@ def entityFloat():
     @Name "entityFloat"
     
     #Entities that will be floated
-    eventPlayer.botSpecialPotentialTargets = getLivingPlayers(Team.ALL).filter(lambda player: player != eventPlayer and distance(eventPlayer.getPosition(), player.getPosition()) < 12 * eventPlayer.size and isInLoS(player.getPosition() + vect(0, losHeightCheck, 0), eventPlayer.getPosition() + vect(0, losHeightCheck, 0), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS))
+    eventPlayer.botSpecialPotentialTargets = getLivingPlayers(Team.ALL).filter(lambda player: player != eventPlayer and distance(eventPlayer.getPosition(), player.getPosition()) < 12 * eventPlayer.size and isInLoS(player.getPosition() + losOffsetConst, eventPlayer.getPosition() + losOffsetConst, BarrierLos.BLOCKED_BY_ENEMY_BARRIERS))
 
 
 def explosionWarning():

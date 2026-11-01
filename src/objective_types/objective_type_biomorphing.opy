@@ -78,12 +78,12 @@ rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS":
     if objectiveCaptureValue < 100:
         waitUntil(goalCheck == false, 99999)
         # tmp0: index of a zombie not holding a full resource, to choose the next resource carrier.
-        tmp0 = getPlayers(Team.2).index((getPlayers(Team.2).filter(lambda player: player.playerObjectiveResourceValue != amountPerResource))[0])
+        tmp0 = getPlayers(Team.2).index((getPlayers(Team.2).filter(lambda player: player.playerObjectiveResourceValue != BIOMORPHING_RESOURCE_AMOUNT))[0])
         # tmp1: current zombie list, to resolve the carrier index in tmp0 to a player.
         tmp1 = getPlayers(Team.2)
         # tmp1: selected zombie, kept while biowasteOutputMacro replaces tmp0 with its resource type.
         tmp1 = tmp1[tmp0]
-        tmp1.playerObjectiveResourceValue = amountPerResource
+        tmp1.playerObjectiveResourceValue = BIOMORPHING_RESOURCE_AMOUNT
         biowasteOutputMacro()
         tmp1.biowasteType = tmp0
     else:
@@ -121,7 +121,7 @@ rule "BIOWASTE IS PICKED UP":
     del objectiveResourcePositions[tmp1]
     del biowasteEffects[tmp1]
     del biowasteString[tmp1]
-    eventPlayer.playerObjectiveResourceValue = amountPerResource
+    eventPlayer.playerObjectiveResourceValue = BIOMORPHING_RESOURCE_AMOUNT
     smallMessage(eventPlayer, "  Go to the deposit area!")
     playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.WHITE, eventPlayer.getPosition(), 50)
     playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.WHITE, eventPlayer.getPosition(), 2)
@@ -150,9 +150,9 @@ rule "PLAYER DELIVERS RESOURCE VALUE":
     #Damage player if resource is blood, damage more if above health.
     damage(eventPlayer, eventPlayer, (50.33 if eventPlayer.getHealth() > 200 else 10.33) if queuedGoalType[0] == 3 else 0)
     #(Amount per resource / dump time) x tick speed
-    eventPlayer.playerObjectiveResourceValue -= amountPerResource / 3 * 0.125
+    eventPlayer.playerObjectiveResourceValue -= BIOMORPHING_RESOURCE_AMOUNT / 3 * 0.125
     #(Amount per resource / dump time) x tick speed, if resource is blood then this will go slower x the number of players
-    objectiveCaptureValue += (amountPerResource / (getNumberOfPlayers(Team.1) * 4.167 if queuedGoalType[0] == 3 else tmp0)) * 0.125
+    objectiveCaptureValue += (BIOMORPHING_RESOURCE_AMOUNT / (getNumberOfPlayers(Team.1) * 4.167 if queuedGoalType[0] == 3 else tmp0)) * 0.125
     if objectiveCaptureValue >= goalPost:
         del queuedGoalType[0]
         objectiveCaptureValue = goalPost
@@ -170,7 +170,7 @@ rule "PLAYER DELIVERS RESOURCE VALUE":
 rule "BIOWASTE HOLDER DIES, ORB IS QUEUED AND RESOURCE AMOUNT REMOVED":
     @Event playerDied
     @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.BIOMORPHING
-    @Condition eventPlayer.playerObjectiveResourceValue >= amountPerResource
+    @Condition eventPlayer.playerObjectiveResourceValue >= BIOMORPHING_RESOURCE_AMOUNT
     @Condition queuedGoalType[0] != 3
     
     deferredType.append(eventPlayer.biowasteType)

@@ -414,23 +414,23 @@ def stun():
     
     if eventPlayer.powerUpEffects[100] == 0:
         #Stun beam effect
-        createBeam(getAllPlayers(), Beam.BAD, eventPlayer.pStunChase1, eventPlayer.pStunChase1 + ((directionTowards(eventPlayer.pStunChase1, eventPlayer.stunOrigin.getPosition() + vect(0, losHeightCheck, 0))) * (min(3, distance(eventPlayer.pStunChase1, eventPlayer.stunOrigin.getPosition() + vect(0, losHeightCheck, 0))))), Color.SKY_BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createBeam(getAllPlayers(), Beam.BAD, eventPlayer.pStunChase1, eventPlayer.pStunChase1 + ((directionTowards(eventPlayer.pStunChase1, eventPlayer.stunOrigin.getPosition() + losOffsetConst)) * (min(3, distance(eventPlayer.pStunChase1, eventPlayer.stunOrigin.getPosition() + losOffsetConst)))), Color.SKY_BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.powerUpEffects[100] = getLastCreatedEntity()
     playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.WHITE, eventPlayer.getPosition(), 30)
     #Stun beam lead
-    eventPlayer.pStunChase1 = eventPlayer.getPosition() + vect(0, losHeightCheck, 0)
+    eventPlayer.pStunChase1 = eventPlayer.getPosition() + losOffsetConst
     #Stun origin player
     eventPlayer.stunOrigin = eventPlayer
     #Stun Target
     eventPlayer.stunTarget = (sorted(getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).filter(lambda player: distance(eventPlayer.getPosition(), player.getPosition()) < 15 * eventPlayer.size), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition()))))[0]
-    chaseAtRate(eventPlayer.pStunChase1, eventPlayer.stunTarget.getPosition() + vect(0, losHeightCheck, 0), 50)
+    chaseAtRate(eventPlayer.pStunChase1, eventPlayer.stunTarget.getPosition() + losOffsetConst, 50)
     #Number of bounces
     for eventPlayer.pStunCount in range(50, 0, -1):
         if eventPlayer.stunTarget == null:
             if eventPlayer.pStunCount > 13 and not eventPlayer.stunOrigin in bosses:
                 eventPlayer.stunOrigin.setStatusEffect(eventPlayer, Status.STUNNED, eventPlayer.pStunCount / 8.3)
             break
-        waitUntil(distance(eventPlayer.pStunChase1, eventPlayer.stunTarget.getPosition() + vect(0, losHeightCheck, 0)) < 0.1, 3)
+        waitUntil(distance(eventPlayer.pStunChase1, eventPlayer.stunTarget.getPosition() + losOffsetConst) < 0.1, 3)
         eventPlayer.stunTarget.setStatusEffect(eventPlayer, Status.STUNNED, 0.5 if eventPlayer.stunTarget in bosses else 1.5)
         playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.WHITE, eventPlayer.stunTarget, 0.5)
         playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.stunTarget.getPosition(), 50)

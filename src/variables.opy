@@ -1,9 +1,11 @@
 #!mainFile "main.opy"
 
 #!define BOT_MAX_TELEPORT_RANGE 40
+#!define BIOMORPHING_RESOURCE_AMOUNT 25
 #!define CURRENT_OBJECTIVE_TYPE objectiveTypes[0]
 #!define LASER_BARRICADE_HEIGHT 2
 #!define LASER_BARRICADE_WIDTH 5
+#!define VOTING_END_TIME 30
 
 # Enhancement IDs also index enhancementOptions and the default-setting choices.
 # Zero means no preference in the menu; initialization resolves the configured default.
@@ -62,10 +64,10 @@ globalvar tmp2
 # Reference counts across src exclude each declaration.
 globalvar offsetUpThreeQuartersConst = vect(0, 0.75, 0)     # 7 uses
 globalvar offsetUpHalfConst = vect(0, 0.5, 0)               # 7 uses
+globalvar losOffsetConst = vect(0, 1.2, 0)                 # 16 uses
 globalvar colorChargeBatteryConst = rgb(236, 206, 44)     # 4 uses
 globalvar dummyHoldingPositionConst = vect(500, 500, 500)   # 6 uses
 globalvar colorKevlarConst = rgb(240, 129, 26)            # 2 uses
-globalvar colorSatelliteUplinkConst = rgb(12, 129, 132)   # 1 use
 
 # Static pregame HUD palettes, indexed by zombie mode, raw objective ID and Enhancement.
 globalvar startMenuZombieColors
@@ -77,7 +79,7 @@ globalvar objectivePositions
 globalvar walkCenter
 globalvar objectiveCaptureValue
 globalvar startPos
-globalvar count2
+globalvar evacCount
 globalvar specialEffectsStrings
 globalvar playersOnObjective
 globalvar testPos
@@ -112,7 +114,7 @@ globalvar botHealthValues
 globalvar throttleSpeeds
 globalvar specialEffectsTiming
 globalvar evacRate
-globalvar evacuatingSurvivorList
+globalvar evacSurvivorList
 globalvar evacDestination
 globalvar zombieSetting
 globalvar bosses
@@ -131,9 +133,7 @@ globalvar botSpawnPoints
 globalvar objectiveValue
 globalvar objectiveEntities
 globalvar voting
-globalvar votingEndTime
 globalvar objectiveResourcePositions
-globalvar amountPerResource
 globalvar extractionZoneRad
 globalvar specialGameModeSetup
 globalvar availablePowerups
@@ -141,7 +141,6 @@ globalvar specialGameMode
 globalvar objectiveSpacing
 globalvar enhancementOptions
 globalvar playerTargetList
-globalvar losHeightCheck
 globalvar survivorToRescue
 globalvar nonBossZombies
 globalvar availableMutations

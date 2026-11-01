@@ -187,7 +187,7 @@ rule "TELEPORT BOTS WHEN NOT USED FOR TOO LONG":
     @Condition eventPlayer.botTarget == null
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer in bosses == false
-    @Condition (playerTargetList.filter(lambda x: x.invisible).all(lambda x: not isInLoS(x.getEyePosition(), eventPlayer.getPosition() + vect(0, losHeightCheck, 0)))) == true
+    @Condition (playerTargetList.filter(lambda x: x.invisible).all(lambda x: not isInLoS(x.getEyePosition(), eventPlayer.getPosition() + losOffsetConst))) == true
     
     if eventPlayer.successfullyTeleported:
         wait(5, Wait.ABORT_WHEN_FALSE)
@@ -238,7 +238,7 @@ rule "BOT TARGET VISIBLE":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.hasSpawned() == true
     @Condition (eventPlayer.botTarget == null or playerTargetList.exclude(eventPlayer.botTarget).any(lambda x: not x.invisible and distance(x.getPosition(), eventPlayer.getPosition()) < 7.5)) == true
-    @Condition (playerTargetList.any(lambda x: not x.invisible and distance(eventPlayer.getPosition(), x.getPosition()) < 150 and isInLoS(x.getEyePosition(), eventPlayer.getPosition() + vect(0, losHeightCheck, 0)))) == true
+    @Condition (playerTargetList.any(lambda x: not x.invisible and distance(eventPlayer.getPosition(), x.getPosition()) < 150 and isInLoS(x.getEyePosition(), eventPlayer.getPosition() + losOffsetConst))) == true
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
     startRule(selectTarget)
@@ -264,7 +264,7 @@ rule "DESELECT BOT TARGET":
     @Team 2
     @Condition eventPlayer.teleporting != true
     @Condition eventPlayer.botTarget != null
-    @Condition (eventPlayer.botTarget.invisible or not eventPlayer.botTarget in playerTargetList or not isInLoS(eventPlayer.botTarget.getEyePosition(), eventPlayer.getPosition() + vect(0, losHeightCheck, 0))) == true
+    @Condition (eventPlayer.botTarget.invisible or not eventPlayer.botTarget in playerTargetList or not isInLoS(eventPlayer.botTarget.getEyePosition(), eventPlayer.getPosition() + losOffsetConst)) == true
     
     eventPlayer.botTarget = null
     if not eventPlayer.specialThrottling:
@@ -467,7 +467,7 @@ def teleportBots():
                 else:
                     eventPlayer.telePos = nearestWalkablePosition(eventPlayer.averagePlayersPos + directionFromAngles(random.uniform(0, 360), random.uniform(-20, 10)) * random.uniform(0, BOT_MAX_TELEPORT_RANGE))
                 wait(0.25)
-            if playerTargetList.all(lambda x: distance(eventPlayer.telePos, x.getPosition()) > 10) and playerTargetList.filter(lambda x: x.isInViewAngle(eventPlayer.telePos, 55)).all(lambda x: not isInLoS(x.getEyePosition(), eventPlayer.telePos + vect(0, losHeightCheck, 0))):
+            if playerTargetList.all(lambda x: distance(eventPlayer.telePos, x.getPosition()) > 10) and playerTargetList.filter(lambda x: x.isInViewAngle(eventPlayer.telePos, 55)).all(lambda x: not isInLoS(x.getEyePosition(), eventPlayer.telePos + losOffsetConst)):
                 eventPlayer.teleport(eventPlayer.telePos)
                 eventPlayer.teleporting = false
             #Teleport was unsuccessful due to line of sight and view angle

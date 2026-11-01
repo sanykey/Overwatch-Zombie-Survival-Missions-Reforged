@@ -45,6 +45,26 @@ rule "EXTRACTION ZONE INFECTION INCREASE":
     loop()
 
 
+# Animate successful extraction: lift survivors, gather them in a circle above the
+# extraction point, then fly them away toward evacDestination. Changes to evacRate
+# in WIN/LOSS CONDITIONS synchronize the movement phases.
+rule "PLAYER EXTRACTION CONTROL":
+    @Event eachPlayer
+    @Team 1
+    @Condition eventPlayer in evacSurvivorList == true
+    
+    eventPlayer.chase2 = eventPlayer.getPosition()
+    chaseAtRate(eventPlayer.chase2, eventPlayer.chase2 + vect(0, 200, 0), evacRate)
+    eventPlayer.startForcingPosition(eventPlayer.chase2)
+    waitUntil(evacRate > 2, 99999)
+    chaseOverTime(eventPlayer.chase2, objectivePositions[0] + vect(0, 50, 0) + directionFromAngles(360 / len(evacSurvivorList) * evacSurvivorList.index(eventPlayer), 0) * 3, 5)
+    waitUntil(evacRate < 10, 99999)
+    chaseAtRate(eventPlayer.chase2, eventPlayer.chase2 + vect(0, 200, 0), evacRate)
+    eventPlayer.evacPos = eventPlayer.chase2 + directionTowards(objectivePositions[0], evacDestination) * 700
+    waitUntil(evacRate > 2, 99999)
+    chaseAtRate(eventPlayer.chase2, eventPlayer.evacPos, evacRate)
+
+
 rule "WIN/LOSS CONDITIONS":
     @Condition objectiveComplete == false
     @Condition isGameplayActive == true
@@ -90,8 +110,8 @@ rule "WIN/LOSS CONDITIONS":
         wait()
         evacDestination = objectivePositions[0] + vect(0, 250, 0) + directionFromAngles(random.uniform(0, 360), 0) * 500
         evacRate = 2
-        evacuatingSurvivorList = playersOnObjective
-        (getPlayers(Team.1).filter(lambda player: not evacuatingSurvivorList[player])).clearStatusEffect(Status.ROOTED)
+        evacSurvivorList = playersOnObjective
+        (getPlayers(Team.1).filter(lambda player: not evacSurvivorList[player])).clearStatusEffect(Status.ROOTED)
         wait(1)
         evacRate = 10
         wait(5)
@@ -123,7 +143,7 @@ def nukeMap():
     while distance(chase1, mapGrid) > 1:
         playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.SKY_BLUE, chase1, 3)
         wait()
-    for count2 in range(400):
-        kill(getPlayers(Team.1).filter(lambda player: not player in evacuatingSurvivorList))
-        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, rgb(255, random.uniform(100, 255), 0), mapGrid + (directionFromAngles(random.uniform(0, 360), 0) * (random.randint(0, (count2 / 20) ** 2 + 1))), (count2 / 18) ** 2)
+    for evacCount in range(400):
+        kill(getPlayers(Team.1).filter(lambda player: not player in evacSurvivorList))
+        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, rgb(255, random.uniform(100, 255), 0), mapGrid + (directionFromAngles(random.uniform(0, 360), 0) * (random.randint(0, (evacCount / 20) ** 2 + 1))), (evacCount / 18) ** 2)
         wait()

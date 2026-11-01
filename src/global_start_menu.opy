@@ -51,12 +51,12 @@ rule "GLOBAL MENU INITIALIZATION":
     lbl_0:
     startMenuSpacingAngle = 40
     #Start screen objective description
-    setObjectiveDescription(getAllPlayers(), "Voting ends in {0}s".format(ceil(getMatchTime() - votingEndTime)) if voting else "Select your hero", HudReeval.VISIBILITY_AND_STRING)
+    setObjectiveDescription(getAllPlayers(), "Voting ends in {0}s".format(ceil(getMatchTime() - VOTING_END_TIME)) if voting else "Select your hero", HudReeval.VISIBILITY_AND_STRING)
 
 
 rule "EFFECTS/TEXTS":
     #Pre game objective description and match timer
-    hudSubtext(getAllPlayers(), "{0} | {1}s".format("Voting will end in {0}s".format(ceil(getMatchTime() - votingEndTime)) if voting else "Select your hero", ceil(getMatchTime())), HudPosition.TOP, -1, rgb(215, 215, 215), HudReeval.VISIBILITY_AND_STRING)
+    hudSubtext(getAllPlayers(), "{0} | {1}s".format("Voting will end in {0}s".format(ceil(getMatchTime() - VOTING_END_TIME)) if voting else "Select your hero", ceil(getMatchTime())), HudPosition.TOP, -1, rgb(215, 215, 215), HudReeval.VISIBILITY_AND_STRING)
     #Creator/Game Code Promo
     hudSubtext(getAllPlayers(), "Original Game Code: MPJFR" if ceil(getTotalTimeElapsed() * 0.2) % 2 == 0 else "Game Mode Creator: Mazattack#1183", HudPosition.RIGHT, 0, Color.BLUE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
     #Creator/Game Code Promo
@@ -133,7 +133,7 @@ rule "EFFECTS/TEXTS":
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Objective Type: arrays use raw IDs; 3, 4 and 8 have no standalone menu row.
-    startMenuObjectiveColors = [Color.AQUA, Color.ORANGE, Color.RED, null, null, Color.RED, Color.LIME_GREEN, colorSatelliteUplinkConst, null, Color.PURPLE]
+    startMenuObjectiveColors = [Color.AQUA, Color.ORANGE, Color.RED, null, null, Color.RED, Color.LIME_GREEN, rgb(12, 129, 132), null, Color.PURPLE]
     hudText(
         getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] in [ObjectiveType.NO_PREFERENCE, ObjectiveType.SHOWDOWN, ObjectiveType.BOSSES, ObjectiveType.KILL_ZONE, ObjectiveType.ZOMBIE_EGG, ObjectiveType.SATELLITE_UPLINK, ObjectiveType.MIXED_OBJECTIVES]),
         [
@@ -230,10 +230,10 @@ rule "SPECIAL EFFECT CONTROLS":
 rule "END VOTING":
     @Condition voting == true
     @Condition specialGameModeSetup == true
-    @Condition getMatchTime() < votingEndTime
+    @Condition getMatchTime() < VOTING_END_TIME
     @Condition len(getPlayers(Team.1).filter(lambda player: player.pregameState > PregameState.SELECTING_HERO)) > 0
     
-    chase1 = votingEndTime
+    chase1 = VOTING_END_TIME
     startRule(determineZombieMode)
     #Waits until votes have been counted
     waitUntil(not voting, 99999)
