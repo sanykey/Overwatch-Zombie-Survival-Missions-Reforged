@@ -243,7 +243,7 @@ def randomActions():
         eventPlayer.communicate(Comms.EMOTE_DOWN)
     elif tmp0 <= 3:
         eventPlayer.communicate(Comms.EMOTE_LEFT)
-    elif tmp0 <= 4:
+    else:
         eventPlayer.communicate(Comms.EMOTE_RIGHT)
     wait(1)
     # tmp0: random voice-line direction 1-4, to choose one communication before the next wait.
@@ -255,5 +255,5 @@ def randomActions():
         eventPlayer.communicate(Comms.VOICE_LINE_DOWN)
     elif tmp0 <= 3:
         eventPlayer.communicate(Comms.VOICE_LINE_LEFT)
-    elif tmp0 <= 4:
+    else:
         eventPlayer.communicate(Comms.VOICE_LINE_RIGHT)

@@ -31,3 +31,4 @@
 #!include "supply_drops.opy"
 #!include "power_ups.opy"
 #!include "enhancements.opy"
+#!include "debug.opy"
