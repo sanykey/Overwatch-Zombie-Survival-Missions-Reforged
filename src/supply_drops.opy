@@ -19,7 +19,6 @@ rule "GENERATE SUPPLY DROPS":
     @Condition supplyDropStatus == true
     #Waits for all objectives to be determined before activating
     @Condition isGameplayActive == true
-    @Condition len(availablePowerups) > 0
     #Limited to 12 power ups on the ground at a time
     @Condition len(powerUpPositions) < 12
     
@@ -56,7 +55,6 @@ rule "GENERATE SUPPLY DROPS":
 
 rule "EFFECT/TEXT (GLOBAL)":
     @Condition isGameplayActive == true
-    @Condition len(availablePowerups) > 0
     
     #Closed supply drop orb
     createEffect(getAllPlayers().filter(lambda _: supplyDropLanding != null and not supplyDropStatus), Effect.ORB, Color.AQUA, supplyDropPosition, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -92,7 +90,7 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         # tmp0: item counter, to append the configured number of random power-up IDs.
         for tmp0 in range(numberOfPowerUpsPerSupplyDrop):
             #Range of power ups
-            powerUpIDs.append(random.choice(availablePowerups))
+            powerUpIDs.append(random.randint(1, 13))
         #Spacing of power ups
         # tmp0: item angle offset in degrees, to spread the opened supply drop's items toward the player.
         for tmp0 in range(-60, 61, 120 / (numberOfPowerUpsPerSupplyDrop - 1)):

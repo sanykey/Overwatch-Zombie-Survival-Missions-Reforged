@@ -12,7 +12,6 @@ macro powerUpAssignmentMacro():
 rule "POWER UP EFFECT/TEXT MANAGEMENT":
     @Condition isGameplayActive == true
     @Condition len(powerUpPositions) > len(powerUpEffect)
-    @Condition len(availablePowerups) > 0
     
     powerUpAssignmentMacro()
     powerUpEffect.append(getLastCreatedEntity())
@@ -23,7 +22,6 @@ rule "POWER UP EFFECT/TEXT MANAGEMENT":
 
 rule "EFFECT/TEXT (PERMANENT)":
     @Condition isGameplayActive == true
-    @Condition len(availablePowerups) > 0
     
     #One row per item ID (1-13); capture the index and the resolved color.
     # tmp1: colors indexed by item ID minus 1, to give each power-up HUD row its item color.

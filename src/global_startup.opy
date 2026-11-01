@@ -81,12 +81,6 @@ macro enableMutationsMacro():
     availableMutations.remove(0)
 
 
-macro enablePowerupsMacro():
-    availablePowerups = []
-    # tmp0: zero-based item index, to populate availablePowerups with item IDs 1-13.
-    for tmp0 in range(13):
-        availablePowerups[tmp0] = tmp0 + 1
-
 rule "PREGAME QUICK TIPS FOR PLAYERS":
     @Condition specialGameModeSetup == true
     
@@ -261,7 +255,6 @@ rule "VARIABLE ASSIGNMENT":
     availableBosses = []
     spawnTimes = []
     customTelePositions = []
-    enablePowerupsMacro()
     enableMutationsMacro()
     numberOfPowerUpsPerSupplyDrop = createWorkshopSettingInt("Power Ups", "Number of Powerups Per Supply Drop", 5, 1, 10, -1)
     uniqueSkinCap = createWorkshopSettingInt("General", "Maximum Number of Unique Hero Skins", 11, 1, 11)

@@ -87,11 +87,10 @@ rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS":
         biowasteOutputMacro()
         tmp1.biowasteType = tmp0
     else:
-        if len(availablePowerups) > 0:
-            # tmp0: reward-item index, to place four power-ups at 90-degree intervals around the objective.
-            for tmp0 in range(4):
-                powerUpIDs.append(random.choice(availablePowerups))
-                powerUpPositions.append(objectivePositions[0] + directionFromAngles(90 * tmp0, 0))
+        # tmp0: reward-item index, to place four power-ups at 90-degree intervals around the objective.
+        for tmp0 in range(4):
+            powerUpIDs.append(random.randint(1, 13))
+            powerUpPositions.append(objectivePositions[0] + directionFromAngles(90 * tmp0, 0))
         objectiveComplete = true
     if ruleCondition:
         loop()

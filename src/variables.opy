@@ -136,7 +136,6 @@ globalvar voting
 globalvar objectiveResourcePositions
 globalvar extractionZoneRad
 globalvar specialGameModeSetup
-globalvar availablePowerups
 globalvar specialGameMode
 globalvar objectiveSpacing
 globalvar enhancementOptions
