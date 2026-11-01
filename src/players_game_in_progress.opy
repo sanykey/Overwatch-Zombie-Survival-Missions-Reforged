@@ -5,7 +5,7 @@ subroutine updateUsers
 
 
 macro playerObjectiveEntityManagementMacro():
-    if eventPlayer.objectiveValue != objectiveValue or len(objectivePositions) == 1:
+    if eventPlayer.objectiveValue != objectiveValue or len(objectivePositionList) == 1:
         eventPlayer.objectiveValue = CURRENT_OBJECTIVE_TYPE
         if eventPlayer.getTeam() == Team.1:
             #Destroy all current objective effects and texts
@@ -21,7 +21,7 @@ macro playerObjectiveEntityManagementMacro():
             eventPlayer.botResourceEntity = []
         if eventPlayer.objectiveValue == ObjectiveType.BIOMORPHING:
             #Player carrying resources icon
-            createIcon(getAllPlayers().filter(lambda player: eventPlayer.isAlive() and player != eventPlayer and eventPlayer.playerObjectiveResourceValue > 0), eventPlayer, Icon.RECYCLE, IconReeval.VISIBILITY_POSITION_AND_COLOR, biowasteColorLookUp[eventPlayer.biowasteType] if eventPlayer.getTeam() == Team.1 else Color.WHITE)
+            createIcon(getAllPlayers().filter(lambda player: eventPlayer.isAlive() and player != eventPlayer and eventPlayer.playerObjectiveResourceValue > 0), eventPlayer, Icon.RECYCLE, IconReeval.VISIBILITY_POSITION_AND_COLOR, biomorphingResourceColorList[eventPlayer.biowasteType] if eventPlayer.getTeam() == Team.1 else Color.WHITE)
             if eventPlayer.getTeam() == Team.1:
                 eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
             else:
@@ -32,7 +32,7 @@ rule "PLAYER INITIALIZATION":
     @Event eachPlayer
     @Team 1
     @Condition isGameInProgress() == true
-    @Condition specialGameModeSetup != true
+    @Condition isPregameSetup != true
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isDummy() == false
     
@@ -61,36 +61,36 @@ rule "PLAYER INITIALIZATION":
     enableDisableAbilities()
     eventPlayer.size = 1
     if eventPlayer.pregameState == PregameState.SELECTING_HERO:
-        if not "{0}".format(eventPlayer) in users:
+        if not "{0}".format(eventPlayer) in userNameList:
             updateUsers()
             teleportToClosestPlayer()
             eventPlayer.setStatusEffect(null, Status.INVINCIBLE, 10)
             eventPlayer.playerActiveStatus = true
         else:
             #Index of user in user array
-            eventPlayer.userIndex = users.index("{0}".format(eventPlayer))
-            eventPlayer.deathTimer = globalPlayerStats[eventPlayer.userIndex][1]
-            eventPlayer.reviveTimer = globalPlayerStats[eventPlayer.userIndex][2]
-            eventPlayer.reviveStartTime = globalPlayerStats[eventPlayer.userIndex][3]
-            if globalPlayerStats[eventPlayer.userIndex][0] == 0:
+            eventPlayer.userIndex = userNameList.index("{0}".format(eventPlayer))
+            eventPlayer.deathTimer = playerStatsList[eventPlayer.userIndex][1]
+            eventPlayer.reviveTimer = playerStatsList[eventPlayer.userIndex][2]
+            eventPlayer.reviveStartTime = playerStatsList[eventPlayer.userIndex][3]
+            if playerStatsList[eventPlayer.userIndex][0] == 0:
                 teleportToClosestPlayer()
                 eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 10)
                 eventPlayer.playerActiveStatus = true
-            elif globalPlayerStats[eventPlayer.userIndex][0] >= 1:
-                eventPlayer.teleport(globalPlayerStats[eventPlayer.userIndex][4])
+            elif playerStatsList[eventPlayer.userIndex][0] >= 1:
+                eventPlayer.teleport(playerStatsList[eventPlayer.userIndex][4])
                 while eventPlayer.isAlive():
                     kill(eventPlayer)
                     wait(0.5)
                 eventPlayer.playerActiveStatus = true
-                if globalPlayerStats[eventPlayer.userIndex][0] == 2:
+                if playerStatsList[eventPlayer.userIndex][0] == 2:
                     eventPlayer.deathTimer = 0.5
     else:
-        waitUntil(len(objectivePositions) >= 1, 5)
-        if specialGameMode:
+        waitUntil(len(objectivePositionList) >= 1, 5)
+        if isSpecialGameMode:
             wait()
-            eventPlayer.teleport(random.choice(mapGrid.filter(lambda x: distance(x, walkCenter) < 15)))
+            eventPlayer.teleport(random.choice(mapGridList.filter(lambda x: distance(x, walkCenter) < 15)))
             wait()
-        eventPlayer.setFacing(directionTowards(eventPlayer.getEyePosition(), objectivePositions[0]), Relativity.TO_WORLD)
+        eventPlayer.setFacing(directionTowards(eventPlayer.getEyePosition(), objectivePositionList[0]), Relativity.TO_WORLD)
         eventPlayer.playerActiveStatus = true
         eventPlayer.cancelPrimaryAction()
         eventPlayer.clearStatusEffect(Status.INVINCIBLE)
@@ -106,7 +106,7 @@ rule "EFFECTS/TEXTS":
     @Condition isGameInProgress() == true
     @Condition eventPlayer.playerActiveStatus == true
     @Condition eventPlayer.hasSpawned() == true
-    @Condition specialGameModeSetup != true
+    @Condition isPregameSetup != true
     @Condition eventPlayer.isDummy() == false
     @Condition eventPlayer.switchedHeroes == false
     
@@ -118,7 +118,7 @@ rule "EFFECTS/TEXTS":
     #Reviving ring
     createEffect(getAllPlayers().filter(lambda _: eventPlayer.reviving), Effect.RING, Color.YELLOW, eventPlayer.getPosition(), REVIVE_RADIUS, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     #Health Hud text
-    hudText(getAllPlayers().filter(lambda _: eventPlayer.deathTimer > 0 and not eventPlayer.afk), "{0}{1}: {2}".format("Winston" if gameSmolderEvent else eventPlayer, heroIcon(Hero.WINSTON) if gameSmolderEvent else heroIcon(eventPlayer.getHero()), "{0}%".format(ceil(eventPlayer.getNormalizedHealth() * 100)) if eventPlayer.isAlive() else "DOWN"), "Revive: {0}s".format(ceil(eventPlayer.deathTimer)) if eventPlayer.isDead() and not eventPlayer.reviving else [], ("{1}Infection Level: {0}".format(floor(eventPlayer.infectionLvl), iconString(Icon.POISON) if eventPlayer.enhancementId == Enhancement.ZOMBIE_HYBRID else [])) if eventPlayer.infectionLvl >= 1 else "Vaccine Level: {0}".format(abs(floor(eventPlayer.infectionLvl))) if eventPlayer.infectionLvl < 0 else "Reviving: {0}s".format(ceil(eventPlayer.reviveTimer)) if eventPlayer.reviving else [], HudPosition.LEFT, 0 if eventPlayer.getNormalizedHealth() > 0.97 else 1 / (eventPlayer.getNormalizedHealth() + 1), Color.BLUE if eventPlayer.getNormalizedHealth() > 0.97 else Color.GREEN if eventPlayer.getNormalizedHealth() > 0.66 else Color.YELLOW if eventPlayer.getNormalizedHealth() > 0.33 else Color.ORANGE if eventPlayer.getNormalizedHealth() > 0 else Color.RED, Color.RED, Color.LIME_GREEN if eventPlayer.infectionLvl >= 1 else Color.BLUE if eventPlayer.infectionLvl < 0 else Color.YELLOW)
+    hudText(getAllPlayers().filter(lambda _: eventPlayer.deathTimer > 0 and not eventPlayer.afk), "{0}{1}: {2}".format("Winston" if isSmolderEventActive else eventPlayer, heroIcon(Hero.WINSTON) if isSmolderEventActive else heroIcon(eventPlayer.getHero()), "{0}%".format(ceil(eventPlayer.getNormalizedHealth() * 100)) if eventPlayer.isAlive() else "DOWN"), "Revive: {0}s".format(ceil(eventPlayer.deathTimer)) if eventPlayer.isDead() and not eventPlayer.reviving else [], ("{1}Infection Level: {0}".format(floor(eventPlayer.infectionLvl), iconString(Icon.POISON) if eventPlayer.enhancementId == Enhancement.ZOMBIE_HYBRID else [])) if eventPlayer.infectionLvl >= 1 else "Vaccine Level: {0}".format(abs(floor(eventPlayer.infectionLvl))) if eventPlayer.infectionLvl < 0 else "Reviving: {0}s".format(ceil(eventPlayer.reviveTimer)) if eventPlayer.reviving else [], HudPosition.LEFT, 0 if eventPlayer.getNormalizedHealth() > 0.97 else 1 / (eventPlayer.getNormalizedHealth() + 1), Color.BLUE if eventPlayer.getNormalizedHealth() > 0.97 else Color.GREEN if eventPlayer.getNormalizedHealth() > 0.66 else Color.YELLOW if eventPlayer.getNormalizedHealth() > 0.33 else Color.ORANGE if eventPlayer.getNormalizedHealth() > 0 else Color.RED, Color.RED, Color.LIME_GREEN if eventPlayer.infectionLvl >= 1 else Color.BLUE if eventPlayer.infectionLvl < 0 else Color.YELLOW)
 
 
 rule "PLAYER GETS DOWNED":
@@ -151,7 +151,7 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
     @Condition eventPlayer.isDummy() == false
     
     #0) Downed/Dead status, 1) Death timer, 2) Revive timer, 3) Revive start time, 4) Downed position
-    globalPlayerStats[eventPlayer.userIndex] = [1, eventPlayer.deathTimer, eventPlayer.reviveTimer, eventPlayer.reviveStartTime, eventPlayer.getPosition()]
+    playerStatsList[eventPlayer.userIndex] = [1, eventPlayer.deathTimer, eventPlayer.reviveTimer, eventPlayer.reviveStartTime, eventPlayer.getPosition()]
     waitUntil(not eventPlayer.reviving and playerTargetList.exclude(eventPlayer).filter(lambda x: not x.invisible).any(lambda x: distance(x.getPosition(), eventPlayer.getPosition()) < REVIVE_RADIUS), 0.5)
     if playerTargetList.exclude(eventPlayer).filter(lambda x: not x.invisible).any(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < REVIVE_RADIUS):
         eventPlayer.reviving = true
@@ -162,12 +162,12 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
     else:
         eventPlayer.reviving = false
         #If dome will pass player before their death timer runs out, set the death timer to how long it will take for the dome to reach them
-        if len(objectivePositions) == 1 and extractionZoneRad - distance(eventPlayer.getPosition(), objectivePositions[0]) < eventPlayer.deathTimer:
-            eventPlayer.deathTimer = (extractionZoneRad - distance(eventPlayer.getPosition(), objectivePositions[0])) / 2.5
+        if len(objectivePositionList) == 1 and extractionZoneRad - distance(eventPlayer.getPosition(), objectivePositionList[0]) < eventPlayer.deathTimer:
+            eventPlayer.deathTimer = (extractionZoneRad - distance(eventPlayer.getPosition(), objectivePositionList[0])) / 2.5
         else:
             eventPlayer.deathTimer += -0.5
         #Player is dead outside of extraction zone
-        if len(objectivePositions) == 1 and distance(objectivePositions[0], eventPlayer.getPosition()) > extractionZoneRad:
+        if len(objectivePositionList) == 1 and distance(objectivePositionList[0], eventPlayer.getPosition()) > extractionZoneRad:
             eventPlayer.deathTimer = 0
         #Player's body falls off of map
         if eventPlayer.getPosition().y - nearestWalkablePosition(eventPlayer.getPosition()).y < -0.1:
@@ -181,14 +181,14 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
         waitUntil(eventPlayer.isAlive(), 2)
     elif eventPlayer.deathTimer <= 0:
         #0) Downed/Dead status, 1) Death timer, 2) Revive timer, 3) Revive start time, 4) Downed position
-        globalPlayerStats[eventPlayer.userIndex] = [2, eventPlayer.deathTimer, eventPlayer.reviveTimer, eventPlayer.reviveStartTime, vect(0, -100, 0)]
+        playerStatsList[eventPlayer.userIndex] = [2, eventPlayer.deathTimer, eventPlayer.reviveTimer, eventPlayer.reviveStartTime, vect(0, -100, 0)]
         bigMessage(getAllPlayers().exclude(eventPlayer), "{0} {1} died!".format(eventPlayer, heroIcon(eventPlayer.getHero())))
-        if mustReviveTime == 60 and len(objectivePositions) != 1:
+        if mustReviveTime == 60 and len(objectivePositionList) != 1:
             bigMessage(getAllPlayers().exclude(eventPlayer), "Save {0} by finishing the objective!".format(eventPlayer))
         mustReviveTime -= 0 if mustReviveTime <= 30 else 10
         eventPlayer.teleport(vect(0, -100, 0))
         eventPlayer.setInvisibility(Invis.ALL)
-        waitUntil(objectiveComplete, 99999)
+        waitUntil(isObjectiveComplete, 99999)
         eventPlayer.resurrect()
         teleportToClosestPlayer()
         waitUntil(eventPlayer.isAlive(), 99999)
@@ -200,7 +200,7 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
     if eventPlayer.isAlive():
         eventPlayer.deathTimer = mustReviveTime
         #0) Downed/Dead status, 1) Death timer, 2) Revive timer, 3) Revive start time, 4) Downed position
-        globalPlayerStats[eventPlayer.userIndex] = [0, eventPlayer.deathTimer, eventPlayer.reviveTimer, eventPlayer.reviveStartTime, eventPlayer.getPosition()]
+        playerStatsList[eventPlayer.userIndex] = [0, eventPlayer.deathTimer, eventPlayer.reviveTimer, eventPlayer.reviveStartTime, eventPlayer.getPosition()]
 
 
 rule "PLAYER PICKS UP HEALTH PACK":
@@ -211,8 +211,8 @@ rule "PLAYER PICKS UP HEALTH PACK":
     eventPlayer.startHealingOverTime(null, 5, 20)
     if difficultySetting < 3 or getMatchTime() > matchEndTime:
         #Update known health pack positions
-        if healthpackPositions.all(lambda x: distance(x, eventPlayer.getPosition()) > 5):
-            healthpackPositions.append(eventPlayer.getPosition())
+        if healthpackPositionList.all(lambda x: distance(x, eventPlayer.getPosition()) > 5):
+            healthpackPositionList.append(eventPlayer.getPosition())
         eventPlayer.stopAllDamageOverTime()
         eventPlayer.clearStatusEffect(Status.BURNING)
         if eventPlayer.infectionLvl > 0:
@@ -254,7 +254,7 @@ rule "PLAYER INFECTION DAMAGE MANAGEMENT":
 rule "PLAYER AFK":
     @Event eachPlayer
     @Team 1
-    @Condition specialGameModeSetup != true
+    @Condition isPregameSetup != true
     @Condition createWorkshopSettingBool("General", "Allow players to go AFK", true, 3) == true
     @Condition eventPlayer.playerActiveStatus == true
     @Condition eventPlayer.attached != true
@@ -263,7 +263,7 @@ rule "PLAYER AFK":
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) == false
     @Condition eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) == false
-    @Condition eventPlayer in playersOnObjective != true
+    @Condition eventPlayer in objectivePlayerList != true
     @Condition eventPlayer.isCommunicatingVoiceline() == false
     
     if not eventPlayer.afk:
@@ -318,7 +318,7 @@ rule "OBJECTIVE CHANGES AND PLAYER ENTITIES UPDATE":
     @Event eachPlayer
     @Condition isGameplayActive == true
     @Condition eventPlayer.hasSpawned() == true
-    @Condition (eventPlayer.objectiveValue != objectiveValue or len(objectivePositions) == 1) == true
+    @Condition (eventPlayer.objectiveValue != objectiveValue or len(objectivePositionList) == 1) == true
     
     playerObjectiveEntityManagementMacro()
 
@@ -355,16 +355,16 @@ rule "PLAYER TARGET (REMOVE)":
 def teleportToClosestPlayer():
     @Name "teleportToClosestPlayer"
     
-    eventPlayer.teleport(nearestWalkablePosition(sorted(playerTargetList.exclude(eventPlayer), lambda x: distance(x.getPosition(), objectivePositions[0]))[0].getPosition()))
+    eventPlayer.teleport(nearestWalkablePosition(sorted(playerTargetList.exclude(eventPlayer), lambda x: distance(x.getPosition(), objectivePositionList[0]))[0].getPosition()))
 
 
 def updateUsers():
     @Name "updateUsers"
     
-    if not "{0}".format(eventPlayer) in users:
+    if not "{0}".format(eventPlayer) in userNameList:
         #Add event player to users list
-        users.append("{0}".format(eventPlayer))
+        userNameList.append("{0}".format(eventPlayer))
         #Index of user in user array
-        eventPlayer.userIndex = users.index("{0}".format(eventPlayer))
+        eventPlayer.userIndex = userNameList.index("{0}".format(eventPlayer))
         #0) Downed/Dead status, 1) Death timer, 2) Revive timer, 3) Revive start time, 4) Downed position
-        globalPlayerStats[eventPlayer.userIndex] = [0, eventPlayer.deathTimer, eventPlayer.reviveTimer, eventPlayer.reviveStartTime, eventPlayer.getPosition()]
+        playerStatsList[eventPlayer.userIndex] = [0, eventPlayer.deathTimer, eventPlayer.reviveTimer, eventPlayer.reviveStartTime, eventPlayer.getPosition()]

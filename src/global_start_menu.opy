@@ -7,11 +7,11 @@ subroutine determineObjectiveType
 subroutine setObjectiveType
 
 rule "GLOBAL MENU INITIALIZATION":
-    @Condition specialGameModeSetup == true
-    @Condition len(mapGrid) > 0
+    @Condition isPregameSetup == true
+    @Condition len(mapGridList) > 0
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
-    if specialGameMode:
+    if isSpecialGameMode:
         if getCurrentGamemode() == Gamemode.CTF or getCurrentGamemode() == Gamemode.PUSH:
             startPos = walkCenter + directionFromAngles(random.uniform(0, 360), 0) * 300 + vect(0, 15, 0)
         elif getCurrentGamemode() == Gamemode.CONTROL:
@@ -50,12 +50,12 @@ rule "GLOBAL MENU INITIALIZATION":
     lbl_0:
     startMenuSpacingAngle = 40
     #Start screen objective description
-    setObjectiveDescription(getAllPlayers(), "Voting ends in {0}s".format(ceil(getMatchTime() - VOTING_END_TIME)) if voting else "Select your hero", HudReeval.VISIBILITY_AND_STRING)
+    setObjectiveDescription(getAllPlayers(), "Voting ends in {0}s".format(ceil(getMatchTime() - VOTING_END_TIME)) if isVoting else "Select your hero", HudReeval.VISIBILITY_AND_STRING)
 
 
 rule "EFFECTS/TEXTS":
     #Pre game objective description and match timer
-    hudSubtext(getAllPlayers(), "{0} | {1}s".format("Voting will end in {0}s".format(ceil(getMatchTime() - VOTING_END_TIME)) if voting else "Select your hero", ceil(getMatchTime())), HudPosition.TOP, -1, rgb(215, 215, 215), HudReeval.VISIBILITY_AND_STRING)
+    hudSubtext(getAllPlayers(), "{0} | {1}s".format("Voting will end in {0}s".format(ceil(getMatchTime() - VOTING_END_TIME)) if isVoting else "Select your hero", ceil(getMatchTime())), HudPosition.TOP, -1, rgb(215, 215, 215), HudReeval.VISIBILITY_AND_STRING)
     #Creator/Game Code Promo
     hudSubtext(getAllPlayers(), "Original Game Code: MPJFR" if ceil(getTotalTimeElapsed() * 0.2) % 2 == 0 else "Game Mode Creator: Mazattack#1183", HudPosition.RIGHT, 0, Color.BLUE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
     #Creator/Game Code Promo
@@ -63,7 +63,7 @@ rule "EFFECTS/TEXTS":
     #Workshop.codes
     createInWorldText(getAllPlayers().filter(lambda player: player.pregameState < PregameState.READY), "For information on changes: workshop.codes/786TW", startCamPos + directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)), 30), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.ORANGE, SpecVisibility.NEVER)
     #Voting options reminder
-    createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.READY), "Voting options are available in the top left corner of your screen" if voting else "Voting is complete. Difficulty is actively scaled by amount of players.", startCamPos + directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)), 30), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.AQUA if voting else Color.PURPLE, SpecVisibility.NEVER)
+    createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.READY), "Voting options are available in the top left corner of your screen" if isVoting else "Voting is complete. Difficulty is actively scaled by amount of players.", startCamPos + directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)), 30), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.AQUA if isVoting else Color.PURPLE, SpecVisibility.NEVER)
     #Ready In World Text
     createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.HERO_SELECTED), "Ready [{0}]".format(inputBindingString(Button.JUMP)), localPlayer.startPos + vect(0, 1.92, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.GREEN, SpecVisibility.NEVER)
     #Change Hero In World Text
@@ -82,8 +82,8 @@ rule "EFFECTS/TEXTS":
             "Challenge: None",
             "Challenge: Swarm Shootout",
             "Challenge: Random Abilities",
-            specialEffectsStrings if specialEffectsTiming else "Challenge: Insanity",
-            specialEffectsStrings if specialEffectsTiming else "Challenge: Pandora's Box"
+            pregameGlitchText if isPregameGlitchActive else "Challenge: Insanity",
+            pregameGlitchText if isPregameGlitchActive else "Challenge: Pandora's Box"
         ][localPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE]],
         [
             "",
@@ -93,16 +93,16 @@ rule "EFFECTS/TEXTS":
             "Faster, stronger, and deadlier",
             "All challenges at Once!"
         ][localPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE]],
-        "Change Vote (Press [{0}])".format(inputBindingString(Button.ULTIMATE)) if voting or localPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] == 0 else [],
+        "Change Vote (Press [{0}])".format(inputBindingString(Button.ULTIMATE)) if isVoting or localPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] == 0 else [],
         HudPosition.LEFT,
         0,
-        [Color.AQUA, Color.YELLOW, Color.LIME_GREEN, Color.ORANGE, Color.WHITE if specialEffectsTiming else Color.TURQUOISE, Color.GRAY if specialEffectsTiming else Color.PURPLE][localPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE]],
+        [Color.AQUA, Color.YELLOW, Color.LIME_GREEN, Color.ORANGE, Color.WHITE if isPregameGlitchActive else Color.TURQUOISE, Color.GRAY if isPregameGlitchActive else Color.PURPLE][localPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE]],
         [Color.AQUA, null, Color.LIME_GREEN, Color.ORANGE, Color.WHITE, Color.WHITE][localPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE]],
         [Color.AQUA, Color.YELLOW, Color.LIME_GREEN, Color.ORANGE, Color.WHITE, Color.WHITE][localPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE]],
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Zombie Mode
-    startMenuZombieColors = [Color.AQUA, Color.ORANGE, Color.RED, Color.PURPLE, Color.LIME_GREEN, Color.BLUE, Color.GRAY]
+    startMenuZombieColorList = [Color.AQUA, Color.ORANGE, Color.RED, Color.PURPLE, Color.LIME_GREEN, Color.BLUE, Color.GRAY]
     hudText(
         getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] in numbersList.slice(NL_MENU_VOTE_IDS_OFFSET, NL_MENU_VOTE_IDS_LEN)),
         [
@@ -123,16 +123,16 @@ rule "EFFECTS/TEXTS":
             "Only zombies with mobility abilities will spawn",
             "Only Reinhardt {0} and Wrecking Ball {1} zombies will spawn".format(heroIcon(Hero.REINHARDT), heroIcon(Hero.WRECKING_BALL))
         ][localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
-        "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_1)) if voting or localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] == 0 else [],
+        "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_1)) if isVoting or localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] == 0 else [],
         HudPosition.LEFT,
         1,
-        startMenuZombieColors[localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
-        startMenuZombieColors[localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
-        startMenuZombieColors[localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
+        startMenuZombieColorList[localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
+        startMenuZombieColorList[localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
+        startMenuZombieColorList[localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Objective Type: arrays use raw IDs; 3, 4 and 8 have no standalone menu row.
-    startMenuObjectiveColors = [Color.AQUA, Color.ORANGE, Color.RED, null, null, Color.RED, Color.LIME_GREEN, rgb(12, 129, 132), null, Color.PURPLE]
+    startMenuObjectiveColorList = [Color.AQUA, Color.ORANGE, Color.RED, null, null, Color.RED, Color.LIME_GREEN, rgb(12, 129, 132), null, Color.PURPLE]
     hudText(
         getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] in [ObjectiveType.NO_PREFERENCE, ObjectiveType.SHOWDOWN, ObjectiveType.BOSSES, ObjectiveType.KILL_ZONE, ObjectiveType.ZOMBIE_EGG, ObjectiveType.SATELLITE_UPLINK, ObjectiveType.MIXED_OBJECTIVES]),
         [
@@ -159,16 +159,16 @@ rule "EFFECTS/TEXTS":
             null,
             "Randomly assigns all types of objectives"
         ][localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
-        "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if voting or localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == 0 else [],
+        "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if isVoting or localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == 0 else [],
         HudPosition.LEFT,
         2,
-        startMenuObjectiveColors[localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
-        startMenuObjectiveColors[localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
-        startMenuObjectiveColors[localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
+        startMenuObjectiveColorList[localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
+        startMenuObjectiveColorList[localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
+        startMenuObjectiveColorList[localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Enhancement
-    startMenuEnhancementColors = [Color.AQUA, colorKevlarConst, Color.GRAY, Color.BLUE, Color.RED, Color.ORANGE, Color.GREEN, Color.GRAY, colorChargeBatteryConst, Color.PURPLE, Color.BLUE]
+    startMenuEnhancementColorList = [Color.AQUA, colorKevlarConst, Color.GRAY, Color.BLUE, Color.RED, Color.ORANGE, Color.GREEN, Color.GRAY, colorChargeBatteryConst, Color.PURPLE, Color.BLUE]
     hudText(
         getAllPlayers().filter(lambda player: player.enhancementId in [Enhancement.NO_PREFERENCE, Enhancement.KEVLAR, Enhancement.ZOMBIE_HYBRID, Enhancement.LASER_BARRICADE, Enhancement.BRAIN_KILLER, Enhancement.PYROTECHNIC, Enhancement.PLAGUE_DOCTOR, Enhancement.BORN_TO_BATTLE, Enhancement.CHARGE_BATTERY, Enhancement.HITCHHIKER, Enhancement.PUP]),
         [
@@ -200,42 +200,42 @@ rule "EFFECTS/TEXTS":
         "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)),
         HudPosition.LEFT,
         3,
-        startMenuEnhancementColors[localPlayer.enhancementId],
-        startMenuEnhancementColors[localPlayer.enhancementId],
-        startMenuEnhancementColors[localPlayer.enhancementId],
+        startMenuEnhancementColorList[localPlayer.enhancementId],
+        startMenuEnhancementColorList[localPlayer.enhancementId],
+        startMenuEnhancementColorList[localPlayer.enhancementId],
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
 
 
 rule "SPECIAL EFFECT CONTROLS":
-    @Condition specialGameModeSetup == true
+    @Condition isPregameSetup == true
     
-    if specialGameModeSetup:
+    if isPregameSetup:
         # tmp0: random message choice 1-3, to select the special-effect text for this flash.
         tmp0 = random.randint(1, 3)
         if tmp0 == 1:
-            specialEffectsStrings = "alglChene oteV: KaMeNrldEr"
+            pregameGlitchText = "alglChene oteV: KaMeNrldEr"
         elif tmp0 == 2:
-            specialEffectsStrings = "You won't win"
+            pregameGlitchText = "You won't win"
         elif tmp0 == 3:
-            specialEffectsStrings = "Don't even try it"
-    specialEffectsTiming = true
+            pregameGlitchText = "Don't even try it"
+    isPregameGlitchActive = true
     wait(random.uniform(0.063, 0.325), Wait.ABORT_WHEN_FALSE)
-    specialEffectsTiming = false
+    isPregameGlitchActive = false
     wait(random.uniform(0.325, 1.5), Wait.ABORT_WHEN_FALSE)
     loop()
 
 
 rule "END VOTING":
-    @Condition voting == true
-    @Condition specialGameModeSetup == true
+    @Condition isVoting == true
+    @Condition isPregameSetup == true
     @Condition getMatchTime() < VOTING_END_TIME
     @Condition len(getPlayers(Team.1).filter(lambda player: player.pregameState > PregameState.SELECTING_HERO)) > 0
     
     chase1 = VOTING_END_TIME
     startRule(determineZombieMode)
     #Waits until votes have been counted
-    waitUntil(not voting, 99999)
+    waitUntil(not isVoting, 99999)
     getPlayers(Team.1).playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] = challengeSetting
     getPlayers(Team.1).playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] = zombieSetting
     getPlayers(Team.1).playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] = objectiveTypeSetting
@@ -244,17 +244,17 @@ rule "END VOTING":
 
 
 rule "MUSIC/ANNOUNCER CONTROL":
-    @Condition voting != true
-    @Condition specialGameModeSetup == true
+    @Condition isVoting != true
+    @Condition isPregameSetup == true
     
     if getMatchTime() < 20:
         enableMusic()
         enableAnnouncer()
-        waitUntil(getMatchTime() > 20 or not specialGameModeSetup, 60)
+        waitUntil(getMatchTime() > 20 or not isPregameSetup, 60)
     else:
         disableMusic()
         disableAnnouncer()
-        waitUntil(getMatchTime() < 20 or not specialGameModeSetup, 60)
+        waitUntil(getMatchTime() < 20 or not isPregameSetup, 60)
     if ruleCondition:
         loop()
 
@@ -264,16 +264,16 @@ def determineZombieMode():
     
     zombieSetting = 0
     # tmp0: zombie-mode vote index, to count active players voting for each enabled mode.
-    for tmp0 in range(1, len(zombieVotes)):
-        if zombieVotes[tmp0][1]:
-            zombieVotes[tmp0] = len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus and player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] == tmp0))
+    for tmp0 in range(1, len(zombieVoteList)):
+        if zombieVoteList[tmp0][1]:
+            zombieVoteList[tmp0] = len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus and player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] == tmp0))
         else:
-            zombieVotes[tmp0] = -1
+            zombieVoteList[tmp0] = -1
     # tmp0: candidate zombie-mode index, to select the winner and resolve tied vote counts.
-    for tmp0 in range(1, len(zombieVotes)):
-        if zombieVotes[zombieSetting] < zombieVotes[tmp0]:
+    for tmp0 in range(1, len(zombieVoteList)):
+        if zombieVoteList[zombieSetting] < zombieVoteList[tmp0]:
             zombieSetting = tmp0
-        elif zombieVotes[zombieSetting] == zombieVotes[tmp0]:
+        elif zombieVoteList[zombieSetting] == zombieVoteList[tmp0]:
             #Randomly pick mode to break tie
             if zombieSetting != 0 and random.randint(0, 1) == 0:
                 zombieSetting = tmp0
@@ -288,36 +288,36 @@ def setZombieMode():
     @Name "setZombieMode"
     
     #Bot available hero list
-    botHeros = [Hero.REAPER, Hero.JUNKRAT, Hero.TORBJORN, Hero.ROADHOG, Hero.REINHARDT, Hero.ANRAN, Hero.WIDOWMAKER, Hero.MAUGA, Hero.MERCY, Hero.WRECKING_BALL, Hero.MOIRA, Hero.PHARAH, Hero.SIGMA, Hero.JUNKER_QUEEN, Hero.ILLARI, Hero.HAZARD, Hero.SYMMETRA, Hero.ANA, Hero.WINSTON, Hero.DOOMFIST, Hero.KIRIKO]
+    botHeroList = [Hero.REAPER, Hero.JUNKRAT, Hero.TORBJORN, Hero.ROADHOG, Hero.REINHARDT, Hero.ANRAN, Hero.WIDOWMAKER, Hero.MAUGA, Hero.MERCY, Hero.WRECKING_BALL, Hero.MOIRA, Hero.PHARAH, Hero.SIGMA, Hero.JUNKER_QUEEN, Hero.ILLARI, Hero.HAZARD, Hero.SYMMETRA, Hero.ANA, Hero.WINSTON, Hero.DOOMFIST, Hero.KIRIKO]
     #Zombie types without a boss variation
-    nonBossZombies = [Hero.JUNKRAT, Hero.ANRAN, Hero.WIDOWMAKER, Hero.JUNKER_QUEEN, Hero.SYMMETRA, Hero.ANA, Hero.DOOMFIST, Hero.KIRIKO, Hero.MAUGA, Hero.SIGMA, Hero.WRECKING_BALL]
+    bossesExcludedHeroList = [Hero.JUNKRAT, Hero.ANRAN, Hero.WIDOWMAKER, Hero.JUNKER_QUEEN, Hero.SYMMETRA, Hero.ANA, Hero.DOOMFIST, Hero.KIRIKO, Hero.MAUGA, Hero.SIGMA, Hero.WRECKING_BALL]
     #All Zombies
     if zombieSetting == 1:
         #Bot respawn probablities
-        botSpawnRates = numbersList.slice(NL_SPAWN_RATES_ALL_ZOMBIES_OFFSET, NL_SPAWN_RATES_ALL_ZOMBIES_LEN)
+        botSpawnRateList = numbersList.slice(NL_SPAWN_RATES_ALL_ZOMBIES_OFFSET, NL_SPAWN_RATES_ALL_ZOMBIES_LEN)
     #New Blood
     elif zombieSetting == 2:
         #Bot respawn probablities
-        botSpawnRates = numbersList.slice(NL_SPAWN_RATES_NEW_BLOOD_OFFSET, NL_SPAWN_RATES_NEW_BLOOD_LEN)
+        botSpawnRateList = numbersList.slice(NL_SPAWN_RATES_NEW_BLOOD_OFFSET, NL_SPAWN_RATES_NEW_BLOOD_LEN)
     #What'll it be?
     elif zombieSetting == 3:
         #Bot respawn probablities
-        botSpawnRates = []
+        botSpawnRateList = []
         # tmp0: hero-entry counter, to append 19 equal spawn weights for this zombie mode.
         for tmp0 in range(19):
-            botSpawnRates.append(5.263)
+            botSpawnRateList.append(5.263)
     #Zombie Shuffle
     elif zombieSetting == 4:
         #Bot respawn probablities
-        botSpawnRates = numbersList.slice(NL_SPAWN_RATES_SHUFFLE_OFFSET, NL_SPAWN_RATES_SHUFFLE_LEN)
+        botSpawnRateList = numbersList.slice(NL_SPAWN_RATES_SHUFFLE_OFFSET, NL_SPAWN_RATES_SHUFFLE_LEN)
     #Dinner Rush!
     elif zombieSetting == 5:
         #Bot respawn probablities
-        botSpawnRates = numbersList.slice(NL_SPAWN_RATES_DINNER_RUSH_OFFSET, NL_SPAWN_RATES_DINNER_RUSH_LEN)
+        botSpawnRateList = numbersList.slice(NL_SPAWN_RATES_DINNER_RUSH_OFFSET, NL_SPAWN_RATES_DINNER_RUSH_LEN)
     #Ham N' Hammer
     elif zombieSetting == 6:
         #Bot respawn probablities
-        botSpawnRates = numbersList.slice(NL_SPAWN_RATES_HAM_N_HAMMER_OFFSET, NL_SPAWN_RATES_HAM_N_HAMMER_LEN)
+        botSpawnRateList = numbersList.slice(NL_SPAWN_RATES_HAM_N_HAMMER_OFFSET, NL_SPAWN_RATES_HAM_N_HAMMER_LEN)
 
 
 def determineChallenge():
@@ -325,25 +325,25 @@ def determineChallenge():
     
     challengeSetting = 0
     # tmp0: challenge vote index, to count active players voting for each enabled difficulty.
-    for tmp0 in range(1, len(challengeVotes)):
-        if challengeVotes[tmp0][1]:
-            challengeVotes[tmp0] = len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus and player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] == tmp0))
+    for tmp0 in range(1, len(challengeVoteList)):
+        if challengeVoteList[tmp0][1]:
+            challengeVoteList[tmp0] = len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus and player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] == tmp0))
         else:
-            challengeVotes[tmp0] = -1
+            challengeVoteList[tmp0] = -1
     # tmp1: sum of difficulty levels weighted by votes, to calculate the average difficulty vote.
     tmp1 = 0
     # tmp0: difficulty index, to include each difficulty's weighted votes in tmp1.
-    for tmp0 in range(1, len(challengeVotes)):
+    for tmp0 in range(1, len(challengeVoteList)):
         # tmp1: running weighted sum including this difficulty, for the average used to break ties.
-        tmp1 += challengeVotes[tmp0] * tmp0
+        tmp1 += challengeVoteList[tmp0] * tmp0
     # tmp1: average difficulty vote, to choose the closer difficulty when vote counts tie.
     tmp1 /= len(getPlayers(Team.1).filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] > 0))
     # tmp0: candidate difficulty index, to choose the winner using votes and distance from tmp1.
-    for tmp0 in range(1, len(challengeVotes)):
+    for tmp0 in range(1, len(challengeVoteList)):
         #If difficulty being compared has more votes than current difficulty
-        if challengeVotes[challengeSetting] < challengeVotes[tmp0]:
+        if challengeVoteList[challengeSetting] < challengeVoteList[tmp0]:
             challengeSetting = tmp0
-        elif challengeVotes[tmp0] > 0 and challengeVotes[challengeSetting] == challengeVotes[tmp0]:
+        elif challengeVoteList[tmp0] > 0 and challengeVoteList[challengeSetting] == challengeVoteList[tmp0]:
             #Pick difficulty closest to the average difficulty vote
             if abs(challengeSetting - tmp1) > abs(tmp0 - tmp1):
                 challengeSetting = tmp0
@@ -358,27 +358,27 @@ def determineObjectiveType():
     
     objectiveTypeSetting = ObjectiveType.NO_PREFERENCE
     # tmp0: objective-type vote index, to count active players voting for each enabled objective type.
-    for tmp0 in range(ObjectiveType.SHOWDOWN, len(objectiveTypeVotes)):
-        if objectiveTypeVotes[tmp0][1]:
-            objectiveTypeVotes[tmp0] = len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus and player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == tmp0))
+    for tmp0 in range(ObjectiveType.SHOWDOWN, len(objectiveTypeVoteList)):
+        if objectiveTypeVoteList[tmp0][1]:
+            objectiveTypeVoteList[tmp0] = len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus and player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == tmp0))
         else:
-            objectiveTypeVotes[tmp0] = -1
+            objectiveTypeVoteList[tmp0] = -1
     # tmp0: candidate objective-type index, to select the winner and resolve tied vote counts.
-    for tmp0 in range(ObjectiveType.SHOWDOWN, len(objectiveTypeVotes)):
-        if objectiveTypeVotes[objectiveTypeSetting] < objectiveTypeVotes[tmp0]:
+    for tmp0 in range(ObjectiveType.SHOWDOWN, len(objectiveTypeVoteList)):
+        if objectiveTypeVoteList[objectiveTypeSetting] < objectiveTypeVoteList[tmp0]:
             objectiveTypeSetting = tmp0
-        elif objectiveTypeVotes[objectiveTypeSetting] == objectiveTypeVotes[tmp0]:
+        elif objectiveTypeVoteList[objectiveTypeSetting] == objectiveTypeVoteList[tmp0]:
             #Pick random objective type to break tie
             if objectiveTypeSetting != ObjectiveType.NO_PREFERENCE and random.randint(0, 1) == 0:
                 objectiveTypeSetting = tmp0
     #If all players choose no preference, randomize
     if objectiveTypeSetting == ObjectiveType.NO_PREFERENCE:
-        if objectiveTypeVotes[ObjectiveType.MIXED_OBJECTIVES] != -1:
+        if objectiveTypeVoteList[ObjectiveType.MIXED_OBJECTIVES] != -1:
             objectiveTypeSetting = ObjectiveType.MIXED_OBJECTIVES
         else:
-            while objectiveTypeSetting == ObjectiveType.NO_PREFERENCE or objectiveTypeVotes[objectiveTypeSetting] == -1:
-                objectiveTypeSetting = random.randint(ObjectiveType.SHOWDOWN, len(objectiveTypeVotes) - 1)
-    voting = false
+            while objectiveTypeSetting == ObjectiveType.NO_PREFERENCE or objectiveTypeVoteList[objectiveTypeSetting] == -1:
+                objectiveTypeSetting = random.randint(ObjectiveType.SHOWDOWN, len(objectiveTypeVoteList) - 1)
+    isVoting = false
     startRule(setObjectiveType)
 
 
@@ -386,33 +386,33 @@ def setObjectiveType():
     @Name "setObjectiveType"
     
     #Wait until game begins
-    waitUntil(isGameInProgress() and not specialGameModeSetup, 99999)
+    waitUntil(isGameInProgress() and not isPregameSetup, 99999)
     #Create objective positions
-    while len(objectiveTypes) < createWorkshopSettingInt("General", "Number of Objectives", 5, 0, 100) + 1:
+    while len(objectiveTypeList) < createWorkshopSettingInt("General", "Number of Objectives", 5, 0, 100) + 1:
         if objectiveTypeSetting != ObjectiveType.MIXED_OBJECTIVES:
-            objectiveTypes.append(objectiveTypeSetting)
+            objectiveTypeList.append(objectiveTypeSetting)
         else:
             #Mixed objective assignment
-            objectiveTypes.append(random.choice(mixedObjectivesPool.exclude(objectiveTypes.filter(lambda _, i: i > len(objectiveTypes) - 1 - (len(mixedObjectivesPool) - 1)))))
+            objectiveTypeList.append(random.choice(mixedObjectiveTypeList.exclude(objectiveTypeList.filter(lambda _, i: i > len(objectiveTypeList) - 1 - (len(mixedObjectiveTypeList) - 1)))))
         objectiveCount1 = 0
-        while len(objectivePositions) < len(objectiveTypes):
+        while len(objectivePositionList) < len(objectiveTypeList):
             #Limits possible map grid points to set min and max range from last created objective position
-            testPos = random.choice(mapGrid if len(objectivePositions) == 0 else mapGrid.filter(lambda x: distance(x, objectivePositions.last()) > objectiveSpacing[0] and distance(x, objectivePositions.last()) < min(100, objectiveSpacing[0] * 3)))
+            testPos = random.choice(mapGridList if len(objectivePositionList) == 0 else mapGridList.filter(lambda x: distance(x, objectivePositionList.last()) > objectiveSpacingList[0] and distance(x, objectivePositionList.last()) < min(100, objectiveSpacingList[0] * 3)))
             testPos += Vector.UP
             wait()
             #Minimum objective spacing
-            if len(objectivePositions) == 0 or objectivePositions.slice(len(objectivePositions) - 5, 5).all(lambda x: distance(testPos, x) > objectiveSpacing[1]):
+            if len(objectivePositionList) == 0 or objectivePositionList.slice(len(objectivePositionList) - 5, 5).all(lambda x: distance(testPos, x) > objectiveSpacingList[1]):
                 #Ensures bosses spawn with head room
-                if objectiveTypes.last() != ObjectiveType.BOSSES or isInLoS(testPos + vect(0, 0, 0), testPos + vect(0, 10, 0)):
-                    objectivePositions.append(testPos)
+                if objectiveTypeList.last() != ObjectiveType.BOSSES or isInLoS(testPos + vect(0, 0, 0), testPos + vect(0, 10, 0)):
+                    objectivePositionList.append(testPos)
                     objectiveCount1 = 0
             objectiveCount1++
             #If Too many attempts
             if objectiveCount1 > 50:
-                del objectivePositions[len(objectivePositions) - 1]
-                del objectivePositions[len(objectivePositions) - 1]
+                del objectivePositionList[len(objectivePositionList) - 1]
+                del objectivePositionList[len(objectivePositionList) - 1]
                 objectiveCount1 = 0
     #Last objective must be extraction objective
-    objectiveTypes[len(objectiveTypes) - 1] = ObjectiveType.SHOWDOWN
+    objectiveTypeList[len(objectiveTypeList) - 1] = ObjectiveType.SHOWDOWN
     objectivesManagement()
     isGameplayActive = true

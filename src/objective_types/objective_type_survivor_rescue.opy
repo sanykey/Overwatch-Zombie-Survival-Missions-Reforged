@@ -4,7 +4,7 @@
 rule "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE":
     @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
     @Condition isGameplayActive == true
-    @Condition objectiveComplete == false
+    @Condition isObjectiveComplete == false
     @Condition (survivorToRescue == null or not entityExists(survivorToRescue)) == true
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
@@ -12,14 +12,14 @@ rule "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE":
         testPos = null
         testPos2 = 115
         while testPos == null:
-            testPos = random.choice(mapGrid.filter(lambda x: distance(x, objectivePositions[0]) > testPos2 and distance(x, objectivePositions[0]) < 120))
+            testPos = random.choice(mapGridList.filter(lambda x: distance(x, objectivePositionList[0]) > testPos2 and distance(x, objectivePositionList[0]) < 120))
             testPos2 -= 5
             wait()
         createDummy(random.choice(getAllHeroes().filter(lambda x: getNumberOfHeroes(x, Team.1) <= 0)), Team.1, 20, testPos)
         survivorToRescue = getLastCreatedEntity()
     else:
         survivorToRescue = null
-        objectiveComplete = true
+        isObjectiveComplete = true
     wait(1)
     if ruleCondition:
         loop()
@@ -43,9 +43,9 @@ rule "INITIALIZE SURVIVOR TO BE RESCUED":
     survivorToRescue.setStatusEffect(null, Status.UNKILLABLE, 99999)
     survivorToRescue.setHealingReceived(110)
     #Objective/Survivor distance
-    createInWorldText(getAllPlayers().filter(lambda _: not eventPlayer.botTempValue and distance(localPlayer.getPosition(), objectivePositions[0]) > 5), "Distance: {0}m".format(distance(localPlayer.getPosition(), eventPlayer.getPosition() if distance(eventPlayer.getPosition(), localPlayer.getPosition()) > objectiveRad else objectivePositions[0])), eventPlayer.getPosition() if distance(eventPlayer.getPosition(), localPlayer.getPosition()) > objectiveRad else objectivePositions[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.VIOLET, SpecVisibility.NEVER)
+    createInWorldText(getAllPlayers().filter(lambda _: not eventPlayer.botTempValue and distance(localPlayer.getPosition(), objectivePositionList[0]) > 5), "Distance: {0}m".format(distance(localPlayer.getPosition(), eventPlayer.getPosition() if distance(eventPlayer.getPosition(), localPlayer.getPosition()) > objectiveRad else objectivePositionList[0])), eventPlayer.getPosition() if distance(eventPlayer.getPosition(), localPlayer.getPosition()) > objectiveRad else objectivePositionList[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.VIOLET, SpecVisibility.NEVER)
     #Survivor rescue progress bar
-    progressBarHud(getAllPlayers(), 100 if eventPlayer.botTempValue else ((distance(vect(objectivePositions[0].x, eventPlayer.startPos.y, objectivePositions[0].z), eventPlayer.startPos) - distance(eventPlayer.getPosition(), vect(objectivePositions[0].x, eventPlayer.getPosition().y, objectivePositions[0].z))) / distance(vect(objectivePositions[0].x, eventPlayer.startPos.y, objectivePositions[0].z), eventPlayer.startPos)) * 100, "Survivor Rescue Progress", HudPosition.TOP, 2, Color.VIOLET, Color.VIOLET, ProgressHudReeval.VISIBILITY_AND_VALUES)
+    progressBarHud(getAllPlayers(), 100 if eventPlayer.botTempValue else ((distance(vect(objectivePositionList[0].x, eventPlayer.startPos.y, objectivePositionList[0].z), eventPlayer.startPos) - distance(eventPlayer.getPosition(), vect(objectivePositionList[0].x, eventPlayer.getPosition().y, objectivePositionList[0].z))) / distance(vect(objectivePositionList[0].x, eventPlayer.startPos.y, objectivePositionList[0].z), eventPlayer.startPos)) * 100, "Survivor Rescue Progress", HudPosition.TOP, 2, Color.VIOLET, Color.VIOLET, ProgressHudReeval.VISIBILITY_AND_VALUES)
     #Survivor icon
     createInWorldText(getAllPlayers(), eventPlayer.botTempvalue2 if eventPlayer.botTempvalue2 else eventPlayer.randVal, eventPlayer, 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.ALWAYS)
     eventPlayer.randVal = iconString(Icon.HALO)
@@ -80,14 +80,14 @@ rule "SURVIVOR FOLLOW TARGET":
     @Condition survivorToRescue.hasSpawned() == true
     @Condition survivorToRescue.getHealth() > 1
     @Condition (playerTargetList.filter(lambda x: x != survivorToRescue and not x.invisible).any(lambda x: distance(survivorToRescue.getPosition(), x.getPosition()) < objectiveRad)) == true
-    @Condition distance(survivorToRescue.getPosition(), objectivePositions[0]) >= 5
+    @Condition distance(survivorToRescue.getPosition(), objectivePositionList[0]) >= 5
     
     survivorToRescue.clearStatusEffect(Status.PHASED_OUT)
     survivorToRescue.randVal = iconString(Icon.SAD)
     survivorToRescue.botThrottleSpeed = survivorToRescue.getNormalizedHealth() * 0.7
     survivorToRescue.potentialTargets = playerTargetList.filter(lambda x: x != survivorToRescue and not x.invisible and distance(survivorToRescue.getPosition(), x.getPosition()) < objectiveRad)
     if survivorToRescue.botFollowTarget == null or not survivorToRescue.botFollowTarget in survivorToRescue.potentialTargets:
-        survivorToRescue.botFollowTarget = (sorted(playerTargetList.filter(lambda x: distance(survivorToRescue.getPosition(), x.getPosition()) < objectiveRad), lambda x: distance(x.getPosition(), objectivePositions[0])))[0]
+        survivorToRescue.botFollowTarget = (sorted(playerTargetList.filter(lambda x: distance(survivorToRescue.getPosition(), x.getPosition()) < objectiveRad), lambda x: distance(x.getPosition(), objectivePositionList[0])))[0]
     if not survivorToRescue in playerTargetList:
         #Add surivor to player target list
         playerTargetList.append(survivorToRescue)
@@ -168,13 +168,13 @@ rule "SURVIVOR JUMP":
 
 rule "SURVIVOR REACHES EXTRACTION SITE":
     @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
-    @Condition objectiveComplete == false
+    @Condition isObjectiveComplete == false
     @Condition survivorToRescue.hasSpawned() == true
-    @Condition distance(survivorToRescue.getPosition(), objectivePositions[0]) < 5
+    @Condition distance(survivorToRescue.getPosition(), objectivePositionList[0]) < 5
     
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, null, survivorToRescue, 200)
     survivorToRescue.randVal = random.choice([iconString(Icon.HAPPY), iconString(Icon.HEART)])
-    survivorToRescue.startThrottleInDirection(directionTowards(survivorToRescue.getPosition(), objectivePositions[0]), 0.75 if distance(survivorToRescue.getPosition(), objectivePositions[0]) > 1 else 0, Relativity.TO_WORLD)
+    survivorToRescue.startThrottleInDirection(directionTowards(survivorToRescue.getPosition(), objectivePositionList[0]), 0.75 if distance(survivorToRescue.getPosition(), objectivePositionList[0]) > 1 else 0, Relativity.TO_WORLD)
     survivorToRescue.startFacing(vect(0, 1, 0), 100)
     wait(1)
     survivorToRescue.botTempValue = true

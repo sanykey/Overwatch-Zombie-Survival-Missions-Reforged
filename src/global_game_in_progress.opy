@@ -3,25 +3,25 @@
 
 rule "EFFECTS/TEXTS":
     @Condition isGameInProgress() == true
-    @Condition specialGameModeSetup != true
+    @Condition isPregameSetup != true
     
     wait(1)
     #Objective description and match timer
     hudSubtext(getAllPlayers(), "{0}{1}".format(objectiveDescription, (" | {0}".format("{0}s".format(getMatchTime()) if getMatchTime() <= 60 else "{0}:{2}{1}".format(floor(getMatchTime() / 60), floor(getMatchTime() % 60), 0 if floor(getMatchTime() % 60) < 10 else []))) if getMatchTime() > 0 + matchEndTime else []), HudPosition.TOP, -1, rgb(215, 215, 215), HudReeval.VISIBILITY_AND_STRING)
     #Infected Hud
-    hudHeader(getAllPlayers().filter(lambda player: ((player.enhancementId != Enhancement.ZOMBIE_HYBRID and (len(healthpackPositions) == 0 or player.getHealth() < floor(player.infectionLvl) ** 2 * 20)) and player.infected) and getMatchTime() > matchEndTime), "{0} Find a healthpack {0}".format(iconString(Icon.PLUS)), HudPosition.RIGHT, 0, (Color.RED if localPlayer.getHealth() < floor(localPlayer.infectionLvl) ** 2 * 10 else Color.LIME_GREEN) if ceil(getTotalTimeElapsed() * 2) % 2 == 0 else Color.WHITE, HudReeval.VISIBILITY_AND_COLOR)
+    hudHeader(getAllPlayers().filter(lambda player: ((player.enhancementId != Enhancement.ZOMBIE_HYBRID and (len(healthpackPositionList) == 0 or player.getHealth() < floor(player.infectionLvl) ** 2 * 20)) and player.infected) and getMatchTime() > matchEndTime), "{0} Find a healthpack {0}".format(iconString(Icon.PLUS)), HudPosition.RIGHT, 0, (Color.RED if localPlayer.getHealth() < floor(localPlayer.infectionLvl) ** 2 * 10 else Color.LIME_GREEN) if ceil(getTotalTimeElapsed() * 2) % 2 == 0 else Color.WHITE, HudReeval.VISIBILITY_AND_COLOR)
     #Nearest Healthpack Distance
-    createInWorldText(getPlayers(Team.1).filter(lambda player: player.enhancementId != Enhancement.ZOMBIE_HYBRID and len(healthpackPositions) > 0 and player.infected and getMatchTime() > matchEndTime), "Cure: {0}m".format(distance(localPlayer.getPosition(), sorted(healthpackPositions, lambda x: angleBetweenVectors(localPlayer.getFacingDirection(), directionTowards(localPlayer.getEyePosition(), x)))[0])), sorted(healthpackPositions, lambda x: angleBetweenVectors(localPlayer.getFacingDirection(), directionTowards(localPlayer.getEyePosition(), x)))[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.GREEN, SpecVisibility.NEVER)
+    createInWorldText(getPlayers(Team.1).filter(lambda player: player.enhancementId != Enhancement.ZOMBIE_HYBRID and len(healthpackPositionList) > 0 and player.infected and getMatchTime() > matchEndTime), "Cure: {0}m".format(distance(localPlayer.getPosition(), sorted(healthpackPositionList, lambda x: angleBetweenVectors(localPlayer.getFacingDirection(), directionTowards(localPlayer.getEyePosition(), x)))[0])), sorted(healthpackPositionList, lambda x: angleBetweenVectors(localPlayer.getFacingDirection(), directionTowards(localPlayer.getEyePosition(), x)))[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.GREEN, SpecVisibility.NEVER)
     #Nearest health pack icon
-    createIcon(getPlayers(Team.1).filter(lambda player: player.enhancementId != Enhancement.ZOMBIE_HYBRID and len(healthpackPositions) > 0 and player.infected and getMatchTime() > matchEndTime), sorted(healthpackPositions, lambda x: angleBetweenVectors(localPlayer.getFacingDirection(), directionTowards(localPlayer.getEyePosition(), x)))[0] + offsetUpThreeQuartersConst + offsetUpHalfConst, Icon.POISON, IconReeval.VISIBILITY_AND_POSITION, Color.GREEN)
+    createIcon(getPlayers(Team.1).filter(lambda player: player.enhancementId != Enhancement.ZOMBIE_HYBRID and len(healthpackPositionList) > 0 and player.infected and getMatchTime() > matchEndTime), sorted(healthpackPositionList, lambda x: angleBetweenVectors(localPlayer.getFacingDirection(), directionTowards(localPlayer.getEyePosition(), x)))[0] + offsetUpThreeQuartersConst + offsetUpHalfConst, Icon.POISON, IconReeval.VISIBILITY_AND_POSITION, Color.GREEN)
     hudSubtext(getAllPlayers(), "Modified version. workshop.codes/786tw", HudPosition.RIGHT, 0.1, Color.TEAM_1, HudReeval.VISIBILITY_AND_STRING)
     hudSubtext(getAllPlayers().filter(lambda _: challengeSetting >= 2), "Challenge round!", HudPosition.RIGHT, 0.2, Color.TEAM_1, HudReeval.VISIBILITY_AND_STRING)
 
 
 rule "ATTACK SPAWN ROOM CONTROL":
-    @Condition specialGameModeSetup != true
+    @Condition isPregameSetup != true
     #Does not apply if game mode is special mode
-    @Condition specialGameMode != true
+    @Condition isSpecialGameMode != true
     @Condition playerTargetList.any(lambda x: distance(x.getPosition(), activeAttackSpawnRoom) < 45) == true
     
     spawnRoomIndex++
@@ -49,17 +49,17 @@ rule "PREVENT MATCH TIME FROM UNPAUSING":
 
 rule "TRIGGER OVERTIME MUSIC":
     @Condition isGameplayActive == true
-    @Condition overtime == false
+    @Condition isOvertimeActive == false
     @Condition getMatchTime() < matchEndTime + 3
-    @Condition (len(getLivingPlayers(Team.2).filter(lambda player: player.botTarget == null and not player in bosses))) > 0
+    @Condition (len(getLivingPlayers(Team.2).filter(lambda player: player.botTarget == null and not player in bossStateList))) > 0
     
     enableMusic()
-    if not specialGameMode:
-        overtime = true
+    if not isSpecialGameMode:
+        isOvertimeActive = true
         if getCurrentGamemode() == Gamemode.ESCORT:
-            ((getLivingPlayers(Team.2).filter(lambda player: player.botTarget == null and not player in bosses))[0]).teleport(getPayloadPosition())
+            ((getLivingPlayers(Team.2).filter(lambda player: player.botTarget == null and not player in bossStateList))[0]).teleport(getPayloadPosition())
         else:
-            ((getLivingPlayers(Team.2).filter(lambda player: player.botTarget == null and not player in bosses))[0]).teleport(getObjectivePosition(0))
+            ((getLivingPlayers(Team.2).filter(lambda player: player.botTarget == null and not player in bossStateList))[0]).teleport(getObjectivePosition(0))
 
 
 rule "ZOMBIE SHUFFLE":
@@ -67,7 +67,7 @@ rule "ZOMBIE SHUFFLE":
     @Condition zombieSetting == 4
     
     #Bot respawn probablities
-    botSpawnRates = random.shuffle(botSpawnRates)
+    botSpawnRateList = random.shuffle(botSpawnRateList)
     bigMessage(getAllPlayers(), "The spawn rates have been shuffled!")
     #1 min 30 sec wait
     wait(90)
@@ -94,9 +94,9 @@ rule "SWARM SHOOTOUT":
 rule "RANDOM ABILITIES":
     @Event eachPlayer
     @Team 2
-    @Condition (challengeSetting == 3 or challengeSetting == 5 or gameSmolderEvent) == true
-    @Condition eventPlayer in bosses != true
-    @Condition specialGameModeSetup == false
+    @Condition (challengeSetting == 3 or challengeSetting == 5 or isSmolderEventActive) == true
+    @Condition eventPlayer in bossStateList != true
+    @Condition isPregameSetup == false
     
     wait(random.uniform(2, 8))
     if eventPlayer.getHero() in [Hero.MERCY]:
@@ -115,10 +115,10 @@ rule "RANDOM ABILITIES":
 
 rule "PLAYER LEAVES THE GAME":
     @Event playerLeft
-    @Condition (playerTargetList.any(lambda x: not entityExists(x)) or playersOnObjective.any(lambda x: not entityExists(x))) == true
+    @Condition (playerTargetList.any(lambda x: not entityExists(x)) or objectivePlayerList.any(lambda x: not entityExists(x))) == true
     
     playerTargetList.remove(playerTargetList.filter(lambda x: not entityExists(x)))
-    playersOnObjective.remove(playersOnObjective.filter(lambda x: not entityExists(x)))
+    objectivePlayerList.remove(objectivePlayerList.filter(lambda x: not entityExists(x)))
     wait(1, Wait.RESTART_WHEN_TRUE)
     if ruleCondition:
         loop()
@@ -127,7 +127,7 @@ rule "PLAYER LEAVES THE GAME":
 
 rule "OBJECTIVE COMPLETE":
     @Condition isGameplayActive == true
-    @Condition objectiveComplete == true
+    @Condition isObjectiveComplete == true
     
     startRule(objectivesManagement)
     (getDeadPlayers(Team.1).filter(lambda player: player.deathTimer < 50)).deathTimer += 10

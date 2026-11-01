@@ -3,7 +3,8 @@
 # Remove the debug.opy include from main.opy to disable all debug rules.
 # main.opy enables playMoreEffects, raising the shared effect/beam/icon limit to 256.
 
-globalvar debugHud
+# Diagnostics.
+globalvar debugHud # ID of the host diagnostics HUD, recreated after phase cleanup.
 
 
 rule "[debug] Host buffs":
@@ -28,6 +29,6 @@ rule "[debug] Resource usage and server load":
     hudSubheader(hostPlayer, "Texts: {0}/128 | Effects: {1}/256\nServer load: {2}".format(getNumberOfTextIds(), getNumberOfEntityIds(), "{0} | Avg (2s): {1} | Peak (2s): {2}".format(getServerLoad(), getAverageServerLoad(), getPeakServerLoad())), HudPosition.RIGHT, -10, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
     debugHud = getLastCreatedText()
     # evalOnce captures the phase at HUD creation; the other operands keep updating.
-    waitUntil(specialGameModeSetup != evalOnce(specialGameModeSetup) or isGameplayActive != evalOnce(isGameplayActive), 99999)
+    waitUntil(isPregameSetup != evalOnce(isPregameSetup) or isGameplayActive != evalOnce(isGameplayActive), 99999)
     destroyHudText(debugHud)
     loop()

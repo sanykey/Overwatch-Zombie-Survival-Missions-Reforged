@@ -4,18 +4,18 @@
 
 macro powerUpAssignmentMacro():
     #Names/colors follow item IDs 1-13; effect and text positions keep separate indices.
-    if powerUpIDs[len(powerUpEffect)] >= 1 and powerUpIDs[len(powerUpEffect)] <= 13:
-        createEffect(getAllPlayers(), Effect.ORB, [Color.GREEN, Color.YELLOW, Color.BLUE, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.BLUE, Color.RED, Color.PURPLE, Color.RED, Color.WHITE][powerUpIDs[len(powerUpEffect)] - 1], powerUpPositions[len(powerUpEffect)], 1, EffectReeval.VISIBILITY)
-        createInWorldText(getAllPlayers(), ["CURE", "Revive", "Force Field", "No Cooldowns", "Air Strike", "Beacon of Healing", "Vaccine", "Sentry Turret", "Cloaking Device", "Super Nano", "Bounce Pad", "Ultimate Charger", "Stun"][powerUpIDs[len(powerUpEffect)] - 1], powerUpPositions[len(powerUpText)], 1, Clip.SURFACES, WorldTextReeval.VISIBILITY)
+    if supplyPowerUpIdList[len(supplyPowerUpEffectIdList)] >= 1 and supplyPowerUpIdList[len(supplyPowerUpEffectIdList)] <= 13:
+        createEffect(getAllPlayers(), Effect.ORB, [Color.GREEN, Color.YELLOW, Color.BLUE, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.BLUE, Color.RED, Color.PURPLE, Color.RED, Color.WHITE][supplyPowerUpIdList[len(supplyPowerUpEffectIdList)] - 1], supplyPowerUpPositionList[len(supplyPowerUpEffectIdList)], 1, EffectReeval.VISIBILITY)
+        createInWorldText(getAllPlayers(), ["CURE", "Revive", "Force Field", "No Cooldowns", "Air Strike", "Beacon of Healing", "Vaccine", "Sentry Turret", "Cloaking Device", "Super Nano", "Bounce Pad", "Ultimate Charger", "Stun"][supplyPowerUpIdList[len(supplyPowerUpEffectIdList)] - 1], supplyPowerUpPositionList[len(supplyPowerUpTextIdList)], 1, Clip.SURFACES, WorldTextReeval.VISIBILITY)
 
 
 rule "POWER UP EFFECT/TEXT MANAGEMENT":
     @Condition isGameplayActive == true
-    @Condition len(powerUpPositions) > len(powerUpEffect)
+    @Condition len(supplyPowerUpPositionList) > len(supplyPowerUpEffectIdList)
     
     powerUpAssignmentMacro()
-    powerUpEffect.append(getLastCreatedEntity())
-    powerUpText.append(getLastCreatedText())
+    supplyPowerUpEffectIdList.append(getLastCreatedEntity())
+    supplyPowerUpTextIdList.append(getLastCreatedText())
     if ruleCondition:
         loop()
 
@@ -79,8 +79,8 @@ rule "PLAYER DROPS POWER UP (MANUAL)":
     @Condition eventPlayer.currentPowerUp != 0
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
-    powerUpIDs.append(eventPlayer.currentPowerUp)
-    powerUpPositions.append(eventPlayer.getPosition() + vect(0, 0.25, 0) if eventPlayer.isOnGround() else nearestWalkablePosition(eventPlayer.getPosition()))
+    supplyPowerUpIdList.append(eventPlayer.currentPowerUp)
+    supplyPowerUpPositionList.append(eventPlayer.getPosition() + vect(0, 0.25, 0) if eventPlayer.isOnGround() else nearestWalkablePosition(eventPlayer.getPosition()))
     wait()
     eventPlayer.currentPowerUp = 0
     playEffect(eventPlayer, DynamicEffect.DEBUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.getPosition(), 25)
@@ -93,8 +93,8 @@ rule "PLAYER DROPS POWER UP (DEATH)":
     
     while not eventPlayer.isOnGround():
         wait(0.25)
-    powerUpIDs.append(eventPlayer.currentPowerUp)
-    powerUpPositions.append(eventPlayer.getPosition() + vect(0, 0.25, 0))
+    supplyPowerUpIdList.append(eventPlayer.currentPowerUp)
+    supplyPowerUpPositionList.append(eventPlayer.getPosition() + vect(0, 0.25, 0))
     wait()
     eventPlayer.currentPowerUp = 0
     playEffect(eventPlayer, DynamicEffect.DEBUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.getPosition(), 25)

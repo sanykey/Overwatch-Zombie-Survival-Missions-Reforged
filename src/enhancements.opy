@@ -270,7 +270,7 @@ rule "BRAIN KILLER EXTRA DAMAGE":
     @Condition eventWasCriticalHit == true
     
     #Critical hits deal 50% more damage, 20% if vicitm is a boss
-    damage(victim, eventPlayer, eventDamage * (0.2 if victim in bosses else 0.6))
+    damage(victim, eventPlayer, eventDamage * (0.2 if victim in bossStateList else 0.6))
     playEffect(eventPlayer, DynamicEffect.BAD_EXPLOSION, rgb(100, 14, 14), victim.getEyePosition() + directionTowards(eventPlayer.getEyePosition(), victim.getEyePosition()) * victim.size, 0.1 * victim.size)
 
 
@@ -298,7 +298,7 @@ rule "PYROTECHNIC APPLIES DAMAGE":
         if tmp0.isAlive():
             # tmp1: damage per second based on hits in the last cycle, used immediately.
             tmp1 = min(4 * (len(eventPlayer.enhancementValue1.filter(lambda x: x == tmp0))), 30)
-            if tmp0 in bosses:
+            if tmp0 in bossStateList:
                 # tmp1: halve this zombie's damage if it is a boss.
                 tmp1 /= 2
             tmp0.startDamageOverTime(eventPlayer, 3, tmp1)

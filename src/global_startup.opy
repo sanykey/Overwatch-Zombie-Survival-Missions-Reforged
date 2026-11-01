@@ -4,21 +4,21 @@ subroutine generateMapGrid
 
 macro setAvailableObjectivesMacro():
     #Set objective type votes empty
-    objectiveTypeVotes[ObjectiveType.NO_PREFERENCE] = [null, true]
+    objectiveTypeVoteList[ObjectiveType.NO_PREFERENCE] = [null, true]
     #Set objective type votes empty
-    objectiveTypeVotes[ObjectiveType.SHOWDOWN] = [null, createWorkshopSettingBool("Available Objective Types", "Showdown", true)]
+    objectiveTypeVoteList[ObjectiveType.SHOWDOWN] = [null, createWorkshopSettingBool("Available Objective Types", "Showdown", true)]
     #Set objective type votes empty
-    objectiveTypeVotes[ObjectiveType.BOSSES] = [null, createWorkshopSettingBool("Available Objective Types", "Bosses", true, 1)]
+    objectiveTypeVoteList[ObjectiveType.BOSSES] = [null, createWorkshopSettingBool("Available Objective Types", "Bosses", true, 1)]
     #Set objective type votes empty
-    objectiveTypeVotes[ObjectiveType.KILL_ZONE] = [null, createWorkshopSettingBool("Available Objective Types", "Kill Zone", true, 4)]
+    objectiveTypeVoteList[ObjectiveType.KILL_ZONE] = [null, createWorkshopSettingBool("Available Objective Types", "Kill Zone", true, 4)]
     #Set objective type votes empty
-    objectiveTypeVotes[ObjectiveType.ZOMBIE_EGG] = [null, createWorkshopSettingBool("Available Objective Types", "Zombie Egg", true, 5)]
+    objectiveTypeVoteList[ObjectiveType.ZOMBIE_EGG] = [null, createWorkshopSettingBool("Available Objective Types", "Zombie Egg", true, 5)]
     #Set objective type votes empty
-    objectiveTypeVotes[ObjectiveType.SATELLITE_UPLINK] = [null, createWorkshopSettingBool("Available Objective Types", "Satellite Uplink", true, 6)]
+    objectiveTypeVoteList[ObjectiveType.SATELLITE_UPLINK] = [null, createWorkshopSettingBool("Available Objective Types", "Satellite Uplink", true, 6)]
     #Set objective type votes empty
-    objectiveTypeVotes[ObjectiveType.MIXED_OBJECTIVES] = [null, createWorkshopSettingBool("Available Objective Types", "Mixed Objectives", true, 8)]
+    objectiveTypeVoteList[ObjectiveType.MIXED_OBJECTIVES] = [null, createWorkshopSettingBool("Available Objective Types", "Mixed Objectives", true, 8)]
     #Mixed Objectives pool
-    mixedObjectivesPool = [
+    mixedObjectiveTypeList = [
         ObjectiveType.SHOWDOWN if createWorkshopSettingBool("Mixed Objectives Pool", "Standoff.", true, 1) else ObjectiveType.NO_PREFERENCE,
         ObjectiveType.BOSSES if createWorkshopSettingBool("Mixed Objectives Pool", "Bosses.", true, 2) else ObjectiveType.NO_PREFERENCE,
         ObjectiveType.BIOMORPHING if createWorkshopSettingBool("Mixed Objectives Pool", "Biomorphing.", true, 3) else ObjectiveType.NO_PREFERENCE,
@@ -28,11 +28,11 @@ macro setAvailableObjectivesMacro():
         ObjectiveType.SATELLITE_UPLINK if createWorkshopSettingBool("Mixed Objectives Pool", "Satellite Uplink.", true, 7) else ObjectiveType.NO_PREFERENCE,
     ]
     #Removed disabled objectives
-    mixedObjectivesPool.remove(ObjectiveType.NO_PREFERENCE)
+    mixedObjectiveTypeList.remove(ObjectiveType.NO_PREFERENCE)
 
 
 macro enableEnhancementsMacro():
-    enhancementOptions = [
+    enhancementOptionList = [
         iconString(Icon.QUESTION_MARK),
         iconString(Icon.STOP),
         iconString(Icon.POISON),
@@ -49,8 +49,8 @@ macro enableEnhancementsMacro():
 
 macro botHeroRandomizationMacro():
     # tmp0: hero types already present among zombies, to check the unique-skin limit.
-    tmp0 = botHeros.filter(lambda x: getNumberOfHeroes(x, Team.2) > 0)
-    if gameSmolderEvent:
+    tmp0 = botHeroList.filter(lambda x: getNumberOfHeroes(x, Team.2) > 0)
+    if isSmolderEventActive:
         createDummy(Hero.WINSTON, Team.2, -1, dummyHoldingPositionConst)
     #Determines if count of current different zombie types is less than the maximum amount allowed
     elif len(tmp0) < (uniqueSkinCap - (getNumberOfSlots(Team.1) if getNumberOfPlayers(Team.1) <= getNumberOfSlots(Team.1) else getNumberOfPlayers(Team.1))):
@@ -64,25 +64,25 @@ macro botHeroRandomizationMacro():
             # tmp2: next hero-table index whose spawn weight must be included.
             tmp2++
             # tmp1: cumulative weight including this hero, to test whether tmp0 falls in its range.
-            tmp1 += botSpawnRates[tmp2]
-        createDummy(botHeros[tmp2], Team.2, -1, dummyHoldingPositionConst)
+            tmp1 += botSpawnRateList[tmp2]
+        createDummy(botHeroList[tmp2], Team.2, -1, dummyHoldingPositionConst)
     else:
-        createDummy(sorted(botHeros, lambda _, i: botSpawnRates[i]).last(), Team.2, -1, dummyHoldingPositionConst)
+        createDummy(sorted(botHeroList, lambda _, i: botSpawnRateList[i]).last(), Team.2, -1, dummyHoldingPositionConst)
 
 
 macro enableMutationsMacro():
-    availableMutations = [
+    availableMutationList = [
         1 if createWorkshopSettingBool("Mutations", "Speed", true) else 0,
         2 if createWorkshopSettingBool("Mutations", "Size Growth", true, 1) else 0,
         3 if createWorkshopSettingBool("Mutations", "Size Reduction", true, 2) else 0,
         4 if createWorkshopSettingBool("Mutations", "Radioactive", true, 3) else 0,
         5 if createWorkshopSettingBool("Mutations", "Heavy", true, 4) else 0,
     ]
-    availableMutations.remove(0)
+    availableMutationList.remove(0)
 
 
 rule "PREGAME QUICK TIPS FOR PLAYERS":
-    @Condition specialGameModeSetup == true
+    @Condition isPregameSetup == true
     
     wait(10, Wait.ABORT_WHEN_FALSE)
     smallMessage(getAllPlayers(), "Quick Tip: {0}".format(random.choice(["Hold [{0}] while voting to cycle backwards.".format(inputBindingString(Button.SECONDARY_FIRE)), "Hold [{0}] for 5 seconds to switch heroes while in game.".format(inputBindingString(Button.RELOAD)), "Hacked zombies cannot infect players.", "Overheal abilities protect players from infection."])))
@@ -94,31 +94,31 @@ rule "SPAWN BOTS":
     @Condition getAverageServerLoad() <= createWorkshopSettingInt("General", "Spawn Zombies When Server Load Average is Less Than", 180, 100, 255, 2)
     #@Condition getNumberOfPlayers(Team.2) < numberOfBots
     @Condition getNumberOfPlayers(Team.ALL) < 24
-    @Condition (len(spawnTimes) > 0 and spawnTimes[0] <= 0 or len(spawnTimes) + getNumberOfPlayers(Team.2) < numberOfBots) == true
+    @Condition (len(botSpawnTimeList) > 0 and botSpawnTimeList[0] <= 0 or len(botSpawnTimeList) + getNumberOfPlayers(Team.2) < numberOfBots) == true
     
     botHeroRandomizationMacro()
-    if len(spawnTimes) > 0 and spawnTimes[0] <= 0:
-        del spawnTimes[0]
+    if len(botSpawnTimeList) > 0 and botSpawnTimeList[0] <= 0:
+        del botSpawnTimeList[0]
         wait(0.25)
     else:
         wait(3)
     if ruleCondition:
         loop()
-    wait(sorted(spawnTimes).last(), Wait.RESTART_WHEN_TRUE)
+    wait(sorted(botSpawnTimeList).last(), Wait.RESTART_WHEN_TRUE)
     #Reset spawn times array if conditions are not met
-    if len(spawnTimes) > 0:
-        spawnTimes[0] = 0
+    if len(botSpawnTimeList) > 0:
+        botSpawnTimeList[0] = 0
     if ruleCondition:
         loop()
 
 
 rule "SPAWN TIME CONTROL":
-    @Condition (len(spawnTimes) > 0 or botSpawnPointTimers > 0) == true
+    @Condition (len(botSpawnTimeList) > 0 or botSpawnPointTimerList > 0) == true
     
-    if len(spawnTimes) > 0:
-        spawnTimes = sorted(spawnTimes.map(lambda x: x - 1))
-    if len(botSpawnPointTimers) > 0:
-        botSpawnPointTimers = botSpawnPointTimers.map(lambda x: max(0, x - 1))
+    if len(botSpawnTimeList) > 0:
+        botSpawnTimeList = sorted(botSpawnTimeList.map(lambda x: x - 1))
+    if len(botSpawnPointTimerList) > 0:
+        botSpawnPointTimerList = botSpawnPointTimerList.map(lambda x: max(0, x - 1))
     wait(1)
     if ruleCondition:
         loop()
@@ -137,15 +137,15 @@ rule "START GAME IF WAITING FOR PLAYERS":
 
 
 rule "SKIP ASSEMBLING HEROES":
-    @Condition (isAssemblingHeroes() or specialGameModeSetup and len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus)) == 0) == true
+    @Condition (isAssemblingHeroes() or isPregameSetup and len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus)) == 0) == true
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
-    voting = true
+    isVoting = true
     enableEnhancementsMacro()
     #Set difficulty votes empty
-    challengeVotes = [[null, true], [null, true], [null, createWorkshopSettingBool("Challenge Toggle", "Swarm Shootout", true, 1)], [null, createWorkshopSettingBool("Challenge Toggle", "Random Abilities", true, 2)], [null, createWorkshopSettingBool("Challenge Toggle", "Insanity", true, 3)], [null, createWorkshopSettingBool("Challenge Toggle", "Pandora's Box", true, 4)]]
+    challengeVoteList = [[null, true], [null, true], [null, createWorkshopSettingBool("Challenge Toggle", "Swarm Shootout", true, 1)], [null, createWorkshopSettingBool("Challenge Toggle", "Random Abilities", true, 2)], [null, createWorkshopSettingBool("Challenge Toggle", "Insanity", true, 3)], [null, createWorkshopSettingBool("Challenge Toggle", "Pandora's Box", true, 4)]]
     #Set zombie modes empty
-    zombieVotes = [[null, true], [null, "All Zombies"], [null, createWorkshopSettingBool("Zombie Mode Toggle", "New Blood", true, 1)], [null, createWorkshopSettingBool("Zombie Mode Toggle", "What'll it be?", true, 2)], [null, createWorkshopSettingBool("Zombie Mode Toggle", "Zombie Shuffle", true, 3)], [null, createWorkshopSettingBool("Zombie Mode Toggle", "Dinner Rush!", true, 4)], [null, createWorkshopSettingBool("Zombie Mode Toggle", "Ham N' Hammer!", true, 5)]]
+    zombieVoteList = [[null, true], [null, "All Zombies"], [null, createWorkshopSettingBool("Zombie Mode Toggle", "New Blood", true, 1)], [null, createWorkshopSettingBool("Zombie Mode Toggle", "What'll it be?", true, 2)], [null, createWorkshopSettingBool("Zombie Mode Toggle", "Zombie Shuffle", true, 3)], [null, createWorkshopSettingBool("Zombie Mode Toggle", "Dinner Rush!", true, 4)], [null, createWorkshopSettingBool("Zombie Mode Toggle", "Ham N' Hammer!", true, 5)]]
     setAvailableObjectivesMacro()
     #Set/Reset to default 0
     difficultySetting = 0
@@ -156,13 +156,13 @@ rule "SKIP ASSEMBLING HEROES":
     if isAssemblingHeroes():
         disableInspector()
         setMatchTime(0)
-        specialGameModeSetup = true
+        isPregameSetup = true
         wait(0.25)
-    if (specialGameMode == true or getCurrentGamemode() == Gamemode.FLASHPOINT) and isInSetup():
+    if (isSpecialGameMode == true or getCurrentGamemode() == Gamemode.FLASHPOINT) and isInSetup():
         setMatchTime(0)
         wait(0.25)
     setMatchTime(3599)
-    waitUntil(len(getPlayers(Team.1).filter(lambda player: player.hasSpawned())) > 0 and len(mapGrid) > 0, 99999)
+    waitUntil(len(getPlayers(Team.1).filter(lambda player: player.hasSpawned())) > 0 and len(mapGridList) > 0, 99999)
     setMatchTime(60)
     wait()
     chase1 = getMatchTime()
@@ -172,9 +172,9 @@ rule "SKIP ASSEMBLING HEROES":
 
 
 rule "PREGAME SPAWN ROOM ROTATION":
-    @Condition specialGameModeSetup == true
+    @Condition isPregameSetup == true
     #Does not apply if game mode is special gamemode
-    @Condition specialGameMode != true
+    @Condition isSpecialGameMode != true
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
     createDummy(Hero.ANA, Team.2, -1, vect(0, 500, 0))
@@ -194,7 +194,7 @@ rule "PREGAME SPAWN ROOM ROTATION":
     wait(0.25)
     destroyAllDummies()
     #Rotates spawn rooms while waiting for game to start
-    while specialGameModeSetup:
+    while isPregameSetup:
         spawnRoomIndex++
         if getCurrentGamemode() == Gamemode.ASSAULT and spawnRoomIndex > 1 or spawnRoomIndex > 2:
             spawnRoomIndex = 0
@@ -212,10 +212,11 @@ rule "VARIABLE ASSIGNMENT":
     else:
         matchEndTime = 0.1
     #Determines if current game mode is base or arcade
-    specialGameMode = true if getCurrentGamemode() in [Gamemode.TDM, Gamemode.CTF, Gamemode.PUSH, Gamemode.CONTROL] else false
+    isSpecialGameMode = true if getCurrentGamemode() in [Gamemode.TDM, Gamemode.CTF, Gamemode.PUSH, Gamemode.CONTROL] else false
     #Initial extraction zone radius
     extractionZoneRad = 300
-    objectiveResourcePositions = []
+    extractionSpeedUp = 2.5
+    objectiveResourcePositionList = []
     #Relative center of the map
     while walkCenter == null:
         wait(1)
@@ -225,45 +226,44 @@ rule "VARIABLE ASSIGNMENT":
         walkCenter = getObjectivePosition(getCurrentObjective())
     startRule(generateMapGrid, StartRuleBehavior.NOOP)
     #objectiveValue = ObjectiveType.NO_PREFERENCE  #Uninitialized Workshop variables already compare equal to 0 at match start.
-    objectiveEntities = []
-    botSpawnPoints = []
-    waypoints = []
-    botSpawnPointTimers = []
-    bosses = []
-    healthpackPositions = []
+    objectiveEntityIdList = []
+    botSpawnPointList = []
+    botSpawnWaypointList = []
+    botSpawnPointTimerList = []
+    bossStateList = []
+    healthpackPositionList = []
     #overtime = false  #Uninitialized Workshop variables already compare equal to false at match start.
     #isGameplayActive = false  #Uninitialized Workshop variables already compare equal to false at match start.
-    users = []
-    globalPlayerStats = []
-    # tmp0: player-slot counter, to create 12 initial entries in globalPlayerStats.
+    userNameList = []
+    playerStatsList = []
+    # tmp0: player-slot counter, to create 12 initial entries in playerStatsList.
     for tmp0 in range(12):
-        globalPlayerStats.append(-1)
-    objectivePositions = []
-    objectiveTypes = []
+        playerStatsList.append(-1)
+    objectivePositionList = []
+    objectiveTypeList = []
     objectiveRad = 10
     mustReviveTime = 60
-    playersOnObjective = []
-    supplyDropStatus = true
-    #supplyDropLanding = null  #Uninitialized Workshop variables already compare equal to null at match start.
+    objectivePlayerList = []
+    isSupplyDropOpen = true
+    #supplyDropLandingPosition = null  #Uninitialized Workshop variables already compare equal to null at match start.
     #supplyDropPosition = null  #Uninitialized Workshop variables already compare equal to null at match start.
-    powerUpIDs = []
-    powerUpPositions = []
-    powerUpEffect = []
-    powerUpText = []
+    supplyPowerUpIdList = []
+    supplyPowerUpPositionList = []
+    supplyPowerUpEffectIdList = []
+    supplyPowerUpTextIdList = []
     playerTargetList = []
-    availableBosses = []
-    spawnTimes = []
-    customTelePositions = []
+    bossesAvailableHeroList = []
+    botSpawnTimeList = []
+    customTeleportPositionList = []
     enableMutationsMacro()
-    numberOfPowerUpsPerSupplyDrop = createWorkshopSettingInt("Power Ups", "Number of Powerups Per Supply Drop", 5, 1, 10, -1)
+    supplyDropPowerUpCount = createWorkshopSettingInt("Power Ups", "Number of Powerups Per Supply Drop", 5, 1, 10, -1)
     uniqueSkinCap = createWorkshopSettingInt("General", "Maximum Number of Unique Hero Skins", 11, 1, 11)
-    #objectiveComplete = false  #Uninitialized Workshop variables already compare equal to false at match start.
+    #isObjectiveComplete = false  #Uninitialized Workshop variables already compare equal to false at match start.
     numberOfBots = createWorkshopSettingInt("General", "Number of zombies", 6, 1, 23, 1)
-    extractionSpeedUp = 2.5
 
 
 rule "START GAME":
-    @Condition specialGameModeSetup != false
+    @Condition isPregameSetup != false
     @Condition getMatchTime() <= 0.1
     @Condition len(getPlayers(Team.1).filter(lambda player: player.hasSpawned())) > 0
     
@@ -274,7 +274,7 @@ rule "START GAME":
     disableAnnouncer()
     pauseMatchTime()
     walkCenter = nearestWalkablePosition(walkCenter)
-    specialGameModeSetup = false
+    isPregameSetup = false
     enableMusic()
     disableInspector()
     #enableInspector()
@@ -297,16 +297,16 @@ rule "START GAME":
 def generateMapGrid():
     @Name "generateMapGrid"
     
-    mapGrid = []
-    while len(mapGrid) < 900:
+    mapGridList = []
+    while len(mapGridList) < 900:
         # tmp0: candidate walkable grid point, to check spawn-room clearance and point spacing.
-        tmp0 = nearestWalkablePosition((random.choice(mapGrid) if len(mapGrid) > 5 else walkCenter) + directionFromAngles(random.uniform(0, 360), random.uniform(-35, 35)) * random.uniform(10, 100))
+        tmp0 = nearestWalkablePosition((random.choice(mapGridList) if len(mapGridList) > 5 else walkCenter) + directionFromAngles(random.uniform(0, 360), random.uniform(-35, 35)) * random.uniform(10, 100))
         #Do not grid points inside spawn rooms on CTF maps
         if getCurrentGamemode() != Gamemode.CTF and getCurrentGamemode() != Gamemode.CLASH and getCurrentGamemode() != Gamemode.PUSH and getCurrentGamemode() != Gamemode.CONTROL and getCurrentGamemode() != Gamemode.FLASHPOINT or getSpawnPoints(Team.2).all(lambda x: distance(x.getPosition(), tmp0) > 50) and getSpawnPoints(Team.1).all(lambda x: distance(x.getPosition(), tmp0) > 40):
-            if len(mapGrid) == 0 or mapGrid.all(lambda x: distance(x, tmp0) > 2.5):
-                mapGrid.append(tmp0)
-        if specialGameModeSetup and getMatchTime() + matchEndTime < 2:
+            if len(mapGridList) == 0 or mapGridList.all(lambda x: distance(x, tmp0) > 2.5):
+                mapGridList.append(tmp0)
+        if isPregameSetup and getMatchTime() + matchEndTime < 2:
             break
         wait()
     #0: Consecutive, 1: Minimum
-    objectiveSpacing = [min(60, len(mapGrid) / 11), min(30, len(mapGrid) / 20)]
+    objectiveSpacingList = [min(60, len(mapGridList) / 11), min(30, len(mapGridList) / 20)]

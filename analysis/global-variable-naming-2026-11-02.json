@@ -1,0 +1,978 @@
+{
+  "date": "2026-11-02",
+  "globals": 111,
+  "renamed": 57,
+  "elements": {
+    "before": 27213,
+    "after": 27213
+  },
+  "warnings": [],
+  "validation": "Executable compiled Workshop is identical after reversing global names and excluding declaration order and action comments; player fields/scopes are preserved.",
+  "sourceSha256Before": {
+    "bots_game_in_progress.opy": "4b85acbeb7daa2c4382cf336681ad68eba1bff89d69157ed01ad273c3e94b195",
+    "compressed numbers.opy": "cdd0ab512010388261efcbfb3fe8fcf527693bdae4e102ded2e5c4bde3028c4d",
+    "debug.opy": "528be1360132e2fae25bc6255d027b0326ed421da371dc0442560aa661403e36",
+    "enhancements.opy": "27392dcb6e14b8e785e3c1007b91c47042369618766a05ed97f47da7c26ed175",
+    "global_game_in_progress.opy": "02e5c8356ad946211afef3cd224d2ce0558ba4fde6c6cd3b62cd9580876e66da",
+    "global_startup.opy": "023d3f6fba82293f1fac7d075c7eb0f2256b812d91165e26176b0d44d435a84e",
+    "global_start_menu.opy": "6caf69fb3a3f00bdb0657ed1caeb5027b048e02278a4d1c0758ccb61b111f457",
+    "hero_tuning.opy": "28d92c1cc23f27f9c444332eff0edd3c9f1f569044d9dde96841b4ad808454aa",
+    "main.opy": "6005995170250d44b35a88576f997014f95de715f521429eda7b9f6dcb1da9fd",
+    "objective_types/objective_type_biomorphing.opy": "551b5ca4f6ac02368526087c9f068018e33d7c6eeffeff2cd7b6ddcbee691532",
+    "objective_types/objective_type_bosses.opy": "fcdc6ffaec515ecc7855ca243f5b3da17fbf94fe5c1c301367185d6fcbc6e4d5",
+    "objective_types/objective_type_extraction_point.opy": "400cb53efdb082427580343bc5e54960d596ddb32b12a291c0c9ad8dc3fe7893",
+    "objective_types/objective_type_kill_zone.opy": "e66d577e1ebfa531b8a00453004c9c5e090f432ba73f963980f66cb80a7977a0",
+    "objective_types/objective_type_satellite_uplink.opy": "ee249575b1fc597a2d5d85ea9ded5f9bfb8178fff53a0c97543ee73ceac1308b",
+    "objective_types/objective_type_showdown.opy": "e1aa3e444b784fa46404c2c5933e006648b768aa217b4fd86e43c828f68cdc2d",
+    "objective_types/objective_type_survivor_rescue.opy": "aca7cae9ea12361f815a8b9d8cff2f518884f5f5809f5def1518c123854d55ec",
+    "objective_types/objective_type_zombie_egg.opy": "0a245c17622b223a445eb8928606c267047ed588e71f821a358d0abcdc927995",
+    "players_game_in_progress.opy": "8057ecd653bca21b0c4f76ec68035e49a4551b8748db5efdae21126cfbe3cacc",
+    "player_start_menu.opy": "73c4b6409f3ea05f3b275c451f7b8f1803ae5f3db47f207e6320e8f3196f3b22",
+    "power_ups.opy": "84321529b8925e59bf335eba6d5146c582b655f6360660c90d9717858d484c5b",
+    "settings.opy": "bafdf47e377bfce8871f5e6c8a79684934e6c283130151ce2824d8778cc659a7",
+    "subroutines.opy": "be278841fa9aea34b9ecbe355a4a4dc027272637924ea5808e2add9798619fdc",
+    "supply_drops.opy": "1b417c00bb30fb4ca56619fa6f0943e480e56bd011cc93e130e8e7264e97d37e",
+    "variables.opy": "0f3dadb6e40dc652c3a859d29730c627452761d2524b65d0353b7840625d85ad",
+    "zombie_types.opy": "64d668fcce9173d36fb27393baa1ed96c07b5d0726b6e20e06b2a0f23031c505"
+  },
+  "sourceSha256After": {
+    "bots_game_in_progress.opy": "0e3311eddb10e36c17635e2eae2de67adad1f198d5e85242d3ecb8dcb5aef8c6",
+    "compressed numbers.opy": "6c414884c6273353c17c85e56de05c382cb6401aec19a22132263fd6f4d6d9d7",
+    "debug.opy": "2a2fde87e43bd36516d2db1c25d513df4c49e24eebce71be8ef8440f59a47bb9",
+    "enhancements.opy": "7618b59de8b60fbdff1f9cd6b1a66ca67765ee60772304b4cab83dc3d99ae4c0",
+    "global_game_in_progress.opy": "d58bc88f5999dc0b2a2b4da3b954295a4fb409dc76dfab363488fbc372b7b00c",
+    "global_startup.opy": "4f887910fc97fd11045eb406da6d5bc5cd94249d75ca92fc60f9ed05a0e426ee",
+    "global_start_menu.opy": "184eb105a4627af1815a1e7d7e63b16255d1f2aa5c761462f4babb1a039d6142",
+    "hero_tuning.opy": "28d92c1cc23f27f9c444332eff0edd3c9f1f569044d9dde96841b4ad808454aa",
+    "main.opy": "6005995170250d44b35a88576f997014f95de715f521429eda7b9f6dcb1da9fd",
+    "objective_types/objective_type_biomorphing.opy": "f5a731068994878aabce9c1318a114b3a6186b3485a6799115a46a5aca87d14c",
+    "objective_types/objective_type_bosses.opy": "9b277bfdedad1e3ad02ddec109e8264e111fcad18fee8325161c905c2c25f976",
+    "objective_types/objective_type_extraction_point.opy": "0ce89a7d5a914fb4c5d288ad419320f838a7c9cda6f9f5fd68acd7a5f61bfe9b",
+    "objective_types/objective_type_kill_zone.opy": "a78473cf359f8524a4f2943cfe71bcca854e9d1526acec32cb919ca9623e0b35",
+    "objective_types/objective_type_satellite_uplink.opy": "94db762a65c134b02118eba9e7a76d565e7564c06846dadf6327553f91db7b24",
+    "objective_types/objective_type_showdown.opy": "17fa4099ed2a6e993363eda221a0122254ace5c62cccf150820a763848b54bfb",
+    "objective_types/objective_type_survivor_rescue.opy": "96f4e49714c2397a35df58558f3d1b0ec74ae53348d3bc3789a9a6c575e5d94a",
+    "objective_types/objective_type_zombie_egg.opy": "2ed0978d073af03252c9e9ffc884f00399be0b7e23674869920796f1e8c88253",
+    "players_game_in_progress.opy": "c891fb75de988acf8f65bd681f6be4e03c7447f0bee555590dfc3d152f77147f",
+    "player_start_menu.opy": "5d8eff792cb6188825db562a7799e78d769f507c2820e6a9aea01dd3292eb198",
+    "power_ups.opy": "84321529b8925e59bf335eba6d5146c582b655f6360660c90d9717858d484c5b",
+    "settings.opy": "bafdf47e377bfce8871f5e6c8a79684934e6c283130151ce2824d8778cc659a7",
+    "subroutines.opy": "fc7bc5efdf019757650bb19bfac84a067cc7f134f54c3df01de873cd61053575",
+    "supply_drops.opy": "be3ccc307d02bde4ca89acd717081d7e1910f3db9cc5ca51fe639bc56faa2145",
+    "variables.opy": "69af440b79a843c10646d7dd04f38a482613686d33543668546fa02e191c3fa3",
+    "zombie_types.opy": "dcc14937a699cc4824ecef0dc39ce0e1061b43b4fc8473a9778edea285c0d9b9"
+  },
+  "variables": [
+    {
+      "old": "tmp0",
+      "name": "tmp0",
+      "type": "mixed",
+      "comment": "Synchronous scratch: number, position, player or list; assign before use and do not retain across waits.",
+      "group": "Shared scratch slots",
+      "file": "variables.opy"
+    },
+    {
+      "old": "tmp1",
+      "name": "tmp1",
+      "type": "mixed",
+      "comment": "Second simultaneously live scratch value; may hold a scalar, player, vector or list.",
+      "group": "Shared scratch slots",
+      "file": "variables.opy"
+    },
+    {
+      "old": "tmp2",
+      "name": "tmp2",
+      "type": "mixed",
+      "comment": "Third simultaneously live scratch value; may hold a scalar, player, vector or list.",
+      "group": "Shared scratch slots",
+      "file": "variables.opy"
+    },
+    {
+      "old": "offsetUpThreeQuartersConst",
+      "name": "offsetUpThreeQuartersConst",
+      "type": "vector",
+      "comment": "Vertical offset of 0.75 m for labels, icons and visibility checks.",
+      "group": "Shared immutable colors and positions",
+      "file": "variables.opy"
+    },
+    {
+      "old": "offsetUpHalfConst",
+      "name": "offsetUpHalfConst",
+      "type": "vector",
+      "comment": "Vertical offset of 0.5 m for labels and effects.",
+      "group": "Shared immutable colors and positions",
+      "file": "variables.opy"
+    },
+    {
+      "old": "losOffsetConst",
+      "name": "losOffsetConst",
+      "type": "vector",
+      "comment": "Vertical offset of 1.2 m used by line-of-sight checks.",
+      "group": "Shared immutable colors and positions",
+      "file": "variables.opy"
+    },
+    {
+      "old": "colorChargeBatteryConst",
+      "name": "colorChargeBatteryConst",
+      "type": "color",
+      "comment": "Shared Charge Battery color used by the menu and enhancement visuals.",
+      "group": "Shared immutable colors and positions",
+      "file": "variables.opy"
+    },
+    {
+      "old": "dummyHoldingPositionConst",
+      "name": "dummyHoldingPositionConst",
+      "type": "vector",
+      "comment": "Off-map holding position for newly created or reconfigured dummy bots.",
+      "group": "Shared immutable colors and positions",
+      "file": "variables.opy"
+    },
+    {
+      "old": "colorKevlarConst",
+      "name": "colorKevlarConst",
+      "type": "color",
+      "comment": "Shared Kevlar color used by the menu and enhancement visuals.",
+      "group": "Shared immutable colors and positions",
+      "file": "variables.opy"
+    },
+    {
+      "old": "isPregameSetup",
+      "name": "isPregameSetup",
+      "type": "bool",
+      "comment": "Pregame hero selection/voting is active; cleared by START GAME before gameplay activation.",
+      "group": "Match state and configuration",
+      "file": "variables.opy"
+    },
+    {
+      "old": "isSpecialGameMode",
+      "name": "isSpecialGameMode",
+      "type": "bool",
+      "comment": "TDM, CTF, PUSH or CONTROL uses alternate menu/spawn handling.",
+      "group": "Match state and configuration",
+      "file": "variables.opy"
+    },
+    {
+      "old": "isGameplayActive",
+      "name": "isGameplayActive",
+      "type": "bool",
+      "comment": "Objectives are generated and combat is active; cleared when the match outcome is decided.",
+      "group": "Match state and configuration",
+      "file": "variables.opy"
+    },
+    {
+      "old": "overtime",
+      "name": "isOvertimeActive",
+      "type": "bool",
+      "comment": "Prevents repeated overtime activation and zombie relocation on standard modes.",
+      "group": "Match state and configuration",
+      "file": "variables.opy"
+    },
+    {
+      "old": "voting",
+      "name": "isVoting",
+      "type": "bool",
+      "comment": "Global pregame vote is open; separate from each player's isVoting field.",
+      "group": "Match state and configuration",
+      "file": "variables.opy"
+    },
+    {
+      "old": "difficultySetting",
+      "name": "difficultySetting",
+      "type": "number",
+      "comment": "Cached player-count difficulty used to select zombie stats and scaling.",
+      "group": "Match state and configuration",
+      "file": "variables.opy"
+    },
+    {
+      "old": "challengeSetting",
+      "name": "challengeSetting",
+      "type": "number",
+      "comment": "Selected Challenge option, retained after pregame voting.",
+      "group": "Match state and configuration",
+      "file": "variables.opy"
+    },
+    {
+      "old": "zombieSetting",
+      "name": "zombieSetting",
+      "type": "number",
+      "comment": "Selected zombie roster/spawn-rate mode, retained after pregame voting.",
+      "group": "Match state and configuration",
+      "file": "variables.opy"
+    },
+    {
+      "old": "objectiveTypeSetting",
+      "name": "objectiveTypeSetting",
+      "type": "number",
+      "comment": "Selected objective mode or Mixed setting; differs from the current objective type.",
+      "group": "Match state and configuration",
+      "file": "variables.opy"
+    },
+    {
+      "old": "matchEndTime",
+      "name": "matchEndTime",
+      "type": "number",
+      "comment": "Native-gamemode timer offset: zero or 0.1, used as the match-time floor.",
+      "group": "Match state and configuration",
+      "file": "variables.opy"
+    },
+    {
+      "old": "uniqueSkinCap",
+      "name": "uniqueSkinCap",
+      "type": "number",
+      "comment": "Configured maximum number of different hero skins shared by players and zombies.",
+      "group": "Match state and configuration",
+      "file": "variables.opy"
+    },
+    {
+      "old": "numberOfBots",
+      "name": "numberOfBots",
+      "type": "number",
+      "comment": "Configured zombie population target, including queued replacements.",
+      "group": "Match state and configuration",
+      "file": "variables.opy"
+    },
+    {
+      "old": "startPos",
+      "name": "startPos",
+      "type": "vector",
+      "comment": "Center/aim position of the pregame hero-selection scene.",
+      "group": "Pregame scene, palettes and voting",
+      "file": "variables.opy"
+    },
+    {
+      "old": "startCamPos",
+      "name": "startCamPos",
+      "type": "vector",
+      "comment": "Pregame camera position used to place players and world text.",
+      "group": "Pregame scene, palettes and voting",
+      "file": "variables.opy"
+    },
+    {
+      "old": "startMenuSpacingAngle",
+      "name": "startMenuSpacingAngle",
+      "type": "number",
+      "comment": "Hero-scene spacing angle; zero also means menu initialization is not finished.",
+      "group": "Pregame scene, palettes and voting",
+      "file": "variables.opy"
+    },
+    {
+      "old": "startMenuZombieColors",
+      "name": "startMenuZombieColorList",
+      "type": "array",
+      "comment": "Pregame Zombie Mode HUD colors indexed by option ID.",
+      "group": "Pregame scene, palettes and voting",
+      "file": "variables.opy"
+    },
+    {
+      "old": "startMenuObjectiveColors",
+      "name": "startMenuObjectiveColorList",
+      "type": "array",
+      "comment": "Pregame Objective Type HUD colors indexed by raw objective ID.",
+      "group": "Pregame scene, palettes and voting",
+      "file": "variables.opy"
+    },
+    {
+      "old": "startMenuEnhancementColors",
+      "name": "startMenuEnhancementColorList",
+      "type": "array",
+      "comment": "Pregame Enhancement HUD colors indexed by enhancement ID.",
+      "group": "Pregame scene, palettes and voting",
+      "file": "variables.opy"
+    },
+    {
+      "old": "challengeVotes",
+      "name": "challengeVoteList",
+      "type": "array",
+      "comment": "Challenge availability/count entries, indexed by vote option.",
+      "group": "Pregame scene, palettes and voting",
+      "file": "variables.opy"
+    },
+    {
+      "old": "zombieVotes",
+      "name": "zombieVoteList",
+      "type": "array",
+      "comment": "Zombie-mode availability/count entries, indexed by vote option.",
+      "group": "Pregame scene, palettes and voting",
+      "file": "variables.opy"
+    },
+    {
+      "old": "objectiveTypeVotes",
+      "name": "objectiveTypeVoteList",
+      "type": "array",
+      "comment": "Objective-type availability/count entries, indexed by raw objective ID.",
+      "group": "Pregame scene, palettes and voting",
+      "file": "variables.opy"
+    },
+    {
+      "old": "enhancementOptions",
+      "name": "enhancementOptionList",
+      "type": "array",
+      "comment": "Enhancement icons/availability used by pregame selection and world text.",
+      "group": "Pregame scene, palettes and voting",
+      "file": "variables.opy"
+    },
+    {
+      "old": "specialEffectsStrings",
+      "name": "pregameGlitchText",
+      "type": "string",
+      "comment": "Random distorted Challenge text shown during the pregame flashing effect.",
+      "group": "Pregame scene, palettes and voting",
+      "file": "variables.opy"
+    },
+    {
+      "old": "specialEffectsTiming",
+      "name": "isPregameGlitchActive",
+      "type": "bool",
+      "comment": "Enables the pregame Challenge text/color flash.",
+      "group": "Pregame scene, palettes and voting",
+      "file": "variables.opy"
+    },
+    {
+      "old": "walkCenter",
+      "name": "walkCenter",
+      "type": "vector",
+      "comment": "Walkable map center used for grid generation, the menu and player teleportation.",
+      "group": "Map grid and spawn-position caches",
+      "file": "variables.opy"
+    },
+    {
+      "old": "mapGrid",
+      "name": "mapGridList",
+      "type": "array",
+      "comment": "Cached walkable map positions used by objectives, teleports, supplies and the finale.",
+      "group": "Map grid and spawn-position caches",
+      "file": "variables.opy"
+    },
+    {
+      "old": "attackSpawnRooms",
+      "name": "attackSpawnRooms",
+      "type": "mixed",
+      "comment": "Standard modes: list of spawn-room positions; the unused CTF fallback stores one position.",
+      "group": "Map grid and spawn-position caches",
+      "file": "variables.opy"
+    },
+    {
+      "old": "activeAttackSpawnRoom",
+      "name": "activeAttackSpawnRoom",
+      "type": "vector",
+      "comment": "Currently activated spawn-room position; may differ from the room being tested.",
+      "group": "Map grid and spawn-position caches",
+      "file": "variables.opy"
+    },
+    {
+      "old": "spawnRoomIndex",
+      "name": "spawnRoomIndex",
+      "type": "number",
+      "comment": "Room index during pregame recording/rotation and in-match safe-room selection.",
+      "group": "Map grid and spawn-position caches",
+      "file": "variables.opy"
+    },
+    {
+      "old": "botSpawnPoints",
+      "name": "botSpawnPointList",
+      "type": "array",
+      "comment": "Cached successful zombie spawn/teleport positions.",
+      "group": "Map grid and spawn-position caches",
+      "file": "variables.opy"
+    },
+    {
+      "old": "botSpawnPointTimers",
+      "name": "botSpawnPointTimerList",
+      "type": "array",
+      "comment": "Per-spawn-point cooldown/load values, indexed with botSpawnPointList.",
+      "group": "Map grid and spawn-position caches",
+      "file": "variables.opy"
+    },
+    {
+      "old": "waypoints",
+      "name": "botSpawnWaypointList",
+      "type": "array",
+      "comment": "Movement waypoint associated with each cached botSpawnPointList entry.",
+      "group": "Map grid and spawn-position caches",
+      "file": "variables.opy"
+    },
+    {
+      "old": "customTelePositions",
+      "name": "customTeleportPositionList",
+      "type": "array",
+      "comment": "Special teleport positions transferred from dying bots to replacement bots.",
+      "group": "Map grid and spawn-position caches",
+      "file": "variables.opy"
+    },
+    {
+      "old": "spawnTimes",
+      "name": "botSpawnTimeList",
+      "type": "array",
+      "comment": "Remaining delays for queued zombie replacements, decremented once per second.",
+      "group": "Map grid and spawn-position caches",
+      "file": "variables.opy"
+    },
+    {
+      "old": "objectivePositions",
+      "name": "objectivePositionList",
+      "type": "array",
+      "comment": "Queued objective positions; index zero is current, the final entry is extraction.",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "objectiveTypes",
+      "name": "objectiveTypeList",
+      "type": "array",
+      "comment": "Queued objective types aligned with objectivePositionList.",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "objectiveSpacing",
+      "name": "objectiveSpacingList",
+      "type": "array",
+      "comment": "Consecutive/minimum placement distances calculated from the map-grid size.",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "mixedObjectivesPool",
+      "name": "mixedObjectiveTypeList",
+      "type": "array",
+      "comment": "Allowed Mixed objective types used while building the mission queue.",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "objectiveValue",
+      "name": "objectiveValue",
+      "type": "number",
+      "comment": "Current type snapshot published when global objective visuals are refreshed.",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "objectiveCaptureValue",
+      "name": "objectiveCaptureValue",
+      "type": "mixed",
+      "comment": "Numeric progress/kill score, or a list of three terminal percentages in Satellite Uplink.",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "objectiveRad",
+      "name": "objectiveRad",
+      "type": "number",
+      "comment": "Current objective radius; also chased or temporarily expanded by some objective types.",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "objectiveDescription",
+      "name": "objectiveDescription",
+      "type": "string",
+      "comment": "Current task description displayed by the global match HUD.",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "objectiveColor",
+      "name": "objectiveColor",
+      "type": "color",
+      "comment": "Shared objective visual color, including Showdown progress-loss flashes.",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "objectiveComplete",
+      "name": "isObjectiveComplete",
+      "type": "bool",
+      "comment": "Requests objective advancement and coordinates objective/player recovery rules.",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "playersOnObjective",
+      "name": "objectivePlayerList",
+      "type": "array",
+      "comment": "Players currently capturing, repairing, depositing resources or extracting.",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "objectiveEntities",
+      "name": "objectiveEntityIdList",
+      "type": "array",
+      "comment": "Global objective effect/text/icon/progress-bar IDs retained for cleanup.",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "objectiveEntitiesCount",
+      "name": "objectiveEntitiesCount",
+      "type": "number",
+      "comment": "Index of the yielding global objective-visual cleanup loop.",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "objectiveResourcePositions",
+      "name": "objectiveResourcePositionList",
+      "type": "array",
+      "comment": "Dropped-resource positions in Biomorphing or terminal positions in Satellite Uplink.",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "testPos",
+      "name": "testPos",
+      "type": "vector",
+      "comment": "Candidate position retained across waits during mission placement or survivor spawning.",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "testPos2",
+      "name": "testPos2",
+      "type": "number",
+      "comment": "Minimum survivor-spawn distance or minimum spacing between satellite terminals.",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "objectiveCount1",
+      "name": "objectiveCount1",
+      "type": "number",
+      "comment": "Mission-placement attempt count, then remaining satellite firing-loop steps.",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "objectiveChase1",
+      "name": "objectiveChase1",
+      "type": "mixed",
+      "comment": "Saved Rescue radius (number), Kill Zone center (vector), or Satellite laser position (vector).",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "goalPost",
+      "name": "goalPost",
+      "type": "number",
+      "comment": "Next 25-percent progress checkpoint shared by Showdown and Biomorphing.",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "queuedGoalType",
+      "name": "queuedGoalList",
+      "type": "array",
+      "comment": "Showdown: contesting zombies; Biomorphing: queued resource-goal IDs.",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "survivorToRescue",
+      "name": "survivorToRescue",
+      "type": "player",
+      "comment": "Rescue NPC or current zombie target followed by the Satellite laser.",
+      "group": "Shared objective generation and runtime state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "playerTargetList",
+      "name": "playerTargetList",
+      "type": "array",
+      "comment": "Active zombie targets; can temporarily include the NPC being rescued.",
+      "group": "Player roster, reconnect state and revival",
+      "file": "variables.opy"
+    },
+    {
+      "old": "users",
+      "name": "userNameList",
+      "type": "array",
+      "comment": "Recorded player names used to restore state when a user rejoins.",
+      "group": "Player roster, reconnect state and revival",
+      "file": "variables.opy"
+    },
+    {
+      "old": "globalPlayerStats",
+      "name": "playerStatsList",
+      "type": "array",
+      "comment": "Per-user death status, timers and last position, indexed with userNameList.",
+      "group": "Player roster, reconnect state and revival",
+      "file": "variables.opy"
+    },
+    {
+      "old": "healthpackPositions",
+      "name": "healthpackPositionList",
+      "type": "array",
+      "comment": "Discovered health-pack positions used by infection-cure indicators.",
+      "group": "Player roster, reconnect state and revival",
+      "file": "variables.opy"
+    },
+    {
+      "old": "mustReviveTime",
+      "name": "mustReviveTime",
+      "type": "number",
+      "comment": "Allowed rescue time; starts at 60 and decreases after permanent player deaths.",
+      "group": "Player roster, reconnect state and revival",
+      "file": "variables.opy"
+    },
+    {
+      "old": "botHeros",
+      "name": "botHeroList",
+      "type": "array",
+      "comment": "Zombie hero order used to index spawn weights and all per-hero stat tables.",
+      "group": "Shared zombie stats, mutations and boss state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "botSpawnRates",
+      "name": "botSpawnRateList",
+      "type": "array",
+      "comment": "Per-hero spawn weights; Zombie Shuffle can reorder them during gameplay.",
+      "group": "Shared zombie stats, mutations and boss state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "biteDamages",
+      "name": "botBiteDamageList",
+      "type": "array",
+      "comment": "Per-hero bite damage selected for the current difficulty.",
+      "group": "Shared zombie stats, mutations and boss state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "biteDurations",
+      "name": "botBiteDurationList",
+      "type": "array",
+      "comment": "Per-hero bite damage-over-time durations selected for the current difficulty.",
+      "group": "Shared zombie stats, mutations and boss state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "damageDealt",
+      "name": "botDamageDealtList",
+      "type": "array",
+      "comment": "Per-hero damage percentages, also used to calibrate bite damage.",
+      "group": "Shared zombie stats, mutations and boss state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "botHealthValues",
+      "name": "botHealthList",
+      "type": "array",
+      "comment": "Per-hero maximum health values selected for the current difficulty.",
+      "group": "Shared zombie stats, mutations and boss state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "throttleSpeeds",
+      "name": "botThrottleSpeedList",
+      "type": "array",
+      "comment": "Per-hero movement throttle values selected for the current difficulty.",
+      "group": "Shared zombie stats, mutations and boss state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "availableMutations",
+      "name": "availableMutationList",
+      "type": "array",
+      "comment": "Enabled mutation IDs configured through Workshop settings.",
+      "group": "Shared zombie stats, mutations and boss state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "miniBoss",
+      "name": "miniBossList",
+      "type": "array",
+      "comment": "Current miniboss membership, independent of the large objective boss/egg.",
+      "group": "Shared zombie stats, mutations and boss state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "bosses",
+      "name": "bossStateList",
+      "type": "array",
+      "comment": "Shared Bosses/Zombie Egg state: boss player at index 0, head-height measurement at index 1.",
+      "group": "Shared zombie stats, mutations and boss state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "gameSmolderEvent",
+      "name": "isSmolderEventActive",
+      "type": "bool",
+      "comment": "Global Winston/Smolder phase affecting spawns, abilities, effects and player HUD.",
+      "group": "Shared zombie stats, mutations and boss state",
+      "file": "variables.opy"
+    },
+    {
+      "old": "availableBosses",
+      "name": "bossesAvailableHeroList",
+      "type": "array",
+      "comment": "Bosses-only hero rotation; retained between Bosses objectives until the pool is exhausted.",
+      "group": "Bosses objective: hero rotation",
+      "file": "variables.opy"
+    },
+    {
+      "old": "nonBossZombies",
+      "name": "bossesExcludedHeroList",
+      "type": "array",
+      "comment": "Hero types excluded from the Bosses objective hero pool when enough alternatives exist.",
+      "group": "Bosses objective: hero rotation",
+      "file": "variables.opy"
+    },
+    {
+      "old": "queuedBioType",
+      "name": "biomorphingQueuedTypeList",
+      "type": "array",
+      "comment": "Shuffled resource types 0/1/2 assigned to successive zombie resource carriers.",
+      "group": "Biomorphing objective: goals, resources and deferred drops",
+      "file": "variables.opy"
+    },
+    {
+      "old": "goalText",
+      "name": "biomorphingGoalText",
+      "type": "string",
+      "comment": "Current requested-material/blood message displayed by the Biomorphing HUD.",
+      "group": "Biomorphing objective: goals, resources and deferred drops",
+      "file": "variables.opy"
+    },
+    {
+      "old": "goalColor",
+      "name": "biomorphingGoalColor",
+      "type": "color",
+      "comment": "Current Biomorphing goal color used by its HUD and announcements.",
+      "group": "Biomorphing objective: goals, resources and deferred drops",
+      "file": "variables.opy"
+    },
+    {
+      "old": "goalCheck",
+      "name": "isBiomorphingGoalPending",
+      "type": "bool",
+      "comment": "Requests Biomorphing resource cleanup and initialization of the next resource goal.",
+      "group": "Biomorphing objective: goals, resources and deferred drops",
+      "file": "variables.opy"
+    },
+    {
+      "old": "biowasteTypes",
+      "name": "biomorphingResourceTypeList",
+      "type": "array",
+      "comment": "Types of dropped resources, indexed with the shared resource-position list.",
+      "group": "Biomorphing objective: goals, resources and deferred drops",
+      "file": "variables.opy"
+    },
+    {
+      "old": "deferredType",
+      "name": "biomorphingDeferredTypeList",
+      "type": "array",
+      "comment": "Queued resource types awaiting orb creation after their holders die.",
+      "group": "Biomorphing objective: goals, resources and deferred drops",
+      "file": "variables.opy"
+    },
+    {
+      "old": "deferredPositions",
+      "name": "biomorphingDeferredPositionList",
+      "type": "array",
+      "comment": "World positions aligned with biomorphingDeferredTypeList.",
+      "group": "Biomorphing objective: goals, resources and deferred drops",
+      "file": "variables.opy"
+    },
+    {
+      "old": "biowasteString",
+      "name": "biomorphingResourceTextIdList",
+      "type": "array",
+      "comment": "World-text IDs for dropped resources, retained until pickup or goal cleanup.",
+      "group": "Biomorphing objective: goals, resources and deferred drops",
+      "file": "variables.opy"
+    },
+    {
+      "old": "biowasteEffects",
+      "name": "biomorphingResourceEffectIdList",
+      "type": "array",
+      "comment": "Effect IDs for dropped resource orbs, retained until pickup or goal cleanup.",
+      "group": "Biomorphing objective: goals, resources and deferred drops",
+      "file": "variables.opy"
+    },
+    {
+      "old": "biowasteCount",
+      "name": "biomorphingCleanupIndex",
+      "type": "number",
+      "comment": "Index retained across waits while old resource effects and labels are destroyed.",
+      "group": "Biomorphing objective: goals, resources and deferred drops",
+      "file": "variables.opy"
+    },
+    {
+      "old": "biowasteColorLookUp",
+      "name": "biomorphingResourceColorList",
+      "type": "array",
+      "comment": "Colors indexed by resource type, including the blood goal.",
+      "group": "Biomorphing objective: goals, resources and deferred drops",
+      "file": "variables.opy"
+    },
+    {
+      "old": "biowasteTextLookUp",
+      "name": "biomorphingResourceNameList",
+      "type": "array",
+      "comment": "Resource names indexed by ordinary resource type: head, arm and leg.",
+      "group": "Biomorphing objective: goals, resources and deferred drops",
+      "file": "variables.opy"
+    },
+    {
+      "old": "extractionZoneRad",
+      "name": "extractionZoneRad",
+      "type": "number",
+      "comment": "Shrinking extraction-dome radius; initialized to 300 and also checked by defeat rules.",
+      "group": "Extraction and shared match-ending visuals",
+      "file": "variables.opy"
+    },
+    {
+      "old": "extractionSpeedUp",
+      "name": "extractionSpeedUp",
+      "type": "number",
+      "comment": "Dome shrink speed, initially 2.5 and increased by players at extraction.",
+      "group": "Extraction and shared match-ending visuals",
+      "file": "variables.opy"
+    },
+    {
+      "old": "evacRate",
+      "name": "extractionFlightSpeed",
+      "type": "number",
+      "comment": "Successful extraction flight-stage speed, switched between 2, 10 and 50.",
+      "group": "Extraction and shared match-ending visuals",
+      "file": "variables.opy"
+    },
+    {
+      "old": "evacDestination",
+      "name": "extractionFlightDestination",
+      "type": "vector",
+      "comment": "Random shared destination used by the successful extraction flight.",
+      "group": "Extraction and shared match-ending visuals",
+      "file": "variables.opy"
+    },
+    {
+      "old": "evacSurvivorList",
+      "name": "evacSurvivorList",
+      "type": "array",
+      "comment": "Snapshot of extracted players, also used to exclude survivors from finale kills.",
+      "group": "Extraction and shared match-ending visuals",
+      "file": "variables.opy"
+    },
+    {
+      "old": "evacCount",
+      "name": "evacCount",
+      "type": "number",
+      "comment": "Counter for 400 finale explosions, used on both victory and defeat.",
+      "group": "Extraction and shared match-ending visuals",
+      "file": "variables.opy"
+    },
+    {
+      "old": "chase1",
+      "name": "chase1",
+      "type": "mixed",
+      "comment": "Pregame hidden timer (number), then the finale projectile position (vector).",
+      "group": "Extraction and shared match-ending visuals",
+      "file": "variables.opy"
+    },
+    {
+      "old": "supplyDropLandingPosition",
+      "name": "supplyDropLandingPosition",
+      "type": "vector",
+      "comment": "Target ground position where the current supply drop will land.",
+      "group": "Supply drops and ground power-ups",
+      "file": "variables.opy"
+    },
+    {
+      "old": "supplyDropPosition",
+      "name": "supplyDropPosition",
+      "type": "vector",
+      "comment": "Current supply-drop position, animated while it falls.",
+      "group": "Supply drops and ground power-ups",
+      "file": "variables.opy"
+    },
+    {
+      "old": "supplyDropIsOpen",
+      "name": "isSupplyDropOpen",
+      "type": "bool",
+      "comment": "Drop is open, or no drop has spawned yet; allows generation of the next drop.",
+      "group": "Supply drops and ground power-ups",
+      "file": "variables.opy"
+    },
+    {
+      "old": "supplyDropPowerUpCount",
+      "name": "supplyDropPowerUpCount",
+      "type": "number",
+      "comment": "Configured number of power-ups spawned when a supply drop is opened.",
+      "group": "Supply drops and ground power-ups",
+      "file": "variables.opy"
+    },
+    {
+      "old": "supplyPowerUpIdList",
+      "name": "supplyPowerUpIdList",
+      "type": "array",
+      "comment": "Item type IDs of ground power-ups from supplies, player drops and Biomorphing rewards.",
+      "group": "Supply drops and ground power-ups",
+      "file": "variables.opy"
+    },
+    {
+      "old": "supplyPowerUpPositionList",
+      "name": "supplyPowerUpPositionList",
+      "type": "array",
+      "comment": "Ground power-up positions indexed by the same item list.",
+      "group": "Supply drops and ground power-ups",
+      "file": "variables.opy"
+    },
+    {
+      "old": "supplyPowerUpTextIdList",
+      "name": "supplyPowerUpTextIdList",
+      "type": "array",
+      "comment": "World-text IDs for removing item labels on pickup or exchange.",
+      "group": "Supply drops and ground power-ups",
+      "file": "variables.opy"
+    },
+    {
+      "old": "supplyPowerUpEffectIdList",
+      "name": "supplyPowerUpEffectIdList",
+      "type": "array",
+      "comment": "Effect IDs for removing item orbs on pickup or exchange.",
+      "group": "Supply drops and ground power-ups",
+      "file": "variables.opy"
+    },
+    {
+      "old": "numbersList",
+      "name": "numbersList",
+      "type": "array",
+      "comment": "Shared compressed numeric lookup data for stat tables, spawn weights and menu vote IDs.",
+      "file": "compressed numbers.opy",
+      "group": "Module-owned globals"
+    },
+    {
+      "old": "debugHud",
+      "name": "debugHud",
+      "type": "number",
+      "comment": "ID of the host diagnostics HUD, recreated after phase cleanup.",
+      "file": "debug.opy",
+      "group": "Module-owned globals"
+    }
+  ],
+  "changedFiles": [
+    "bots_game_in_progress.opy",
+    "compressed numbers.opy",
+    "debug.opy",
+    "enhancements.opy",
+    "global_game_in_progress.opy",
+    "global_startup.opy",
+    "global_start_menu.opy",
+    "objective_types/objective_type_biomorphing.opy",
+    "objective_types/objective_type_bosses.opy",
+    "objective_types/objective_type_extraction_point.opy",
+    "objective_types/objective_type_kill_zone.opy",
+    "objective_types/objective_type_satellite_uplink.opy",
+    "objective_types/objective_type_showdown.opy",
+    "objective_types/objective_type_survivor_rescue.opy",
+    "objective_types/objective_type_zombie_egg.opy",
+    "players_game_in_progress.opy",
+    "player_start_menu.opy",
+    "subroutines.opy",
+    "supply_drops.opy",
+    "variables.opy",
+    "zombie_types.opy"
+  ]
+}

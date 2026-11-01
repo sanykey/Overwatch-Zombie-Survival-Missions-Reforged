@@ -16,40 +16,40 @@ subroutine stun
 
 rule "GENERATE SUPPLY DROPS":
     #Only activates if last supply drop has been opened
-    @Condition supplyDropStatus == true
+    @Condition isSupplyDropOpen == true
     #Waits for all objectives to be determined before activating
     @Condition isGameplayActive == true
     #Limited to 12 power ups on the ground at a time
-    @Condition len(powerUpPositions) < 12
+    @Condition len(supplyPowerUpPositionList) < 12
     
     #Standard 30 second wait
     wait(30)
-    supplyDropLanding = null
+    supplyDropLandingPosition = null
     supplyDropPosition = null
-    supplyDropStatus = false
+    isSupplyDropOpen = false
     #Wait standard minimum 30 seconds + a random 30 to 90 extra seconds. Total resulting wait time is 2 to 2.5 minutes.
     wait(random.uniform(1.5, 2) * 60)
-    while supplyDropLanding == null:
+    while supplyDropLandingPosition == null:
         #Find the closest player to the objective
         # tmp0: player closest to the objective, used as the center for choosing a supply-drop location.
-        tmp0 = sorted(playerTargetList, lambda x: distance(x.getPosition(), objectivePositions[0]))[0]
+        tmp0 = sorted(playerTargetList, lambda x: distance(x.getPosition(), objectivePositionList[0]))[0]
         # tmp1: candidate drop position 20-35m from tmp0, to check clearance from all players.
-        tmp1 = random.choice(mapGrid.filter(lambda x: distance(tmp0.getPosition(), x) < 35 and distance(tmp0.getPosition(), x) > 20))
+        tmp1 = random.choice(mapGridList.filter(lambda x: distance(tmp0.getPosition(), x) < 35 and distance(tmp0.getPosition(), x) > 20))
         if playerTargetList.all(lambda x: distance(tmp1, x.getPosition()) > 20):
             #Sets supply drop location
-            supplyDropLanding = tmp1
+            supplyDropLandingPosition = tmp1
             #Sets supply drop location to be placed on ground (in the case that a walkable position is underground for some reason)
-            supplyDropLanding = raycastHitPosition(supplyDropLanding + vect(0, 2, 0), supplyDropLanding + vect(0, 0, 0), getAllPlayers(), getAllPlayers(), false)
+            supplyDropLandingPosition = raycastHitPosition(supplyDropLandingPosition + vect(0, 2, 0), supplyDropLandingPosition + vect(0, 0, 0), getAllPlayers(), getAllPlayers(), false)
         wait(0.25)
-    supplyDropPosition = supplyDropLanding + vect(0, 200, 0)
-    chaseOverTime(supplyDropPosition, supplyDropLanding, 15)
+    supplyDropPosition = supplyDropLandingPosition + vect(0, 200, 0)
+    chaseOverTime(supplyDropPosition, supplyDropLandingPosition, 15)
     bigMessage(getPlayers(Team.1), "Supply drop incoming!")
-    waitUntil(supplyDropPosition == supplyDropLanding, 99999)
+    waitUntil(supplyDropPosition == supplyDropLandingPosition, 99999)
     stopChasing(supplyDropPosition)
-    playEffect(getPlayers(Team.1), DynamicEffect.RING_EXPLOSION, Color.AQUA, supplyDropLanding, 4)
-    playEffect(getPlayers(Team.1), DynamicEffect.RING_EXPLOSION_SOUND, Color.WHITE, supplyDropLanding, 50)
+    playEffect(getPlayers(Team.1), DynamicEffect.RING_EXPLOSION, Color.AQUA, supplyDropLandingPosition, 4)
+    playEffect(getPlayers(Team.1), DynamicEffect.RING_EXPLOSION_SOUND, Color.WHITE, supplyDropLandingPosition, 50)
     wait(10, Wait.RESTART_WHEN_TRUE)
-    if len(powerUpPositions) < 12:
+    if len(supplyPowerUpPositionList) < 12:
         loop()
 
 
@@ -57,21 +57,21 @@ rule "EFFECT/TEXT (GLOBAL)":
     @Condition isGameplayActive == true
     
     #Closed supply drop orb
-    createEffect(getAllPlayers().filter(lambda _: supplyDropLanding != null and not supplyDropStatus), Effect.ORB, Color.AQUA, supplyDropPosition, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    createEffect(getAllPlayers().filter(lambda _: supplyDropLandingPosition != null and not isSupplyDropOpen), Effect.ORB, Color.AQUA, supplyDropPosition, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     #Falling supply drop aura
-    createEffect(getAllPlayers().filter(lambda _: supplyDropLanding != null and supplyDropPosition != null and distance(supplyDropLanding, supplyDropPosition) > 1), Effect.BAD_AURA, Color.AQUA, supplyDropPosition, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    createEffect(getAllPlayers().filter(lambda _: supplyDropLandingPosition != null and supplyDropPosition != null and distance(supplyDropLandingPosition, supplyDropPosition) > 1), Effect.BAD_AURA, Color.AQUA, supplyDropPosition, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     #Open supply drop sphere
-    createEffect(getAllPlayers().filter(lambda _: supplyDropLanding != null and supplyDropStatus), Effect.SPHERE, Color.AQUA, supplyDropPosition, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    createEffect(getAllPlayers().filter(lambda _: supplyDropLandingPosition != null and isSupplyDropOpen), Effect.SPHERE, Color.AQUA, supplyDropPosition, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     #Supply drop landing ring
-    createEffect(getAllPlayers().filter(lambda _: supplyDropLanding != null), Effect.RING, Color.AQUA, supplyDropLanding, 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    createEffect(getAllPlayers().filter(lambda _: supplyDropLandingPosition != null), Effect.RING, Color.AQUA, supplyDropLandingPosition, 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     #Open supply drop text
-    createInWorldText(getLivingPlayers(Team.1).filter(lambda player: supplyDropLanding != null and distance(supplyDropLanding, supplyDropPosition) < 1 and not supplyDropStatus and distance(player.getPosition(), supplyDropLanding) <= 6 and distance(supplyDropLanding, player.getEyePosition() + player.getFacingDirection() * distance(player.getEyePosition(), supplyDropLanding)) < 0.5), "[{0}]".format(inputBindingString(Button.INTERACT)), supplyDropPosition + vect(0, 1, 0), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.BLUE)
+    createInWorldText(getLivingPlayers(Team.1).filter(lambda player: supplyDropLandingPosition != null and distance(supplyDropLandingPosition, supplyDropPosition) < 1 and not isSupplyDropOpen and distance(player.getPosition(), supplyDropLandingPosition) <= 6 and distance(supplyDropLandingPosition, player.getEyePosition() + player.getFacingDirection() * distance(player.getEyePosition(), supplyDropLandingPosition)) < 0.5), "[{0}]".format(inputBindingString(Button.INTERACT)), supplyDropPosition + vect(0, 1, 0), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.BLUE)
     #Pick up power up text
-    createInWorldText(localPlayer if len(powerUpPositions.filter(lambda x: distance(x, localPlayer.getEyePosition() + localPlayer.getFacingDirection() * distance(localPlayer.getEyePosition(), x)) < 0.5 and distance(localPlayer.getPosition(), x) <= 6)) else null, "[{0}]".format(inputBindingString(Button.INTERACT)), offsetUpHalfConst + ((sorted(powerUpPositions.filter(lambda x: distance(x, localPlayer.getEyePosition() + localPlayer.getFacingDirection() * distance(localPlayer.getEyePosition(), x)) < 0.5 and distance(localPlayer.getPosition(), x) <= 6), lambda x: angleBetweenVectors(localPlayer.getFacingDirection(), directionTowards(localPlayer.getEyePosition(), x))))[0]), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.GREEN)
+    createInWorldText(localPlayer if len(supplyPowerUpPositionList.filter(lambda x: distance(x, localPlayer.getEyePosition() + localPlayer.getFacingDirection() * distance(localPlayer.getEyePosition(), x)) < 0.5 and distance(localPlayer.getPosition(), x) <= 6)) else null, "[{0}]".format(inputBindingString(Button.INTERACT)), offsetUpHalfConst + ((sorted(supplyPowerUpPositionList.filter(lambda x: distance(x, localPlayer.getEyePosition() + localPlayer.getFacingDirection() * distance(localPlayer.getEyePosition(), x)) < 0.5 and distance(localPlayer.getPosition(), x) <= 6), lambda x: angleBetweenVectors(localPlayer.getFacingDirection(), directionTowards(localPlayer.getEyePosition(), x))))[0]), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.GREEN)
     #Supply drop landing icon
-    createIcon(getAllPlayers().filter(lambda player: supplyDropLanding != null and distance(player.getPosition(), supplyDropPosition) > 5), supplyDropPosition + vect(0, 1, 0), Icon.PLUS, IconReeval.VISIBILITY_AND_POSITION, Color.AQUA)
+    createIcon(getAllPlayers().filter(lambda player: supplyDropLandingPosition != null and distance(player.getPosition(), supplyDropPosition) > 5), supplyDropPosition + vect(0, 1, 0), Icon.PLUS, IconReeval.VISIBILITY_AND_POSITION, Color.AQUA)
     #Supply drop distance
-    createInWorldText(getAllPlayers().filter(lambda player: supplyDropLanding != null and distance(player.getPosition(), supplyDropPosition) > 5), "Supply Drop: {0}m".format(distance(localPlayer.getPosition(), supplyDropPosition)), supplyDropPosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.AQUA, SpecVisibility.NEVER)
+    createInWorldText(getAllPlayers().filter(lambda player: supplyDropLandingPosition != null and distance(player.getPosition(), supplyDropPosition) > 5), "Supply Drop: {0}m".format(distance(localPlayer.getPosition(), supplyDropPosition)), supplyDropPosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.AQUA, SpecVisibility.NEVER)
 
 
 rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)":
@@ -82,42 +82,42 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
     @Condition isGameplayActive == true
     @Condition eventPlayer.isDummy() == false
     
-    if distance(supplyDropLanding, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), supplyDropLanding)) < 0.5 and not supplyDropStatus and distance(eventPlayer.getPosition(), supplyDropLanding) <= 6 and supplyDropLanding != null and distance(supplyDropLanding, supplyDropPosition) < 1:
-        supplyDropStatus = true
+    if distance(supplyDropLandingPosition, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), supplyDropLandingPosition)) < 0.5 and not isSupplyDropOpen and distance(eventPlayer.getPosition(), supplyDropLandingPosition) <= 6 and supplyDropLandingPosition != null and distance(supplyDropLandingPosition, supplyDropPosition) < 1:
+        isSupplyDropOpen = true
         playEffect(getPlayers(Team.1), DynamicEffect.GOOD_EXPLOSION, Color.AQUA, supplyDropPosition, 0.5)
         playEffect(getPlayers(Team.1), DynamicEffect.BUFF_EXPLOSION_SOUND, Color.AQUA, supplyDropPosition, 50)
         #Power ups per supply drop
         # tmp0: item counter, to append the configured number of random power-up IDs.
-        for tmp0 in range(numberOfPowerUpsPerSupplyDrop):
+        for tmp0 in range(supplyDropPowerUpCount):
             #Range of power ups
-            powerUpIDs.append(random.randint(1, 13))
+            supplyPowerUpIdList.append(random.randint(1, 13))
         #Spacing of power ups
         # tmp0: item angle offset in degrees, to spread the opened supply drop's items toward the player.
-        for tmp0 in range(-60, 61, 120 / (numberOfPowerUpsPerSupplyDrop - 1)):
-            powerUpPositions.append(supplyDropLanding + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(supplyDropLanding, eventPlayer.getPosition())) + tmp0, 0)) * 2))
-    elif len(powerUpPositions) > 0 and ((len(powerUpPositions.filter(lambda x: distance(x, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), x)) < 0.5 and distance(eventPlayer.getPosition(), x) <= 6))) > 0):
+        for tmp0 in range(-60, 61, 120 / (supplyDropPowerUpCount - 1)):
+            supplyPowerUpPositionList.append(supplyDropLandingPosition + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(supplyDropLandingPosition, eventPlayer.getPosition())) + tmp0, 0)) * 2))
+    elif len(supplyPowerUpPositionList) > 0 and ((len(supplyPowerUpPositionList.filter(lambda x: distance(x, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), x)) < 0.5 and distance(eventPlayer.getPosition(), x) <= 6))) > 0):
         #Power up effect position
-        eventPlayer.powerUpTradeValues[0] = (sorted(powerUpPositions.filter(lambda x: distance(x, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), x)) < 0.5 and distance(eventPlayer.getPosition(), x) <= 6), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x))))[0]
+        eventPlayer.powerUpTradeValues[0] = (sorted(supplyPowerUpPositionList.filter(lambda x: distance(x, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), x)) < 0.5 and distance(eventPlayer.getPosition(), x) <= 6), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x))))[0]
         #Current power up (or 0 if no current power up)
         eventPlayer.powerUpTradeValues[2] = eventPlayer.currentPowerUp
         wait()
         #Index of position of current power up being aquired
-        eventPlayer.powerUpTradeIndex = powerUpPositions.index(eventPlayer.powerUpTradeValues[0])
+        eventPlayer.powerUpTradeIndex = supplyPowerUpPositionList.index(eventPlayer.powerUpTradeValues[0])
         wait()
         #Pick up power up
-        eventPlayer.currentPowerUp = powerUpIDs[eventPlayer.powerUpTradeIndex]
-        destroyEffect(powerUpEffect[eventPlayer.powerUpTradeIndex])
-        destroyInWorldText(powerUpText[eventPlayer.powerUpTradeIndex])
+        eventPlayer.currentPowerUp = supplyPowerUpIdList[eventPlayer.powerUpTradeIndex]
+        destroyEffect(supplyPowerUpEffectIdList[eventPlayer.powerUpTradeIndex])
+        destroyInWorldText(supplyPowerUpTextIdList[eventPlayer.powerUpTradeIndex])
         wait()
-        del powerUpIDs[eventPlayer.powerUpTradeIndex]
-        del powerUpPositions[eventPlayer.powerUpTradeIndex]
-        del powerUpEffect[eventPlayer.powerUpTradeIndex]
-        del powerUpText[eventPlayer.powerUpTradeIndex]
+        del supplyPowerUpIdList[eventPlayer.powerUpTradeIndex]
+        del supplyPowerUpPositionList[eventPlayer.powerUpTradeIndex]
+        del supplyPowerUpEffectIdList[eventPlayer.powerUpTradeIndex]
+        del supplyPowerUpTextIdList[eventPlayer.powerUpTradeIndex]
         wait()
         #Trade power ups. Ignore if no power up is currently held.
         if eventPlayer.powerUpTradeValues[2] != 0:
-            powerUpIDs.append(eventPlayer.powerUpTradeValues[2])
-            powerUpPositions.append(eventPlayer.powerUpTradeValues[0])
+            supplyPowerUpIdList.append(eventPlayer.powerUpTradeValues[2])
+            supplyPowerUpPositionList.append(eventPlayer.powerUpTradeValues[0])
     elif eventPlayer.currentPowerUp != 0:
         wait(0.25, Wait.ABORT_WHEN_FALSE)
         powerUpUsage()
@@ -425,11 +425,11 @@ def stun():
     #Number of bounces
     for eventPlayer.pStunCount in range(50, 0, -1):
         if eventPlayer.stunTarget == null:
-            if eventPlayer.pStunCount > 13 and not eventPlayer.stunOrigin in bosses:
+            if eventPlayer.pStunCount > 13 and not eventPlayer.stunOrigin in bossStateList:
                 eventPlayer.stunOrigin.setStatusEffect(eventPlayer, Status.STUNNED, eventPlayer.pStunCount / 8.3)
             break
         waitUntil(distance(eventPlayer.pStunChase1, eventPlayer.stunTarget.getPosition() + losOffsetConst) < 0.1, 3)
-        eventPlayer.stunTarget.setStatusEffect(eventPlayer, Status.STUNNED, 0.5 if eventPlayer.stunTarget in bosses else 1.5)
+        eventPlayer.stunTarget.setStatusEffect(eventPlayer, Status.STUNNED, 0.5 if eventPlayer.stunTarget in bossStateList else 1.5)
         playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.WHITE, eventPlayer.stunTarget, 0.5)
         playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.stunTarget.getPosition(), 50)
         wait()

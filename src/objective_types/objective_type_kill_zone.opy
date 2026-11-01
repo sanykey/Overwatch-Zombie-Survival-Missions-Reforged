@@ -10,9 +10,9 @@ rule "MODIFY KILL ZONE SCORE":
         victim.reviveTimer = 2
         objectiveCaptureValue += ceil(victim.health / 280)
         if objectiveCaptureValue >= ELIMINATIONS_NEEDED_PER_OBJECTIVE:
-            objectiveComplete = true
+            isObjectiveComplete = true
             #Give all bots a long respawn time
             getPlayers(Team.2).reviveTimer = 12
-            spawnTimes = spawnTimes.map(lambda _: 12)
+            botSpawnTimeList = botSpawnTimeList.map(lambda _: 12)
     #Adjust Kill Zone Positions
     objectiveChase1 += 0.5 * directionTowards(objectiveChase1, victim.getPosition())
