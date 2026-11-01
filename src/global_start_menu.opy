@@ -11,7 +11,6 @@ rule "GLOBAL MENU INITIALIZATION":
     @Condition len(mapGrid) > 0
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
-    startCamDistance = 6.5
     if specialGameMode:
         if getCurrentGamemode() == Gamemode.CTF or getCurrentGamemode() == Gamemode.PUSH:
             startPos = walkCenter + directionFromAngles(random.uniform(0, 360), 0) * 300 + vect(0, 15, 0)
@@ -19,7 +18,7 @@ rule "GLOBAL MENU INITIALIZATION":
             startPos = walkCenter + directionFromAngles(random.uniform(0, 360), 0) * 300 + vect(0, 100, 0)
         else:
             startPos = walkCenter + directionFromAngles(random.uniform(0, 360), 0) * 150 + vect(0, 30, 0)
-        startCamPos = startPos + vect(0, 1.5, 0) + directionFromAngles(horizontalAngleOfDirection(directionTowards(walkCenter, startPos)), 0) * startCamDistance
+        startCamPos = startPos + vect(0, 1.5, 0) + directionFromAngles(horizontalAngleOfDirection(directionTowards(walkCenter, startPos)), 0) * START_CAM_DISTANCE
         wait()
         createDummy(Hero.REAPER, Team.2, -1, nearestWalkablePosition(startPos), Vector.FORWARD)
         wait()
@@ -35,16 +34,16 @@ rule "GLOBAL MENU INITIALIZATION":
                     startPos = vect(-0.27, 0.49, 83.6)
                     startCamPos = vect(-0.19, 2, 90.1)
                     goto lbl_0
-            startCamPos = startPos + vect(0, 1.5, 0) + directionFromAngles(random.uniform(0, 360), 0) * startCamDistance
+            startCamPos = startPos + vect(0, 1.5, 0) + directionFromAngles(random.uniform(0, 360), 0) * START_CAM_DISTANCE
             startCamPos = raycastHitPosition(startCamPos, startCamPos - vect(0, 5, 0), null, null, false) + vect(0, 1.5, 0)
             startPos = vect(startPos.x, startCamPos.y - 1.5, startPos.z)
             startPos = raycastHitPosition(startPos + vect(0, 0.4, 0), startPos - vect(0, 5, 0), null, null, false)
             startPos = raycastHitPosition(startCamPos - offsetUpThreeQuartersConst, startPos + offsetUpThreeQuartersConst, null, null, false) - offsetUpThreeQuartersConst
-            startCamPos = startPos + vect(0, 1.5, 0) + directionFromAngles(horizontalAngleOfDirection(directionTowards(startPos, startCamPos)), 0) * startCamDistance
+            startCamPos = startPos + vect(0, 1.5, 0) + directionFromAngles(horizontalAngleOfDirection(directionTowards(startPos, startCamPos)), 0) * START_CAM_DISTANCE
             #Line of Sight Checks for each player position
             # tmp0: horizontal angle offset in degrees, to test visibility of each menu position.
             for tmp0 in range(-26, 27, 2):
-                if not isInLoS(startCamPos, startCamPos + vect(0, -0.75, 0) + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + tmp0, 0)) * startCamDistance)) or not isInLoS(startCamPos + vect(0, -0.75, 0) + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + tmp0, 0)) * startCamDistance), startCamPos):
+                if not isInLoS(startCamPos, startCamPos + vect(0, -0.75, 0) + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + tmp0, 0)) * START_CAM_DISTANCE)) or not isInLoS(startCamPos + vect(0, -0.75, 0) + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + tmp0, 0)) * START_CAM_DISTANCE), startCamPos):
                     startPos = null
                     break
             wait()
@@ -352,7 +351,6 @@ def determineChallenge():
     if challengeSetting == 0:
         challengeSetting = 1
     startRule(determineObjectiveType)
-    startTime = 300
 
 
 def determineObjectiveType():

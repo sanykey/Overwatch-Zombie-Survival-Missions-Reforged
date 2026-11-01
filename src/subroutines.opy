@@ -325,7 +325,7 @@ macro globalObjectiveEntityManagementMacro():
     #Killzone
     elif objectiveValue == ObjectiveType.KILL_ZONE:
         #Kill Zone Progress Bar
-        progressBarHud(getAllPlayers(), objectiveCaptureValue / eliminationsNeededPerObjective * 100, "Kill Zone Elimination Progress", HudPosition.TOP, 2, Color.RED, Color.RED, ProgressHudReeval.VISIBILITY_AND_VALUES)
+        progressBarHud(getAllPlayers(), objectiveCaptureValue / ELIMINATIONS_NEEDED_PER_OBJECTIVE * 100, "Kill Zone Elimination Progress", HudPosition.TOP, 2, Color.RED, Color.RED, ProgressHudReeval.VISIBILITY_AND_VALUES)
         objectiveEntities.append(getLastCreatedText())
         #Objectives Remaining Hud Text
         hudSubheader(getAllPlayers(), "Objectives Remaining: {0}".format(len(objectivePositions) - 1), HudPosition.TOP, 1, Color.RED, HudReeval.VISIBILITY)
@@ -621,7 +621,6 @@ def objectivesManagement():
             case ObjectiveType.KILL_ZONE:
                 objectiveDescription = "Clear the kill zone"
                 objectiveRad = 20
-                eliminationsNeededPerObjective = 50
                 objectiveChase1 = objectivePositions[0]
                 bigMessage(getAllPlayers(), "Get to the kill zone and clear zombies!")
                 objectiveCaptureValue = 0

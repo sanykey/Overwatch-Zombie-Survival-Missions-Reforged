@@ -9,7 +9,7 @@ rule "MODIFY KILL ZONE SCORE":
     if distance(eventPlayer.getPosition(), objectiveChase1) < objectiveRad or distance(victim.getPosition(), objectiveChase1) < objectiveRad:
         victim.reviveTimer = 2
         objectiveCaptureValue += ceil(victim.health / 280)
-        if objectiveCaptureValue >= eliminationsNeededPerObjective:
+        if objectiveCaptureValue >= ELIMINATIONS_NEEDED_PER_OBJECTIVE:
             objectiveComplete = true
             #Give all bots a long respawn time
             getPlayers(Team.2).reviveTimer = 12

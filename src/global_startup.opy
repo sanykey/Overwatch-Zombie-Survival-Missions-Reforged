@@ -241,7 +241,6 @@ rule "VARIABLE ASSIGNMENT":
     objectivePositions = []
     objectiveTypes = []
     objectiveRad = 10
-    reviveRadius = 5
     mustReviveTime = 60
     playersOnObjective = []
     supplyDropStatus = true
@@ -285,7 +284,7 @@ rule "START GAME":
     destroyAllIcons()
     destroyAllInWorldTexts()
     wait(0.25)
-    setMatchTime(startTime + matchEndTime)
+    setMatchTime(START_TIME + matchEndTime)
     unpauseMatchTime()
     #Disabled survivor spawn room healing zone
     startForcingSpawn(Team.1, Color.BLUE)

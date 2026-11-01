@@ -126,7 +126,7 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
 def instantRevive():
     @Name "instantRevive (0-9)"
     
-    eventPlayer.interactEntity = (sorted(getDeadPlayers(Team.1).filter(lambda player: distance(eventPlayer.getPosition(), player.getPosition()) <= reviveRadius), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getPosition()))))[0]
+    eventPlayer.interactEntity = (sorted(getDeadPlayers(Team.1).filter(lambda player: distance(eventPlayer.getPosition(), player.getPosition()) <= REVIVE_RADIUS), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getPosition()))))[0]
     wait()
     eventPlayer.interactEntity.setStatusEffect(null, Status.INVINCIBLE, 5)
     eventPlayer.interactEntity.resurrect()
@@ -459,7 +459,7 @@ def powerUpUsage():
             break
         #Instant Revive
         case 2:
-            if len(getDeadPlayers(Team.1).filter(lambda player: distance(eventPlayer.getPosition(), player.getPosition()) <= reviveRadius)) == 0:
+            if len(getDeadPlayers(Team.1).filter(lambda player: distance(eventPlayer.getPosition(), player.getPosition()) <= REVIVE_RADIUS)) == 0:
                 return
             startRule(instantRevive)
             break

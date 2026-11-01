@@ -116,7 +116,7 @@ rule "EFFECTS/TEXTS":
     #Need revive text
     createInWorldText(getAllPlayers().filter(lambda _: eventPlayer.isDead() and eventPlayer.deathTimer > 0), "Reviving: {0}s".format(ceil(eventPlayer.reviveTimer)) if eventPlayer.reviving else "Revive: {0}s".format(ceil(eventPlayer.deathTimer)), eventPlayer.getPosition() + vect(0, 1.5, 0), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.YELLOW if eventPlayer.reviving else Color.RED)
     #Reviving ring
-    createEffect(getAllPlayers().filter(lambda _: eventPlayer.reviving), Effect.RING, Color.YELLOW, eventPlayer.getPosition(), reviveRadius, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    createEffect(getAllPlayers().filter(lambda _: eventPlayer.reviving), Effect.RING, Color.YELLOW, eventPlayer.getPosition(), REVIVE_RADIUS, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     #Health Hud text
     hudText(getAllPlayers().filter(lambda _: eventPlayer.deathTimer > 0 and not eventPlayer.afk), "{0}{1}: {2}".format("Winston" if gameSmolderEvent else eventPlayer, heroIcon(Hero.WINSTON) if gameSmolderEvent else heroIcon(eventPlayer.getHero()), "{0}%".format(ceil(eventPlayer.getNormalizedHealth() * 100)) if eventPlayer.isAlive() else "DOWN"), "Revive: {0}s".format(ceil(eventPlayer.deathTimer)) if eventPlayer.isDead() and not eventPlayer.reviving else [], ("{1}Infection Level: {0}".format(floor(eventPlayer.infectionLvl), iconString(Icon.POISON) if eventPlayer.enhancementId == Enhancement.ZOMBIE_HYBRID else [])) if eventPlayer.infectionLvl >= 1 else "Vaccine Level: {0}".format(abs(floor(eventPlayer.infectionLvl))) if eventPlayer.infectionLvl < 0 else "Reviving: {0}s".format(ceil(eventPlayer.reviveTimer)) if eventPlayer.reviving else [], HudPosition.LEFT, 0 if eventPlayer.getNormalizedHealth() > 0.97 else 1 / (eventPlayer.getNormalizedHealth() + 1), Color.BLUE if eventPlayer.getNormalizedHealth() > 0.97 else Color.GREEN if eventPlayer.getNormalizedHealth() > 0.66 else Color.YELLOW if eventPlayer.getNormalizedHealth() > 0.33 else Color.ORANGE if eventPlayer.getNormalizedHealth() > 0 else Color.RED, Color.RED, Color.LIME_GREEN if eventPlayer.infectionLvl >= 1 else Color.BLUE if eventPlayer.infectionLvl < 0 else Color.YELLOW)
 
@@ -152,10 +152,10 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
     
     #0) Downed/Dead status, 1) Death timer, 2) Revive timer, 3) Revive start time, 4) Downed position
     globalPlayerStats[eventPlayer.userIndex] = [1, eventPlayer.deathTimer, eventPlayer.reviveTimer, eventPlayer.reviveStartTime, eventPlayer.getPosition()]
-    waitUntil(not eventPlayer.reviving and playerTargetList.exclude(eventPlayer).filter(lambda x: not x.invisible).any(lambda x: distance(x.getPosition(), eventPlayer.getPosition()) < reviveRadius), 0.5)
-    if playerTargetList.exclude(eventPlayer).filter(lambda x: not x.invisible).any(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < reviveRadius):
+    waitUntil(not eventPlayer.reviving and playerTargetList.exclude(eventPlayer).filter(lambda x: not x.invisible).any(lambda x: distance(x.getPosition(), eventPlayer.getPosition()) < REVIVE_RADIUS), 0.5)
+    if playerTargetList.exclude(eventPlayer).filter(lambda x: not x.invisible).any(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < REVIVE_RADIUS):
         eventPlayer.reviving = true
-        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.YELLOW, eventPlayer.getPosition(), reviveRadius * 2)
+        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.YELLOW, eventPlayer.getPosition(), REVIVE_RADIUS * 2)
         eventPlayer.reviveTimer += -0.5
         if eventPlayer.deathTimer < 70:
             eventPlayer.deathTimer += 0.5

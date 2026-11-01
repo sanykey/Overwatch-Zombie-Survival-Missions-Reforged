@@ -3,8 +3,12 @@
 #!define BOT_MAX_TELEPORT_RANGE 40
 #!define BIOMORPHING_RESOURCE_AMOUNT 25
 #!define CURRENT_OBJECTIVE_TYPE objectiveTypes[0]
+#!define ELIMINATIONS_NEEDED_PER_OBJECTIVE 50
 #!define LASER_BARRICADE_HEIGHT 2
 #!define LASER_BARRICADE_WIDTH 5
+#!define REVIVE_RADIUS 5
+#!define START_CAM_DISTANCE 6.5
+#!define START_TIME 300
 #!define VOTING_END_TIME 30
 
 # Enhancement IDs also index enhancementOptions and the default-setting choices.
@@ -86,12 +90,10 @@ globalvar testPos
 globalvar testPos2
 globalvar objectiveTypes
 globalvar objectiveRad
-globalvar reviveRadius
 globalvar botHeros
 globalvar chase1
 globalvar gameSmolderEvent
 globalvar isGameplayActive # Formerly gameStatus in the original mod
-globalvar startTime
 globalvar mustReviveTime
 globalvar supplyDropLanding
 globalvar supplyDropPosition
@@ -103,7 +105,6 @@ globalvar powerUpEffect
 globalvar startCamPos
 globalvar botSpawnRates
 globalvar startMenuSpacingAngle
-globalvar startCamDistance
 globalvar overtime
 globalvar challengeVotes
 globalvar difficultySetting
@@ -122,7 +123,6 @@ globalvar zombieVotes
 globalvar globalPlayerStats
 globalvar objectiveTypeVotes
 globalvar objectiveTypeSetting
-globalvar eliminationsNeededPerObjective
 globalvar healthpackPositions
 globalvar miniBoss
 globalvar mapGrid

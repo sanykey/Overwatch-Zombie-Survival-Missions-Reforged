@@ -23,7 +23,7 @@ rule "PLAYER MENU INITIALIZATION":
         eventPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] = difficultySetting
         eventPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] = zombieSetting
         eventPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] = objectiveTypeSetting
-    eventPlayer.startPos = startCamPos + vect(0, -1.5, 0) + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + startMenuSpacingAngle + (eventPlayer.getSlot() * (startMenuSpacingAngle * -2 / (max(getNumberOfSlots(Team.1) - 1, 1)))), 0)) * startCamDistance)
+    eventPlayer.startPos = startCamPos + vect(0, -1.5, 0) + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + startMenuSpacingAngle + (eventPlayer.getSlot() * (startMenuSpacingAngle * -2 / (max(getNumberOfSlots(Team.1) - 1, 1)))), 0)) * START_CAM_DISTANCE)
     if not specialGameMode:
         eventPlayer.startPos = raycastHitPosition(eventPlayer.startPos + vect(0, 3, 0), eventPlayer.startPos, getAllPlayers(), getAllPlayers(), false)
     enableDisableAbilities()
