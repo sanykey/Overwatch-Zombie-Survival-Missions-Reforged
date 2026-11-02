@@ -1,7 +1,7 @@
 {
-  "elements": 27211,
-  "globals": 99,
-  "playerVariables": 74,
+  "elements": 26834,
+  "globals": 103,
+  "playerVariables": 75,
   "warnings": [],
   "method": "Backward scratch liveness in compiled Workshop control flow, including expanded macros, branches, loops, skips and implicit trailing Ends. Calls are conservative boundaries. Reevaluated HUD/effect/icon fields are checked for uncaptured scratch references. No in-game validation.",
   "rules": [
@@ -13,7 +13,7 @@
     },
     {
       "name": "objectivesManagement",
-      "controlFlowNodes": 220,
+      "controlFlowNodes": 222,
       "boundaries": 3,
       "visualActions": 5
     },
@@ -37,7 +37,7 @@
     },
     {
       "name": "VARIABLE ASSIGNMENT",
-      "controlFlowNodes": 48,
+      "controlFlowNodes": 50,
       "boundaries": 2,
       "visualActions": 0
     },
@@ -49,7 +49,7 @@
     },
     {
       "name": "GLOBAL MENU INITIALIZATION",
-      "controlFlowNodes": 45,
+      "controlFlowNodes": 48,
       "boundaries": 4,
       "visualActions": 0
     },
@@ -61,7 +61,7 @@
     },
     {
       "name": "determineZombieMode",
-      "controlFlowNodes": 21,
+      "controlFlowNodes": 24,
       "boundaries": 2,
       "visualActions": 0
     },
@@ -79,7 +79,7 @@
     },
     {
       "name": "determineObjectiveType",
-      "controlFlowNodes": 28,
+      "controlFlowNodes": 31,
       "boundaries": 1,
       "visualActions": 0
     },
@@ -87,6 +87,12 @@
       "name": "randomActions",
       "controlFlowNodes": 21,
       "boundaries": 1,
+      "visualActions": 0
+    },
+    {
+      "name": "WIN/LOSS CONDITIONS",
+      "controlFlowNodes": 57,
+      "boundaries": 11,
       "visualActions": 0
     },
     {
@@ -145,8 +151,8 @@
     },
     {
       "name": "teleportBots",
-      "controlFlowNodes": 63,
-      "boundaries": 9,
+      "controlFlowNodes": 61,
+      "boundaries": 10,
       "visualActions": 0
     },
     {
@@ -157,7 +163,7 @@
     },
     {
       "name": "BASIC (REAPER) SHADOW STEP (BOSS)",
-      "controlFlowNodes": 35,
+      "controlFlowNodes": 33,
       "boundaries": 7,
       "visualActions": 0
     },
@@ -175,7 +181,7 @@
     },
     {
       "name": "PRIME SLIMER (EMRE) FLIGHT (BOSS)",
-      "controlFlowNodes": 48,
+      "controlFlowNodes": 46,
       "boundaries": 12,
       "visualActions": 0
     },
@@ -223,7 +229,7 @@
     },
     {
       "name": "EFFECT/TEXT (PERMANENT)",
-      "controlFlowNodes": 4,
+      "controlFlowNodes": 3,
       "boundaries": 0,
       "visualActions": 1
     },

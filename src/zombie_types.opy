@@ -26,7 +26,7 @@ rule "BASIC (REAPER) SHADOW STEP (BOSS)":
     @Condition eventPlayer.isCrowdControlled != true
     @Condition eventPlayer in bossStateList == true
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_2) <= 0
-    @Condition abs(angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()))) < 20
+    @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 20
     
     eventPlayer.setPrimaryFireEnabled(false)
     eventPlayer.forceButtonPress(Button.ABILITY_2)
@@ -89,7 +89,7 @@ rule "RUSHER (TORB) SPEED MECHANICS":
     @Condition eventPlayer.isOnGround() == true
     @Condition eventPlayer.getThrottle() != vect(0, 0, 0)
     @Condition eventPlayer in bossStateList == false
-    @Condition abs(angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()))) < 45
+    @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 45
     
     eventPlayer.applyImpulse(vect(0, 1, 3), 10, Relativity.TO_PLAYER, Impulse.INCORPORATE_CONTRARY_MOTION)
     wait(0.5)
@@ -311,7 +311,7 @@ rule "BRUTE FIRE STRIKE (BOSS)":
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer in bossStateList == true
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()) > 5 * eventPlayer.sizeScale
-    @Condition abs(angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()))) < 20
+    @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 20
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.setAbilityCharge(Button.ABILITY_2, 2)
@@ -329,7 +329,7 @@ rule "REIGNITED (ANRAN) ABILITIES":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer in bossStateList == false
     @Condition eventPlayer.botTarget != null
-    @Condition (eventPlayer.isOnGround() and eventPlayer.botTarget != null and distance(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()) > 6 * eventPlayer.sizeScale and distance(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()) < 30 * eventPlayer.sizeScale and abs(angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()))) < 20 or eventPlayer.isUsingUltimate()) == true
+    @Condition (eventPlayer.isOnGround() and eventPlayer.botTarget != null and distance(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()) > 6 * eventPlayer.sizeScale and distance(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()) < 30 * eventPlayer.sizeScale and angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 20 or eventPlayer.isUsingUltimate()) == true
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.botIsThrottleOverridden = true
@@ -490,7 +490,7 @@ rule "RIDER USE GRAPPLING HOOK":
     @Condition eventPlayer.botIsAttached != true
     @Condition eventPlayer.botTarget.isOnGround() == true
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
-    @Condition abs(angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()))) < 20
+    @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 20
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.botTarget.getPosition()) < 20
     @Condition distance(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()) > 5
     
@@ -526,7 +526,7 @@ rule "CHARGER (MAUGA) CHARGE":
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
     @Condition eventPlayer.isUsingAbility1() == false
     @Condition eventPlayer.getThrottle() != vect(0, 0, 0)
-    @Condition abs(angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()))) < 35
+    @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 35
     @Condition (distance(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()) < 5 or verticalAngleOfDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition())) > -35) == true
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
@@ -582,7 +582,7 @@ rule "SLIMER (MERCY) TENTACLE GRAB":
     @Condition eventPlayer.botIsThrottleOverridden != true
     @Condition eventPlayer.isUsingUltimate() != true
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()) < 20 * eventPlayer.sizeScale
-    @Condition abs(angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()))) < 20
+    @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 20
     
     wait(0.016 if eventPlayer.isUsingUltimate() else 0.5, Wait.ABORT_WHEN_FALSE)
     eventPlayer.botIsThrottleOverridden = true
@@ -696,7 +696,7 @@ rule "STRIKER (WRECKING BALL) PILE DRIVER":
     @Condition eventPlayer.hasStatus(Status.ROOTED) == false
     @Condition eventPlayer.getAbilityCooldown(Button.CROUCH) <= 0
     @Condition distance(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()) < 15 * eventPlayer.sizeScale
-    @Condition abs(angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()))) < 35
+    @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 35
     @Condition (eventPlayer.getAltitude() > 3 or eventPlayer.isOnGround() and isInLoS(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + 3 * Vector.UP)) == true
     
     wait(0.125, Wait.ABORT_WHEN_FALSE)
@@ -751,7 +751,7 @@ rule "STALKER (MOIRA) FADE":
     @Condition eventPlayer.isCrowdControlled != true
     @Condition eventPlayer.botIsWallCollisionEnabled == true
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) <= 0
-    @Condition abs(angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()))) < 45
+    @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 45
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.botIsFacingOverridden = true
@@ -974,7 +974,7 @@ rule "GLADIATOR (JUNKERQUEEN) COMMAND SHOUT":
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isOnGround() == true
-    @Condition abs(angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()))) < 20
+    @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 20
     @Condition distance(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()) > 4 * eventPlayer.sizeScale
     @Condition distance(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()) < 30 * eventPlayer.sizeScale
     
@@ -1086,7 +1086,7 @@ rule "TUNNELER (SYMMETRA) BUILDS PORTAL":
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isOnGround() == true
-    @Condition abs(angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()))) < 20
+    @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 20
     @Condition distance(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()) > 4 * eventPlayer.sizeScale
     @Condition distance(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()) < 30 * eventPlayer.sizeScale
     @Condition eventPlayer.botTarget.isOnGround() == true
@@ -1137,7 +1137,7 @@ rule "ENSNARER (HAZARD) BLOCKS PLAYERS":
     @Hero hazard
     @Condition (eventPlayer in bossStateList or not eventPlayer.botAbilityCooldown) == true
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()) < 20 * eventPlayer.sizeScale
-    @Condition abs(angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()))) < 20
+    @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 20
     @Condition eventPlayer.botIsEnsnarerMeleeActive != true
     
     if eventPlayer in bossStateList:
@@ -1171,7 +1171,7 @@ rule "ENSNARER LUNGE":
     @Team 2
     @Hero hazard
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()) < 20 * eventPlayer.sizeScale
-    @Condition abs(angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()))) < 30
+    @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 30
     @Condition eventPlayer.botTarget.getSpeed() >= 10
     @Condition eventPlayer.botIsEnsnarerMeleeActive != true
     @Condition eventPlayer.botIsEnsnarerBlocking != true
@@ -1369,7 +1369,7 @@ rule "BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isOnGround() == true
-    @Condition abs(angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()))) < 20
+    @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 20
     @Condition distance(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()) < 30 * eventPlayer.sizeScale
     @Condition eventPlayer in miniBossList == true
     @Condition eventPlayer.getHero() in [Hero.REINHARDT, Hero.JUNKER_QUEEN, Hero.KIRIKO, Hero.DOOMFIST, Hero.HAZARD] == true

@@ -5,6 +5,7 @@ subroutine determineZombieMode
 subroutine setZombieMode
 subroutine determineObjectiveType
 subroutine setObjectiveType
+subroutine selectVoteWinner
 
 rule "GLOBAL MENU INITIALIZATION":
     @Condition isPregameSetup == true
@@ -275,6 +276,11 @@ rule "MUSIC/ANNOUNCER CONTROL":
         loop()
 
 
+# Synchronous helper inputs/result; consume them before any wait or asynchronous startRule.
+#!define voteWinnerCounts tmp1
+#!define voteWinnerResult tmp2
+#!define voteWinnerIndex tmp0
+
 def determineZombieMode():
     @Name "determineZombieMode"
     
@@ -286,14 +292,10 @@ def determineZombieMode():
             zombieVoteList[zombieModeVoteIndex] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameZombieVote == zombieModeVoteIndex))
         else:
             zombieVoteList[zombieModeVoteIndex] = -1
-    # zombieModeVoteIndex: candidate zombie-mode index, to select the winner and resolve tied vote counts.
-    for zombieModeVoteIndex in range(1, len(zombieVoteList)):
-        if zombieVoteList[zombieSetting] < zombieVoteList[zombieModeVoteIndex]:
-            zombieSetting = zombieModeVoteIndex
-        elif zombieVoteList[zombieSetting] == zombieVoteList[zombieModeVoteIndex]:
-            #Randomly pick mode to break tie
-            if zombieSetting != 0 and random.randint(0, 1) == 0:
-                zombieSetting = zombieModeVoteIndex
+    voteWinnerCounts = zombieVoteList
+    voteWinnerResult = zombieSetting
+    selectVoteWinner()
+    zombieSetting = voteWinnerResult
     #If all players choose no preference, randomize
     if zombieSetting == 0:
         zombieSetting = 1
@@ -385,14 +387,10 @@ def determineObjectiveType():
             objectiveTypeVoteList[objectiveTypeVoteIndex] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameObjectiveVote == objectiveTypeVoteIndex))
         else:
             objectiveTypeVoteList[objectiveTypeVoteIndex] = -1
-    # objectiveTypeVoteIndex: candidate objective-type index, to select the winner and resolve tied vote counts.
-    for objectiveTypeVoteIndex in range(ObjectiveType.SHOWDOWN, len(objectiveTypeVoteList)):
-        if objectiveTypeVoteList[objectiveTypeSetting] < objectiveTypeVoteList[objectiveTypeVoteIndex]:
-            objectiveTypeSetting = objectiveTypeVoteIndex
-        elif objectiveTypeVoteList[objectiveTypeSetting] == objectiveTypeVoteList[objectiveTypeVoteIndex]:
-            #Pick random objective type to break tie
-            if objectiveTypeSetting != ObjectiveType.NO_PREFERENCE and random.randint(0, 1) == 0:
-                objectiveTypeSetting = objectiveTypeVoteIndex
+    voteWinnerCounts = objectiveTypeVoteList
+    voteWinnerResult = objectiveTypeSetting
+    selectVoteWinner()
+    objectiveTypeSetting = voteWinnerResult
     #If all players choose no preference, randomize
     if objectiveTypeSetting == ObjectiveType.NO_PREFERENCE:
         if objectiveTypeVoteList[ObjectiveType.MIXED_OBJECTIVES] != -1:
@@ -402,6 +400,18 @@ def determineObjectiveType():
                 objectiveTypeSetting = random.randint(ObjectiveType.SHOWDOWN, len(objectiveTypeVoteList) - 1)
     isVoting = false
     startRule(setObjectiveType)
+
+
+def selectVoteWinner():
+    # Synchronous only: no waits, asynchronous work, nested calls or reevaluated readers of tmp0..2.
+    # Keep the original traversal and sequential coin flips; a uniform pick among tied options differs.
+    # Callers publish the result immediately, then handle their own no-preference defaults.
+    for voteWinnerIndex in range(1, len(voteWinnerCounts)):
+        if voteWinnerCounts[voteWinnerResult] < voteWinnerCounts[voteWinnerIndex]:
+            voteWinnerResult = voteWinnerIndex
+        elif voteWinnerCounts[voteWinnerResult] == voteWinnerCounts[voteWinnerIndex]:
+            if voteWinnerResult != 0 and random.randint(0, 1) == 0:
+                voteWinnerResult = voteWinnerIndex
 
 
 def setObjectiveType():

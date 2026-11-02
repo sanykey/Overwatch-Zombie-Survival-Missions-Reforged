@@ -8,7 +8,11 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **26,902 elements**, freeing up **5,362** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+The current OverPy 9.7.20 build uses **26,834 elements**, freeing up **5,430** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+
+- Extracted the Zombie Mode and Objective Type winner selection into the synchronous `selectVoteWinner`: **26,866 → 26,834 (−32 elements)**, without new variables. Its `tmp0..2` inputs and result are consumed before waits or asynchronous launches; the helper contains no waits, asynchronous actions or nested calls. The original loops, random tie-breaking conditions and separate no-preference defaults are preserved. `node analysis/verify-vote-winner.cjs` compares all 233 original compiled rules after substituting the helper body, checks scratch lifetimes and rejects four deliberately unsafe changes. In-game validation has not been performed. [Validation results](analysis/vote-winner-validation-2026-11-03.json).
+
+- Replaced two zombie-type cap conditional expressions with `max()` and removed 14 redundant `abs()` wrappers around nonnegative `angleBetweenVectors()` results: **26,896 → 26,866 (−30 elements)**, without new variables. All 233 compiled rules match after normalizing only these expressions; the build through includes was also verified. Gameplay thresholds are preserved; in-game validation has not been performed. [Validation results](analysis/low-risk-math-validation-2026-11-03.json).
 
 - Fixed the import error `Player variable '15' is too long`: the physical name `enhancementHitchhikerCarrierPoolId` (34 characters) was shortened to `enhancementCarrierPoolId`, with the old name retained as an alias. Build validation now checks the length of exported global variable, player variable, and subroutine names and reproduces the rejection of the old name. All 234 rules match after normalizing the rename, and the element budget is unchanged.
 

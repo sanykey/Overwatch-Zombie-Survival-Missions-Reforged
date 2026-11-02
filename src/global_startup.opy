@@ -54,7 +54,7 @@ macro botHeroRandomizationMacro():
     if isSmolderEventActive:
         createDummy(Hero.WINSTON, Team.2, -1, dummyHoldingPositionConst)
     #Determines if count of current different zombie types is less than the maximum amount allowed
-    elif len(spawnedBotHeroList) < (uniqueSkinCap - (getNumberOfSlots(Team.1) if getNumberOfPlayers(Team.1) <= getNumberOfSlots(Team.1) else getNumberOfPlayers(Team.1))):
+    elif len(spawnedBotHeroList) < (uniqueSkinCap - max(getNumberOfSlots(Team.1), getNumberOfPlayers(Team.1))):
         # botSpawnWeightRoll: random threshold for weighted hero selection; the hero list is no longer needed.
         #!define botSpawnWeightRoll tmp0
         botSpawnWeightRoll = random.uniform(0, 100)

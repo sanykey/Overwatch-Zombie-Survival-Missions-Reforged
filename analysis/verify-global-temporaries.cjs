@@ -1,5 +1,5 @@
 // Compile current sources, then check scratch-variable lifetimes in Workshop actions.
-// Macros are already expanded. Calls are conservatively treated as scratch boundaries.
+// Macros are already expanded. Calls are conservative boundaries except the explicitly audited vote helper.
 const fs = require('node:fs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
@@ -162,6 +162,10 @@ function checkRule(name, actions) {
 }
 
 function checkWorkshop(output) {
+    // Validate the no-yield contract and exact input/call/result handoffs before inlining this helper.
+    // All other subroutine calls remain conservative scratch boundaries.
+    if (/^\s*selectVoteWinner;$/m.test(output))
+        output = require('./verify-vote-winner.cjs').prepareScratchAudit(output);
     const results = [];
     for (const m of output.matchAll(/^rule \("((?:\\.|[^"\\])*)"\) \{\n([\s\S]*?)^\}/gm)) {
         const [, name, body] = m;

@@ -97,10 +97,11 @@ enum PowerUpEntitySlot:
 # Shared scratch slots.
 # Define a semantic #!define alias next to each use; access scratch through that alias.
 # Finish scratch use before wait/waitUntil or async calls; use separate slots for simultaneous values.
+# Synchronous helper arguments/results require an explicit, audited contract; other calls may overwrite scratch.
 # Capture scratch references in reevaluated visuals with evalOnce, and document each assignment locally.
-globalvar tmp0  # Synchronous scratch, including Rescue path index and Anran spawn source; assign before use, never retain across waits/calls.
-globalvar tmp1  # Second synchronous scratch value, including selectTarget candidates and barricade push geometry; never retain across waits/calls.
-globalvar tmp2  # Third synchronous scratch value, including barricade's current target and mutation color captured with evalOnce for the outline.
+globalvar tmp0  # Synchronous scratch, including Rescue path index and Anran spawn source; assign before use, never retain across waits/async work.
+globalvar tmp1  # Second synchronous scratch value, including selectTarget candidates and barricade push geometry; never retain across waits/async work.
+globalvar tmp2  # Third synchronous scratch value, including barricade's current target and mutation color captured with evalOnce for the outline; no live reads across waits/async work.
 
 # Phase-owned storage, NOT scratch: values may survive waits and reevaluation.
 # START GAME removes all pregame HUD/world text before mission generation can resume.

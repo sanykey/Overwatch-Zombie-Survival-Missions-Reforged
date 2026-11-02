@@ -9,7 +9,7 @@ rule "SPAWN BOSS":
     @Condition len(bossesStateList.filter(lambda x: entityExists(x))) == 0
     @Condition (getLivingPlayers(Team.2).any(lambda player: player.hasSpawned() and not player.botIsTeleporting and player.botTarget == null)) == true
     #Keeps amount of different bots within the max limit.
-    @Condition len(botHeroList.filter(lambda x: getNumberOfHeroes(x, Team.2) > 0)) < (uniqueSkinCap - (getNumberOfSlots(Team.1) if getNumberOfPlayers(Team.1) <= getNumberOfSlots(Team.1) else getNumberOfPlayers(Team.1)))
+    @Condition len(botHeroList.filter(lambda x: getNumberOfHeroes(x, Team.2) > 0)) < (uniqueSkinCap - max(getNumberOfSlots(Team.1), getNumberOfPlayers(Team.1)))
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     bossesStateList[0] = (getLivingPlayers(Team.2).filter(lambda player: player.hasSpawned() and not miniBossList[player] and not player.botIsTeleporting and player.botTarget == null))[0]

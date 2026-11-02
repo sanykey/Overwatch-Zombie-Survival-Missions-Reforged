@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-03",
+  "compiler": "OverPy 9.7.20",
+  "before": 26896,
+  "after": 26866,
+  "saved": 30,
+  "maxSavings": 16,
+  "absSavings": 14,
+  "compiledMaxReplacements": 2,
+  "compiledAbsReplacements": 14,
+  "compiledRulesCompared": 233,
+  "comparison": "All compiled rules match after only the two approved expression normalizations.",
+  "directIncludeBuildChecked": true,
+  "globalVariables": 103,
+  "playerVariables": 75,
+  "emittedWarnings": [],
+  "warningsSuppressedByMainSource": true,
+  "inGameValidated": false,
+  "runtimeBenchmarked": false,
+  "changedSources": {
+    "global_startup.opy": {
+      "beforeSha256": "5cef9f6ebcf658f9863a3b44612d89763a537b9c941a3e753543a3acd344eb0d",
+      "afterSha256": "e35dd1d50ec2b84cb6ce7b2124bc0554079d5f1ab30c47f8b0204c3a66e58099"
+    },
+    "objective_types/objective_type_bosses.opy": {
+      "beforeSha256": "e4f857bd67b84c236e450e15221045a5e18937996211e81ee91be02ba3aafed8",
+      "afterSha256": "ac06014d5ac628d5581b1b47b89ddf7597027cc25a2fdd032d31a6f54c084ec5"
+    },
+    "zombie_types.opy": {
+      "beforeSha256": "991edab8ae9d81bab0336ff2fd56a04a6aeabddde72569cf37021f19ec31947c",
+      "afterSha256": "216601a10678ad3159bec3c6fee633a25bbb5ce1905ff8d7455cffd558584761"
+    }
+  }
+}
