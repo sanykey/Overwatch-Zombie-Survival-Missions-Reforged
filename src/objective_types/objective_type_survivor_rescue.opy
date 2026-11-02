@@ -178,7 +178,7 @@ rule "SURVIVOR REACHES EXTRACTION SITE":
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, null, rescueSurvivor, 200)
     rescueSurvivor.rescueMoodIcon = random.choice([iconString(Icon.HAPPY), iconString(Icon.HEART)])
     rescueSurvivor.startThrottleInDirection(directionTowards(rescueSurvivor.getPosition(), currentObjectivePosition), 0.75 if distance(rescueSurvivor.getPosition(), currentObjectivePosition) > 1 else 0, Relativity.TO_WORLD)
-    rescueSurvivor.startFacing(vect(0, 1, 0), 100)
+    rescueSurvivor.startFacing(Vector.UP, 100)
     wait(1)
     rescueSurvivor.rescueIsExtracting = true
     rescueSurvivor.rescuePathList = []
@@ -186,8 +186,8 @@ rule "SURVIVOR REACHES EXTRACTION SITE":
     wait()
     rescueSurvivor.startForcingPosition(rescueSurvivor.rescueExtractionPosition)
     wait(0.5)
-    chaseAtRate(rescueSurvivor.rescueExtractionPosition, rescueSurvivor.getPosition() + vect(0, 100, 0), 3, ChaseRateReeval.NONE)
+    chaseAtRate(rescueSurvivor.rescueExtractionPosition, rescueSurvivor.getPosition() + 100 * Vector.UP, 3, ChaseRateReeval.NONE)
     wait(2)
-    chaseAtRate(rescueSurvivor.rescueExtractionPosition, rescueSurvivor.getPosition() + vect(0, 100, 0), 10, ChaseRateReeval.NONE)
+    chaseAtRate(rescueSurvivor.rescueExtractionPosition, rescueSurvivor.getPosition() + 100 * Vector.UP, 10, ChaseRateReeval.NONE)
     wait(3)
     destroyDummy(Team.1, rescueSurvivor.getSlot())

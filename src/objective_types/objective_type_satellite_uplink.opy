@@ -12,29 +12,29 @@ macro fireSatelliteMacro():
     # satelliteFiringTerminalIndex: terminal index, to connect each terminal to the satellite laser with a beam.
     #!define satelliteFiringTerminalIndex tmp0
     for satelliteFiringTerminalIndex in range(len(satelliteTerminalPositionList)):
-        createBeam(getAllPlayers(), Beam.BAD, satelliteLaserPosition + vect(0, 700, 0), satelliteTerminalPositionList[evalOnce(satelliteFiringTerminalIndex)] + vect(0, 0, 0), objectiveColor, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createBeam(getAllPlayers(), Beam.BAD, satelliteLaserPosition + 700 * Vector.UP, satelliteTerminalPositionList[evalOnce(satelliteFiringTerminalIndex)] + vect(0, 0, 0), objectiveColor, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         objectiveEntityIdList.append(getLastCreatedEntity())
     wait(1)
     smallMessage(getAllPlayers(), "Preparing to fire...")
     wait(0.5)
     bigMessage(getAllPlayers(), "Stand clear of the laser")
     #Warning icon
-    createIcon(getAllPlayers(), satelliteLaserPosition + vect(0, 1, 0), Icon.WARNING, IconReeval.VISIBILITY_AND_POSITION, Color.SKY_BLUE)
+    createIcon(getAllPlayers(), satelliteLaserPosition + Vector.UP, Icon.WARNING, IconReeval.VISIBILITY_AND_POSITION, Color.SKY_BLUE)
     objectiveEntityIdList.append(getLastCreatedEntity())
     #Laser distance
     createInWorldText(getAllPlayers(), "Danger: {0}m".format(distance(satelliteLaserPosition, localPlayer.getPosition())), satelliteLaserPosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.SKY_BLUE)
     objectiveEntityIdList.append(getLastCreatedText())
     #Laser center beam
-    createBeam(getAllPlayers(), Beam.BAD, satelliteLaserPosition + vect(0, 700, 0) + directionFromAngles(getTotalTimeElapsed() * 360, 0) * 1, satelliteLaserPosition + vect(0, -700, 0) + directionFromAngles(getTotalTimeElapsed() * 360, 0) * 1, Color.SKY_BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    createBeam(getAllPlayers(), Beam.BAD, satelliteLaserPosition + 700 * Vector.UP + directionFromAngles(getTotalTimeElapsed() * 360, 0) * 1, satelliteLaserPosition + -700 * Vector.UP + directionFromAngles(getTotalTimeElapsed() * 360, 0) * 1, Color.SKY_BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     objectiveEntityIdList.append(getLastCreatedEntity())
     #Laser center beam
-    createBeam(getAllPlayers(), Beam.BAD, satelliteLaserPosition + vect(0, 700, 0) + directionFromAngles(getTotalTimeElapsed() * 360, 0) * -1, satelliteLaserPosition + vect(0, -700, 0) + directionFromAngles(getTotalTimeElapsed() * 360, 0) * -1, Color.SKY_BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    createBeam(getAllPlayers(), Beam.BAD, satelliteLaserPosition + 700 * Vector.UP + directionFromAngles(getTotalTimeElapsed() * 360, 0) * -1, satelliteLaserPosition + -700 * Vector.UP + directionFromAngles(getTotalTimeElapsed() * 360, 0) * -1, Color.SKY_BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     objectiveEntityIdList.append(getLastCreatedEntity())
     #Sattellite firing light shafts
     # satelliteLaserShaftLayerIndex: laser light-shaft layer index, to place six shafts at heights -35 through 65.
     #!define satelliteLaserShaftLayerIndex tmp0
     for satelliteLaserShaftLayerIndex in range(-1, 5):
-        createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.AQUA, satelliteLaserPosition + (vect(0, -15 + 20 * evalOnce(satelliteLaserShaftLayerIndex), 0)), 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.AQUA, satelliteLaserPosition + ((-15 + 20 * evalOnce(satelliteLaserShaftLayerIndex)) * Vector.UP), 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         objectiveEntityIdList.append(getLastCreatedEntity())
     wait(5)
     smallMessage(getAllPlayers(), "Firing sequence commenced")
@@ -50,7 +50,7 @@ macro fireSatelliteMacro():
         wait(0.5)
         # satelliteLaserImpactPosition: laser impact position on the ground, shared by explosion visuals and both damage checks.
         #!define satelliteLaserImpactPosition tmp0
-        satelliteLaserImpactPosition = raycastHitPosition(satelliteLaserPosition + vect(0, 2, 0), satelliteLaserPosition + offsetDownHundredConst, getAllPlayers(), getAllPlayers().filter(lambda player: player.isOnGround()), false) + vect(0, 0.1, 0)
+        satelliteLaserImpactPosition = raycastHitPosition(satelliteLaserPosition + 2 * Vector.UP, satelliteLaserPosition + offsetDownHundredConst, getAllPlayers(), getAllPlayers().filter(lambda player: player.isOnGround()), false) + 0.1 * Vector.UP
         playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.SKY_BLUE, satelliteLaserImpactPosition, 5)
         playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.SKY_BLUE, satelliteLaserImpactPosition, 200)
         #Damage Zombies

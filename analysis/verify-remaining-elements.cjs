@@ -46,6 +46,40 @@ function codeOnly(s) {
         match => match.startsWith('#') && !match.startsWith('#!') ? '' : match)
         .split('\n').map(l => l.trimEnd()).filter(l => l.trim()).join('\n');
 }
+// Match the explicit Vector spelling used by src/ without relaxing other source checks.
+// Keep the scalar first, as in OverPy's optimizeForSize lowering of axial vectors.
+function explicitAxisVectors(source) {
+    const edits = [];
+    for (const match of source.matchAll(/\bvect\(/g)) {
+        const args = [];
+        let depth = 0, part = match.index + match[0].length, end;
+        for (let i = part; i < source.length; i++) {
+            const c = source[i];
+            if (c === ')' && depth === 0) {
+                args.push(source.slice(part, i).trim());
+                end = i + 1;
+                break;
+            }
+            if ('([{'.includes(c)) depth++;
+            if (')]}'.includes(c)) depth--;
+            if (c === ',' && depth === 0) {
+                args.push(source.slice(part, i).trim());
+                part = i + 1;
+            }
+        }
+        if (args.length !== 3) continue;
+        const axes = args.map((v, i) => v !== '0' ? i : -1).filter(i => i >= 0);
+        if (axes.length !== 1) continue;
+        const axis = axes[0], scalar = args[axis];
+        const positive = ['LEFT', 'UP', 'FORWARD'][axis];
+        const negative = ['RIGHT', 'DOWN', 'BACKWARD'][axis];
+        const value = scalar === '1' ? 'Vector.' + positive : scalar === '-1' ? 'Vector.' + negative
+            : (/^-?\d+(?:\.\d+)?$|^[\w.]+$/.test(scalar) ? scalar : '(' + scalar + ')') + ' * Vector.' + positive;
+        edits.push({start: match.index, end, value});
+    }
+    for (const edit of edits.reverse()) source = source.slice(0, edit.start) + edit.value + source.slice(edit.end);
+    return source;
+}
 function replace(f, file, before, after) {
     assert(f[file].includes(before), `${file}: missing ${before.slice(0, 80)}`);
     f[file] = f[file].replace(before, after);
@@ -105,7 +139,8 @@ function reverse(f, baseline) {
         '    #!define powerUpHudColorList tmp1\n    powerUpHudColorList = ' + palette + '\n    #!define powerUpHudItemIndex tmp0');
     f['power_ups.opy'] = f['power_ups.opy'].replaceAll('powerUpColorListConst', palette);
     f['variables.opy'] = baseline['variables.opy'];
-    for (const file of Object.keys(f)) assert.equal(codeOnly(f[file]), codeOnly(baseline[file]), 'Unrelated source change: ' + file);
+    for (const file of Object.keys(f)) assert.equal(explicitAxisVectors(codeOnly(f[file])),
+        explicitAxisVectors(codeOnly(baseline[file])), 'Unrelated source change: ' + file);
     return f;
 }
 
@@ -197,6 +232,34 @@ function checkReadyPredicate() {
     return cases;
 }
 
+// OverPy accepts names that the game's importer rejects. Check exported names,
+// not role aliases or enum members, which never appear as Workshop identifiers.
+function checkImportNames(output) {
+    const maxLength = 32;
+    const declarations = output.match(/^variables \{\n([\s\S]*?)^\}/m)?.[1];
+    assert(declarations, 'Missing exported variable declarations');
+    const counts = {global: 0, player: 0, subroutine: 0};
+    let kind;
+    function check(type, slot, name) {
+        assert(name.length <= maxLength,
+            `${type} variable/subroutine ${slot}: ${name} has ${name.length} characters (maximum ${maxLength})`);
+        counts[type]++;
+    }
+    for (const line of declarations.split('\n')) {
+        const section = line.match(/^    (global|player):$/);
+        if (section) kind = section[1];
+        const entry = line.match(/^        (\d+): (\S+)$/);
+        if (entry) {
+            assert(kind, 'Variable entry outside a section');
+            check(kind, entry[1], entry[2]);
+        }
+    }
+    assert(counts.global > 0 && counts.player > 0, 'No exported variable names checked');
+    const subroutines = output.match(/^subroutines \{\n([\s\S]*?)^\}/m)?.[1] ?? '';
+    for (const entry of subroutines.matchAll(/^    (\d+): (\S+)$/gm)) check('subroutine', entry[1], entry[2]);
+    return {...counts, maxLength};
+}
+
 async function main() {
     const root = path.dirname(src);
     const baseline = Object.fromEntries(Object.keys(files).map(file => [file,
@@ -224,6 +287,18 @@ async function main() {
     assert.equal(before.elements, 27102);
     assert.equal(after.elements, 26902);
     assert.equal(currentRules.length, rules(before.result).length + 3);
+    const importNames = checkImportNames(after.result);
+    // Reproduce the reported slot-15 import error and prove the repair only
+    // changes its exported name, not any of the compiled rules or the budget.
+    const previousNaming = {...files, 'variables.opy': files['variables.opy']
+        .replace('playervar enhancementCarrierPoolId ', 'playervar enhancementHitchhikerCarrierPoolId ')
+        .replace(/^#!define enhancementHitchhikerCarrierPoolId enhancementCarrierPoolId\n/m, '')};
+    assert.notEqual(previousNaming['variables.opy'], files['variables.opy']);
+    const previous = await compile(previousNaming);
+    assert.throws(() => checkImportNames(previous.result), /player variable\/subroutine 15: .*34 characters/);
+    assert.equal(previous.elements, after.elements);
+    assert.deepEqual(rules(previous.result, {enhancementHitchhikerCarrierPoolId: 'enhancementCarrierPoolId'}), currentRules,
+        'Import-name repair must only rename the carrier pool storage');
     const scratch = checkWorkshop(after.result);
     let exported;
     const saved = console.log;
@@ -235,6 +310,7 @@ async function main() {
     assert.deepEqual(exported.encounteredWarnings, []);
     assert.equal(exported.nbElements, after.elements);
     assert.deepEqual(rules(exported.result), currentRules);
+    assert.deepEqual(checkImportNames(exported.result), importNames);
     fs.writeFileSync(path.join(src, 'main.ws.txt'), exported.result);
     const report = {baselineRef, compiler: 'OverPy 9.7.20',
         before: {elements: before.elements, globalVariables: 102, playerVariables: 74},
@@ -242,7 +318,8 @@ async function main() {
         savedElements: before.elements - after.elements, storage,
         sourceReconstructionChecked: true, compiledRulesCompared: currentRules.length,
         readyPredicateCases, scratchRulesChecked: scratch.length,
-        independentStorageCompared: true, negativeAuditCases: 2, directIncludeBuildChecked: true,
+        independentStorageCompared: true, negativeAuditCases: 3, directIncludeBuildChecked: true,
+        importNames, carrierPoolRenameOnlyCompared: true,
         emittedWarnings: after.warnings, warningsSuppressedByMainSource: true,
         sourceSha256: Object.fromEntries(Object.entries(files).map(([file, source]) =>
             [file, crypto.createHash('sha256').update(source).digest('hex')])),
@@ -252,5 +329,5 @@ async function main() {
         compiledRulesCompared: report.compiledRulesCompared, readyPredicateCases, scratchRulesChecked: scratch.length}));
     return report;
 }
-module.exports = {main, auditStorage, reverse, separateStorage};
+module.exports = {main, auditStorage, reverse, separateStorage, checkImportNames};
 if (require.main === module) main().catch(e => {console.error(e); process.exitCode = 1;});

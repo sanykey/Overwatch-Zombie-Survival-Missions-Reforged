@@ -13,11 +13,11 @@ rule "GLOBAL MENU INITIALIZATION":
     wait(0.016, Wait.ABORT_WHEN_FALSE)
     if isSpecialGameMode:
         if getCurrentGamemode() == Gamemode.CTF or getCurrentGamemode() == Gamemode.PUSH:
-            startPos = walkCenter + directionFromAngles(random.uniform(0, 360), 0) * 300 + vect(0, 15, 0)
+            startPos = walkCenter + directionFromAngles(random.uniform(0, 360), 0) * 300 + 15 * Vector.UP
         elif getCurrentGamemode() == Gamemode.CONTROL:
-            startPos = walkCenter + directionFromAngles(random.uniform(0, 360), 0) * 300 + vect(0, 100, 0)
+            startPos = walkCenter + directionFromAngles(random.uniform(0, 360), 0) * 300 + 100 * Vector.UP
         else:
-            startPos = walkCenter + directionFromAngles(random.uniform(0, 360), 0) * 150 + vect(0, 30, 0)
+            startPos = walkCenter + directionFromAngles(random.uniform(0, 360), 0) * 150 + 30 * Vector.UP
         startCamPos = startPos + offsetUpOneAndHalfConst + directionFromAngles(horizontalAngleOfDirection(directionTowards(walkCenter, startPos)), 0) * START_CAM_DISTANCE
         wait()
         # Shared menu storage changes owners at START GAME.
@@ -29,7 +29,7 @@ rule "GLOBAL MENU INITIALIZATION":
         if not isPregameSetup:
             return
         getPlayers(Team.2).setInvisibility(Invis.ALL)
-        getPlayers(Team.2)[0].startForcingPosition(startPos + vect(0, 15, 0))
+        getPlayers(Team.2)[0].startForcingPosition(startPos + 15 * Vector.UP)
         getPlayers(Team.2).startFacing(Vector.FORWARD, 100000)
     else:
         while startPos == null:
@@ -41,16 +41,16 @@ rule "GLOBAL MENU INITIALIZATION":
                     startCamPos = vect(-0.19, 2, 90.1)
                     goto lbl_0
             startCamPos = startPos + offsetUpOneAndHalfConst + directionFromAngles(random.uniform(0, 360), 0) * START_CAM_DISTANCE
-            startCamPos = raycastHitPosition(startCamPos, startCamPos - vect(0, 5, 0), null, null, false) + offsetUpOneAndHalfConst
+            startCamPos = raycastHitPosition(startCamPos, startCamPos - 5 * Vector.UP, null, null, false) + offsetUpOneAndHalfConst
             startPos = vect(startPos.x, startCamPos.y - 1.5, startPos.z)
-            startPos = raycastHitPosition(startPos + vect(0, 0.4, 0), startPos - vect(0, 5, 0), null, null, false)
+            startPos = raycastHitPosition(startPos + 0.4 * Vector.UP, startPos - 5 * Vector.UP, null, null, false)
             startPos = raycastHitPosition(startCamPos - offsetUpThreeQuartersConst, startPos + offsetUpThreeQuartersConst, null, null, false) - offsetUpThreeQuartersConst
             startCamPos = startPos + offsetUpOneAndHalfConst + directionFromAngles(horizontalAngleOfDirection(directionTowards(startPos, startCamPos)), 0) * START_CAM_DISTANCE
             #Line of Sight Checks for each player position
             # menuVisibilityAngleOffset: horizontal angle offset in degrees, to test visibility of each menu position.
             #!define menuVisibilityAngleOffset tmp0
             for menuVisibilityAngleOffset in range(-26, 27, 2):
-                if not isInLoS(startCamPos, startCamPos + vect(0, -0.75, 0) + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + menuVisibilityAngleOffset, 0)) * START_CAM_DISTANCE)) or not isInLoS(startCamPos + vect(0, -0.75, 0) + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + menuVisibilityAngleOffset, 0)) * START_CAM_DISTANCE), startCamPos):
+                if not isInLoS(startCamPos, startCamPos + -0.75 * Vector.UP + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + menuVisibilityAngleOffset, 0)) * START_CAM_DISTANCE)) or not isInLoS(startCamPos + -0.75 * Vector.UP + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + menuVisibilityAngleOffset, 0)) * START_CAM_DISTANCE), startCamPos):
                     startPos = null
                     break
             wait()
@@ -77,11 +77,11 @@ rule "EFFECTS/TEXTS":
     #Voting options reminder
     createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.READY), "Voting options are available in the top left corner of your screen" if isVoting else "Voting is complete. Difficulty is actively scaled by amount of players.", startCamPos + directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)), 30), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.AQUA if isVoting else Color.PURPLE, SpecVisibility.NEVER)
     #Ready In World Text
-    createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.HERO_SELECTED), "Ready [{0}]".format(inputBindingString(Button.JUMP)), localPlayer.pregamePosition + vect(0, 1.92, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.GREEN, SpecVisibility.NEVER)
+    createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.HERO_SELECTED), "Ready [{0}]".format(inputBindingString(Button.JUMP)), localPlayer.pregamePosition + 1.92 * Vector.UP, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.GREEN, SpecVisibility.NEVER)
     #Change Hero In World Text
-    createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.HERO_SELECTED and getMatchTime() > 2.5), "Change Hero [{0}]".format(inputBindingString(Button.CROUCH)), localPlayer.pregamePosition + vect(0, 1.8, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.ORANGE, SpecVisibility.NEVER)
+    createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.HERO_SELECTED and getMatchTime() > 2.5), "Change Hero [{0}]".format(inputBindingString(Button.CROUCH)), localPlayer.pregamePosition + 1.8 * Vector.UP, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.ORANGE, SpecVisibility.NEVER)
     #Cancel In World Text
-    createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.READY and getMatchTime() > 2.5), "Cancel [{0}]".format(inputBindingString(Button.CROUCH)), localPlayer.pregamePosition + vect(0, -0.6, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, rgb(255, 49, 49), SpecVisibility.NEVER)
+    createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.READY and getMatchTime() > 2.5), "Cancel [{0}]".format(inputBindingString(Button.CROUCH)), localPlayer.pregamePosition + -0.6 * Vector.UP, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, rgb(255, 49, 49), SpecVisibility.NEVER)
     #One reevaluated HUD per category; localPlayer selects the viewer's current option.
     #Do not capture vote indices or dynamic text/colors with evalOnce.
     #Empty descriptions must be strings: null selected from an array displays as 0.
@@ -427,7 +427,7 @@ def setObjectiveType():
             #Minimum objective spacing
             if len(objectivePositionList) == 0 or objectivePositionList.slice(len(objectivePositionList) - 5, 5).all(lambda x: distance(missionCandidatePosition, x) > objectiveSpacingList[1]):
                 #Ensures bosses spawn with head room
-                if objectiveTypeList.last() != ObjectiveType.BOSSES or isInLoS(missionCandidatePosition + vect(0, 0, 0), missionCandidatePosition + vect(0, 10, 0)):
+                if objectiveTypeList.last() != ObjectiveType.BOSSES or isInLoS(missionCandidatePosition + vect(0, 0, 0), missionCandidatePosition + 10 * Vector.UP):
                     objectivePositionList.append(missionCandidatePosition)
                     currentObjectivePosition = objectivePositionList[0]
                     missionPlacementAttemptCount = 0

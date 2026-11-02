@@ -43,7 +43,7 @@ rule "BASIC (REAPER) SHADOW STEP (BOSS)":
     eventPlayer.botIsThrottleOverridden = true
     eventPlayer.stopThrottleInDirection()
     eventPlayer.botIsFacingOverridden = true
-    eventPlayer.startFacing(vect(-1, 0, 0), 180, Relativity.TO_PLAYER)
+    eventPlayer.startFacing(Vector.RIGHT, 180, Relativity.TO_PLAYER)
     while eventPlayer.isUsingAbility1():
         entityFloat()
         # shadowStepFloatTargetIndex: floated-player index, to push each affected player upward during the shadow-step ability.
@@ -55,7 +55,7 @@ rule "BASIC (REAPER) SHADOW STEP (BOSS)":
                 eventPlayer.botAbilityTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.botAbilityTarget.getPosition(), eventPlayer.getPosition())), -50), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
             else:
                 #Push target straight up
-                eventPlayer.botAbilityTarget.applyImpulse(vect(0, 1, 0), 0.5, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
+                eventPlayer.botAbilityTarget.applyImpulse(Vector.UP, 0.5, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
         wait(0.032)
     resumeBotMovementAndFacing()
     eventPlayer.setAbilityCooldown(Button.ABILITY_2, 5)
@@ -249,7 +249,7 @@ rule "BRUTE (REIN) SUPER SEISMIC SLAM":
     @Hero reinhardt
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer.getUltCharge() >= 100
-    @Condition distance(worldVector(vect(0, 0, 3 * eventPlayer.sizeScale), eventPlayer, Transform.ROTATION_AND_TRANSLATION), eventPlayer.botTarget.getPosition()) < 1.5 * eventPlayer.sizeScale
+    @Condition distance(worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION), eventPlayer.botTarget.getPosition()) < 1.5 * eventPlayer.sizeScale
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.ULTIMATE)
@@ -259,10 +259,10 @@ rule "BRUTE (REIN) SUPER SEISMIC SLAM":
             return
         if eventPlayer.isCrowdControlled:
             return
-    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, worldVector(vect(0, 0, 3 * eventPlayer.sizeScale), eventPlayer, Transform.ROTATION_AND_TRANSLATION), 20 * eventPlayer.sizeScale)
-    (getLivingPlayers(Team.ALL).exclude(eventPlayer).filter(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < 20 * eventPlayer.sizeScale and distance(worldVector(vect(0, 0, 3 * eventPlayer.sizeScale), eventPlayer, Transform.ROTATION_AND_TRANSLATION), x.getPosition()) > 1.5 * eventPlayer.sizeScale and isInLoS(eventPlayer.getEyePosition(), x.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) and x != eventPlayer and abs(eventPlayer.getPosition().y - x.getPosition().y) < 2 * eventPlayer.sizeScale)).applyImpulse(vect(0, 1, 0), 15 * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
-    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, worldVector(vect(0, 0, 3 * eventPlayer.sizeScale), eventPlayer, Transform.ROTATION_AND_TRANSLATION), 3 * eventPlayer.sizeScale)
-    (null.concat(getLivingPlayers(Team.2)).filter(lambda x: distance(x.getPosition(), worldVector(vect(0, 0, 3 * eventPlayer.sizeScale), eventPlayer, Transform.ROTATION_AND_TRANSLATION)) < 1.5 * eventPlayer.sizeScale and not x.hasStatus(Status.KNOCKED_DOWN))).setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 2.5)
+    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION), 20 * eventPlayer.sizeScale)
+    (getLivingPlayers(Team.ALL).exclude(eventPlayer).filter(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < 20 * eventPlayer.sizeScale and distance(worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION), x.getPosition()) > 1.5 * eventPlayer.sizeScale and isInLoS(eventPlayer.getEyePosition(), x.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) and x != eventPlayer and abs(eventPlayer.getPosition().y - x.getPosition().y) < 2 * eventPlayer.sizeScale)).applyImpulse(Vector.UP, 15 * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION), 3 * eventPlayer.sizeScale)
+    (null.concat(getLivingPlayers(Team.2)).filter(lambda x: distance(x.getPosition(), worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION)) < 1.5 * eventPlayer.sizeScale and not x.hasStatus(Status.KNOCKED_DOWN))).setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 2.5)
 
 
 rule "BRUTE, GLADIATOR, AND SMOLDER ALTERNATE ATTACK CONTROL":
@@ -416,7 +416,7 @@ rule "ZOMBIES SPAWN AT REIGNITED":
     #!define reigniteSpawnSource tmp0
     reigniteSpawnSource = getPlayersOnHero(Hero.ANRAN, Team.2).filter(lambda player: player.botIsReigniteActive)[0]
     eventPlayer.botReigniteDestination = random.choice(mapGridList.filter(lambda x: distance(reigniteSpawnSource.getPosition(), x) > 2 and distance(reigniteSpawnSource.getPosition(), x) < 7))
-    eventPlayer.botReigniteRisePosition = eventPlayer.botReigniteDestination - vect(0, 2, 0)
+    eventPlayer.botReigniteRisePosition = eventPlayer.botReigniteDestination - 2 * Vector.UP
     eventPlayer.startForcingPosition(eventPlayer.botReigniteRisePosition)
     chaseOverTime(eventPlayer.botReigniteRisePosition, eventPlayer.botReigniteDestination, 1.5)
     wait(2)
@@ -435,7 +435,7 @@ rule "RIDER (WIDOWMAKER) ATTACH TO PLAYERS":
     
     eventPlayer.botIsAttached = true
     eventPlayer.botAbilityTarget = victim
-    eventPlayer.attachTo(eventPlayer.botAbilityTarget, vect(0, 0, eventPlayer.botAbilityTarget.sizeScale))
+    eventPlayer.attachTo(eventPlayer.botAbilityTarget, eventPlayer.botAbilityTarget.sizeScale * Vector.FORWARD)
 
 
 rule "RIDER DETACH WHEN DEAD OR TARGET IS DEAD":
@@ -536,7 +536,7 @@ rule "CHARGER (MAUGA) CHARGE":
     eventPlayer.botIsFacingOverridden = true
     eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition()), 1500 if eventPlayer.botIsAttached else 0 if eventPlayer.isCrowdControlled else 100)
     eventPlayer.botIsThrottleOverridden = true
-    eventPlayer.startThrottleInDirection(vect(0, 0, -1), 0.35, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
+    eventPlayer.startThrottleInDirection(Vector.BACKWARD, 0.35, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
     #Charger walk backwards duration
     for eventPlayer.botChargerWindupProgress in range(0, 1, 0.064):
         if eventPlayer.isCrowdControlled or eventPlayer.isDead():
@@ -646,7 +646,7 @@ rule "PRIME SLIMER (EMRE) FLIGHT (BOSS)":
         eventPlayer.enableEnvironmentCollision()
         eventPlayer.forceButtonPress(Button.JUMP)
         waitUntil(eventPlayer.isJumping(), 1)
-    eventPlayer.applyImpulse(vect(0, 1, 0), random.uniform(6, 10) * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+    eventPlayer.applyImpulse(Vector.UP, random.uniform(6, 10) * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     wait()
     waitUntil(eventPlayer.getVelocity().y < 0, 3)
     eventPlayer.forceButtonPress(Button.ULTIMATE)
@@ -697,7 +697,7 @@ rule "STRIKER (WRECKING BALL) PILE DRIVER":
     @Condition eventPlayer.getAbilityCooldown(Button.CROUCH) <= 0
     @Condition distance(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()) < 15 * eventPlayer.sizeScale
     @Condition abs(angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()))) < 35
-    @Condition (eventPlayer.getAltitude() > 3 or eventPlayer.isOnGround() and isInLoS(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + vect(0, 3, 0))) == true
+    @Condition (eventPlayer.getAltitude() > 3 or eventPlayer.isOnGround() and isInLoS(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + 3 * Vector.UP)) == true
     
     wait(0.125, Wait.ABORT_WHEN_FALSE)
     waitUntil(not eventPlayer.hasStatus(Status.HACKED), 1)
@@ -710,7 +710,7 @@ rule "STRIKER (WRECKING BALL) PILE DRIVER":
             eventPlayer.forceButtonPress(Button.JUMP)
             waitUntil(eventPlayer.isJumping(), 1)
         playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, eventPlayer.getPosition(), 4 * eventPlayer.sizeScale)
-        eventPlayer.applyImpulse(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition() + vect(0, 10 * eventPlayer.sizeScale, 0)), 25, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+        eventPlayer.applyImpulse(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition() + (10 * eventPlayer.sizeScale) * Vector.UP), 25, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
         wait(0.25)
         waitUntil(eventPlayer.getVelocity().y <= 0, 3)
     eventPlayer.forceButtonPress(Button.CROUCH)
@@ -839,7 +839,7 @@ rule "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES":
         return
     if isInLoS(eventPlayer.getPosition(), eventPlayer.getEyePosition() + worldVector(vect(0, 11, 5), eventPlayer, Transform.ROTATION)) and isInLoS(eventPlayer.botLastTarget.getEyePosition(), eventPlayer.getEyePosition() + worldVector(vect(0, 11, 5), eventPlayer, Transform.ROTATION)):
         waitUntil(not eventPlayer.isCrowdControlled, 99999)
-        eventPlayer.startThrottleInDirection(vect(0, 0, 1), 1, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
+        eventPlayer.startThrottleInDirection(Vector.FORWARD, 1, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
         eventPlayer.forceButtonPress(Button.ABILITY_1)
         eventPlayer.setAmmo(0, eventPlayer.getMaxAmmo())
         wait()
@@ -1034,7 +1034,7 @@ rule "DAYTAKER (ILLARI) BURST":
         eventPlayer.botAbilityTarget.isAttached = false
         return
     waitUntil(not eventPlayer.isCrowdControlled, 99999)
-    eventPlayer.startThrottleInDirection(vect(0, 0, 1), 1, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
+    eventPlayer.startThrottleInDirection(Vector.FORWARD, 1, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
     #Eject zombies
     if eventPlayer.isAlive() and eventPlayer.botAbilityTarget.isAlive():
         eventPlayer.botAbilityTarget.detach()
@@ -1047,7 +1047,7 @@ rule "DAYTAKER (ILLARI) BURST":
         wait(0.2)
         playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer.botAbilityTarget.getPosition(), 1.5 * eventPlayer.botAbilityTarget.sizeScale)
         if eventPlayer.botTarget != null:
-            eventPlayer.botAbilityTarget.applyImpulse(directionTowards(eventPlayer.botAbilityTarget.getPosition(), eventPlayer.botTarget.getEyePosition() + vect(0, 3 * eventPlayer.botTarget.sizeScale, 0)), 20 + 9 * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+            eventPlayer.botAbilityTarget.applyImpulse(directionTowards(eventPlayer.botAbilityTarget.getPosition(), eventPlayer.botTarget.getEyePosition() + (3 * eventPlayer.botTarget.sizeScale) * Vector.UP), 20 + 9 * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
         else:
             eventPlayer.botAbilityTarget.applyImpulse(directionFromAngles(eventPlayer.getHorizontalFacingAngle(), -35), 20 + 9 * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     eventPlayer.botAbilityTarget = null
@@ -1146,7 +1146,7 @@ rule "ENSNARER (HAZARD) BLOCKS PLAYERS":
         eventPlayer.botIsEnsnarerBlocking = true
         entityFloat()
         for eventPlayer.botEnsnarerTargetIndex in range(len(eventPlayer.botSpecialTargetList)):
-            eventPlayer.startFacing(directionTowards(eventPlayer.getPosition(), eventPlayer.botSpecialTargetList[eventPlayer.botEnsnarerTargetIndex].getPosition()) + vect(0, -0.3, 0), 10000)
+            eventPlayer.startFacing(directionTowards(eventPlayer.getPosition(), eventPlayer.botSpecialTargetList[eventPlayer.botEnsnarerTargetIndex].getPosition()) + -0.3 * Vector.UP, 10000)
             eventPlayer.cancelPrimaryAction()
             wait(0.1)
             eventPlayer.forceButtonPress(Button.ABILITY_2)
@@ -1159,7 +1159,7 @@ rule "ENSNARER (HAZARD) BLOCKS PLAYERS":
         eventPlayer.allowButton(Button.MELEE)
         wait(8)
     else:
-        eventPlayer.startFacing(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()) + vect(0, -0.3, 0), 999)
+        eventPlayer.startFacing(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()) + -0.3 * Vector.UP, 999)
         wait(0.25)
         eventPlayer.forceButtonPress(Button.ABILITY_2)
         eventPlayer.botAbilityCooldown += 7
@@ -1386,7 +1386,7 @@ rule "BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)
     eventPlayer.forceButtonPress(Button.ULTIMATE if eventPlayer.getHero() == Hero.JUNKER_QUEEN or eventPlayer.getHero() == Hero.KIRIKO else Button.ABILITY_1)
     eventPlayer.botIsFacingOverridden = false
     restoreDefaultFacingMovement()
-    eventPlayer.applyImpulse(vect(0, 2.5 if eventPlayer.getHero() in [Hero.DOOMFIST, Hero.HAZARD] else 0, 0), 5 if eventPlayer.getHero() == Hero.HAZARD else 10, Relativity.TO_PLAYER, Impulse.INCORPORATE_CONTRARY_MOTION)
+    eventPlayer.applyImpulse((2.5 if eventPlayer.getHero() in [Hero.DOOMFIST, Hero.HAZARD] else 0) * Vector.UP, 5 if eventPlayer.getHero() == Hero.HAZARD else 10, Relativity.TO_PLAYER, Impulse.INCORPORATE_CONTRARY_MOTION)
     waitUntil(eventPlayer.isDead(), 15 if eventPlayer.getHero() == Hero.DOOMFIST else 30)
     eventPlayer.setUltCharge(0)
 

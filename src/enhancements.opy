@@ -51,13 +51,13 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             #Barricade bottom
             createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementBarrierPosition != null), Beam.BAD, eventPlayer.enhancementBarrierCorner1, eventPlayer.enhancementBarrierCorner2, Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             #Barricade side 1
-            createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementBarrierHealth > 0), Beam.BAD, eventPlayer.enhancementBarrierCorner1 + vect(0, LASER_BARRICADE_HEIGHT, 0), eventPlayer.enhancementBarrierCorner1, Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementBarrierHealth > 0), Beam.BAD, eventPlayer.enhancementBarrierCorner1 + LASER_BARRICADE_HEIGHT * Vector.UP, eventPlayer.enhancementBarrierCorner1, Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             #Barricade side 2
-            createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementBarrierHealth > 0), Beam.BAD, eventPlayer.enhancementBarrierCorner2, eventPlayer.enhancementBarrierCorner2 + vect(0, LASER_BARRICADE_HEIGHT, 0), Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementBarrierHealth > 0), Beam.BAD, eventPlayer.enhancementBarrierCorner2, eventPlayer.enhancementBarrierCorner2 + LASER_BARRICADE_HEIGHT * Vector.UP, Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             #Barricade top
-            createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementBarrierHealth > 0), Beam.BAD, eventPlayer.enhancementBarrierCorner2 + vect(0, LASER_BARRICADE_HEIGHT, 0), eventPlayer.enhancementBarrierCorner1 + vect(0, LASER_BARRICADE_HEIGHT, 0), Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementBarrierHealth > 0), Beam.BAD, eventPlayer.enhancementBarrierCorner2 + LASER_BARRICADE_HEIGHT * Vector.UP, eventPlayer.enhancementBarrierCorner1 + LASER_BARRICADE_HEIGHT * Vector.UP, Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             #Barricade health
-            createInWorldText(getAllPlayers() if eventPlayer.enhancementBarrierHealth > 0 else null, "{0}HP".format(ceil(eventPlayer.enhancementBarrierHealth)), eventPlayer.enhancementBarrierPosition + vect(0, 1, 0), 1.5, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.BLUE)
+            createInWorldText(getAllPlayers() if eventPlayer.enhancementBarrierHealth > 0 else null, "{0}HP".format(ceil(eventPlayer.enhancementBarrierHealth)), eventPlayer.enhancementBarrierPosition + Vector.UP, 1.5, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.BLUE)
             break
         #Brain Killer
         case Enhancement.BRAIN_KILLER:
@@ -98,15 +98,15 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             # enhancementBatteryPlacementCooldown: remaining placement cooldown in seconds (20 on placement), for placement checks and HUD.
             hudText(eventPlayer, "Charge Battery {0}".format(iconString(Icon.SPIRAL) if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else "{0}s".format(ceil(eventPlayer.enhancementBatteryPlacementCooldown))), null, "Hold [{0}]".format(inputBindingString(Button.MELEE)) if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else [], HudPosition.LEFT, 99, colorChargeBatteryConst if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else Color.RED, colorChargeBatteryConst, colorChargeBatteryConst if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else Color.RED, HudReeval.STRING_AND_COLOR)
             #Battery placement visual
-            createEffect(eventPlayer.filter(lambda _: eventPlayer.isHoldingButton(Button.MELEE) and eventPlayer.enhancementBatteryPlacementCooldown <= 0 and distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) <= 30), Effect.RING, rgb(0, 255, 0, 204), worldVector(vect(0, 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), 0.45, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            createEffect(eventPlayer.filter(lambda _: eventPlayer.isHoldingButton(Button.MELEE) and eventPlayer.enhancementBatteryPlacementCooldown <= 0 and distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) <= 30), Effect.RING, rgb(0, 255, 0, 204), worldVector(0.1 * Vector.UP, eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), 0.45, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             #Battery ring
             createEffect(getAllPlayers().filter(lambda _: eventPlayer.enhancementBatteryPosition != 0), Effect.RING, Color.YELLOW, eventPlayer.enhancementBatteryPosition, 0.45, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             #Battery sphere
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.enhancementBatteryPosition != 0 and eventPlayer.enhancementBatteryReuseCooldown <= 0), Effect.ORB, Color.GRAY, eventPlayer.enhancementBatteryPosition + (vect(0, 0.5 + sin(getTotalTimeElapsed() * 1) * 0.15, 0)), 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.enhancementBatteryPosition != 0 and eventPlayer.enhancementBatteryReuseCooldown <= 0), Effect.ORB, Color.GRAY, eventPlayer.enhancementBatteryPosition + ((0.5 + sin(getTotalTimeElapsed() * 1) * 0.15) * Vector.UP), 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             #Charge battery text
-            createInWorldText(getAllPlayers().filter(lambda player: eventPlayer.enhancementBatteryPosition != 0 and eventPlayer.enhancementBatteryReuseCooldown <= 0 and distance(player.getPosition(), eventPlayer.enhancementBatteryPosition) < 6), "Charge Battery", eventPlayer.enhancementBatteryPosition + (vect(0, 0.5 + sin(getTotalTimeElapsed() * 1) * 0.15, 0)), 1, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING)
+            createInWorldText(getAllPlayers().filter(lambda player: eventPlayer.enhancementBatteryPosition != 0 and eventPlayer.enhancementBatteryReuseCooldown <= 0 and distance(player.getPosition(), eventPlayer.enhancementBatteryPosition) < 6), "Charge Battery", eventPlayer.enhancementBatteryPosition + ((0.5 + sin(getTotalTimeElapsed() * 1) * 0.15) * Vector.UP), 1, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING)
             #Charge battery progress bar
-            createProgressBarInWorldText(getAllPlayers().filter(lambda player: eventPlayer.enhancementBatteryPosition != 0 and eventPlayer.enhancementBatteryReuseCooldown > 0 and distance(player.getPosition(), eventPlayer.enhancementBatteryPosition) < 6), 100 - eventPlayer.enhancementBatteryReuseCooldown / eventPlayer.enhancementBatteryReuseDuration * 100, [], eventPlayer.enhancementBatteryPosition + vect(0, 0.4, 0), 0.5, Clip.SURFACES, Color.WHITE, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_POSITION_AND_VALUES)
+            createProgressBarInWorldText(getAllPlayers().filter(lambda player: eventPlayer.enhancementBatteryPosition != 0 and eventPlayer.enhancementBatteryReuseCooldown > 0 and distance(player.getPosition(), eventPlayer.enhancementBatteryPosition) < 6), 100 - eventPlayer.enhancementBatteryReuseCooldown / eventPlayer.enhancementBatteryReuseDuration * 100, [], eventPlayer.enhancementBatteryPosition + 0.4 * Vector.UP, 0.5, Clip.SURFACES, Color.WHITE, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_POSITION_AND_VALUES)
             eventPlayer.enhancementBatteryReuseDuration = 10
             break
         #Hitchhiker
@@ -133,7 +133,7 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             # enhancementPupCooldown: remaining ability cooldown in seconds (2 after freezing, 1 after laser), gating target selection.
             hudHeader(eventPlayer, "P.U.P. {0}".format(iconString(Icon.HAPPY)), HudPosition.LEFT, 99, Color.BLUE if eventPlayer.enhancementPupColor == Color.SKY_BLUE and eventPlayer.enhancementPupCooldown > 0 else eventPlayer.enhancementPupColor, HudReeval.VISIBILITY_STRING_AND_COLOR)
             #Postion of P.U.P.
-            eventPlayer.enhancementPupPosition = eventPlayer.getPosition() + vect(0, 200, 0)
+            eventPlayer.enhancementPupPosition = eventPlayer.getPosition() + 200 * Vector.UP
             #P.U.P. Default movment
             chaseAtRate(eventPlayer.enhancementPupPosition, eventPlayer.getEyePosition() + directionTowards(eventPlayer.getEyePosition(), eventPlayer.enhancementPupPosition), abs(distance(eventPlayer.getEyePosition(), eventPlayer.enhancementPupPosition) - 1))
             eventPlayer.enhancementPupCooldown = 0
@@ -197,9 +197,9 @@ rule "LASER BARRICADE (PLACEMENT)":
     #Barrier center point
     eventPlayer.enhancementBarrierPosition = raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)
     #Barrier corner 1
-    eventPlayer.enhancementBarrierCorner1 = eventPlayer.enhancementBarrierPosition + worldVector(vect(-0.5 * LASER_BARRICADE_WIDTH, 0, 0), eventPlayer, Transform.ROTATION)
+    eventPlayer.enhancementBarrierCorner1 = eventPlayer.enhancementBarrierPosition + worldVector((-0.5 * LASER_BARRICADE_WIDTH) * Vector.LEFT, eventPlayer, Transform.ROTATION)
     #Barrier Corner 2
-    eventPlayer.enhancementBarrierCorner2 = eventPlayer.enhancementBarrierPosition + worldVector(vect(0.5 * LASER_BARRICADE_WIDTH, 0, 0), eventPlayer, Transform.ROTATION)
+    eventPlayer.enhancementBarrierCorner2 = eventPlayer.enhancementBarrierPosition + worldVector((0.5 * LASER_BARRICADE_WIDTH) * Vector.LEFT, eventPlayer, Transform.ROTATION)
     # Horizontal push direction captured at placement; reference points are center +/- this vector.
     eventPlayer.enhancementBarrierFacing = directionFromAngles(eventPlayer.getHorizontalFacingAngle(), 0)
     # Along-barrier direction, reused by collision checks.
@@ -248,10 +248,10 @@ rule "LASER BARRICADE BLOCKS ZOMBIES":
             damage(barrierCollisionTarget, eventPlayer, 10)
         if barrierCollisionTarget.getThrottle() == vect(0, 0, 0):
             #If bot is not throttling
-            barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(barrierPushReferencePointList, lambda x: distance(barrierCollisionTarget.getPosition(), x)))[0])), (-1 if barrierCollisionTarget.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(barrierCollisionTarget.getPosition(), barrierCollisionTarget.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
+            barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(barrierPushReferencePointList, lambda x: distance(barrierCollisionTarget.getPosition(), x)))[0])), (-1 if barrierCollisionTarget.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(barrierCollisionTarget.getPosition(), barrierCollisionTarget.getPosition() + Vector.DOWN, null, getAllPlayers(), false))))), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
         else:
             #If bot is throttling
-            barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(barrierPushReferencePointList, lambda x: angleBetweenVectors(worldVector(barrierCollisionTarget.getThrottle(), barrierCollisionTarget, Transform.ROTATION), directionTowards(eventPlayer.enhancementBarrierPosition, x)))).last())), (-1 if barrierCollisionTarget.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(barrierCollisionTarget.getPosition(), barrierCollisionTarget.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+            barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(barrierPushReferencePointList, lambda x: angleBetweenVectors(worldVector(barrierCollisionTarget.getThrottle(), barrierCollisionTarget, Transform.ROTATION), directionTowards(eventPlayer.enhancementBarrierPosition, x)))).last())), (-1 if barrierCollisionTarget.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(barrierCollisionTarget.getPosition(), barrierCollisionTarget.getPosition() + Vector.DOWN, null, getAllPlayers(), false))))), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     wait()
     if ruleCondition:
         loop()
@@ -450,7 +450,7 @@ rule "HITCHHIKER ATTACH/DETATCH":
             eventPlayer.enhancementHitchhikerCarrier = (sorted(playerTargetList.exclude(eventPlayer).filter(lambda x: not x.isCrowdControlled and distance(eventPlayer.getPosition(), x.getPosition()) < x.sizeScale * 2), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition()))))[0]
             # hitchhikerWorldAttachmentPosition: attachment position in world space, converted and captured before any wait.
             #!define hitchhikerWorldAttachmentPosition tmp0
-            hitchhikerWorldAttachmentPosition = eventPlayer.enhancementHitchhikerCarrier.getPosition() + directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementHitchhikerCarrier.getPosition(), eventPlayer.getPosition())), 0) * eventPlayer.enhancementHitchhikerCarrier.sizeScale + vect(0, eventPlayer.enhancementHitchhikerCarrier.sizeScale, 0)
+            hitchhikerWorldAttachmentPosition = eventPlayer.enhancementHitchhikerCarrier.getPosition() + directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementHitchhikerCarrier.getPosition(), eventPlayer.getPosition())), 0) * eventPlayer.enhancementHitchhikerCarrier.sizeScale + eventPlayer.enhancementHitchhikerCarrier.sizeScale * Vector.UP
             # hitchhikerLocalAttachmentOffset: convert the attachment position to the parent's local coordinates.
             #!define hitchhikerLocalAttachmentOffset tmp0
             hitchhikerLocalAttachmentOffset = localVector(hitchhikerWorldAttachmentPosition, eventPlayer.enhancementHitchhikerCarrier, Transform.ROTATION_AND_TRANSLATION)

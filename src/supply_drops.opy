@@ -41,9 +41,9 @@ rule "GENERATE SUPPLY DROPS":
             #Sets supply drop location
             supplyDropLandingPosition = supplyDropCandidatePosition
             #Sets supply drop location to be placed on ground (in the case that a walkable position is underground for some reason)
-            supplyDropLandingPosition = raycastHitPosition(supplyDropLandingPosition + vect(0, 2, 0), supplyDropLandingPosition + vect(0, 0, 0), getAllPlayers(), getAllPlayers(), false)
+            supplyDropLandingPosition = raycastHitPosition(supplyDropLandingPosition + 2 * Vector.UP, supplyDropLandingPosition + vect(0, 0, 0), getAllPlayers(), getAllPlayers(), false)
         wait(0.25)
-    supplyDropPosition = supplyDropLandingPosition + vect(0, 200, 0)
+    supplyDropPosition = supplyDropLandingPosition + 200 * Vector.UP
     chaseOverTime(supplyDropPosition, supplyDropLandingPosition, 15)
     bigMessage(getPlayers(Team.1), "Supply drop incoming!")
     waitUntil(supplyDropPosition == supplyDropLandingPosition, 99999)
@@ -67,11 +67,11 @@ rule "EFFECT/TEXT (GLOBAL)":
     #Supply drop landing ring
     createEffect(getAllPlayers().filter(lambda _: supplyDropLandingPosition != null), Effect.RING, Color.AQUA, supplyDropLandingPosition, 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     #Open supply drop text
-    createInWorldText(getLivingPlayers(Team.1).filter(lambda player: supplyDropLandingPosition != null and distance(supplyDropLandingPosition, supplyDropPosition) < 1 and not isSupplyDropOpen and distance(player.getPosition(), supplyDropLandingPosition) <= 6 and distance(supplyDropLandingPosition, player.getEyePosition() + player.getFacingDirection() * distance(player.getEyePosition(), supplyDropLandingPosition)) < 0.5), "[{0}]".format(inputBindingString(Button.INTERACT)), supplyDropPosition + vect(0, 1, 0), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.BLUE)
+    createInWorldText(getLivingPlayers(Team.1).filter(lambda player: supplyDropLandingPosition != null and distance(supplyDropLandingPosition, supplyDropPosition) < 1 and not isSupplyDropOpen and distance(player.getPosition(), supplyDropLandingPosition) <= 6 and distance(supplyDropLandingPosition, player.getEyePosition() + player.getFacingDirection() * distance(player.getEyePosition(), supplyDropLandingPosition)) < 0.5), "[{0}]".format(inputBindingString(Button.INTERACT)), supplyDropPosition + Vector.UP, 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.BLUE)
     #Pick up power up text
     createInWorldText(localPlayer if len(supplyPowerUpPositionList.filter(lambda x: distance(x, localPlayer.getEyePosition() + localPlayer.getFacingDirection() * distance(localPlayer.getEyePosition(), x)) < 0.5 and distance(localPlayer.getPosition(), x) <= 6)) else null, "[{0}]".format(inputBindingString(Button.INTERACT)), offsetUpHalfConst + ((sorted(supplyPowerUpPositionList.filter(lambda x: distance(x, localPlayer.getEyePosition() + localPlayer.getFacingDirection() * distance(localPlayer.getEyePosition(), x)) < 0.5 and distance(localPlayer.getPosition(), x) <= 6), lambda x: angleBetweenVectors(localPlayer.getFacingDirection(), directionTowards(localPlayer.getEyePosition(), x))))[0]), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.GREEN)
     #Supply drop landing icon
-    createIcon(getAllPlayers().filter(lambda player: supplyDropLandingPosition != null and distance(player.getPosition(), supplyDropPosition) > 5), supplyDropPosition + vect(0, 1, 0), Icon.PLUS, IconReeval.VISIBILITY_AND_POSITION, Color.AQUA)
+    createIcon(getAllPlayers().filter(lambda player: supplyDropLandingPosition != null and distance(player.getPosition(), supplyDropPosition) > 5), supplyDropPosition + Vector.UP, Icon.PLUS, IconReeval.VISIBILITY_AND_POSITION, Color.AQUA)
     #Supply drop distance
     createInWorldText(getAllPlayers().filter(lambda player: supplyDropLandingPosition != null and distance(player.getPosition(), supplyDropPosition) > 5), "Supply Drop: {0}m".format(distance(localPlayer.getPosition(), supplyDropPosition)), supplyDropPosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.AQUA, SpecVisibility.NEVER)
 
@@ -210,11 +210,11 @@ def airStrike():
         #Random position in ring
         # airStrikeRayStartPosition: candidate explosion position above the strike area, to raycast onto the ground.
         #!define airStrikeRayStartPosition tmp0
-        airStrikeRayStartPosition = eventPlayer.powerUpAirStrikePosition + vect(0, 5, 0) + directionFromAngles(random.uniform(0, 360), 0) * random.uniform(0, 10)
+        airStrikeRayStartPosition = eventPlayer.powerUpAirStrikePosition + 5 * Vector.UP + directionFromAngles(random.uniform(0, 360), 0) * random.uniform(0, 10)
         #Ray Cast downwards
         # airStrikeImpactPosition: ground impact position, shared by this explosion's effects and damage-radius check.
         #!define airStrikeImpactPosition tmp0
-        airStrikeImpactPosition = raycastHitPosition(airStrikeRayStartPosition, airStrikeRayStartPosition + vect(0, -25, 0), null, getAllPlayers(), false)
+        airStrikeImpactPosition = raycastHitPosition(airStrikeRayStartPosition, airStrikeRayStartPosition + -25 * Vector.UP, null, getAllPlayers(), false)
         playEffect(getAllPlayers(), DynamicEffect.BAD_PICKUP_EFFECT, Color.ORANGE, airStrikeImpactPosition, 2.5)
         playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, airStrikeImpactPosition, 5)
         playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, airStrikeImpactPosition, 100)
@@ -235,7 +235,7 @@ def healBeacon():
     
     eventPlayer.powerUpHealBeaconPosition = eventPlayer.getPosition()
     if not entityExists(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_LIGHT_SHAFT]):
-        createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition + vect(0, -2, 0), 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition + -2 * Vector.UP, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_LIGHT_SHAFT] = getLastCreatedEntity()
         createEffect(getAllPlayers(), Effect.RING, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition, 10, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_RING] = getLastCreatedEntity()
@@ -249,7 +249,7 @@ def healBeacon():
     #Heal Beacon duration
     for eventPlayer.powerUpHealBeaconTimeRemaining in range(30, 0, -1):
         wait(1)
-        playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition + vect(0, 1, 0), 0.1)
+        playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition + Vector.UP, 0.1)
         getPlayersInRadius(eventPlayer.powerUpHealBeaconPosition, 10, eventPlayer.getTeam()).startHealingOverTime(eventPlayer, 2, 30)
     destroyEffect(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_LIGHT_SHAFT])
     destroyEffect(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_RING])
@@ -280,7 +280,7 @@ def sentryTurret():
     #Sentry Gun Duration
     for eventPlayer.powerUpTurretTimeRemaining in range(30, 0, -0.125):
         if (len(getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.powerUpTurretPosition, player) and not player.botIsTeleporting))) > 0:
-            eventPlayer.powerUpTurretDirection = directionTowards(eventPlayer.powerUpTurretPosition, sorted(getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.powerUpTurretPosition, player)), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition())))[0].getPosition() + vect(0, 1, 0))
+            eventPlayer.powerUpTurretDirection = directionTowards(eventPlayer.powerUpTurretPosition, sorted(getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.powerUpTurretPosition, player)), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition())))[0].getPosition() + Vector.UP)
             # turretShotImpactPosition: turret shot's impact position with random spread, to place its explosion and damage ray.
             #!define turretShotImpactPosition tmp0
             turretShotImpactPosition = raycastHitPosition(eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + ((directionFromAngles(random.uniform(-1, 1) + horizontalAngleOfDirection(eventPlayer.powerUpTurretDirection), random.uniform(-1, 1) + verticalAngleOfDirection(eventPlayer.powerUpTurretDirection))) * 100), getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())), getPlayers(eventPlayer.getTeam()), true)
@@ -382,7 +382,7 @@ def bouncePad():
     #Bounce pad duration
     for eventPlayer.powerUpBouncePadTimeRemaining in range(60, 0, -0.125):
         if eventPlayer.powerUpBouncePadTimeRemaining % 0.25 == 0:
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.PURPLE, eventPlayer.powerUpBouncePadPosition + vect(0, 0.125, 0), 4)
+            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.PURPLE, eventPlayer.powerUpBouncePadPosition + 0.125 * Vector.UP, 4)
         #Determine which players are on the bounce pad
         # bouncePadSurvivorList: grounded survivors on this pad, to apply the bounce and play feedback for this tick.
         #!define bouncePadSurvivorList tmp0
@@ -396,7 +396,7 @@ def bouncePad():
                 # bouncePadSurvivor: current survivor from bouncePadSurvivorList, to apply this tick's upward impulse.
                 #!define bouncePadSurvivor tmp2
                 bouncePadSurvivor = bouncePadSurvivorList[bouncePadSurvivorIndex]
-                bouncePadSurvivor.applyImpulse(vect(0, 1, 0), 22, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+                bouncePadSurvivor.applyImpulse(Vector.UP, 22, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
             playEffect(bouncePadSurvivorList, DynamicEffect.RING_EXPLOSION_SOUND, Color.WHITE, eventPlayer.powerUpBouncePadPosition, 50)
         wait(0.125)
     wait(0.25)

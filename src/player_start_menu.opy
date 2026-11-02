@@ -25,9 +25,9 @@ rule "PLAYER MENU INITIALIZATION":
         eventPlayer.pregameChallengeVote = difficultySetting
         eventPlayer.pregameZombieVote = zombieSetting
         eventPlayer.pregameObjectiveVote = objectiveTypeSetting
-    eventPlayer.pregamePosition = startCamPos + vect(0, -1.5, 0) + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + startMenuSpacingAngle + (eventPlayer.getSlot() * (startMenuSpacingAngle * -2 / (max(getNumberOfSlots(Team.1) - 1, 1)))), 0)) * START_CAM_DISTANCE)
+    eventPlayer.pregamePosition = startCamPos + -1.5 * Vector.UP + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + startMenuSpacingAngle + (eventPlayer.getSlot() * (startMenuSpacingAngle * -2 / (max(getNumberOfSlots(Team.1) - 1, 1)))), 0)) * START_CAM_DISTANCE)
     if not isSpecialGameMode:
-        eventPlayer.pregamePosition = raycastHitPosition(eventPlayer.pregamePosition + vect(0, 3, 0), eventPlayer.pregamePosition, getAllPlayers(), getAllPlayers(), false)
+        eventPlayer.pregamePosition = raycastHitPosition(eventPlayer.pregamePosition + 3 * Vector.UP, eventPlayer.pregamePosition, getAllPlayers(), getAllPlayers(), false)
     enableDisableAbilities()
 
 
@@ -42,17 +42,17 @@ rule "EFFECTS/TEXT":
         createEffect(getAllPlayers().filter(lambda _: eventPlayer.pregameState < PregameState.READY), Effect.RING, Color.SKY_BLUE, eventPlayer.pregamePosition, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     else:
         #Invis start light shaft
-        createEffect(getAllPlayers().filter(lambda _: eventPlayer.pregameState < PregameState.READY), Effect.LIGHT_SHAFT, Color.SKY_BLUE, eventPlayer.pregamePosition + vect(0, -10, 0), 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createEffect(getAllPlayers().filter(lambda _: eventPlayer.pregameState < PregameState.READY), Effect.LIGHT_SHAFT, Color.SKY_BLUE, eventPlayer.pregamePosition + -10 * Vector.UP, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     #In world hero text
     createInWorldText(getAllPlayers().filter(lambda _: eventPlayer.pregameState < PregameState.READY), heroIcon(eventPlayer.getHero()) if eventPlayer.pregameState == PregameState.HERO_SELECTED else "?", eventPlayer.pregamePosition + offsetUpHalfConst, 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING)
     #Selecting hero text
     createInWorldText(getAllPlayers().filter(lambda _: eventPlayer.pregameState < PregameState.READY and eventPlayer.isPregameVoting == false), "SELECTING HERO..." if eventPlayer.pregameState < PregameState.HERO_SELECTED else "Getting Ready...", eventPlayer.pregamePosition + offsetUpOneAndHalfConst, 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.SKY_BLUE)
     #Voting text
-    createInWorldText(getAllPlayers().filter(lambda _: eventPlayer.isPregameVoting == true), "Voting...", eventPlayer.pregamePosition + (vect(0, 1.5 if eventPlayer.pregameState < PregameState.READY else -1, 0)), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.PURPLE)
+    createInWorldText(getAllPlayers().filter(lambda _: eventPlayer.isPregameVoting == true), "Voting...", eventPlayer.pregamePosition + ((1.5 if eventPlayer.pregameState < PregameState.READY else -1) * Vector.UP), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.PURPLE)
     #Name text
-    createInWorldText(getAllPlayers().filter(lambda _: eventPlayer.pregameState < PregameState.READY), eventPlayer, eventPlayer.pregamePosition + vect(0, -1, 0), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.AQUA)
+    createInWorldText(getAllPlayers().filter(lambda _: eventPlayer.pregameState < PregameState.READY), eventPlayer, eventPlayer.pregamePosition + Vector.DOWN, 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.AQUA)
     #Enhancement icon
-    createInWorldText(getAllPlayers(), enhancementOptionList[eventPlayer.enhancementId], eventPlayer.pregamePosition + vect(0, 2.25, 0), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING)
+    createInWorldText(getAllPlayers(), enhancementOptionList[eventPlayer.enhancementId], eventPlayer.pregamePosition + 2.25 * Vector.UP, 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING)
 
 
 rule "PLAYER SELECTS/RESELECTS HERO":
@@ -66,7 +66,7 @@ rule "PLAYER SELECTS/RESELECTS HERO":
     wait(0.016, Wait.ABORT_WHEN_FALSE)
     startRule(setPrematchTimer)
     eventPlayer.setInvisibility(Invis.ALL)
-    eventPlayer.startCamera(startCamPos, startPos + vect(0, 1, 0))
+    eventPlayer.startCamera(startCamPos, startPos + Vector.UP)
     eventPlayer.startHealingOverTime(null, 5, 1000)
     eventPlayer.setStatusEffect(null, Status.INVINCIBLE, 99999)
     eventPlayer.setStatusEffect(null, Status.ROOTED, 99999)

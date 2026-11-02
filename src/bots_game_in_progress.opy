@@ -106,7 +106,7 @@ rule "KILL BOTS THAT ARE STUCK OR ARE NOT MOVING":
         wait(random.uniform(7.5, 12.5), Wait.ABORT_WHEN_FALSE)
     else:
         wait(5, Wait.ABORT_WHEN_FALSE)
-    eventPlayer.teleport(vect(0, -500, 0))
+    eventPlayer.teleport(-500 * Vector.UP)
     if ruleCondition:
         loop()
 
@@ -365,7 +365,7 @@ rule "BOTS MELEE":
         eventPlayer.botIsEnsnarerMeleeActive = true
         eventPlayer.botIsFacingOverridden = true
         eventPlayer.botEnsnarerMeleeAngle = -20
-        eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition() + vect(eventPlayer.botEnsnarerMeleeAngle, 0, 0)), 9999 if eventPlayer.botEnsnarerMeleeAngle == -20 else 100)
+        eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition() + eventPlayer.botEnsnarerMeleeAngle * Vector.LEFT), 9999 if eventPlayer.botEnsnarerMeleeAngle == -20 else 100)
         chaseOverTime(eventPlayer.botEnsnarerMeleeAngle, 25, 3)
         for eventPlayer.botEnsnarerUltimateIndex in range(5):
             eventPlayer.setUltCharge(100)

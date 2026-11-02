@@ -246,13 +246,13 @@ macro globalObjectiveEntityManagementMacro():
             # extractionLightShaftLayerIndex: extraction light-shaft layer index, to select heights -2, 22 and 46.
             #!define extractionLightShaftLayerIndex tmp0
             for extractionLightShaftLayerIndex in range(3):
-                createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.SKY_BLUE, currentObjectivePosition + vect(0, [-2, 22, 46][extractionLightShaftLayerIndex], 0), objectiveRad, EffectReeval.VISIBILITY)
+                createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.SKY_BLUE, currentObjectivePosition + ([-2, 22, 46][extractionLightShaftLayerIndex]) * Vector.UP, objectiveRad, EffectReeval.VISIBILITY)
                 objectiveEntityIdList.append(getLastCreatedEntity())
             #Extraction icon
-            createIcon(getAllPlayers().exclude(objectivePlayerList), currentObjectivePosition + vect(0, 1, 0), Icon.ARROW_DOWN, IconReeval.VISIBILITY, Color.SKY_BLUE)
+            createIcon(getAllPlayers().exclude(objectivePlayerList), currentObjectivePosition + Vector.UP, Icon.ARROW_DOWN, IconReeval.VISIBILITY, Color.SKY_BLUE)
             objectiveEntityIdList.append(getLastCreatedEntity())
             #Extraction text
-            createInWorldText(getAllPlayers().exclude(objectivePlayerList), "GET TO THE EXTRACTION POINT", currentObjectivePosition + vect(0, 5, 0), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.SKY_BLUE)
+            createInWorldText(getAllPlayers().exclude(objectivePlayerList), "GET TO THE EXTRACTION POINT", currentObjectivePosition + 5 * Vector.UP, 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.SKY_BLUE)
             objectiveEntityIdList.append(getLastCreatedText())
         #Standoff
         else:
@@ -266,16 +266,16 @@ macro globalObjectiveEntityManagementMacro():
             createEffect(getAllPlayers(), Effect.RING, objectiveColor, vect(currentObjectivePosition.x, localPlayer.getPosition().y, currentObjectivePosition.z), objectiveRad)
             objectiveEntityIdList.append(getLastCreatedEntity())
             #Objective boundary (Light Shaft)
-            createEffect(objectivePlayerList, Effect.LIGHT_SHAFT, objectiveColor, currentObjectivePosition + vect(0, -30, 0), objectiveRad)
+            createEffect(objectivePlayerList, Effect.LIGHT_SHAFT, objectiveColor, currentObjectivePosition + -30 * Vector.UP, objectiveRad)
             objectiveEntityIdList.append(getLastCreatedEntity())
             #Objective beacon
-            createEffect(getAllPlayers().filter(lambda _: len(objectivePlayerList) > 0), Effect.LIGHT_SHAFT, objectiveColor, currentObjectivePosition + vect(0, -10, 0), objectiveRad / 20)
+            createEffect(getAllPlayers().filter(lambda _: len(objectivePlayerList) > 0), Effect.LIGHT_SHAFT, objectiveColor, currentObjectivePosition + -10 * Vector.UP, objectiveRad / 20)
             objectiveEntityIdList.append(getLastCreatedEntity())
             #Objective icon
-            createIcon(getAllPlayers().exclude(objectivePlayerList), currentObjectivePosition + vect(0, 1, 0), Icon.ARROW_DOWN, IconReeval.VISIBILITY_AND_COLOR, objectiveColor)
+            createIcon(getAllPlayers().exclude(objectivePlayerList), currentObjectivePosition + Vector.UP, Icon.ARROW_DOWN, IconReeval.VISIBILITY_AND_COLOR, objectiveColor)
             objectiveEntityIdList.append(getLastCreatedEntity())
             #Capture percentage text
-            createInWorldText(objectivePlayerList, "CAPTURE PERCENTAGE: {0}%".format(floor(showdownCapturePercent)), currentObjectivePosition + vect(0, 1, 0), 2, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, objectiveColor)
+            createInWorldText(objectivePlayerList, "CAPTURE PERCENTAGE: {0}%".format(floor(showdownCapturePercent)), currentObjectivePosition + Vector.UP, 2, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, objectiveColor)
             objectiveEntityIdList.append(getLastCreatedText())
             #Capture percentage hud text
             hudText(getAllPlayers(), "Capture Percentage: {0}%".format(floor(showdownCapturePercent)), "Objectives remaining: {0}".format(len(objectivePositionList) - 1), "{0} {2}".format("Allies: {0}".format(len(objectivePlayerList)) if len(objectivePlayerList) > 0 else [], null, "Foes: {0}".format(len(showdownContestingZombieList)) if len(showdownContestingZombieList) > 0 else []), HudPosition.TOP, 1, objectiveColor, objectiveColor, objectiveColor, HudReeval.VISIBILITY_STRING_AND_COLOR)
@@ -303,13 +303,13 @@ macro globalObjectiveEntityManagementMacro():
         hudSubheader(localPlayer.filter(lambda _: localPlayer.biomorphingResourceAmount > 0), "Turn in your health at the deposit area" if biomorphingGoalQueueList[0] == 3 else "You have a zombie {0}".format(biomorphingResourceNameList[localPlayer.biomorphingResourceType]), HudPosition.TOP, 2, biomorphingResourceColorList[localPlayer.biomorphingResourceType], HudReeval.VISIBILITY_STRING_AND_COLOR)
         objectiveEntityIdList.append(getLastCreatedText())
         #Collection site icon
-        createIcon(getPlayers(Team.1).filter(lambda player: player.biomorphingResourceAmount > 0 and not player in objectivePlayerList), currentObjectivePosition + vect(0, 1, 0), Icon.ARROW_DOWN, IconReeval.VISIBILITY, objectiveColor)
+        createIcon(getPlayers(Team.1).filter(lambda player: player.biomorphingResourceAmount > 0 and not player in objectivePlayerList), currentObjectivePosition + Vector.UP, Icon.ARROW_DOWN, IconReeval.VISIBILITY, objectiveColor)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Collection site ring
-        createEffect(getPlayers(Team.1), Effect.RING, Color.WHITE, currentObjectivePosition + vect(0, -1, 0), objectiveRad, EffectReeval.VISIBILITY)
+        createEffect(getPlayers(Team.1), Effect.RING, Color.WHITE, currentObjectivePosition + Vector.DOWN, objectiveRad, EffectReeval.VISIBILITY)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Biowaste deposit site boundary (Light Shaft)
-        createEffect(objectivePlayerList, Effect.LIGHT_SHAFT, biomorphingResourceColorList[localPlayer.biomorphingResourceType], currentObjectivePosition + vect(0, -2, 0), objectiveRad, EffectReeval.VISIBILITY_AND_COLOR)
+        createEffect(objectivePlayerList, Effect.LIGHT_SHAFT, biomorphingResourceColorList[localPlayer.biomorphingResourceType], currentObjectivePosition + -2 * Vector.UP, objectiveRad, EffectReeval.VISIBILITY_AND_COLOR)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Depositing resources progress bar
         createProgressBarInWorldText(localPlayer.filter(lambda x: x in objectivePlayerList), ceil(localPlayer.getNormalizedHealth() * 100) if biomorphingGoalQueueList[0] == 3 else localPlayer.biomorphingResourceAmount / BIOMORPHING_RESOURCE_AMOUNT * 100, "Depositing Biowaste...", updateEveryFrame(localPlayer.getEyePosition() + (directionFromAngles(horizontalAngleOfDirection(localPlayer.getFacingDirection()), verticalAngleOfDirection(localPlayer.getFacingDirection()) + 15))) if localPlayer in objectivePlayerList else evalOnce(localPlayer.getPosition()), 1, Clip.NONE, biomorphingResourceColorList[localPlayer.biomorphingResourceType], Color.WHITE, ProgressWorldTextReeval.VISIBILITY_POSITION_VALUES_AND_COLOR, SpecVisibility.NEVER)
@@ -320,13 +320,13 @@ macro globalObjectiveEntityManagementMacro():
     #Survivor Rescue
     elif objectiveValue == ObjectiveType.SURVIVOR_RESCUE:
         #Extraction site light shaft 2
-        createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.VIOLET, currentObjectivePosition + vect(0, -2, 0), 5, EffectReeval.VISIBILITY)
+        createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.VIOLET, currentObjectivePosition + -2 * Vector.UP, 5, EffectReeval.VISIBILITY)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Objectives remaining text
         hudSubheader(getPlayers(Team.1), "Objectives Remaining: {0}".format(len(objectivePositionList) - 1), HudPosition.TOP, 1, Color.VIOLET, HudReeval.VISIBILITY)
         objectiveEntityIdList.append(getLastCreatedText())
         #Objective icon
-        createIcon(getAllPlayers().filter(lambda player: distance(player.getPosition(), rescueSurvivor[0].getPosition()) < objectiveRad and distance(player.getPosition(), currentObjectivePosition) > 5), currentObjectivePosition + vect(0, 1, 0), Icon.ARROW_DOWN, IconReeval.VISIBILITY_AND_POSITION, Color.VIOLET)
+        createIcon(getAllPlayers().filter(lambda player: distance(player.getPosition(), rescueSurvivor[0].getPosition()) < objectiveRad and distance(player.getPosition(), currentObjectivePosition) > 5), currentObjectivePosition + Vector.UP, Icon.ARROW_DOWN, IconReeval.VISIBILITY_AND_POSITION, Color.VIOLET)
         objectiveEntityIdList.append(getLastCreatedEntity())
     #Killzone
     elif objectiveValue == ObjectiveType.KILL_ZONE:
@@ -340,7 +340,7 @@ macro globalObjectiveEntityManagementMacro():
         createInWorldText(getAllPlayers().filter(lambda player: distance(player.getPosition(), killZoneCenter) > objectiveRad), "Distance: {0}m".format(distance(localPlayer.getPosition(), killZoneCenter) - objectiveRad), killZoneCenter, 1, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.RED, SpecVisibility.NEVER)
         objectiveEntityIdList.append(getLastCreatedText())
         #Objective icon
-        createIcon(getAllPlayers().filter(lambda player: distance(player.getPosition(), killZoneCenter) > objectiveRad), killZoneCenter + vect(0, 1, 0), Icon.ARROW_DOWN, IconReeval.VISIBILITY, Color.RED)
+        createIcon(getAllPlayers().filter(lambda player: distance(player.getPosition(), killZoneCenter) > objectiveRad), killZoneCenter + Vector.UP, Icon.ARROW_DOWN, IconReeval.VISIBILITY, Color.RED)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Kill Zone Sphere
         createEffect(getAllPlayers().filter(lambda player: distance(player.getPosition(), killZoneCenter) > objectiveRad), Effect.SPHERE, Color.GRAY, killZoneCenter, objectiveRad, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -363,13 +363,13 @@ macro globalObjectiveEntityManagementMacro():
         createInWorldText(getAllPlayers(), "Destroy: {0}m".format(distance(localPlayer.getPosition(), currentObjectivePosition)), currentObjectivePosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.LIME_GREEN, SpecVisibility.NEVER)
         objectiveEntityIdList.append(getLastCreatedText())
         #Objective icon
-        createIcon(getAllPlayers(), currentObjectivePosition + vect(0, 1, 0), Icon.RADIOACTIVE, IconReeval.VISIBILITY_AND_POSITION, Color.LIME_GREEN)
+        createIcon(getAllPlayers(), currentObjectivePosition + Vector.UP, Icon.RADIOACTIVE, IconReeval.VISIBILITY_AND_POSITION, Color.LIME_GREEN)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Egg visual
         createEffect(getAllPlayers().filter(lambda _: zombieEggStateList[0] != null), Effect.SPHERE, Color.LIME_GREEN, currentObjectivePosition, 2.5 + abs(0.5 * (sin(0.5 * getTotalTimeElapsed()))), EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Egg toxic gas visual (stationary)
-        createEffect(getAllPlayers(), Effect.CLOUD, Color.LIME_GREEN, currentObjectivePosition + vect(0, -1, 0), 25, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createEffect(getAllPlayers(), Effect.CLOUD, Color.LIME_GREEN, currentObjectivePosition + Vector.DOWN, 25, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         objectiveEntityIdList.append(getLastCreatedEntity())
     #Satellite Uplink
     elif objectiveValue == ObjectiveType.SATELLITE_UPLINK:
@@ -377,7 +377,7 @@ macro globalObjectiveEntityManagementMacro():
         hudText(getAllPlayers(), "{0}% | {1}% | {2}%".format(floor(satelliteTerminalProgressList[0]), floor(satelliteTerminalProgressList[1]), floor(satelliteTerminalProgressList[2])), "Objectives remaining: {0}".format(len(objectivePositionList) - 1), [], HudPosition.TOP, 1, objectiveColor, objectiveColor, objectiveColor, HudReeval.VISIBILITY_AND_STRING)
         objectiveEntityIdList.append(getLastCreatedText())
         #Fixing terminal light shaft
-        createEffect(objectivePlayerList, Effect.LIGHT_SHAFT, objectiveColor, sorted(satelliteTerminalPositionList, lambda x: distance(localPlayer.getPosition(), x))[0] + vect(0, -2, 0), objectiveRad, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createEffect(objectivePlayerList, Effect.LIGHT_SHAFT, objectiveColor, sorted(satelliteTerminalPositionList, lambda x: distance(localPlayer.getPosition(), x))[0] + -2 * Vector.UP, objectiveRad, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Current terminal repair percentage
         createInWorldText(objectivePlayerList, "{0}%".format(floor(satelliteTerminalProgressList[satelliteTerminalPositionList.index(sorted(satelliteTerminalPositionList, lambda x: distance(localPlayer.getPosition(), x))[0])])), updateEveryFrame(localPlayer.getEyePosition() + ((directionFromAngles(localPlayer.getHorizontalFacingAngle(), localPlayer.getVerticalFacingAngle() + 15)) * 200)), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, objectiveColor)
@@ -387,13 +387,13 @@ macro globalObjectiveEntityManagementMacro():
         #!define satelliteTerminalVisualIndex tmp0
         for satelliteTerminalVisualIndex in range(len(satelliteTerminalProgressList)):
             #Terminal icon
-            createIcon(getPlayers(Team.1).filter(lambda player: distance(player.getPosition(), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)]) > objectiveRad and satelliteTerminalProgressList[evalOnce(satelliteTerminalVisualIndex)] < 100), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)] + vect(0, 1, 0), Icon.BOLT, IconReeval.VISIBILITY_AND_POSITION, objectiveColor)
+            createIcon(getPlayers(Team.1).filter(lambda player: distance(player.getPosition(), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)]) > objectiveRad and satelliteTerminalProgressList[evalOnce(satelliteTerminalVisualIndex)] < 100), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)] + Vector.UP, Icon.BOLT, IconReeval.VISIBILITY_AND_POSITION, objectiveColor)
             objectiveEntityIdList.append(getLastCreatedEntity())
             #Terminal repair area ring
             createEffect(getAllPlayers(), Effect.RING, objectiveColor, satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)], objectiveRad, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             objectiveEntityIdList.append(getLastCreatedEntity())
             #Terminal "screen" light shaft
-            createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, objectiveColor, satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)] + directionTowards(satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)], currentObjectivePosition) * objectiveRad * 0.8 + vect(0, -1.5, 0), 0.25, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, objectiveColor, satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)] + directionTowards(satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)], currentObjectivePosition) * objectiveRad * 0.8 + -1.5 * Vector.UP, 0.25, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             objectiveEntityIdList.append(getLastCreatedEntity())
             #Objective distance
             createInWorldText(getAllPlayers().filter(lambda player: satelliteTerminalProgressList[evalOnce(satelliteTerminalVisualIndex)] < 100 and distance(player.getPosition(), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)]) > objectiveRad), "Distance: {0}m".format(distance(localPlayer.getPosition(), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)])), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, objectiveColor, SpecVisibility.NEVER)

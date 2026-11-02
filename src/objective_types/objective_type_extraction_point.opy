@@ -54,12 +54,12 @@ rule "PLAYER EXTRACTION CONTROL":
     @Condition eventPlayer in evacSurvivorList == true
     
     eventPlayer.extractionFlightPosition = eventPlayer.getPosition()
-    chaseAtRate(eventPlayer.extractionFlightPosition, eventPlayer.extractionFlightPosition + vect(0, 200, 0), extractionFlightSpeed)
+    chaseAtRate(eventPlayer.extractionFlightPosition, eventPlayer.extractionFlightPosition + 200 * Vector.UP, extractionFlightSpeed)
     eventPlayer.startForcingPosition(eventPlayer.extractionFlightPosition)
     waitUntil(extractionFlightSpeed > 2, 99999)
-    chaseOverTime(eventPlayer.extractionFlightPosition, currentObjectivePosition + vect(0, 50, 0) + directionFromAngles(360 / len(evacSurvivorList) * evacSurvivorList.index(eventPlayer), 0) * 3, 5)
+    chaseOverTime(eventPlayer.extractionFlightPosition, currentObjectivePosition + 50 * Vector.UP + directionFromAngles(360 / len(evacSurvivorList) * evacSurvivorList.index(eventPlayer), 0) * 3, 5)
     waitUntil(extractionFlightSpeed < 10, 99999)
-    chaseAtRate(eventPlayer.extractionFlightPosition, eventPlayer.extractionFlightPosition + vect(0, 200, 0), extractionFlightSpeed)
+    chaseAtRate(eventPlayer.extractionFlightPosition, eventPlayer.extractionFlightPosition + 200 * Vector.UP, extractionFlightSpeed)
     eventPlayer.extractionDestination = eventPlayer.extractionFlightPosition + directionTowards(currentObjectivePosition, extractionFlightDestination) * 700
     waitUntil(extractionFlightSpeed > 2, 99999)
     chaseAtRate(eventPlayer.extractionFlightPosition, eventPlayer.extractionDestination, extractionFlightSpeed)
@@ -90,7 +90,7 @@ rule "WIN/LOSS CONDITIONS":
     getPlayers(Team.1).setStatusEffect(null, Status.ROOTED, 99999)
     getPlayers(Team.1).setStatusEffect(null, Status.PHASED_OUT, 99999)
     if len(playerTargetList) == 0 or objectivePlayerList == []:
-        getPlayers(Team.1).teleport(vect(0, 500, 0))
+        getPlayers(Team.1).teleport(500 * Vector.UP)
         getAllPlayers().setInvisibility(Invis.ALL)
         wait(0.25)
         getPlayers(Team.1).resurrect()
@@ -108,7 +108,7 @@ rule "WIN/LOSS CONDITIONS":
         (getPlayers(Team.1).filter(lambda player: player.hasSpawned() and distance(currentObjectivePosition, vect(player.getPosition().x, currentObjectivePosition.y, player.getPosition().z)) < objectiveRad)).resurrect()
         getAllPlayers().enableKillFeed()
         wait()
-        extractionFlightDestination = currentObjectivePosition + vect(0, 250, 0) + directionFromAngles(random.uniform(0, 360), 0) * 500
+        extractionFlightDestination = currentObjectivePosition + 250 * Vector.UP + directionFromAngles(random.uniform(0, 360), 0) * 500
         extractionFlightSpeed = 2
         evacSurvivorList = objectivePlayerList
         (getPlayers(Team.1).filter(lambda player: not evacSurvivorList[player])).clearStatusEffect(Status.ROOTED)

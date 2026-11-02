@@ -181,7 +181,7 @@ rule "PREGAME SPAWN ROOM ROTATION":
     @Condition isSpecialGameMode != true
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
-    createDummy(Hero.ANA, Team.2, -1, vect(0, 500, 0))
+    createDummy(Hero.ANA, Team.2, -1, 500 * Vector.UP)
     attackSpawnRooms = []
     spawnRoomIndex = 0
     #Records spawn room locations

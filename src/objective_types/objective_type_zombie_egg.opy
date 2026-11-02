@@ -31,7 +31,7 @@ rule "BOT BECOMES ZOMBIE EGG":
     eventPlayer.startForcingName("Egg")
     eventPlayer.botIsThrottleOverridden = true
     eventPlayer.setInvisibility(Invis.ALL)
-    eventPlayer.startForcingPosition(currentObjectivePosition + vect(0, -2.5, 0))
+    eventPlayer.startForcingPosition(currentObjectivePosition + -2.5 * Vector.UP)
     eventPlayer.startModifyingVoicelinePitch(0.5, false)
     eventPlayer.botBaseHealth = 15000
     eventPlayer.botBossHealth = eventPlayer.botBaseHealth
