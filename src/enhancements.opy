@@ -1,5 +1,6 @@
 #!mainFile "main.opy"
 
+subroutine checkEnhancementPlacement
 
 rule "PLAYER ENHANCEMENT INITIALIZATION":
     @Event eachPlayer
@@ -175,6 +176,9 @@ rule "ZOMBIE HYBRID":
         eventPlayer.enhancementHybridCooldown += -1
 
 
+# Synchronous helper output; consume immediately before any wait or asynchronous work.
+#!define isEnhancementPlacementInvalid tmp0
+
 rule "LASER BARRICADE (PLACEMENT)":
     @Event eachPlayer
     @Team 1
@@ -188,9 +192,8 @@ rule "LASER BARRICADE (PLACEMENT)":
     playEffect(eventPlayer, DynamicEffect.GOOD_EXPLOSION, Color.BLUE, eventPlayer.getEyePosition() + ((directionFromAngles(eventPlayer.getHorizontalFacingAngle() + random.uniform(-5, 5), eventPlayer.getVerticalFacingAngle() + random.uniform(-5, 5))) * 1.5), 0.1)
     playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.BLUE, eventPlayer.getPosition(), 75)
     waitUntil(not eventPlayer.isHoldingButton(Button.MELEE) or eventPlayer.isDead(), 99999)
-    if distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) > 30:
-        return
-    if eventPlayer.isDead():
+    checkEnhancementPlacement()
+    if isEnhancementPlacementInvalid:
         return
     #Laser Barrier health
     eventPlayer.enhancementBarrierHealth = 10000
@@ -398,9 +401,8 @@ rule "CHARGE BATTERY":
     playEffect(eventPlayer, DynamicEffect.GOOD_EXPLOSION, Color.YELLOW, eventPlayer.getEyePosition() + ((directionFromAngles(eventPlayer.getHorizontalFacingAngle() + random.uniform(-5, 5), eventPlayer.getVerticalFacingAngle() + random.uniform(-5, 5))) * 1.5), 0.1)
     playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.YELLOW, eventPlayer.getPosition(), 75)
     waitUntil(not eventPlayer.isHoldingButton(Button.MELEE) or eventPlayer.isDead(), 99999)
-    if distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) > 30:
-        return
-    if eventPlayer.isDead():
+    checkEnhancementPlacement()
+    if isEnhancementPlacementInvalid:
         return
     eventPlayer.enhancementBatteryPosition = raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)
     #Charge Battery cooldown
@@ -435,6 +437,13 @@ rule "CHARGE BATTERY (USAGE AND COOLDOWNS)":
         eventPlayer.enhancementBatteryReuseCooldown += -0.5
     if ruleCondition:
         loop()
+
+
+def checkEnhancementPlacement():
+    # Synchronous output only: no waits, asynchronous work or nested calls before the caller reads tmp0.
+    # Keep the 31 m validation ray separate from each caller's 30 m placement ray and its player filters.
+    # The caller must return on rejection; returning here alone would not cancel placement.
+    isEnhancementPlacementInvalid = distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) > 30 or eventPlayer.isDead()
 
 
 rule "HITCHHIKER ATTACH/DETATCH":

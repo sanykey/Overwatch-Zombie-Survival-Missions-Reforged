@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **26,816 elements**, freeing up **5,448** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+The current OverPy 9.7.20 build uses **26,801 elements**, freeing up **5,463** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+
+- The synchronous `checkEnhancementPlacement` shares Laser Barricade and Charge Battery rejection checks after button release: **26,816 → 26,801 (−15 elements)**, without new variables. Its `tmp0` result is immediately consumed by an abort in the calling rule. The 31 m validation ray, 30 m threshold, death check, separate placement rays, effects and cooldowns are preserved. `node analysis/verify-enhancement-placement.cjs` compares all 234 original compiled rules after restoring the two rejection checks, audits synchronous execution and scratch lifetimes, and rejects four unsafe variants. In-game placement validation has not been performed. [Validation results](analysis/enhancement-placement-validation-2026-11-03.json).
 
 - Saved reconnect-row fields are named using `ReconnectField`, and player states using `ReconnectStatus`. Snapshot and live-row reads, status comparisons and row writes use the enums. All 234 compiled rules match the numeric version; element and variable counts are unchanged.
 

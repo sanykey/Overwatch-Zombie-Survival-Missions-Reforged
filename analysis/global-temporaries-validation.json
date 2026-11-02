@@ -1,9 +1,9 @@
 {
-  "elements": 26834,
+  "elements": 26801,
   "globals": 103,
   "playerVariables": 75,
   "warnings": [],
-  "method": "Backward scratch liveness in compiled Workshop control flow, including expanded macros, branches, loops, skips and implicit trailing Ends. Calls are conservative boundaries. Reevaluated HUD/effect/icon fields are checked for uncaptured scratch references. No in-game validation.",
+  "method": "Backward scratch liveness in compiled Workshop control flow, including expanded macros, branches, loops, skips and implicit trailing Ends. Calls are conservative boundaries unless an explicit synchronous helper contract is validated before inlining. Reevaluated HUD/effect/icon fields are checked for uncaptured scratch references. No in-game validation.",
   "rules": [
     {
       "name": "setDifficulty",
@@ -144,6 +144,12 @@
       "visualActions": 2
     },
     {
+      "name": "PLAYER INITIALIZATION",
+      "controlFlowNodes": 66,
+      "boundaries": 12,
+      "visualActions": 0
+    },
+    {
       "name": "BOT DIES",
       "controlFlowNodes": 48,
       "boundaries": 7,
@@ -234,6 +240,12 @@
       "visualActions": 1
     },
     {
+      "name": "LASER BARRICADE (PLACEMENT)",
+      "controlFlowNodes": 20,
+      "boundaries": 3,
+      "visualActions": 0
+    },
+    {
       "name": "LASER BARRICADE BLOCKS ZOMBIES",
       "controlFlowNodes": 26,
       "boundaries": 3,
@@ -243,6 +255,12 @@
       "name": "PYROTECHNIC APPLIES DAMAGE",
       "controlFlowNodes": 13,
       "boundaries": 1,
+      "visualActions": 0
+    },
+    {
+      "name": "CHARGE BATTERY",
+      "controlFlowNodes": 16,
+      "boundaries": 3,
       "visualActions": 0
     },
     {

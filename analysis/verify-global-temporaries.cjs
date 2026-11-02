@@ -1,5 +1,5 @@
 // Compile current sources, then check scratch-variable lifetimes in Workshop actions.
-// Macros are already expanded. Calls are conservative boundaries except the explicitly audited vote helper.
+// Macros are already expanded. Calls are conservative boundaries except explicitly audited synchronous helpers.
 const fs = require('node:fs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
@@ -162,10 +162,12 @@ function checkRule(name, actions) {
 }
 
 function checkWorkshop(output) {
-    // Validate the no-yield contract and exact input/call/result handoffs before inlining this helper.
+    // Validate no-yield contracts and exact input/call/result handoffs before inlining audited helpers.
     // All other subroutine calls remain conservative scratch boundaries.
     if (/^\s*selectVoteWinner;$/m.test(output))
         output = require('./verify-vote-winner.cjs').prepareScratchAudit(output);
+    if (/^\s*checkEnhancementPlacement;$/m.test(output))
+        output = require('./verify-enhancement-placement.cjs').prepareScratchAudit(output);
     const results = [];
     for (const m of output.matchAll(/^rule \("((?:\\.|[^"\\])*)"\) \{\n([\s\S]*?)^\}/gm)) {
         const [, name, body] = m;
@@ -202,7 +204,7 @@ async function main() {
         globals: [...source.matchAll(/^globalvar /gm)].length,
         playerVariables: [...source.matchAll(/^playervar /gm)].length,
         warnings: compiled.warnings,
-        method: 'Backward scratch liveness in compiled Workshop control flow, including expanded macros, branches, loops, skips and implicit trailing Ends. Calls are conservative boundaries. Reevaluated HUD/effect/icon fields are checked for uncaptured scratch references. No in-game validation.',
+        method: 'Backward scratch liveness in compiled Workshop control flow, including expanded macros, branches, loops, skips and implicit trailing Ends. Calls are conservative boundaries unless an explicit synchronous helper contract is validated before inlining. Reevaluated HUD/effect/icon fields are checked for uncaptured scratch references. No in-game validation.',
         rules
     };
     fs.writeFileSync(path.join(__dirname, 'global-temporaries-validation.json'), JSON.stringify(report, null, 2) + '\n');
