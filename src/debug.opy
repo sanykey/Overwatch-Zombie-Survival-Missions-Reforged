@@ -14,9 +14,9 @@ rule "[debug] snky buffs":
     @Condition eventPlayer.hasSpawned()
 
     # Reapply after respawns, hero changes and power-ups that overwrite healing dealt.
-    eventPlayer.setDamageDealt(1000)
-    eventPlayer.setHealingDealt(10000)
-    eventPlayer.setMaxHealth(10000)
+    # eventPlayer.setDamageDealt(1000)
+    # eventPlayer.setHealingDealt(10000)
+    # eventPlayer.setMaxHealth(10000)
     wait(0.5, Wait.ABORT_WHEN_FALSE)
     if ruleCondition:
         loop()
