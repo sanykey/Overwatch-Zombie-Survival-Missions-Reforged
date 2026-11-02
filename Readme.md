@@ -8,7 +8,11 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **26,834 elements**, freeing up **5,430** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+The current OverPy 9.7.20 build uses **26,816 elements**, freeing up **5,448** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+
+- Saved reconnect-row fields are named using `ReconnectField`, and player states using `ReconnectStatus`. Snapshot and live-row reads, status comparisons and row writes use the enums. All 234 compiled rules match the numeric version; element and variable counts are unchanged.
+
+- Six reconnect-state row reads now use one snapshot in the existing `tmp0`: **26,834 → 26,816 (−18 elements)**, without new variables. The snapshot is used only in the synchronous segment before `kill()` and the wait; the later status check still reads the current `playerStatsList`. `node analysis/verify-reconnect-row.cjs` compares all 234 compiled rules after substituting the snapshot expression back, checks scratch lifetimes and rejects an inserted wait or asynchronous launch before snapshot consumption. In-game reconnect validation has not been performed. [Validation results](analysis/reconnect-row-validation-2026-11-03.json).
 
 - Extracted the Zombie Mode and Objective Type winner selection into the synchronous `selectVoteWinner`: **26,866 → 26,834 (−32 elements)**, without new variables. Its `tmp0..2` inputs and result are consumed before waits or asynchronous launches; the helper contains no waits, asynchronous actions or nested calls. The original loops, random tie-breaking conditions and separate no-preference defaults are preserved. `node analysis/verify-vote-winner.cjs` compares all 233 original compiled rules after substituting the helper body, checks scratch lifetimes and rejects four deliberately unsafe changes. In-game validation has not been performed. [Validation results](analysis/vote-winner-validation-2026-11-03.json).
 

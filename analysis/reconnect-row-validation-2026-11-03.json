@@ -1,0 +1,38 @@
+{
+  "date": "2026-11-03",
+  "compiler": "OverPy 9.7.20",
+  "baselinePlayerSourceRef": "66b2054",
+  "before": 26834,
+  "after": 26816,
+  "saved": 18,
+  "globalVariables": 103,
+  "playerVariables": 75,
+  "compiledRulesCompared": 234,
+  "cachedReads": 6,
+  "postWaitStatusReadPreserved": true,
+  "scratchRulesChecked": 44,
+  "negativeAsyncAuditCases": 2,
+  "directIncludeBuildChecked": true,
+  "emittedWarnings": [],
+  "warningsSuppressedByMainSource": true,
+  "inGameValidated": false,
+  "runtimeBenchmarked": false,
+  "enumValues": {
+    "ReconnectField": {
+      "STATUS": 0,
+      "RESCUE_TIME_REMAINING": 1,
+      "REVIVE_TIME_REMAINING": 2,
+      "REVIVE_DURATION": 3,
+      "POSITION": 4
+    },
+    "ReconnectStatus": {
+      "ALIVE": 0,
+      "DOWNED": 1,
+      "DEAD": 2
+    }
+  },
+  "enumOnlyElementsUnchanged": true,
+  "enumOnlyCompiledRulesCompared": 234,
+  "playerSourceSha256": "8b19185af9cd6e89c90731549c6e93a0058f0e3ebab152344775d0ec6a4eb7b1",
+  "variableSourceSha256": "9bf6b00d1aa5268232b4ae28b92272b8da03819cec5741a05662571c9cabc8c8"
+}

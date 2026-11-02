@@ -56,6 +56,20 @@ enum PregameState:
     HERO_SELECTED = 1,
     READY = 2,
 
+# Fields of playerStatsList[user index] and reconnectRowSnapshot; full-row writes follow this order.
+enum ReconnectField:
+    STATUS = 0,
+    RESCUE_TIME_REMAINING = 1,
+    REVIVE_TIME_REMAINING = 2,
+    REVIVE_DURATION = 3,
+    POSITION = 4,
+
+# Ordered saved statuses: >= DOWNED includes players awaiting revival and permanently dead players.
+enum ReconnectStatus:
+    ALIVE = 0,
+    DOWNED = 1,
+    DEAD = 2,
+
 # Sparse indices in powerUpEntityIdList; values identify storage slots, not item IDs.
 # Turret effect slots 50..54 stay contiguous for creation and cleanup loops.
 enum PowerUpEntitySlot:

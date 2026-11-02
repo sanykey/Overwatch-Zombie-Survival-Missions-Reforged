@@ -69,20 +69,24 @@ rule "PLAYER INITIALIZATION":
         else:
             #Index of user in user array
             eventPlayer.reconnectUserIndex = userNameList.index("{0}".format(eventPlayer))
-            eventPlayer.rescueTimeRemaining = playerStatsList[eventPlayer.reconnectUserIndex][1]
-            eventPlayer.reviveTimeRemaining = playerStatsList[eventPlayer.reconnectUserIndex][2]
-            eventPlayer.reviveDuration = playerStatsList[eventPlayer.reconnectUserIndex][3]
-            if playerStatsList[eventPlayer.reconnectUserIndex][0] == 0:
+            # Read-only snapshot for this synchronous segment; do not retain it across kill()/wait().
+            #!define reconnectRowSnapshot tmp0
+            reconnectRowSnapshot = playerStatsList[eventPlayer.reconnectUserIndex]
+            eventPlayer.rescueTimeRemaining = reconnectRowSnapshot[ReconnectField.RESCUE_TIME_REMAINING]
+            eventPlayer.reviveTimeRemaining = reconnectRowSnapshot[ReconnectField.REVIVE_TIME_REMAINING]
+            eventPlayer.reviveDuration = reconnectRowSnapshot[ReconnectField.REVIVE_DURATION]
+            if reconnectRowSnapshot[ReconnectField.STATUS] == ReconnectStatus.ALIVE:
                 teleportToClosestPlayer()
                 eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 10)
                 eventPlayer.isPlayerActive = true
-            elif playerStatsList[eventPlayer.reconnectUserIndex][0] >= 1:
-                eventPlayer.teleport(playerStatsList[eventPlayer.reconnectUserIndex][4])
+            elif reconnectRowSnapshot[ReconnectField.STATUS] >= ReconnectStatus.DOWNED:
+                eventPlayer.teleport(reconnectRowSnapshot[ReconnectField.POSITION])
                 while eventPlayer.isAlive():
                     kill(eventPlayer)
                     wait(0.5)
                 eventPlayer.isPlayerActive = true
-                if playerStatsList[eventPlayer.reconnectUserIndex][0] == 2:
+                # Death handlers may update saved state during the wait; read the current status again.
+                if playerStatsList[eventPlayer.reconnectUserIndex][ReconnectField.STATUS] == ReconnectStatus.DEAD:
                     eventPlayer.rescueTimeRemaining = 0.5
     else:
         waitUntil(len(objectivePositionList) >= 1, 5)
@@ -150,8 +154,8 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
     @Condition eventPlayer.rescueTimeRemaining > 0
     @Condition eventPlayer.isDummy() == false
     
-    #0) Downed/Dead status, 1) Death timer, 2) Revive timer, 3) Revive start time, 4) Downed position
-    playerStatsList[eventPlayer.reconnectUserIndex] = [1, eventPlayer.rescueTimeRemaining, eventPlayer.reviveTimeRemaining, eventPlayer.reviveDuration, eventPlayer.getPosition()]
+    # Save row in ReconnectField order.
+    playerStatsList[eventPlayer.reconnectUserIndex] = [ReconnectStatus.DOWNED, eventPlayer.rescueTimeRemaining, eventPlayer.reviveTimeRemaining, eventPlayer.reviveDuration, eventPlayer.getPosition()]
     waitUntil(not eventPlayer.isReviving and playerTargetList.exclude(eventPlayer).filter(lambda x: not x.invisibilityCount).any(lambda x: distance(x.getPosition(), eventPlayer.getPosition()) < REVIVE_RADIUS), 0.5)
     if playerTargetList.exclude(eventPlayer).filter(lambda x: not x.invisibilityCount).any(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < REVIVE_RADIUS):
         eventPlayer.isReviving = true
@@ -180,8 +184,8 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
         eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 5)
         waitUntil(eventPlayer.isAlive(), 2)
     elif eventPlayer.rescueTimeRemaining <= 0:
-        #0) Downed/Dead status, 1) Death timer, 2) Revive timer, 3) Revive start time, 4) Downed position
-        playerStatsList[eventPlayer.reconnectUserIndex] = [2, eventPlayer.rescueTimeRemaining, eventPlayer.reviveTimeRemaining, eventPlayer.reviveDuration, offsetDownHundredConst]
+        # Save row in ReconnectField order.
+        playerStatsList[eventPlayer.reconnectUserIndex] = [ReconnectStatus.DEAD, eventPlayer.rescueTimeRemaining, eventPlayer.reviveTimeRemaining, eventPlayer.reviveDuration, offsetDownHundredConst]
         bigMessage(getAllPlayers().exclude(eventPlayer), "{0} {1} died!".format(eventPlayer, heroIcon(eventPlayer.getHero())))
         if mustReviveTime == 60 and len(objectivePositionList) != 1:
             bigMessage(getAllPlayers().exclude(eventPlayer), "Save {0} by finishing the objective!".format(eventPlayer))
@@ -199,8 +203,8 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
     eventPlayer.isReviving = false
     if eventPlayer.isAlive():
         eventPlayer.rescueTimeRemaining = mustReviveTime
-        #0) Downed/Dead status, 1) Death timer, 2) Revive timer, 3) Revive start time, 4) Downed position
-        playerStatsList[eventPlayer.reconnectUserIndex] = [0, eventPlayer.rescueTimeRemaining, eventPlayer.reviveTimeRemaining, eventPlayer.reviveDuration, eventPlayer.getPosition()]
+        # Save row in ReconnectField order.
+        playerStatsList[eventPlayer.reconnectUserIndex] = [ReconnectStatus.ALIVE, eventPlayer.rescueTimeRemaining, eventPlayer.reviveTimeRemaining, eventPlayer.reviveDuration, eventPlayer.getPosition()]
 
 
 rule "PLAYER PICKS UP HEALTH PACK":
@@ -366,5 +370,5 @@ def updateUsers():
         userNameList.append("{0}".format(eventPlayer))
         #Index of user in user array
         eventPlayer.reconnectUserIndex = userNameList.index("{0}".format(eventPlayer))
-        #0) Downed/Dead status, 1) Death timer, 2) Revive timer, 3) Revive start time, 4) Downed position
-        playerStatsList[eventPlayer.reconnectUserIndex] = [0, eventPlayer.rescueTimeRemaining, eventPlayer.reviveTimeRemaining, eventPlayer.reviveDuration, eventPlayer.getPosition()]
+        # Save row in ReconnectField order.
+        playerStatsList[eventPlayer.reconnectUserIndex] = [ReconnectStatus.ALIVE, eventPlayer.rescueTimeRemaining, eventPlayer.reviveTimeRemaining, eventPlayer.reviveDuration, eventPlayer.getPosition()]
