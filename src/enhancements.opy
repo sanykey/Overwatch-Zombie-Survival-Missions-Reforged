@@ -236,18 +236,19 @@ rule "LASER BARRICADE BLOCKS ZOMBIES":
     tmp1 = [eventPlayer.enhancementBarrierPosition + eventPlayer.enhancementBarrierFacing, eventPlayer.enhancementBarrierPosition + eventPlayer.enhancementBarrierFacing * -1]
     # tmp0: barricade target index, to damage and push each zombie crossing the barrier.
     for tmp0 in range(len(eventPlayer.enhancementBarrierTargetList)):
-        eventPlayer.enhancementBarrierTarget = eventPlayer.enhancementBarrierTargetList[tmp0]
-        if not eventPlayer.enhancementBarrierTarget.hasStatus(Status.ROOTED):
+        # tmp2: current zombie, consumed by this iteration's damage/push actions before wait.
+        tmp2 = eventPlayer.enhancementBarrierTargetList[tmp0]
+        if not tmp2.hasStatus(Status.ROOTED):
             #Damage the barricade
-            eventPlayer.enhancementBarrierHealth -= eventPlayer.enhancementBarrierTarget.getMaxHealth() * 2.5
-            eventPlayer.enhancementBarrierTarget.setStatusEffect(eventPlayer, Status.ROOTED, 0.5)
-            damage(eventPlayer.enhancementBarrierTarget, eventPlayer, 10)
-        if eventPlayer.enhancementBarrierTarget.getThrottle() == vect(0, 0, 0):
+            eventPlayer.enhancementBarrierHealth -= tmp2.getMaxHealth() * 2.5
+            tmp2.setStatusEffect(eventPlayer, Status.ROOTED, 0.5)
+            damage(tmp2, eventPlayer, 10)
+        if tmp2.getThrottle() == vect(0, 0, 0):
             #If bot is not throttling
-            eventPlayer.enhancementBarrierTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(tmp1, lambda x: distance(eventPlayer.enhancementBarrierTarget.getPosition(), x)))[0])), (-1 if eventPlayer.enhancementBarrierTarget.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(eventPlayer.enhancementBarrierTarget.getPosition(), eventPlayer.enhancementBarrierTarget.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
+            tmp2.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(tmp1, lambda x: distance(tmp2.getPosition(), x)))[0])), (-1 if tmp2.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(tmp2.getPosition(), tmp2.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
         else:
             #If bot is throttling
-            eventPlayer.enhancementBarrierTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(tmp1, lambda x: angleBetweenVectors(worldVector(eventPlayer.enhancementBarrierTarget.getThrottle(), eventPlayer.enhancementBarrierTarget, Transform.ROTATION), directionTowards(eventPlayer.enhancementBarrierPosition, x)))).last())), (-1 if eventPlayer.enhancementBarrierTarget.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(eventPlayer.enhancementBarrierTarget.getPosition(), eventPlayer.enhancementBarrierTarget.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+            tmp2.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(tmp1, lambda x: angleBetweenVectors(worldVector(tmp2.getThrottle(), tmp2, Transform.ROTATION), directionTowards(eventPlayer.enhancementBarrierPosition, x)))).last())), (-1 if tmp2.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(tmp2.getPosition(), tmp2.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     wait()
     if ruleCondition:
         loop()

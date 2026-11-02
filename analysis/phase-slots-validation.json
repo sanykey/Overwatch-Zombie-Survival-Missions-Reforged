@@ -4,13 +4,28 @@
   "baselineOverrides": {
     "debug.opy": "9185ddd9b8bc76852ffacdafbfde932a3970f152"
   },
+  "phaseComparisonTargetRef": "fddc95aa13042bb5cbdcfebe4295fef74a6ee151",
   "before": {
     "globals": 110,
     "elements": 27213
   },
+  "phaseTarget": {
+    "globals": 99,
+    "playerVariables": 108,
+    "elements": 27218
+  },
   "after": {
     "globals": 99,
-    "elements": 27218
+    "playerVariables": 107,
+    "elements": 27188
+  },
+  "playerPackageComparison": {
+    "mapping": {
+      "aiLocationSlot": "botTeleportPosition",
+      "botReigniteMotionSlot": "botReigniteRisePosition",
+      "combatTargetSlot": "botTarget"
+    },
+    "compiledRulesCompared": 231
   },
   "sharedSlots": [
     {
@@ -199,14 +214,15 @@
   "compiledRulesCompared": 231,
   "actionChanges": [
     "START GAME: restore biomorphingGoalText and biomorphingGoalColor to null after deleting pregame texts.",
-    "GLOBAL MENU INITIALIZATION: write the spacing angle only while isPregameSetup is true, preventing a resumed menu writer from overwriting the Biomorphing goal color."
+    "GLOBAL MENU INITIALIZATION: write the spacing angle only while isPregameSetup is true, preventing a resumed menu writer from overwriting the Biomorphing goal color.",
+    "Player temporary package: compare all current rules with the reviewed transformation of phaseComparisonTargetRef; retain the boss-distance candidate snapshot, capture mutation outline color, rename remaining single-role slots."
   ],
   "warnings": [],
   "sha256": {
     "bots_game_in_progress.opy": "7aa7840100fd677716dd60d0a91ec360be25412008d39af2be5719f05c4a4bdd",
     "compressed numbers.opy": "6c414884c6273353c17c85e56de05c382cb6401aec19a22132263fd6f4d6d9d7",
     "debug.opy": "86ea5811c5a07f735b0eefc11a53c4710a3ebe33ad79e5d96fb13722607be67a",
-    "enhancements.opy": "7e3eb6ae437b7a88a630f38f645510ea888ec0b12e2b426de35af68ee031de38",
+    "enhancements.opy": "109cd4d8c9f83b2190612ae491650e9589323626c28935bcb992fbfd4cbf36bb",
     "global_game_in_progress.opy": "f473a301ab97918868904b9fec1bff4e38ac33e50b01c68c8050d0cbf1dac535",
     "global_startup.opy": "68bb5a2f7beea4d1ca7985aaba1d7c3b90d84a86ec7977d0568f39e0a163e683",
     "global_start_menu.opy": "855bed789086f29d015669e9ab78adf93f98fb221918bf795def8014ea1e0b5b",
@@ -218,16 +234,16 @@
     "objective_types/objective_type_kill_zone.opy": "b18ae7314acdcbeacfe1b8ee594f161f970b67dddc4a477ba4649d5fb4a6808e",
     "objective_types/objective_type_satellite_uplink.opy": "2c55f54279b78259021fd23865c41f26f1d7b88bad14225124925dc1f082efbc",
     "objective_types/objective_type_showdown.opy": "a7aea0343f2959f7b8c99a29c016071c6a7c3e52d97d839c0c7f57577d13dd10",
-    "objective_types/objective_type_survivor_rescue.opy": "98221db7e586f6ab246174776fa00a82588e40026459c5b812358a942dc4d5ac",
+    "objective_types/objective_type_survivor_rescue.opy": "fc8317ea4552d392817bc3852a7563d12eedddbe25e87da17aff79fb614f6fa3",
     "objective_types/objective_type_zombie_egg.opy": "73e9e636a67e213e42e90db762d8036e35485ac86f8b8f55663c66e8a43e1267",
-    "players_game_in_progress.opy": "d8f903fb9ccadd27df25b704edf040effe91c8128b3e5f0b7d86a882eb1afba1",
+    "players_game_in_progress.opy": "c914759a145bb321445a9a1e10f4707c73bbb5f1f005ee0452d3990a571e36bc",
     "player_start_menu.opy": "55a99bd21e4c2b2c9fb81f45ef9770bdc0fec67dab87b6985d04af1fdd6e3fb5",
     "power_ups.opy": "e39f56b3c12425eae7fb939bedc5f88a1af033dd2258678fb01364320d49e383",
     "settings.opy": "bafdf47e377bfce8871f5e6c8a79684934e6c283130151ce2824d8778cc659a7",
-    "subroutines.opy": "a879cfb163b0ac6d21d9f45101f722a93ca1b6075212d92168ed679ef5855741",
+    "subroutines.opy": "892cc629e7282c111485f80fdbe0d8bbd1034965c36835b137bdb7c6728674a5",
     "supply_drops.opy": "11b883a1b043b7a6adb591b75adb5f802272b042b3878ac9d307d020440f3cf6",
-    "variables.opy": "75f2ec99a29d46a659f991565994860edf6efbab16ec3c99aa5a716360bf57c5",
-    "zombie_types.opy": "d392a43105fd864f860f9b4eea2e39ca1c1ed34b3eccdfb8b4bec378bf6d942b"
+    "variables.opy": "de5cab670582a1fcd41de8182aa162a2a3f9aecbcba0bf950155397999747419",
+    "zombie_types.opy": "b830c292a91e7df7d0df8536e10e450bdd5c7325d56059692039c06bb193ce68"
   },
   "limitations": "Static source review and complete compiled-rule comparison. Does not simulate Workshop scheduling, renderer reevaluation, joins or combat. In-game transitions still require validation."
 }

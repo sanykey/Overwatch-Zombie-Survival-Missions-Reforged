@@ -414,8 +414,9 @@ rule "ZOMBIES SPAWN AT REIGNITED":
     playEffect(getAllPlayers(), DynamicEffect.BAD_PICKUP_EFFECT, Color.ORANGE, eventPlayer, 0.5)
     eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 2)
     eventPlayer.setStatusEffect(null, Status.BURNING, 2.3)
-    eventPlayer.botReigniteSource = getPlayersOnHero(Hero.ANRAN, Team.2).filter(lambda player: player.botIsReigniteActive)[0]
-    eventPlayer.botReigniteDestination = random.choice(mapGridList.filter(lambda x: distance(eventPlayer.botReigniteSource.getPosition(), x) > 2 and distance(eventPlayer.botReigniteSource.getPosition(), x) < 7))
+    # tmp0: active Anran used only by the immediate emergence-destination search.
+    tmp0 = getPlayersOnHero(Hero.ANRAN, Team.2).filter(lambda player: player.botIsReigniteActive)[0]
+    eventPlayer.botReigniteDestination = random.choice(mapGridList.filter(lambda x: distance(tmp0.getPosition(), x) > 2 and distance(tmp0.getPosition(), x) < 7))
     eventPlayer.botReigniteRisePosition = eventPlayer.botReigniteDestination - vect(0, 2, 0)
     eventPlayer.startForcingPosition(eventPlayer.botReigniteRisePosition)
     chaseOverTime(eventPlayer.botReigniteRisePosition, eventPlayer.botReigniteDestination, 1.5)

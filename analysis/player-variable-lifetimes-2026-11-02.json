@@ -1,0 +1,1731 @@
+{
+  "date": "2026-11-02",
+  "baselineRef": "fddc95aa13042bb5cbdcfebe4295fef74a6ee151",
+  "baseline": {
+    "globals": 99,
+    "playerVariables": 108,
+    "elements": 27218
+  },
+  "method": "Included source field inventory and compiled explicit reads, with implicit For Player Variable counter reads. Probes compile in memory and reuse scratch CFG/reevaluation checks. Outline capture checked separately. Alias names alone do not establish dead stores; all aliases and concurrent callers must be considered. No src files modified; no in-game run.",
+  "fields": [
+    {
+      "name": "botTeleportCenter",
+      "aliases": [],
+      "explicitCompiledReads": 5,
+      "implicitForCounterRead": false,
+      "referenceLines": 17,
+      "files": [
+        "objective_types/objective_type_bosses.opy",
+        "objective_types/objective_type_zombie_egg.opy",
+        "bots_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "botIsSelectingTarget",
+      "aliases": [],
+      "explicitCompiledReads": 1,
+      "implicitForCounterRead": false,
+      "referenceLines": 4,
+      "files": [
+        "subroutines.opy",
+        "bots_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "botReturnMotionSlot",
+      "aliases": [
+        "botReturnTime",
+        "botReturnPosition"
+      ],
+      "explicitCompiledReads": 2,
+      "implicitForCounterRead": false,
+      "referenceLines": 8,
+      "files": [
+        "objective_types/objective_type_bosses.opy"
+      ]
+    },
+    {
+      "name": "botIsTeleporting",
+      "aliases": [],
+      "explicitCompiledReads": 25,
+      "implicitForCounterRead": false,
+      "referenceLines": 28,
+      "files": [
+        "objective_types/objective_type_bosses.opy",
+        "objective_types/objective_type_zombie_egg.opy",
+        "objective_types/objective_type_satellite_uplink.opy",
+        "bots_game_in_progress.opy",
+        "zombie_types.opy",
+        "supply_drops.opy",
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "botLoopIndexSlot",
+      "aliases": [
+        "botStalkerFadeIndex",
+        "botEnsnarerTargetIndex"
+      ],
+      "explicitCompiledReads": 2,
+      "implicitForCounterRead": true,
+      "referenceLines": 4,
+      "files": [
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "botBiteDamage",
+      "aliases": [],
+      "explicitCompiledReads": 10,
+      "implicitForCounterRead": false,
+      "referenceLines": 12,
+      "files": [
+        "subroutines.opy",
+        "bots_game_in_progress.opy",
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "botBiteDuration",
+      "aliases": [],
+      "explicitCompiledReads": 3,
+      "implicitForCounterRead": false,
+      "referenceLines": 5,
+      "files": [
+        "subroutines.opy",
+        "bots_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "botIsTeleportConfirmed",
+      "aliases": [],
+      "explicitCompiledReads": 9,
+      "implicitForCounterRead": false,
+      "referenceLines": 14,
+      "files": [
+        "objective_types/objective_type_zombie_egg.opy",
+        "bots_game_in_progress.opy",
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "botReigniteDestination",
+      "aliases": [],
+      "explicitCompiledReads": 3,
+      "implicitForCounterRead": false,
+      "referenceLines": 5,
+      "files": [
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "botIsWallPhaseAllowed",
+      "aliases": [],
+      "explicitCompiledReads": 2,
+      "implicitForCounterRead": false,
+      "referenceLines": 15,
+      "files": [
+        "subroutines.opy",
+        "objective_types/objective_type_bosses.opy",
+        "bots_game_in_progress.opy",
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "botAbilityTarget",
+      "aliases": [],
+      "explicitCompiledReads": 63,
+      "implicitForCounterRead": false,
+      "referenceLines": 60,
+      "files": [
+        "subroutines.opy",
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "botBossHealth",
+      "aliases": [],
+      "explicitCompiledReads": 4,
+      "implicitForCounterRead": false,
+      "referenceLines": 11,
+      "files": [
+        "subroutines.opy",
+        "objective_types/objective_type_bosses.opy",
+        "objective_types/objective_type_zombie_egg.opy"
+      ]
+    },
+    {
+      "name": "botIsWallCollisionEnabled",
+      "aliases": [],
+      "explicitCompiledReads": 5,
+      "implicitForCounterRead": false,
+      "referenceLines": 19,
+      "files": [
+        "subroutines.opy",
+        "objective_types/objective_type_bosses.opy",
+        "objective_types/objective_type_zombie_egg.opy",
+        "bots_game_in_progress.opy",
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "botIsFacingOverridden",
+      "aliases": [],
+      "explicitCompiledReads": 3,
+      "implicitForCounterRead": false,
+      "referenceLines": 37,
+      "files": [
+        "subroutines.opy",
+        "bots_game_in_progress.opy",
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "botIsThrottleOverridden",
+      "aliases": [],
+      "explicitCompiledReads": 10,
+      "implicitForCounterRead": false,
+      "referenceLines": 42,
+      "files": [
+        "subroutines.opy",
+        "objective_types/objective_type_zombie_egg.opy",
+        "bots_game_in_progress.opy",
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "botConfiguredHero",
+      "aliases": [],
+      "explicitCompiledReads": 1,
+      "implicitForCounterRead": false,
+      "referenceLines": 2,
+      "files": [
+        "subroutines.opy"
+      ]
+    },
+    {
+      "name": "botMutationId",
+      "aliases": [],
+      "explicitCompiledReads": 6,
+      "implicitForCounterRead": false,
+      "referenceLines": 8,
+      "files": [
+        "subroutines.opy",
+        "bots_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "botBaseHealth",
+      "aliases": [],
+      "explicitCompiledReads": 15,
+      "implicitForCounterRead": false,
+      "referenceLines": 22,
+      "files": [
+        "subroutines.opy",
+        "objective_types/objective_type_bosses.opy",
+        "objective_types/objective_type_kill_zone.opy",
+        "objective_types/objective_type_zombie_egg.opy",
+        "bots_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "botIsInitializing",
+      "aliases": [],
+      "explicitCompiledReads": 8,
+      "implicitForCounterRead": false,
+      "referenceLines": 10,
+      "files": [
+        "subroutines.opy",
+        "objective_types/objective_type_bosses.opy",
+        "objective_types/objective_type_zombie_egg.opy",
+        "bots_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "botKnockbackScale",
+      "aliases": [],
+      "explicitCompiledReads": 5,
+      "implicitForCounterRead": false,
+      "referenceLines": 8,
+      "files": [
+        "subroutines.opy",
+        "bots_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "botCustomTeleportPosition",
+      "aliases": [],
+      "explicitCompiledReads": 5,
+      "implicitForCounterRead": false,
+      "referenceLines": 9,
+      "files": [
+        "objective_types/objective_type_zombie_egg.opy",
+        "bots_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "botLastTarget",
+      "aliases": [],
+      "explicitCompiledReads": 19,
+      "implicitForCounterRead": false,
+      "referenceLines": 17,
+      "files": [
+        "subroutines.opy",
+        "objective_types/objective_type_bosses.opy",
+        "bots_game_in_progress.opy",
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "botAbilityStateSlot",
+      "aliases": [
+        "botAbilityCooldown",
+        "botGasPositionList"
+      ],
+      "explicitCompiledReads": 14,
+      "implicitForCounterRead": false,
+      "referenceLines": 18,
+      "files": [
+        "subroutines.opy",
+        "bots_game_in_progress.opy",
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "botGasRadiusList",
+      "aliases": [],
+      "explicitCompiledReads": 5,
+      "implicitForCounterRead": false,
+      "referenceLines": 8,
+      "files": [
+        "subroutines.opy",
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "botSpawnWaypoint",
+      "aliases": [],
+      "explicitCompiledReads": 1,
+      "implicitForCounterRead": false,
+      "referenceLines": 2,
+      "files": [
+        "bots_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "botCandidateTarget",
+      "aliases": [],
+      "explicitCompiledReads": 2,
+      "implicitForCounterRead": false,
+      "referenceLines": 3,
+      "files": [
+        "subroutines.opy"
+      ]
+    },
+    {
+      "name": "botIsTeleportAllowed",
+      "aliases": [],
+      "explicitCompiledReads": 1,
+      "implicitForCounterRead": false,
+      "referenceLines": 3,
+      "files": [
+        "bots_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "botMutationOutlineColor",
+      "aliases": [],
+      "explicitCompiledReads": 1,
+      "implicitForCounterRead": false,
+      "referenceLines": 7,
+      "files": [
+        "subroutines.opy"
+      ]
+    },
+    {
+      "name": "botReigniteMotionSlot",
+      "aliases": [
+        "botReigniteSource",
+        "botReigniteRisePosition"
+      ],
+      "explicitCompiledReads": 3,
+      "implicitForCounterRead": false,
+      "referenceLines": 5,
+      "files": [
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "botResourceIconIdList",
+      "aliases": [],
+      "explicitCompiledReads": 2,
+      "implicitForCounterRead": false,
+      "referenceLines": 4,
+      "files": [
+        "players_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "isPlayerActive",
+      "aliases": [],
+      "explicitCompiledReads": 12,
+      "implicitForCounterRead": false,
+      "referenceLines": 17,
+      "files": [
+        "subroutines.opy",
+        "global_startup.opy",
+        "global_start_menu.opy",
+        "player_start_menu.opy",
+        "players_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "isReviving",
+      "aliases": [],
+      "explicitCompiledReads": 6,
+      "implicitForCounterRead": false,
+      "referenceLines": 9,
+      "files": [
+        "players_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "reviveDuration",
+      "aliases": [],
+      "explicitCompiledReads": 7,
+      "implicitForCounterRead": false,
+      "referenceLines": 10,
+      "files": [
+        "players_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "isInfected",
+      "aliases": [],
+      "explicitCompiledReads": 11,
+      "implicitForCounterRead": false,
+      "referenceLines": 18,
+      "files": [
+        "global_game_in_progress.opy",
+        "objective_types/objective_type_extraction_point.opy",
+        "players_game_in_progress.opy",
+        "bots_game_in_progress.opy",
+        "supply_drops.opy",
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "rescueTimeRemaining",
+      "aliases": [],
+      "explicitCompiledReads": 15,
+      "implicitForCounterRead": false,
+      "referenceLines": 21,
+      "files": [
+        "subroutines.opy",
+        "global_game_in_progress.opy",
+        "objective_types/objective_type_extraction_point.opy",
+        "players_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "infectionLevel",
+      "aliases": [],
+      "explicitCompiledReads": 22,
+      "implicitForCounterRead": false,
+      "referenceLines": 25,
+      "files": [
+        "subroutines.opy",
+        "global_game_in_progress.opy",
+        "objective_types/objective_type_extraction_point.opy",
+        "players_game_in_progress.opy",
+        "bots_game_in_progress.opy",
+        "supply_drops.opy",
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "team1PositionSlot",
+      "aliases": [
+        "pregamePosition",
+        "rescueStartPosition"
+      ],
+      "explicitCompiledReads": 24,
+      "implicitForCounterRead": false,
+      "referenceLines": 20,
+      "files": [
+        "global_start_menu.opy",
+        "player_start_menu.opy",
+        "objective_types/objective_type_survivor_rescue.opy"
+      ]
+    },
+    {
+      "name": "extractionDestination",
+      "aliases": [],
+      "explicitCompiledReads": 1,
+      "implicitForCounterRead": false,
+      "referenceLines": 2,
+      "files": [
+        "objective_types/objective_type_extraction_point.opy"
+      ]
+    },
+    {
+      "name": "invisibilityCount",
+      "aliases": [],
+      "explicitCompiledReads": 15,
+      "implicitForCounterRead": false,
+      "referenceLines": 27,
+      "files": [
+        "subroutines.opy",
+        "player_start_menu.opy",
+        "objective_types/objective_type_showdown.opy",
+        "objective_types/objective_type_biomorphing.opy",
+        "objective_types/objective_type_survivor_rescue.opy",
+        "objective_types/objective_type_satellite_uplink.opy",
+        "players_game_in_progress.opy",
+        "hero_tuning.opy",
+        "bots_game_in_progress.opy",
+        "zombie_types.opy",
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "infectionDamageOverTimeId",
+      "aliases": [],
+      "explicitCompiledReads": 1,
+      "implicitForCounterRead": false,
+      "referenceLines": 2,
+      "files": [
+        "players_game_in_progress.opy",
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "reconnectUserIndex",
+      "aliases": [],
+      "explicitCompiledReads": 11,
+      "implicitForCounterRead": false,
+      "referenceLines": 13,
+      "files": [
+        "players_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "isAfk",
+      "aliases": [],
+      "explicitCompiledReads": 6,
+      "implicitForCounterRead": false,
+      "referenceLines": 9,
+      "files": [
+        "objective_types/objective_type_extraction_point.opy",
+        "objective_types/objective_type_biomorphing.opy",
+        "players_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "isHeroSwitchRespawn",
+      "aliases": [],
+      "explicitCompiledReads": 3,
+      "implicitForCounterRead": false,
+      "referenceLines": 4,
+      "files": [
+        "players_game_in_progress.opy",
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "enhancementId",
+      "aliases": [],
+      "explicitCompiledReads": 43,
+      "implicitForCounterRead": false,
+      "referenceLines": 45,
+      "files": [
+        "global_start_menu.opy",
+        "player_start_menu.opy",
+        "global_game_in_progress.opy",
+        "objective_types/objective_type_survivor_rescue.opy",
+        "players_game_in_progress.opy",
+        "bots_game_in_progress.opy",
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "enhancementStateSlot1",
+      "aliases": [
+        "enhancementHybridCooldown",
+        "enhancementBarrierFacing",
+        "enhancementPyroHitList",
+        "enhancementPlagueCureTotal",
+        "enhancementIsBattleResetReady",
+        "enhancementBatteryPosition",
+        "enhancementHitchhikerCarrier",
+        "enhancementPupColor"
+      ],
+      "explicitCompiledReads": 67,
+      "implicitForCounterRead": false,
+      "referenceLines": 70,
+      "files": [
+        "objective_types/objective_type_survivor_rescue.opy",
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "enhancementStateSlot2",
+      "aliases": [
+        "enhancementBarrierEdgeDirection",
+        "enhancementBattleAbilityButton",
+        "enhancementBatteryReuseCooldown",
+        "enhancementHitchhikerPassengerPoolId",
+        "enhancementIsPupBeamActive"
+      ],
+      "explicitCompiledReads": 22,
+      "implicitForCounterRead": false,
+      "referenceLines": 36,
+      "files": [
+        "objective_types/objective_type_survivor_rescue.opy",
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "enhancementStateSlot3",
+      "aliases": [
+        "enhancementBarrierPlacementCooldown",
+        "enhancementBatteryReuseDuration",
+        "enhancementPupTarget"
+      ],
+      "explicitCompiledReads": 40,
+      "implicitForCounterRead": false,
+      "referenceLines": 34,
+      "files": [
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "enhancementStateSlot4",
+      "aliases": [
+        "enhancementBarrierPosition",
+        "enhancementBatteryPlacementCooldown",
+        "enhancementIsPupFreezeAuraActive"
+      ],
+      "explicitCompiledReads": 30,
+      "implicitForCounterRead": false,
+      "referenceLines": 26,
+      "files": [
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "enhancementPositionSlot",
+      "aliases": [
+        "enhancementBarrierCorner1",
+        "enhancementPupPosition"
+      ],
+      "explicitCompiledReads": 30,
+      "implicitForCounterRead": false,
+      "referenceLines": 20,
+      "files": [
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "enhancementStateSlot6",
+      "aliases": [
+        "enhancementBarrierCorner2",
+        "enhancementPupCooldown"
+      ],
+      "explicitCompiledReads": 7,
+      "implicitForCounterRead": false,
+      "referenceLines": 11,
+      "files": [
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "enhancementBarrierHealth",
+      "aliases": [],
+      "explicitCompiledReads": 10,
+      "implicitForCounterRead": false,
+      "referenceLines": 13,
+      "files": [
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "enhancementHitchhikerPassenger",
+      "aliases": [],
+      "explicitCompiledReads": 4,
+      "implicitForCounterRead": false,
+      "referenceLines": 6,
+      "files": [
+        "bots_game_in_progress.opy",
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "enhancementHitchhikerCarrierPoolId",
+      "aliases": [],
+      "explicitCompiledReads": 1,
+      "implicitForCounterRead": false,
+      "referenceLines": 2,
+      "files": [
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "powerUpForceFieldTimeRemaining",
+      "aliases": [],
+      "explicitCompiledReads": 1,
+      "implicitForCounterRead": true,
+      "referenceLines": 2,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "powerUpReviveTarget",
+      "aliases": [],
+      "explicitCompiledReads": 4,
+      "implicitForCounterRead": false,
+      "referenceLines": 5,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "powerUpItemId",
+      "aliases": [],
+      "explicitCompiledReads": 8,
+      "implicitForCounterRead": false,
+      "referenceLines": 12,
+      "files": [
+        "supply_drops.opy",
+        "power_ups.opy"
+      ]
+    },
+    {
+      "name": "powerUpTradeDataList",
+      "aliases": [],
+      "explicitCompiledReads": 4,
+      "implicitForCounterRead": false,
+      "referenceLines": 6,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "powerUpEntityIdList",
+      "aliases": [],
+      "explicitCompiledReads": 32,
+      "implicitForCounterRead": false,
+      "referenceLines": 63,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "powerUpAirStrikeIndex",
+      "aliases": [],
+      "explicitCompiledReads": 0,
+      "implicitForCounterRead": true,
+      "referenceLines": 1,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "powerUpHealBeaconTimeRemaining",
+      "aliases": [],
+      "explicitCompiledReads": 1,
+      "implicitForCounterRead": true,
+      "referenceLines": 2,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "powerUpTurretTimeRemaining",
+      "aliases": [],
+      "explicitCompiledReads": 1,
+      "implicitForCounterRead": true,
+      "referenceLines": 2,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "powerUpCloakTimeRemaining",
+      "aliases": [],
+      "explicitCompiledReads": 4,
+      "implicitForCounterRead": true,
+      "referenceLines": 4,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "powerUpSuperNanoTimeRemaining",
+      "aliases": [],
+      "explicitCompiledReads": 1,
+      "implicitForCounterRead": true,
+      "referenceLines": 2,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "powerUpUltimateTimeRemaining",
+      "aliases": [],
+      "explicitCompiledReads": 1,
+      "implicitForCounterRead": true,
+      "referenceLines": 2,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "powerUpStunBouncesRemaining",
+      "aliases": [],
+      "explicitCompiledReads": 2,
+      "implicitForCounterRead": true,
+      "referenceLines": 3,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "powerUpStunBeamPosition",
+      "aliases": [],
+      "explicitCompiledReads": 5,
+      "implicitForCounterRead": false,
+      "referenceLines": 5,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "powerUpTurretPosition",
+      "aliases": [],
+      "explicitCompiledReads": 18,
+      "implicitForCounterRead": false,
+      "referenceLines": 13,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "powerUpStunTarget",
+      "aliases": [],
+      "explicitCompiledReads": 9,
+      "implicitForCounterRead": false,
+      "referenceLines": 9,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "powerUpHealBeaconPosition",
+      "aliases": [],
+      "explicitCompiledReads": 6,
+      "implicitForCounterRead": false,
+      "referenceLines": 8,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "powerUpForceFieldPosition",
+      "aliases": [],
+      "explicitCompiledReads": 5,
+      "implicitForCounterRead": false,
+      "referenceLines": 7,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "powerUpBouncePadPosition",
+      "aliases": [],
+      "explicitCompiledReads": 6,
+      "implicitForCounterRead": false,
+      "referenceLines": 7,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "powerUpStunOrigin",
+      "aliases": [],
+      "explicitCompiledReads": 5,
+      "implicitForCounterRead": false,
+      "referenceLines": 6,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "powerUpTurretDirection",
+      "aliases": [],
+      "explicitCompiledReads": 5,
+      "implicitForCounterRead": false,
+      "referenceLines": 5,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "powerUpAirStrikePosition",
+      "aliases": [],
+      "explicitCompiledReads": 3,
+      "implicitForCounterRead": false,
+      "referenceLines": 4,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "powerUpTradeIndex",
+      "aliases": [],
+      "explicitCompiledReads": 7,
+      "implicitForCounterRead": false,
+      "referenceLines": 8,
+      "files": [
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "pregameVoteList",
+      "aliases": [],
+      "explicitCompiledReads": 44,
+      "implicitForCounterRead": false,
+      "referenceLines": 51,
+      "files": [
+        "global_start_menu.opy",
+        "player_start_menu.opy"
+      ]
+    },
+    {
+      "name": "pregameState",
+      "aliases": [],
+      "explicitCompiledReads": 27,
+      "implicitForCounterRead": false,
+      "referenceLines": 29,
+      "files": [
+        "subroutines.opy",
+        "global_start_menu.opy",
+        "player_start_menu.opy",
+        "players_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "isPregameVoting",
+      "aliases": [],
+      "explicitCompiledReads": 6,
+      "implicitForCounterRead": false,
+      "referenceLines": 12,
+      "files": [
+        "subroutines.opy",
+        "player_start_menu.opy"
+      ]
+    },
+    {
+      "name": "rescueMoodIcon",
+      "aliases": [],
+      "explicitCompiledReads": 1,
+      "implicitForCounterRead": false,
+      "referenceLines": 5,
+      "files": [
+        "objective_types/objective_type_survivor_rescue.opy"
+      ]
+    },
+    {
+      "name": "rescueLeader",
+      "aliases": [],
+      "explicitCompiledReads": 19,
+      "implicitForCounterRead": false,
+      "referenceLines": 19,
+      "files": [
+        "objective_types/objective_type_survivor_rescue.opy",
+        "bots_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "rescuePathList",
+      "aliases": [],
+      "explicitCompiledReads": 10,
+      "implicitForCounterRead": false,
+      "referenceLines": 10,
+      "files": [
+        "objective_types/objective_type_survivor_rescue.opy"
+      ]
+    },
+    {
+      "name": "biomorphingResourceType",
+      "aliases": [],
+      "explicitCompiledReads": 7,
+      "implicitForCounterRead": false,
+      "referenceLines": 11,
+      "files": [
+        "subroutines.opy",
+        "objective_types/objective_type_biomorphing.opy",
+        "players_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "biomorphingResourceAmount",
+      "aliases": [],
+      "explicitCompiledReads": 13,
+      "implicitForCounterRead": false,
+      "referenceLines": 18,
+      "files": [
+        "subroutines.opy",
+        "objective_types/objective_type_biomorphing.opy",
+        "players_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "explosionInnerColor",
+      "aliases": [],
+      "explicitCompiledReads": 1,
+      "implicitForCounterRead": false,
+      "referenceLines": 3,
+      "files": [
+        "subroutines.opy",
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "explosionOuterColor",
+      "aliases": [],
+      "explicitCompiledReads": 1,
+      "implicitForCounterRead": false,
+      "referenceLines": 3,
+      "files": [
+        "subroutines.opy",
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "explosionScale",
+      "aliases": [],
+      "explicitCompiledReads": 5,
+      "implicitForCounterRead": false,
+      "referenceLines": 7,
+      "files": [
+        "subroutines.opy",
+        "zombie_types.opy",
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "combatTargetSlot",
+      "aliases": [
+        "botTarget",
+        "enhancementBarrierTarget",
+        "currentCombatTarget"
+      ],
+      "explicitCompiledReads": 181,
+      "implicitForCounterRead": false,
+      "referenceLines": 154,
+      "files": [
+        "subroutines.opy",
+        "global_game_in_progress.opy",
+        "objective_types/objective_type_bosses.opy",
+        "objective_types/objective_type_zombie_egg.opy",
+        "players_game_in_progress.opy",
+        "bots_game_in_progress.opy",
+        "zombie_types.opy",
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "aiThrottleSpeedSlot",
+      "aliases": [
+        "botThrottleSpeed",
+        "rescueThrottleSpeed"
+      ],
+      "explicitCompiledReads": 19,
+      "implicitForCounterRead": false,
+      "referenceLines": 22,
+      "files": [
+        "subroutines.opy",
+        "objective_types/objective_type_bosses.opy",
+        "objective_types/objective_type_survivor_rescue.opy",
+        "bots_game_in_progress.opy",
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "recoveryTimeSlot",
+      "aliases": [
+        "reviveTimeRemaining",
+        "botRespawnDelay"
+      ],
+      "explicitCompiledReads": 10,
+      "implicitForCounterRead": false,
+      "referenceLines": 25,
+      "files": [
+        "objective_types/objective_type_bosses.opy",
+        "objective_types/objective_type_kill_zone.opy",
+        "objective_types/objective_type_zombie_egg.opy",
+        "objective_types/objective_type_satellite_uplink.opy",
+        "players_game_in_progress.opy",
+        "bots_game_in_progress.opy",
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "isCrowdControlled",
+      "aliases": [],
+      "explicitCompiledReads": 61,
+      "implicitForCounterRead": false,
+      "referenceLines": 64,
+      "files": [
+        "subroutines.opy",
+        "bots_game_in_progress.opy",
+        "zombie_types.opy",
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "actorCountdownSlot",
+      "aliases": [
+        "powerUpNoCooldownsTimeRemaining",
+        "botChargerWindupProgress"
+      ],
+      "explicitCompiledReads": 1,
+      "implicitForCounterRead": true,
+      "referenceLines": 3,
+      "files": [
+        "zombie_types.opy",
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "controlStateSlot",
+      "aliases": [
+        "isCrowdControlCooldownActive",
+        "botReturnTarget"
+      ],
+      "explicitCompiledReads": 5,
+      "implicitForCounterRead": false,
+      "referenceLines": 9,
+      "files": [
+        "objective_types/objective_type_bosses.opy",
+        "hero_tuning.opy",
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "actorMotionSlot1",
+      "aliases": [
+        "botGasProjectilePosition",
+        "botTentaclePosition",
+        "botBlasterCharge",
+        "botDaytakerCharge",
+        "botSmolderAnger",
+        "botEnsnarerMeleeAngle",
+        "rescueExtractionPosition"
+      ],
+      "explicitCompiledReads": 32,
+      "implicitForCounterRead": false,
+      "referenceLines": 56,
+      "files": [
+        "subroutines.opy",
+        "objective_types/objective_type_survivor_rescue.opy",
+        "bots_game_in_progress.opy",
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "actorMotionSlot2",
+      "aliases": [
+        "botGasCloudTimeRemaining",
+        "extractionFlightPosition"
+      ],
+      "explicitCompiledReads": 6,
+      "implicitForCounterRead": false,
+      "referenceLines": 13,
+      "files": [
+        "subroutines.opy",
+        "objective_types/objective_type_extraction_point.opy",
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "actorAbilitySlot2",
+      "aliases": [
+        "botAuxiliaryState",
+        "rescueFollowMessage",
+        "botIsReigniteActive",
+        "botIsEnsnarerMeleeActive"
+      ],
+      "explicitCompiledReads": 6,
+      "implicitForCounterRead": false,
+      "referenceLines": 13,
+      "files": [
+        "subroutines.opy",
+        "objective_types/objective_type_survivor_rescue.opy",
+        "bots_game_in_progress.opy",
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "initialMaxHealth",
+      "aliases": [],
+      "explicitCompiledReads": 5,
+      "implicitForCounterRead": false,
+      "referenceLines": 8,
+      "files": [
+        "subroutines.opy",
+        "players_game_in_progress.opy",
+        "bots_game_in_progress.opy",
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "isAttached",
+      "aliases": [
+        "botIsAttached",
+        "enhancementIsHitchhiking"
+      ],
+      "explicitCompiledReads": 25,
+      "implicitForCounterRead": false,
+      "referenceLines": 38,
+      "files": [
+        "subroutines.opy",
+        "objective_types/objective_type_bosses.opy",
+        "objective_types/objective_type_zombie_egg.opy",
+        "players_game_in_progress.opy",
+        "bots_game_in_progress.opy",
+        "zombie_types.opy",
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "aiLocationSlot",
+      "aliases": [
+        "botTeleportPosition",
+        "rescuePathIndex"
+      ],
+      "explicitCompiledReads": 26,
+      "implicitForCounterRead": false,
+      "referenceLines": 26,
+      "files": [
+        "objective_types/objective_type_survivor_rescue.opy",
+        "objective_types/objective_type_zombie_egg.opy",
+        "bots_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "candidateTargetList",
+      "aliases": [
+        "botPotentialTargetList",
+        "rescuePotentialLeaderList",
+        "enhancementBarrierTargetList"
+      ],
+      "explicitCompiledReads": 12,
+      "implicitForCounterRead": false,
+      "referenceLines": 21,
+      "files": [
+        "subroutines.opy",
+        "objective_types/objective_type_bosses.opy",
+        "objective_types/objective_type_survivor_rescue.opy",
+        "players_game_in_progress.opy",
+        "bots_game_in_progress.opy",
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "sizeScale",
+      "aliases": [],
+      "explicitCompiledReads": 123,
+      "implicitForCounterRead": false,
+      "referenceLines": 114,
+      "files": [
+        "subroutines.opy",
+        "objective_types/objective_type_bosses.opy",
+        "objective_types/objective_type_zombie_egg.opy",
+        "players_game_in_progress.opy",
+        "bots_game_in_progress.opy",
+        "zombie_types.opy",
+        "supply_drops.opy",
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "actorAbilitySlot1",
+      "aliases": [
+        "botAbilityState",
+        "rescueIsExtracting",
+        "botIsBomberPrimed",
+        "botRusherHealthPoolId",
+        "botGasAimPosition",
+        "botIsReigniteAttackUsed",
+        "botRiderGrapplePosition",
+        "botChargerDestination",
+        "botTentacleTargetPosition",
+        "botIsStrikerStrikeActive",
+        "botIsDownfallenGrabbing",
+        "botIsEnsnarerBlocking",
+        "botSmolderState"
+      ],
+      "explicitCompiledReads": 35,
+      "implicitForCounterRead": false,
+      "referenceLines": 58,
+      "files": [
+        "subroutines.opy",
+        "objective_types/objective_type_survivor_rescue.opy",
+        "bots_game_in_progress.opy",
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "objectiveTypeSnapshot",
+      "aliases": [],
+      "explicitCompiledReads": 3,
+      "implicitForCounterRead": false,
+      "referenceLines": 4,
+      "files": [
+        "players_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "visualEntityIdList",
+      "aliases": [
+        "botVisualEntityIdList",
+        "playerObjectiveIconIdList"
+      ],
+      "explicitCompiledReads": 4,
+      "implicitForCounterRead": false,
+      "referenceLines": 27,
+      "files": [
+        "subroutines.opy",
+        "players_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "visualCleanupIndex",
+      "aliases": [],
+      "explicitCompiledReads": 3,
+      "implicitForCounterRead": true,
+      "referenceLines": 6,
+      "files": [
+        "subroutines.opy",
+        "players_game_in_progress.opy"
+      ]
+    },
+    {
+      "name": "actorLoopSlot",
+      "aliases": [
+        "botEnsnarerUltimateIndex",
+        "powerUpBouncePadTimeRemaining"
+      ],
+      "explicitCompiledReads": 2,
+      "implicitForCounterRead": true,
+      "referenceLines": 4,
+      "files": [
+        "bots_game_in_progress.opy",
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "abilityTargetList",
+      "aliases": [
+        "botSpecialTargetList",
+        "explosionTargetList"
+      ],
+      "explicitCompiledReads": 16,
+      "implicitForCounterRead": false,
+      "referenceLines": 20,
+      "files": [
+        "subroutines.opy",
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "movementSpeedScale",
+      "aliases": [],
+      "explicitCompiledReads": 20,
+      "implicitForCounterRead": false,
+      "referenceLines": 35,
+      "files": [
+        "subroutines.opy",
+        "objective_types/objective_type_survivor_rescue.opy",
+        "players_game_in_progress.opy",
+        "bots_game_in_progress.opy",
+        "zombie_types.opy",
+        "supply_drops.opy"
+      ]
+    },
+    {
+      "name": "damageOverTimeRemaining",
+      "aliases": [],
+      "explicitCompiledReads": 8,
+      "implicitForCounterRead": false,
+      "referenceLines": 16,
+      "files": [
+        "subroutines.opy",
+        "bots_game_in_progress.opy",
+        "zombie_types.opy"
+      ]
+    }
+  ],
+  "zeroExplicitReads": [
+    {
+      "name": "powerUpAirStrikeIndex",
+      "aliases": [],
+      "explicitCompiledReads": 0,
+      "implicitForCounterRead": true,
+      "referenceLines": 1,
+      "files": [
+        "supply_drops.opy"
+      ]
+    }
+  ],
+  "aliasesWithoutExplicitSourceReads": [
+    {
+      "name": "botReturnPosition",
+      "physicalSlot": "botReturnMotionSlot",
+      "implicitForCounter": false,
+      "references": [
+        {
+          "file": "objective_types/objective_type_bosses.opy",
+          "line": 202,
+          "block": "def bossReturn()",
+          "source": "eventPlayer.botReturnPosition = eventPlayer.getEyePosition()"
+        },
+        {
+          "file": "objective_types/objective_type_bosses.opy",
+          "line": 209,
+          "block": "def bossReturn()",
+          "source": "eventPlayer.botReturnPosition = 0"
+        }
+      ]
+    },
+    {
+      "name": "botChargerWindupProgress",
+      "physicalSlot": "actorCountdownSlot",
+      "implicitForCounter": true,
+      "references": [
+        {
+          "file": "zombie_types.opy",
+          "line": 541,
+          "block": "rule \"CHARGER (MAUGA) CHARGE\"",
+          "source": "for eventPlayer.botChargerWindupProgress in range(0, 1, 0.064):"
+        }
+      ]
+    },
+    {
+      "name": "botAuxiliaryState",
+      "physicalSlot": "actorAbilitySlot2",
+      "implicitForCounter": false,
+      "references": [
+        {
+          "file": "subroutines.opy",
+          "line": 719,
+          "block": "def botRespawnInitialization()",
+          "source": "eventPlayer.botAuxiliaryState = null"
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 955,
+          "block": "rule \"DOWNFALLEN GRABS PLAYER\"",
+          "source": "eventPlayer.botAuxiliaryState = null"
+        }
+      ]
+    },
+    {
+      "name": "botAbilityState",
+      "physicalSlot": "actorAbilitySlot1",
+      "implicitForCounter": false,
+      "references": [
+        {
+          "file": "subroutines.opy",
+          "line": 718,
+          "block": "def botRespawnInitialization()",
+          "source": "eventPlayer.botAbilityState = null"
+        }
+      ]
+    },
+    {
+      "name": "botIsBomberPrimed",
+      "physicalSlot": "actorAbilitySlot1",
+      "implicitForCounter": false,
+      "references": [
+        {
+          "file": "zombie_types.opy",
+          "line": 75,
+          "block": "rule \"BOMBER (JUNKRAT) SELF DESTRUCT\"",
+          "source": "eventPlayer.botIsBomberPrimed = true"
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 1473,
+          "block": "def explosionWarning()",
+          "source": "eventPlayer.botIsBomberPrimed = false"
+        }
+      ]
+    },
+    {
+      "name": "botEnsnarerUltimateIndex",
+      "physicalSlot": "actorLoopSlot",
+      "implicitForCounter": true,
+      "references": [
+        {
+          "file": "bots_game_in_progress.opy",
+          "line": 368,
+          "block": "rule \"BOTS MELEE\"",
+          "source": "for eventPlayer.botEnsnarerUltimateIndex in range(5):"
+        }
+      ]
+    }
+  ],
+  "probes": [
+    {
+      "name": "rescue_path_index_to_tmp0",
+      "assessment": "safe-local-role",
+      "elements": 27215,
+      "delta": -3,
+      "globals": 99,
+      "playerVariables": 108,
+      "scratchRulesChecked": 41,
+      "lifetimeRejection": null,
+      "warnings": [],
+      "changedFiles": [
+        "objective_types/objective_type_survivor_rescue.opy"
+      ]
+    },
+    {
+      "name": "reignite_source_to_tmp0",
+      "assessment": "safe-local-role",
+      "elements": 27216,
+      "delta": -2,
+      "globals": 99,
+      "playerVariables": 108,
+      "scratchRulesChecked": 41,
+      "lifetimeRejection": null,
+      "warnings": [],
+      "changedFiles": [
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "barrier_target_to_tmp2",
+      "assessment": "safe-local-role",
+      "elements": 27202,
+      "delta": -16,
+      "globals": 99,
+      "playerVariables": 108,
+      "scratchRulesChecked": 40,
+      "lifetimeRejection": null,
+      "warnings": [],
+      "changedFiles": [
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "barrier_list_to_tmp2",
+      "assessment": "safe-local-role-alternative",
+      "elements": 27216,
+      "delta": -2,
+      "globals": 99,
+      "playerVariables": 108,
+      "scratchRulesChecked": 40,
+      "lifetimeRejection": null,
+      "warnings": [],
+      "changedFiles": [
+        "enhancements.opy"
+      ]
+    },
+    {
+      "name": "bot_target_candidates_to_tmp1",
+      "assessment": "local-calculation; final player snapshot retained for reevaluated boss-distance visibility",
+      "elements": 27215,
+      "delta": -3,
+      "globals": 99,
+      "playerVariables": 108,
+      "scratchRulesChecked": 40,
+      "lifetimeRejection": null,
+      "warnings": [],
+      "changedFiles": [
+        "subroutines.opy"
+      ]
+    },
+    {
+      "name": "bot_target_candidates_to_tmp1_without_snapshot",
+      "assessment": "REJECTED-boss-distance-HUD-loses-persistent-candidates",
+      "elements": 27213,
+      "delta": -5,
+      "globals": 99,
+      "playerVariables": 108,
+      "scratchRulesChecked": 40,
+      "lifetimeRejection": null,
+      "warnings": [],
+      "changedFiles": [
+        "subroutines.opy"
+      ]
+    },
+    {
+      "name": "explosion_targets_to_tmp2",
+      "assessment": "local-role; other hero abilities keep physical list; review overlap on hero replacement",
+      "elements": 27214,
+      "delta": -4,
+      "globals": 99,
+      "playerVariables": 108,
+      "scratchRulesChecked": 41,
+      "lifetimeRejection": null,
+      "warnings": [],
+      "changedFiles": [
+        "subroutines.opy"
+      ]
+    },
+    {
+      "name": "bot_visual_cleanup_index_to_tmp0",
+      "assessment": "REJECTED-counter-live-across-wait",
+      "elements": 27217,
+      "delta": -1,
+      "globals": 99,
+      "playerVariables": 108,
+      "scratchRulesChecked": 0,
+      "lifetimeRejection": "botRespawnInitialization: tmp0 live across Wait(False, Ignore Condition);\n\n1 !== 0\n",
+      "warnings": [],
+      "changedFiles": [
+        "subroutines.opy"
+      ]
+    },
+    {
+      "name": "outline_color_to_captured_tmp2",
+      "assessment": "candidate-with-mandatory-evalOnce",
+      "elements": 27212,
+      "delta": -6,
+      "globals": 99,
+      "playerVariables": 107,
+      "scratchRulesChecked": 40,
+      "lifetimeRejection": null,
+      "warnings": [],
+      "changedFiles": [
+        "subroutines.opy",
+        "variables.opy"
+      ]
+    },
+    {
+      "name": "outline_color_captured_lookup_from_mutation_id",
+      "assessment": "candidate-with-captured-derived-expression",
+      "elements": 27223,
+      "delta": 5,
+      "globals": 99,
+      "playerVariables": 107,
+      "scratchRulesChecked": 40,
+      "lifetimeRejection": null,
+      "warnings": [],
+      "changedFiles": [
+        "subroutines.opy",
+        "variables.opy"
+      ]
+    },
+    {
+      "name": "combined_three_local_roles_and_captured_outline",
+      "assessment": "combined-candidate",
+      "elements": 27191,
+      "delta": -27,
+      "globals": 99,
+      "playerVariables": 107,
+      "scratchRulesChecked": 42,
+      "lifetimeRejection": null,
+      "warnings": [],
+      "changedFiles": [
+        "enhancements.opy",
+        "objective_types/objective_type_survivor_rescue.opy",
+        "subroutines.opy",
+        "variables.opy",
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "combined_four_local_roles_and_captured_outline",
+      "assessment": "conservative-combined-candidate",
+      "elements": 27188,
+      "delta": -30,
+      "globals": 99,
+      "playerVariables": 107,
+      "scratchRulesChecked": 42,
+      "lifetimeRejection": null,
+      "warnings": [],
+      "changedFiles": [
+        "enhancements.opy",
+        "objective_types/objective_type_survivor_rescue.opy",
+        "subroutines.opy",
+        "variables.opy",
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "remove_bomber_primed_flag_writes",
+      "assessment": "no-reader-in-Bomber-role; shared-hero-slot-lifetimes-require-review",
+      "elements": 27216,
+      "delta": -2,
+      "globals": 99,
+      "playerVariables": 108,
+      "scratchRulesChecked": 40,
+      "lifetimeRejection": null,
+      "warnings": [],
+      "changedFiles": [
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "remove_downfallen_auxiliary_reset",
+      "assessment": "unused-secondary-state-in-Sigma-role; keep-respawn-reset",
+      "elements": 27217,
+      "delta": -1,
+      "globals": 99,
+      "playerVariables": 108,
+      "scratchRulesChecked": 40,
+      "lifetimeRejection": null,
+      "warnings": [],
+      "changedFiles": [
+        "zombie_types.opy"
+      ]
+    },
+    {
+      "name": "remove_boss_return_position_writes_size_only",
+      "assessment": "REJECTED-as-unproven-concurrent-slot-lifetime",
+      "elements": 27215,
+      "delta": -3,
+      "globals": 99,
+      "playerVariables": 108,
+      "scratchRulesChecked": 40,
+      "lifetimeRejection": null,
+      "warnings": [],
+      "changedFiles": [
+        "objective_types/objective_type_bosses.opy"
+      ]
+    }
+  ],
+  "sha256": {
+    "bots_game_in_progress.opy": "7aa7840100fd677716dd60d0a91ec360be25412008d39af2be5719f05c4a4bdd",
+    "compressed numbers.opy": "6c414884c6273353c17c85e56de05c382cb6401aec19a22132263fd6f4d6d9d7",
+    "debug.opy": "86ea5811c5a07f735b0eefc11a53c4710a3ebe33ad79e5d96fb13722607be67a",
+    "enhancements.opy": "7e3eb6ae437b7a88a630f38f645510ea888ec0b12e2b426de35af68ee031de38",
+    "global_game_in_progress.opy": "f473a301ab97918868904b9fec1bff4e38ac33e50b01c68c8050d0cbf1dac535",
+    "global_startup.opy": "68bb5a2f7beea4d1ca7985aaba1d7c3b90d84a86ec7977d0568f39e0a163e683",
+    "global_start_menu.opy": "855bed789086f29d015669e9ab78adf93f98fb221918bf795def8014ea1e0b5b",
+    "hero_tuning.opy": "4825b4d1bec2addfac244d4b0bf97de19449517a712d03eb8f9015653e4f1a66",
+    "main.opy": "6005995170250d44b35a88576f997014f95de715f521429eda7b9f6dcb1da9fd",
+    "objective_types/objective_type_biomorphing.opy": "ecabbcae658db3e936596b396c2a68b61fd50ce7bb9fde681b3af7d13b487bea",
+    "objective_types/objective_type_bosses.opy": "764f3f88254fda09c9f5713d59e268fc910f02102fe8b1aa315cb2d48299ec16",
+    "objective_types/objective_type_extraction_point.opy": "766b2639781a612d9fb3841644a5f08662511848ef852d273ffe78fb7a17e9d5",
+    "objective_types/objective_type_kill_zone.opy": "b18ae7314acdcbeacfe1b8ee594f161f970b67dddc4a477ba4649d5fb4a6808e",
+    "objective_types/objective_type_satellite_uplink.opy": "2c55f54279b78259021fd23865c41f26f1d7b88bad14225124925dc1f082efbc",
+    "objective_types/objective_type_showdown.opy": "a7aea0343f2959f7b8c99a29c016071c6a7c3e52d97d839c0c7f57577d13dd10",
+    "objective_types/objective_type_survivor_rescue.opy": "98221db7e586f6ab246174776fa00a82588e40026459c5b812358a942dc4d5ac",
+    "objective_types/objective_type_zombie_egg.opy": "73e9e636a67e213e42e90db762d8036e35485ac86f8b8f55663c66e8a43e1267",
+    "players_game_in_progress.opy": "d8f903fb9ccadd27df25b704edf040effe91c8128b3e5f0b7d86a882eb1afba1",
+    "player_start_menu.opy": "55a99bd21e4c2b2c9fb81f45ef9770bdc0fec67dab87b6985d04af1fdd6e3fb5",
+    "power_ups.opy": "e39f56b3c12425eae7fb939bedc5f88a1af033dd2258678fb01364320d49e383",
+    "settings.opy": "bafdf47e377bfce8871f5e6c8a79684934e6c283130151ce2824d8778cc659a7",
+    "subroutines.opy": "a879cfb163b0ac6d21d9f45101f722a93ca1b6075212d92168ed679ef5855741",
+    "supply_drops.opy": "11b883a1b043b7a6adb591b75adb5f802272b042b3878ac9d307d020440f3cf6",
+    "variables.opy": "75f2ec99a29d46a659f991565994860edf6efbab16ec3c99aa5a716360bf57c5",
+    "zombie_types.opy": "d392a43105fd864f860f9b4eea2e39ca1c1ed34b3eccdfb8b4bec378bf6d942b"
+  }
+}

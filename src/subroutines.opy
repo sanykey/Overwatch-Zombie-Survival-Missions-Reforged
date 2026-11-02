@@ -77,31 +77,32 @@ macro mutationsMacro():
     #Zombies have a chance to mutate. Bosses cannot mutate
     if len(availableMutationList) > 0 and not eventPlayer in bossStateList and (random.uniform(0, 100) < (100 if challengeSetting == 3 or challengeSetting == 5 else createWorkshopSettingFloat("Mutations", "Chance to mutate percentage", 25, 0, 100))):
         eventPlayer.botMutationId = random.choice(availableMutationList)
+        # tmp2: outline color; every enabled mutation assigns it before the capture below.
         #Speed
         if eventPlayer.botMutationId == 1:
             eventPlayer.movementSpeedScale *= 1.5
             eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
-            eventPlayer.botMutationOutlineColor = Color.PURPLE
+            tmp2 = Color.PURPLE
             eventPlayer.startForcingName("SPEED")
         #Size Growth
         elif eventPlayer.botMutationId == 2:
             eventPlayer.sizeScale *= 1.5
             eventPlayer.botBaseHealth *= eventPlayer.sizeScale
-            eventPlayer.botMutationOutlineColor = Color.VIOLET
+            tmp2 = Color.VIOLET
             eventPlayer.startForcingName("XL")
         #Size Reduction
         elif eventPlayer.botMutationId == 3:
             eventPlayer.sizeScale *= 0.6
             eventPlayer.botBaseHealth *= eventPlayer.sizeScale
-            eventPlayer.botMutationOutlineColor = Color.ROSE
+            tmp2 = Color.ROSE
             eventPlayer.startForcingName("XS")
         #Radioactive
         elif eventPlayer.botMutationId == 4:
             eventPlayer.botBiteDuration *= 1.5
-            eventPlayer.botMutationOutlineColor = Color.LIME_GREEN
+            tmp2 = Color.LIME_GREEN
             eventPlayer.startForcingName("Radioactive")
-        #Heavy
-        elif eventPlayer.botMutationId == 5:
+        #Heavy: enabled mutation IDs are 1..5, so the remaining case is 5.
+        else:
             eventPlayer.botKnockbackScale *= 0.5
             eventPlayer.setKnockbackReceived(100 * eventPlayer.botKnockbackScale)
             #Scale move speed
@@ -109,13 +110,13 @@ macro mutationsMacro():
             eventPlayer.setMoveSpeed(100 * eventPlayer.movementSpeedScale)
             #Scale health
             eventPlayer.botBaseHealth /= eventPlayer.botKnockbackScale
-            eventPlayer.botMutationOutlineColor = Color.BLACK
+            tmp2 = Color.BLACK
             eventPlayer.startForcingName("Heavy")
-        #Mutation outline for players
-        eventPlayer.startForcingOutlineFor(getAllPlayers(), true, eventPlayer.botMutationOutlineColor)
+        #Capture the color so later scratch writes cannot change this persistent outline.
+        eventPlayer.startForcingOutlineFor(getAllPlayers(), true, evalOnce(tmp2))
     else:
         eventPlayer.botMutationId = 0
-        eventPlayer.botMutationOutlineColor = null
+
         #Default ouline for players
         eventPlayer.stopForcingOutlineFor(getAllPlayers())
         eventPlayer.stopForcingName()
@@ -648,26 +649,28 @@ def selectTarget():
     @Name "selectTarget"
     
     eventPlayer.botIsSelectingTarget = true
-    #Set potential targets empty
-    eventPlayer.botPotentialTargetList = []
+    # tmp1: per-call target calculations; preserve the final snapshot below for the boss distance text.
+    tmp1 = []
     #Miniboss prioritizes players on objective
     if eventPlayer in miniBossList:
-        eventPlayer.botPotentialTargetList.append(objectivePlayerList.filter(lambda x: not x.isDummy()))
+        tmp1.append(objectivePlayerList.filter(lambda x: not x.isDummy()))
     #Prioitize dummy bots
-    eventPlayer.botPotentialTargetList.append(playerTargetList.filter(lambda x: x.isDummy()))
+    tmp1.append(playerTargetList.filter(lambda x: x.isDummy()))
     #For projectile firing heroes
     if not eventPlayer in bossStateList and eventPlayer.getHero() == Hero.PHARAH:
         #Players in Air
-        eventPlayer.botPotentialTargetList.append(playerTargetList.filter(lambda x: distance(x.getPosition(), nearestWalkablePosition(x.getPosition())) > 5))
+        tmp1.append(playerTargetList.filter(lambda x: distance(x.getPosition(), nearestWalkablePosition(x.getPosition())) > 5))
     #Add players who are below bot to target list
-    eventPlayer.botPotentialTargetList.append(sorted(playerTargetList.exclude(eventPlayer.botPotentialTargetList).filter(lambda x: x.getPosition().y - eventPlayer.getPosition().y < 2.5), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))
+    tmp1.append(sorted(playerTargetList.exclude(tmp1).filter(lambda x: x.getPosition().y - eventPlayer.getPosition().y < 2.5), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))
     #Add remaining players
-    eventPlayer.botPotentialTargetList.append(sorted(playerTargetList.exclude(eventPlayer.botPotentialTargetList), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))
+    tmp1.append(sorted(playerTargetList.exclude(tmp1), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))
     #Remove invisible players
-    eventPlayer.botPotentialTargetList = eventPlayer.botPotentialTargetList.filter(lambda x: not x.invisibilityCount)
+    tmp1 = tmp1.filter(lambda x: not x.invisibilityCount)
+    #The reevaluated boss distance-text visibility reads this per-bot snapshot after this call returns.
+    eventPlayer.botPotentialTargetList = tmp1
     # tmp0: candidate-target index, to select the first target visible to this bot.
-    for tmp0 in range(len(eventPlayer.botPotentialTargetList)):
-        eventPlayer.botCandidateTarget = eventPlayer.botPotentialTargetList[tmp0]
+    for tmp0 in range(len(tmp1)):
+        eventPlayer.botCandidateTarget = tmp1[tmp0]
         if isInLoS(eventPlayer.botCandidateTarget.getEyePosition(), eventPlayer.getPosition() + losOffsetConst):
             break
         #wait()

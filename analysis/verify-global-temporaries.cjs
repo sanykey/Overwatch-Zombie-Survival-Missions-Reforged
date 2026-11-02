@@ -40,13 +40,15 @@ function checkReevaluation(name, action) {
         'Create Effect': [5, {0: 'Visible To', 2: 'Color', 3: 'Position', 4: 'Radius'}],
         'Create Beam Effect': [5, {0: 'Visible To', 2: 'Position', 3: 'Position', 4: 'Color'}],
         'Create Icon': [3, {0: 'Visible To', 1: 'Position', 4: 'Color'}],
-        'Create In-World Text': [5, {0: 'Visible To', 1: 'String', 2: 'Position', 6: 'Color'}]
+        'Create In-World Text': [5, {0: 'Visible To', 1: 'String', 2: 'Position', 6: 'Color'}],
+        // Outlines have no reevaluation selector; require capture of any scratch argument.
+        'Start Forcing Player Outlines': [null, {0: 'Players', 1: 'Visible To', 2: 'Visibility', 3: 'Color'}]
     };
     const signature = signatures[action.slice(0, action.indexOf('('))];
     if (!signature) return 0;
     const values = args(action), [modeIndex, fields] = signature;
     for (const [index, flag] of Object.entries(fields)) {
-        if (!values[modeIndex].includes(flag)) continue;
+        if (modeIndex !== null && !values[modeIndex].includes(flag)) continue;
         let value = values[index].replace(/"(?:\\.|[^"\\])*"/g, '""');
         // Remove complete Evaluate Once expressions, including nested calls.
         let begin;
@@ -183,6 +185,10 @@ async function main() {
     assert.throws(() => checkRule('undefined input', ['Small Message(All Players(All Teams), Global.tmp0);']), /before assignment/);
     assert.throws(() => checkReevaluation('uncaptured position',
         'Create Icon(All Players(All Teams), Global.tmp0, Bolt, Visible To and Position, Null, True);'), /scratch escapes/);
+    assert.throws(() => checkReevaluation('uncaptured outline color',
+        'Start Forcing Player Outlines(Event Player, All Players(All Teams), True, Global.tmp2, Default);'), /scratch escapes/);
+    assert.equal(checkReevaluation('captured outline color',
+        'Start Forcing Player Outlines(Event Player, All Players(All Teams), True, Evaluate Once(Global.tmp2), Default);'), 1);
     await compiler.readyPromise;
     const compiled = await compile(files);
     const rules = checkWorkshop(compiled.result);
@@ -202,3 +208,4 @@ async function main() {
         visualActionsChecked: rules.reduce((s, r) => s + r.visualActions, 0)}));
 }
 if (require.main === module) main().catch(e => { console.error(e); process.exitCode = 1; });
+module.exports = {checkWorkshop, args};

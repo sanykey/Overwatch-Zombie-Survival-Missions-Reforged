@@ -12,23 +12,24 @@ function codeOnly(line) {
     return line.replace(/"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|#(?!\!define\b).*$/g, value => ' '.repeat(value.length));
 }
 
-function inventory() {
-    const variables = included.flatMap(file => files[file].split('\n').flatMap((line, i) => {
+function inventory(sourceFiles = files) {
+    const sourceIncludes = ['main.opy', ...[...sourceFiles['main.opy'].matchAll(/^#!include "([^"]+)"/gm)].map(m => m[1])];
+    const variables = sourceIncludes.flatMap(file => sourceFiles[file].split('\n').flatMap((line, i) => {
         const m = line.match(/^playervar (\w+)/);
         return m ? [{name: m[1], declaration: {file, line: i + 1}, aliases: [], references: []}] : [];
     }));
     assert.equal(new Set(variables.map(v => v.name)).size, variables.length);
-    const aliases = Object.fromEntries(included.flatMap(file =>
-        [...files[file].matchAll(/^#!define (\w+) (\w+)\s*$/gm)].map(m => [m[1], m[2]])));
+    const aliases = Object.fromEntries(sourceIncludes.flatMap(file =>
+        [...sourceFiles[file].matchAll(/^#!define (\w+) (\w+)\s*$/gm)].map(m => [m[1], m[2]])));
     function resolve(name, seen = new Set()) {
         assert(!seen.has(name), 'Cyclic alias: ' + name);
         seen.add(name);
         return Object.hasOwn(aliases, name) ? resolve(aliases[name], seen) : name;
     }
     for (const variable of variables) variable.aliases = Object.keys(aliases).filter(name => resolve(name) === variable.name);
-    for (const file of included) {
+    for (const file of sourceIncludes) {
         let block = 'module', event = null, team = null, conditions = [];
-        for (const [i, source] of files[file].split('\n').entries()) {
+        for (const [i, source] of sourceFiles[file].split('\n').entries()) {
             if (/^(?:rule |def |macro )/.test(source)) {
                 block = source.trim().replace(/:$/, ''); event = team = null; conditions = [];
             }
@@ -91,9 +92,11 @@ function writeReview(report) {
         player: 'Игрок/null', string: 'Строка', hero: 'Герой', color: 'Цвет', icon: 'Иконка', button: 'Кнопка'};
     const aliasCount = layout.variables.reduce((n, v) => n + v.aliases.length, 0);
     const rows = ['# Порядок и имена переменных игрока — ' + date, '',
-        '**108 физических playervar, 99 globalvar, 27 218 элементов.** Число слотов, действия и время жизни не изменены. ' +
+        '**107 физических playervar, 99 globalvar, 27 188 элементов.** После организации имён внедрён ' +
+        '[консервативный перенос локальных вычислений](player-variable-lifetimes-2026-11-02.md): −1 слот и −30 элементов. ' +
         'Объявления сгруппированы; ' + aliasCount + ' смысловых алиаса `#!define` раскрываются в существующие слоты. ' +
-        'База сравнения — `' + layout.baselineRef + '`.', '',
+        'База первоначального переименования — `' + layout.baselineRef + '`; ' +
+        'пакет временных значений сравнивается с `fddc95aa13042bb5cbdcfebe4295fef74a6ee151`.', '',
         'Комментарии к каждому физическому полю и каждой роли находятся в `src/variables.opy`. ' +
         '[Индекс обращений](player-variable-references-2026-11-02.md) содержит файлы, правила и строки, ' +
         '[JSON](player-variable-usage-2026-11-02.json) — полные выражения, команды правил и условия. ' +
@@ -104,13 +107,17 @@ function writeReview(report) {
         '- `bot` означает поле зомби Team 2. Функциональные группы enhancements/power-ups имеют собственные префиксы; ' +
         'они остаются в этих группах даже при чтении из файла другой системы. Остальные поля только Team 1 разделены на выживание, меню и Rescue.',
         '- Булевы роли используют `is...` или `botIs...` / `enhancementIs...` / `rescueIs...`; массивы заканчиваются на `List`. ' +
-        'Нулевые/null-сбросы существующих ссылок и векторов сохранены. Числовые счётчики не превращены в булевы.',
+        'Сбросы постоянных ссылок и векторов сохранены. Числовые счётчики не превращены в булевы. ' +
+        'Временный цвет мутации захватывается контуром через `evalOnce`.',
         '- Разные назначения одного слота имеют отдельные алиасы. Одинаковый смысл в разных потребителях ' +
-        'сохраняет общее имя: например, `initialMaxHealth`, `sizeScale`, `movementSpeedScale`, `isCrowdControlled`.',
+        'сохраняет общее имя: например, `initialMaxHealth`, `sizeScale`, `movementSpeedScale`, `isCrowdControlled`. ' +
+        'Слоты с единственной оставшейся ролью переименованы в её имя; одиночных алиасов нет.',
         '- Новое совместное хранение не добавлялось. Порядок физических индексов мог измениться: импортировать следует полный скрипт.', '',
         '## Важные случаи', '',
-        '- Старый `botTarget` также записывался на игроке владельце Laser Barricade. Теперь физический `combatTargetSlot` ' +
-        'имеет роли `botTarget`, `enhancementBarrierTarget` и `currentCombatTarget` для общей очистки.',
+        '- Цель Laser Barricade перенесена в `tmp2`; оставшаяся цель AI и её очистка используют физический `botTarget`. ' +
+        'Бывшие `aiLocationSlot` и `botReigniteMotionSlot` стали физическими `botTeleportPosition` и `botReigniteRisePosition`.',
+        '- В `selectTarget` кандидаты вычисляются в `tmp1`, но итог сохраняется в `botPotentialTargetList`: ' +
+        'его читает переоцениваемый текст расстояния до босса. Физический `candidateTargetList` сохраняет также роли Rescue и Barricade.',
         '- Старый `botFollowTarget` принадлежит NPC Team 1: теперь это `rescueLeader`. ' +
         'Старый `botThrottleSpeed` хранится в `aiThrottleSpeedSlot` с ролями `botThrottleSpeed` / `rescueThrottleSpeed`.',
         '- `specialCooldown` содержал флаг Team 1 и ссылку на цель босса. Теперь это `controlStateSlot`: ' +
@@ -143,14 +150,15 @@ function writeReview(report) {
         rows.push('');
     }
     rows.push('## Проверки и ограничения', '',
-        '`node analysis/verify-player-variables.cjs` сравнивает все 231 правила после замены имён: ' +
+        '`node analysis/verify-player-variables.cjs` сравнивает все 231 правила с явно заданным пакетом ' +
+        'преобразований исходной ревизии после нормализации оставшихся физических имён: ' +
         'события, условия, действия, выражения, аргументы переоценки и chase. ' +
         'Обычная сборка через `#!include` также проверена, локальный `src/main.ws.txt` обновлён. ' +
         'Предупреждений нет при сохранённых подавлениях проекта.', '',
         '`node analysis/audit-player-variables.cjs` пересоздаёт этот документ и индекс из ' +
         'проверенной классификации `analysis/player-variable-layout.cjs` и текущих исходников. ' +
         'Классификация владения не выводится автоматически из `@Team`.', '',
-        'Проверка в игре не проводилась. Сравнение подтверждает отсутствие изменений скомпилированной логики, ' +
+        'Проверка в игре не проводилась. Сравнение исключает изменения скомпилированной логики вне согласованного пакета, ' +
         'но не моделирует планирование движка или перенос состояния уже идущего матча.', '');
     fs.writeFileSync(path.join(__dirname, 'player-variables-review-2026-11-02.md'), rows.join('\n'));
 }

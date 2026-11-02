@@ -132,7 +132,7 @@ rule "PLAYER GETS DOWNED":
     eventPlayer.stopAllDamageOverTime()
     eventPlayer.infectionLevel = 0
     eventPlayer.isInfected = false
-    (getPlayers(Team.2).filter(lambda player: player.currentCombatTarget == eventPlayer)).currentCombatTarget = null
+    (getPlayers(Team.2).filter(lambda player: player.botTarget == eventPlayer)).botTarget = null
     (getAllPlayers().filter(lambda player: eventPlayer in player.candidateTargetList)).candidateTargetList.remove(eventPlayer)
     if eventWasEnvironment:
         if attacker.getHero() == Hero.REINHARDT and eventAbility == Button.ABILITY_1:

@@ -1,5 +1,5 @@
 // Reviewed ownership/layout and the one-to-one mapping from the pre-refactor player slots.
-// No new sharing is introduced: every row keeps exactly one existing player slot.
+// No new sharing is introduced. Local roles use tmp0..2; the outline-color slot was removed.
 const A = (name, type, description) => ({name, type, description});
 const F = (old, name, group, type, description, aliases = []) => ({old, name, group, type, description, aliases});
 const groups = {
@@ -23,10 +23,7 @@ const variables = [
     F('pForceFieldCount1','powerUpForceFieldTimeRemaining','powerups','number','Remaining Force Field seconds; yielding loop and item HUD in supply_drops.'),
     F('pForceFieldCount2_bCount1','botLoopIndexSlot','bots','number','Existing yielding loop index shared by Stalker fades and Ensnarer blocking.',[
         A('botStalkerFadeIndex','number','Repeated Moira fade/attack index.'), A('botEnsnarerTargetIndex','number','Index into Ensnarer affected targets.')]),
-    F('botTarget','combatTargetSlot','shared','player','Zombie combat target or the current zombie hit by a player barricade; preserve existing sharing.',[
-        A('botTarget','player','Zombie AI target, including cross-team reads on zombies.'),
-        A('enhancementBarrierTarget','player','Zombie currently processed by the Team 1 barricade collision loop.'),
-        A('currentCombatTarget','player','Generic target used when downed-player cleanup visits actors from both teams.')]),
+    F('botTarget','botTarget','bots','player','Zombie AI combat target; subroutines, bot abilities and objectives; cleared when its Team 1 target is downed.'),
     F('botThrottleSpeed','aiThrottleSpeedSlot','shared','number','Zombie movement throttle or Team 1 Rescue follow throttle; subroutines, bots and Rescue.',[
         A('botThrottleSpeed','number','Zombie per-hero/boss throttle in the range 0..1.'), A('rescueThrottleSpeed','number','Rescue follow throttle scaled by NPC health.')]),
     F('playerActiveStatus','isPlayerActive','team1','bool','Player has completed initial menu activation; used by voting, roster and downed-player rules.'),
@@ -75,13 +72,13 @@ const variables = [
     F('botSpecialTarget','botAbilityTarget','bots','player','Zombie special-ability target: teleport/grab host, flight target or affected player.'),
     F('attached','isAttached','shared','bool','Actor is attached to a host; zombie attachment and Team 1 Hitchhiker share the same meaning.',[
         A('botIsAttached','bool','Zombie is attached to another actor.'), A('enhancementIsHitchhiking','bool','Hitchhiker passenger is attached; shared Team 1 carrier queries use isAttached.')]),
-    F('telePos','aiLocationSlot','shared','mixed','Zombie teleport candidate vector or Rescue path-trimming index.',[
-        A('botTeleportPosition','vector','Zombie teleport candidate/accepted position; zero clears it.'), A('rescuePathIndex','number','Rescue path index through which reached points are removed.')]),
+    F('telePos','botTeleportPosition','bots','vector','Zombie teleport candidate/accepted position; bot teleport rules, Egg and spawn-cache updates; zero clears it.'),
     F('invisible','invisibilityCount','team1','number','Stacking invisibility/untargetability counter; hero abilities and Cloaking Device increment/decrement it. Not a boolean.'),
     F('pCloakingDeviceCount','powerUpCloakTimeRemaining','powerups','number','Remaining cloak seconds and early-cancel threshold.'),
     F('path','rescuePathList','rescue','array','Recorded leader positions followed and trimmed by the Rescue NPC.'),
-    F('potentialTargets','candidateTargetList','shared','array','Candidate list shared by zombie target selection, Rescue leader selection and barricade collision.',[
-        A('botPotentialTargetList','array','Zombie target candidates.'), A('rescuePotentialLeaderList','array','Team 1 Rescue NPC leader candidates.'), A('enhancementBarrierTargetList','array','Zombies crossing the player\'s barricade.')]),
+    F('potentialTargets','candidateTargetList','shared','array','Boss target-visibility snapshot, Rescue leader candidates or barricade collision targets; downed-player cleanup removes invalid candidates.',[
+        A('botPotentialTargetList','array','Final selectTarget candidate snapshot, retained for reevaluated boss-distance-text visibility; cleared on bot death/boss initialization.'),
+        A('rescuePotentialLeaderList','array','Team 1 Rescue NPC leader candidates, retained for GROUP UP handling.'), A('enhancementBarrierTargetList','array','Zombies crossing the player\'s barricade, processed synchronously.')]),
     F('pSuperNanoCount','powerUpSuperNanoTimeRemaining','powerups','number','Remaining Super Nano seconds; yielding loop and HUD.'),
     F('size','sizeScale','shared','number','Actor size multiplier; shared by players, zombies, Rescue, item ranges and enhancements.'),
     F('bossHealth','botBossHealth','bots','number','Virtual boss/egg health adjusted by damage events; -1 when not a boss.'),
@@ -125,14 +122,12 @@ const variables = [
     F('waypoint','botSpawnWaypoint','bots','vector','Movement waypoint associated with the accepted zombie spawn point.'),
     F('testTarget','botCandidateTarget','bots','player','Candidate zombie target under line-of-sight testing in selectTarget.'),
     F('canTeleport','botIsTeleportAllowed','bots','bool','Zombie initialization has enabled teleport processing.'),
-    F('defaultOutlineColor','botMutationOutlineColor','bots','color','Mutation outline color; null if no mutation outline is active.'),
     F('explosionColor1','explosionInnerColor','explosions','color','Inner explosion color shared by ordinary zombies and Zombie Hybrid.'),
     F('explosionColor2','explosionOuterColor','explosions','color','Outer explosion color shared by ordinary zombies and Zombie Hybrid.'),
     F('afk','isAfk','team1','bool','Player is treated as inactive/AFK and excluded from objectives or extraction counts.'),
     F('explosionSize','explosionScale','explosions','number','Explosion radius/sound multiplier; zombie warning setup and Hybrid initialization assign it.'),
     F('switchedHeroes','isHeroSwitchRespawn','team1','bool','Player has switched heroes; prevents repeating first-spawn and enhancement initialization.'),
-    F('anranPortalRise','botReigniteMotionSlot','bots','mixed','Anran emergence source actor, then the chased rise position.',[
-        A('botReigniteSource','player','Active Anran whose position anchors the replacement spawn search.'), A('botReigniteRisePosition','vector','Replacement zombie position chased upward from below the emergence point.')]),
+    F('anranPortalRise','botReigniteRisePosition','bots','vector','Zombie emergence position chased upward near Anran; zombie_types forces this position across the rise wait.'),
     F('botResourceEntity','botResourceIconIdList','bots','array','Zombie Biomorphing resource icon IDs; separate from the zombie visual-effect list.'),
     F('enhancementId','enhancementId','enhancements','number','Selected Enhancement enum; pregame selection, runtime behavior and Rescue Hitchhiker initialization.'),
     F('enhancementValue1','enhancementStateSlot1','enhancements','mixed','Primary enhancement state; each enhancement owns a distinct role alias.',[

@@ -1,16 +1,16 @@
 {
   "date": "2026-11-02",
-  "elements": 27218,
+  "elements": 27188,
   "globals": 99,
-  "playerVariables": 108,
+  "playerVariables": 107,
   "warnings": [],
   "method": "Included OverPy sources only; strings, comments, declarations and player fields excluded from references. Identifier aliases resolved to physical globals; alias bindings listed as metadata, role uses counted at their source locations. Write classification is syntactic, not semantic dataflow. Macro bodies are indexed once, not per expansion. Compiled references are counted separately. No game runtime or performance measurement.",
   "sha256": {
     "main.opy": "6005995170250d44b35a88576f997014f95de715f521429eda7b9f6dcb1da9fd",
     "settings.opy": "bafdf47e377bfce8871f5e6c8a79684934e6c283130151ce2824d8778cc659a7",
-    "variables.opy": "75f2ec99a29d46a659f991565994860edf6efbab16ec3c99aa5a716360bf57c5",
+    "variables.opy": "de5cab670582a1fcd41de8182aa162a2a3f9aecbcba0bf950155397999747419",
     "compressed numbers.opy": "6c414884c6273353c17c85e56de05c382cb6401aec19a22132263fd6f4d6d9d7",
-    "subroutines.opy": "a879cfb163b0ac6d21d9f45101f722a93ca1b6075212d92168ed679ef5855741",
+    "subroutines.opy": "892cc629e7282c111485f80fdbe0d8bbd1034965c36835b137bdb7c6728674a5",
     "global_startup.opy": "68bb5a2f7beea4d1ca7985aaba1d7c3b90d84a86ec7977d0568f39e0a163e683",
     "global_start_menu.opy": "855bed789086f29d015669e9ab78adf93f98fb221918bf795def8014ea1e0b5b",
     "player_start_menu.opy": "55a99bd21e4c2b2c9fb81f45ef9770bdc0fec67dab87b6985d04af1fdd6e3fb5",
@@ -19,17 +19,17 @@
     "objective_types/objective_type_showdown.opy": "a7aea0343f2959f7b8c99a29c016071c6a7c3e52d97d839c0c7f57577d13dd10",
     "objective_types/objective_type_bosses.opy": "764f3f88254fda09c9f5713d59e268fc910f02102fe8b1aa315cb2d48299ec16",
     "objective_types/objective_type_biomorphing.opy": "ecabbcae658db3e936596b396c2a68b61fd50ce7bb9fde681b3af7d13b487bea",
-    "objective_types/objective_type_survivor_rescue.opy": "98221db7e586f6ab246174776fa00a82588e40026459c5b812358a942dc4d5ac",
+    "objective_types/objective_type_survivor_rescue.opy": "fc8317ea4552d392817bc3852a7563d12eedddbe25e87da17aff79fb614f6fa3",
     "objective_types/objective_type_kill_zone.opy": "b18ae7314acdcbeacfe1b8ee594f161f970b67dddc4a477ba4649d5fb4a6808e",
     "objective_types/objective_type_zombie_egg.opy": "73e9e636a67e213e42e90db762d8036e35485ac86f8b8f55663c66e8a43e1267",
     "objective_types/objective_type_satellite_uplink.opy": "2c55f54279b78259021fd23865c41f26f1d7b88bad14225124925dc1f082efbc",
-    "players_game_in_progress.opy": "d8f903fb9ccadd27df25b704edf040effe91c8128b3e5f0b7d86a882eb1afba1",
+    "players_game_in_progress.opy": "c914759a145bb321445a9a1e10f4707c73bbb5f1f005ee0452d3990a571e36bc",
     "hero_tuning.opy": "4825b4d1bec2addfac244d4b0bf97de19449517a712d03eb8f9015653e4f1a66",
     "bots_game_in_progress.opy": "7aa7840100fd677716dd60d0a91ec360be25412008d39af2be5719f05c4a4bdd",
-    "zombie_types.opy": "d392a43105fd864f860f9b4eea2e39ca1c1ed34b3eccdfb8b4bec378bf6d942b",
+    "zombie_types.opy": "b830c292a91e7df7d0df8536e10e450bdd5c7325d56059692039c06bb193ce68",
     "supply_drops.opy": "11b883a1b043b7a6adb591b75adb5f802272b042b3878ac9d307d020440f3cf6",
     "power_ups.opy": "e39f56b3c12425eae7fb939bedc5f88a1af033dd2258678fb01364320d49e383",
-    "enhancements.opy": "7e3eb6ae437b7a88a630f38f645510ea888ec0b12e2b426de35af68ee031de38",
+    "enhancements.opy": "109cd4d8c9f83b2190612ae491650e9589323626c28935bcb992fbfd4cbf36bb",
     "debug.opy": "86ea5811c5a07f735b0eefc11a53c4710a3ebe33ad79e5d96fb13722607be67a"
   },
   "variables": [
@@ -98,7 +98,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 145,
+          "line": 146,
           "block": "macro botEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -106,7 +106,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 147,
+          "line": 148,
           "block": "macro botEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 3,
@@ -114,7 +114,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 150,
+          "line": 151,
           "block": "macro botEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 3,
@@ -122,7 +122,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 242,
+          "line": 243,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -130,7 +130,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 243,
+          "line": 244,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -138,7 +138,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 381,
+          "line": 382,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -146,7 +146,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 383,
+          "line": 384,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 3,
@@ -154,7 +154,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 386,
+          "line": 387,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -162,7 +162,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 389,
+          "line": 390,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -170,7 +170,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 392,
+          "line": 393,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 4,
@@ -178,7 +178,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 411,
+          "line": 412,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -186,23 +186,23 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 669,
+          "line": 672,
           "block": "def selectTarget()",
           "kind": "write-or-read/write",
           "occurrences": 1,
-          "source": "for tmp0 in range(len(eventPlayer.botPotentialTargetList)):"
+          "source": "for tmp0 in range(len(tmp1)):"
         },
         {
           "file": "subroutines.opy",
-          "line": 670,
+          "line": 673,
           "block": "def selectTarget()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
-          "source": "eventPlayer.botCandidateTarget = eventPlayer.botPotentialTargetList[tmp0]"
+          "source": "eventPlayer.botCandidateTarget = tmp1[tmp0]"
         },
         {
           "file": "subroutines.opy",
-          "line": 726,
+          "line": 729,
           "block": "def botRespawnInitialization()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -210,7 +210,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 727,
+          "line": 730,
           "block": "def botRespawnInitialization()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -785,6 +785,22 @@
           "source": "createEffect(getAllPlayers().filter(lambda _: len(eventPlayer.rescuePathList) > evalOnce(tmp0 * 3)), Effect.RING, Color.VIOLET, eventPlayer.rescuePathList[evalOnce(tmp0) * 3], 0.2)"
         },
         {
+          "file": "objective_types/objective_type_survivor_rescue.opy",
+          "line": 132,
+          "block": "rule \"DELETE PATH\"",
+          "kind": "write-or-read/write",
+          "occurrences": 1,
+          "source": "tmp0 = rescueSurvivor.rescuePathList.index(sorted(rescueSurvivor.rescuePathList, lambda x: distance(rescueSurvivor.getPosition(), x))[0])"
+        },
+        {
+          "file": "objective_types/objective_type_survivor_rescue.opy",
+          "line": 133,
+          "block": "rule \"DELETE PATH\"",
+          "kind": "read-or-action-argument",
+          "occurrences": 1,
+          "source": "rescueSurvivor.rescuePathList.remove(rescueSurvivor.rescuePathList.filter(lambda _, i: i <= tmp0))"
+        },
+        {
           "file": "objective_types/objective_type_satellite_uplink.opy",
           "line": 13,
           "block": "macro fireSatelliteMacro()",
@@ -1114,7 +1130,23 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 674,
+          "line": 418,
+          "block": "rule \"ZOMBIES SPAWN AT REIGNITED\"",
+          "kind": "write-or-read/write",
+          "occurrences": 1,
+          "source": "tmp0 = getPlayersOnHero(Hero.ANRAN, Team.2).filter(lambda player: player.botIsReigniteActive)[0]"
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 419,
+          "block": "rule \"ZOMBIES SPAWN AT REIGNITED\"",
+          "kind": "read-or-action-argument",
+          "occurrences": 2,
+          "source": "eventPlayer.botReigniteDestination = random.choice(mapGridList.filter(lambda x: distance(tmp0.getPosition(), x) > 2 and distance(tmp0.getPosition(), x) < 7))"
+        },
+        {
+          "file": "zombie_types.opy",
+          "line": 675,
           "block": "rule \"PRIME SLIMER (EMRE) FLIGHT (BOSS)\"",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -1122,7 +1154,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 675,
+          "line": 676,
           "block": "rule \"PRIME SLIMER (EMRE) FLIGHT (BOSS)\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -1130,7 +1162,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1288,
+          "line": 1289,
           "block": "rule \"SMOLDER SUPER SLAM\"",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -1138,7 +1170,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1289,
+          "line": 1290,
           "block": "rule \"SMOLDER SUPER SLAM\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -1434,15 +1466,15 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 239,
+          "line": 240,
           "block": "rule \"LASER BARRICADE BLOCKS ZOMBIES\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
-          "source": "eventPlayer.enhancementBarrierTarget = eventPlayer.enhancementBarrierTargetList[tmp0]"
+          "source": "tmp2 = eventPlayer.enhancementBarrierTargetList[tmp0]"
         },
         {
           "file": "enhancements.opy",
-          "line": 297,
+          "line": 298,
           "block": "rule \"PYROTECHNIC APPLIES DAMAGE\"",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -1450,7 +1482,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 298,
+          "line": 299,
           "block": "rule \"PYROTECHNIC APPLIES DAMAGE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -1458,7 +1490,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 300,
+          "line": 301,
           "block": "rule \"PYROTECHNIC APPLIES DAMAGE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -1466,7 +1498,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 301,
+          "line": 302,
           "block": "rule \"PYROTECHNIC APPLIES DAMAGE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -1474,7 +1506,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 304,
+          "line": 305,
           "block": "rule \"PYROTECHNIC APPLIES DAMAGE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -1482,7 +1514,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 305,
+          "line": 306,
           "block": "rule \"PYROTECHNIC APPLIES DAMAGE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -1490,7 +1522,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 420,
+          "line": 421,
           "block": "rule \"CHARGE BATTERY (USAGE AND COOLDOWNS)\"",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -1498,7 +1530,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 421,
+          "line": 422,
           "block": "rule \"CHARGE BATTERY (USAGE AND COOLDOWNS)\"",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -1506,7 +1538,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 422,
+          "line": 423,
           "block": "rule \"CHARGE BATTERY (USAGE AND COOLDOWNS)\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -1514,7 +1546,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 423,
+          "line": 424,
           "block": "rule \"CHARGE BATTERY (USAGE AND COOLDOWNS)\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -1522,7 +1554,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 424,
+          "line": 425,
           "block": "rule \"CHARGE BATTERY (USAGE AND COOLDOWNS)\"",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -1530,7 +1562,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 445,
+          "line": 446,
           "block": "rule \"HITCHHIKER ATTACH/DETATCH\"",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -1538,7 +1570,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 447,
+          "line": 448,
           "block": "rule \"HITCHHIKER ATTACH/DETATCH\"",
           "kind": "write-or-read/write",
           "occurrences": 2,
@@ -1546,7 +1578,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 449,
+          "line": 450,
           "block": "rule \"HITCHHIKER ATTACH/DETATCH\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -1554,7 +1586,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 451,
+          "line": 452,
           "block": "rule \"HITCHHIKER ATTACH/DETATCH\"",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -1562,7 +1594,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 453,
+          "line": 454,
           "block": "rule \"HITCHHIKER ATTACH/DETATCH\"",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -1570,7 +1602,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 455,
+          "line": 456,
           "block": "rule \"HITCHHIKER ATTACH/DETATCH\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -1578,7 +1610,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 495,
+          "line": 496,
           "block": "rule \"HITCHHIKER LIFEBONDS\"",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -1586,7 +1618,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 500,
+          "line": 501,
           "block": "rule \"HITCHHIKER LIFEBONDS\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -1594,7 +1626,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 501,
+          "line": 502,
           "block": "rule \"HITCHHIKER LIFEBONDS\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -1602,9 +1634,9 @@
         }
       ],
       "aliases": [],
-      "compiledOccurrences": 161,
-      "referenceLines": 195,
-      "occurrences": 227
+      "compiledOccurrences": 164,
+      "referenceLines": 199,
+      "occurrences": 232
     },
     {
       "name": "tmp1",
@@ -1613,6 +1645,86 @@
         "line": 67
       },
       "references": [
+        {
+          "file": "subroutines.opy",
+          "line": 653,
+          "block": "def selectTarget()",
+          "kind": "write-or-read/write",
+          "occurrences": 1,
+          "source": "tmp1 = []"
+        },
+        {
+          "file": "subroutines.opy",
+          "line": 656,
+          "block": "def selectTarget()",
+          "kind": "write-or-read/write",
+          "occurrences": 1,
+          "source": "tmp1.append(objectivePlayerList.filter(lambda x: not x.isDummy()))"
+        },
+        {
+          "file": "subroutines.opy",
+          "line": 658,
+          "block": "def selectTarget()",
+          "kind": "write-or-read/write",
+          "occurrences": 1,
+          "source": "tmp1.append(playerTargetList.filter(lambda x: x.isDummy()))"
+        },
+        {
+          "file": "subroutines.opy",
+          "line": 662,
+          "block": "def selectTarget()",
+          "kind": "write-or-read/write",
+          "occurrences": 1,
+          "source": "tmp1.append(playerTargetList.filter(lambda x: distance(x.getPosition(), nearestWalkablePosition(x.getPosition())) > 5))"
+        },
+        {
+          "file": "subroutines.opy",
+          "line": 664,
+          "block": "def selectTarget()",
+          "kind": "write-or-read/write",
+          "occurrences": 2,
+          "source": "tmp1.append(sorted(playerTargetList.exclude(tmp1).filter(lambda x: x.getPosition().y - eventPlayer.getPosition().y < 2.5), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))"
+        },
+        {
+          "file": "subroutines.opy",
+          "line": 666,
+          "block": "def selectTarget()",
+          "kind": "write-or-read/write",
+          "occurrences": 2,
+          "source": "tmp1.append(sorted(playerTargetList.exclude(tmp1), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))"
+        },
+        {
+          "file": "subroutines.opy",
+          "line": 668,
+          "block": "def selectTarget()",
+          "kind": "write-or-read/write",
+          "occurrences": 2,
+          "source": "tmp1 = tmp1.filter(lambda x: not x.invisibilityCount)"
+        },
+        {
+          "file": "subroutines.opy",
+          "line": 670,
+          "block": "def selectTarget()",
+          "kind": "read-or-action-argument",
+          "occurrences": 1,
+          "source": "eventPlayer.botPotentialTargetList = tmp1"
+        },
+        {
+          "file": "subroutines.opy",
+          "line": 672,
+          "block": "def selectTarget()",
+          "kind": "read-or-action-argument",
+          "occurrences": 1,
+          "source": "for tmp0 in range(len(tmp1)):"
+        },
+        {
+          "file": "subroutines.opy",
+          "line": 673,
+          "block": "def selectTarget()",
+          "kind": "read-or-action-argument",
+          "occurrences": 1,
+          "source": "eventPlayer.botCandidateTarget = tmp1[tmp0]"
+        },
         {
           "file": "global_startup.opy",
           "line": 60,
@@ -1919,23 +2031,23 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 247,
+          "line": 248,
           "block": "rule \"LASER BARRICADE BLOCKS ZOMBIES\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
-          "source": "eventPlayer.enhancementBarrierTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(tmp1, lambda x: distance(eventPlayer.enhancementBarrierTarget.getPosition(), x)))[0])), (-1 if eventPlayer.enhancementBarrierTarget.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(eventPlayer.enhancementBarrierTarget.getPosition(), eventPlayer.enhancementBarrierTarget.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)"
+          "source": "tmp2.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(tmp1, lambda x: distance(tmp2.getPosition(), x)))[0])), (-1 if tmp2.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(tmp2.getPosition(), tmp2.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)"
         },
         {
           "file": "enhancements.opy",
-          "line": 250,
+          "line": 251,
           "block": "rule \"LASER BARRICADE BLOCKS ZOMBIES\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
-          "source": "eventPlayer.enhancementBarrierTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(tmp1, lambda x: angleBetweenVectors(worldVector(eventPlayer.enhancementBarrierTarget.getThrottle(), eventPlayer.enhancementBarrierTarget, Transform.ROTATION), directionTowards(eventPlayer.enhancementBarrierPosition, x)))).last())), (-1 if eventPlayer.enhancementBarrierTarget.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(eventPlayer.enhancementBarrierTarget.getPosition(), eventPlayer.enhancementBarrierTarget.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
+          "source": "tmp2.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(tmp1, lambda x: angleBetweenVectors(worldVector(tmp2.getThrottle(), tmp2, Transform.ROTATION), directionTowards(eventPlayer.enhancementBarrierPosition, x)))).last())), (-1 if tmp2.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(tmp2.getPosition(), tmp2.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
         },
         {
           "file": "enhancements.opy",
-          "line": 300,
+          "line": 301,
           "block": "rule \"PYROTECHNIC APPLIES DAMAGE\"",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -1943,7 +2055,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 303,
+          "line": 304,
           "block": "rule \"PYROTECHNIC APPLIES DAMAGE\"",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -1951,7 +2063,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 304,
+          "line": 305,
           "block": "rule \"PYROTECHNIC APPLIES DAMAGE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -1959,7 +2071,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 497,
+          "line": 498,
           "block": "rule \"HITCHHIKER LIFEBONDS\"",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -1967,7 +2079,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 499,
+          "line": 500,
           "block": "rule \"HITCHHIKER LIFEBONDS\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -1975,7 +2087,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 500,
+          "line": 501,
           "block": "rule \"HITCHHIKER LIFEBONDS\"",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -1983,9 +2095,9 @@
         }
       ],
       "aliases": [],
-      "compiledOccurrences": 31,
-      "referenceLines": 46,
-      "occurrences": 49
+      "compiledOccurrences": 37,
+      "referenceLines": 56,
+      "occurrences": 62
     },
     {
       "name": "tmp2",
@@ -1994,6 +2106,54 @@
         "line": 68
       },
       "references": [
+        {
+          "file": "subroutines.opy",
+          "line": 85,
+          "block": "macro mutationsMacro()",
+          "kind": "write-or-read/write",
+          "occurrences": 1,
+          "source": "tmp2 = Color.PURPLE"
+        },
+        {
+          "file": "subroutines.opy",
+          "line": 91,
+          "block": "macro mutationsMacro()",
+          "kind": "write-or-read/write",
+          "occurrences": 1,
+          "source": "tmp2 = Color.VIOLET"
+        },
+        {
+          "file": "subroutines.opy",
+          "line": 97,
+          "block": "macro mutationsMacro()",
+          "kind": "write-or-read/write",
+          "occurrences": 1,
+          "source": "tmp2 = Color.ROSE"
+        },
+        {
+          "file": "subroutines.opy",
+          "line": 102,
+          "block": "macro mutationsMacro()",
+          "kind": "write-or-read/write",
+          "occurrences": 1,
+          "source": "tmp2 = Color.LIME_GREEN"
+        },
+        {
+          "file": "subroutines.opy",
+          "line": 113,
+          "block": "macro mutationsMacro()",
+          "kind": "write-or-read/write",
+          "occurrences": 1,
+          "source": "tmp2 = Color.BLACK"
+        },
+        {
+          "file": "subroutines.opy",
+          "line": 116,
+          "block": "macro mutationsMacro()",
+          "kind": "read-or-action-argument",
+          "occurrences": 1,
+          "source": "eventPlayer.startForcingOutlineFor(getAllPlayers(), true, evalOnce(tmp2))"
+        },
         {
           "file": "global_startup.opy",
           "line": 62,
@@ -2052,7 +2212,71 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 499,
+          "line": 240,
+          "block": "rule \"LASER BARRICADE BLOCKS ZOMBIES\"",
+          "kind": "write-or-read/write",
+          "occurrences": 1,
+          "source": "tmp2 = eventPlayer.enhancementBarrierTargetList[tmp0]"
+        },
+        {
+          "file": "enhancements.opy",
+          "line": 241,
+          "block": "rule \"LASER BARRICADE BLOCKS ZOMBIES\"",
+          "kind": "read-or-action-argument",
+          "occurrences": 1,
+          "source": "if not tmp2.hasStatus(Status.ROOTED):"
+        },
+        {
+          "file": "enhancements.opy",
+          "line": 243,
+          "block": "rule \"LASER BARRICADE BLOCKS ZOMBIES\"",
+          "kind": "read-or-action-argument",
+          "occurrences": 1,
+          "source": "eventPlayer.enhancementBarrierHealth -= tmp2.getMaxHealth() * 2.5"
+        },
+        {
+          "file": "enhancements.opy",
+          "line": 244,
+          "block": "rule \"LASER BARRICADE BLOCKS ZOMBIES\"",
+          "kind": "read-or-action-argument",
+          "occurrences": 1,
+          "source": "tmp2.setStatusEffect(eventPlayer, Status.ROOTED, 0.5)"
+        },
+        {
+          "file": "enhancements.opy",
+          "line": 245,
+          "block": "rule \"LASER BARRICADE BLOCKS ZOMBIES\"",
+          "kind": "read-or-action-argument",
+          "occurrences": 1,
+          "source": "damage(tmp2, eventPlayer, 10)"
+        },
+        {
+          "file": "enhancements.opy",
+          "line": 246,
+          "block": "rule \"LASER BARRICADE BLOCKS ZOMBIES\"",
+          "kind": "read-or-action-argument",
+          "occurrences": 1,
+          "source": "if tmp2.getThrottle() == vect(0, 0, 0):"
+        },
+        {
+          "file": "enhancements.opy",
+          "line": 248,
+          "block": "rule \"LASER BARRICADE BLOCKS ZOMBIES\"",
+          "kind": "read-or-action-argument",
+          "occurrences": 5,
+          "source": "tmp2.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(tmp1, lambda x: distance(tmp2.getPosition(), x)))[0])), (-1 if tmp2.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(tmp2.getPosition(), tmp2.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)"
+        },
+        {
+          "file": "enhancements.opy",
+          "line": 251,
+          "block": "rule \"LASER BARRICADE BLOCKS ZOMBIES\"",
+          "kind": "read-or-action-argument",
+          "occurrences": 6,
+          "source": "tmp2.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(tmp1, lambda x: angleBetweenVectors(worldVector(tmp2.getThrottle(), tmp2, Transform.ROTATION), directionTowards(eventPlayer.enhancementBarrierPosition, x)))).last())), (-1 if tmp2.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(tmp2.getPosition(), tmp2.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
+        },
+        {
+          "file": "enhancements.opy",
+          "line": 500,
           "block": "rule \"HITCHHIKER LIFEBONDS\"",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -2060,7 +2284,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 501,
+          "line": 502,
           "block": "rule \"HITCHHIKER LIFEBONDS\"",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -2068,9 +2292,9 @@
         }
       ],
       "aliases": [],
-      "compiledOccurrences": 6,
-      "referenceLines": 9,
-      "occurrences": 10
+      "compiledOccurrences": 23,
+      "referenceLines": 23,
+      "occurrences": 33
     },
     {
       "name": "phaseSlot0",
@@ -2081,7 +2305,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 222,
+          "line": 223,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -2089,7 +2313,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 223,
+          "line": 224,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -2097,7 +2321,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 224,
+          "line": 225,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -2105,7 +2329,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 225,
+          "line": 226,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -2113,7 +2337,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 226,
+          "line": 227,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -2121,7 +2345,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 227,
+          "line": 228,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -2129,7 +2353,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 228,
+          "line": 229,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -2315,7 +2539,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 640,
+          "line": 641,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -2412,7 +2636,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 297,
+          "line": 298,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -2420,7 +2644,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 609,
+          "line": 610,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -2580,7 +2804,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 297,
+          "line": 298,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -2588,7 +2812,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 306,
+          "line": 307,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -2596,7 +2820,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 309,
+          "line": 310,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -2604,7 +2828,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 608,
+          "line": 609,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -3260,7 +3484,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 294,
+          "line": 295,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -3396,7 +3620,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 294,
+          "line": 295,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -3553,7 +3777,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 158,
+          "line": 159,
           "block": "macro botEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -3577,7 +3801,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 595,
+          "line": 596,
           "block": "rule \"SLIMER (MERCY) TENTACLE GRAB\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -3585,7 +3809,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 608,
+          "line": 609,
           "block": "rule \"SLIMER (MERCY) TENTACLE GRAB\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -3593,7 +3817,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 617,
+          "line": 618,
           "block": "rule \"SLIMER (MERCY) TENTACLE GRAB\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -3622,7 +3846,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 671,
+          "line": 674,
           "block": "def selectTarget()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -3662,7 +3886,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1285,
+          "line": 1286,
           "block": "rule \"SMOLDER SUPER SLAM\"",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -3670,7 +3894,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1286,
+          "line": 1287,
           "block": "rule \"SMOLDER SUPER SLAM\"",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -3678,7 +3902,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1459,
+          "line": 1460,
           "block": "def entityFloat()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -3850,7 +4074,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 505,
+          "line": 506,
           "block": "def enableDisableAbilities()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -4284,7 +4508,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 526,
+          "line": 527,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -4580,7 +4804,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 387,
+          "line": 388,
           "block": "rule \"CHARGE BATTERY\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -4588,7 +4812,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 414,
+          "line": 415,
           "block": "rule \"CHARGE BATTERY (USAGE AND COOLDOWNS)\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -4646,7 +4870,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 476,
+          "line": 477,
           "block": "def setPrematchTimer()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -4795,7 +5019,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 399,
+          "line": 400,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -4803,7 +5027,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 426,
+          "line": 427,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -4811,7 +5035,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 436,
+          "line": 437,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -4819,7 +5043,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 448,
+          "line": 449,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -4827,7 +5051,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 724,
+          "line": 727,
           "block": "def botRespawnInitialization()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -4904,7 +5128,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 401,
+          "line": 402,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -5202,7 +5426,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 283,
+          "line": 284,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -5771,11 +5995,11 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 418,
+          "line": 419,
           "block": "rule \"ZOMBIES SPAWN AT REIGNITED\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
-          "source": "eventPlayer.botReigniteDestination = random.choice(mapGridList.filter(lambda x: distance(eventPlayer.botReigniteSource.getPosition(), x) > 2 and distance(eventPlayer.botReigniteSource.getPosition(), x) < 7))"
+          "source": "eventPlayer.botReigniteDestination = random.choice(mapGridList.filter(lambda x: distance(tmp0.getPosition(), x) > 2 and distance(tmp0.getPosition(), x) < 7))"
         },
         {
           "file": "supply_drops.opy",
@@ -6810,7 +7034,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 234,
+          "line": 235,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -6818,7 +7042,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 236,
+          "line": 237,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 4,
@@ -6826,7 +7050,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 239,
+          "line": 240,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -6834,7 +7058,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 243,
+          "line": 244,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -6842,7 +7066,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 246,
+          "line": 247,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -6850,7 +7074,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 249,
+          "line": 250,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -6858,7 +7082,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 254,
+          "line": 255,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -6866,7 +7090,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 257,
+          "line": 258,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -6874,7 +7098,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 260,
+          "line": 261,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -6882,7 +7106,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 263,
+          "line": 264,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -6890,7 +7114,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 266,
+          "line": 267,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -6898,7 +7122,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 269,
+          "line": 270,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -6906,7 +7130,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 272,
+          "line": 273,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -6914,7 +7138,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 275,
+          "line": 276,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -6922,7 +7146,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 283,
+          "line": 284,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -6930,7 +7154,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 286,
+          "line": 287,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -6938,7 +7162,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 289,
+          "line": 290,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -6946,7 +7170,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 294,
+          "line": 295,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -6954,7 +7178,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 300,
+          "line": 301,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -6962,7 +7186,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 303,
+          "line": 304,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -6970,7 +7194,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 306,
+          "line": 307,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -6978,7 +7202,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 312,
+          "line": 313,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -6986,7 +7210,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 317,
+          "line": 318,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -6994,7 +7218,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 320,
+          "line": 321,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7002,7 +7226,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 323,
+          "line": 324,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -7010,7 +7234,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 331,
+          "line": 332,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7018,7 +7242,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 354,
+          "line": 355,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7026,7 +7250,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 357,
+          "line": 358,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -7034,7 +7258,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 360,
+          "line": 361,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7042,7 +7266,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 363,
+          "line": 364,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7050,7 +7274,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 366,
+          "line": 367,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7058,7 +7282,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 371,
+          "line": 372,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7066,7 +7290,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 389,
+          "line": 390,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7074,7 +7298,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 535,
+          "line": 536,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7082,7 +7306,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 536,
+          "line": 537,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7090,7 +7314,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 545,
+          "line": 546,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7098,7 +7322,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 546,
+          "line": 547,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7106,7 +7330,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 551,
+          "line": 552,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7114,7 +7338,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 552,
+          "line": 553,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7122,19 +7346,11 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 563,
-          "block": "def objectivesManagement()",
-          "kind": "read-or-action-argument",
-          "occurrences": 1,
-          "source": "playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.LIME_GREEN, objectivePositionList[0], 200)"
-        },
-        {
-          "file": "subroutines.opy",
           "line": 564,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
-          "source": "playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.LIME_GREEN, objectivePositionList[0], objectiveRad * 2)"
+          "source": "playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.LIME_GREEN, objectivePositionList[0], 200)"
         },
         {
           "file": "subroutines.opy",
@@ -7142,11 +7358,19 @@
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
+          "source": "playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.LIME_GREEN, objectivePositionList[0], objectiveRad * 2)"
+        },
+        {
+          "file": "subroutines.opy",
+          "line": 566,
+          "block": "def objectivesManagement()",
+          "kind": "read-or-action-argument",
+          "occurrences": 1,
           "source": "playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.LIME_GREEN, objectivePositionList[0], 3)"
         },
         {
           "file": "subroutines.opy",
-          "line": 570,
+          "line": 571,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7154,7 +7378,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 573,
+          "line": 574,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -7162,7 +7386,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 578,
+          "line": 579,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7170,7 +7394,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 624,
+          "line": 625,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7490,7 +7714,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 173,
+          "line": 174,
           "block": "rule \"SURVIVOR REACHES EXTRACTION SITE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7498,7 +7722,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 177,
+          "line": 178,
           "block": "rule \"SURVIVOR REACHES EXTRACTION SITE\"",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -7666,7 +7890,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1409,
+          "line": 1410,
           "block": "rule \"CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)\"",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -7695,7 +7919,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 220,
+          "line": 221,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7703,7 +7927,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 533,
+          "line": 534,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7711,7 +7935,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 574,
+          "line": 575,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -7719,7 +7943,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 586,
+          "line": 587,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7727,7 +7951,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 726,
+          "line": 729,
           "block": "def botRespawnInitialization()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7959,7 +8183,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 139,
+          "line": 140,
           "block": "rule \"SURVIVOR FOLLOW TARGET LETS GO\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7967,7 +8191,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 147,
+          "line": 148,
           "block": "rule \"PLAYER SAYS GROUP UP TO SURVIVOR\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7975,7 +8199,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 159,
+          "line": 160,
           "block": "rule \"SURVIVOR JUMP\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -7983,7 +8207,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 170,
+          "line": 171,
           "block": "rule \"SURVIVOR REACHES EXTRACTION SITE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8161,7 +8385,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 220,
+          "line": 221,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -8169,7 +8393,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 232,
+          "line": 233,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8177,7 +8401,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 278,
+          "line": 279,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8185,7 +8409,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 292,
+          "line": 293,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8193,7 +8417,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 315,
+          "line": 316,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8201,7 +8425,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 326,
+          "line": 327,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8209,7 +8433,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 349,
+          "line": 350,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8217,7 +8441,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 369,
+          "line": 370,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8254,7 +8478,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 272,
+          "line": 273,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8262,7 +8486,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 275,
+          "line": 276,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8270,7 +8494,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 294,
+          "line": 295,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8278,7 +8502,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 328,
+          "line": 329,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8286,7 +8510,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 371,
+          "line": 372,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 3,
@@ -8294,7 +8518,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 377,
+          "line": 378,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8302,7 +8526,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 381,
+          "line": 382,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8310,7 +8534,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 383,
+          "line": 384,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8318,7 +8542,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 392,
+          "line": 393,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8326,7 +8550,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 528,
+          "line": 529,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -8334,7 +8558,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 589,
+          "line": 590,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -8342,7 +8566,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 590,
+          "line": 591,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8350,7 +8574,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 602,
+          "line": 603,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -8358,7 +8582,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 626,
+          "line": 627,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -8366,7 +8590,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 638,
+          "line": 639,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -8625,7 +8849,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 243,
+          "line": 244,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8633,7 +8857,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 257,
+          "line": 258,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8641,7 +8865,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 260,
+          "line": 261,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8649,7 +8873,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 263,
+          "line": 264,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8657,7 +8881,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 266,
+          "line": 267,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8665,7 +8889,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 303,
+          "line": 304,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8673,7 +8897,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 306,
+          "line": 307,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8681,7 +8905,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 323,
+          "line": 324,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8689,7 +8913,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 334,
+          "line": 335,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -8697,7 +8921,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 337,
+          "line": 338,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8705,7 +8929,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 340,
+          "line": 341,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -8713,7 +8937,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 343,
+          "line": 344,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8721,7 +8945,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 346,
+          "line": 347,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -8729,7 +8953,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 374,
+          "line": 375,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8737,7 +8961,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 383,
+          "line": 384,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8745,7 +8969,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 386,
+          "line": 387,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8753,7 +8977,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 389,
+          "line": 390,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8761,7 +8985,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 392,
+          "line": 393,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8769,7 +8993,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 535,
+          "line": 536,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8777,7 +9001,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 545,
+          "line": 546,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8785,7 +9009,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 551,
+          "line": 552,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8793,7 +9017,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 558,
+          "line": 559,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8801,7 +9025,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 564,
+          "line": 565,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8809,7 +9033,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 583,
+          "line": 584,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -8817,7 +9041,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 590,
+          "line": 591,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8825,7 +9049,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 606,
+          "line": 607,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -8833,7 +9057,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 617,
+          "line": 618,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -8841,7 +9065,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 618,
+          "line": 619,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -8849,7 +9073,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 623,
+          "line": 624,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -8857,7 +9081,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 630,
+          "line": 631,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -8865,7 +9089,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 635,
+          "line": 636,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -9041,7 +9265,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1409,
+          "line": 1410,
           "block": "rule \"CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9062,7 +9286,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 580,
+          "line": 581,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -9070,7 +9294,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 588,
+          "line": 589,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -9078,7 +9302,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 597,
+          "line": 598,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -9086,7 +9310,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 601,
+          "line": 602,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -9094,7 +9318,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 615,
+          "line": 616,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -9102,7 +9326,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 622,
+          "line": 623,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -9110,7 +9334,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 629,
+          "line": 630,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -9118,7 +9342,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 634,
+          "line": 635,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -9155,7 +9379,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 254,
+          "line": 255,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9163,7 +9387,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 257,
+          "line": 258,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9171,7 +9395,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 260,
+          "line": 261,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9179,7 +9403,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 263,
+          "line": 264,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9187,7 +9411,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 266,
+          "line": 267,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9195,7 +9419,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 269,
+          "line": 270,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9203,7 +9427,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 272,
+          "line": 273,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9211,7 +9435,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 275,
+          "line": 276,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 3,
@@ -9219,7 +9443,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 294,
+          "line": 295,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9227,7 +9451,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 300,
+          "line": 301,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9235,7 +9459,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 371,
+          "line": 372,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 3,
@@ -9243,7 +9467,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 374,
+          "line": 375,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9251,7 +9475,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 377,
+          "line": 378,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9259,7 +9483,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 383,
+          "line": 384,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9267,7 +9491,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 386,
+          "line": 387,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9275,7 +9499,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 389,
+          "line": 390,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9283,7 +9507,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 392,
+          "line": 393,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9291,7 +9515,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 591,
+          "line": 592,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -9299,7 +9523,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 605,
+          "line": 606,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -9307,7 +9531,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 636,
+          "line": 637,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -9384,7 +9608,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 644,
+          "line": 645,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -9520,7 +9744,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 171,
+          "line": 172,
           "block": "rule \"SURVIVOR REACHES EXTRACTION SITE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9629,7 +9853,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 236,
+          "line": 237,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9637,7 +9861,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 246,
+          "line": 247,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9645,7 +9869,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 249,
+          "line": 250,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9653,7 +9877,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 254,
+          "line": 255,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9661,7 +9885,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 263,
+          "line": 264,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9669,7 +9893,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 266,
+          "line": 267,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9677,7 +9901,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 269,
+          "line": 270,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9685,7 +9909,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 272,
+          "line": 273,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9693,7 +9917,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 275,
+          "line": 276,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -9701,7 +9925,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 300,
+          "line": 301,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9709,7 +9933,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 306,
+          "line": 307,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9717,7 +9941,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 309,
+          "line": 310,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -9725,7 +9949,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 312,
+          "line": 313,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9733,7 +9957,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 374,
+          "line": 375,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9741,7 +9965,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 377,
+          "line": 378,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -9749,7 +9973,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 527,
+          "line": 528,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -9757,7 +9981,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 579,
+          "line": 580,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -9765,11 +9989,11 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 655,
+          "line": 656,
           "block": "def selectTarget()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
-          "source": "eventPlayer.botPotentialTargetList.append(objectivePlayerList.filter(lambda x: not x.isDummy()))"
+          "source": "tmp1.append(objectivePlayerList.filter(lambda x: not x.isDummy()))"
         },
         {
           "file": "global_startup.opy",
@@ -10026,7 +10250,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 222,
+          "line": 223,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -10034,7 +10258,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 223,
+          "line": 224,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -10042,7 +10266,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 224,
+          "line": 225,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -10050,7 +10274,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 225,
+          "line": 226,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -10058,7 +10282,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 226,
+          "line": 227,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -10066,7 +10290,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 227,
+          "line": 228,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -10074,7 +10298,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 228,
+          "line": 229,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -10082,7 +10306,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 230,
+          "line": 231,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10090,7 +10314,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 237,
+          "line": 238,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10098,7 +10322,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 240,
+          "line": 241,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10106,7 +10330,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 244,
+          "line": 245,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10114,7 +10338,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 247,
+          "line": 248,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10122,7 +10346,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 250,
+          "line": 251,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10130,7 +10354,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 255,
+          "line": 256,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10138,7 +10362,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 258,
+          "line": 259,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10146,7 +10370,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 261,
+          "line": 262,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10154,7 +10378,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 264,
+          "line": 265,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10162,7 +10386,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 267,
+          "line": 268,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10170,7 +10394,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 270,
+          "line": 271,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10178,7 +10402,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 273,
+          "line": 274,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10186,7 +10410,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 276,
+          "line": 277,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10194,7 +10418,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 281,
+          "line": 282,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10202,7 +10426,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 284,
+          "line": 285,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10210,7 +10434,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 287,
+          "line": 288,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10218,7 +10442,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 290,
+          "line": 291,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10226,7 +10450,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 295,
+          "line": 296,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10234,7 +10458,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 298,
+          "line": 299,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10242,7 +10466,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 301,
+          "line": 302,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10250,7 +10474,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 304,
+          "line": 305,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10258,7 +10482,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 307,
+          "line": 308,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10266,7 +10490,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 310,
+          "line": 311,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10274,7 +10498,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 313,
+          "line": 314,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10282,7 +10506,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 318,
+          "line": 319,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10290,7 +10514,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 321,
+          "line": 322,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10298,7 +10522,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 324,
+          "line": 325,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10306,7 +10530,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 329,
+          "line": 330,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10314,7 +10538,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 332,
+          "line": 333,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10322,7 +10546,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 335,
+          "line": 336,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10330,7 +10554,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 338,
+          "line": 339,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10338,7 +10562,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 341,
+          "line": 342,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10346,7 +10570,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 344,
+          "line": 345,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10354,7 +10578,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 347,
+          "line": 348,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10362,7 +10586,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 352,
+          "line": 353,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10370,7 +10594,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 355,
+          "line": 356,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10378,7 +10602,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 358,
+          "line": 359,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10386,7 +10610,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 361,
+          "line": 362,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10394,7 +10618,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 364,
+          "line": 365,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10402,7 +10626,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 367,
+          "line": 368,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10410,7 +10634,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 372,
+          "line": 373,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10418,7 +10642,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 375,
+          "line": 376,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10426,7 +10650,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 378,
+          "line": 379,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10434,7 +10658,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 384,
+          "line": 385,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10442,7 +10666,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 387,
+          "line": 388,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10450,7 +10674,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 390,
+          "line": 391,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10458,7 +10682,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 393,
+          "line": 394,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10535,7 +10759,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 312,
+          "line": 313,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 3,
@@ -10543,7 +10767,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 374,
+          "line": 375,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -10551,7 +10775,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 377,
+          "line": 378,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -10559,7 +10783,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 383,
+          "line": 384,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -10567,7 +10791,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 386,
+          "line": 387,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -10575,7 +10799,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 389,
+          "line": 390,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -10583,7 +10807,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 392,
+          "line": 393,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 3,
@@ -10591,7 +10815,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 603,
+          "line": 604,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10599,7 +10823,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 637,
+          "line": 638,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10920,7 +11144,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 334,
+          "line": 335,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 3,
@@ -10928,7 +11152,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 337,
+          "line": 338,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -10936,7 +11160,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 340,
+          "line": 341,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -10944,7 +11168,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 343,
+          "line": 344,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 3,
@@ -10952,7 +11176,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 346,
+          "line": 347,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 4,
@@ -10960,7 +11184,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 557,
+          "line": 558,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -10968,7 +11192,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 558,
+          "line": 559,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -10976,7 +11200,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 618,
+          "line": 619,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -10984,7 +11208,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 624,
+          "line": 625,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -11161,7 +11385,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 530,
+          "line": 531,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -11169,7 +11393,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 593,
+          "line": 594,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -11177,7 +11401,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 612,
+          "line": 613,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -11258,7 +11482,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 275,
+          "line": 276,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -11266,7 +11490,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 297,
+          "line": 298,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -11274,7 +11498,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 309,
+          "line": 310,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -11282,7 +11506,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 594,
+          "line": 595,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -11290,7 +11514,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 610,
+          "line": 611,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -11474,7 +11698,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 323,
+          "line": 324,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -11482,7 +11706,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 576,
+          "line": 577,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -11490,7 +11714,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 616,
+          "line": 617,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -11810,27 +12034,19 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 131,
-          "block": "rule \"DELETE PATH\"",
-          "kind": "read-or-action-argument",
-          "occurrences": 4,
-          "source": "rescueSurvivor.rescuePathIndex = rescueSurvivor.rescuePathList.index(sorted(rescueSurvivor.rescuePathList, lambda x: distance(rescueSurvivor.getPosition(), x))[0])"
-        },
-        {
-          "file": "objective_types/objective_type_survivor_rescue.opy",
           "line": 132,
           "block": "rule \"DELETE PATH\"",
           "kind": "read-or-action-argument",
           "occurrences": 3,
-          "source": "rescueSurvivor.rescuePathList.remove(rescueSurvivor.rescuePathList.filter(lambda _, i: i <= rescueSurvivor.rescuePathIndex))"
+          "source": "tmp0 = rescueSurvivor.rescuePathList.index(sorted(rescueSurvivor.rescuePathList, lambda x: distance(rescueSurvivor.getPosition(), x))[0])"
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 140,
-          "block": "rule \"SURVIVOR FOLLOW TARGET LETS GO\"",
+          "line": 133,
+          "block": "rule \"DELETE PATH\"",
           "kind": "read-or-action-argument",
-          "occurrences": 1,
-          "source": "@Condition rescueSurvivor.rescueLeader != null"
+          "occurrences": 2,
+          "source": "rescueSurvivor.rescuePathList.remove(rescueSurvivor.rescuePathList.filter(lambda _, i: i <= tmp0))"
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
@@ -11838,11 +12054,19 @@
           "block": "rule \"SURVIVOR FOLLOW TARGET LETS GO\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
+          "source": "@Condition rescueSurvivor.rescueLeader != null"
+        },
+        {
+          "file": "objective_types/objective_type_survivor_rescue.opy",
+          "line": 142,
+          "block": "rule \"SURVIVOR FOLLOW TARGET LETS GO\"",
+          "kind": "read-or-action-argument",
+          "occurrences": 1,
           "source": "@Condition rescueSurvivor.rescueLeader.isCommunicating(Comms.GOODBYE) == true"
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 143,
+          "line": 144,
           "block": "rule \"SURVIVOR FOLLOW TARGET LETS GO\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -11850,7 +12074,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 148,
+          "line": 149,
           "block": "rule \"PLAYER SAYS GROUP UP TO SURVIVOR\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -11858,7 +12082,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 149,
+          "line": 150,
           "block": "rule \"PLAYER SAYS GROUP UP TO SURVIVOR\"",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -11866,7 +12090,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 151,
+          "line": 152,
           "block": "rule \"PLAYER SAYS GROUP UP TO SURVIVOR\"",
           "kind": "read-or-action-argument",
           "occurrences": 4,
@@ -11874,7 +12098,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 152,
+          "line": 153,
           "block": "rule \"PLAYER SAYS GROUP UP TO SURVIVOR\"",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -11882,7 +12106,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 153,
+          "line": 154,
           "block": "rule \"PLAYER SAYS GROUP UP TO SURVIVOR\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -11890,7 +12114,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 155,
+          "line": 156,
           "block": "rule \"PLAYER SAYS GROUP UP TO SURVIVOR\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -11898,7 +12122,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 160,
+          "line": 161,
           "block": "rule \"SURVIVOR JUMP\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -11906,7 +12130,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 161,
+          "line": 162,
           "block": "rule \"SURVIVOR JUMP\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -11914,7 +12138,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 162,
+          "line": 163,
           "block": "rule \"SURVIVOR JUMP\"",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -11922,7 +12146,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 165,
+          "line": 166,
           "block": "rule \"SURVIVOR JUMP\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -11930,7 +12154,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 172,
+          "line": 173,
           "block": "rule \"SURVIVOR REACHES EXTRACTION SITE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -11938,7 +12162,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 173,
+          "line": 174,
           "block": "rule \"SURVIVOR REACHES EXTRACTION SITE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -11946,7 +12170,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 175,
+          "line": 176,
           "block": "rule \"SURVIVOR REACHES EXTRACTION SITE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -11954,7 +12178,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 176,
+          "line": 177,
           "block": "rule \"SURVIVOR REACHES EXTRACTION SITE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -11962,7 +12186,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 177,
+          "line": 178,
           "block": "rule \"SURVIVOR REACHES EXTRACTION SITE\"",
           "kind": "read-or-action-argument",
           "occurrences": 3,
@@ -11970,7 +12194,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 178,
+          "line": 179,
           "block": "rule \"SURVIVOR REACHES EXTRACTION SITE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -11978,7 +12202,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 180,
+          "line": 181,
           "block": "rule \"SURVIVOR REACHES EXTRACTION SITE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -11986,7 +12210,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 181,
+          "line": 182,
           "block": "rule \"SURVIVOR REACHES EXTRACTION SITE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -11994,7 +12218,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 182,
+          "line": 183,
           "block": "rule \"SURVIVOR REACHES EXTRACTION SITE\"",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -12002,7 +12226,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 184,
+          "line": 185,
           "block": "rule \"SURVIVOR REACHES EXTRACTION SITE\"",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -12010,7 +12234,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 186,
+          "line": 187,
           "block": "rule \"SURVIVOR REACHES EXTRACTION SITE\"",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -12018,7 +12242,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 188,
+          "line": 189,
           "block": "rule \"SURVIVOR REACHES EXTRACTION SITE\"",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -12026,7 +12250,7 @@
         },
         {
           "file": "objective_types/objective_type_survivor_rescue.opy",
-          "line": 190,
+          "line": 191,
           "block": "rule \"SURVIVOR REACHES EXTRACTION SITE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -12094,9 +12318,9 @@
         "rescueSurvivor",
         "satelliteLaserTarget"
       ],
-      "compiledOccurrences": 104,
+      "compiledOccurrences": 102,
       "referenceLines": 77,
-      "occurrences": 109
+      "occurrences": 107
     },
     {
       "name": "isBiomorphingGoalPending",
@@ -12107,7 +12331,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 531,
+          "line": 532,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -12115,7 +12339,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 611,
+          "line": 612,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -12433,7 +12657,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 239,
+          "line": 240,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -12441,7 +12665,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 582,
+          "line": 583,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -12518,7 +12742,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 582,
+          "line": 583,
           "block": "def objectivesManagement()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -12608,7 +12832,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 473,
+          "line": 474,
           "block": "def setPrematchTimer()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -12616,7 +12840,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 480,
+          "line": 481,
           "block": "def setPrematchTimer()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -12624,7 +12848,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 492,
+          "line": 493,
           "block": "def setPrematchTimer()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -13480,35 +13704,35 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 657,
+          "line": 658,
           "block": "def selectTarget()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
-          "source": "eventPlayer.botPotentialTargetList.append(playerTargetList.filter(lambda x: x.isDummy()))"
+          "source": "tmp1.append(playerTargetList.filter(lambda x: x.isDummy()))"
         },
         {
           "file": "subroutines.opy",
-          "line": 661,
+          "line": 662,
           "block": "def selectTarget()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
-          "source": "eventPlayer.botPotentialTargetList.append(playerTargetList.filter(lambda x: distance(x.getPosition(), nearestWalkablePosition(x.getPosition())) > 5))"
+          "source": "tmp1.append(playerTargetList.filter(lambda x: distance(x.getPosition(), nearestWalkablePosition(x.getPosition())) > 5))"
         },
         {
           "file": "subroutines.opy",
-          "line": 663,
+          "line": 664,
           "block": "def selectTarget()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
-          "source": "eventPlayer.botPotentialTargetList.append(sorted(playerTargetList.exclude(eventPlayer.botPotentialTargetList).filter(lambda x: x.getPosition().y - eventPlayer.getPosition().y < 2.5), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))"
+          "source": "tmp1.append(sorted(playerTargetList.exclude(tmp1).filter(lambda x: x.getPosition().y - eventPlayer.getPosition().y < 2.5), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))"
         },
         {
           "file": "subroutines.opy",
-          "line": 665,
+          "line": 666,
           "block": "def selectTarget()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
-          "source": "eventPlayer.botPotentialTargetList.append(sorted(playerTargetList.exclude(eventPlayer.botPotentialTargetList), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))"
+          "source": "tmp1.append(sorted(playerTargetList.exclude(tmp1), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))"
         },
         {
           "file": "global_startup.opy",
@@ -13872,7 +14096,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 601,
+          "line": 602,
           "block": "rule \"SLIMER (MERCY) TENTACLE GRAB\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -13880,7 +14104,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 602,
+          "line": 603,
           "block": "rule \"SLIMER (MERCY) TENTACLE GRAB\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -13888,7 +14112,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1285,
+          "line": 1286,
           "block": "rule \"SMOLDER SUPER SLAM\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -13920,7 +14144,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 417,
+          "line": 418,
           "block": "rule \"CHARGE BATTERY (USAGE AND COOLDOWNS)\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -13928,7 +14152,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 441,
+          "line": 442,
           "block": "rule \"HITCHHIKER ATTACH/DETATCH\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -13936,7 +14160,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 443,
+          "line": 444,
           "block": "rule \"HITCHHIKER ATTACH/DETATCH\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -14257,7 +14481,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 705,
+          "line": 708,
           "block": "def botRespawnInitialization()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -14451,7 +14675,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 405,
+          "line": 406,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14459,7 +14683,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 428,
+          "line": 429,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14467,7 +14691,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 440,
+          "line": 441,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14475,7 +14699,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 452,
+          "line": 453,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14483,7 +14707,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 462,
+          "line": 463,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14512,7 +14736,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 407,
+          "line": 408,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14520,7 +14744,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 424,
+          "line": 425,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14528,7 +14752,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 430,
+          "line": 431,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14536,7 +14760,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 442,
+          "line": 443,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14573,7 +14797,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 414,
+          "line": 415,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14581,7 +14805,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 434,
+          "line": 435,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14589,7 +14813,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 446,
+          "line": 447,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14597,7 +14821,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 456,
+          "line": 457,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14605,7 +14829,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 466,
+          "line": 467,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14626,7 +14850,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 403,
+          "line": 404,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14634,7 +14858,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 422,
+          "line": 423,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14642,7 +14866,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 438,
+          "line": 439,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14650,7 +14874,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 450,
+          "line": 451,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14658,7 +14882,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 460,
+          "line": 461,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14666,7 +14890,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 705,
+          "line": 708,
           "block": "def botRespawnInitialization()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -14695,7 +14919,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 409,
+          "line": 410,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14703,7 +14927,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 412,
+          "line": 413,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14711,7 +14935,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 432,
+          "line": 433,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14719,7 +14943,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 444,
+          "line": 445,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14727,7 +14951,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 454,
+          "line": 455,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14735,7 +14959,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 464,
+          "line": 465,
           "block": "def setDifficulty()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -14809,7 +15033,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 178,
+          "line": 179,
           "block": "macro botEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -14817,7 +15041,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 654,
+          "line": 655,
           "block": "def selectTarget()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -14825,7 +15049,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 724,
+          "line": 727,
           "block": "def botRespawnInitialization()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -14833,7 +15057,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 731,
+          "line": 734,
           "block": "def botRespawnInitialization()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -14905,7 +15129,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1345,
+          "line": 1346,
           "block": "rule \"PROTECTOR (KIRIKO) USES CLEANSE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -14913,7 +15137,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1384,
+          "line": 1385,
           "block": "rule \"BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -14921,7 +15145,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1408,
+          "line": 1409,
           "block": "rule \"CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -14966,7 +15190,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 125,
+          "line": 126,
           "block": "macro botEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -14974,7 +15198,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 136,
+          "line": 137,
           "block": "macro botEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -14982,7 +15206,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 167,
+          "line": 168,
           "block": "macro botEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -14990,7 +15214,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 183,
+          "line": 184,
           "block": "macro botEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -14998,7 +15222,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 203,
+          "line": 204,
           "block": "macro botEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15006,7 +15230,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 206,
+          "line": 207,
           "block": "macro botEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15014,7 +15238,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 280,
+          "line": 281,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 3,
@@ -15022,7 +15246,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 286,
+          "line": 287,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -15030,7 +15254,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 289,
+          "line": 290,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 6,
@@ -15038,7 +15262,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 351,
+          "line": 352,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 2,
@@ -15046,7 +15270,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 363,
+          "line": 364,
           "block": "macro globalObjectiveEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15054,7 +15278,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 575,
+          "line": 576,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -15062,7 +15286,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 659,
+          "line": 660,
           "block": "def selectTarget()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15070,7 +15294,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 698,
+          "line": 701,
           "block": "def botRespawnInitialization()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15078,7 +15302,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 724,
+          "line": 727,
           "block": "def botRespawnInitialization()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15542,7 +15766,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 434,
+          "line": 435,
           "block": "rule \"RIDER (WIDOWMAKER) ATTACH TO PLAYERS\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15550,7 +15774,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 553,
+          "line": 554,
           "block": "rule \"CHARGER (MAUGA) CHARGE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15558,7 +15782,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 563,
+          "line": 564,
           "block": "rule \"CHARGER (MAUGA) CHARGE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15566,7 +15790,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 622,
+          "line": 623,
           "block": "rule \"SLIMER (MERCY) TENTACLE GRAB\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15574,7 +15798,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 641,
+          "line": 642,
           "block": "rule \"PRIME SLIMER (EMRE) FLIGHT (BOSS)\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15582,7 +15806,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 746,
+          "line": 747,
           "block": "rule \"STRIKER NORMAL PILE DRIVER\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15590,7 +15814,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 767,
+          "line": 768,
           "block": "rule \"STALKER (MOIRA) FADE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15598,7 +15822,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 772,
+          "line": 773,
           "block": "rule \"STALKER (MOIRA) FADE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15606,7 +15830,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 785,
+          "line": 786,
           "block": "rule \"STALKER (MOIRA) FADE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15614,7 +15838,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 800,
+          "line": 801,
           "block": "rule \"STALKER (MOIRA) FADE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15622,7 +15846,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 860,
+          "line": 861,
           "block": "rule \"BLASTER (PHARAH) CHARGES ROCKET THEN FIRES\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15630,7 +15854,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 908,
+          "line": 909,
           "block": "rule \"DOWNFALLEN (SIGMA) FIRES\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15638,7 +15862,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 925,
+          "line": 926,
           "block": "rule \"DOWNFALLEN GRABS PLAYER\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15646,7 +15870,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 938,
+          "line": 939,
           "block": "rule \"DOWNFALLEN GRABS PLAYER\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15654,7 +15878,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1011,
+          "line": 1012,
           "block": "rule \"DAYTAKER (ILLARI) BURST\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15662,7 +15886,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1013,
+          "line": 1014,
           "block": "rule \"DAYTAKER (ILLARI) BURST\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15670,7 +15894,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1014,
+          "line": 1015,
           "block": "rule \"DAYTAKER (ILLARI) BURST\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15678,7 +15902,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1052,
+          "line": 1053,
           "block": "rule \"DAYTAKER (ILLARI) BURST\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15686,7 +15910,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1068,
+          "line": 1069,
           "block": "rule \"DAYTAKER (ILLARI) BURST\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15694,7 +15918,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1070,
+          "line": 1071,
           "block": "rule \"DAYTAKER (ILLARI) BURST\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15702,7 +15926,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1082,
+          "line": 1083,
           "block": "rule \"DAYTAKER ATTACKS AT HALF HEALTH (BOSS)\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15710,7 +15934,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1114,
+          "line": 1115,
           "block": "rule \"TUNNELER PORTAL LETS ZOMBIES THROUGH\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15718,7 +15942,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1149,
+          "line": 1150,
           "block": "rule \"ENSNARER (HAZARD) BLOCKS PLAYERS\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15726,7 +15950,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1154,
+          "line": 1155,
           "block": "rule \"ENSNARER (HAZARD) BLOCKS PLAYERS\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15734,7 +15958,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1201,
+          "line": 1202,
           "block": "rule \"SMOLDER (WINSTON) SEES PLAYER\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15742,7 +15966,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1225,
+          "line": 1226,
           "block": "rule \"SMOLDER ACTIVATES FROM DAMAGE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15750,7 +15974,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1251,
+          "line": 1252,
           "block": "rule \"SMOLDER BOSS SLAM\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15758,7 +15982,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1280,
+          "line": 1281,
           "block": "rule \"SMOLDER SUPER SLAM\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15766,7 +15990,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1297,
+          "line": 1298,
           "block": "rule \"SMOLDER STAYS ENRAGE DURING BOSS EVENT\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15774,7 +15998,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1310,
+          "line": 1311,
           "block": "rule \"SMOLDER BOSS EVENT STARTS\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15782,7 +16006,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1336,
+          "line": 1337,
           "block": "rule \"SMOLDER ACTIVATED FROM BOSS EVENT\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15806,7 +16030,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 273,
+          "line": 274,
           "block": "rule \"BRAIN KILLER EXTRA DAMAGE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15814,7 +16038,7 @@
         },
         {
           "file": "enhancements.opy",
-          "line": 301,
+          "line": 302,
           "block": "rule \"PYROTECHNIC APPLIES DAMAGE\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15838,7 +16062,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 208,
+          "line": 209,
           "block": "macro botEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15846,7 +16070,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 211,
+          "line": 212,
           "block": "macro botEntityManagementMacro()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15854,7 +16078,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 529,
+          "line": 530,
           "block": "def objectivesManagement()",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -15886,7 +16110,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1247,
+          "line": 1248,
           "block": "rule \"SMOLDER BOSS SLAM\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15894,7 +16118,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1295,
+          "line": 1296,
           "block": "rule \"SMOLDER STAYS ENRAGE DURING BOSS EVENT\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -15902,7 +16126,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1314,
+          "line": 1315,
           "block": "rule \"SMOLDER BOSS EVENT STARTS\"",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -15910,7 +16134,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1321,
+          "line": 1322,
           "block": "rule \"SMOLDER BOSS EVENT STARTS\"",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -15918,7 +16142,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1324,
+          "line": 1325,
           "block": "rule \"SMOLDER BOSS EVENT STARTS\"",
           "kind": "write-or-read/write",
           "occurrences": 1,
@@ -15926,7 +16150,7 @@
         },
         {
           "file": "zombie_types.opy",
-          "line": 1335,
+          "line": 1336,
           "block": "rule \"SMOLDER ACTIVATED FROM BOSS EVENT\"",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16061,7 +16285,7 @@
       "references": [
         {
           "file": "subroutines.opy",
-          "line": 403,
+          "line": 404,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16069,7 +16293,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 405,
+          "line": 406,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16077,7 +16301,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 407,
+          "line": 408,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16085,7 +16309,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 414,
+          "line": 415,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16093,7 +16317,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 422,
+          "line": 423,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16101,7 +16325,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 424,
+          "line": 425,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16109,7 +16333,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 428,
+          "line": 429,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16117,7 +16341,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 430,
+          "line": 431,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16125,7 +16349,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 432,
+          "line": 433,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16133,7 +16357,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 434,
+          "line": 435,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16141,7 +16365,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 440,
+          "line": 441,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16149,7 +16373,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 442,
+          "line": 443,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16157,7 +16381,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 444,
+          "line": 445,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16165,7 +16389,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 446,
+          "line": 447,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16173,7 +16397,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 450,
+          "line": 451,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16181,7 +16405,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 452,
+          "line": 453,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16189,7 +16413,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 454,
+          "line": 455,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16197,7 +16421,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 456,
+          "line": 457,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16205,7 +16429,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 462,
+          "line": 463,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16213,7 +16437,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 464,
+          "line": 465,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,
@@ -16221,7 +16445,7 @@
         },
         {
           "file": "subroutines.opy",
-          "line": 466,
+          "line": 467,
           "block": "def setDifficulty()",
           "kind": "read-or-action-argument",
           "occurrences": 1,

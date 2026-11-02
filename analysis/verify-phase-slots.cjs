@@ -6,7 +6,8 @@ const crypto = require('node:crypto');
 const {execFileSync} = require('node:child_process');
 const {files, compile, compiler} = require('./measure-further-optimizations.cjs');
 const playerLayout = require('./player-variable-layout.cjs');
-const {normalizePlayerNames} = require('./verify-player-variables.cjs');
+const {normalizePlayerNames, compare: comparePlayerPackage} = require('./verify-player-variables.cjs');
+const playerChanges = require('./probe-player-temporaries-2026-11-02.cjs');
 const root = path.resolve(__dirname, '..');
 const src = path.join(root, 'src');
 const baselineRef = '1a313866755d0a00e6cc8bfcbfc323904c5ff02f';
@@ -53,10 +54,15 @@ async function main() {
         {cwd: root, encoding: 'utf8'}).replace(/\r\n/g, '\n');
     await compiler.readyPromise;
     const before = await compile(baselineFiles);
+    // Keep the original phase proof intact, then compose the reviewed player-local changes.
+    const phaseTargetFiles = playerChanges.baselineFiles();
+    const phaseTarget = await compile(phaseTargetFiles);
+    const expectedCurrent = await compile(playerChanges.applyConservativePackage({...phaseTargetFiles}));
     const after = await compile(files);
     assert.deepEqual(after.warnings, []);
     assert.equal(before.elements, 27213);
-    assert.equal(after.elements, before.elements + 5);
+    assert.equal(phaseTarget.elements, before.elements + 5);
+    assert.equal(after.elements, phaseTarget.elements - 30);
     const globals = Object.values(files).join('\n').match(/^globalvar /gm).length;
     assert.equal(globals, 99);
     const declarations = new Set([...files['variables.opy'].matchAll(/^globalvar (\w+)/gm)].map(m => m[1]));
@@ -67,12 +73,14 @@ async function main() {
     assert(currentAliases.some(a => a.name === 'rescueMinSpawnDistance' && a.slot === 'phaseSlot2'));
     assert(currentAliases.some(a => a.name === 'satelliteMinTerminalSpacing' && a.slot === 'phaseSlot2'));
 
-    const playerMap = Object.fromEntries(playerLayout.variables.map(v => [v.old, v.name]));
-    const oldRules = rules(before.result, mapping, playerMap), newRules = rules(after.result);
+    const playerMap = JSON.parse(execFileSync('git', ['show', `${playerChanges.baselineRef}:analysis/player-variable-validation-2026-11-02.json`],
+        {cwd: root, encoding: 'utf8'})).mapping;
+    const oldRules = rules(before.result, mapping, playerMap), phaseRules = rules(phaseTarget.result), newRules = rules(after.result);
     assert(oldRules.length > 200, 'No compiled rules parsed');
     assert.equal(newRules.length, oldRules.length);
+    assert.equal(phaseRules.length, oldRules.length);
     let resets = 0, guardedWrites = 0;
-    newRules.forEach((rule, i) => {
+    phaseRules.forEach((rule, i) => {
         assert.equal(rule.name, oldRules[i].name);
         let body = rule.body;
         if (rule.name === 'START GAME') {
@@ -99,6 +107,7 @@ async function main() {
     });
     assert.equal(resets, 2);
     assert.equal(guardedWrites, 1);
+    const playerPackageComparison = comparePlayerPackage(expectedCurrent, after);
 
     // Preserve zero as the menu readiness sentinel and the early extraction-speed initialization.
     assert.match(files['global_startup.opy'], /extractionSpeedUp = 2\.5/);
@@ -123,15 +132,19 @@ async function main() {
     const report = {
         date: '2026-11-02', baselineRef,
         baselineOverrides: {'debug.opy': playerLayout.baselineRef},
+        phaseComparisonTargetRef: playerChanges.baselineRef,
         before: {globals: 110, elements: before.elements},
-        after: {globals, elements: after.elements},
+        phaseTarget: {globals: 99, playerVariables: 108, elements: phaseTarget.elements},
+        after: {globals, playerVariables: 107, elements: after.elements},
+        playerPackageComparison,
         sharedSlots: [...new Set(currentAliases.map(a => a.slot))].map(slot => ({slot,
             roles: currentAliases.filter(a => a.slot === slot).map(a => a.name)})),
         legacyVariableMapping: mapping,
         compiledRulesCompared: newRules.length,
         actionChanges: [
             'START GAME: restore biomorphingGoalText and biomorphingGoalColor to null after deleting pregame texts.',
-            'GLOBAL MENU INITIALIZATION: write the spacing angle only while isPregameSetup is true, preventing a resumed menu writer from overwriting the Biomorphing goal color.'
+            'GLOBAL MENU INITIALIZATION: write the spacing angle only while isPregameSetup is true, preventing a resumed menu writer from overwriting the Biomorphing goal color.',
+            'Player temporary package: compare all current rules with the reviewed transformation of phaseComparisonTargetRef; retain the boss-distance candidate snapshot, capture mutation outline color, rename remaining single-role slots.'
         ],
         warnings: after.warnings,
         sha256: Object.fromEntries(Object.entries(files).map(([file, source]) => [file,

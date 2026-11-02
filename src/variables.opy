@@ -63,9 +63,9 @@ enum PregameState:
 # Shared scratch slots.
 # Finish scratch use before wait/waitUntil or async calls; use separate slots for simultaneous values.
 # Capture scratch references in reevaluated visuals with evalOnce, and document each assignment locally.
-globalvar tmp0  # Synchronous scratch: number, position, player or list; assign before use and do not retain across waits.
-globalvar tmp1  # Second simultaneously live scratch value; may hold a scalar, player, vector or list.
-globalvar tmp2  # Third simultaneously live scratch value; may hold a scalar, player, vector or list.
+globalvar tmp0  # Synchronous scratch, including Rescue path index and Anran spawn source; assign before use, never retain across waits/calls.
+globalvar tmp1  # Second synchronous scratch value, including selectTarget candidates and barricade push geometry; never retain across waits/calls.
+globalvar tmp2  # Third synchronous scratch value, including barricade's current target and mutation color captured with evalOnce for the outline.
 
 # Phase-owned storage, NOT scratch: values may survive waits and reevaluation.
 # START GAME removes all pregame HUD/world text before mission generation can resume.
@@ -277,12 +277,14 @@ playervar botLoopIndexSlot  # Existing yielding loop index shared by Stalker fad
 #!define botStalkerFadeIndex botLoopIndexSlot
 # Index into Ensnarer affected targets.
 #!define botEnsnarerTargetIndex botLoopIndexSlot
+playervar botTarget  # Zombie AI combat target; subroutines, bot abilities and objectives; cleared when its Team 1 target is downed.
 playervar botBiteDamage  # Difficulty/hero-scaled zombie bite damage, also used by zombie abilities and explosions.
 playervar botBiteDuration  # Zombie melee damage-over-time duration, including mutation overrides.
 playervar botIsTeleportConfirmed  # Zombie teleport/spawn position has been accepted and may be added to the spawn cache.
 playervar botReigniteDestination  # Zombie emergence destination near Anran; false clears the position after the rise.
 playervar botIsWallPhaseAllowed  # Zombie may pass spawn doors; special abilities temporarily disable this permission.
 playervar botAbilityTarget  # Zombie special-ability target: teleport/grab host, flight target or affected player.
+playervar botTeleportPosition  # Zombie teleport candidate/accepted position; bot teleport rules, Egg and spawn-cache updates; zero clears it.
 playervar botBossHealth  # Virtual boss/egg health adjusted by damage events; -1 when not a boss.
 playervar botIsWallCollisionEnabled  # Cached zombie environment-collision state, restored by abilities and spawn-door handling.
 playervar botIsFacingOverridden  # Special zombie ability controls facing instead of normal target tracking.
@@ -303,12 +305,7 @@ playervar botGasRadiusList  # Boss Behemoth gas-cloud radii, aligned with botGas
 playervar botSpawnWaypoint  # Movement waypoint associated with the accepted zombie spawn point.
 playervar botCandidateTarget  # Candidate zombie target under line-of-sight testing in selectTarget.
 playervar botIsTeleportAllowed  # Zombie initialization has enabled teleport processing.
-playervar botMutationOutlineColor  # Mutation outline color; null if no mutation outline is active.
-playervar botReigniteMotionSlot  # Anran emergence source actor, then the chased rise position.
-# Active Anran whose position anchors the replacement spawn search.
-#!define botReigniteSource botReigniteMotionSlot
-# Replacement zombie position chased upward from below the emergence point.
-#!define botReigniteRisePosition botReigniteMotionSlot
+playervar botReigniteRisePosition  # Zombie emergence position chased upward near Anran; zombie_types forces this position across the rise wait.
 playervar botResourceIconIdList  # Zombie Biomorphing resource icon IDs; separate from the zombie visual-effect list.
 
 # Team 1 players/allied actors: survival, infection and reconnect state.
@@ -432,13 +429,6 @@ playervar explosionOuterColor  # Outer explosion color shared by ordinary zombie
 playervar explosionScale  # Explosion radius/sound multiplier; zombie warning setup and Hybrid initialization assign it.
 
 # Both teams or multiple systems: shared stats, visuals and role-owned storage.
-playervar combatTargetSlot  # Zombie combat target or the current zombie hit by a player barricade; preserve existing sharing.
-# Zombie AI target, including cross-team reads on zombies.
-#!define botTarget combatTargetSlot
-# Zombie currently processed by the Team 1 barricade collision loop.
-#!define enhancementBarrierTarget combatTargetSlot
-# Generic target used when downed-player cleanup visits actors from both teams.
-#!define currentCombatTarget combatTargetSlot
 playervar aiThrottleSpeedSlot  # Zombie movement throttle or Team 1 Rescue follow throttle; subroutines, bots and Rescue.
 # Zombie per-hero/boss throttle in the range 0..1.
 #!define botThrottleSpeed aiThrottleSpeedSlot
@@ -495,17 +485,12 @@ playervar isAttached  # Actor is attached to a host; zombie attachment and Team 
 #!define botIsAttached isAttached
 # Hitchhiker passenger is attached; shared Team 1 carrier queries use isAttached.
 #!define enhancementIsHitchhiking isAttached
-playervar aiLocationSlot  # Zombie teleport candidate vector or Rescue path-trimming index.
-# Zombie teleport candidate/accepted position; zero clears it.
-#!define botTeleportPosition aiLocationSlot
-# Rescue path index through which reached points are removed.
-#!define rescuePathIndex aiLocationSlot
-playervar candidateTargetList  # Candidate list shared by zombie target selection, Rescue leader selection and barricade collision.
-# Zombie target candidates.
+playervar candidateTargetList  # Boss target-visibility snapshot, Rescue leader candidates or barricade collision targets; downed-player cleanup removes invalid candidates.
+# Final selectTarget candidate snapshot, retained for reevaluated boss-distance-text visibility; cleared on bot death/boss initialization.
 #!define botPotentialTargetList candidateTargetList
-# Team 1 Rescue NPC leader candidates.
+# Team 1 Rescue NPC leader candidates, retained for GROUP UP handling.
 #!define rescuePotentialLeaderList candidateTargetList
-# Zombies crossing the player's barricade.
+# Zombies crossing the player's barricade, processed synchronously.
 #!define enhancementBarrierTargetList candidateTargetList
 playervar sizeScale  # Actor size multiplier; shared by players, zombies, Rescue, item ranges and enhancements.
 playervar actorAbilitySlot1  # Existing per-zombie ability state or Team 1 Rescue extraction flag.

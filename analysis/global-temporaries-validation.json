@@ -1,7 +1,7 @@
 {
-  "elements": 27218,
+  "elements": 27188,
   "globals": 99,
-  "playerVariables": 108,
+  "playerVariables": 107,
   "warnings": [],
   "method": "Backward scratch liveness in compiled Workshop control flow, including expanded macros, branches, loops, skips and implicit trailing Ends. Calls are conservative boundaries. Reevaluated HUD/effect/icon fields are checked for uncaptured scratch references. No in-game validation.",
   "rules": [
@@ -19,15 +19,15 @@
     },
     {
       "name": "selectTarget",
-      "controlFlowNodes": 24,
+      "controlFlowNodes": 25,
       "boundaries": 1,
       "visualActions": 0
     },
     {
       "name": "botRespawnInitialization",
-      "controlFlowNodes": 201,
+      "controlFlowNodes": 200,
       "boundaries": 3,
-      "visualActions": 2
+      "visualActions": 3
     },
     {
       "name": "SPAWN BOTS",
@@ -120,6 +120,12 @@
       "visualActions": 1
     },
     {
+      "name": "DELETE PATH",
+      "controlFlowNodes": 4,
+      "boundaries": 1,
+      "visualActions": 0
+    },
+    {
       "name": "SET UP TERMINAL POSITIONS",
       "controlFlowNodes": 20,
       "boundaries": 1,
@@ -158,6 +164,12 @@
     {
       "name": "BEHEMOTH GAS STREAM (BOSS)",
       "controlFlowNodes": 12,
+      "boundaries": 1,
+      "visualActions": 0
+    },
+    {
+      "name": "ZOMBIES SPAWN AT REIGNITED",
+      "controlFlowNodes": 11,
       "boundaries": 1,
       "visualActions": 0
     },

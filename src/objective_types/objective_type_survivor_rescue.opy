@@ -128,8 +128,9 @@ rule "DELETE PATH":
     @Condition objectiveTypeList[0] == ObjectiveType.SURVIVOR_RESCUE
     @Condition (rescueSurvivor.rescuePathList.any(lambda x: distance(rescueSurvivor.getPosition(), vect(x.x, rescueSurvivor.getPosition().y, x.z)) < 0.25 and abs(rescueSurvivor.getPosition().y - x.y) < 2)) == true
     
-    rescueSurvivor.rescuePathIndex = rescueSurvivor.rescuePathList.index(sorted(rescueSurvivor.rescuePathList, lambda x: distance(rescueSurvivor.getPosition(), x))[0])
-    rescueSurvivor.rescuePathList.remove(rescueSurvivor.rescuePathList.filter(lambda _, i: i <= rescueSurvivor.rescuePathIndex))
+    # tmp0: reached path index, consumed by the immediate path trim.
+    tmp0 = rescueSurvivor.rescuePathList.index(sorted(rescueSurvivor.rescuePathList, lambda x: distance(rescueSurvivor.getPosition(), x))[0])
+    rescueSurvivor.rescuePathList.remove(rescueSurvivor.rescuePathList.filter(lambda _, i: i <= tmp0))
     wait(0.25, Wait.RESTART_WHEN_TRUE)
     if ruleCondition:
         loop()

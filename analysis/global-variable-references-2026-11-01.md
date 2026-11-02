@@ -8,14 +8,14 @@
 
 ## tmp0
 
-Объявление: [variables.opy:66](../src/variables.opy#L66). Строк обращений: 195; упоминаний: 227; чтений вида Global в скомпилированном коде: 161.
+Объявление: [variables.opy:66](../src/variables.opy#L66). Строк обращений: 199; упоминаний: 232; чтений вида Global в скомпилированном коде: 164.
 
 - subroutines.opy — macro botStatManagementMacro(): [33](../src/subroutines.opy#L33), [34](../src/subroutines.opy#L34), [36](../src/subroutines.opy#L36), [37](../src/subroutines.opy#L37), [39](../src/subroutines.opy#L39), [41](../src/subroutines.opy#L41), [42](../src/subroutines.opy#L42).
-- subroutines.opy — macro botEntityManagementMacro(): [145](../src/subroutines.opy#L145), [147](../src/subroutines.opy#L147), [150](../src/subroutines.opy#L150).
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [242](../src/subroutines.opy#L242), [243](../src/subroutines.opy#L243), [381](../src/subroutines.opy#L381), [383](../src/subroutines.opy#L383), [386](../src/subroutines.opy#L386), [389](../src/subroutines.opy#L389), [392](../src/subroutines.opy#L392).
-- subroutines.opy — def setDifficulty(): [411](../src/subroutines.opy#L411).
-- subroutines.opy — def selectTarget(): [669](../src/subroutines.opy#L669), [670](../src/subroutines.opy#L670).
-- subroutines.opy — def botRespawnInitialization(): [726](../src/subroutines.opy#L726), [727](../src/subroutines.opy#L727).
+- subroutines.opy — macro botEntityManagementMacro(): [146](../src/subroutines.opy#L146), [148](../src/subroutines.opy#L148), [151](../src/subroutines.opy#L151).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [243](../src/subroutines.opy#L243), [244](../src/subroutines.opy#L244), [382](../src/subroutines.opy#L382), [384](../src/subroutines.opy#L384), [387](../src/subroutines.opy#L387), [390](../src/subroutines.opy#L390), [393](../src/subroutines.opy#L393).
+- subroutines.opy — def setDifficulty(): [412](../src/subroutines.opy#L412).
+- subroutines.opy — def selectTarget(): [672](../src/subroutines.opy#L672), [673](../src/subroutines.opy#L673).
+- subroutines.opy — def botRespawnInitialization(): [729](../src/subroutines.opy#L729), [730](../src/subroutines.opy#L730).
 - global_startup.opy — macro botHeroRandomizationMacro(): [52](../src/global_startup.opy#L52), [56](../src/global_startup.opy#L56), [58](../src/global_startup.opy#L58), [63](../src/global_startup.opy#L63).
 - global_startup.opy — rule "VARIABLE ASSIGNMENT": [240](../src/global_startup.opy#L240).
 - global_startup.opy — def generateMapGrid(): [307](../src/global_startup.opy#L307), [309](../src/global_startup.opy#L309), [310](../src/global_startup.opy#L310), [311](../src/global_startup.opy#L311).
@@ -33,6 +33,7 @@
 - objective_types/objective_type_biomorphing.opy — rule "PLAYER DELIVERS RESOURCE VALUE": [145](../src/objective_types/objective_type_biomorphing.opy#L145), [149](../src/objective_types/objective_type_biomorphing.opy#L149), [155](../src/objective_types/objective_type_biomorphing.opy#L155).
 - objective_types/objective_type_biomorphing.opy — rule "BIOWASTE MANAGEMENT": [187](../src/objective_types/objective_type_biomorphing.opy#L187).
 - objective_types/objective_type_survivor_rescue.opy — rule "INITIALIZE SURVIVOR TO BE RESCUED": [57](../src/objective_types/objective_type_survivor_rescue.opy#L57), [59](../src/objective_types/objective_type_survivor_rescue.opy#L59).
+- objective_types/objective_type_survivor_rescue.opy — rule "DELETE PATH": [132](../src/objective_types/objective_type_survivor_rescue.opy#L132), [133](../src/objective_types/objective_type_survivor_rescue.opy#L133).
 - objective_types/objective_type_satellite_uplink.opy — macro fireSatelliteMacro(): [13](../src/objective_types/objective_type_satellite_uplink.opy#L13), [14](../src/objective_types/objective_type_satellite_uplink.opy#L14), [34](../src/objective_types/objective_type_satellite_uplink.opy#L34), [35](../src/objective_types/objective_type_satellite_uplink.opy#L35), [50](../src/objective_types/objective_type_satellite_uplink.opy#L50), [51](../src/objective_types/objective_type_satellite_uplink.opy#L51), [52](../src/objective_types/objective_type_satellite_uplink.opy#L52), [54](../src/objective_types/objective_type_satellite_uplink.opy#L54), [56](../src/objective_types/objective_type_satellite_uplink.opy#L56).
 - objective_types/objective_type_satellite_uplink.opy — rule "SET UP TERMINAL POSITIONS": [75](../src/objective_types/objective_type_satellite_uplink.opy#L75), [77](../src/objective_types/objective_type_satellite_uplink.opy#L77), [83](../src/objective_types/objective_type_satellite_uplink.opy#L83), [84](../src/objective_types/objective_type_satellite_uplink.opy#L84), [86](../src/objective_types/objective_type_satellite_uplink.opy#L86).
 - objective_types/objective_type_satellite_uplink.opy — rule "PLAYERS REPAIR TERMINALS": [123](../src/objective_types/objective_type_satellite_uplink.opy#L123), [124](../src/objective_types/objective_type_satellite_uplink.opy#L124), [125](../src/objective_types/objective_type_satellite_uplink.opy#L125), [126](../src/objective_types/objective_type_satellite_uplink.opy#L126), [128](../src/objective_types/objective_type_satellite_uplink.opy#L128), [130](../src/objective_types/objective_type_satellite_uplink.opy#L130), [132](../src/objective_types/objective_type_satellite_uplink.opy#L132), [133](../src/objective_types/objective_type_satellite_uplink.opy#L133), [135](../src/objective_types/objective_type_satellite_uplink.opy#L135), [136](../src/objective_types/objective_type_satellite_uplink.opy#L136).
@@ -41,8 +42,9 @@
 - bots_game_in_progress.opy — def locateAveragePlayerLocation(): [492](../src/bots_game_in_progress.opy#L492), [493](../src/bots_game_in_progress.opy#L493), [496](../src/bots_game_in_progress.opy#L496), [497](../src/bots_game_in_progress.opy#L497), [498](../src/bots_game_in_progress.opy#L498).
 - zombie_types.opy — rule "BASIC (REAPER) SHADOW STEP (BOSS)": [48](../src/zombie_types.opy#L48), [49](../src/zombie_types.opy#L49).
 - zombie_types.opy — rule "BEHEMOTH GAS STREAM (BOSS)": [236](../src/zombie_types.opy#L236), [237](../src/zombie_types.opy#L237), [238](../src/zombie_types.opy#L238), [239](../src/zombie_types.opy#L239).
-- zombie_types.opy — rule "PRIME SLIMER (EMRE) FLIGHT (BOSS)": [674](../src/zombie_types.opy#L674), [675](../src/zombie_types.opy#L675).
-- zombie_types.opy — rule "SMOLDER SUPER SLAM": [1288](../src/zombie_types.opy#L1288), [1289](../src/zombie_types.opy#L1289).
+- zombie_types.opy — rule "ZOMBIES SPAWN AT REIGNITED": [418](../src/zombie_types.opy#L418), [419](../src/zombie_types.opy#L419).
+- zombie_types.opy — rule "PRIME SLIMER (EMRE) FLIGHT (BOSS)": [675](../src/zombie_types.opy#L675), [676](../src/zombie_types.opy#L676).
+- zombie_types.opy — rule "SMOLDER SUPER SLAM": [1289](../src/zombie_types.opy#L1289), [1290](../src/zombie_types.opy#L1290).
 - supply_drops.opy — rule "GENERATE SUPPLY DROPS": [35](../src/supply_drops.opy#L35), [37](../src/supply_drops.opy#L37).
 - supply_drops.opy — rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)": [91](../src/supply_drops.opy#L91), [96](../src/supply_drops.opy#L96), [97](../src/supply_drops.opy#L97).
 - supply_drops.opy — def playerForceField(): [152](../src/supply_drops.opy#L152), [153](../src/supply_drops.opy#L153), [154](../src/supply_drops.opy#L154).
@@ -50,16 +52,17 @@
 - supply_drops.opy — def sentryTurret(): [262](../src/supply_drops.opy#L262), [263](../src/supply_drops.opy#L263), [264](../src/supply_drops.opy#L264), [276](../src/supply_drops.opy#L276), [279](../src/supply_drops.opy#L279), [280](../src/supply_drops.opy#L280), [283](../src/supply_drops.opy#L283), [284](../src/supply_drops.opy#L284).
 - supply_drops.opy — def bouncePad(): [377](../src/supply_drops.opy#L377), [378](../src/supply_drops.opy#L378), [381](../src/supply_drops.opy#L381), [384](../src/supply_drops.opy#L384), [386](../src/supply_drops.opy#L386).
 - power_ups.opy — rule "EFFECT/TEXT (PERMANENT)": [30](../src/power_ups.opy#L30), [32](../src/power_ups.opy#L32), [47](../src/power_ups.opy#L47), [63](../src/power_ups.opy#L63), [66](../src/power_ups.opy#L66), [67](../src/power_ups.opy#L67), [68](../src/power_ups.opy#L68).
-- enhancements.opy — rule "LASER BARRICADE BLOCKS ZOMBIES": [238](../src/enhancements.opy#L238), [239](../src/enhancements.opy#L239).
-- enhancements.opy — rule "PYROTECHNIC APPLIES DAMAGE": [297](../src/enhancements.opy#L297), [298](../src/enhancements.opy#L298), [300](../src/enhancements.opy#L300), [301](../src/enhancements.opy#L301), [304](../src/enhancements.opy#L304), [305](../src/enhancements.opy#L305).
-- enhancements.opy — rule "CHARGE BATTERY (USAGE AND COOLDOWNS)": [420](../src/enhancements.opy#L420), [421](../src/enhancements.opy#L421), [422](../src/enhancements.opy#L422), [423](../src/enhancements.opy#L423), [424](../src/enhancements.opy#L424).
-- enhancements.opy — rule "HITCHHIKER ATTACH/DETATCH": [445](../src/enhancements.opy#L445), [447](../src/enhancements.opy#L447), [449](../src/enhancements.opy#L449), [451](../src/enhancements.opy#L451), [453](../src/enhancements.opy#L453), [455](../src/enhancements.opy#L455).
-- enhancements.opy — rule "HITCHHIKER LIFEBONDS": [495](../src/enhancements.opy#L495), [500](../src/enhancements.opy#L500), [501](../src/enhancements.opy#L501).
+- enhancements.opy — rule "LASER BARRICADE BLOCKS ZOMBIES": [238](../src/enhancements.opy#L238), [240](../src/enhancements.opy#L240).
+- enhancements.opy — rule "PYROTECHNIC APPLIES DAMAGE": [298](../src/enhancements.opy#L298), [299](../src/enhancements.opy#L299), [301](../src/enhancements.opy#L301), [302](../src/enhancements.opy#L302), [305](../src/enhancements.opy#L305), [306](../src/enhancements.opy#L306).
+- enhancements.opy — rule "CHARGE BATTERY (USAGE AND COOLDOWNS)": [421](../src/enhancements.opy#L421), [422](../src/enhancements.opy#L422), [423](../src/enhancements.opy#L423), [424](../src/enhancements.opy#L424), [425](../src/enhancements.opy#L425).
+- enhancements.opy — rule "HITCHHIKER ATTACH/DETATCH": [446](../src/enhancements.opy#L446), [448](../src/enhancements.opy#L448), [450](../src/enhancements.opy#L450), [452](../src/enhancements.opy#L452), [454](../src/enhancements.opy#L454), [456](../src/enhancements.opy#L456).
+- enhancements.opy — rule "HITCHHIKER LIFEBONDS": [496](../src/enhancements.opy#L496), [501](../src/enhancements.opy#L501), [502](../src/enhancements.opy#L502).
 
 ## tmp1
 
-Объявление: [variables.opy:67](../src/variables.opy#L67). Строк обращений: 46; упоминаний: 49; чтений вида Global в скомпилированном коде: 31.
+Объявление: [variables.opy:67](../src/variables.opy#L67). Строк обращений: 56; упоминаний: 62; чтений вида Global в скомпилированном коде: 37.
 
+- subroutines.opy — def selectTarget(): [653](../src/subroutines.opy#L653), [656](../src/subroutines.opy#L656), [658](../src/subroutines.opy#L658), [662](../src/subroutines.opy#L662), [664](../src/subroutines.opy#L664), [666](../src/subroutines.opy#L666), [668](../src/subroutines.opy#L668), [670](../src/subroutines.opy#L670), [672](../src/subroutines.opy#L672), [673](../src/subroutines.opy#L673).
 - global_startup.opy — macro botHeroRandomizationMacro(): [60](../src/global_startup.opy#L60), [63](../src/global_startup.opy#L63), [67](../src/global_startup.opy#L67).
 - global_start_menu.opy — def determineChallenge(): [336](../src/global_start_menu.opy#L336), [340](../src/global_start_menu.opy#L340), [342](../src/global_start_menu.opy#L342), [350](../src/global_start_menu.opy#L350).
 - objective_types/objective_type_biomorphing.opy — macro biowasteAssignmentMacro(): [16](../src/objective_types/objective_type_biomorphing.opy#L16), [17](../src/objective_types/objective_type_biomorphing.opy#L17), [19](../src/objective_types/objective_type_biomorphing.opy#L19).
@@ -71,17 +74,19 @@
 - supply_drops.opy — def airStrike(): [216](../src/supply_drops.opy#L216), [217](../src/supply_drops.opy#L217), [218](../src/supply_drops.opy#L218).
 - supply_drops.opy — def bouncePad(): [381](../src/supply_drops.opy#L381), [384](../src/supply_drops.opy#L384).
 - power_ups.opy — rule "EFFECT/TEXT (PERMANENT)": [28](../src/power_ups.opy#L28), [66](../src/power_ups.opy#L66), [67](../src/power_ups.opy#L67), [68](../src/power_ups.opy#L68).
-- enhancements.opy — rule "LASER BARRICADE BLOCKS ZOMBIES": [236](../src/enhancements.opy#L236), [247](../src/enhancements.opy#L247), [250](../src/enhancements.opy#L250).
-- enhancements.opy — rule "PYROTECHNIC APPLIES DAMAGE": [300](../src/enhancements.opy#L300), [303](../src/enhancements.opy#L303), [304](../src/enhancements.opy#L304).
-- enhancements.opy — rule "HITCHHIKER LIFEBONDS": [497](../src/enhancements.opy#L497), [499](../src/enhancements.opy#L499), [500](../src/enhancements.opy#L500).
+- enhancements.opy — rule "LASER BARRICADE BLOCKS ZOMBIES": [236](../src/enhancements.opy#L236), [248](../src/enhancements.opy#L248), [251](../src/enhancements.opy#L251).
+- enhancements.opy — rule "PYROTECHNIC APPLIES DAMAGE": [301](../src/enhancements.opy#L301), [304](../src/enhancements.opy#L304), [305](../src/enhancements.opy#L305).
+- enhancements.opy — rule "HITCHHIKER LIFEBONDS": [498](../src/enhancements.opy#L498), [500](../src/enhancements.opy#L500), [501](../src/enhancements.opy#L501).
 
 ## tmp2
 
-Объявление: [variables.opy:68](../src/variables.opy#L68). Строк обращений: 9; упоминаний: 10; чтений вида Global в скомпилированном коде: 6.
+Объявление: [variables.opy:68](../src/variables.opy#L68). Строк обращений: 23; упоминаний: 33; чтений вида Global в скомпилированном коде: 23.
 
+- subroutines.opy — macro mutationsMacro(): [85](../src/subroutines.opy#L85), [91](../src/subroutines.opy#L91), [97](../src/subroutines.opy#L97), [102](../src/subroutines.opy#L102), [113](../src/subroutines.opy#L113), [116](../src/subroutines.opy#L116).
 - global_startup.opy — macro botHeroRandomizationMacro(): [62](../src/global_startup.opy#L62), [63](../src/global_startup.opy#L63), [65](../src/global_startup.opy#L65), [67](../src/global_startup.opy#L67), [68](../src/global_startup.opy#L68).
 - supply_drops.opy — def bouncePad(): [384](../src/supply_drops.opy#L384), [385](../src/supply_drops.opy#L385).
-- enhancements.opy — rule "HITCHHIKER LIFEBONDS": [499](../src/enhancements.opy#L499), [501](../src/enhancements.opy#L501).
+- enhancements.opy — rule "LASER BARRICADE BLOCKS ZOMBIES": [240](../src/enhancements.opy#L240), [241](../src/enhancements.opy#L241), [243](../src/enhancements.opy#L243), [244](../src/enhancements.opy#L244), [245](../src/enhancements.opy#L245), [246](../src/enhancements.opy#L246), [248](../src/enhancements.opy#L248), [251](../src/enhancements.opy#L251).
+- enhancements.opy — rule "HITCHHIKER LIFEBONDS": [500](../src/enhancements.opy#L500), [502](../src/enhancements.opy#L502).
 
 ## phaseSlot0
 
@@ -89,7 +94,7 @@
 
 Алиасы ролей: `startMenuZombieColorList`, `objectiveVisualCleanupIndex`.
 
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [222](../src/subroutines.opy#L222), [223](../src/subroutines.opy#L223), [224](../src/subroutines.opy#L224), [225](../src/subroutines.opy#L225), [226](../src/subroutines.opy#L226), [227](../src/subroutines.opy#L227), [228](../src/subroutines.opy#L228).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [223](../src/subroutines.opy#L223), [224](../src/subroutines.opy#L224), [225](../src/subroutines.opy#L225), [226](../src/subroutines.opy#L226), [227](../src/subroutines.opy#L227), [228](../src/subroutines.opy#L228), [229](../src/subroutines.opy#L229).
 - global_start_menu.opy — rule "EFFECTS/TEXTS": [107](../src/global_start_menu.opy#L107), [131](../src/global_start_menu.opy#L131), [132](../src/global_start_menu.opy#L132), [133](../src/global_start_menu.opy#L133).
 
 ## phaseSlot1
@@ -109,7 +114,7 @@
 
 Алиасы ролей: `startMenuEnhancementColorList`, `rescueMinSpawnDistance`, `satelliteMinTerminalSpacing`.
 
-- subroutines.opy — def objectivesManagement(): [640](../src/subroutines.opy#L640).
+- subroutines.opy — def objectivesManagement(): [641](../src/subroutines.opy#L641).
 - global_start_menu.opy — rule "EFFECTS/TEXTS": [173](../src/global_start_menu.opy#L173), [205](../src/global_start_menu.opy#L205), [206](../src/global_start_menu.opy#L206), [207](../src/global_start_menu.opy#L207).
 - objective_types/objective_type_survivor_rescue.opy — rule "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE": [13](../src/objective_types/objective_type_survivor_rescue.opy#L13), [15](../src/objective_types/objective_type_survivor_rescue.opy#L15), [16](../src/objective_types/objective_type_survivor_rescue.opy#L16).
 - objective_types/objective_type_satellite_uplink.opy — rule "SET UP TERMINAL POSITIONS": [83](../src/objective_types/objective_type_satellite_uplink.opy#L83), [90](../src/objective_types/objective_type_satellite_uplink.opy#L90).
@@ -120,8 +125,8 @@
 
 Алиасы ролей: `challengeVoteList`, `biomorphingResourceNameList`.
 
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [297](../src/subroutines.opy#L297).
-- subroutines.opy — def objectivesManagement(): [609](../src/subroutines.opy#L609).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [298](../src/subroutines.opy#L298).
+- subroutines.opy — def objectivesManagement(): [610](../src/subroutines.opy#L610).
 - global_startup.opy — rule "SKIP ASSEMBLING HEROES": [146](../src/global_startup.opy#L146).
 - global_start_menu.opy — def determineChallenge(): [330](../src/global_start_menu.opy#L330), [331](../src/global_start_menu.opy#L331), [332](../src/global_start_menu.opy#L332), [334](../src/global_start_menu.opy#L334), [338](../src/global_start_menu.opy#L338), [340](../src/global_start_menu.opy#L340), [344](../src/global_start_menu.opy#L344), [346](../src/global_start_menu.opy#L346), [348](../src/global_start_menu.opy#L348).
 - player_start_menu.opy — rule "PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)": [136](../src/player_start_menu.opy#L136), [137](../src/player_start_menu.opy#L137), [138](../src/player_start_menu.opy#L138), [140](../src/player_start_menu.opy#L140), [141](../src/player_start_menu.opy#L141), [142](../src/player_start_menu.opy#L142).
@@ -133,8 +138,8 @@
 
 Алиасы ролей: `objectiveTypeVoteList`, `biomorphingResourceColorList`.
 
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [297](../src/subroutines.opy#L297), [306](../src/subroutines.opy#L306), [309](../src/subroutines.opy#L309).
-- subroutines.opy — def objectivesManagement(): [608](../src/subroutines.opy#L608).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [298](../src/subroutines.opy#L298), [307](../src/subroutines.opy#L307), [310](../src/subroutines.opy#L310).
+- subroutines.opy — def objectivesManagement(): [609](../src/subroutines.opy#L609).
 - global_startup.opy — macro setAvailableObjectivesMacro(): [7](../src/global_startup.opy#L7), [9](../src/global_startup.opy#L9), [11](../src/global_startup.opy#L11), [13](../src/global_startup.opy#L13), [15](../src/global_startup.opy#L15), [17](../src/global_startup.opy#L17), [19](../src/global_startup.opy#L19).
 - global_start_menu.opy — def determineObjectiveType(): [363](../src/global_start_menu.opy#L363), [364](../src/global_start_menu.opy#L364), [365](../src/global_start_menu.opy#L365), [367](../src/global_start_menu.opy#L367), [369](../src/global_start_menu.opy#L369), [370](../src/global_start_menu.opy#L370), [372](../src/global_start_menu.opy#L372), [378](../src/global_start_menu.opy#L378), [381](../src/global_start_menu.opy#L381), [382](../src/global_start_menu.opy#L382).
 - player_start_menu.opy — rule "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)": [176](../src/player_start_menu.opy#L176), [177](../src/player_start_menu.opy#L177), [178](../src/player_start_menu.opy#L178), [180](../src/player_start_menu.opy#L180), [181](../src/player_start_menu.opy#L181), [182](../src/player_start_menu.opy#L182).
@@ -191,7 +196,7 @@
 
 Алиасы ролей: `enhancementOptionList`, `biomorphingGoalText`.
 
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [294](../src/subroutines.opy#L294).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [295](../src/subroutines.opy#L295).
 - global_startup.opy — macro enableEnhancementsMacro(): [35](../src/global_startup.opy#L35).
 - global_startup.opy — rule "START GAME": [287](../src/global_startup.opy#L287).
 - player_start_menu.opy — rule "EFFECTS/TEXT": [53](../src/player_start_menu.opy#L53).
@@ -204,7 +209,7 @@
 
 Алиасы ролей: `startMenuSpacingAngle`, `biomorphingGoalColor`.
 
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [294](../src/subroutines.opy#L294).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [295](../src/subroutines.opy#L295).
 - global_startup.opy — rule "START GAME": [289](../src/global_startup.opy#L289).
 - global_start_menu.opy — rule "GLOBAL MENU INITIALIZATION": [53](../src/global_start_menu.opy#L53).
 - player_start_menu.opy — rule "PLAYER MENU INITIALIZATION": [10](../src/player_start_menu.opy#L10), [26](../src/player_start_menu.opy#L26).
@@ -224,23 +229,23 @@
 
 Объявление: [variables.opy:126](../src/variables.opy#L126). Строк обращений: 7; упоминаний: 7; чтений вида Global в скомпилированном коде: 7.
 
-- subroutines.opy — macro botEntityManagementMacro(): [158](../src/subroutines.opy#L158).
+- subroutines.opy — macro botEntityManagementMacro(): [159](../src/subroutines.opy#L159).
 - player_start_menu.opy — rule "EFFECTS/TEXT": [45](../src/player_start_menu.opy#L45).
 - global_game_in_progress.opy — rule "EFFECTS/TEXTS": [16](../src/global_game_in_progress.opy#L16).
-- zombie_types.opy — rule "SLIMER (MERCY) TENTACLE GRAB": [595](../src/zombie_types.opy#L595), [608](../src/zombie_types.opy#L608), [617](../src/zombie_types.opy#L617).
+- zombie_types.opy — rule "SLIMER (MERCY) TENTACLE GRAB": [596](../src/zombie_types.opy#L596), [609](../src/zombie_types.opy#L609), [618](../src/zombie_types.opy#L618).
 - supply_drops.opy — rule "EFFECT/TEXT (GLOBAL)": [70](../src/supply_drops.opy#L70).
 
 ## losOffsetConst
 
 Объявление: [variables.opy:127](../src/variables.opy#L127). Строк обращений: 12; упоминаний: 16; чтений вида Global в скомпилированном коде: 16.
 
-- subroutines.opy — def selectTarget(): [671](../src/subroutines.opy#L671).
+- subroutines.opy — def selectTarget(): [674](../src/subroutines.opy#L674).
 - bots_game_in_progress.opy — rule "TELEPORT BOTS WHEN NOT USED FOR TOO LONG": [190](../src/bots_game_in_progress.opy#L190).
 - bots_game_in_progress.opy — rule "BOT TARGET VISIBLE": [241](../src/bots_game_in_progress.opy#L241).
 - bots_game_in_progress.opy — rule "DESELECT BOT TARGET": [267](../src/bots_game_in_progress.opy#L267).
 - bots_game_in_progress.opy — def teleportBots(): [470](../src/bots_game_in_progress.opy#L470).
-- zombie_types.opy — rule "SMOLDER SUPER SLAM": [1285](../src/zombie_types.opy#L1285), [1286](../src/zombie_types.opy#L1286).
-- zombie_types.opy — def entityFloat(): [1459](../src/zombie_types.opy#L1459).
+- zombie_types.opy — rule "SMOLDER SUPER SLAM": [1286](../src/zombie_types.opy#L1286), [1287](../src/zombie_types.opy#L1287).
+- zombie_types.opy — def entityFloat(): [1460](../src/zombie_types.opy#L1460).
 - supply_drops.opy — def stun(): [415](../src/supply_drops.opy#L415), [419](../src/supply_drops.opy#L419), [424](../src/supply_drops.opy#L424), [431](../src/supply_drops.opy#L431).
 
 ## colorChargeBatteryConst
@@ -270,7 +275,7 @@
 
 Объявление: [variables.opy:133](../src/variables.opy#L133). Строк обращений: 40; упоминаний: 41; чтений вида Global в скомпилированном коде: 39.
 
-- subroutines.opy — def enableDisableAbilities(): [505](../src/subroutines.opy#L505).
+- subroutines.opy — def enableDisableAbilities(): [506](../src/subroutines.opy#L506).
 - global_startup.opy — rule "PREGAME QUICK TIPS FOR PLAYERS": [85](../src/global_startup.opy#L85).
 - global_startup.opy — rule "SKIP ASSEMBLING HEROES": [140](../src/global_startup.opy#L140), [159](../src/global_startup.opy#L159).
 - global_startup.opy — rule "PREGAME SPAWN ROOM ROTATION": [175](../src/global_startup.opy#L175), [197](../src/global_startup.opy#L197).
@@ -324,7 +329,7 @@
 
 Объявление: [variables.opy:135](../src/variables.opy#L135). Строк обращений: 40; упоминаний: 41; чтений вида Global в скомпилированном коде: 39.
 
-- subroutines.opy — def objectivesManagement(): [526](../src/subroutines.opy#L526).
+- subroutines.opy — def objectivesManagement(): [527](../src/subroutines.opy#L527).
 - global_startup.opy — rule "SPAWN BOTS": [93](../src/global_startup.opy#L93).
 - global_start_menu.opy — def setObjectiveType(): [420](../src/global_start_menu.opy#L420).
 - global_game_in_progress.opy — rule "PREVENT MATCH TIME FROM UNPAUSING": [40](../src/global_game_in_progress.opy#L40).
@@ -359,8 +364,8 @@
 - power_ups.opy — rule "PLAYER DROPS POWER UP (MANUAL)": [77](../src/power_ups.opy#L77).
 - enhancements.opy — rule "PLAYER ENHANCEMENT INITIALIZATION": [8](../src/enhancements.opy#L8).
 - enhancements.opy — rule "LASER BARRICADE (PLACEMENT)": [181](../src/enhancements.opy#L181).
-- enhancements.opy — rule "CHARGE BATTERY": [387](../src/enhancements.opy#L387).
-- enhancements.opy — rule "CHARGE BATTERY (USAGE AND COOLDOWNS)": [414](../src/enhancements.opy#L414).
+- enhancements.opy — rule "CHARGE BATTERY": [388](../src/enhancements.opy#L388).
+- enhancements.opy — rule "CHARGE BATTERY (USAGE AND COOLDOWNS)": [415](../src/enhancements.opy#L415).
 - debug.opy — rule "[debug] Resource usage and server load": [32](../src/debug.opy#L32).
 
 ## isOvertimeActive
@@ -373,7 +378,7 @@
 
 Объявление: [variables.opy:137](../src/variables.opy#L137). Строк обращений: 17; упоминаний: 19; чтений вида Global в скомпилированном коде: 17.
 
-- subroutines.opy — def setPrematchTimer(): [476](../src/subroutines.opy#L476).
+- subroutines.opy — def setPrematchTimer(): [477](../src/subroutines.opy#L477).
 - global_startup.opy — rule "SKIP ASSEMBLING HEROES": [143](../src/global_startup.opy#L143).
 - global_start_menu.opy — rule "GLOBAL MENU INITIALIZATION": [55](../src/global_start_menu.opy#L55).
 - global_start_menu.opy — rule "EFFECTS/TEXTS": [60](../src/global_start_menu.opy#L60), [68](../src/global_start_menu.opy#L68), [98](../src/global_start_menu.opy#L98), [128](../src/global_start_menu.opy#L128), [164](../src/global_start_menu.opy#L164).
@@ -390,8 +395,8 @@
 
 Объявление: [variables.opy:138](../src/variables.opy#L138). Строк обращений: 11; упоминаний: 12; чтений вида Global в скомпилированном коде: 10.
 
-- subroutines.opy — def setDifficulty(): [399](../src/subroutines.opy#L399), [426](../src/subroutines.opy#L426), [436](../src/subroutines.opy#L436), [448](../src/subroutines.opy#L448).
-- subroutines.opy — def botRespawnInitialization(): [724](../src/subroutines.opy#L724).
+- subroutines.opy — def setDifficulty(): [400](../src/subroutines.opy#L400), [427](../src/subroutines.opy#L427), [437](../src/subroutines.opy#L437), [449](../src/subroutines.opy#L449).
+- subroutines.opy — def botRespawnInitialization(): [727](../src/subroutines.opy#L727).
 - global_startup.opy — rule "SKIP ASSEMBLING HEROES": [151](../src/global_startup.opy#L151).
 - player_start_menu.opy — rule "PLAYER MENU INITIALIZATION": [23](../src/player_start_menu.opy#L23).
 - objective_types/objective_type_showdown.opy — rule "DECREASES CAPTURE PERCENTAGE": [71](../src/objective_types/objective_type_showdown.opy#L71).
@@ -403,7 +408,7 @@
 Объявление: [variables.opy:139](../src/variables.opy#L139). Строк обращений: 15; упоминаний: 18; чтений вида Global в скомпилированном коде: 14.
 
 - subroutines.opy — macro mutationsMacro(): [78](../src/subroutines.opy#L78).
-- subroutines.opy — def setDifficulty(): [401](../src/subroutines.opy#L401).
+- subroutines.opy — def setDifficulty(): [402](../src/subroutines.opy#L402).
 - global_start_menu.opy — rule "END VOTING": [241](../src/global_start_menu.opy#L241).
 - global_start_menu.opy — def determineChallenge(): [328](../src/global_start_menu.opy#L328), [346](../src/global_start_menu.opy#L346), [347](../src/global_start_menu.opy#L347), [348](../src/global_start_menu.opy#L348), [350](../src/global_start_menu.opy#L350), [351](../src/global_start_menu.opy#L351), [353](../src/global_start_menu.opy#L353), [354](../src/global_start_menu.opy#L354).
 - global_game_in_progress.opy — rule "EFFECTS/TEXTS": [18](../src/global_game_in_progress.opy#L18).
@@ -428,7 +433,7 @@
 
 Объявление: [variables.opy:141](../src/variables.opy#L141). Строк обращений: 16; упоминаний: 17; чтений вида Global в скомпилированном коде: 11.
 
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [283](../src/subroutines.opy#L283).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [284](../src/subroutines.opy#L284).
 - global_startup.opy — rule "SKIP ASSEMBLING HEROES": [155](../src/global_startup.opy#L155).
 - global_start_menu.opy — rule "END VOTING": [243](../src/global_start_menu.opy#L243).
 - global_start_menu.opy — def determineObjectiveType(): [361](../src/global_start_menu.opy#L361), [370](../src/global_start_menu.opy#L370), [371](../src/global_start_menu.opy#L371), [372](../src/global_start_menu.opy#L372), [374](../src/global_start_menu.opy#L374), [375](../src/global_start_menu.opy#L375), [377](../src/global_start_menu.opy#L377), [379](../src/global_start_menu.opy#L379), [381](../src/global_start_menu.opy#L381), [382](../src/global_start_menu.opy#L382).
@@ -489,7 +494,7 @@
 - objective_types/objective_type_survivor_rescue.opy — rule "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE": [15](../src/objective_types/objective_type_survivor_rescue.opy#L15).
 - objective_types/objective_type_satellite_uplink.opy — rule "SET UP TERMINAL POSITIONS": [75](../src/objective_types/objective_type_satellite_uplink.opy#L75).
 - players_game_in_progress.opy — rule "PLAYER INITIALIZATION": [91](../src/players_game_in_progress.opy#L91).
-- zombie_types.opy — rule "ZOMBIES SPAWN AT REIGNITED": [418](../src/zombie_types.opy#L418).
+- zombie_types.opy — rule "ZOMBIES SPAWN AT REIGNITED": [419](../src/zombie_types.opy#L419).
 - supply_drops.opy — rule "GENERATE SUPPLY DROPS": [37](../src/supply_drops.opy#L37).
 
 ## attackSpawnRooms
@@ -582,8 +587,8 @@
 
 Объявление: [variables.opy:163](../src/variables.opy#L163). Строк обращений: 109; упоминаний: 142; чтений вида Global в скомпилированном коде: 136.
 
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [234](../src/subroutines.opy#L234), [236](../src/subroutines.opy#L236), [239](../src/subroutines.opy#L239), [243](../src/subroutines.opy#L243), [246](../src/subroutines.opy#L246), [249](../src/subroutines.opy#L249), [254](../src/subroutines.opy#L254), [257](../src/subroutines.opy#L257), [260](../src/subroutines.opy#L260), [263](../src/subroutines.opy#L263), [266](../src/subroutines.opy#L266), [269](../src/subroutines.opy#L269), [272](../src/subroutines.opy#L272), [275](../src/subroutines.opy#L275), [283](../src/subroutines.opy#L283), [286](../src/subroutines.opy#L286), [289](../src/subroutines.opy#L289), [294](../src/subroutines.opy#L294), [300](../src/subroutines.opy#L300), [303](../src/subroutines.opy#L303), [306](../src/subroutines.opy#L306), [312](../src/subroutines.opy#L312), [317](../src/subroutines.opy#L317), [320](../src/subroutines.opy#L320), [323](../src/subroutines.opy#L323), [331](../src/subroutines.opy#L331), [354](../src/subroutines.opy#L354), [357](../src/subroutines.opy#L357), [360](../src/subroutines.opy#L360), [363](../src/subroutines.opy#L363), [366](../src/subroutines.opy#L366), [371](../src/subroutines.opy#L371), [389](../src/subroutines.opy#L389).
-- subroutines.opy — def objectivesManagement(): [535](../src/subroutines.opy#L535), [536](../src/subroutines.opy#L536), [545](../src/subroutines.opy#L545), [546](../src/subroutines.opy#L546), [551](../src/subroutines.opy#L551), [552](../src/subroutines.opy#L552), [563](../src/subroutines.opy#L563), [564](../src/subroutines.opy#L564), [565](../src/subroutines.opy#L565), [570](../src/subroutines.opy#L570), [573](../src/subroutines.opy#L573), [578](../src/subroutines.opy#L578), [624](../src/subroutines.opy#L624).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [235](../src/subroutines.opy#L235), [237](../src/subroutines.opy#L237), [240](../src/subroutines.opy#L240), [244](../src/subroutines.opy#L244), [247](../src/subroutines.opy#L247), [250](../src/subroutines.opy#L250), [255](../src/subroutines.opy#L255), [258](../src/subroutines.opy#L258), [261](../src/subroutines.opy#L261), [264](../src/subroutines.opy#L264), [267](../src/subroutines.opy#L267), [270](../src/subroutines.opy#L270), [273](../src/subroutines.opy#L273), [276](../src/subroutines.opy#L276), [284](../src/subroutines.opy#L284), [287](../src/subroutines.opy#L287), [290](../src/subroutines.opy#L290), [295](../src/subroutines.opy#L295), [301](../src/subroutines.opy#L301), [304](../src/subroutines.opy#L304), [307](../src/subroutines.opy#L307), [313](../src/subroutines.opy#L313), [318](../src/subroutines.opy#L318), [321](../src/subroutines.opy#L321), [324](../src/subroutines.opy#L324), [332](../src/subroutines.opy#L332), [355](../src/subroutines.opy#L355), [358](../src/subroutines.opy#L358), [361](../src/subroutines.opy#L361), [364](../src/subroutines.opy#L364), [367](../src/subroutines.opy#L367), [372](../src/subroutines.opy#L372), [390](../src/subroutines.opy#L390).
+- subroutines.opy — def objectivesManagement(): [536](../src/subroutines.opy#L536), [537](../src/subroutines.opy#L537), [546](../src/subroutines.opy#L546), [547](../src/subroutines.opy#L547), [552](../src/subroutines.opy#L552), [553](../src/subroutines.opy#L553), [564](../src/subroutines.opy#L564), [565](../src/subroutines.opy#L565), [566](../src/subroutines.opy#L566), [571](../src/subroutines.opy#L571), [574](../src/subroutines.opy#L574), [579](../src/subroutines.opy#L579), [625](../src/subroutines.opy#L625).
 - global_startup.opy — rule "VARIABLE ASSIGNMENT": [242](../src/global_startup.opy#L242).
 - global_start_menu.opy — def setObjectiveType(): [400](../src/global_start_menu.opy#L400), [402](../src/global_start_menu.opy#L402), [406](../src/global_start_menu.opy#L406), [409](../src/global_start_menu.opy#L409), [414](../src/global_start_menu.opy#L414), [415](../src/global_start_menu.opy#L415).
 - objective_types/objective_type_extraction_point.opy — rule "PLAYERS IN EXTRACTION POINT CONTROL": [13](../src/objective_types/objective_type_extraction_point.opy#L13), [14](../src/objective_types/objective_type_extraction_point.opy#L14), [15](../src/objective_types/objective_type_extraction_point.opy#L15).
@@ -600,7 +605,7 @@
 - objective_types/objective_type_survivor_rescue.opy — rule "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE": [15](../src/objective_types/objective_type_survivor_rescue.opy#L15).
 - objective_types/objective_type_survivor_rescue.opy — rule "INITIALIZE SURVIVOR TO BE RESCUED": [46](../src/objective_types/objective_type_survivor_rescue.opy#L46), [48](../src/objective_types/objective_type_survivor_rescue.opy#L48).
 - objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR FOLLOW TARGET": [83](../src/objective_types/objective_type_survivor_rescue.opy#L83), [90](../src/objective_types/objective_type_survivor_rescue.opy#L90).
-- objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR REACHES EXTRACTION SITE": [173](../src/objective_types/objective_type_survivor_rescue.opy#L173), [177](../src/objective_types/objective_type_survivor_rescue.opy#L177).
+- objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR REACHES EXTRACTION SITE": [174](../src/objective_types/objective_type_survivor_rescue.opy#L174), [178](../src/objective_types/objective_type_survivor_rescue.opy#L178).
 - objective_types/objective_type_zombie_egg.opy — rule "BOT BECOMES ZOMBIE EGG": [34](../src/objective_types/objective_type_zombie_egg.opy#L34).
 - objective_types/objective_type_zombie_egg.opy — rule "BOTS TELEPORT TO THE EGG": [64](../src/objective_types/objective_type_zombie_egg.opy#L64), [69](../src/objective_types/objective_type_zombie_egg.opy#L69), [72](../src/objective_types/objective_type_zombie_egg.opy#L72).
 - objective_types/objective_type_zombie_egg.opy — rule "EGG SWITCHES THE POSITION FOR YOU": [82](../src/objective_types/objective_type_zombie_egg.opy#L82).
@@ -614,16 +619,16 @@
 - players_game_in_progress.opy — def teleportToClosestPlayer(): [358](../src/players_game_in_progress.opy#L358).
 - bots_game_in_progress.opy — macro botTeleportCenterMacro(): [13](../src/bots_game_in_progress.opy#L13), [39](../src/bots_game_in_progress.opy#L39).
 - bots_game_in_progress.opy — rule "BOT DIES": [136](../src/bots_game_in_progress.opy#L136).
-- zombie_types.opy — rule "CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)": [1409](../src/zombie_types.opy#L1409).
+- zombie_types.opy — rule "CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)": [1410](../src/zombie_types.opy#L1410).
 - supply_drops.opy — rule "GENERATE SUPPLY DROPS": [35](../src/supply_drops.opy#L35).
 
 ## objectiveTypeList
 
 Объявление: [variables.opy:164](../src/variables.opy#L164). Строк обращений: 52; упоминаний: 55; чтений вида Global в скомпилированном коде: 50.
 
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [220](../src/subroutines.opy#L220).
-- subroutines.opy — def objectivesManagement(): [533](../src/subroutines.opy#L533), [574](../src/subroutines.opy#L574), [586](../src/subroutines.opy#L586).
-- subroutines.opy — def botRespawnInitialization(): [726](../src/subroutines.opy#L726).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [221](../src/subroutines.opy#L221).
+- subroutines.opy — def objectivesManagement(): [534](../src/subroutines.opy#L534), [575](../src/subroutines.opy#L575), [587](../src/subroutines.opy#L587).
+- subroutines.opy — def botRespawnInitialization(): [729](../src/subroutines.opy#L729).
 - global_startup.opy — rule "VARIABLE ASSIGNMENT": [243](../src/global_startup.opy#L243).
 - global_start_menu.opy — def setObjectiveType(): [393](../src/global_start_menu.opy#L393), [395](../src/global_start_menu.opy#L395), [398](../src/global_start_menu.opy#L398), [400](../src/global_start_menu.opy#L400), [408](../src/global_start_menu.opy#L408), [418](../src/global_start_menu.opy#L418).
 - objective_types/objective_type_extraction_point.opy — rule "PLAYERS IN EXTRACTION POINT CONTROL": [12](../src/objective_types/objective_type_extraction_point.opy#L12).
@@ -645,10 +650,10 @@
 - objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR FOLLOW TARGET": [78](../src/objective_types/objective_type_survivor_rescue.opy#L78).
 - objective_types/objective_type_survivor_rescue.opy — rule "CREATE PATH": [115](../src/objective_types/objective_type_survivor_rescue.opy#L115).
 - objective_types/objective_type_survivor_rescue.opy — rule "DELETE PATH": [128](../src/objective_types/objective_type_survivor_rescue.opy#L128).
-- objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR FOLLOW TARGET LETS GO": [139](../src/objective_types/objective_type_survivor_rescue.opy#L139).
-- objective_types/objective_type_survivor_rescue.opy — rule "PLAYER SAYS GROUP UP TO SURVIVOR": [147](../src/objective_types/objective_type_survivor_rescue.opy#L147).
-- objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR JUMP": [159](../src/objective_types/objective_type_survivor_rescue.opy#L159).
-- objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR REACHES EXTRACTION SITE": [170](../src/objective_types/objective_type_survivor_rescue.opy#L170).
+- objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR FOLLOW TARGET LETS GO": [140](../src/objective_types/objective_type_survivor_rescue.opy#L140).
+- objective_types/objective_type_survivor_rescue.opy — rule "PLAYER SAYS GROUP UP TO SURVIVOR": [148](../src/objective_types/objective_type_survivor_rescue.opy#L148).
+- objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR JUMP": [160](../src/objective_types/objective_type_survivor_rescue.opy#L160).
+- objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR REACHES EXTRACTION SITE": [171](../src/objective_types/objective_type_survivor_rescue.opy#L171).
 - objective_types/objective_type_kill_zone.opy — rule "MODIFY KILL ZONE SCORE": [6](../src/objective_types/objective_type_kill_zone.opy#L6).
 - objective_types/objective_type_zombie_egg.opy — rule "ASSIGN ZOMBIE TO BECOME EGG": [5](../src/objective_types/objective_type_zombie_egg.opy#L5).
 - objective_types/objective_type_zombie_egg.opy — rule "BOT BECOMES ZOMBIE EGG": [20](../src/objective_types/objective_type_zombie_egg.opy#L20).
@@ -672,7 +677,7 @@
 
 Объявление: [variables.opy:166](../src/variables.opy#L166). Строк обращений: 10; упоминаний: 10; чтений вида Global в скомпилированном коде: 9.
 
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [220](../src/subroutines.opy#L220), [232](../src/subroutines.opy#L232), [278](../src/subroutines.opy#L278), [292](../src/subroutines.opy#L292), [315](../src/subroutines.opy#L315), [326](../src/subroutines.opy#L326), [349](../src/subroutines.opy#L349), [369](../src/subroutines.opy#L369).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [221](../src/subroutines.opy#L221), [233](../src/subroutines.opy#L233), [279](../src/subroutines.opy#L279), [293](../src/subroutines.opy#L293), [316](../src/subroutines.opy#L316), [327](../src/subroutines.opy#L327), [350](../src/subroutines.opy#L350), [370](../src/subroutines.opy#L370).
 - players_game_in_progress.opy — macro playerObjectiveEntityManagementMacro(): [8](../src/players_game_in_progress.opy#L8).
 - players_game_in_progress.opy — rule "OBJECTIVE CHANGES AND PLAYER ENTITIES UPDATE": [321](../src/players_game_in_progress.opy#L321).
 
@@ -682,8 +687,8 @@
 
 Алиасы ролей: `objectiveProgress`, `showdownCapturePercent`, `biomorphingCapturePercent`, `killZoneEliminationScore`, `satelliteTerminalProgressList`.
 
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [272](../src/subroutines.opy#L272), [275](../src/subroutines.opy#L275), [294](../src/subroutines.opy#L294), [328](../src/subroutines.opy#L328), [371](../src/subroutines.opy#L371), [377](../src/subroutines.opy#L377), [381](../src/subroutines.opy#L381), [383](../src/subroutines.opy#L383), [392](../src/subroutines.opy#L392).
-- subroutines.opy — def objectivesManagement(): [528](../src/subroutines.opy#L528), [589](../src/subroutines.opy#L589), [590](../src/subroutines.opy#L590), [602](../src/subroutines.opy#L602), [626](../src/subroutines.opy#L626), [638](../src/subroutines.opy#L638).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [273](../src/subroutines.opy#L273), [276](../src/subroutines.opy#L276), [295](../src/subroutines.opy#L295), [329](../src/subroutines.opy#L329), [372](../src/subroutines.opy#L372), [378](../src/subroutines.opy#L378), [382](../src/subroutines.opy#L382), [384](../src/subroutines.opy#L384), [393](../src/subroutines.opy#L393).
+- subroutines.opy — def objectivesManagement(): [529](../src/subroutines.opy#L529), [590](../src/subroutines.opy#L590), [591](../src/subroutines.opy#L591), [603](../src/subroutines.opy#L603), [627](../src/subroutines.opy#L627), [639](../src/subroutines.opy#L639).
 - objective_types/objective_type_showdown.opy — rule "INCREASE OBJECTIVE CAPTURE PERCENTAGE": [36](../src/objective_types/objective_type_showdown.opy#L36), [45](../src/objective_types/objective_type_showdown.opy#L45), [46](../src/objective_types/objective_type_showdown.opy#L46), [47](../src/objective_types/objective_type_showdown.opy#L47).
 - objective_types/objective_type_showdown.opy — rule "DECREASES CAPTURE PERCENTAGE": [64](../src/objective_types/objective_type_showdown.opy#L64), [71](../src/objective_types/objective_type_showdown.opy#L71), [72](../src/objective_types/objective_type_showdown.opy#L72).
 - objective_types/objective_type_biomorphing.opy — rule "BIOMORPHING GOAL START": [44](../src/objective_types/objective_type_biomorphing.opy#L44), [47](../src/objective_types/objective_type_biomorphing.opy#L47), [48](../src/objective_types/objective_type_biomorphing.opy#L48).
@@ -699,8 +704,8 @@
 
 Объявление: [variables.opy:173](../src/variables.opy#L173). Строк обращений: 53; упоминаний: 58; чтений вида Global в скомпилированном коде: 47.
 
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [243](../src/subroutines.opy#L243), [257](../src/subroutines.opy#L257), [260](../src/subroutines.opy#L260), [263](../src/subroutines.opy#L263), [266](../src/subroutines.opy#L266), [303](../src/subroutines.opy#L303), [306](../src/subroutines.opy#L306), [323](../src/subroutines.opy#L323), [334](../src/subroutines.opy#L334), [337](../src/subroutines.opy#L337), [340](../src/subroutines.opy#L340), [343](../src/subroutines.opy#L343), [346](../src/subroutines.opy#L346), [374](../src/subroutines.opy#L374), [383](../src/subroutines.opy#L383), [386](../src/subroutines.opy#L386), [389](../src/subroutines.opy#L389), [392](../src/subroutines.opy#L392).
-- subroutines.opy — def objectivesManagement(): [535](../src/subroutines.opy#L535), [545](../src/subroutines.opy#L545), [551](../src/subroutines.opy#L551), [558](../src/subroutines.opy#L558), [564](../src/subroutines.opy#L564), [583](../src/subroutines.opy#L583), [590](../src/subroutines.opy#L590), [606](../src/subroutines.opy#L606), [617](../src/subroutines.opy#L617), [618](../src/subroutines.opy#L618), [623](../src/subroutines.opy#L623), [630](../src/subroutines.opy#L630), [635](../src/subroutines.opy#L635).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [244](../src/subroutines.opy#L244), [258](../src/subroutines.opy#L258), [261](../src/subroutines.opy#L261), [264](../src/subroutines.opy#L264), [267](../src/subroutines.opy#L267), [304](../src/subroutines.opy#L304), [307](../src/subroutines.opy#L307), [324](../src/subroutines.opy#L324), [335](../src/subroutines.opy#L335), [338](../src/subroutines.opy#L338), [341](../src/subroutines.opy#L341), [344](../src/subroutines.opy#L344), [347](../src/subroutines.opy#L347), [375](../src/subroutines.opy#L375), [384](../src/subroutines.opy#L384), [387](../src/subroutines.opy#L387), [390](../src/subroutines.opy#L390), [393](../src/subroutines.opy#L393).
+- subroutines.opy — def objectivesManagement(): [536](../src/subroutines.opy#L536), [546](../src/subroutines.opy#L546), [552](../src/subroutines.opy#L552), [559](../src/subroutines.opy#L559), [565](../src/subroutines.opy#L565), [584](../src/subroutines.opy#L584), [591](../src/subroutines.opy#L591), [607](../src/subroutines.opy#L607), [618](../src/subroutines.opy#L618), [619](../src/subroutines.opy#L619), [624](../src/subroutines.opy#L624), [631](../src/subroutines.opy#L631), [636](../src/subroutines.opy#L636).
 - global_startup.opy — rule "VARIABLE ASSIGNMENT": [244](../src/global_startup.opy#L244).
 - objective_types/objective_type_extraction_point.opy — rule "PLAYERS IN EXTRACTION POINT CONTROL": [15](../src/objective_types/objective_type_extraction_point.opy#L15).
 - objective_types/objective_type_extraction_point.opy — rule "WIN/LOSS CONDITIONS": [108](../src/objective_types/objective_type_extraction_point.opy#L108).
@@ -713,13 +718,13 @@
 - objective_types/objective_type_satellite_uplink.opy — rule "PLAYERS AT TERMINALS CONTROLS": [106](../src/objective_types/objective_type_satellite_uplink.opy#L106).
 - objective_types/objective_type_satellite_uplink.opy — rule "PLAYERS REPAIR TERMINALS": [125](../src/objective_types/objective_type_satellite_uplink.opy#L125), [126](../src/objective_types/objective_type_satellite_uplink.opy#L126), [135](../src/objective_types/objective_type_satellite_uplink.opy#L135).
 - bots_game_in_progress.opy — macro botTeleportCenterMacro(): [26](../src/bots_game_in_progress.opy#L26).
-- zombie_types.opy — rule "CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)": [1409](../src/zombie_types.opy#L1409).
+- zombie_types.opy — rule "CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)": [1410](../src/zombie_types.opy#L1410).
 
 ## objectiveDescription
 
 Объявление: [variables.opy:174](../src/variables.opy#L174). Строк обращений: 10; упоминаний: 10; чтений вида Global в скомпилированном коде: 2.
 
-- subroutines.opy — def objectivesManagement(): [580](../src/subroutines.opy#L580), [588](../src/subroutines.opy#L588), [597](../src/subroutines.opy#L597), [601](../src/subroutines.opy#L601), [615](../src/subroutines.opy#L615), [622](../src/subroutines.opy#L622), [629](../src/subroutines.opy#L629), [634](../src/subroutines.opy#L634).
+- subroutines.opy — def objectivesManagement(): [581](../src/subroutines.opy#L581), [589](../src/subroutines.opy#L589), [598](../src/subroutines.opy#L598), [602](../src/subroutines.opy#L602), [616](../src/subroutines.opy#L616), [623](../src/subroutines.opy#L623), [630](../src/subroutines.opy#L630), [635](../src/subroutines.opy#L635).
 - global_startup.opy — rule "START GAME": [296](../src/global_startup.opy#L296).
 - global_game_in_progress.opy — rule "EFFECTS/TEXTS": [10](../src/global_game_in_progress.opy#L10).
 
@@ -727,8 +732,8 @@
 
 Объявление: [variables.opy:175](../src/variables.opy#L175). Строк обращений: 27; упоминаний: 31; чтений вида Global в скомпилированном коде: 26.
 
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [254](../src/subroutines.opy#L254), [257](../src/subroutines.opy#L257), [260](../src/subroutines.opy#L260), [263](../src/subroutines.opy#L263), [266](../src/subroutines.opy#L266), [269](../src/subroutines.opy#L269), [272](../src/subroutines.opy#L272), [275](../src/subroutines.opy#L275), [294](../src/subroutines.opy#L294), [300](../src/subroutines.opy#L300), [371](../src/subroutines.opy#L371), [374](../src/subroutines.opy#L374), [377](../src/subroutines.opy#L377), [383](../src/subroutines.opy#L383), [386](../src/subroutines.opy#L386), [389](../src/subroutines.opy#L389), [392](../src/subroutines.opy#L392).
-- subroutines.opy — def objectivesManagement(): [591](../src/subroutines.opy#L591), [605](../src/subroutines.opy#L605), [636](../src/subroutines.opy#L636).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [255](../src/subroutines.opy#L255), [258](../src/subroutines.opy#L258), [261](../src/subroutines.opy#L261), [264](../src/subroutines.opy#L264), [267](../src/subroutines.opy#L267), [270](../src/subroutines.opy#L270), [273](../src/subroutines.opy#L273), [276](../src/subroutines.opy#L276), [295](../src/subroutines.opy#L295), [301](../src/subroutines.opy#L301), [372](../src/subroutines.opy#L372), [375](../src/subroutines.opy#L375), [378](../src/subroutines.opy#L378), [384](../src/subroutines.opy#L384), [387](../src/subroutines.opy#L387), [390](../src/subroutines.opy#L390), [393](../src/subroutines.opy#L393).
+- subroutines.opy — def objectivesManagement(): [592](../src/subroutines.opy#L592), [606](../src/subroutines.opy#L606), [637](../src/subroutines.opy#L637).
 - objective_types/objective_type_showdown.opy — rule "DECREASES CAPTURE PERCENTAGE": [73](../src/objective_types/objective_type_showdown.opy#L73), [79](../src/objective_types/objective_type_showdown.opy#L79).
 - objective_types/objective_type_biomorphing.opy — rule "BIOMORPHING GOAL START": [45](../src/objective_types/objective_type_biomorphing.opy#L45).
 - objective_types/objective_type_satellite_uplink.opy — macro fireSatelliteMacro(): [14](../src/objective_types/objective_type_satellite_uplink.opy#L14).
@@ -738,7 +743,7 @@
 
 Объявление: [variables.opy:176](../src/variables.opy#L176). Строк обращений: 29; упоминаний: 29; чтений вида Global в скомпилированном коде: 21.
 
-- subroutines.opy — def objectivesManagement(): [644](../src/subroutines.opy#L644).
+- subroutines.opy — def objectivesManagement(): [645](../src/subroutines.opy#L645).
 - global_game_in_progress.opy — rule "OBJECTIVE COMPLETE": [130](../src/global_game_in_progress.opy#L130).
 - objective_types/objective_type_extraction_point.opy — rule "PLAYERS IN EXTRACTION POINT CONTROL": [9](../src/objective_types/objective_type_extraction_point.opy#L9).
 - objective_types/objective_type_extraction_point.opy — rule "WIN/LOSS CONDITIONS": [69](../src/objective_types/objective_type_extraction_point.opy#L69).
@@ -751,7 +756,7 @@
 - objective_types/objective_type_biomorphing.opy — rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS": [73](../src/objective_types/objective_type_biomorphing.opy#L73), [95](../src/objective_types/objective_type_biomorphing.opy#L95).
 - objective_types/objective_type_biomorphing.opy — rule "BIOWASTE IS PICKED UP": [104](../src/objective_types/objective_type_biomorphing.opy#L104).
 - objective_types/objective_type_survivor_rescue.opy — rule "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE": [7](../src/objective_types/objective_type_survivor_rescue.opy#L7), [22](../src/objective_types/objective_type_survivor_rescue.opy#L22).
-- objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR REACHES EXTRACTION SITE": [171](../src/objective_types/objective_type_survivor_rescue.opy#L171).
+- objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR REACHES EXTRACTION SITE": [172](../src/objective_types/objective_type_survivor_rescue.opy#L172).
 - objective_types/objective_type_kill_zone.opy — rule "MODIFY KILL ZONE SCORE": [13](../src/objective_types/objective_type_kill_zone.opy#L13).
 - objective_types/objective_type_zombie_egg.opy — rule "ASSIGN ZOMBIE TO BECOME EGG": [6](../src/objective_types/objective_type_zombie_egg.opy#L6).
 - objective_types/objective_type_zombie_egg.opy — rule "BOT BECOMES ZOMBIE EGG": [21](../src/objective_types/objective_type_zombie_egg.opy#L21), [45](../src/objective_types/objective_type_zombie_egg.opy#L45), [50](../src/objective_types/objective_type_zombie_egg.opy#L50).
@@ -765,9 +770,9 @@
 
 Объявление: [variables.opy:177](../src/variables.opy#L177). Строк обращений: 48; упоминаний: 52; чтений вида Global в скомпилированном коде: 39.
 
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [236](../src/subroutines.opy#L236), [246](../src/subroutines.opy#L246), [249](../src/subroutines.opy#L249), [254](../src/subroutines.opy#L254), [263](../src/subroutines.opy#L263), [266](../src/subroutines.opy#L266), [269](../src/subroutines.opy#L269), [272](../src/subroutines.opy#L272), [275](../src/subroutines.opy#L275), [300](../src/subroutines.opy#L300), [306](../src/subroutines.opy#L306), [309](../src/subroutines.opy#L309), [312](../src/subroutines.opy#L312), [374](../src/subroutines.opy#L374), [377](../src/subroutines.opy#L377).
-- subroutines.opy — def objectivesManagement(): [527](../src/subroutines.opy#L527), [579](../src/subroutines.opy#L579).
-- subroutines.opy — def selectTarget(): [655](../src/subroutines.opy#L655).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [237](../src/subroutines.opy#L237), [247](../src/subroutines.opy#L247), [250](../src/subroutines.opy#L250), [255](../src/subroutines.opy#L255), [264](../src/subroutines.opy#L264), [267](../src/subroutines.opy#L267), [270](../src/subroutines.opy#L270), [273](../src/subroutines.opy#L273), [276](../src/subroutines.opy#L276), [301](../src/subroutines.opy#L301), [307](../src/subroutines.opy#L307), [310](../src/subroutines.opy#L310), [313](../src/subroutines.opy#L313), [375](../src/subroutines.opy#L375), [378](../src/subroutines.opy#L378).
+- subroutines.opy — def objectivesManagement(): [528](../src/subroutines.opy#L528), [580](../src/subroutines.opy#L580).
+- subroutines.opy — def selectTarget(): [656](../src/subroutines.opy#L656).
 - global_startup.opy — rule "VARIABLE ASSIGNMENT": [246](../src/global_startup.opy#L246).
 - global_game_in_progress.opy — rule "PLAYER LEAVES THE GAME": [118](../src/global_game_in_progress.opy#L118), [121](../src/global_game_in_progress.opy#L121).
 - objective_types/objective_type_extraction_point.opy — rule "PLAYERS IN EXTRACTION POINT CONTROL": [17](../src/objective_types/objective_type_extraction_point.opy#L17), [18](../src/objective_types/objective_type_extraction_point.opy#L18), [24](../src/objective_types/objective_type_extraction_point.opy#L24).
@@ -786,7 +791,7 @@
 
 Объявление: [variables.opy:178](../src/variables.opy#L178). Строк обращений: 62; упоминаний: 62; чтений вида Global в скомпилированном коде: 7.
 
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [222](../src/subroutines.opy#L222), [223](../src/subroutines.opy#L223), [224](../src/subroutines.opy#L224), [225](../src/subroutines.opy#L225), [226](../src/subroutines.opy#L226), [227](../src/subroutines.opy#L227), [228](../src/subroutines.opy#L228), [230](../src/subroutines.opy#L230), [237](../src/subroutines.opy#L237), [240](../src/subroutines.opy#L240), [244](../src/subroutines.opy#L244), [247](../src/subroutines.opy#L247), [250](../src/subroutines.opy#L250), [255](../src/subroutines.opy#L255), [258](../src/subroutines.opy#L258), [261](../src/subroutines.opy#L261), [264](../src/subroutines.opy#L264), [267](../src/subroutines.opy#L267), [270](../src/subroutines.opy#L270), [273](../src/subroutines.opy#L273), [276](../src/subroutines.opy#L276), [281](../src/subroutines.opy#L281), [284](../src/subroutines.opy#L284), [287](../src/subroutines.opy#L287), [290](../src/subroutines.opy#L290), [295](../src/subroutines.opy#L295), [298](../src/subroutines.opy#L298), [301](../src/subroutines.opy#L301), [304](../src/subroutines.opy#L304), [307](../src/subroutines.opy#L307), [310](../src/subroutines.opy#L310), [313](../src/subroutines.opy#L313), [318](../src/subroutines.opy#L318), [321](../src/subroutines.opy#L321), [324](../src/subroutines.opy#L324), [329](../src/subroutines.opy#L329), [332](../src/subroutines.opy#L332), [335](../src/subroutines.opy#L335), [338](../src/subroutines.opy#L338), [341](../src/subroutines.opy#L341), [344](../src/subroutines.opy#L344), [347](../src/subroutines.opy#L347), [352](../src/subroutines.opy#L352), [355](../src/subroutines.opy#L355), [358](../src/subroutines.opy#L358), [361](../src/subroutines.opy#L361), [364](../src/subroutines.opy#L364), [367](../src/subroutines.opy#L367), [372](../src/subroutines.opy#L372), [375](../src/subroutines.opy#L375), [378](../src/subroutines.opy#L378), [384](../src/subroutines.opy#L384), [387](../src/subroutines.opy#L387), [390](../src/subroutines.opy#L390), [393](../src/subroutines.opy#L393).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [223](../src/subroutines.opy#L223), [224](../src/subroutines.opy#L224), [225](../src/subroutines.opy#L225), [226](../src/subroutines.opy#L226), [227](../src/subroutines.opy#L227), [228](../src/subroutines.opy#L228), [229](../src/subroutines.opy#L229), [231](../src/subroutines.opy#L231), [238](../src/subroutines.opy#L238), [241](../src/subroutines.opy#L241), [245](../src/subroutines.opy#L245), [248](../src/subroutines.opy#L248), [251](../src/subroutines.opy#L251), [256](../src/subroutines.opy#L256), [259](../src/subroutines.opy#L259), [262](../src/subroutines.opy#L262), [265](../src/subroutines.opy#L265), [268](../src/subroutines.opy#L268), [271](../src/subroutines.opy#L271), [274](../src/subroutines.opy#L274), [277](../src/subroutines.opy#L277), [282](../src/subroutines.opy#L282), [285](../src/subroutines.opy#L285), [288](../src/subroutines.opy#L288), [291](../src/subroutines.opy#L291), [296](../src/subroutines.opy#L296), [299](../src/subroutines.opy#L299), [302](../src/subroutines.opy#L302), [305](../src/subroutines.opy#L305), [308](../src/subroutines.opy#L308), [311](../src/subroutines.opy#L311), [314](../src/subroutines.opy#L314), [319](../src/subroutines.opy#L319), [322](../src/subroutines.opy#L322), [325](../src/subroutines.opy#L325), [330](../src/subroutines.opy#L330), [333](../src/subroutines.opy#L333), [336](../src/subroutines.opy#L336), [339](../src/subroutines.opy#L339), [342](../src/subroutines.opy#L342), [345](../src/subroutines.opy#L345), [348](../src/subroutines.opy#L348), [353](../src/subroutines.opy#L353), [356](../src/subroutines.opy#L356), [359](../src/subroutines.opy#L359), [362](../src/subroutines.opy#L362), [365](../src/subroutines.opy#L365), [368](../src/subroutines.opy#L368), [373](../src/subroutines.opy#L373), [376](../src/subroutines.opy#L376), [379](../src/subroutines.opy#L379), [385](../src/subroutines.opy#L385), [388](../src/subroutines.opy#L388), [391](../src/subroutines.opy#L391), [394](../src/subroutines.opy#L394).
 - global_startup.opy — rule "VARIABLE ASSIGNMENT": [229](../src/global_startup.opy#L229).
 - objective_types/objective_type_satellite_uplink.opy — macro fireSatelliteMacro(): [15](../src/objective_types/objective_type_satellite_uplink.opy#L15), [22](../src/objective_types/objective_type_satellite_uplink.opy#L22), [25](../src/objective_types/objective_type_satellite_uplink.opy#L25), [28](../src/objective_types/objective_type_satellite_uplink.opy#L28), [31](../src/objective_types/objective_type_satellite_uplink.opy#L31), [36](../src/objective_types/objective_type_satellite_uplink.opy#L36).
 
@@ -796,8 +801,8 @@
 
 Алиасы ролей: `objectivePositionsList`, `biomorphingResourcePositionList`, `satelliteTerminalPositionList`.
 
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [312](../src/subroutines.opy#L312), [374](../src/subroutines.opy#L374), [377](../src/subroutines.opy#L377), [383](../src/subroutines.opy#L383), [386](../src/subroutines.opy#L386), [389](../src/subroutines.opy#L389), [392](../src/subroutines.opy#L392).
-- subroutines.opy — def objectivesManagement(): [603](../src/subroutines.opy#L603), [637](../src/subroutines.opy#L637).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [313](../src/subroutines.opy#L313), [375](../src/subroutines.opy#L375), [378](../src/subroutines.opy#L378), [384](../src/subroutines.opy#L384), [387](../src/subroutines.opy#L387), [390](../src/subroutines.opy#L390), [393](../src/subroutines.opy#L393).
+- subroutines.opy — def objectivesManagement(): [604](../src/subroutines.opy#L604), [638](../src/subroutines.opy#L638).
 - global_startup.opy — rule "VARIABLE ASSIGNMENT": [219](../src/global_startup.opy#L219).
 - objective_types/objective_type_biomorphing.opy — macro biowasteAssignmentMacro(): [16](../src/objective_types/objective_type_biomorphing.opy#L16).
 - objective_types/objective_type_biomorphing.opy — rule "BIOMORPHING GOAL START": [39](../src/objective_types/objective_type_biomorphing.opy#L39).
@@ -823,8 +828,8 @@
 
 Алиасы ролей: `rescueSavedRadius`, `killZoneCenter`, `satelliteLaserPosition`.
 
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [334](../src/subroutines.opy#L334), [337](../src/subroutines.opy#L337), [340](../src/subroutines.opy#L340), [343](../src/subroutines.opy#L343), [346](../src/subroutines.opy#L346).
-- subroutines.opy — def objectivesManagement(): [557](../src/subroutines.opy#L557), [558](../src/subroutines.opy#L558), [618](../src/subroutines.opy#L618), [624](../src/subroutines.opy#L624).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [335](../src/subroutines.opy#L335), [338](../src/subroutines.opy#L338), [341](../src/subroutines.opy#L341), [344](../src/subroutines.opy#L344), [347](../src/subroutines.opy#L347).
+- subroutines.opy — def objectivesManagement(): [558](../src/subroutines.opy#L558), [559](../src/subroutines.opy#L559), [619](../src/subroutines.opy#L619), [625](../src/subroutines.opy#L625).
 - objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR FOLLOW TARGET": [101](../src/objective_types/objective_type_survivor_rescue.opy#L101).
 - objective_types/objective_type_kill_zone.opy — rule "MODIFY KILL ZONE SCORE": [7](../src/objective_types/objective_type_kill_zone.opy#L7), [9](../src/objective_types/objective_type_kill_zone.opy#L9), [18](../src/objective_types/objective_type_kill_zone.opy#L18).
 - objective_types/objective_type_satellite_uplink.opy — macro fireSatelliteMacro(): [10](../src/objective_types/objective_type_satellite_uplink.opy#L10), [14](../src/objective_types/objective_type_satellite_uplink.opy#L14), [21](../src/objective_types/objective_type_satellite_uplink.opy#L21), [24](../src/objective_types/objective_type_satellite_uplink.opy#L24), [27](../src/objective_types/objective_type_satellite_uplink.opy#L27), [30](../src/objective_types/objective_type_satellite_uplink.opy#L30), [35](../src/objective_types/objective_type_satellite_uplink.opy#L35), [40](../src/objective_types/objective_type_satellite_uplink.opy#L40), [43](../src/objective_types/objective_type_satellite_uplink.opy#L43), [44](../src/objective_types/objective_type_satellite_uplink.opy#L44), [47](../src/objective_types/objective_type_satellite_uplink.opy#L47), [50](../src/objective_types/objective_type_satellite_uplink.opy#L50), [64](../src/objective_types/objective_type_satellite_uplink.opy#L64).
@@ -836,7 +841,7 @@
 
 Алиасы ролей: `objectiveNextCheckpoint`, `showdownNextCheckpoint`, `biomorphingNextCheckpoint`.
 
-- subroutines.opy — def objectivesManagement(): [530](../src/subroutines.opy#L530), [593](../src/subroutines.opy#L593), [612](../src/subroutines.opy#L612).
+- subroutines.opy — def objectivesManagement(): [531](../src/subroutines.opy#L531), [594](../src/subroutines.opy#L594), [613](../src/subroutines.opy#L613).
 - objective_types/objective_type_showdown.opy — rule "INCREASE OBJECTIVE CAPTURE PERCENTAGE": [47](../src/objective_types/objective_type_showdown.opy#L47), [48](../src/objective_types/objective_type_showdown.opy#L48), [50](../src/objective_types/objective_type_showdown.opy#L50).
 - objective_types/objective_type_showdown.opy — rule "DECREASES CAPTURE PERCENTAGE": [64](../src/objective_types/objective_type_showdown.opy#L64).
 - objective_types/objective_type_biomorphing.opy — rule "PLAYER DELIVERS RESOURCE VALUE": [156](../src/objective_types/objective_type_biomorphing.opy#L156), [158](../src/objective_types/objective_type_biomorphing.opy#L158), [160](../src/objective_types/objective_type_biomorphing.opy#L160).
@@ -847,8 +852,8 @@
 
 Алиасы ролей: `showdownContestingZombieList`, `biomorphingGoalQueueList`.
 
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [275](../src/subroutines.opy#L275), [297](../src/subroutines.opy#L297), [309](../src/subroutines.opy#L309).
-- subroutines.opy — def objectivesManagement(): [594](../src/subroutines.opy#L594), [610](../src/subroutines.opy#L610).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [276](../src/subroutines.opy#L276), [298](../src/subroutines.opy#L298), [310](../src/subroutines.opy#L310).
+- subroutines.opy — def objectivesManagement(): [595](../src/subroutines.opy#L595), [611](../src/subroutines.opy#L611).
 - objective_types/objective_type_showdown.opy — rule "PLAYERS ON OBJECTIVE CONTROL": [17](../src/objective_types/objective_type_showdown.opy#L17), [18](../src/objective_types/objective_type_showdown.opy#L18), [26](../src/objective_types/objective_type_showdown.opy#L26).
 - objective_types/objective_type_showdown.opy — rule "INCREASE OBJECTIVE CAPTURE PERCENTAGE": [39](../src/objective_types/objective_type_showdown.opy#L39).
 - objective_types/objective_type_showdown.opy — rule "DECREASES CAPTURE PERCENTAGE": [62](../src/objective_types/objective_type_showdown.opy#L62), [71](../src/objective_types/objective_type_showdown.opy#L71).
@@ -861,22 +866,22 @@
 
 ## objectiveActorSlot
 
-Объявление: [variables.opy:202](../src/variables.opy#L202). Строк обращений: 77; упоминаний: 109; чтений вида Global в скомпилированном коде: 104.
+Объявление: [variables.opy:202](../src/variables.opy#L202). Строк обращений: 77; упоминаний: 107; чтений вида Global в скомпилированном коде: 102.
 
 Алиасы ролей: `objectiveActor`, `rescueSurvivor`, `satelliteLaserTarget`.
 
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [323](../src/subroutines.opy#L323).
-- subroutines.opy — def objectivesManagement(): [576](../src/subroutines.opy#L576), [616](../src/subroutines.opy#L616).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [324](../src/subroutines.opy#L324).
+- subroutines.opy — def objectivesManagement(): [577](../src/subroutines.opy#L577), [617](../src/subroutines.opy#L617).
 - objective_types/objective_type_survivor_rescue.opy — rule "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE": [8](../src/objective_types/objective_type_survivor_rescue.opy#L8), [11](../src/objective_types/objective_type_survivor_rescue.opy#L11), [19](../src/objective_types/objective_type_survivor_rescue.opy#L19), [21](../src/objective_types/objective_type_survivor_rescue.opy#L21).
 - objective_types/objective_type_survivor_rescue.opy — rule "INITIALIZE SURVIVOR TO BE RESCUED": [32](../src/objective_types/objective_type_survivor_rescue.opy#L32), [35](../src/objective_types/objective_type_survivor_rescue.opy#L35), [36](../src/objective_types/objective_type_survivor_rescue.opy#L36), [37](../src/objective_types/objective_type_survivor_rescue.opy#L37), [43](../src/objective_types/objective_type_survivor_rescue.opy#L43), [44](../src/objective_types/objective_type_survivor_rescue.opy#L44).
 - objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR TO BE RESCUED DIES": [68](../src/objective_types/objective_type_survivor_rescue.opy#L68).
 - objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR FOLLOW TARGET": [79](../src/objective_types/objective_type_survivor_rescue.opy#L79), [80](../src/objective_types/objective_type_survivor_rescue.opy#L80), [81](../src/objective_types/objective_type_survivor_rescue.opy#L81), [82](../src/objective_types/objective_type_survivor_rescue.opy#L82), [83](../src/objective_types/objective_type_survivor_rescue.opy#L83), [85](../src/objective_types/objective_type_survivor_rescue.opy#L85), [86](../src/objective_types/objective_type_survivor_rescue.opy#L86), [87](../src/objective_types/objective_type_survivor_rescue.opy#L87), [88](../src/objective_types/objective_type_survivor_rescue.opy#L88), [89](../src/objective_types/objective_type_survivor_rescue.opy#L89), [90](../src/objective_types/objective_type_survivor_rescue.opy#L90), [91](../src/objective_types/objective_type_survivor_rescue.opy#L91), [93](../src/objective_types/objective_type_survivor_rescue.opy#L93), [99](../src/objective_types/objective_type_survivor_rescue.opy#L99), [102](../src/objective_types/objective_type_survivor_rescue.opy#L102), [103](../src/objective_types/objective_type_survivor_rescue.opy#L103), [104](../src/objective_types/objective_type_survivor_rescue.opy#L104), [105](../src/objective_types/objective_type_survivor_rescue.opy#L105), [106](../src/objective_types/objective_type_survivor_rescue.opy#L106), [107](../src/objective_types/objective_type_survivor_rescue.opy#L107), [108](../src/objective_types/objective_type_survivor_rescue.opy#L108), [109](../src/objective_types/objective_type_survivor_rescue.opy#L109).
 - objective_types/objective_type_survivor_rescue.opy — rule "CREATE PATH": [116](../src/objective_types/objective_type_survivor_rescue.opy#L116), [117](../src/objective_types/objective_type_survivor_rescue.opy#L117), [118](../src/objective_types/objective_type_survivor_rescue.opy#L118), [119](../src/objective_types/objective_type_survivor_rescue.opy#L119), [121](../src/objective_types/objective_type_survivor_rescue.opy#L121).
-- objective_types/objective_type_survivor_rescue.opy — rule "DELETE PATH": [129](../src/objective_types/objective_type_survivor_rescue.opy#L129), [131](../src/objective_types/objective_type_survivor_rescue.opy#L131), [132](../src/objective_types/objective_type_survivor_rescue.opy#L132).
-- objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR FOLLOW TARGET LETS GO": [140](../src/objective_types/objective_type_survivor_rescue.opy#L140), [141](../src/objective_types/objective_type_survivor_rescue.opy#L141), [143](../src/objective_types/objective_type_survivor_rescue.opy#L143).
-- objective_types/objective_type_survivor_rescue.opy — rule "PLAYER SAYS GROUP UP TO SURVIVOR": [148](../src/objective_types/objective_type_survivor_rescue.opy#L148), [149](../src/objective_types/objective_type_survivor_rescue.opy#L149), [151](../src/objective_types/objective_type_survivor_rescue.opy#L151), [152](../src/objective_types/objective_type_survivor_rescue.opy#L152), [153](../src/objective_types/objective_type_survivor_rescue.opy#L153), [155](../src/objective_types/objective_type_survivor_rescue.opy#L155).
-- objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR JUMP": [160](../src/objective_types/objective_type_survivor_rescue.opy#L160), [161](../src/objective_types/objective_type_survivor_rescue.opy#L161), [162](../src/objective_types/objective_type_survivor_rescue.opy#L162), [165](../src/objective_types/objective_type_survivor_rescue.opy#L165).
-- objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR REACHES EXTRACTION SITE": [172](../src/objective_types/objective_type_survivor_rescue.opy#L172), [173](../src/objective_types/objective_type_survivor_rescue.opy#L173), [175](../src/objective_types/objective_type_survivor_rescue.opy#L175), [176](../src/objective_types/objective_type_survivor_rescue.opy#L176), [177](../src/objective_types/objective_type_survivor_rescue.opy#L177), [178](../src/objective_types/objective_type_survivor_rescue.opy#L178), [180](../src/objective_types/objective_type_survivor_rescue.opy#L180), [181](../src/objective_types/objective_type_survivor_rescue.opy#L181), [182](../src/objective_types/objective_type_survivor_rescue.opy#L182), [184](../src/objective_types/objective_type_survivor_rescue.opy#L184), [186](../src/objective_types/objective_type_survivor_rescue.opy#L186), [188](../src/objective_types/objective_type_survivor_rescue.opy#L188), [190](../src/objective_types/objective_type_survivor_rescue.opy#L190).
+- objective_types/objective_type_survivor_rescue.opy — rule "DELETE PATH": [129](../src/objective_types/objective_type_survivor_rescue.opy#L129), [132](../src/objective_types/objective_type_survivor_rescue.opy#L132), [133](../src/objective_types/objective_type_survivor_rescue.opy#L133).
+- objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR FOLLOW TARGET LETS GO": [141](../src/objective_types/objective_type_survivor_rescue.opy#L141), [142](../src/objective_types/objective_type_survivor_rescue.opy#L142), [144](../src/objective_types/objective_type_survivor_rescue.opy#L144).
+- objective_types/objective_type_survivor_rescue.opy — rule "PLAYER SAYS GROUP UP TO SURVIVOR": [149](../src/objective_types/objective_type_survivor_rescue.opy#L149), [150](../src/objective_types/objective_type_survivor_rescue.opy#L150), [152](../src/objective_types/objective_type_survivor_rescue.opy#L152), [153](../src/objective_types/objective_type_survivor_rescue.opy#L153), [154](../src/objective_types/objective_type_survivor_rescue.opy#L154), [156](../src/objective_types/objective_type_survivor_rescue.opy#L156).
+- objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR JUMP": [161](../src/objective_types/objective_type_survivor_rescue.opy#L161), [162](../src/objective_types/objective_type_survivor_rescue.opy#L162), [163](../src/objective_types/objective_type_survivor_rescue.opy#L163), [166](../src/objective_types/objective_type_survivor_rescue.opy#L166).
+- objective_types/objective_type_survivor_rescue.opy — rule "SURVIVOR REACHES EXTRACTION SITE": [173](../src/objective_types/objective_type_survivor_rescue.opy#L173), [174](../src/objective_types/objective_type_survivor_rescue.opy#L174), [176](../src/objective_types/objective_type_survivor_rescue.opy#L176), [177](../src/objective_types/objective_type_survivor_rescue.opy#L177), [178](../src/objective_types/objective_type_survivor_rescue.opy#L178), [179](../src/objective_types/objective_type_survivor_rescue.opy#L179), [181](../src/objective_types/objective_type_survivor_rescue.opy#L181), [182](../src/objective_types/objective_type_survivor_rescue.opy#L182), [183](../src/objective_types/objective_type_survivor_rescue.opy#L183), [185](../src/objective_types/objective_type_survivor_rescue.opy#L185), [187](../src/objective_types/objective_type_survivor_rescue.opy#L187), [189](../src/objective_types/objective_type_survivor_rescue.opy#L189), [191](../src/objective_types/objective_type_survivor_rescue.opy#L191).
 - objective_types/objective_type_satellite_uplink.opy — macro fireSatelliteMacro(): [40](../src/objective_types/objective_type_satellite_uplink.opy#L40), [44](../src/objective_types/objective_type_satellite_uplink.opy#L44), [45](../src/objective_types/objective_type_satellite_uplink.opy#L45), [47](../src/objective_types/objective_type_satellite_uplink.opy#L47).
 - bots_game_in_progress.opy — macro botTeleportCenterMacro(): [19](../src/bots_game_in_progress.opy#L19), [20](../src/bots_game_in_progress.opy#L20), [22](../src/bots_game_in_progress.opy#L22).
 
@@ -884,7 +889,7 @@
 
 Объявление: [variables.opy:208](../src/variables.opy#L208). Строк обращений: 6; упоминаний: 6; чтений вида Global в скомпилированном коде: 2.
 
-- subroutines.opy — def objectivesManagement(): [531](../src/subroutines.opy#L531), [611](../src/subroutines.opy#L611).
+- subroutines.opy — def objectivesManagement(): [532](../src/subroutines.opy#L532), [612](../src/subroutines.opy#L612).
 - objective_types/objective_type_biomorphing.opy — rule "BIOMORPHING GOAL START": [26](../src/objective_types/objective_type_biomorphing.opy#L26), [67](../src/objective_types/objective_type_biomorphing.opy#L67).
 - objective_types/objective_type_biomorphing.opy — rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS": [80](../src/objective_types/objective_type_biomorphing.opy#L80).
 - objective_types/objective_type_biomorphing.opy — rule "PLAYER DELIVERS RESOURCE VALUE": [159](../src/objective_types/objective_type_biomorphing.opy#L159).
@@ -933,8 +938,8 @@
 
 Объявление: [variables.opy:216](../src/variables.opy#L216). Строк обращений: 9; упоминаний: 10; чтений вида Global в скомпилированном коде: 8.
 
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [239](../src/subroutines.opy#L239).
-- subroutines.opy — def objectivesManagement(): [582](../src/subroutines.opy#L582).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [240](../src/subroutines.opy#L240).
+- subroutines.opy — def objectivesManagement(): [583](../src/subroutines.opy#L583).
 - global_startup.opy — rule "VARIABLE ASSIGNMENT": [217](../src/global_startup.opy#L217).
 - objective_types/objective_type_extraction_point.opy — rule "EXTRACTION ZONE INFECTION INCREASE": [33](../src/objective_types/objective_type_extraction_point.opy#L33), [34](../src/objective_types/objective_type_extraction_point.opy#L34).
 - objective_types/objective_type_extraction_point.opy — rule "WIN/LOSS CONDITIONS": [71](../src/objective_types/objective_type_extraction_point.opy#L71).
@@ -944,7 +949,7 @@
 
 Объявление: [variables.opy:217](../src/variables.opy#L217). Строк обращений: 3; упоминаний: 3; чтений вида Global в скомпилированном коде: 1.
 
-- subroutines.opy — def objectivesManagement(): [582](../src/subroutines.opy#L582).
+- subroutines.opy — def objectivesManagement(): [583](../src/subroutines.opy#L583).
 - global_startup.opy — rule "VARIABLE ASSIGNMENT": [218](../src/global_startup.opy#L218).
 - objective_types/objective_type_extraction_point.opy — rule "PLAYERS IN EXTRACTION POINT CONTROL": [19](../src/objective_types/objective_type_extraction_point.opy#L19).
 
@@ -962,7 +967,7 @@
 
 Алиасы ролей: `pregameCountdown`, `nukeProjectilePosition`.
 
-- subroutines.opy — def setPrematchTimer(): [473](../src/subroutines.opy#L473), [480](../src/subroutines.opy#L480), [492](../src/subroutines.opy#L492).
+- subroutines.opy — def setPrematchTimer(): [474](../src/subroutines.opy#L474), [481](../src/subroutines.opy#L481), [493](../src/subroutines.opy#L493).
 - global_startup.opy — rule "SKIP ASSEMBLING HEROES": [168](../src/global_startup.opy#L168), [169](../src/global_startup.opy#L169).
 - global_start_menu.opy — rule "END VOTING": [237](../src/global_start_menu.opy#L237).
 - objective_types/objective_type_extraction_point.opy — def nukeMap(): [140](../src/objective_types/objective_type_extraction_point.opy#L140), [141](../src/objective_types/objective_type_extraction_point.opy#L141), [143](../src/objective_types/objective_type_extraction_point.opy#L143), [144](../src/objective_types/objective_type_extraction_point.opy#L144), [145](../src/objective_types/objective_type_extraction_point.opy#L145).
@@ -1046,7 +1051,7 @@
 
 Объявление: [variables.opy:235](../src/variables.opy#L235). Строк обращений: 58; упоминаний: 62; чтений вида Global в скомпилированном коде: 55.
 
-- subroutines.opy — def selectTarget(): [657](../src/subroutines.opy#L657), [661](../src/subroutines.opy#L661), [663](../src/subroutines.opy#L663), [665](../src/subroutines.opy#L665).
+- subroutines.opy — def selectTarget(): [658](../src/subroutines.opy#L658), [662](../src/subroutines.opy#L662), [664](../src/subroutines.opy#L664), [666](../src/subroutines.opy#L666).
 - global_startup.opy — rule "VARIABLE ASSIGNMENT": [254](../src/global_startup.opy#L254).
 - global_game_in_progress.opy — rule "ATTACK SPAWN ROOM CONTROL": [25](../src/global_game_in_progress.opy#L25).
 - global_game_in_progress.opy — rule "PLAYER LEAVES THE GAME": [118](../src/global_game_in_progress.opy#L118), [120](../src/global_game_in_progress.opy#L120).
@@ -1069,12 +1074,12 @@
 - bots_game_in_progress.opy — def locateAveragePlayerLocation(): [490](../src/bots_game_in_progress.opy#L490), [492](../src/bots_game_in_progress.opy#L492), [493](../src/bots_game_in_progress.opy#L493), [496](../src/bots_game_in_progress.opy#L496), [497](../src/bots_game_in_progress.opy#L497).
 - zombie_types.opy — rule "BEHEMOTH (ROAD) TOXIC CLOUD": [180](../src/zombie_types.opy#L180).
 - zombie_types.opy — rule "BEHEMOTH GAS STREAM (BOSS)": [239](../src/zombie_types.opy#L239).
-- zombie_types.opy — rule "SLIMER (MERCY) TENTACLE GRAB": [601](../src/zombie_types.opy#L601), [602](../src/zombie_types.opy#L602).
-- zombie_types.opy — rule "SMOLDER SUPER SLAM": [1285](../src/zombie_types.opy#L1285).
+- zombie_types.opy — rule "SLIMER (MERCY) TENTACLE GRAB": [602](../src/zombie_types.opy#L602), [603](../src/zombie_types.opy#L603).
+- zombie_types.opy — rule "SMOLDER SUPER SLAM": [1286](../src/zombie_types.opy#L1286).
 - supply_drops.opy — rule "GENERATE SUPPLY DROPS": [35](../src/supply_drops.opy#L35), [38](../src/supply_drops.opy#L38).
 - enhancements.opy — rule "PLAYER ENHANCEMENT INITIALIZATION": [117](../src/enhancements.opy#L117).
-- enhancements.opy — rule "CHARGE BATTERY (USAGE AND COOLDOWNS)": [417](../src/enhancements.opy#L417).
-- enhancements.opy — rule "HITCHHIKER ATTACH/DETATCH": [441](../src/enhancements.opy#L441), [443](../src/enhancements.opy#L443).
+- enhancements.opy — rule "CHARGE BATTERY (USAGE AND COOLDOWNS)": [418](../src/enhancements.opy#L418).
+- enhancements.opy — rule "HITCHHIKER ATTACH/DETATCH": [442](../src/enhancements.opy#L442), [444](../src/enhancements.opy#L444).
 
 ## userNameList
 
@@ -1114,7 +1119,7 @@
 Объявление: [variables.opy:242](../src/variables.opy#L242). Строк обращений: 10; упоминаний: 10; чтений вида Global в скомпилированном коде: 9.
 
 - subroutines.opy — macro botStatManagementMacro(): [33](../src/subroutines.opy#L33).
-- subroutines.opy — def botRespawnInitialization(): [705](../src/subroutines.opy#L705).
+- subroutines.opy — def botRespawnInitialization(): [708](../src/subroutines.opy#L708).
 - global_startup.opy — macro botHeroRandomizationMacro(): [52](../src/global_startup.opy#L52), [68](../src/global_startup.opy#L68), [70](../src/global_startup.opy#L70).
 - global_start_menu.opy — def setZombieMode(): [293](../src/global_start_menu.opy#L293).
 - objective_types/objective_type_bosses.opy — rule "SPAWN BOSS": [12](../src/objective_types/objective_type_bosses.opy#L12).
@@ -1135,35 +1140,35 @@
 Объявление: [variables.opy:244](../src/variables.opy#L244). Строк обращений: 6; упоминаний: 6; чтений вида Global в скомпилированном коде: 1.
 
 - subroutines.opy — macro botStatManagementMacro(): [34](../src/subroutines.opy#L34).
-- subroutines.opy — def setDifficulty(): [405](../src/subroutines.opy#L405), [428](../src/subroutines.opy#L428), [440](../src/subroutines.opy#L440), [452](../src/subroutines.opy#L452), [462](../src/subroutines.opy#L462).
+- subroutines.opy — def setDifficulty(): [406](../src/subroutines.opy#L406), [429](../src/subroutines.opy#L429), [441](../src/subroutines.opy#L441), [453](../src/subroutines.opy#L453), [463](../src/subroutines.opy#L463).
 
 ## botBiteDurationList
 
 Объявление: [variables.opy:245](../src/variables.opy#L245). Строк обращений: 5; упоминаний: 5; чтений вида Global в скомпилированном коде: 1.
 
 - subroutines.opy — macro botStatManagementMacro(): [37](../src/subroutines.opy#L37).
-- subroutines.opy — def setDifficulty(): [407](../src/subroutines.opy#L407), [424](../src/subroutines.opy#L424), [430](../src/subroutines.opy#L430), [442](../src/subroutines.opy#L442).
+- subroutines.opy — def setDifficulty(): [408](../src/subroutines.opy#L408), [425](../src/subroutines.opy#L425), [431](../src/subroutines.opy#L431), [443](../src/subroutines.opy#L443).
 
 ## botDamageDealtList
 
 Объявление: [variables.opy:246](../src/variables.opy#L246). Строк обращений: 7; упоминаний: 7; чтений вида Global в скомпилированном коде: 2.
 
 - subroutines.opy — macro botStatManagementMacro(): [36](../src/subroutines.opy#L36), [41](../src/subroutines.opy#L41).
-- subroutines.opy — def setDifficulty(): [414](../src/subroutines.opy#L414), [434](../src/subroutines.opy#L434), [446](../src/subroutines.opy#L446), [456](../src/subroutines.opy#L456), [466](../src/subroutines.opy#L466).
+- subroutines.opy — def setDifficulty(): [415](../src/subroutines.opy#L415), [435](../src/subroutines.opy#L435), [447](../src/subroutines.opy#L447), [457](../src/subroutines.opy#L457), [467](../src/subroutines.opy#L467).
 
 ## botHealthList
 
 Объявление: [variables.opy:247](../src/variables.opy#L247). Строк обращений: 6; упоминаний: 6; чтений вида Global в скомпилированном коде: 1.
 
-- subroutines.opy — def setDifficulty(): [403](../src/subroutines.opy#L403), [422](../src/subroutines.opy#L422), [438](../src/subroutines.opy#L438), [450](../src/subroutines.opy#L450), [460](../src/subroutines.opy#L460).
-- subroutines.opy — def botRespawnInitialization(): [705](../src/subroutines.opy#L705).
+- subroutines.opy — def setDifficulty(): [404](../src/subroutines.opy#L404), [423](../src/subroutines.opy#L423), [439](../src/subroutines.opy#L439), [451](../src/subroutines.opy#L451), [461](../src/subroutines.opy#L461).
+- subroutines.opy — def botRespawnInitialization(): [708](../src/subroutines.opy#L708).
 
 ## botThrottleSpeedList
 
 Объявление: [variables.opy:248](../src/variables.opy#L248). Строк обращений: 7; упоминаний: 7; чтений вида Global в скомпилированном коде: 1.
 
 - subroutines.opy — macro botStatManagementMacro(): [39](../src/subroutines.opy#L39).
-- subroutines.opy — def setDifficulty(): [409](../src/subroutines.opy#L409), [412](../src/subroutines.opy#L412), [432](../src/subroutines.opy#L432), [444](../src/subroutines.opy#L444), [454](../src/subroutines.opy#L454), [464](../src/subroutines.opy#L464).
+- subroutines.opy — def setDifficulty(): [410](../src/subroutines.opy#L410), [413](../src/subroutines.opy#L413), [433](../src/subroutines.opy#L433), [445](../src/subroutines.opy#L445), [455](../src/subroutines.opy#L455), [465](../src/subroutines.opy#L465).
 
 ## availableMutationList
 
@@ -1177,9 +1182,9 @@
 Объявление: [variables.opy:250](../src/variables.opy#L250). Строк обращений: 16; упоминаний: 17; чтений вида Global в скомпилированном коде: 14.
 
 - subroutines.opy — macro minibossMutationMacro(): [18](../src/subroutines.opy#L18).
-- subroutines.opy — macro botEntityManagementMacro(): [178](../src/subroutines.opy#L178).
-- subroutines.opy — def selectTarget(): [654](../src/subroutines.opy#L654).
-- subroutines.opy — def botRespawnInitialization(): [724](../src/subroutines.opy#L724), [731](../src/subroutines.opy#L731).
+- subroutines.opy — macro botEntityManagementMacro(): [179](../src/subroutines.opy#L179).
+- subroutines.opy — def selectTarget(): [655](../src/subroutines.opy#L655).
+- subroutines.opy — def botRespawnInitialization(): [727](../src/subroutines.opy#L727), [734](../src/subroutines.opy#L734).
 - objective_types/objective_type_bosses.opy — rule "SPAWN BOSS": [15](../src/objective_types/objective_type_bosses.opy#L15).
 - objective_types/objective_type_bosses.opy — rule "BOT BECOMES BOSS": [36](../src/objective_types/objective_type_bosses.opy#L36).
 - bots_game_in_progress.opy — rule "BOT DIES": [134](../src/bots_game_in_progress.opy#L134), [145](../src/bots_game_in_progress.opy#L145).
@@ -1187,9 +1192,9 @@
 - bots_game_in_progress.opy — rule "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)": [398](../src/bots_game_in_progress.opy#L398).
 - bots_game_in_progress.opy — rule "MINIBOSS MESSAGE": [525](../src/bots_game_in_progress.opy#L525).
 - zombie_types.opy — rule "ZOMBIES SPAWN AT REIGNITED": [406](../src/zombie_types.opy#L406).
-- zombie_types.opy — rule "PROTECTOR (KIRIKO) USES CLEANSE": [1345](../src/zombie_types.opy#L1345).
-- zombie_types.opy — rule "BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)": [1384](../src/zombie_types.opy#L1384).
-- zombie_types.opy — rule "CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)": [1408](../src/zombie_types.opy#L1408).
+- zombie_types.opy — rule "PROTECTOR (KIRIKO) USES CLEANSE": [1346](../src/zombie_types.opy#L1346).
+- zombie_types.opy — rule "BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)": [1385](../src/zombie_types.opy#L1385).
+- zombie_types.opy — rule "CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)": [1409](../src/zombie_types.opy#L1409).
 
 ## bossStateList
 
@@ -1200,11 +1205,11 @@
 - subroutines.opy — macro minibossMutationMacro(): [27](../src/subroutines.opy#L27).
 - subroutines.opy — macro botStatManagementMacro(): [56](../src/subroutines.opy#L56).
 - subroutines.opy — macro mutationsMacro(): [78](../src/subroutines.opy#L78).
-- subroutines.opy — macro botEntityManagementMacro(): [125](../src/subroutines.opy#L125), [136](../src/subroutines.opy#L136), [167](../src/subroutines.opy#L167), [183](../src/subroutines.opy#L183), [203](../src/subroutines.opy#L203), [206](../src/subroutines.opy#L206).
-- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [280](../src/subroutines.opy#L280), [286](../src/subroutines.opy#L286), [289](../src/subroutines.opy#L289), [351](../src/subroutines.opy#L351), [363](../src/subroutines.opy#L363).
-- subroutines.opy — def objectivesManagement(): [575](../src/subroutines.opy#L575).
-- subroutines.opy — def selectTarget(): [659](../src/subroutines.opy#L659).
-- subroutines.opy — def botRespawnInitialization(): [698](../src/subroutines.opy#L698), [724](../src/subroutines.opy#L724).
+- subroutines.opy — macro botEntityManagementMacro(): [126](../src/subroutines.opy#L126), [137](../src/subroutines.opy#L137), [168](../src/subroutines.opy#L168), [184](../src/subroutines.opy#L184), [204](../src/subroutines.opy#L204), [207](../src/subroutines.opy#L207).
+- subroutines.opy — macro globalObjectiveEntityManagementMacro(): [281](../src/subroutines.opy#L281), [287](../src/subroutines.opy#L287), [290](../src/subroutines.opy#L290), [352](../src/subroutines.opy#L352), [364](../src/subroutines.opy#L364).
+- subroutines.opy — def objectivesManagement(): [576](../src/subroutines.opy#L576).
+- subroutines.opy — def selectTarget(): [660](../src/subroutines.opy#L660).
+- subroutines.opy — def botRespawnInitialization(): [701](../src/subroutines.opy#L701), [727](../src/subroutines.opy#L727).
 - global_startup.opy — rule "VARIABLE ASSIGNMENT": [233](../src/global_startup.opy#L233).
 - global_game_in_progress.opy — rule "TRIGGER OVERTIME MUSIC": [54](../src/global_game_in_progress.opy#L54), [60](../src/global_game_in_progress.opy#L60), [62](../src/global_game_in_progress.opy#L62).
 - global_game_in_progress.opy — rule "RANDOM ABILITIES": [98](../src/global_game_in_progress.opy#L98).
@@ -1237,43 +1242,43 @@
 - zombie_types.opy — rule "BRUTE FIRE STRIKE (BOSS)": [314](../src/zombie_types.opy#L314).
 - zombie_types.opy — rule "REIGNITED (ANRAN) ABILITIES": [332](../src/zombie_types.opy#L332).
 - zombie_types.opy — rule "ZOMBIES SPAWN AT REIGNITED": [405](../src/zombie_types.opy#L405).
-- zombie_types.opy — rule "RIDER (WIDOWMAKER) ATTACH TO PLAYERS": [434](../src/zombie_types.opy#L434).
-- zombie_types.opy — rule "CHARGER (MAUGA) CHARGE": [553](../src/zombie_types.opy#L553), [563](../src/zombie_types.opy#L563).
-- zombie_types.opy — rule "SLIMER (MERCY) TENTACLE GRAB": [622](../src/zombie_types.opy#L622).
-- zombie_types.opy — rule "PRIME SLIMER (EMRE) FLIGHT (BOSS)": [641](../src/zombie_types.opy#L641).
-- zombie_types.opy — rule "STRIKER NORMAL PILE DRIVER": [746](../src/zombie_types.opy#L746).
-- zombie_types.opy — rule "STALKER (MOIRA) FADE": [767](../src/zombie_types.opy#L767), [772](../src/zombie_types.opy#L772), [785](../src/zombie_types.opy#L785), [800](../src/zombie_types.opy#L800).
-- zombie_types.opy — rule "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES": [860](../src/zombie_types.opy#L860).
-- zombie_types.opy — rule "DOWNFALLEN (SIGMA) FIRES": [908](../src/zombie_types.opy#L908).
-- zombie_types.opy — rule "DOWNFALLEN GRABS PLAYER": [925](../src/zombie_types.opy#L925), [938](../src/zombie_types.opy#L938).
-- zombie_types.opy — rule "DAYTAKER (ILLARI) BURST": [1011](../src/zombie_types.opy#L1011), [1013](../src/zombie_types.opy#L1013), [1014](../src/zombie_types.opy#L1014), [1052](../src/zombie_types.opy#L1052), [1068](../src/zombie_types.opy#L1068), [1070](../src/zombie_types.opy#L1070).
-- zombie_types.opy — rule "DAYTAKER ATTACKS AT HALF HEALTH (BOSS)": [1082](../src/zombie_types.opy#L1082).
-- zombie_types.opy — rule "TUNNELER PORTAL LETS ZOMBIES THROUGH": [1114](../src/zombie_types.opy#L1114).
-- zombie_types.opy — rule "ENSNARER (HAZARD) BLOCKS PLAYERS": [1149](../src/zombie_types.opy#L1149), [1154](../src/zombie_types.opy#L1154).
-- zombie_types.opy — rule "SMOLDER (WINSTON) SEES PLAYER": [1201](../src/zombie_types.opy#L1201).
-- zombie_types.opy — rule "SMOLDER ACTIVATES FROM DAMAGE": [1225](../src/zombie_types.opy#L1225).
-- zombie_types.opy — rule "SMOLDER BOSS SLAM": [1251](../src/zombie_types.opy#L1251).
-- zombie_types.opy — rule "SMOLDER SUPER SLAM": [1280](../src/zombie_types.opy#L1280).
-- zombie_types.opy — rule "SMOLDER STAYS ENRAGE DURING BOSS EVENT": [1297](../src/zombie_types.opy#L1297).
-- zombie_types.opy — rule "SMOLDER BOSS EVENT STARTS": [1310](../src/zombie_types.opy#L1310).
-- zombie_types.opy — rule "SMOLDER ACTIVATED FROM BOSS EVENT": [1336](../src/zombie_types.opy#L1336).
+- zombie_types.opy — rule "RIDER (WIDOWMAKER) ATTACH TO PLAYERS": [435](../src/zombie_types.opy#L435).
+- zombie_types.opy — rule "CHARGER (MAUGA) CHARGE": [554](../src/zombie_types.opy#L554), [564](../src/zombie_types.opy#L564).
+- zombie_types.opy — rule "SLIMER (MERCY) TENTACLE GRAB": [623](../src/zombie_types.opy#L623).
+- zombie_types.opy — rule "PRIME SLIMER (EMRE) FLIGHT (BOSS)": [642](../src/zombie_types.opy#L642).
+- zombie_types.opy — rule "STRIKER NORMAL PILE DRIVER": [747](../src/zombie_types.opy#L747).
+- zombie_types.opy — rule "STALKER (MOIRA) FADE": [768](../src/zombie_types.opy#L768), [773](../src/zombie_types.opy#L773), [786](../src/zombie_types.opy#L786), [801](../src/zombie_types.opy#L801).
+- zombie_types.opy — rule "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES": [861](../src/zombie_types.opy#L861).
+- zombie_types.opy — rule "DOWNFALLEN (SIGMA) FIRES": [909](../src/zombie_types.opy#L909).
+- zombie_types.opy — rule "DOWNFALLEN GRABS PLAYER": [926](../src/zombie_types.opy#L926), [939](../src/zombie_types.opy#L939).
+- zombie_types.opy — rule "DAYTAKER (ILLARI) BURST": [1012](../src/zombie_types.opy#L1012), [1014](../src/zombie_types.opy#L1014), [1015](../src/zombie_types.opy#L1015), [1053](../src/zombie_types.opy#L1053), [1069](../src/zombie_types.opy#L1069), [1071](../src/zombie_types.opy#L1071).
+- zombie_types.opy — rule "DAYTAKER ATTACKS AT HALF HEALTH (BOSS)": [1083](../src/zombie_types.opy#L1083).
+- zombie_types.opy — rule "TUNNELER PORTAL LETS ZOMBIES THROUGH": [1115](../src/zombie_types.opy#L1115).
+- zombie_types.opy — rule "ENSNARER (HAZARD) BLOCKS PLAYERS": [1150](../src/zombie_types.opy#L1150), [1155](../src/zombie_types.opy#L1155).
+- zombie_types.opy — rule "SMOLDER (WINSTON) SEES PLAYER": [1202](../src/zombie_types.opy#L1202).
+- zombie_types.opy — rule "SMOLDER ACTIVATES FROM DAMAGE": [1226](../src/zombie_types.opy#L1226).
+- zombie_types.opy — rule "SMOLDER BOSS SLAM": [1252](../src/zombie_types.opy#L1252).
+- zombie_types.opy — rule "SMOLDER SUPER SLAM": [1281](../src/zombie_types.opy#L1281).
+- zombie_types.opy — rule "SMOLDER STAYS ENRAGE DURING BOSS EVENT": [1298](../src/zombie_types.opy#L1298).
+- zombie_types.opy — rule "SMOLDER BOSS EVENT STARTS": [1311](../src/zombie_types.opy#L1311).
+- zombie_types.opy — rule "SMOLDER ACTIVATED FROM BOSS EVENT": [1337](../src/zombie_types.opy#L1337).
 - supply_drops.opy — def stun(): [428](../src/supply_drops.opy#L428), [432](../src/supply_drops.opy#L432).
-- enhancements.opy — rule "BRAIN KILLER EXTRA DAMAGE": [273](../src/enhancements.opy#L273).
-- enhancements.opy — rule "PYROTECHNIC APPLIES DAMAGE": [301](../src/enhancements.opy#L301).
+- enhancements.opy — rule "BRAIN KILLER EXTRA DAMAGE": [274](../src/enhancements.opy#L274).
+- enhancements.opy — rule "PYROTECHNIC APPLIES DAMAGE": [302](../src/enhancements.opy#L302).
 
 ## isSmolderEventActive
 
 Объявление: [variables.opy:254](../src/variables.opy#L254). Строк обращений: 12; упоминаний: 13; чтений вида Global в скомпилированном коде: 9.
 
-- subroutines.opy — macro botEntityManagementMacro(): [208](../src/subroutines.opy#L208), [211](../src/subroutines.opy#L211).
-- subroutines.opy — def objectivesManagement(): [529](../src/subroutines.opy#L529).
+- subroutines.opy — macro botEntityManagementMacro(): [209](../src/subroutines.opy#L209), [212](../src/subroutines.opy#L212).
+- subroutines.opy — def objectivesManagement(): [530](../src/subroutines.opy#L530).
 - global_startup.opy — macro botHeroRandomizationMacro(): [53](../src/global_startup.opy#L53).
 - global_game_in_progress.opy — rule "RANDOM ABILITIES": [97](../src/global_game_in_progress.opy#L97).
 - players_game_in_progress.opy — rule "EFFECTS/TEXTS": [121](../src/players_game_in_progress.opy#L121).
-- zombie_types.opy — rule "SMOLDER BOSS SLAM": [1247](../src/zombie_types.opy#L1247).
-- zombie_types.opy — rule "SMOLDER STAYS ENRAGE DURING BOSS EVENT": [1295](../src/zombie_types.opy#L1295).
-- zombie_types.opy — rule "SMOLDER BOSS EVENT STARTS": [1314](../src/zombie_types.opy#L1314), [1321](../src/zombie_types.opy#L1321), [1324](../src/zombie_types.opy#L1324).
-- zombie_types.opy — rule "SMOLDER ACTIVATED FROM BOSS EVENT": [1335](../src/zombie_types.opy#L1335).
+- zombie_types.opy — rule "SMOLDER BOSS SLAM": [1248](../src/zombie_types.opy#L1248).
+- zombie_types.opy — rule "SMOLDER STAYS ENRAGE DURING BOSS EVENT": [1296](../src/zombie_types.opy#L1296).
+- zombie_types.opy — rule "SMOLDER BOSS EVENT STARTS": [1315](../src/zombie_types.opy#L1315), [1322](../src/zombie_types.opy#L1322), [1325](../src/zombie_types.opy#L1325).
+- zombie_types.opy — rule "SMOLDER ACTIVATED FROM BOSS EVENT": [1336](../src/zombie_types.opy#L1336).
 
 ## bossesAvailableHeroList
 
@@ -1293,7 +1298,7 @@
 
 Объявление: [compressed numbers.opy:6](../src/compressed%20numbers.opy#L6). Строк обращений: 28; упоминаний: 28; чтений вида Global в скомпилированном коде: 28.
 
-- subroutines.opy — def setDifficulty(): [403](../src/subroutines.opy#L403), [405](../src/subroutines.opy#L405), [407](../src/subroutines.opy#L407), [414](../src/subroutines.opy#L414), [422](../src/subroutines.opy#L422), [424](../src/subroutines.opy#L424), [428](../src/subroutines.opy#L428), [430](../src/subroutines.opy#L430), [432](../src/subroutines.opy#L432), [434](../src/subroutines.opy#L434), [440](../src/subroutines.opy#L440), [442](../src/subroutines.opy#L442), [444](../src/subroutines.opy#L444), [446](../src/subroutines.opy#L446), [450](../src/subroutines.opy#L450), [452](../src/subroutines.opy#L452), [454](../src/subroutines.opy#L454), [456](../src/subroutines.opy#L456), [462](../src/subroutines.opy#L462), [464](../src/subroutines.opy#L464), [466](../src/subroutines.opy#L466).
+- subroutines.opy — def setDifficulty(): [404](../src/subroutines.opy#L404), [406](../src/subroutines.opy#L406), [408](../src/subroutines.opy#L408), [415](../src/subroutines.opy#L415), [423](../src/subroutines.opy#L423), [425](../src/subroutines.opy#L425), [429](../src/subroutines.opy#L429), [431](../src/subroutines.opy#L431), [433](../src/subroutines.opy#L433), [435](../src/subroutines.opy#L435), [441](../src/subroutines.opy#L441), [443](../src/subroutines.opy#L443), [445](../src/subroutines.opy#L445), [447](../src/subroutines.opy#L447), [451](../src/subroutines.opy#L451), [453](../src/subroutines.opy#L453), [455](../src/subroutines.opy#L455), [457](../src/subroutines.opy#L457), [463](../src/subroutines.opy#L463), [465](../src/subroutines.opy#L465), [467](../src/subroutines.opy#L467).
 - global_start_menu.opy — rule "EFFECTS/TEXTS": [81](../src/global_start_menu.opy#L81), [109](../src/global_start_menu.opy#L109).
 - global_start_menu.opy — def setZombieMode(): [299](../src/global_start_menu.opy#L299), [303](../src/global_start_menu.opy#L303), [314](../src/global_start_menu.opy#L314), [318](../src/global_start_menu.opy#L318), [322](../src/global_start_menu.opy#L322).
 
