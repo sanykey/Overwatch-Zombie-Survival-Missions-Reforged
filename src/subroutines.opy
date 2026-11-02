@@ -176,7 +176,7 @@ macro botEntityManagementMacro():
                 eventPlayer.startForcingHero(Hero.EMRE)
         elif eventPlayer.getHero() == Hero.WRECKING_BALL:
             #Ground strike location
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botIsStrikerStrikeActive), Effect.RING, Color.TEAM_2, raycastHitPosition(eventPlayer.getPosition(), eventPlayer.getPosition() + vect(0, -100, 0), getAllPlayers(), getAllPlayers(), false) if eventPlayer.botIsStrikerStrikeActive else evalOnce(vect(0, -100, 0)), 1 * eventPlayer.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botIsStrikerStrikeActive), Effect.RING, Color.TEAM_2, raycastHitPosition(eventPlayer.getPosition(), eventPlayer.getPosition() + offsetDownHundredConst, getAllPlayers(), getAllPlayers(), false) if eventPlayer.botIsStrikerStrikeActive else evalOnce(offsetDownHundredConst), 1 * eventPlayer.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
             eventPlayer.setMaxAmmo(0, 40)
         elif eventPlayer.getHero() == Hero.REAPER:
@@ -217,7 +217,7 @@ macro botEntityManagementMacro():
                 eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
         elif eventPlayer.getHero() == Hero.DOOMFIST:
             #Meteor strike/Seismic Slam location
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.isUsingUltimate() or eventPlayer.isUsingAbility1()), Effect.RING, Color.ORANGE, raycastHitPosition(eventPlayer.getPosition(), eventPlayer.getPosition() + vect(0, -100, 0), getAllPlayers(), getAllPlayers(), false) if eventPlayer.isUsingUltimate() or eventPlayer.isUsingAbility1() else evalOnce(vect(0, -100, 0)), 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.isUsingUltimate() or eventPlayer.isUsingAbility1()), Effect.RING, Color.ORANGE, raycastHitPosition(eventPlayer.getPosition(), eventPlayer.getPosition() + offsetDownHundredConst, getAllPlayers(), getAllPlayers(), false) if eventPlayer.isUsingUltimate() or eventPlayer.isUsingAbility1() else evalOnce(offsetDownHundredConst), 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
 
 

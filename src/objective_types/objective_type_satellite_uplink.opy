@@ -50,7 +50,7 @@ macro fireSatelliteMacro():
         wait(0.5)
         # satelliteLaserImpactPosition: laser impact position on the ground, shared by explosion visuals and both damage checks.
         #!define satelliteLaserImpactPosition tmp0
-        satelliteLaserImpactPosition = raycastHitPosition(satelliteLaserPosition + vect(0, 2, 0), satelliteLaserPosition + vect(0, -100, 0), getAllPlayers(), getAllPlayers().filter(lambda player: player.isOnGround()), false) + vect(0, 0.1, 0)
+        satelliteLaserImpactPosition = raycastHitPosition(satelliteLaserPosition + vect(0, 2, 0), satelliteLaserPosition + offsetDownHundredConst, getAllPlayers(), getAllPlayers().filter(lambda player: player.isOnGround()), false) + vect(0, 0.1, 0)
         playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.SKY_BLUE, satelliteLaserImpactPosition, 5)
         playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.SKY_BLUE, satelliteLaserImpactPosition, 200)
         #Damage Zombies

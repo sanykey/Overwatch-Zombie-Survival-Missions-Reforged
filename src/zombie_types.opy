@@ -296,7 +296,7 @@ rule "BRUTE KNOCKDOWN":
     @Condition attacker.getHero() == Hero.REINHARDT
     
     attacker.setUltCharge(attacker.getUltCharge() + 25)
-    eventPlayer.applyImpulse(directionTowards(attacker.getPosition(), eventPlayer.getPosition()) + vect(0, 0.25, 0), 15 * attacker.sizeScale, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
+    eventPlayer.applyImpulse(directionTowards(attacker.getPosition(), eventPlayer.getPosition()) + offsetUpQuarterConst, 15 * attacker.sizeScale, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
     if eventPlayer.isCrowdControlCooldownActive == true:
         goto lbl_0
     eventPlayer.isCrowdControlCooldownActive = true
@@ -354,7 +354,7 @@ rule "REIGNITED (ANRAN) ABILITIES":
         eventPlayer.cancelPrimaryAction()
         if not eventPlayer.isCrowdControlled and eventPlayer.botTarget != null:
             eventPlayer.forceButtonPress(Button.ABILITY_1)
-            eventPlayer.applyImpulse(normalize(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()) + vect(0, 0.25, 0)), eventPlayer.sizeScale * (15 + 25 * abs(cosDeg(verticalAngleOfDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()))))), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+            eventPlayer.applyImpulse(normalize(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()) + offsetUpQuarterConst), eventPlayer.sizeScale * (15 + 25 * abs(cosDeg(verticalAngleOfDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()))))), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
             eventPlayer.botIsThrottleOverridden = false
             eventPlayer.botIsFacingOverridden = true
             startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)

@@ -144,12 +144,15 @@ globalvar phaseSlot12  # Menu camera position -> current objective position, inc
 #!define currentObjectivePosition phaseSlot12
 
 # Shared immutable colors and positions.
-globalvar offsetUpThreeQuartersConst = vect(0, 0.75, 0)    # Vertical offset of 0.75 m for labels, icons and visibility checks.
-globalvar offsetUpHalfConst = vect(0, 0.5, 0)              # Vertical offset of 0.5 m for labels and effects.
-globalvar losOffsetConst = vect(0, 1.2, 0)                 # Vertical offset of 1.2 m used by line-of-sight checks.
-globalvar colorChargeBatteryConst = rgb(236, 206, 44)    # Shared Charge Battery color used by the menu and enhancement visuals.
-globalvar dummyHoldingPositionConst = vect(500, 500, 500)  # Off-map holding position for newly created or reconfigured dummy bots.
-globalvar colorKevlarConst = rgb(240, 129, 26)           # Shared Kevlar color used by the menu and enhancement visuals.
+globalvar offsetUpThreeQuartersConst = vect(0, 0.75, 0)    # Vertical offset of 0.75 m for labels, icons and visibility checks. Source uses: 7 (excluding declaration).
+globalvar offsetUpHalfConst = vect(0, 0.5, 0)              # Vertical offset of 0.5 m for labels and effects. Source uses: 7 (excluding declaration).
+globalvar losOffsetConst = vect(0, 1.2, 0)                 # Vertical offset of 1.2 m used by line-of-sight checks. Source uses: 16 (excluding declaration).
+globalvar colorChargeBatteryConst = rgb(236, 206, 44)    # Shared Charge Battery color used by the menu and enhancement visuals. Source uses: 4 (excluding declaration).
+globalvar dummyHoldingPositionConst = vect(500, 500, 500)  # Off-map holding position for newly created or reconfigured dummy bots. Source uses: 6 (excluding declaration).
+globalvar colorKevlarConst = rgb(240, 129, 26)           # Shared Kevlar color used by the menu and enhancement visuals. Source uses: 2 (excluding declaration).
+globalvar offsetDownHundredConst = vect(0, -100, 0)       # Downward offset of 100 m for raycasts, hidden effects and dead-player storage. Source uses: 7 (excluding declaration).
+globalvar offsetUpOneAndHalfConst = vect(0, 1.5, 0)       # Vertical offset of 1.5 m for the pregame camera and player labels. Source uses: 6 (excluding declaration).
+globalvar offsetUpQuarterConst = vect(0, 0.25, 0)         # Vertical offset of 0.25 m for impulses, power-up drops and effects. Source uses: 5 (excluding declaration).
 
 # Match state and configuration.
 globalvar isPregameSetup        # Pregame hero selection/voting is active; cleared by START GAME before gameplay activation.

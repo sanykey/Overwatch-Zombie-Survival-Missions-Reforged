@@ -179,7 +179,7 @@ rule "PLAYER DELIVERS RESOURCE VALUE":
         loop()
     if eventPlayer.biomorphingResourceAmount <= 0:
         playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.getPosition(), 75)
-        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.WHITE, eventPlayer.getPosition() + vect(0, 0.25, 0), 8)
+        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.WHITE, eventPlayer.getPosition() + offsetUpQuarterConst, 8)
         smallMessage(eventPlayer, "  Biowaste deposited!")
     objectivePlayerList.remove(eventPlayer)
 

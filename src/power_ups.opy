@@ -82,7 +82,7 @@ rule "PLAYER DROPS POWER UP (MANUAL)":
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     supplyPowerUpIdList.append(eventPlayer.powerUpItemId)
-    supplyPowerUpPositionList.append(eventPlayer.getPosition() + vect(0, 0.25, 0) if eventPlayer.isOnGround() else nearestWalkablePosition(eventPlayer.getPosition()))
+    supplyPowerUpPositionList.append(eventPlayer.getPosition() + offsetUpQuarterConst if eventPlayer.isOnGround() else nearestWalkablePosition(eventPlayer.getPosition()))
     wait()
     eventPlayer.powerUpItemId = 0
     playEffect(eventPlayer, DynamicEffect.DEBUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.getPosition(), 25)
@@ -96,7 +96,7 @@ rule "PLAYER DROPS POWER UP (DEATH)":
     while not eventPlayer.isOnGround():
         wait(0.25)
     supplyPowerUpIdList.append(eventPlayer.powerUpItemId)
-    supplyPowerUpPositionList.append(eventPlayer.getPosition() + vect(0, 0.25, 0))
+    supplyPowerUpPositionList.append(eventPlayer.getPosition() + offsetUpQuarterConst)
     wait()
     eventPlayer.powerUpItemId = 0
     playEffect(eventPlayer, DynamicEffect.DEBUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.getPosition(), 25)

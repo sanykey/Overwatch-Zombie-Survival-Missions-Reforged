@@ -114,7 +114,7 @@ rule "EFFECTS/TEXTS":
     #Infected aura
     createEffect(getAllPlayers().filter(lambda _: eventPlayer.isInfected), Effect.BAD_AURA, Color.BLACK if eventPlayer.enhancementId == Enhancement.ZOMBIE_HYBRID else Color.LIME_GREEN, eventPlayer, 0.1 if localPlayer == eventPlayer else 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     #Need revive text
-    createInWorldText(getAllPlayers().filter(lambda _: eventPlayer.isDead() and eventPlayer.rescueTimeRemaining > 0), "Reviving: {0}s".format(ceil(eventPlayer.reviveTimeRemaining)) if eventPlayer.isReviving else "Revive: {0}s".format(ceil(eventPlayer.rescueTimeRemaining)), eventPlayer.getPosition() + vect(0, 1.5, 0), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.YELLOW if eventPlayer.isReviving else Color.RED)
+    createInWorldText(getAllPlayers().filter(lambda _: eventPlayer.isDead() and eventPlayer.rescueTimeRemaining > 0), "Reviving: {0}s".format(ceil(eventPlayer.reviveTimeRemaining)) if eventPlayer.isReviving else "Revive: {0}s".format(ceil(eventPlayer.rescueTimeRemaining)), eventPlayer.getPosition() + offsetUpOneAndHalfConst, 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.YELLOW if eventPlayer.isReviving else Color.RED)
     #Reviving ring
     createEffect(getAllPlayers().filter(lambda _: eventPlayer.isReviving), Effect.RING, Color.YELLOW, eventPlayer.getPosition(), REVIVE_RADIUS, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     #Health Hud text
@@ -181,12 +181,12 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
         waitUntil(eventPlayer.isAlive(), 2)
     elif eventPlayer.rescueTimeRemaining <= 0:
         #0) Downed/Dead status, 1) Death timer, 2) Revive timer, 3) Revive start time, 4) Downed position
-        playerStatsList[eventPlayer.reconnectUserIndex] = [2, eventPlayer.rescueTimeRemaining, eventPlayer.reviveTimeRemaining, eventPlayer.reviveDuration, vect(0, -100, 0)]
+        playerStatsList[eventPlayer.reconnectUserIndex] = [2, eventPlayer.rescueTimeRemaining, eventPlayer.reviveTimeRemaining, eventPlayer.reviveDuration, offsetDownHundredConst]
         bigMessage(getAllPlayers().exclude(eventPlayer), "{0} {1} died!".format(eventPlayer, heroIcon(eventPlayer.getHero())))
         if mustReviveTime == 60 and len(objectivePositionList) != 1:
             bigMessage(getAllPlayers().exclude(eventPlayer), "Save {0} by finishing the objective!".format(eventPlayer))
         mustReviveTime -= 0 if mustReviveTime <= 30 else 10
-        eventPlayer.teleport(vect(0, -100, 0))
+        eventPlayer.teleport(offsetDownHundredConst)
         eventPlayer.setInvisibility(Invis.ALL)
         waitUntil(isObjectiveComplete, 99999)
         eventPlayer.resurrect()

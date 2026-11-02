@@ -18,7 +18,7 @@ rule "GLOBAL MENU INITIALIZATION":
             startPos = walkCenter + directionFromAngles(random.uniform(0, 360), 0) * 300 + vect(0, 100, 0)
         else:
             startPos = walkCenter + directionFromAngles(random.uniform(0, 360), 0) * 150 + vect(0, 30, 0)
-        startCamPos = startPos + vect(0, 1.5, 0) + directionFromAngles(horizontalAngleOfDirection(directionTowards(walkCenter, startPos)), 0) * START_CAM_DISTANCE
+        startCamPos = startPos + offsetUpOneAndHalfConst + directionFromAngles(horizontalAngleOfDirection(directionTowards(walkCenter, startPos)), 0) * START_CAM_DISTANCE
         wait()
         # Shared menu storage changes owners at START GAME.
         if not isPregameSetup:
@@ -40,12 +40,12 @@ rule "GLOBAL MENU INITIALIZATION":
                     startPos = vect(-0.27, 0.49, 83.6)
                     startCamPos = vect(-0.19, 2, 90.1)
                     goto lbl_0
-            startCamPos = startPos + vect(0, 1.5, 0) + directionFromAngles(random.uniform(0, 360), 0) * START_CAM_DISTANCE
-            startCamPos = raycastHitPosition(startCamPos, startCamPos - vect(0, 5, 0), null, null, false) + vect(0, 1.5, 0)
+            startCamPos = startPos + offsetUpOneAndHalfConst + directionFromAngles(random.uniform(0, 360), 0) * START_CAM_DISTANCE
+            startCamPos = raycastHitPosition(startCamPos, startCamPos - vect(0, 5, 0), null, null, false) + offsetUpOneAndHalfConst
             startPos = vect(startPos.x, startCamPos.y - 1.5, startPos.z)
             startPos = raycastHitPosition(startPos + vect(0, 0.4, 0), startPos - vect(0, 5, 0), null, null, false)
             startPos = raycastHitPosition(startCamPos - offsetUpThreeQuartersConst, startPos + offsetUpThreeQuartersConst, null, null, false) - offsetUpThreeQuartersConst
-            startCamPos = startPos + vect(0, 1.5, 0) + directionFromAngles(horizontalAngleOfDirection(directionTowards(startPos, startCamPos)), 0) * START_CAM_DISTANCE
+            startCamPos = startPos + offsetUpOneAndHalfConst + directionFromAngles(horizontalAngleOfDirection(directionTowards(startPos, startCamPos)), 0) * START_CAM_DISTANCE
             #Line of Sight Checks for each player position
             # menuVisibilityAngleOffset: horizontal angle offset in degrees, to test visibility of each menu position.
             #!define menuVisibilityAngleOffset tmp0
