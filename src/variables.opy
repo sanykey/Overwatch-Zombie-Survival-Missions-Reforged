@@ -10,6 +10,16 @@
 #!define START_TIME 300
 #!define VOTING_END_TIME 30
 
+# Player-count thresholds for difficultySetting; zero is the pregame reset value.
+# Keep the raw player count for scaling: 4 uses Expert stats, 6 uses Legendary stats.
+# Insanity is controlled separately by challengeSetting.
+enum Difficulty:
+    UNSET = 0,
+    NORMAL = 1,
+    HARD = 2,
+    EXPERT = 3,
+    LEGENDARY = 5,
+
 # Enhancement IDs also index enhancementOptionList and the default-setting choices.
 # Zero means no preference in the menu; initialization resolves the configured default.
 # If that setting is "No Enhancement", zero leaves the player without an enhancement.
@@ -136,7 +146,7 @@ globalvar isSpecialGameMode     # TDM, CTF, PUSH or CONTROL uses alternate menu/
 globalvar isGameplayActive      # Objectives are generated and combat is active; cleared when the match outcome is decided.
 globalvar isOvertimeActive      # Prevents repeated overtime activation and zombie relocation on standard modes.
 globalvar isVoting              # Global pregame vote is open; separate from each player's isPregameVoting field.
-globalvar difficultySetting     # Cached player-count difficulty used to select zombie stats and scaling.
+globalvar difficultySetting     # Cached player count; compared with Difficulty thresholds and used directly for scaling.
 globalvar challengeSetting      # Selected Challenge option, retained after pregame voting.
 globalvar zombieSetting         # Selected zombie roster/spawn-rate mode, retained after pregame voting.
 globalvar objectiveTypeSetting  # Selected objective mode or Mixed setting; differs from the current objective type.

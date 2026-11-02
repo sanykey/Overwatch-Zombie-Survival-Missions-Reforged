@@ -431,7 +431,7 @@ def setDifficulty():
         #Shared bite durations for 3+ players; 1 and 2 players override them.
         botBiteDurationList = numbersList.slice(NL_BITE_DURATIONS_BASE_OFFSET, NL_BITE_DURATIONS_BASE_LEN)
         #Difficulty: 1 Player "Normal"
-        if difficultySetting == 1:
+        if difficultySetting == Difficulty.NORMAL:
             #Bot bite damage
             botBiteDamageList = numbersList.slice(NL_BITE_DAMAGE_NORMAL_OFFSET, NL_BITE_DAMAGE_NORMAL_LEN)
             #Bot bite durations
@@ -441,7 +441,7 @@ def setDifficulty():
             #Bot damage dealt
             botDamageDealtList = numbersList.slice(NL_DAMAGE_DEALT_NORMAL_OFFSET, NL_DAMAGE_DEALT_NORMAL_LEN)
         #Difficulty: 2 Player "Hard"
-        elif difficultySetting == 2:
+        elif difficultySetting == Difficulty.HARD:
             #Bot Health Values
             botHealthList[18] = 750
             #Bot bite damage
@@ -453,7 +453,7 @@ def setDifficulty():
             #Bot damage dealt
             botDamageDealtList = numbersList.slice(NL_DAMAGE_DEALT_HARD_OFFSET, NL_DAMAGE_DEALT_HARD_LEN)
         #Difficulty: 5+ Player "Legendary"
-        elif difficultySetting >= 5:
+        elif difficultySetting >= Difficulty.LEGENDARY:
             #Bot Health Values
             botHealthList = numbersList.slice(NL_BOT_HEALTH_LEGENDARY_OFFSET, NL_BOT_HEALTH_LEGENDARY_LEN)
             #Bot bite damage
@@ -733,7 +733,7 @@ def botRespawnInitialization():
     eventPlayer.botIsSelectingTarget = false
     eventPlayer.botBossHealth = -1
     #Chance for a minboss on high difficulties
-    if difficultySetting >= 3 and eventPlayer in bossStateList == false and len(miniBossList.filter(lambda x: entityExists(x))) == 0:
+    if difficultySetting >= Difficulty.EXPERT and eventPlayer in bossStateList == false and len(miniBossList.filter(lambda x: entityExists(x))) == 0:
         # minibossPromotionRoll: miniboss promotion roll, consumed before the possible initialization wait.
         #!define minibossPromotionRoll tmp0
         minibossPromotionRoll = random.randint(1, 27 if objectiveTypeList[0] == ObjectiveType.SHOWDOWN else 189)

@@ -68,7 +68,7 @@ rule "DECREASES CAPTURE PERCENTAGE":
         return
     if len(objectivePositionList) <= 1:
         return
-    showdownCapturePercent -= (3 if len(showdownContestingZombieList) > 3 else len(showdownContestingZombieList)) if difficultySetting == 1 else len(showdownContestingZombieList) + difficultySetting * 0.75
+    showdownCapturePercent -= (3 if len(showdownContestingZombieList) > 3 else len(showdownContestingZombieList)) if difficultySetting == Difficulty.NORMAL else len(showdownContestingZombieList) + difficultySetting * 0.75
     playEffect(getPlayers(Team.1), DynamicEffect.DEBUFF_IMPACT_SOUND, null, objectivePositionList[0], (0.05 * showdownCapturePercent) ** 2)
     objectiveColor = Color.RED
     wait(0.5)

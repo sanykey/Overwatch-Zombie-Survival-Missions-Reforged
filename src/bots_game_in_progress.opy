@@ -128,8 +128,8 @@ rule "BOT DIES":
         # botKillBonusRoll: random kill-bonus roll, to decide whether this zombie awards objective progress.
         #!define botKillBonusRoll tmp0
         botKillBonusRoll = random.randint(150, eventPlayer.botBaseHealth)
-        if botKillBonusRoll > 175 or difficultySetting <= 3:
-            showdownCapturePercent += 10 if eventPlayer.botBaseHealth > 500 else eventPlayer.botBaseHealth * (0.04 if difficultySetting <= 2 else 0.035)
+        if botKillBonusRoll > 175 or difficultySetting <= Difficulty.EXPERT:
+            showdownCapturePercent += 10 if eventPlayer.botBaseHealth > 500 else eventPlayer.botBaseHealth * (0.04 if difficultySetting <= Difficulty.HARD else 0.035)
             smallMessage(getAllPlayers(), " {0}  Kill Bonus".format(iconString(Icon.PLUS)))
             #Miniboss kill bonus
             if eventPlayer in miniBossList:

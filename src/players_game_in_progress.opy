@@ -209,7 +209,7 @@ rule "PLAYER PICKS UP HEALTH PACK":
     @Condition eventWasHealthPack == true
     
     eventPlayer.startHealingOverTime(null, 5, 20)
-    if difficultySetting < 3 or getMatchTime() > matchEndTime:
+    if difficultySetting < Difficulty.EXPERT or getMatchTime() > matchEndTime:
         #Update known health pack positions
         if healthpackPositionList.all(lambda x: distance(x, eventPlayer.getPosition()) > 5):
             healthpackPositionList.append(eventPlayer.getPosition())

@@ -152,7 +152,7 @@ rule "SKIP ASSEMBLING HEROES":
     zombieVoteList = [[null, true], [null, "All Zombies"], [null, createWorkshopSettingBool("Zombie Mode Toggle", "New Blood", true, 1)], [null, createWorkshopSettingBool("Zombie Mode Toggle", "What'll it be?", true, 2)], [null, createWorkshopSettingBool("Zombie Mode Toggle", "Zombie Shuffle", true, 3)], [null, createWorkshopSettingBool("Zombie Mode Toggle", "Dinner Rush!", true, 4)], [null, createWorkshopSettingBool("Zombie Mode Toggle", "Ham N' Hammer!", true, 5)]]
     setAvailableObjectivesMacro()
     #Set/Reset to default 0
-    difficultySetting = 0
+    difficultySetting = Difficulty.UNSET
     #Set/Reset to default 0
     zombieSetting = 0
     #Set/Reset to default 0
