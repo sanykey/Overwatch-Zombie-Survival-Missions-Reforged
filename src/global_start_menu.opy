@@ -67,18 +67,18 @@ rule "EFFECTS/TEXTS":
     #Voting options reminder
     createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.READY), "Voting options are available in the top left corner of your screen" if isVoting else "Voting is complete. Difficulty is actively scaled by amount of players.", startCamPos + directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)), 30), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.AQUA if isVoting else Color.PURPLE, SpecVisibility.NEVER)
     #Ready In World Text
-    createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.HERO_SELECTED), "Ready [{0}]".format(inputBindingString(Button.JUMP)), localPlayer.startPos + vect(0, 1.92, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.GREEN, SpecVisibility.NEVER)
+    createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.HERO_SELECTED), "Ready [{0}]".format(inputBindingString(Button.JUMP)), localPlayer.pregamePosition + vect(0, 1.92, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.GREEN, SpecVisibility.NEVER)
     #Change Hero In World Text
-    createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.HERO_SELECTED and getMatchTime() > 2.5), "Change Hero [{0}]".format(inputBindingString(Button.CROUCH)), localPlayer.startPos + vect(0, 1.8, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.ORANGE, SpecVisibility.NEVER)
+    createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.HERO_SELECTED and getMatchTime() > 2.5), "Change Hero [{0}]".format(inputBindingString(Button.CROUCH)), localPlayer.pregamePosition + vect(0, 1.8, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.ORANGE, SpecVisibility.NEVER)
     #Cancel In World Text
-    createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.READY and getMatchTime() > 2.5), "Cancel [{0}]".format(inputBindingString(Button.CROUCH)), localPlayer.startPos + vect(0, -0.6, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, rgb(255, 49, 49), SpecVisibility.NEVER)
+    createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.READY and getMatchTime() > 2.5), "Cancel [{0}]".format(inputBindingString(Button.CROUCH)), localPlayer.pregamePosition + vect(0, -0.6, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, rgb(255, 49, 49), SpecVisibility.NEVER)
     #One reevaluated HUD per category; localPlayer selects the viewer's current option.
     #Do not capture vote indices or dynamic text/colors with evalOnce.
     #Empty descriptions must be strings: null selected from an array displays as 0.
     #Both vote filters share the 0-6 sequence; Challenge excludes the final entry.
     #Challenge
     hudText(
-        getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] in numbersList.slice(NL_MENU_VOTE_IDS_OFFSET, NL_MENU_VOTE_IDS_LEN - 1)),
+        getAllPlayers().filter(lambda player: player.pregameVoteList[PlayerMenuStatusField.CHALLENGE_VOTE] in numbersList.slice(NL_MENU_VOTE_IDS_OFFSET, NL_MENU_VOTE_IDS_LEN - 1)),
         [
             "Challenge: No Preference",
             "Challenge: None",
@@ -86,7 +86,7 @@ rule "EFFECTS/TEXTS":
             "Challenge: Random Abilities",
             pregameGlitchText if isPregameGlitchActive else "Challenge: Insanity",
             pregameGlitchText if isPregameGlitchActive else "Challenge: Pandora's Box"
-        ][localPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE]],
+        ][localPlayer.pregameVoteList[PlayerMenuStatusField.CHALLENGE_VOTE]],
         [
             "",
             "",
@@ -94,19 +94,19 @@ rule "EFFECTS/TEXTS":
             "Non-boss zombies use abilities",
             "Faster, stronger, and deadlier",
             "All challenges at Once!"
-        ][localPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE]],
-        "Change Vote (Press [{0}])".format(inputBindingString(Button.ULTIMATE)) if isVoting or localPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] == 0 else [],
+        ][localPlayer.pregameVoteList[PlayerMenuStatusField.CHALLENGE_VOTE]],
+        "Change Vote (Press [{0}])".format(inputBindingString(Button.ULTIMATE)) if isVoting or localPlayer.pregameVoteList[PlayerMenuStatusField.CHALLENGE_VOTE] == 0 else [],
         HudPosition.LEFT,
         0,
-        [Color.AQUA, Color.YELLOW, Color.LIME_GREEN, Color.ORANGE, Color.WHITE if isPregameGlitchActive else Color.TURQUOISE, Color.GRAY if isPregameGlitchActive else Color.PURPLE][localPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE]],
-        [Color.AQUA, null, Color.LIME_GREEN, Color.ORANGE, Color.WHITE, Color.WHITE][localPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE]],
-        [Color.AQUA, Color.YELLOW, Color.LIME_GREEN, Color.ORANGE, Color.WHITE, Color.WHITE][localPlayer.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE]],
+        [Color.AQUA, Color.YELLOW, Color.LIME_GREEN, Color.ORANGE, Color.WHITE if isPregameGlitchActive else Color.TURQUOISE, Color.GRAY if isPregameGlitchActive else Color.PURPLE][localPlayer.pregameVoteList[PlayerMenuStatusField.CHALLENGE_VOTE]],
+        [Color.AQUA, null, Color.LIME_GREEN, Color.ORANGE, Color.WHITE, Color.WHITE][localPlayer.pregameVoteList[PlayerMenuStatusField.CHALLENGE_VOTE]],
+        [Color.AQUA, Color.YELLOW, Color.LIME_GREEN, Color.ORANGE, Color.WHITE, Color.WHITE][localPlayer.pregameVoteList[PlayerMenuStatusField.CHALLENGE_VOTE]],
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Zombie Mode
     startMenuZombieColorList = [Color.AQUA, Color.ORANGE, Color.RED, Color.PURPLE, Color.LIME_GREEN, Color.BLUE, Color.GRAY]
     hudText(
-        getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] in numbersList.slice(NL_MENU_VOTE_IDS_OFFSET, NL_MENU_VOTE_IDS_LEN)),
+        getAllPlayers().filter(lambda player: player.pregameVoteList[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] in numbersList.slice(NL_MENU_VOTE_IDS_OFFSET, NL_MENU_VOTE_IDS_LEN)),
         [
             "Zombie Mode: No Preference",
             "Zombie Mode: All Zombies",
@@ -115,7 +115,7 @@ rule "EFFECTS/TEXTS":
             "Zombie Mode: Zombie Shuffle",
             "Zombie Mode: Dinner Rush!",
             "Zombie Mode: Ham N' Hammer!"
-        ][localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
+        ][localPlayer.pregameVoteList[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
         [
             "",
             "Normal game featuring all zombie types",
@@ -124,19 +124,19 @@ rule "EFFECTS/TEXTS":
             "The zombie spawn rates twist and turn with wild abandon!",
             "Only zombies with mobility abilities will spawn",
             "Only Reinhardt {0} and Wrecking Ball {1} zombies will spawn".format(heroIcon(Hero.REINHARDT), heroIcon(Hero.WRECKING_BALL))
-        ][localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
-        "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_1)) if isVoting or localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] == 0 else [],
+        ][localPlayer.pregameVoteList[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
+        "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_1)) if isVoting or localPlayer.pregameVoteList[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] == 0 else [],
         HudPosition.LEFT,
         1,
-        startMenuZombieColorList[localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
-        startMenuZombieColorList[localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
-        startMenuZombieColorList[localPlayer.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
+        startMenuZombieColorList[localPlayer.pregameVoteList[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
+        startMenuZombieColorList[localPlayer.pregameVoteList[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
+        startMenuZombieColorList[localPlayer.pregameVoteList[PlayerMenuStatusField.ZOMBIE_MODE_VOTE]],
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Objective Type: arrays use raw IDs; 3, 4 and 8 have no standalone menu row.
     startMenuObjectiveColorList = [Color.AQUA, Color.ORANGE, Color.RED, null, null, Color.RED, Color.LIME_GREEN, rgb(12, 129, 132), null, Color.PURPLE]
     hudText(
-        getAllPlayers().filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] in [ObjectiveType.NO_PREFERENCE, ObjectiveType.SHOWDOWN, ObjectiveType.BOSSES, ObjectiveType.KILL_ZONE, ObjectiveType.ZOMBIE_EGG, ObjectiveType.SATELLITE_UPLINK, ObjectiveType.MIXED_OBJECTIVES]),
+        getAllPlayers().filter(lambda player: player.pregameVoteList[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] in [ObjectiveType.NO_PREFERENCE, ObjectiveType.SHOWDOWN, ObjectiveType.BOSSES, ObjectiveType.KILL_ZONE, ObjectiveType.ZOMBIE_EGG, ObjectiveType.SATELLITE_UPLINK, ObjectiveType.MIXED_OBJECTIVES]),
         [
             "Objective Type: No Preference",
             "Objective Type: Showdown {0}".format(abilityIconString(Hero.BRIGITTE, Button.ULTIMATE)),
@@ -148,7 +148,7 @@ rule "EFFECTS/TEXTS":
             "Objective Type: Satellite Uplink {0}".format(iconString(Icon.MOON)),
             null,
             "Objective Type: Mixed Objectives {0}".format(iconString(Icon.SPIRAL))
-        ][localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
+        ][localPlayer.pregameVoteList[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
         [
             "",
             "Players must contest a point against zombies",
@@ -160,13 +160,13 @@ rule "EFFECTS/TEXTS":
             "Survivors must repair terminals to communicate with a satellite",
             null,
             "Randomly assigns all types of objectives"
-        ][localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
-        "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if isVoting or localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == 0 else [],
+        ][localPlayer.pregameVoteList[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
+        "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if isVoting or localPlayer.pregameVoteList[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == 0 else [],
         HudPosition.LEFT,
         2,
-        startMenuObjectiveColorList[localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
-        startMenuObjectiveColorList[localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
-        startMenuObjectiveColorList[localPlayer.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
+        startMenuObjectiveColorList[localPlayer.pregameVoteList[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
+        startMenuObjectiveColorList[localPlayer.pregameVoteList[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
+        startMenuObjectiveColorList[localPlayer.pregameVoteList[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE]],
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Enhancement
@@ -238,9 +238,9 @@ rule "END VOTING":
     startRule(determineZombieMode)
     #Waits until votes have been counted
     waitUntil(not isVoting, 99999)
-    getPlayers(Team.1).playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] = challengeSetting
-    getPlayers(Team.1).playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] = zombieSetting
-    getPlayers(Team.1).playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] = objectiveTypeSetting
+    getPlayers(Team.1).pregameVoteList[PlayerMenuStatusField.CHALLENGE_VOTE] = challengeSetting
+    getPlayers(Team.1).pregameVoteList[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] = zombieSetting
+    getPlayers(Team.1).pregameVoteList[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] = objectiveTypeSetting
     bigMessage(getAllPlayers(), "Voting has ended!")
     startRule(setPrematchTimer)
 
@@ -268,7 +268,7 @@ def determineZombieMode():
     # tmp0: zombie-mode vote index, to count active players voting for each enabled mode.
     for tmp0 in range(1, len(zombieVoteList)):
         if zombieVoteList[tmp0][1]:
-            zombieVoteList[tmp0] = len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus and player.playerMenuStatus[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] == tmp0))
+            zombieVoteList[tmp0] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameVoteList[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] == tmp0))
         else:
             zombieVoteList[tmp0] = -1
     # tmp0: candidate zombie-mode index, to select the winner and resolve tied vote counts.
@@ -329,7 +329,7 @@ def determineChallenge():
     # tmp0: challenge vote index, to count active players voting for each enabled difficulty.
     for tmp0 in range(1, len(challengeVoteList)):
         if challengeVoteList[tmp0][1]:
-            challengeVoteList[tmp0] = len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus and player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] == tmp0))
+            challengeVoteList[tmp0] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameVoteList[PlayerMenuStatusField.CHALLENGE_VOTE] == tmp0))
         else:
             challengeVoteList[tmp0] = -1
     # tmp1: sum of difficulty levels weighted by votes, to calculate the average difficulty vote.
@@ -339,7 +339,7 @@ def determineChallenge():
         # tmp1: running weighted sum including this difficulty, for the average used to break ties.
         tmp1 += challengeVoteList[tmp0] * tmp0
     # tmp1: average difficulty vote, to choose the closer difficulty when vote counts tie.
-    tmp1 /= len(getPlayers(Team.1).filter(lambda player: player.playerMenuStatus[PlayerMenuStatusField.CHALLENGE_VOTE] > 0))
+    tmp1 /= len(getPlayers(Team.1).filter(lambda player: player.pregameVoteList[PlayerMenuStatusField.CHALLENGE_VOTE] > 0))
     # tmp0: candidate difficulty index, to choose the winner using votes and distance from tmp1.
     for tmp0 in range(1, len(challengeVoteList)):
         #If difficulty being compared has more votes than current difficulty
@@ -362,7 +362,7 @@ def determineObjectiveType():
     # tmp0: objective-type vote index, to count active players voting for each enabled objective type.
     for tmp0 in range(ObjectiveType.SHOWDOWN, len(objectiveTypeVoteList)):
         if objectiveTypeVoteList[tmp0][1]:
-            objectiveTypeVoteList[tmp0] = len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus and player.playerMenuStatus[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == tmp0))
+            objectiveTypeVoteList[tmp0] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameVoteList[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == tmp0))
         else:
             objectiveTypeVoteList[tmp0] = -1
     # tmp0: candidate objective-type index, to select the winner and resolve tied vote counts.

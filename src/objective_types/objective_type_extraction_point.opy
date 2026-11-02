@@ -35,9 +35,9 @@ rule "EXTRACTION ZONE INFECTION INCREASE":
     @Condition eventPlayer in objectivePlayerList == false
     
     wait(1, Wait.ABORT_WHEN_FALSE)
-    eventPlayer.infectionLvl++
-    if not eventPlayer.infected and eventPlayer.infectionLvl >= 1:
-        eventPlayer.infected = true
+    eventPlayer.infectionLevel++
+    if not eventPlayer.isInfected and eventPlayer.infectionLevel >= 1:
+        eventPlayer.isInfected = true
     #Kick players out of the spawn room if dome is closing in.
     while eventPlayer.isInSpawnRoom():
         eventPlayer.teleport(nearestWalkablePosition(eventPlayer.getPosition() + directionTowards(eventPlayer.getPosition(), objectivePositionList[0]) * 10))
@@ -53,22 +53,22 @@ rule "PLAYER EXTRACTION CONTROL":
     @Team 1
     @Condition eventPlayer in evacSurvivorList == true
     
-    eventPlayer.chase2 = eventPlayer.getPosition()
-    chaseAtRate(eventPlayer.chase2, eventPlayer.chase2 + vect(0, 200, 0), extractionFlightSpeed)
-    eventPlayer.startForcingPosition(eventPlayer.chase2)
+    eventPlayer.extractionFlightPosition = eventPlayer.getPosition()
+    chaseAtRate(eventPlayer.extractionFlightPosition, eventPlayer.extractionFlightPosition + vect(0, 200, 0), extractionFlightSpeed)
+    eventPlayer.startForcingPosition(eventPlayer.extractionFlightPosition)
     waitUntil(extractionFlightSpeed > 2, 99999)
-    chaseOverTime(eventPlayer.chase2, objectivePositionList[0] + vect(0, 50, 0) + directionFromAngles(360 / len(evacSurvivorList) * evacSurvivorList.index(eventPlayer), 0) * 3, 5)
+    chaseOverTime(eventPlayer.extractionFlightPosition, objectivePositionList[0] + vect(0, 50, 0) + directionFromAngles(360 / len(evacSurvivorList) * evacSurvivorList.index(eventPlayer), 0) * 3, 5)
     waitUntil(extractionFlightSpeed < 10, 99999)
-    chaseAtRate(eventPlayer.chase2, eventPlayer.chase2 + vect(0, 200, 0), extractionFlightSpeed)
-    eventPlayer.evacPos = eventPlayer.chase2 + directionTowards(objectivePositionList[0], extractionFlightDestination) * 700
+    chaseAtRate(eventPlayer.extractionFlightPosition, eventPlayer.extractionFlightPosition + vect(0, 200, 0), extractionFlightSpeed)
+    eventPlayer.extractionDestination = eventPlayer.extractionFlightPosition + directionTowards(objectivePositionList[0], extractionFlightDestination) * 700
     waitUntil(extractionFlightSpeed > 2, 99999)
-    chaseAtRate(eventPlayer.chase2, eventPlayer.evacPos, extractionFlightSpeed)
+    chaseAtRate(eventPlayer.extractionFlightPosition, eventPlayer.extractionDestination, extractionFlightSpeed)
 
 
 rule "WIN/LOSS CONDITIONS":
     @Condition isObjectiveComplete == false
     @Condition isGameplayActive == true
-    @Condition (len(objectivePositionList) == 1 and (len(objectivePlayerList) == (len(getPlayers(Team.1).filter(lambda player: player.hasSpawned() and player.deathTimer > 0 and not player.afk)))) or (len(playerTargetList) == 0 or extractionZoneRad <= 0)) == true
+    @Condition (len(objectivePositionList) == 1 and (len(objectivePlayerList) == (len(getPlayers(Team.1).filter(lambda player: player.hasSpawned() and player.rescueTimeRemaining > 0 and not player.isAfk)))) or (len(playerTargetList) == 0 or extractionZoneRad <= 0)) == true
     
     if (len(playerTargetList) == 0 or playerTargetList == []) and getPlayersOnHero(Hero.ANRAN, Team.1).any(lambda player: player.getUltCharge() == 100):
         wait(5.5, Wait.ABORT_WHEN_FALSE)

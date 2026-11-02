@@ -14,7 +14,7 @@
 
 «Меню» заканчивается выключением `isPregameSetup`. **Генерация миссий идёт после меню, до `isGameplayActive = true`**. «Финал» включает поражение на любом задании. Префикс задания обозначает назначение состояния, а не гарантию прекращения всех его обработчиков сразу при переключении типа.
 
-У булевых ролей префикс `is`, у постоянных массивов суффикс `List`. Для смешанных слотов сохранены нейтральные имена: `tmp0..2`, `phaseSlot0..10`, `objectiveProgressSlot`, `objectiveMotionSlot`, `menuFinaleMotionSlot` и `attackSpawnRooms`. Суффикс List у них скрывал бы часть допустимых типов. Глобальный `isVoting` и `player.isVoting` — отдельные значения; индекс обращений исключает одноимённые поля игрока.
+У булевых ролей префикс `is`, у постоянных массивов суффикс `List`. Для смешанных слотов сохранены нейтральные имена: `tmp0..2`, `phaseSlot0..10`, `objectiveProgressSlot`, `objectiveMotionSlot`, `menuFinaleMotionSlot` и `attackSpawnRooms`. Суффикс List у них скрывал бы часть допустимых типов. Глобальный `isVoting` и `player.isPregameVoting` — отдельные значения. [Имена и группы переменных игрока](player-variables-review-2026-11-02.md) актуализированы отдельно; физические 108 слотов игрока и вся логика сохранены.
 
 ## Имена ролей вместо исторических общих имён
 
@@ -32,7 +32,7 @@
 | `goalPost` | `showdownNextCheckpoint` / `biomorphingNextCheckpoint`. |
 | `queuedGoalList` | `showdownContestingZombieList` / `biomorphingGoalQueueList`. |
 | `survivorToRescue` | `rescueSurvivor` / `satelliteLaserTarget`. |
-| Глобальный `chase1` | `pregameCountdown` / `nukeProjectilePosition`; одноимённое поле игрока `player.chase1` не переименовано. |
+| Глобальный `chase1` | `pregameCountdown` / `nukeProjectilePosition`; прежнее поле `player.chase1` отдельно представлено `actorMotionSlot1` с собственными ролями. |
 | `evacCount` | `finaleExplosionIndex`: взрывы и при победе, и при поражении. |
 | `bossStateList` в задании | `bossesStateList` / `zombieEggStateList`; общие боевые правила используют `bossStateList`. |
 
@@ -85,7 +85,7 @@
 | [`isSpecialGameMode`](global-variable-references-2026-11-01.md#isspecialgamemode) | Булево | Инициализация → бой; GS, GM, PM, GG, P | Постоянный признак особой обработки TDM/CTF/PUSH/CONTROL, независимый от предматчевой фазы и objective type. | Сохранить кеш определения базового режима. Значение нужно и в меню, и в бою. |
 | [`isGameplayActive`](global-variable-references-2026-11-01.md#isgameplayactive) | Булево | Весь жизненный цикл; большинство модулей | Активная игровая часть, начинается после генерации и выключается при исходе матча. | Сохранить; отличается от `isGameInProgress()` и завершения меню. |
 | [`isOvertimeActive`](global-variable-references-2026-11-01.md#isovertimeactive) | Булево | Конец таймера; GG | Однократность включения овертайма/телепорта зомби на обычных картах. | Полезный флаг, хотя всего две строки обращений. Удаление допускает повторные срабатывания при изменениях доступности зомби. |
-| [`isVoting`](global-variable-references-2026-11-01.md#isvoting) | Булево | Предматчевое голосование; S, GS, GM, PM | Глобальный флаг голосования; отдельное поле игрока isVoting показывает участие конкретного игрока. | Резерв после меню, но сначала исключить поздние вызовы setPrematchTimer. Общий флаг и одноимённые поля игроков — разные данные. |
+| [`isVoting`](global-variable-references-2026-11-01.md#isvoting) | Булево | Предматчевое голосование; S, GS, GM, PM | Глобальный флаг голосования; поле игрока isPregameVoting показывает участие конкретного игрока. | Резерв после меню, но сначала исключить поздние вызовы setPrematchTimer. Общий флаг и поле игрока — разные данные. |
 | [`difficultySetting`](global-variable-references-2026-11-01.md#difficultysetting) | Число | Меню, затем весь бой; S, PM, Showdown, P, B | Масштаб сложности по числу игроков; используется характеристиками и боевыми правилами. | Сохранить кеш; не путать с результатом голосования `challengeSetting`. |
 | [`challengeSetting`](global-variable-references-2026-11-01.md#challengesetting) | Число | Меню → бой; GM, S, GG, P | Выбранный Challenge, влияет на урон/абилити/характеристики/возрождение. | Сохранить результат голосования. |
 | [`zombieSetting`](global-variable-references-2026-11-01.md#zombiesetting) | Число | Меню → бой; GM, S, GG, Bosses | Выбранный режим состава/вероятностей зомби, также Shuffle и выбор боссов. | Не только меню: сохранить результат. |
@@ -123,7 +123,7 @@
 | [`objectivePositionList`](global-variable-references-2026-11-01.md#objectivepositionlist) | Массив | Генерация → весь бой/финал; S, GM, задания, P, B, Z, SD | Очередь позиций миссий; первый элемент — текущая, последний — эвакуация. | Сохранить. Нельзя заменить одной текущей позицией без потери очереди. |
 | [`objectiveTypeList`](global-variable-references-2026-11-01.md#objectivetypelist) | Массив | Генерация → бой; S, GM, задания, P, B | Очередь типов; текущий тип читается напрямую как `objectiveTypeList[0]`, удаление первого элемента переключает задание. | Сохранить; промежуточный макрос для текущего типа удалён, результат компиляции не изменился. |
 | [`objectiveSpacingList`](global-variable-references-2026-11-01.md#objectivespacinglist) | Массив | Конец построения сетки → генерация заданий; GS, GM | Две вычисленные дистанции между целями по размеру сетки. | Освобождается после генерации, а не при исчезновении меню. Возможен поздний reuse; учитывать отдельную корутину generateMapGrid. |
-| [`objectiveValue`](global-variable-references-2026-11-01.md#objectivevalue) | Число | Обновление HUD/значков задания; S, P | Снимок типа, опубликованный при обновлении глобальных сущностей; сравнивается с player `objectiveValue`. | Сохранить. Замена на прямое чтение `objectiveTypeList[0]` меняет момент обновления относительно ожиданий и удаления HUD. |
+| [`objectiveValue`](global-variable-references-2026-11-01.md#objectivevalue) | Число | Обновление HUD/значков задания; S, P | Снимок типа, опубликованный при обновлении глобальных сущностей; сравнивается с player `objectiveTypeSnapshot`. | Сохранить. Замена на прямое чтение `objectiveTypeList[0]` меняет момент обновления относительно ожиданий и удаления HUD. |
 | [`objectiveProgressSlot`](global-variable-references-2026-11-01.md#objectiveprogressslot) | Смешанный | Showdown, Biomorphing, Kill Zone, Satellite; S, B | Число для Showdown/Biomorphing/Kill Zone или массив трёх процентов терминалов Satellite. Это намеренно смешанный слот. | Уже переиспользуется между типами. Сохранить модель, обеспечить корректную инициализацию типа значения. |
 | [`objectiveRad`](global-variable-references-2026-11-01.md#objectiverad) | Число | Практически весь бой; S, задания, B, Z | Радиус текущего задания: 0/3/3.5/10/20/30 и изменяемый радиус Showdown. | Уже общий. Это не константа; также является целью `chase`. |
 | [`objectiveDescription`](global-variable-references-2026-11-01.md#objectivedescription) | Строка | Весь бой; S, GS, GG | Текст текущей задачи в общей верхней строке. | Сохранить; подстановка выражения выбора типа утяжелит постоянную переоценку. |
@@ -309,6 +309,8 @@
 Упаковка часто читаемых кешей/таблиц характеристик в один большой массив также сократит слоты, но добавит индексирование. После внедрения одиннадцати передач кеши позиций и таблицы зомби сохранены; упаковка остаётся отдельным компромиссом для дальнейшей работы.
 
 ## Приоритет и проверка при внедрении
+
+После переименования полей игрока `verify-phase-slots.cjs` нормализует их имена отдельно от глобальных. Для `debug.opy` в исходной фазовой базе используется версия из коммита `9185ddd9b8bc76852ffacdafbfde932a3970f152`: настройка усилений хоста была изменена и закоммичена отдельно от логики слотов. Это исключение записано в `baselineOverrides` результата проверки. Сам рефакторинг playervar сравнивается целиком с этим коммитом без исключений.
 
 Статически выполнено: проверка границ передачи и инициализации новых ролей; сравнение всех 231 скомпилированного правила; сборка через обычные `#!include` и обновление локального `src/main.ws.txt`; проверка времени жизни `tmp`; пересоздание индекса с разрешением алиасов и компиляционных проб. [Результат сравнения](phase-slots-validation.json) содержит исходную ревизию, обе базы, пары и хеши исходников. Воспроизведение: `node analysis/verify-phase-slots.cjs` и `node analysis/verify-global-temporaries.cjs`.
 

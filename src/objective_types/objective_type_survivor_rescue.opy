@@ -32,33 +32,33 @@ rule "INITIALIZE SURVIVOR TO BE RESCUED":
     @Condition rescueSurvivor == eventPlayer
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
-    rescueSurvivor.path = []
-    rescueSurvivor.startPos = rescueSurvivor.getPosition()
-    rescueSurvivor.botTempValue = false
-    eventPlayer.botFollowTarget = null
-    eventPlayer.movementSpeed = 1
+    rescueSurvivor.rescuePathList = []
+    rescueSurvivor.rescueStartPosition = rescueSurvivor.getPosition()
+    rescueSurvivor.rescueIsExtracting = false
+    eventPlayer.rescueLeader = null
+    eventPlayer.movementSpeedScale = 1
     eventPlayer.enhancementId = Enhancement.HITCHHIKER
-    eventPlayer.enhancementValue1 = 0
-    eventPlayer.enhancementValue2 = false
+    eventPlayer.enhancementHitchhikerCarrier = 0
+    eventPlayer.enhancementHitchhikerPassengerPoolId = false
     rescueSurvivor.setStatusEffect(null, Status.UNKILLABLE, 99999)
     rescueSurvivor.setHealingReceived(110)
     #Objective/Survivor distance
-    createInWorldText(getAllPlayers().filter(lambda _: not eventPlayer.botTempValue and distance(localPlayer.getPosition(), objectivePositionList[0]) > 5), "Distance: {0}m".format(distance(localPlayer.getPosition(), eventPlayer.getPosition() if distance(eventPlayer.getPosition(), localPlayer.getPosition()) > objectiveRad else objectivePositionList[0])), eventPlayer.getPosition() if distance(eventPlayer.getPosition(), localPlayer.getPosition()) > objectiveRad else objectivePositionList[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.VIOLET, SpecVisibility.NEVER)
+    createInWorldText(getAllPlayers().filter(lambda _: not eventPlayer.rescueIsExtracting and distance(localPlayer.getPosition(), objectivePositionList[0]) > 5), "Distance: {0}m".format(distance(localPlayer.getPosition(), eventPlayer.getPosition() if distance(eventPlayer.getPosition(), localPlayer.getPosition()) > objectiveRad else objectivePositionList[0])), eventPlayer.getPosition() if distance(eventPlayer.getPosition(), localPlayer.getPosition()) > objectiveRad else objectivePositionList[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.VIOLET, SpecVisibility.NEVER)
     #Survivor rescue progress bar
-    progressBarHud(getAllPlayers(), 100 if eventPlayer.botTempValue else ((distance(vect(objectivePositionList[0].x, eventPlayer.startPos.y, objectivePositionList[0].z), eventPlayer.startPos) - distance(eventPlayer.getPosition(), vect(objectivePositionList[0].x, eventPlayer.getPosition().y, objectivePositionList[0].z))) / distance(vect(objectivePositionList[0].x, eventPlayer.startPos.y, objectivePositionList[0].z), eventPlayer.startPos)) * 100, "Survivor Rescue Progress", HudPosition.TOP, 2, Color.VIOLET, Color.VIOLET, ProgressHudReeval.VISIBILITY_AND_VALUES)
+    progressBarHud(getAllPlayers(), 100 if eventPlayer.rescueIsExtracting else ((distance(vect(objectivePositionList[0].x, eventPlayer.rescueStartPosition.y, objectivePositionList[0].z), eventPlayer.rescueStartPosition) - distance(eventPlayer.getPosition(), vect(objectivePositionList[0].x, eventPlayer.getPosition().y, objectivePositionList[0].z))) / distance(vect(objectivePositionList[0].x, eventPlayer.rescueStartPosition.y, objectivePositionList[0].z), eventPlayer.rescueStartPosition)) * 100, "Survivor Rescue Progress", HudPosition.TOP, 2, Color.VIOLET, Color.VIOLET, ProgressHudReeval.VISIBILITY_AND_VALUES)
     #Survivor icon
-    createInWorldText(getAllPlayers(), eventPlayer.botTempvalue2 if eventPlayer.botTempvalue2 else eventPlayer.randVal, eventPlayer, 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.ALWAYS)
-    eventPlayer.randVal = iconString(Icon.HALO)
+    createInWorldText(getAllPlayers(), eventPlayer.rescueFollowMessage if eventPlayer.rescueFollowMessage else eventPlayer.rescueMoodIcon, eventPlayer, 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.ALWAYS)
+    eventPlayer.rescueMoodIcon = iconString(Icon.HALO)
     #Survivor activation ring
-    createEffect(getAllPlayers(), Effect.RING, Color.VIOLET if eventPlayer.botFollowTarget != null else Color.RED, eventPlayer, objectiveRad)
+    createEffect(getAllPlayers(), Effect.RING, Color.VIOLET if eventPlayer.rescueLeader != null else Color.RED, eventPlayer, objectiveRad)
     #Zombie slowing ring
     createEffect(getAllPlayers().filter(lambda _: eventPlayer.getNormalizedHealth() < 1), Effect.BAD_AURA, Color.PURPLE, eventPlayer, 1)
     # tmp0: survivor path-marker index, to create rings every three path points using evalOnce.
     for tmp0 in range(10):
         #Path Markers
-        createEffect(getAllPlayers().filter(lambda _: len(eventPlayer.path) > evalOnce(tmp0 * 3)), Effect.RING, Color.VIOLET, eventPlayer.path[evalOnce(tmp0) * 3], 0.2)
-    eventPlayer.startFacing(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botFollowTarget.getEyePosition())), 80 if eventPlayer.botFollowTarget == null else verticalAngleOfDirection(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botFollowTarget.getEyePosition()))), 100)
-    eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), (eventPlayer.path.filter(lambda x: distance(eventPlayer.getPosition(), x) < 2)).last() if eventPlayer.path.any(lambda x: distance(eventPlayer.getPosition(), x) < 2) else eventPlayer.botFollowTarget.getPosition()), 0 if eventPlayer.botFollowTarget == null or distance(eventPlayer.getPosition(), eventPlayer.botFollowTarget.getPosition()) < 1.5 else eventPlayer.botThrottleSpeed, Relativity.TO_WORLD)
+        createEffect(getAllPlayers().filter(lambda _: len(eventPlayer.rescuePathList) > evalOnce(tmp0 * 3)), Effect.RING, Color.VIOLET, eventPlayer.rescuePathList[evalOnce(tmp0) * 3], 0.2)
+    eventPlayer.startFacing(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getEyePosition(), eventPlayer.rescueLeader.getEyePosition())), 80 if eventPlayer.rescueLeader == null else verticalAngleOfDirection(directionTowards(eventPlayer.getEyePosition(), eventPlayer.rescueLeader.getEyePosition()))), 100)
+    eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), (eventPlayer.rescuePathList.filter(lambda x: distance(eventPlayer.getPosition(), x) < 2)).last() if eventPlayer.rescuePathList.any(lambda x: distance(eventPlayer.getPosition(), x) < 2) else eventPlayer.rescueLeader.getPosition()), 0 if eventPlayer.rescueLeader == null or distance(eventPlayer.getPosition(), eventPlayer.rescueLeader.getPosition()) < 1.5 else eventPlayer.rescueThrottleSpeed, Relativity.TO_WORLD)
 
 
 rule "SURVIVOR TO BE RESCUED DIES":
@@ -76,18 +76,18 @@ rule "SURVIVOR TO BE RESCUED DIES":
 
 rule "SURVIVOR FOLLOW TARGET":
     @Condition objectiveTypeList[0] == ObjectiveType.SURVIVOR_RESCUE
-    @Condition rescueSurvivor.botTempValue == false
+    @Condition rescueSurvivor.rescueIsExtracting == false
     @Condition rescueSurvivor.hasSpawned() == true
     @Condition rescueSurvivor.getHealth() > 1
-    @Condition (playerTargetList.filter(lambda x: x != rescueSurvivor and not x.invisible).any(lambda x: distance(rescueSurvivor.getPosition(), x.getPosition()) < objectiveRad)) == true
+    @Condition (playerTargetList.filter(lambda x: x != rescueSurvivor and not x.invisibilityCount).any(lambda x: distance(rescueSurvivor.getPosition(), x.getPosition()) < objectiveRad)) == true
     @Condition distance(rescueSurvivor.getPosition(), objectivePositionList[0]) >= 5
     
     rescueSurvivor.clearStatusEffect(Status.PHASED_OUT)
-    rescueSurvivor.randVal = iconString(Icon.SAD)
-    rescueSurvivor.botThrottleSpeed = rescueSurvivor.getNormalizedHealth() * 0.7
-    rescueSurvivor.potentialTargets = playerTargetList.filter(lambda x: x != rescueSurvivor and not x.invisible and distance(rescueSurvivor.getPosition(), x.getPosition()) < objectiveRad)
-    if rescueSurvivor.botFollowTarget == null or not rescueSurvivor.botFollowTarget in rescueSurvivor.potentialTargets:
-        rescueSurvivor.botFollowTarget = (sorted(playerTargetList.filter(lambda x: distance(rescueSurvivor.getPosition(), x.getPosition()) < objectiveRad), lambda x: distance(x.getPosition(), objectivePositionList[0])))[0]
+    rescueSurvivor.rescueMoodIcon = iconString(Icon.SAD)
+    rescueSurvivor.rescueThrottleSpeed = rescueSurvivor.getNormalizedHealth() * 0.7
+    rescueSurvivor.rescuePotentialLeaderList = playerTargetList.filter(lambda x: x != rescueSurvivor and not x.invisibilityCount and distance(rescueSurvivor.getPosition(), x.getPosition()) < objectiveRad)
+    if rescueSurvivor.rescueLeader == null or not rescueSurvivor.rescueLeader in rescueSurvivor.rescuePotentialLeaderList:
+        rescueSurvivor.rescueLeader = (sorted(playerTargetList.filter(lambda x: distance(rescueSurvivor.getPosition(), x.getPosition()) < objectiveRad), lambda x: distance(x.getPosition(), objectivePositionList[0])))[0]
     if not rescueSurvivor in playerTargetList:
         #Add surivor to player target list
         playerTargetList.append(rescueSurvivor)
@@ -99,10 +99,10 @@ rule "SURVIVOR FOLLOW TARGET":
     playerTargetList.remove(rescueSurvivor)
     #Reset objective radius
     objectiveRad = rescueSavedRadius
-    rescueSurvivor.botFollowTarget = null
-    rescueSurvivor.potentialTargets = []
+    rescueSurvivor.rescueLeader = null
+    rescueSurvivor.rescuePotentialLeaderList = []
     if rescueSurvivor.getHealth() <= 1:
-        rescueSurvivor.randVal = iconString(Icon.DIZZY)
+        rescueSurvivor.rescueMoodIcon = iconString(Icon.DIZZY)
         rescueSurvivor.setStatusEffect(null, Status.KNOCKED_DOWN, 99999)
         rescueSurvivor.setStatusEffect(null, Status.PHASED_OUT, 99999)
         waitUntil(rescueSurvivor.getNormalizedHealth() > 0.75, 20)
@@ -113,12 +113,12 @@ rule "SURVIVOR FOLLOW TARGET":
 
 rule "CREATE PATH":
     @Condition objectiveTypeList[0] == ObjectiveType.SURVIVOR_RESCUE
-    @Condition rescueSurvivor.botFollowTarget != null
-    @Condition rescueSurvivor.botThrottleSpeed > 0
-    @Condition rescueSurvivor.botFollowTarget.getAltitude() <= 1.5
-    @Condition (len(rescueSurvivor.path) == 0 or distance(rescueSurvivor.botFollowTarget.getPosition(), rescueSurvivor.path.last()) > 1) == true
+    @Condition rescueSurvivor.rescueLeader != null
+    @Condition rescueSurvivor.rescueThrottleSpeed > 0
+    @Condition rescueSurvivor.rescueLeader.getAltitude() <= 1.5
+    @Condition (len(rescueSurvivor.rescuePathList) == 0 or distance(rescueSurvivor.rescueLeader.getPosition(), rescueSurvivor.rescuePathList.last()) > 1) == true
     
-    rescueSurvivor.path.append(rescueSurvivor.botFollowTarget.getPosition())
+    rescueSurvivor.rescuePathList.append(rescueSurvivor.rescueLeader.getPosition())
     wait(0.25, Wait.RESTART_WHEN_TRUE)
     if ruleCondition:
         loop()
@@ -126,10 +126,10 @@ rule "CREATE PATH":
 
 rule "DELETE PATH":
     @Condition objectiveTypeList[0] == ObjectiveType.SURVIVOR_RESCUE
-    @Condition (rescueSurvivor.path.any(lambda x: distance(rescueSurvivor.getPosition(), vect(x.x, rescueSurvivor.getPosition().y, x.z)) < 0.25 and abs(rescueSurvivor.getPosition().y - x.y) < 2)) == true
+    @Condition (rescueSurvivor.rescuePathList.any(lambda x: distance(rescueSurvivor.getPosition(), vect(x.x, rescueSurvivor.getPosition().y, x.z)) < 0.25 and abs(rescueSurvivor.getPosition().y - x.y) < 2)) == true
     
-    rescueSurvivor.telePos = rescueSurvivor.path.index(sorted(rescueSurvivor.path, lambda x: distance(rescueSurvivor.getPosition(), x))[0])
-    rescueSurvivor.path.remove(rescueSurvivor.path.filter(lambda _, i: i <= rescueSurvivor.telePos))
+    rescueSurvivor.rescuePathIndex = rescueSurvivor.rescuePathList.index(sorted(rescueSurvivor.rescuePathList, lambda x: distance(rescueSurvivor.getPosition(), x))[0])
+    rescueSurvivor.rescuePathList.remove(rescueSurvivor.rescuePathList.filter(lambda _, i: i <= rescueSurvivor.rescuePathIndex))
     wait(0.25, Wait.RESTART_WHEN_TRUE)
     if ruleCondition:
         loop()
@@ -137,29 +137,29 @@ rule "DELETE PATH":
 
 rule "SURVIVOR FOLLOW TARGET LETS GO":
     @Condition objectiveTypeList[0] == ObjectiveType.SURVIVOR_RESCUE
-    @Condition rescueSurvivor.botFollowTarget != null
-    @Condition rescueSurvivor.botFollowTarget.isCommunicating(Comms.GOODBYE) == true
+    @Condition rescueSurvivor.rescueLeader != null
+    @Condition rescueSurvivor.rescueLeader.isCommunicating(Comms.GOODBYE) == true
     
-    rescueSurvivor.botFollowTarget = null
+    rescueSurvivor.rescueLeader = null
 
 
 rule "PLAYER SAYS GROUP UP TO SURVIVOR":
     @Condition objectiveTypeList[0] == ObjectiveType.SURVIVOR_RESCUE
-    @Condition rescueSurvivor.botFollowTarget != null
-    @Condition (rescueSurvivor.potentialTargets.any(lambda x: x.isCommunicating(Comms.GROUP_UP) and distance(x.getPosition(), rescueSurvivor.getPosition()) < 12)) == true
+    @Condition rescueSurvivor.rescueLeader != null
+    @Condition (rescueSurvivor.rescuePotentialLeaderList.any(lambda x: x.isCommunicating(Comms.GROUP_UP) and distance(x.getPosition(), rescueSurvivor.getPosition()) < 12)) == true
     
-    rescueSurvivor.botFollowTarget = (sorted(rescueSurvivor.potentialTargets.filter(lambda x: x.isCommunicating(Comms.GROUP_UP) and distance(x.getPosition(), rescueSurvivor.getPosition()) < 12), lambda x: distance(x.getPosition(), rescueSurvivor.getPosition())))[0]
-    rescueSurvivor.botTempvalue2 = "{0} {1}".format(heroIcon(rescueSurvivor.botFollowTarget.getHero()), iconString(Icon.QUESTION_MARK))
-    rescueSurvivor.path = []
+    rescueSurvivor.rescueLeader = (sorted(rescueSurvivor.rescuePotentialLeaderList.filter(lambda x: x.isCommunicating(Comms.GROUP_UP) and distance(x.getPosition(), rescueSurvivor.getPosition()) < 12), lambda x: distance(x.getPosition(), rescueSurvivor.getPosition())))[0]
+    rescueSurvivor.rescueFollowMessage = "{0} {1}".format(heroIcon(rescueSurvivor.rescueLeader.getHero()), iconString(Icon.QUESTION_MARK))
+    rescueSurvivor.rescuePathList = []
     wait(3)
-    rescueSurvivor.botTempvalue2 = null
+    rescueSurvivor.rescueFollowMessage = null
 
 
 rule "SURVIVOR JUMP":
     @Condition objectiveTypeList[0] == ObjectiveType.SURVIVOR_RESCUE
     @Condition rescueSurvivor.isOnGround() == true
     @Condition rescueSurvivor.getThrottle() != vect(0, 0, 0)
-    @Condition rescueSurvivor.getHorizontalSpeed() < rescueSurvivor.botThrottleSpeed * 3.5
+    @Condition rescueSurvivor.getHorizontalSpeed() < rescueSurvivor.rescueThrottleSpeed * 3.5
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     rescueSurvivor.forceButtonPress(Button.JUMP)
@@ -173,18 +173,18 @@ rule "SURVIVOR REACHES EXTRACTION SITE":
     @Condition distance(rescueSurvivor.getPosition(), objectivePositionList[0]) < 5
     
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, null, rescueSurvivor, 200)
-    rescueSurvivor.randVal = random.choice([iconString(Icon.HAPPY), iconString(Icon.HEART)])
+    rescueSurvivor.rescueMoodIcon = random.choice([iconString(Icon.HAPPY), iconString(Icon.HEART)])
     rescueSurvivor.startThrottleInDirection(directionTowards(rescueSurvivor.getPosition(), objectivePositionList[0]), 0.75 if distance(rescueSurvivor.getPosition(), objectivePositionList[0]) > 1 else 0, Relativity.TO_WORLD)
     rescueSurvivor.startFacing(vect(0, 1, 0), 100)
     wait(1)
-    rescueSurvivor.botTempValue = true
-    rescueSurvivor.path = []
-    rescueSurvivor.chase1 = rescueSurvivor.getPosition()
+    rescueSurvivor.rescueIsExtracting = true
+    rescueSurvivor.rescuePathList = []
+    rescueSurvivor.rescueExtractionPosition = rescueSurvivor.getPosition()
     wait()
-    rescueSurvivor.startForcingPosition(rescueSurvivor.chase1)
+    rescueSurvivor.startForcingPosition(rescueSurvivor.rescueExtractionPosition)
     wait(0.5)
-    chaseAtRate(rescueSurvivor.chase1, rescueSurvivor.getPosition() + vect(0, 100, 0), 3, ChaseRateReeval.NONE)
+    chaseAtRate(rescueSurvivor.rescueExtractionPosition, rescueSurvivor.getPosition() + vect(0, 100, 0), 3, ChaseRateReeval.NONE)
     wait(2)
-    chaseAtRate(rescueSurvivor.chase1, rescueSurvivor.getPosition() + vect(0, 100, 0), 10, ChaseRateReeval.NONE)
+    chaseAtRate(rescueSurvivor.rescueExtractionPosition, rescueSurvivor.getPosition() + vect(0, 100, 0), 10, ChaseRateReeval.NONE)
     wait(3)
     destroyDummy(Team.1, rescueSurvivor.getSlot())

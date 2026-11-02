@@ -7,15 +7,15 @@ rule "SPAWN BOSS":
     @Condition objectiveTypeList[0] == ObjectiveType.BOSSES
     @Condition isObjectiveComplete == false
     @Condition len(bossesStateList.filter(lambda x: entityExists(x))) == 0
-    @Condition (getLivingPlayers(Team.2).any(lambda player: player.hasSpawned() and not player.teleporting and player.botTarget == null)) == true
+    @Condition (getLivingPlayers(Team.2).any(lambda player: player.hasSpawned() and not player.botIsTeleporting and player.botTarget == null)) == true
     #Keeps amount of different bots within the max limit.
     @Condition len(botHeroList.filter(lambda x: getNumberOfHeroes(x, Team.2) > 0)) < (uniqueSkinCap - (getNumberOfSlots(Team.1) if getNumberOfPlayers(Team.1) <= getNumberOfSlots(Team.1) else getNumberOfPlayers(Team.1)))
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
-    bossesStateList[0] = (getLivingPlayers(Team.2).filter(lambda player: player.hasSpawned() and not miniBossList[player] and not player.teleporting and player.botTarget == null))[0]
+    bossesStateList[0] = (getLivingPlayers(Team.2).filter(lambda player: player.hasSpawned() and not miniBossList[player] and not player.botIsTeleporting and player.botTarget == null))[0]
     bossesStateList.teleport(dummyHoldingPositionConst)
-    waitUntil(bossesStateList[0].initializing, 3)
-    waitUntil(not bossesStateList[0].initializing, 5)
+    waitUntil(bossesStateList[0].botIsInitializing, 3)
+    waitUntil(not bossesStateList[0].botIsInitializing, 5)
     bossesStateList.teleport(objectivePositionList[0])
     while bossesStateList.any(lambda x: x.isDead()):
         bossesStateList.resurrect()
@@ -34,8 +34,8 @@ rule "BOT BECOMES BOSS":
     @Condition eventPlayer in bossesStateList == true
     
     miniBossList.remove(eventPlayer)
-    if eventPlayer.attached:
-        eventPlayer.attached = false
+    if eventPlayer.botIsAttached:
+        eventPlayer.botIsAttached = false
         eventPlayer.detach()
     eventPlayer.setInvisibility(Invis.NONE)
     if len(bossesAvailableHeroList) == 0:
@@ -56,18 +56,18 @@ rule "BOT BECOMES BOSS":
     #Boss throttle speed
     eventPlayer.botThrottleSpeed = 0.9 if eventPlayer.getHero() == Hero.REINHARDT else 0.65
     #Health pool size as boss
-    eventPlayer.health = 15000
-    eventPlayer.bossHealth = eventPlayer.health
-    eventPlayer.size = createWorkshopSettingFloat("Zombies", "Boss Size", 2.5, 0, 20)
-    eventPlayer.startScalingSize(eventPlayer.size + 1 if eventPlayer.getHero() == Hero.EMRE else eventPlayer.size, false)
+    eventPlayer.botBaseHealth = 15000
+    eventPlayer.botBossHealth = eventPlayer.botBaseHealth
+    eventPlayer.sizeScale = createWorkshopSettingFloat("Zombies", "Boss Size", 2.5, 0, 20)
+    eventPlayer.startScalingSize(eventPlayer.sizeScale + 1 if eventPlayer.getHero() == Hero.EMRE else eventPlayer.sizeScale, false)
     #Scale zombie voice lines with size
-    eventPlayer.startModifyingVoicelinePitch(0.5 + (1 / (eventPlayer.size + 1)), false)
+    eventPlayer.startModifyingVoicelinePitch(0.5 + (1 / (eventPlayer.sizeScale + 1)), false)
     eventPlayer.stopAllDamageOverTime()
     eventPlayer.setHealth(eventPlayer.getMaxHealth())
     eventPlayer.setStatusEffect(null, Status.ROOTED, 99999)
     eventPlayer.disableEnvironmentCollision(false)
-    eventPlayer.wallCollisionEnabled = false
-    eventPlayer.potentialTargets = []
+    eventPlayer.botIsWallCollisionEnabled = false
+    eventPlayer.botPotentialTargetList = []
     eventPlayer.stopForcingButton(Button.SECONDARY_FIRE)
     eventPlayer.setKnockbackReceived(50)
     eventPlayer.setHealingReceived(0)
@@ -75,31 +75,31 @@ rule "BOT BECOMES BOSS":
     bossesStateList[1] = distance(eventPlayer.getPosition(), eventPlayer.getEyePosition())
     waitUntil(eventPlayer.botTarget == null, 1)
     wait(0.25)
-    waitUntil(eventPlayer.botTarget != null or eventPlayer.getHealth() < eventPlayer.health, 99999)
+    waitUntil(eventPlayer.botTarget != null or eventPlayer.getHealth() < eventPlayer.botBaseHealth, 99999)
     eventPlayer.clearStatusEffect(Status.ROOTED)
     bossesStateList[1] = distance(eventPlayer.getPosition(), eventPlayer.getEyePosition())
     wait(1)
     eventPlayer.enableEnvironmentCollision()
-    eventPlayer.wallCollisionEnabled = true
+    eventPlayer.botIsWallCollisionEnabled = true
 
 
 rule "BOSS STUCK":
     @Event eachPlayer
     @Team 2
     @Condition objectiveTypeList[0] == ObjectiveType.BOSSES
-    @Condition eventPlayer.wallCollisionEnabled == true
-    @Condition eventPlayer.canWallPhase == true
+    @Condition eventPlayer.botIsWallCollisionEnabled == true
+    @Condition eventPlayer.botIsWallPhaseAllowed == true
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer.isCrouching() == false
     @Condition eventPlayer in bossesStateList == true
     @Condition distance(eventPlayer.getPosition(), eventPlayer.getEyePosition()) < bossesStateList[1] - 0.25
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
-    eventPlayer.wallCollisionEnabled = false
+    eventPlayer.botIsWallCollisionEnabled = false
     eventPlayer.disableEnvironmentCollision(false)
     wait(3)
     eventPlayer.enableEnvironmentCollision()
-    eventPlayer.wallCollisionEnabled = true
+    eventPlayer.botIsWallCollisionEnabled = true
     if ruleCondition:
         loop()
 
@@ -111,8 +111,8 @@ rule "BOSS HEALTH CONTROL (ALL BOSS OBJECTIVES)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer in bossesStateList == true
     
-    eventPlayer.bossHealth = eventPlayer.getHealth() + eventDamage - 1000
-    eventPlayer.setHealth(eventPlayer.bossHealth)
+    eventPlayer.botBossHealth = eventPlayer.getHealth() + eventDamage - 1000
+    eventPlayer.setHealth(eventPlayer.botBossHealth)
 
 
 rule "BOSS DIES (ALL BOSS OBJECTIVES)":
@@ -124,41 +124,41 @@ rule "BOSS DIES (ALL BOSS OBJECTIVES)":
     if eventWasEnvironment:
         eventPlayer.stopAllDamageOverTime()
         if attacker.getTeam() == getOppositeTeam(eventPlayer.getTeam()):
-            eventPlayer.bossHealth = eventDamage - 200
+            eventPlayer.botBossHealth = eventDamage - 200
         else:
-            eventPlayer.bossHealth = eventDamage
-        if eventPlayer.bossHealth > 0:
+            eventPlayer.botBossHealth = eventDamage
+        if eventPlayer.botBossHealth > 0:
             while eventPlayer.isDead():
                 if eventPlayer.getPosition().y - nearestWalkablePosition(eventPlayer.getPosition()).y < -50:
                     #Teleport boss if they fall very far below the map
                     bossReturn()
                 else:
                     #17.532 is acceleration due to gravity constant
-                    eventPlayer.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getPosition(), getClosestPlayer(eventPlayer, Team.1).getPosition())), -75), max(1, sqrt(2 * 17.532 * (eventPlayer.lastTarget.getPosition().y + 3 - eventPlayer.getPosition().y))), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+                    eventPlayer.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getPosition(), getClosestPlayer(eventPlayer, Team.1).getPosition())), -75), max(1, sqrt(2 * 17.532 * (eventPlayer.botLastTarget.getPosition().y + 3 - eventPlayer.getPosition().y))), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
                 wait()
                 eventPlayer.resurrect()
                 waitUntil(eventPlayer.isAlive(), 0.25)
-            eventPlayer.setHealth(eventPlayer.bossHealth)
+            eventPlayer.setHealth(eventPlayer.botBossHealth)
             if eventPlayer.botTarget == null:
-                eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.lastTarget.getPosition()), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
+                eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botLastTarget.getPosition()), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
             #Illari punishes with ultimate
             if eventPlayer.getHero() == Hero.ILLARI and attacker.getTeam() == Team.1:
                 illariUlt()
         else:
             isObjectiveComplete = true
             bossesStateList[bossesStateList.index(eventPlayer)] = 0
-            eventPlayer.reviveTimer = 10
+            eventPlayer.botRespawnDelay = 10
             goto lbl_0
     #Resurrects player if event damage was greater than 1000 and their health still is higher than 0hp.
     elif eventDamage - 1000 > 0:
-        eventPlayer.bossHealth = eventDamage - 1000
+        eventPlayer.botBossHealth = eventDamage - 1000
         eventPlayer.resurrect()
         waitUntil(eventPlayer.isAlive(), 5)
-        eventPlayer.setHealth(eventPlayer.bossHealth)
+        eventPlayer.setHealth(eventPlayer.botBossHealth)
     else:
         isObjectiveComplete = true
         bossesStateList[bossesStateList.index(eventPlayer)] = 0
-        eventPlayer.reviveTimer = 10
+        eventPlayer.botRespawnDelay = 10
         (getPlayersOnHero(Hero.WINSTON, Team.2) if eventPlayer.getHero() == Hero.WINSTON else []).setStatusEffect(null, Status.KNOCKED_DOWN, 12)
         lbl_0:
     wait(0.25, Wait.RESTART_WHEN_TRUE)
@@ -170,11 +170,11 @@ rule "BOSS TAKES KNOCKBACK":
     @Event playerReceivedKnockback
     @Team 2
     @Condition objectiveTypeList[0] == ObjectiveType.BOSSES
-    @Condition eventPlayer.wallCollisionEnabled == false
+    @Condition eventPlayer.botIsWallCollisionEnabled == false
     @Condition eventPlayer in bossesStateList == true
     
     eventPlayer.enableEnvironmentCollision()
-    eventPlayer.wallCollisionEnabled = true
+    eventPlayer.botIsWallCollisionEnabled = true
 
 
 rule "BOSS TELEPORT TO TARGET IF NOT USED":
@@ -183,12 +183,12 @@ rule "BOSS TELEPORT TO TARGET IF NOT USED":
     @Condition eventPlayer in bossesStateList == true
     @Condition eventPlayer.hasStatus(Status.ROOTED) != true
     
-    chaseAtRate(eventPlayer.mutationChase, 15, 1)
-    waitUntil(eventPlayer.mutationChase >= 14 or eventPlayer.botTarget != null, 99999)
-    if eventPlayer.mutationChase >= 14 and eventPlayer.botTarget == null:
+    chaseAtRate(eventPlayer.botReturnTime, 15, 1)
+    waitUntil(eventPlayer.botReturnTime >= 14 or eventPlayer.botTarget != null, 99999)
+    if eventPlayer.botReturnTime >= 14 and eventPlayer.botTarget == null:
         bossReturn()
-    stopChasing(eventPlayer.mutationChase)
-    eventPlayer.mutationChase = 0
+    stopChasing(eventPlayer.botReturnTime)
+    eventPlayer.botReturnTime = 0
     waitUntil(eventPlayer.botTarget == null, 99999)
     wait(0.16)
     loop()
@@ -197,14 +197,14 @@ rule "BOSS TELEPORT TO TARGET IF NOT USED":
 def bossReturn():
     @Name "bossReturn"
     
-    stopChasing(eventPlayer.mutationChase)
+    stopChasing(eventPlayer.botReturnTime)
     eventPlayer.enableEnvironmentCollision()
-    eventPlayer.mutationChase = eventPlayer.getEyePosition()
-    eventPlayer.specialCooldown = eventPlayer.lastTarget if eventPlayer.lastTarget != null else getClosestPlayer(eventPlayer, Team.1)
+    eventPlayer.botReturnPosition = eventPlayer.getEyePosition()
+    eventPlayer.botReturnTarget = eventPlayer.botLastTarget if eventPlayer.botLastTarget != null else getClosestPlayer(eventPlayer, Team.1)
     eventPlayer.teleport(nearestWalkablePosition(eventPlayer))
     wait(0.1)
-    eventPlayer.teleport(Vector.UP + (random.choice(mapGridList.filter(lambda x: isInLoS(x, eventPlayer.averagePlayersPos.getEyePosition()) and distance(x, eventPlayer.specialCooldown.getPosition()) > 5 and distance(x, eventPlayer.specialCooldown) < 20))))
+    eventPlayer.teleport(Vector.UP + (random.choice(mapGridList.filter(lambda x: isInLoS(x, eventPlayer.botTeleportCenter.getEyePosition()) and distance(x, eventPlayer.botReturnTarget.getPosition()) > 5 and distance(x, eventPlayer.botReturnTarget) < 20))))
     wait()
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.BLACK, eventPlayer, 3)
-    eventPlayer.mutationChase = 0
-    eventPlayer.specialCooldown = null
+    eventPlayer.botReturnPosition = 0
+    eventPlayer.botReturnTarget = null

@@ -37,14 +37,14 @@ macro fireSatelliteMacro():
     wait(5)
     smallMessage(getAllPlayers(), "Firing sequence commenced")
     #Chase closest living zombie
-    chaseAtRate(satelliteLaserPosition, satelliteLaserTarget.getPosition(), 7.5 if getLivingPlayers(Team.2).any(lambda player: not player.teleporting) else 0)
+    chaseAtRate(satelliteLaserPosition, satelliteLaserTarget.getPosition(), 7.5 if getLivingPlayers(Team.2).any(lambda player: not player.botIsTeleporting) else 0)
     #Fire satellite
     for satelliteFiringStepsRemaining in range(40, 0, -1):
         stopChasing(satelliteLaserPosition)
-        satelliteLaserTarget = (sorted(getLivingPlayers(Team.2).filter(lambda player: not player.teleporting), lambda x: distance(x.getPosition(), satelliteLaserPosition)))[0]
+        satelliteLaserTarget = (sorted(getLivingPlayers(Team.2).filter(lambda player: not player.botIsTeleporting), lambda x: distance(x.getPosition(), satelliteLaserPosition)))[0]
         if satelliteLaserTarget != null:
             #Chase closest living zombie
-            chaseAtRate(satelliteLaserPosition, satelliteLaserTarget.getPosition(), 7.5 if getLivingPlayers(Team.2).any(lambda player: not player.teleporting) else 0)
+            chaseAtRate(satelliteLaserPosition, satelliteLaserTarget.getPosition(), 7.5 if getLivingPlayers(Team.2).any(lambda player: not player.botIsTeleporting) else 0)
         wait(0.5)
         # tmp0: laser impact position on the ground, shared by explosion visuals and both damage checks.
         tmp0 = raycastHitPosition(satelliteLaserPosition + vect(0, 2, 0), satelliteLaserPosition + vect(0, -100, 0), getAllPlayers(), getAllPlayers().filter(lambda player: player.isOnGround()), false) + vect(0, 0.1, 0)
@@ -56,10 +56,10 @@ macro fireSatelliteMacro():
         damage(getPlayers(Team.1).filter(lambda player: distance(player.getPosition(), tmp0) < 5), null, 70)
         if satelliteFiringStepsRemaining > 5:
             #Give all bots quick respawn time
-            getPlayers(Team.2).reviveTimer = 1
+            getPlayers(Team.2).botRespawnDelay = 1
         else:
             #Give all bots a long respawn time
-            getPlayers(Team.2).reviveTimer = 12
+            getPlayers(Team.2).botRespawnDelay = 12
             botSpawnTimeList = botSpawnTimeList.map(lambda _: 12)
     stopChasing(satelliteLaserPosition)
 
@@ -102,7 +102,7 @@ rule "PLAYERS AT TERMINALS CONTROLS":
     @Condition isObjectiveComplete == false
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.hasSpawned() == true
-    @Condition eventPlayer.invisible != true
+    @Condition eventPlayer.invisibilityCount != true
     @Condition (satelliteTerminalPositionList.filter(lambda _, i: satelliteTerminalProgressList[i] < 100).any(lambda x: distance(x, eventPlayer.getPosition()) < objectiveRad and x.x != null)) == true
     
     if not eventPlayer in objectivePlayerList:

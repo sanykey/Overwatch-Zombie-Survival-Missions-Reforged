@@ -1,0 +1,575 @@
+{
+  "date": "2026-11-02",
+  "baselineRef": "9185ddd9b8bc76852ffacdafbfde932a3970f152",
+  "globals": 99,
+  "playerVariables": 108,
+  "elements": 27218,
+  "warnings": [],
+  "compiledRulesCompared": 231,
+  "groups": {
+    "bots": 30,
+    "team1": 13,
+    "enhancements": 10,
+    "powerups": 22,
+    "pregame": 3,
+    "rescue": 3,
+    "biomorphing": 2,
+    "explosions": 3,
+    "shared": 22
+  },
+  "mapping": {
+    "averagePlayersPos": "botTeleportCenter",
+    "targeting": "botIsSelectingTarget",
+    "mutationChase": "botReturnMotionSlot",
+    "teleporting": "botIsTeleporting",
+    "pForceFieldCount1": "powerUpForceFieldTimeRemaining",
+    "pForceFieldCount2_bCount1": "botLoopIndexSlot",
+    "botTarget": "combatTargetSlot",
+    "botThrottleSpeed": "aiThrottleSpeedSlot",
+    "playerActiveStatus": "isPlayerActive",
+    "reviving": "isReviving",
+    "reviveStartTime": "reviveDuration",
+    "reviveTimer": "recoveryTimeSlot",
+    "interactEntity": "powerUpReviveTarget",
+    "infected": "isInfected",
+    "biteDamage": "botBiteDamage",
+    "biteDuration": "botBiteDuration",
+    "randVal": "rescueMoodIcon",
+    "crowdControlled": "isCrowdControlled",
+    "deathTimer": "rescueTimeRemaining",
+    "infectionLvl": "infectionLevel",
+    "currentPowerUp": "powerUpItemId",
+    "powerUpTradeValues": "powerUpTradeDataList",
+    "powerUpEffects": "powerUpEntityIdList",
+    "pNoCooldownsCount_bCount2": "actorCountdownSlot",
+    "pAirStrikeCount": "powerUpAirStrikeIndex",
+    "specialCooldown": "controlStateSlot",
+    "chase1": "actorMotionSlot1",
+    "chase2": "actorMotionSlot2",
+    "botFollowTarget": "rescueLeader",
+    "botTempvalue2": "actorAbilitySlot2",
+    "playerMenuStatus": "pregameVoteList",
+    "startPos": "team1PositionSlot",
+    "successfullyTeleported": "botIsTeleportConfirmed",
+    "biowasteType": "biomorphingResourceType",
+    "anranPortal": "botReigniteDestination",
+    "evacPos": "extractionDestination",
+    "canWallPhase": "botIsWallPhaseAllowed",
+    "pHealBeaconCount": "powerUpHealBeaconTimeRemaining",
+    "pSentryTurretCount": "powerUpTurretTimeRemaining",
+    "initialMaxHealth": "initialMaxHealth",
+    "botSpecialTarget": "botAbilityTarget",
+    "attached": "isAttached",
+    "telePos": "aiLocationSlot",
+    "invisible": "invisibilityCount",
+    "pCloakingDeviceCount": "powerUpCloakTimeRemaining",
+    "path": "rescuePathList",
+    "potentialTargets": "candidateTargetList",
+    "pSuperNanoCount": "powerUpSuperNanoTimeRemaining",
+    "size": "sizeScale",
+    "bossHealth": "botBossHealth",
+    "wallCollisionEnabled": "botIsWallCollisionEnabled",
+    "specialFacing": "botIsFacingOverridden",
+    "specialThrottling": "botIsThrottleOverridden",
+    "botTempValue": "actorAbilitySlot1",
+    "objectiveValue": "objectiveTypeSnapshot",
+    "generalPlayerBotEntities": "visualEntityIdList",
+    "entityCount": "visualCleanupIndex",
+    "botHero": "botConfiguredHero",
+    "playerObjectiveResourceValue": "biomorphingResourceAmount",
+    "pBouncePadCount1": "actorLoopSlot",
+    "infectionDamage": "infectionDamageOverTimeId",
+    "botSpecialPotentialTargets": "abilityTargetList",
+    "movementSpeed": "movementSpeedScale",
+    "mutationValue": "botMutationId",
+    "health": "botBaseHealth",
+    "damageOverTimeDuration": "damageOverTimeRemaining",
+    "pUltimateChargerCount": "powerUpUltimateTimeRemaining",
+    "pStunCount": "powerUpStunBouncesRemaining",
+    "initializing": "botIsInitializing",
+    "userIndex": "reconnectUserIndex",
+    "knockbackRecieved": "botKnockbackScale",
+    "pStunChase1": "powerUpStunBeamPosition",
+    "customTelePos": "botCustomTeleportPosition",
+    "lastTarget": "botLastTarget",
+    "abilityArray1": "botAbilityStateSlot",
+    "abilityArray2": "botGasRadiusList",
+    "waypoint": "botSpawnWaypoint",
+    "testTarget": "botCandidateTarget",
+    "canTeleport": "botIsTeleportAllowed",
+    "defaultOutlineColor": "botMutationOutlineColor",
+    "explosionColor1": "explosionInnerColor",
+    "explosionColor2": "explosionOuterColor",
+    "afk": "isAfk",
+    "explosionSize": "explosionScale",
+    "switchedHeroes": "isHeroSwitchRespawn",
+    "anranPortalRise": "botReigniteMotionSlot",
+    "botResourceEntity": "botResourceIconIdList",
+    "enhancementId": "enhancementId",
+    "enhancementValue1": "enhancementStateSlot1",
+    "enhancementValue2": "enhancementStateSlot2",
+    "enhancementValue3": "enhancementStateSlot3",
+    "enhancementValue4": "enhancementStateSlot4",
+    "enhancementValue5": "enhancementPositionSlot",
+    "enhancementValue6": "enhancementStateSlot6",
+    "enhancementValue7": "enhancementBarrierHealth",
+    "hitchhikerPassenger": "enhancementHitchhikerPassenger",
+    "hitchhikerCarrierHealthPool": "enhancementHitchhikerCarrierPoolId",
+    "sentryTurretPosition": "powerUpTurretPosition",
+    "stunTarget": "powerUpStunTarget",
+    "healBeaconPosition": "powerUpHealBeaconPosition",
+    "forceFieldPosition": "powerUpForceFieldPosition",
+    "bouncePadPosition": "powerUpBouncePadPosition",
+    "stunOrigin": "powerUpStunOrigin",
+    "sentryTurretDirection": "powerUpTurretDirection",
+    "airStrikePosition": "powerUpAirStrikePosition",
+    "powerUpTradeIndex": "powerUpTradeIndex",
+    "pregameState": "pregameState",
+    "isVoting": "isPregameVoting"
+  },
+  "aliases": [
+    {
+      "name": "botReturnTime",
+      "slot": "botReturnMotionSlot",
+      "type": "number"
+    },
+    {
+      "name": "botReturnPosition",
+      "slot": "botReturnMotionSlot",
+      "type": "vector"
+    },
+    {
+      "name": "botStalkerFadeIndex",
+      "slot": "botLoopIndexSlot",
+      "type": "number"
+    },
+    {
+      "name": "botEnsnarerTargetIndex",
+      "slot": "botLoopIndexSlot",
+      "type": "number"
+    },
+    {
+      "name": "botTarget",
+      "slot": "combatTargetSlot",
+      "type": "player"
+    },
+    {
+      "name": "enhancementBarrierTarget",
+      "slot": "combatTargetSlot",
+      "type": "player"
+    },
+    {
+      "name": "currentCombatTarget",
+      "slot": "combatTargetSlot",
+      "type": "player"
+    },
+    {
+      "name": "botThrottleSpeed",
+      "slot": "aiThrottleSpeedSlot",
+      "type": "number"
+    },
+    {
+      "name": "rescueThrottleSpeed",
+      "slot": "aiThrottleSpeedSlot",
+      "type": "number"
+    },
+    {
+      "name": "reviveTimeRemaining",
+      "slot": "recoveryTimeSlot",
+      "type": "number"
+    },
+    {
+      "name": "botRespawnDelay",
+      "slot": "recoveryTimeSlot",
+      "type": "number"
+    },
+    {
+      "name": "powerUpNoCooldownsTimeRemaining",
+      "slot": "actorCountdownSlot",
+      "type": "number"
+    },
+    {
+      "name": "botChargerWindupProgress",
+      "slot": "actorCountdownSlot",
+      "type": "number"
+    },
+    {
+      "name": "isCrowdControlCooldownActive",
+      "slot": "controlStateSlot",
+      "type": "bool"
+    },
+    {
+      "name": "botReturnTarget",
+      "slot": "controlStateSlot",
+      "type": "player"
+    },
+    {
+      "name": "botGasProjectilePosition",
+      "slot": "actorMotionSlot1",
+      "type": "vector"
+    },
+    {
+      "name": "botTentaclePosition",
+      "slot": "actorMotionSlot1",
+      "type": "vector"
+    },
+    {
+      "name": "botBlasterCharge",
+      "slot": "actorMotionSlot1",
+      "type": "number"
+    },
+    {
+      "name": "botDaytakerCharge",
+      "slot": "actorMotionSlot1",
+      "type": "number"
+    },
+    {
+      "name": "botSmolderAnger",
+      "slot": "actorMotionSlot1",
+      "type": "number"
+    },
+    {
+      "name": "botEnsnarerMeleeAngle",
+      "slot": "actorMotionSlot1",
+      "type": "number"
+    },
+    {
+      "name": "rescueExtractionPosition",
+      "slot": "actorMotionSlot1",
+      "type": "vector"
+    },
+    {
+      "name": "botGasCloudTimeRemaining",
+      "slot": "actorMotionSlot2",
+      "type": "number"
+    },
+    {
+      "name": "extractionFlightPosition",
+      "slot": "actorMotionSlot2",
+      "type": "vector"
+    },
+    {
+      "name": "botAuxiliaryState",
+      "slot": "actorAbilitySlot2",
+      "type": "mixed"
+    },
+    {
+      "name": "rescueFollowMessage",
+      "slot": "actorAbilitySlot2",
+      "type": "string"
+    },
+    {
+      "name": "botIsReigniteActive",
+      "slot": "actorAbilitySlot2",
+      "type": "bool"
+    },
+    {
+      "name": "botIsEnsnarerMeleeActive",
+      "slot": "actorAbilitySlot2",
+      "type": "bool"
+    },
+    {
+      "name": "pregamePosition",
+      "slot": "team1PositionSlot",
+      "type": "vector"
+    },
+    {
+      "name": "rescueStartPosition",
+      "slot": "team1PositionSlot",
+      "type": "vector"
+    },
+    {
+      "name": "botIsAttached",
+      "slot": "isAttached",
+      "type": "bool"
+    },
+    {
+      "name": "enhancementIsHitchhiking",
+      "slot": "isAttached",
+      "type": "bool"
+    },
+    {
+      "name": "botTeleportPosition",
+      "slot": "aiLocationSlot",
+      "type": "vector"
+    },
+    {
+      "name": "rescuePathIndex",
+      "slot": "aiLocationSlot",
+      "type": "number"
+    },
+    {
+      "name": "botPotentialTargetList",
+      "slot": "candidateTargetList",
+      "type": "array"
+    },
+    {
+      "name": "rescuePotentialLeaderList",
+      "slot": "candidateTargetList",
+      "type": "array"
+    },
+    {
+      "name": "enhancementBarrierTargetList",
+      "slot": "candidateTargetList",
+      "type": "array"
+    },
+    {
+      "name": "botAbilityState",
+      "slot": "actorAbilitySlot1",
+      "type": "mixed"
+    },
+    {
+      "name": "rescueIsExtracting",
+      "slot": "actorAbilitySlot1",
+      "type": "bool"
+    },
+    {
+      "name": "botIsBomberPrimed",
+      "slot": "actorAbilitySlot1",
+      "type": "bool"
+    },
+    {
+      "name": "botRusherHealthPoolId",
+      "slot": "actorAbilitySlot1",
+      "type": "number"
+    },
+    {
+      "name": "botGasAimPosition",
+      "slot": "actorAbilitySlot1",
+      "type": "vector"
+    },
+    {
+      "name": "botIsReigniteAttackUsed",
+      "slot": "actorAbilitySlot1",
+      "type": "bool"
+    },
+    {
+      "name": "botRiderGrapplePosition",
+      "slot": "actorAbilitySlot1",
+      "type": "vector"
+    },
+    {
+      "name": "botChargerDestination",
+      "slot": "actorAbilitySlot1",
+      "type": "vector"
+    },
+    {
+      "name": "botTentacleTargetPosition",
+      "slot": "actorAbilitySlot1",
+      "type": "vector"
+    },
+    {
+      "name": "botIsStrikerStrikeActive",
+      "slot": "actorAbilitySlot1",
+      "type": "bool"
+    },
+    {
+      "name": "botIsDownfallenGrabbing",
+      "slot": "actorAbilitySlot1",
+      "type": "bool"
+    },
+    {
+      "name": "botIsEnsnarerBlocking",
+      "slot": "actorAbilitySlot1",
+      "type": "bool"
+    },
+    {
+      "name": "botSmolderState",
+      "slot": "actorAbilitySlot1",
+      "type": "number"
+    },
+    {
+      "name": "botVisualEntityIdList",
+      "slot": "visualEntityIdList",
+      "type": "array"
+    },
+    {
+      "name": "playerObjectiveIconIdList",
+      "slot": "visualEntityIdList",
+      "type": "array"
+    },
+    {
+      "name": "botEnsnarerUltimateIndex",
+      "slot": "actorLoopSlot",
+      "type": "number"
+    },
+    {
+      "name": "powerUpBouncePadTimeRemaining",
+      "slot": "actorLoopSlot",
+      "type": "number"
+    },
+    {
+      "name": "botSpecialTargetList",
+      "slot": "abilityTargetList",
+      "type": "array"
+    },
+    {
+      "name": "explosionTargetList",
+      "slot": "abilityTargetList",
+      "type": "array"
+    },
+    {
+      "name": "botAbilityCooldown",
+      "slot": "botAbilityStateSlot",
+      "type": "number"
+    },
+    {
+      "name": "botGasPositionList",
+      "slot": "botAbilityStateSlot",
+      "type": "array"
+    },
+    {
+      "name": "botReigniteSource",
+      "slot": "botReigniteMotionSlot",
+      "type": "player"
+    },
+    {
+      "name": "botReigniteRisePosition",
+      "slot": "botReigniteMotionSlot",
+      "type": "vector"
+    },
+    {
+      "name": "enhancementHybridCooldown",
+      "slot": "enhancementStateSlot1",
+      "type": "number"
+    },
+    {
+      "name": "enhancementBarrierFacing",
+      "slot": "enhancementStateSlot1",
+      "type": "vector"
+    },
+    {
+      "name": "enhancementPyroHitList",
+      "slot": "enhancementStateSlot1",
+      "type": "array"
+    },
+    {
+      "name": "enhancementPlagueCureTotal",
+      "slot": "enhancementStateSlot1",
+      "type": "number"
+    },
+    {
+      "name": "enhancementIsBattleResetReady",
+      "slot": "enhancementStateSlot1",
+      "type": "bool"
+    },
+    {
+      "name": "enhancementBatteryPosition",
+      "slot": "enhancementStateSlot1",
+      "type": "vector"
+    },
+    {
+      "name": "enhancementHitchhikerCarrier",
+      "slot": "enhancementStateSlot1",
+      "type": "player"
+    },
+    {
+      "name": "enhancementPupColor",
+      "slot": "enhancementStateSlot1",
+      "type": "color"
+    },
+    {
+      "name": "enhancementBarrierEdgeDirection",
+      "slot": "enhancementStateSlot2",
+      "type": "vector"
+    },
+    {
+      "name": "enhancementBattleAbilityButton",
+      "slot": "enhancementStateSlot2",
+      "type": "button"
+    },
+    {
+      "name": "enhancementBatteryReuseCooldown",
+      "slot": "enhancementStateSlot2",
+      "type": "number"
+    },
+    {
+      "name": "enhancementHitchhikerPassengerPoolId",
+      "slot": "enhancementStateSlot2",
+      "type": "number"
+    },
+    {
+      "name": "enhancementIsPupBeamActive",
+      "slot": "enhancementStateSlot2",
+      "type": "bool"
+    },
+    {
+      "name": "enhancementBarrierPlacementCooldown",
+      "slot": "enhancementStateSlot3",
+      "type": "number"
+    },
+    {
+      "name": "enhancementBatteryReuseDuration",
+      "slot": "enhancementStateSlot3",
+      "type": "number"
+    },
+    {
+      "name": "enhancementPupTarget",
+      "slot": "enhancementStateSlot3",
+      "type": "player"
+    },
+    {
+      "name": "enhancementBarrierPosition",
+      "slot": "enhancementStateSlot4",
+      "type": "vector"
+    },
+    {
+      "name": "enhancementBatteryPlacementCooldown",
+      "slot": "enhancementStateSlot4",
+      "type": "number"
+    },
+    {
+      "name": "enhancementIsPupFreezeAuraActive",
+      "slot": "enhancementStateSlot4",
+      "type": "bool"
+    },
+    {
+      "name": "enhancementBarrierCorner1",
+      "slot": "enhancementPositionSlot",
+      "type": "vector"
+    },
+    {
+      "name": "enhancementPupPosition",
+      "slot": "enhancementPositionSlot",
+      "type": "vector"
+    },
+    {
+      "name": "enhancementBarrierCorner2",
+      "slot": "enhancementStateSlot6",
+      "type": "vector"
+    },
+    {
+      "name": "enhancementPupCooldown",
+      "slot": "enhancementStateSlot6",
+      "type": "number"
+    }
+  ],
+  "sha256": {
+    "bots_game_in_progress.opy": "7aa7840100fd677716dd60d0a91ec360be25412008d39af2be5719f05c4a4bdd",
+    "compressed numbers.opy": "6c414884c6273353c17c85e56de05c382cb6401aec19a22132263fd6f4d6d9d7",
+    "debug.opy": "86ea5811c5a07f735b0eefc11a53c4710a3ebe33ad79e5d96fb13722607be67a",
+    "enhancements.opy": "7e3eb6ae437b7a88a630f38f645510ea888ec0b12e2b426de35af68ee031de38",
+    "global_game_in_progress.opy": "f473a301ab97918868904b9fec1bff4e38ac33e50b01c68c8050d0cbf1dac535",
+    "global_startup.opy": "68bb5a2f7beea4d1ca7985aaba1d7c3b90d84a86ec7977d0568f39e0a163e683",
+    "global_start_menu.opy": "855bed789086f29d015669e9ab78adf93f98fb221918bf795def8014ea1e0b5b",
+    "hero_tuning.opy": "4825b4d1bec2addfac244d4b0bf97de19449517a712d03eb8f9015653e4f1a66",
+    "main.opy": "6005995170250d44b35a88576f997014f95de715f521429eda7b9f6dcb1da9fd",
+    "objective_types/objective_type_biomorphing.opy": "ecabbcae658db3e936596b396c2a68b61fd50ce7bb9fde681b3af7d13b487bea",
+    "objective_types/objective_type_bosses.opy": "764f3f88254fda09c9f5713d59e268fc910f02102fe8b1aa315cb2d48299ec16",
+    "objective_types/objective_type_extraction_point.opy": "766b2639781a612d9fb3841644a5f08662511848ef852d273ffe78fb7a17e9d5",
+    "objective_types/objective_type_kill_zone.opy": "b18ae7314acdcbeacfe1b8ee594f161f970b67dddc4a477ba4649d5fb4a6808e",
+    "objective_types/objective_type_satellite_uplink.opy": "2c55f54279b78259021fd23865c41f26f1d7b88bad14225124925dc1f082efbc",
+    "objective_types/objective_type_showdown.opy": "a7aea0343f2959f7b8c99a29c016071c6a7c3e52d97d839c0c7f57577d13dd10",
+    "objective_types/objective_type_survivor_rescue.opy": "98221db7e586f6ab246174776fa00a82588e40026459c5b812358a942dc4d5ac",
+    "objective_types/objective_type_zombie_egg.opy": "73e9e636a67e213e42e90db762d8036e35485ac86f8b8f55663c66e8a43e1267",
+    "players_game_in_progress.opy": "d8f903fb9ccadd27df25b704edf040effe91c8128b3e5f0b7d86a882eb1afba1",
+    "player_start_menu.opy": "55a99bd21e4c2b2c9fb81f45ef9770bdc0fec67dab87b6985d04af1fdd6e3fb5",
+    "power_ups.opy": "e39f56b3c12425eae7fb939bedc5f88a1af033dd2258678fb01364320d49e383",
+    "settings.opy": "bafdf47e377bfce8871f5e6c8a79684934e6c283130151ce2824d8778cc659a7",
+    "subroutines.opy": "a879cfb163b0ac6d21d9f45101f722a93ca1b6075212d92168ed679ef5855741",
+    "supply_drops.opy": "11b883a1b043b7a6adb591b75adb5f802272b042b3878ac9d307d020440f3cf6",
+    "variables.opy": "75f2ec99a29d46a659f991565994860edf6efbab16ec3c99aa5a716360bf57c5",
+    "zombie_types.opy": "d392a43105fd864f860f9b4eea2e39ca1c1ed34b3eccdfb8b4bec378bf6d942b"
+  },
+  "limitations": "Full compiled-rule comparison confirms unchanged events, conditions, actions, expression trees and chase/reevaluation arguments after player-name substitution. Declaration order/physical slot numbers may change; import the complete script. No live-match migration or in-game renderer/scheduler test."
+}

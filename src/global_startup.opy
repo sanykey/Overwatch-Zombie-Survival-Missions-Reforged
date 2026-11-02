@@ -137,7 +137,7 @@ rule "START GAME IF WAITING FOR PLAYERS":
 
 
 rule "SKIP ASSEMBLING HEROES":
-    @Condition (isAssemblingHeroes() or isPregameSetup and len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus)) == 0) == true
+    @Condition (isAssemblingHeroes() or isPregameSetup and len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive)) == 0) == true
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
     isVoting = true

@@ -19,56 +19,56 @@ macro minibossMutationMacro():
     eventPlayer.startForcingHero(random.choice([Hero.REINHARDT, Hero.WRECKING_BALL, Hero.JUNKER_QUEEN, Hero.DOOMFIST, Hero.KIRIKO, Hero.MAUGA, Hero.HAZARD, Hero.REAPER]))
     if zombieSetting == 6:
         eventPlayer.startForcingHero(random.choice([Hero.REINHARDT, Hero.WRECKING_BALL]))
-    eventPlayer.health = 2500
-    eventPlayer.size *= 1.55
+    eventPlayer.botBaseHealth = 2500
+    eventPlayer.sizeScale *= 1.55
     eventPlayer.startForcingOutlineFor(getAllPlayers(), true, Color.ORANGE)
     eventPlayer.startForcingName("Contestor")
     #Skull Icon
-    createIcon(getAllPlayers().filter(lambda _: eventPlayer.initializing == false and eventPlayer in bossStateList == false), eventPlayer.getEyePosition() + Vector.UP, Icon.SKULL, IconReeval.VISIBILITY_AND_POSITION, Color.ORANGE)
-    eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+    createIcon(getAllPlayers().filter(lambda _: eventPlayer.botIsInitializing == false and eventPlayer in bossStateList == false), eventPlayer.getEyePosition() + Vector.UP, Icon.SKULL, IconReeval.VISIBILITY_AND_POSITION, Color.ORANGE)
+    eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
 
 
 macro botStatManagementMacro():
     # tmp0: current bot hero's table index, to look up bite, movement and damage settings without repeating the hero search.
     tmp0 = botHeroList.index(eventPlayer.getHero())
-    eventPlayer.biteDamage = botBiteDamageList[tmp0]
+    eventPlayer.botBiteDamage = botBiteDamageList[tmp0]
     #Re-calibrate bite damage
-    eventPlayer.biteDamage *= 100 / botDamageDealtList[tmp0]
-    eventPlayer.biteDuration = botBiteDurationList[tmp0]
+    eventPlayer.botBiteDamage *= 100 / botDamageDealtList[tmp0]
+    eventPlayer.botBiteDuration = botBiteDurationList[tmp0]
     #Range from 0 to 1 in terms of throttle
     eventPlayer.botThrottleSpeed = botThrottleSpeedList[tmp0]
     # tmp0: normalized damage multiplier; the hero index is no longer needed after this lookup.
     tmp0 = botDamageDealtList[tmp0] / 100
     eventPlayer.setDamageDealt(tmp0 * 100)
     eventPlayer.setDamageReceived(100)
-    eventPlayer.movementSpeed = 1
-    eventPlayer.setMoveSpeed(eventPlayer.movementSpeed * 100 + ((len(getDeadPlayers(Team.1).filter(lambda player: player.deathTimer <= 0))) * 3))
+    eventPlayer.movementSpeedScale = 1
+    eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100 + ((len(getDeadPlayers(Team.1).filter(lambda player: player.rescueTimeRemaining <= 0))) * 3))
     eventPlayer.setJumpVerticalSpeed(100)
     eventPlayer.setHealingReceived(100)
     eventPlayer.setProjectileSpeed(100)
     eventPlayer.setProjectileGravity(100)
-    eventPlayer.knockbackRecieved = 1
+    eventPlayer.botKnockbackScale = 1
     eventPlayer.setKnockbackReceived(100)
     if eventPlayer.getHero() == Hero.REINHARDT:
-        eventPlayer.knockbackRecieved = 0.7
-        eventPlayer.setKnockbackReceived(100 * eventPlayer.knockbackRecieved)
+        eventPlayer.botKnockbackScale = 0.7
+        eventPlayer.setKnockbackReceived(100 * eventPlayer.botKnockbackScale)
     elif eventPlayer.getHero() == Hero.MERCY:
         eventPlayer.setProjectileSpeed(75 if eventPlayer in bossStateList else 20)
     elif eventPlayer.getHero() == Hero.ILLARI:
         eventPlayer.setKnockbackDealt(25)
     elif eventPlayer.getHero() == Hero.WINSTON:
-        eventPlayer.size *= 0.7
-        eventPlayer.chase1 = 2
-        eventPlayer.startScalingBarriers(eventPlayer.size)
+        eventPlayer.sizeScale *= 0.7
+        eventPlayer.botSmolderAnger = 2
+        eventPlayer.startScalingBarriers(eventPlayer.sizeScale)
     elif eventPlayer.getHero() == Hero.ANA or eventPlayer.getHero() == Hero.KIRIKO:
         eventPlayer.setProjectileGravity(500)
     elif eventPlayer.getHero() == Hero.SIGMA:
-        eventPlayer.setProjectileSpeed(100 * eventPlayer.size * 0.5)
+        eventPlayer.setProjectileSpeed(100 * eventPlayer.sizeScale * 0.5)
         eventPlayer.setPrimaryFireEnabled(true)
     elif eventPlayer.getHero() == Hero.MAUGA:
         eventPlayer.setKnockbackDealt(120)
     elif eventPlayer.getHero() == Hero.HAZARD:
-        chaseAtRate(eventPlayer.abilityArray1, 0, 1)
+        chaseAtRate(eventPlayer.botAbilityCooldown, 0, 1)
     elif eventPlayer.getHero() == Hero.ANRAN:
         eventPlayer.setKnockbackDealt(150)
 
@@ -76,144 +76,144 @@ macro botStatManagementMacro():
 macro mutationsMacro():
     #Zombies have a chance to mutate. Bosses cannot mutate
     if len(availableMutationList) > 0 and not eventPlayer in bossStateList and (random.uniform(0, 100) < (100 if challengeSetting == 3 or challengeSetting == 5 else createWorkshopSettingFloat("Mutations", "Chance to mutate percentage", 25, 0, 100))):
-        eventPlayer.mutationValue = random.choice(availableMutationList)
+        eventPlayer.botMutationId = random.choice(availableMutationList)
         #Speed
-        if eventPlayer.mutationValue == 1:
-            eventPlayer.movementSpeed *= 1.5
-            eventPlayer.setMoveSpeed(eventPlayer.movementSpeed * 100)
-            eventPlayer.defaultOutlineColor = Color.PURPLE
+        if eventPlayer.botMutationId == 1:
+            eventPlayer.movementSpeedScale *= 1.5
+            eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
+            eventPlayer.botMutationOutlineColor = Color.PURPLE
             eventPlayer.startForcingName("SPEED")
         #Size Growth
-        elif eventPlayer.mutationValue == 2:
-            eventPlayer.size *= 1.5
-            eventPlayer.health *= eventPlayer.size
-            eventPlayer.defaultOutlineColor = Color.VIOLET
+        elif eventPlayer.botMutationId == 2:
+            eventPlayer.sizeScale *= 1.5
+            eventPlayer.botBaseHealth *= eventPlayer.sizeScale
+            eventPlayer.botMutationOutlineColor = Color.VIOLET
             eventPlayer.startForcingName("XL")
         #Size Reduction
-        elif eventPlayer.mutationValue == 3:
-            eventPlayer.size *= 0.6
-            eventPlayer.health *= eventPlayer.size
-            eventPlayer.defaultOutlineColor = Color.ROSE
+        elif eventPlayer.botMutationId == 3:
+            eventPlayer.sizeScale *= 0.6
+            eventPlayer.botBaseHealth *= eventPlayer.sizeScale
+            eventPlayer.botMutationOutlineColor = Color.ROSE
             eventPlayer.startForcingName("XS")
         #Radioactive
-        elif eventPlayer.mutationValue == 4:
-            eventPlayer.biteDuration *= 1.5
-            eventPlayer.defaultOutlineColor = Color.LIME_GREEN
+        elif eventPlayer.botMutationId == 4:
+            eventPlayer.botBiteDuration *= 1.5
+            eventPlayer.botMutationOutlineColor = Color.LIME_GREEN
             eventPlayer.startForcingName("Radioactive")
         #Heavy
-        elif eventPlayer.mutationValue == 5:
-            eventPlayer.knockbackRecieved *= 0.5
-            eventPlayer.setKnockbackReceived(100 * eventPlayer.knockbackRecieved)
+        elif eventPlayer.botMutationId == 5:
+            eventPlayer.botKnockbackScale *= 0.5
+            eventPlayer.setKnockbackReceived(100 * eventPlayer.botKnockbackScale)
             #Scale move speed
-            eventPlayer.movementSpeed *= eventPlayer.knockbackRecieved
-            eventPlayer.setMoveSpeed(100 * eventPlayer.movementSpeed)
+            eventPlayer.movementSpeedScale *= eventPlayer.botKnockbackScale
+            eventPlayer.setMoveSpeed(100 * eventPlayer.movementSpeedScale)
             #Scale health
-            eventPlayer.health /= eventPlayer.knockbackRecieved
-            eventPlayer.defaultOutlineColor = Color.BLACK
+            eventPlayer.botBaseHealth /= eventPlayer.botKnockbackScale
+            eventPlayer.botMutationOutlineColor = Color.BLACK
             eventPlayer.startForcingName("Heavy")
         #Mutation outline for players
-        eventPlayer.startForcingOutlineFor(getAllPlayers(), true, eventPlayer.defaultOutlineColor)
+        eventPlayer.startForcingOutlineFor(getAllPlayers(), true, eventPlayer.botMutationOutlineColor)
     else:
-        eventPlayer.mutationValue = 0
-        eventPlayer.defaultOutlineColor = null
+        eventPlayer.botMutationId = 0
+        eventPlayer.botMutationOutlineColor = null
         #Default ouline for players
         eventPlayer.stopForcingOutlineFor(getAllPlayers())
         eventPlayer.stopForcingName()
 
 
 macro botEntityManagementMacro():
-    if eventPlayer.botHero != eventPlayer.getHero() or eventPlayer in bossStateList:
-        eventPlayer.botHero = eventPlayer.getHero()
+    if eventPlayer.botConfiguredHero != eventPlayer.getHero() or eventPlayer in bossStateList:
+        eventPlayer.botConfiguredHero = eventPlayer.getHero()
         #Destroy all current hero effects and texts
-        for eventPlayer.entityCount in range(len(eventPlayer.generalPlayerBotEntities)):
-            destroyEffect(eventPlayer.generalPlayerBotEntities[eventPlayer.entityCount])
+        for eventPlayer.visualCleanupIndex in range(len(eventPlayer.botVisualEntityIdList)):
+            destroyEffect(eventPlayer.botVisualEntityIdList[eventPlayer.visualCleanupIndex])
             wait()
-        eventPlayer.explosionColor1 = Color.YELLOW
-        eventPlayer.explosionColor2 = Color.ORANGE
-        eventPlayer.generalPlayerBotEntities = []
+        eventPlayer.explosionInnerColor = Color.YELLOW
+        eventPlayer.explosionOuterColor = Color.ORANGE
+        eventPlayer.botVisualEntityIdList = []
         if eventPlayer.getHero() == Hero.ROADHOG:
             eventPlayer.setHealingReceived(30)
             if eventPlayer in bossStateList:
                 #Gas Projectile 1
-                createEffect(getAllPlayers().filter(lambda _: eventPlayer.chase1 != null), Effect.BAD_AURA, Color.LIME_GREEN, eventPlayer.chase1, 0.4 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+                createEffect(getAllPlayers().filter(lambda _: eventPlayer.botGasProjectilePosition != null), Effect.BAD_AURA, Color.LIME_GREEN, eventPlayer.botGasProjectilePosition, 0.4 * eventPlayer.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
                 #Gas Projectile 2
-                createEffect(getAllPlayers().filter(lambda _: eventPlayer.chase1 != null), Effect.GOOD_AURA, Color.LIME_GREEN, eventPlayer.chase1, 0.2 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+                createEffect(getAllPlayers().filter(lambda _: eventPlayer.botGasProjectilePosition != null), Effect.GOOD_AURA, Color.LIME_GREEN, eventPlayer.botGasProjectilePosition, 0.2 * eventPlayer.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
                 #Gas Clouds
                 # tmp0: gas-cloud visual index, to create each cloud and ring with a captured array index.
                 for tmp0 in range(3):
                     #Cloud Effect
-                    createEffect(getAllPlayers().filter(lambda _: eventPlayer.abilityArray1[evalOnce(tmp0)] != null), Effect.CLOUD, Color.LIME_GREEN, eventPlayer.abilityArray1[evalOnce(tmp0)], eventPlayer.abilityArray2[evalOnce(tmp0)] + 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                    eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+                    createEffect(getAllPlayers().filter(lambda _: eventPlayer.botGasPositionList[evalOnce(tmp0)] != null), Effect.CLOUD, Color.LIME_GREEN, eventPlayer.botGasPositionList[evalOnce(tmp0)], eventPlayer.botGasRadiusList[evalOnce(tmp0)] + 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                    eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
                     #Cloud Effect ring
-                    createEffect(getAllPlayers().filter(lambda _: eventPlayer.abilityArray1[evalOnce(tmp0)] != null), Effect.RING, Color.LIME_GREEN, eventPlayer.abilityArray1[evalOnce(tmp0)], eventPlayer.abilityArray2[evalOnce(tmp0)] + 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                    eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+                    createEffect(getAllPlayers().filter(lambda _: eventPlayer.botGasPositionList[evalOnce(tmp0)] != null), Effect.RING, Color.LIME_GREEN, eventPlayer.botGasPositionList[evalOnce(tmp0)], eventPlayer.botGasRadiusList[evalOnce(tmp0)] + 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                    eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
             else:
                 #Roadhog toxic cloud
-                createEffect(getAllPlayers().filter(lambda _: eventPlayer.chase2 > 0), Effect.CLOUD, Color.LIME_GREEN, eventPlayer, 10 * eventPlayer.size + 2.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+                createEffect(getAllPlayers().filter(lambda _: eventPlayer.botGasCloudTimeRemaining > 0), Effect.CLOUD, Color.LIME_GREEN, eventPlayer, 10 * eventPlayer.sizeScale + 2.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
         elif eventPlayer.getHero() == Hero.MERCY:
             #Mercy tentacle
-            createBeam(getAllPlayers().filter(lambda _: eventPlayer.botTempValue != 0), Beam.BAD, eventPlayer.getEyePosition() + offsetUpHalfConst * eventPlayer.size if eventPlayer.isInAir() else eventPlayer.getEyePosition(), eventPlayer.chase1, Color.LIME_GREEN, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+            createBeam(getAllPlayers().filter(lambda _: eventPlayer.botTentacleTargetPosition != 0), Beam.BAD, eventPlayer.getEyePosition() + offsetUpHalfConst * eventPlayer.sizeScale if eventPlayer.isInAir() else eventPlayer.getEyePosition(), eventPlayer.botTentaclePosition, Color.LIME_GREEN, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
             #Tentacle sound effect
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botTempValue != 0), Effect.ENERGY_SOUND, Color.WHITE, eventPlayer.chase1, 400, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botTentacleTargetPosition != 0), Effect.ENERGY_SOUND, Color.WHITE, eventPlayer.botTentaclePosition, 400, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
             #Tentacle end visual effect
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botTempValue != 0), Effect.GOOD_AURA, Color.LIME_GREEN, eventPlayer.chase1, 0.1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botTentacleTargetPosition != 0), Effect.GOOD_AURA, Color.LIME_GREEN, eventPlayer.botTentaclePosition, 0.1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
             #Boss only
             if eventPlayer in bossStateList:
                 #Ultimate lift aura
-                createEffect(getAllPlayers().filter(lambda player: eventPlayer.isUsingUltimate() and player.isInViewAngle(eventPlayer.getPosition(), 60)), Effect.GOOD_AURA, Color.BLACK, eventPlayer.getPosition(), 12 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+                createEffect(getAllPlayers().filter(lambda player: eventPlayer.isUsingUltimate() and player.isInViewAngle(eventPlayer.getPosition(), 60)), Effect.GOOD_AURA, Color.BLACK, eventPlayer.getPosition(), 12 * eventPlayer.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
                 eventPlayer.startForcingHero(Hero.EMRE)
         elif eventPlayer.getHero() == Hero.WRECKING_BALL:
             #Ground strike location
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botTempValue), Effect.RING, Color.TEAM_2, raycastHitPosition(eventPlayer.getPosition(), eventPlayer.getPosition() + vect(0, -100, 0), getAllPlayers(), getAllPlayers(), false) if eventPlayer.botTempValue else evalOnce(vect(0, -100, 0)), 1 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botIsStrikerStrikeActive), Effect.RING, Color.TEAM_2, raycastHitPosition(eventPlayer.getPosition(), eventPlayer.getPosition() + vect(0, -100, 0), getAllPlayers(), getAllPlayers(), false) if eventPlayer.botIsStrikerStrikeActive else evalOnce(vect(0, -100, 0)), 1 * eventPlayer.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
             eventPlayer.setMaxAmmo(0, 40)
         elif eventPlayer.getHero() == Hero.REAPER:
             if eventPlayer in miniBossList:
                 eventPlayer.startForcingHero(Hero.JETPACK_CAT)
-                eventPlayer.setMoveSpeed(90 * eventPlayer.movementSpeed)
+                eventPlayer.setMoveSpeed(90 * eventPlayer.movementSpeedScale)
                 eventPlayer.disableEnvironmentCollision(false)
             #Boss Only
             if eventPlayer in bossStateList:
                 #Using Wraith Form
-                createEffect(getAllPlayers().filter(lambda player: eventPlayer.isUsingAbility1() and player.isInViewAngle(eventPlayer.getPosition(), 60)), Effect.BAD_AURA, Color.GRAY, eventPlayer.getPosition(), 12 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+                createEffect(getAllPlayers().filter(lambda player: eventPlayer.isUsingAbility1() and player.isInViewAngle(eventPlayer.getPosition(), 60)), Effect.BAD_AURA, Color.GRAY, eventPlayer.getPosition(), 12 * eventPlayer.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
                 #Using Wraith Form
-                createEffect(getAllPlayers().filter(lambda _: eventPlayer.isUsingAbility1()), Effect.CLOUD, Color.WHITE, eventPlayer, 12 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+                createEffect(getAllPlayers().filter(lambda _: eventPlayer.isUsingAbility1()), Effect.CLOUD, Color.WHITE, eventPlayer, 12 * eventPlayer.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
         elif eventPlayer.getHero() == Hero.PHARAH:
             #Charging attack effect
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.chase1 > 0), Effect.GOOD_AURA, Color.BLUE, eventPlayer, eventPlayer.chase1 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botBlasterCharge > 0), Effect.GOOD_AURA, Color.BLUE, eventPlayer, eventPlayer.botBlasterCharge * eventPlayer.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
         elif eventPlayer.getHero() == Hero.SIGMA:
             createEffect(getAllPlayers().filter(lambda _: eventPlayer.isUsingAbility1()), Effect.CLOUD, Color.TURQUOISE, eventPlayer.botTarget.getEyePosition(), 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+            eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
         elif eventPlayer.getHero() == Hero.ILLARI:
             #Charging attack effect
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.chase1 > 0), Effect.GOOD_AURA, Color.ORANGE, eventPlayer, eventPlayer.chase1 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botDaytakerCharge > 0), Effect.GOOD_AURA, Color.ORANGE, eventPlayer, eventPlayer.botDaytakerCharge * eventPlayer.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
         elif eventPlayer.getHero() == Hero.WINSTON:
             #Charging attack effect
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.isAlive() and not eventPlayer in bossStateList and eventPlayer.botTempValue <= 1), Effect.GOOD_AURA, Color.RED, eventPlayer, eventPlayer.chase1 * eventPlayer.size, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.isAlive() and not eventPlayer in bossStateList and eventPlayer.botSmolderState <= 1), Effect.GOOD_AURA, Color.RED, eventPlayer, eventPlayer.botSmolderAnger * eventPlayer.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
             #Boss only
             if eventPlayer in bossStateList:
                 #Darkness visual
                 createEffect(getAllPlayers().filter(lambda _: isSmolderEventActive), Effect.BAD_AURA, Color.BLACK, localPlayer.getEyePosition() + localPlayer.getFacingDirection() * 30, 200, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+                eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
                 #Darkness visual
                 createEffect(getAllPlayers().filter(lambda _: isSmolderEventActive), Effect.BAD_AURA, Color.RED, localPlayer.getEyePosition() + (localPlayer.getFacingDirection() * (33 + evalOnce(random.uniform(-0.5, 0.5)))), 200, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+                eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
         elif eventPlayer.getHero() == Hero.DOOMFIST:
             #Meteor strike/Seismic Slam location
             createEffect(getAllPlayers().filter(lambda _: eventPlayer.isUsingUltimate() or eventPlayer.isUsingAbility1()), Effect.RING, Color.ORANGE, raycastHitPosition(eventPlayer.getPosition(), eventPlayer.getPosition() + vect(0, -100, 0), getAllPlayers(), getAllPlayers(), false) if eventPlayer.isUsingUltimate() or eventPlayer.isUsingAbility1() else evalOnce(vect(0, -100, 0)), 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.generalPlayerBotEntities.append(getLastCreatedEntity())
+            eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
 
 
 macro globalObjectiveEntityManagementMacro():
@@ -286,7 +286,7 @@ macro globalObjectiveEntityManagementMacro():
         createIcon(getAllPlayers(), bossesStateList[0].getEyePosition() + Vector.UP if len(bossesStateList) > 0 else objectivePositionList[0], Icon.SKULL, IconReeval.VISIBILITY_AND_POSITION, Color.RED)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Boss Distance
-        createInWorldText(getAllPlayers().filter(lambda player: len(bossesStateList) == 0 or not player in bossesStateList[0].potentialTargets), "Distance: {0}m".format(distance(localPlayer.getPosition(), bossesStateList[0].getPosition()) if len(bossesStateList) > 0 else distance(localPlayer.getPosition(), objectivePositionList[0])), bossesStateList[0].getPosition() if len(bossesStateList) > 0 else objectivePositionList[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.RED, SpecVisibility.NEVER)
+        createInWorldText(getAllPlayers().filter(lambda player: len(bossesStateList) == 0 or not player in bossesStateList[0].botPotentialTargetList), "Distance: {0}m".format(distance(localPlayer.getPosition(), bossesStateList[0].getPosition()) if len(bossesStateList) > 0 else distance(localPlayer.getPosition(), objectivePositionList[0])), bossesStateList[0].getPosition() if len(bossesStateList) > 0 else objectivePositionList[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.RED, SpecVisibility.NEVER)
         objectiveEntityIdList.append(getLastCreatedText())
     #Biomoprhing
     elif objectiveValue == ObjectiveType.BIOMORPHING:
@@ -294,22 +294,22 @@ macro globalObjectiveEntityManagementMacro():
         hudText(getAllPlayers(), "{0} | {1}%".format(biomorphingGoalText, floor(biomorphingCapturePercent)), "Objectives remaining: {0}".format(len(objectivePositionList) - 1), null, HudPosition.TOP, 1, biomorphingGoalColor, objectiveColor, null, HudReeval.VISIBILITY_STRING_AND_COLOR)
         objectiveEntityIdList.append(getLastCreatedText())
         #Collection type text
-        hudSubheader(localPlayer.filter(lambda _: localPlayer.playerObjectiveResourceValue > 0), "Turn in your health at the deposit area" if biomorphingGoalQueueList[0] == 3 else "You have a zombie {0}".format(biomorphingResourceNameList[localPlayer.biowasteType]), HudPosition.TOP, 2, biomorphingResourceColorList[localPlayer.biowasteType], HudReeval.VISIBILITY_STRING_AND_COLOR)
+        hudSubheader(localPlayer.filter(lambda _: localPlayer.biomorphingResourceAmount > 0), "Turn in your health at the deposit area" if biomorphingGoalQueueList[0] == 3 else "You have a zombie {0}".format(biomorphingResourceNameList[localPlayer.biomorphingResourceType]), HudPosition.TOP, 2, biomorphingResourceColorList[localPlayer.biomorphingResourceType], HudReeval.VISIBILITY_STRING_AND_COLOR)
         objectiveEntityIdList.append(getLastCreatedText())
         #Collection site icon
-        createIcon(getPlayers(Team.1).filter(lambda player: player.playerObjectiveResourceValue > 0 and not player in objectivePlayerList), objectivePositionList[0] + vect(0, 1, 0), Icon.ARROW_DOWN, IconReeval.VISIBILITY, objectiveColor)
+        createIcon(getPlayers(Team.1).filter(lambda player: player.biomorphingResourceAmount > 0 and not player in objectivePlayerList), objectivePositionList[0] + vect(0, 1, 0), Icon.ARROW_DOWN, IconReeval.VISIBILITY, objectiveColor)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Collection site ring
         createEffect(getPlayers(Team.1), Effect.RING, Color.WHITE, objectivePositionList[0] + vect(0, -1, 0), objectiveRad, EffectReeval.VISIBILITY)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Biowaste deposit site boundary (Light Shaft)
-        createEffect(objectivePlayerList, Effect.LIGHT_SHAFT, biomorphingResourceColorList[localPlayer.biowasteType], objectivePositionList[0] + vect(0, -2, 0), objectiveRad, EffectReeval.VISIBILITY_AND_COLOR)
+        createEffect(objectivePlayerList, Effect.LIGHT_SHAFT, biomorphingResourceColorList[localPlayer.biomorphingResourceType], objectivePositionList[0] + vect(0, -2, 0), objectiveRad, EffectReeval.VISIBILITY_AND_COLOR)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Depositing resources progress bar
-        createProgressBarInWorldText(localPlayer.filter(lambda x: x in objectivePlayerList), ceil(localPlayer.getNormalizedHealth() * 100) if biomorphingGoalQueueList[0] == 3 else localPlayer.playerObjectiveResourceValue / BIOMORPHING_RESOURCE_AMOUNT * 100, "Depositing Biowaste...", updateEveryFrame(localPlayer.getEyePosition() + (directionFromAngles(horizontalAngleOfDirection(localPlayer.getFacingDirection()), verticalAngleOfDirection(localPlayer.getFacingDirection()) + 15))) if localPlayer in objectivePlayerList else evalOnce(localPlayer.getPosition()), 1, Clip.NONE, biomorphingResourceColorList[localPlayer.biowasteType], Color.WHITE, ProgressWorldTextReeval.VISIBILITY_POSITION_VALUES_AND_COLOR, SpecVisibility.NEVER)
+        createProgressBarInWorldText(localPlayer.filter(lambda x: x in objectivePlayerList), ceil(localPlayer.getNormalizedHealth() * 100) if biomorphingGoalQueueList[0] == 3 else localPlayer.biomorphingResourceAmount / BIOMORPHING_RESOURCE_AMOUNT * 100, "Depositing Biowaste...", updateEveryFrame(localPlayer.getEyePosition() + (directionFromAngles(horizontalAngleOfDirection(localPlayer.getFacingDirection()), verticalAngleOfDirection(localPlayer.getFacingDirection()) + 15))) if localPlayer in objectivePlayerList else evalOnce(localPlayer.getPosition()), 1, Clip.NONE, biomorphingResourceColorList[localPlayer.biomorphingResourceType], Color.WHITE, ProgressWorldTextReeval.VISIBILITY_POSITION_VALUES_AND_COLOR, SpecVisibility.NEVER)
         objectiveEntityIdList.append(getLastCreatedText())
         #Collection site distance (or closest resource distance)
-        createInWorldText(localPlayer.filter(lambda x: not x in objectivePlayerList and (localPlayer.playerObjectiveResourceValue > 0 or len(biomorphingResourcePositionList) > 0)), "Distance: {0}m".format(distance(objectivePositionList[0] if localPlayer.playerObjectiveResourceValue > 0 else sorted(biomorphingResourcePositionList, lambda x: angleBetweenVectors(directionTowards(localPlayer.getEyePosition(), x), localPlayer.getFacingDirection()))[0], localPlayer.getPosition())), objectivePositionList[0] if localPlayer.playerObjectiveResourceValue > 0 else sorted(biomorphingResourcePositionList, lambda x: angleBetweenVectors(directionTowards(localPlayer.getEyePosition(), x), localPlayer.getFacingDirection()))[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.NEVER)
+        createInWorldText(localPlayer.filter(lambda x: not x in objectivePlayerList and (localPlayer.biomorphingResourceAmount > 0 or len(biomorphingResourcePositionList) > 0)), "Distance: {0}m".format(distance(objectivePositionList[0] if localPlayer.biomorphingResourceAmount > 0 else sorted(biomorphingResourcePositionList, lambda x: angleBetweenVectors(directionTowards(localPlayer.getEyePosition(), x), localPlayer.getFacingDirection()))[0], localPlayer.getPosition())), objectivePositionList[0] if localPlayer.biomorphingResourceAmount > 0 else sorted(biomorphingResourcePositionList, lambda x: angleBetweenVectors(directionTowards(localPlayer.getEyePosition(), x), localPlayer.getFacingDirection()))[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.NEVER)
         objectiveEntityIdList.append(getLastCreatedText())
     #Survivor Rescue
     elif objectiveValue == ObjectiveType.SURVIVOR_RESCUE:
@@ -475,15 +475,15 @@ def setPrematchTimer():
     #Voting in progress
     if isVoting:
         #Event player is voting
-        if eventPlayer.isVoting == true:
+        if eventPlayer.isPregameVoting == true:
             #Set match time to hidden timer
             setMatchTime(pregameCountdown)
         #Event Player is not voting
         else:
             #All players are finished voting
-            if getMatchTime() > 5 + VOTING_END_TIME and ((len(getPlayers(Team.1).filter(lambda player: player.isVoting == false and player.pregameState > PregameState.SELECTING_HERO))) == getNumberOfPlayers(Team.1)):
+            if getMatchTime() > 5 + VOTING_END_TIME and ((len(getPlayers(Team.1).filter(lambda player: player.isPregameVoting == false and player.pregameState > PregameState.SELECTING_HERO))) == getNumberOfPlayers(Team.1)):
                 setMatchTime(5 + VOTING_END_TIME)
-            elif getMatchTime() > 20 + VOTING_END_TIME and ((len(getPlayers(Team.1).filter(lambda player: player.isVoting == false and player.pregameState > PregameState.SELECTING_HERO))) == len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus))):
+            elif getMatchTime() > 20 + VOTING_END_TIME and ((len(getPlayers(Team.1).filter(lambda player: player.isPregameVoting == false and player.pregameState > PregameState.SELECTING_HERO))) == len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive))):
                 setMatchTime(20 + VOTING_END_TIME)
     #Voting complete
     else:
@@ -495,7 +495,7 @@ def setPrematchTimer():
                 setMatchTime(15)
                 wait()
                 setMatchTime(10)
-            elif getMatchTime() > 20 and len(getPlayers(Team.1).filter(lambda player: player.pregameState == PregameState.READY)) == len(getPlayers(Team.1).filter(lambda player: player.playerActiveStatus)):
+            elif getMatchTime() > 20 and len(getPlayers(Team.1).filter(lambda player: player.pregameState == PregameState.READY)) == len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive)):
                 setMatchTime(20)
 
 
@@ -601,7 +601,7 @@ def objectivesManagement():
                 objectiveDescription = "Convert biowaste into powerups!"
                 biomorphingCapturePercent = 0
                 biomorphingResourcePositionList = []
-                getAllPlayers().playerObjectiveResourceValue = 0
+                getAllPlayers().biomorphingResourceAmount = 0
                 objectiveColor = rgb(135, 206, 250)
                 objectiveRad = 3.5
                 bigMessage(getAllPlayers(), "Find the indicated material and deposit it!")
@@ -647,45 +647,45 @@ def objectivesManagement():
 def selectTarget():
     @Name "selectTarget"
     
-    eventPlayer.targeting = true
+    eventPlayer.botIsSelectingTarget = true
     #Set potential targets empty
-    eventPlayer.potentialTargets = []
+    eventPlayer.botPotentialTargetList = []
     #Miniboss prioritizes players on objective
     if eventPlayer in miniBossList:
-        eventPlayer.potentialTargets.append(objectivePlayerList.filter(lambda x: not x.isDummy()))
+        eventPlayer.botPotentialTargetList.append(objectivePlayerList.filter(lambda x: not x.isDummy()))
     #Prioitize dummy bots
-    eventPlayer.potentialTargets.append(playerTargetList.filter(lambda x: x.isDummy()))
+    eventPlayer.botPotentialTargetList.append(playerTargetList.filter(lambda x: x.isDummy()))
     #For projectile firing heroes
     if not eventPlayer in bossStateList and eventPlayer.getHero() == Hero.PHARAH:
         #Players in Air
-        eventPlayer.potentialTargets.append(playerTargetList.filter(lambda x: distance(x.getPosition(), nearestWalkablePosition(x.getPosition())) > 5))
+        eventPlayer.botPotentialTargetList.append(playerTargetList.filter(lambda x: distance(x.getPosition(), nearestWalkablePosition(x.getPosition())) > 5))
     #Add players who are below bot to target list
-    eventPlayer.potentialTargets.append(sorted(playerTargetList.exclude(eventPlayer.potentialTargets).filter(lambda x: x.getPosition().y - eventPlayer.getPosition().y < 2.5), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))
+    eventPlayer.botPotentialTargetList.append(sorted(playerTargetList.exclude(eventPlayer.botPotentialTargetList).filter(lambda x: x.getPosition().y - eventPlayer.getPosition().y < 2.5), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))
     #Add remaining players
-    eventPlayer.potentialTargets.append(sorted(playerTargetList.exclude(eventPlayer.potentialTargets), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))
+    eventPlayer.botPotentialTargetList.append(sorted(playerTargetList.exclude(eventPlayer.botPotentialTargetList), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))
     #Remove invisible players
-    eventPlayer.potentialTargets = eventPlayer.potentialTargets.filter(lambda x: not x.invisible)
+    eventPlayer.botPotentialTargetList = eventPlayer.botPotentialTargetList.filter(lambda x: not x.invisibilityCount)
     # tmp0: candidate-target index, to select the first target visible to this bot.
-    for tmp0 in range(len(eventPlayer.potentialTargets)):
-        eventPlayer.testTarget = eventPlayer.potentialTargets[tmp0]
-        if isInLoS(eventPlayer.testTarget.getEyePosition(), eventPlayer.getPosition() + losOffsetConst):
+    for tmp0 in range(len(eventPlayer.botPotentialTargetList)):
+        eventPlayer.botCandidateTarget = eventPlayer.botPotentialTargetList[tmp0]
+        if isInLoS(eventPlayer.botCandidateTarget.getEyePosition(), eventPlayer.getPosition() + losOffsetConst):
             break
         #wait()
     if eventPlayer.isAlive():
-        eventPlayer.botTarget = eventPlayer.testTarget
-        eventPlayer.lastTarget = eventPlayer.botTarget
+        eventPlayer.botTarget = eventPlayer.botCandidateTarget
+        eventPlayer.botLastTarget = eventPlayer.botTarget
         startRule(restoreDefaultFacingMovement)
-    eventPlayer.targeting = false
+    eventPlayer.botIsSelectingTarget = false
 
 
 def restoreDefaultFacingMovement():
     @Name "restoreDefaultFacingMovement"
     
     if eventPlayer.botTarget != null:
-        if not eventPlayer.specialFacing:
-            eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()), 1500 if eventPlayer.attached else 0 if eventPlayer.crowdControlled else 100)
-        if not eventPlayer.specialThrottling:
-            eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()), eventPlayer.botThrottleSpeed if distance(eventPlayer.getPosition(), vect(eventPlayer.botTarget.getPosition().x, eventPlayer.getPosition().y, eventPlayer.botTarget.getPosition().z)) > 2 * min(1, eventPlayer.size) else 0, Relativity.TO_WORLD)
+        if not eventPlayer.botIsFacingOverridden:
+            eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()), 1500 if eventPlayer.botIsAttached else 0 if eventPlayer.isCrowdControlled else 100)
+        if not eventPlayer.botIsThrottleOverridden:
+            eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()), eventPlayer.botThrottleSpeed if distance(eventPlayer.getPosition(), vect(eventPlayer.botTarget.getPosition().x, eventPlayer.getPosition().y, eventPlayer.botTarget.getPosition().z)) > 2 * min(1, eventPlayer.sizeScale) else 0, Relativity.TO_WORLD)
     else:
         eventPlayer.startThrottleInDirection(eventPlayer.getFacingDirection(), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
         eventPlayer.startFacing(eventPlayer.getThrottle(), 100, Relativity.TO_PLAYER)
@@ -694,32 +694,32 @@ def restoreDefaultFacingMovement():
 def botRespawnInitialization():
     @Name "botRespawnInitialization"
     
-    eventPlayer.initializing = true
+    eventPlayer.botIsInitializing = true
     if eventPlayer in bossStateList:
         eventPlayer.disableNameplatesFor(getAllPlayers())
-        eventPlayer.health = 0
+        eventPlayer.botBaseHealth = 0
         eventPlayer.initialMaxHealth = eventPlayer.getMaxHealth()
     else:
         eventPlayer.enableNameplatesFor(getAllPlayers())
-        eventPlayer.size = createWorkshopSettingFloat("Zombies", "Zombie Size", 1, 0, 20)
-        eventPlayer.health = botHealthList[botHeroList.index(eventPlayer.getHero())]
+        eventPlayer.sizeScale = createWorkshopSettingFloat("Zombies", "Zombie Size", 1, 0, 20)
+        eventPlayer.botBaseHealth = botHealthList[botHeroList.index(eventPlayer.getHero())]
         #Scale zombie voice lines with size
-        eventPlayer.startModifyingVoicelinePitch(0.5 + (1 / (eventPlayer.size + 1)) + 0.25 * (sinDeg(getTotalTimeElapsed() * evalOnce(random.uniform(360, 720)))))
+        eventPlayer.startModifyingVoicelinePitch(0.5 + (1 / (eventPlayer.sizeScale + 1)) + 0.25 * (sinDeg(getTotalTimeElapsed() * evalOnce(random.uniform(360, 720)))))
     eventPlayer.stopForcingButton(Button.CROUCH)
     eventPlayer.stopForcingButton(Button.PRIMARY_FIRE)
     eventPlayer.enableEnvironmentCollision()
-    eventPlayer.wallCollisionEnabled = true
+    eventPlayer.botIsWallCollisionEnabled = true
     eventPlayer.enablePlayerCollision()
-    eventPlayer.attached = false
-    eventPlayer.specialFacing = false
-    eventPlayer.specialThrottling = false
-    eventPlayer.canWallPhase = true
-    eventPlayer.crowdControlled = false
-    eventPlayer.botTempValue = null
-    eventPlayer.botTempvalue2 = null
-    eventPlayer.botSpecialTarget = null
-    eventPlayer.targeting = false
-    eventPlayer.bossHealth = -1
+    eventPlayer.botIsAttached = false
+    eventPlayer.botIsFacingOverridden = false
+    eventPlayer.botIsThrottleOverridden = false
+    eventPlayer.botIsWallPhaseAllowed = true
+    eventPlayer.isCrowdControlled = false
+    eventPlayer.botAbilityState = null
+    eventPlayer.botAuxiliaryState = null
+    eventPlayer.botAbilityTarget = null
+    eventPlayer.botIsSelectingTarget = false
+    eventPlayer.botBossHealth = -1
     #Chance for a minboss on high difficulties
     if difficultySetting >= 3 and eventPlayer in bossStateList == false and len(miniBossList.filter(lambda x: entityExists(x))) == 0:
         # tmp0: miniboss promotion roll, consumed before the possible initialization wait.
@@ -732,19 +732,19 @@ def botRespawnInitialization():
         goto lbl_0
     mutationsMacro()
     lbl_0:
-    eventPlayer.startScalingSize(eventPlayer.size, false)
+    eventPlayer.startScalingSize(eventPlayer.sizeScale, false)
     botEntityManagementMacro()
-    waitUntil(eventPlayer.getHealth() >= eventPlayer.health, 5)
+    waitUntil(eventPlayer.getHealth() >= eventPlayer.botBaseHealth, 5)
     eventPlayer.stopAllHealingOverTime()
-    eventPlayer.setHealth(eventPlayer.health)
-    eventPlayer.initializing = false
+    eventPlayer.setHealth(eventPlayer.botBaseHealth)
+    eventPlayer.botIsInitializing = false
 
 
 def abilityPlacement():
     @Name "abilityPlacement"
     
     wait(0.5)
-    if eventPlayer.crowdControlled == true:
+    if eventPlayer.isCrowdControlled == true:
         return
     eventPlayer.forceButtonPress(Button.PRIMARY_FIRE)
     eventPlayer.setStatusEffect(null, Status.ROOTED, 1.6)
@@ -759,39 +759,39 @@ def abilityPlacement():
 def explosionSequence():
     @Name "explosionSequence"
     
-    eventPlayer.botSpecialPotentialTargets = getPlayers(Team.2) if not eventPlayer.isDummy() else getAllPlayers().filter(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < eventPlayer.explosionSize * 6 and (isInLoS(x.getEyePosition(), eventPlayer.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) if eventPlayer.isDummy() else true))
+    eventPlayer.explosionTargetList = getPlayers(Team.2) if not eventPlayer.isDummy() else getAllPlayers().filter(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < eventPlayer.explosionScale * 6 and (isInLoS(x.getEyePosition(), eventPlayer.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) if eventPlayer.isDummy() else true))
     #Scaled
-    damage(eventPlayer.botSpecialPotentialTargets, eventPlayer, eventPlayer.biteDamage * 2.5 if eventPlayer.isDummy() else eventPlayer.infectionLvl * 100)
+    damage(eventPlayer.explosionTargetList, eventPlayer, eventPlayer.botBiteDamage * 2.5 if eventPlayer.isDummy() else eventPlayer.infectionLevel * 100)
     if eventPlayer.isDummy():
         #Scaled
-        damage(eventPlayer.botSpecialPotentialTargets.filter(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < 3 * eventPlayer.size), eventPlayer, eventPlayer.biteDamage * 5)
+        damage(eventPlayer.explosionTargetList.filter(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < 3 * eventPlayer.sizeScale), eventPlayer, eventPlayer.botBiteDamage * 5)
         #Scaled
-        eventPlayer.botSpecialPotentialTargets.setStatusEffect(eventPlayer, Status.BURNING, 3)
+        eventPlayer.explosionTargetList.setStatusEffect(eventPlayer, Status.BURNING, 3)
         #Not scaled damage
-        eventPlayer.botSpecialPotentialTargets.startDamageOverTime(eventPlayer, 3, eventPlayer.biteDamage * 2)
-        if eventPlayer.damageOverTimeDuration < 3:
-            eventPlayer.damageOverTimeDuration = 3
-    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, eventPlayer.explosionColor2, eventPlayer.getPosition(), 6 * eventPlayer.explosionSize)
-    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, eventPlayer.explosionColor1, eventPlayer.getPosition(), 3 * eventPlayer.explosionSize)
+        eventPlayer.explosionTargetList.startDamageOverTime(eventPlayer, 3, eventPlayer.botBiteDamage * 2)
+        if eventPlayer.damageOverTimeRemaining < 3:
+            eventPlayer.damageOverTimeRemaining = 3
+    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, eventPlayer.explosionOuterColor, eventPlayer.getPosition(), 6 * eventPlayer.explosionScale)
+    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, eventPlayer.explosionInnerColor, eventPlayer.getPosition(), 3 * eventPlayer.explosionScale)
     #Scaled
-    playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, Color.YELLOW, eventPlayer.getPosition(), 150 * eventPlayer.explosionSize)
+    playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, Color.YELLOW, eventPlayer.getPosition(), 150 * eventPlayer.explosionScale)
     #Scaled
-    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.YELLOW, eventPlayer.getPosition(), 150 * eventPlayer.explosionSize)
+    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.YELLOW, eventPlayer.getPosition(), 150 * eventPlayer.explosionScale)
     wait(0.25)
 
 
 def illariUlt():
     @Name "DAYTAKER'S REVENGE (BOSS)"
     
-    eventPlayer.botSpecialTarget.detach()
-    eventPlayer.botSpecialTarget.attached = false
-    eventPlayer.botSpecialTarget = null
+    eventPlayer.botAbilityTarget.detach()
+    eventPlayer.botAbilityTarget.isAttached = false
+    eventPlayer.botAbilityTarget = null
     eventPlayer.setAbilityCooldown(Button.ABILITY_1, 10)
     eventPlayer.setUltCharge(100)
     wait(1)
     eventPlayer.forceButtonPress(Button.ULTIMATE)
-    eventPlayer.movementSpeed /= 3
-    eventPlayer.setMoveSpeed(eventPlayer.movementSpeed * 100)
+    eventPlayer.movementSpeedScale /= 3
+    eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
     wait(1.5)
     if eventPlayer.isDead():
         return
@@ -800,5 +800,5 @@ def illariUlt():
     eventPlayer.forceButtonPress(Button.PRIMARY_FIRE)
     lbl_0:
     waitUntil(eventPlayer.isUsingUltimate(), false)
-    eventPlayer.movementSpeed *= 3
-    eventPlayer.setMoveSpeed(eventPlayer.movementSpeed * 100)
+    eventPlayer.movementSpeedScale *= 3
+    eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)

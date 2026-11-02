@@ -5,11 +5,11 @@ rule "ASSIGN ZOMBIE TO BECOME EGG":
     @Condition objectiveTypeList[0] == ObjectiveType.ZOMBIE_EGG
     @Condition isObjectiveComplete == false
     @Condition entityExists(zombieEggStateList[0]) == false
-    @Condition (getLivingPlayers(Team.2).any(lambda player: not player.teleporting and player.botTarget == null)) == true
+    @Condition (getLivingPlayers(Team.2).any(lambda player: not player.botIsTeleporting and player.botTarget == null)) == true
     @Condition len(botHeroList.filter(lambda x: getNumberOfHeroes(x, Team.2) > 0)) < uniqueSkinCap - max(getNumberOfSlots(Team.1), getNumberOfPlayers(Team.1))
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
-    zombieEggStateList[0] = random.choice(getLivingPlayers(Team.2).filter(lambda player: not player.teleporting and not player.attached and player.botTarget == null))
+    zombieEggStateList[0] = random.choice(getLivingPlayers(Team.2).filter(lambda player: not player.botIsTeleporting and not player.isAttached and player.botTarget == null))
     if ruleCondition:
         loop()
 
@@ -29,17 +29,17 @@ rule "BOT BECOMES ZOMBIE EGG":
     botRespawnInitialization()
     eventPlayer.setMeleeEnabled(false)
     eventPlayer.startForcingName("Egg")
-    eventPlayer.specialThrottling = true
+    eventPlayer.botIsThrottleOverridden = true
     eventPlayer.setInvisibility(Invis.ALL)
     eventPlayer.startForcingPosition(objectivePositionList[0] + vect(0, -2.5, 0))
     eventPlayer.startModifyingVoicelinePitch(0.5, false)
-    eventPlayer.health = 15000
-    eventPlayer.bossHealth = eventPlayer.health
-    eventPlayer.size = 2.5
-    eventPlayer.startScalingSize(eventPlayer.size, false)
+    eventPlayer.botBaseHealth = 15000
+    eventPlayer.botBossHealth = eventPlayer.botBaseHealth
+    eventPlayer.sizeScale = 2.5
+    eventPlayer.startScalingSize(eventPlayer.sizeScale, false)
     eventPlayer.setHealth(eventPlayer.getMaxHealth())
-    waitUntil(eventPlayer.wallCollisionEnabled == true, 5)
-    eventPlayer.wallCollisionEnabled = false
+    waitUntil(eventPlayer.botIsWallCollisionEnabled == true, 5)
+    eventPlayer.botIsWallCollisionEnabled = false
     eventPlayer.disableEnvironmentCollision(true)
     eventPlayer.setHealingReceived(0)
     while not isObjectiveComplete:
@@ -55,22 +55,22 @@ rule "BOTS TELEPORT TO THE EGG":
     @Team 2
     @Condition objectiveTypeList[0] == ObjectiveType.ZOMBIE_EGG
     @Condition isObjectiveComplete != true
-    @Condition eventPlayer.initializing != true
-    @Condition eventPlayer.teleporting != true
-    @Condition eventPlayer.successfullyTeleported != true
+    @Condition eventPlayer.botIsInitializing != true
+    @Condition eventPlayer.botIsTeleporting != true
+    @Condition eventPlayer.botIsTeleportConfirmed != true
     @Condition eventPlayer.isAlive() == true
     @Condition entityExists(zombieEggStateList[0]) == true
     @Condition eventPlayer in zombieEggStateList != true
     @Condition playerTargetList.any(lambda x: distance(objectivePositionList[0], x.getPosition()) < 40) == true
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
-    eventPlayer.successfullyTeleported = true
-    eventPlayer.customTelePos = dummyHoldingPositionConst
-    eventPlayer.telePos = objectivePositionList[0]
-    eventPlayer.averagePlayersPos = eventPlayer.telePos
-    eventPlayer.reviveTimer = 1
+    eventPlayer.botIsTeleportConfirmed = true
+    eventPlayer.botCustomTeleportPosition = dummyHoldingPositionConst
+    eventPlayer.botTeleportPosition = objectivePositionList[0]
+    eventPlayer.botTeleportCenter = eventPlayer.botTeleportPosition
+    eventPlayer.botRespawnDelay = 1
     playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.LIME_GREEN, objectivePositionList[0], 7)
-    eventPlayer.teleport(eventPlayer.telePos)
+    eventPlayer.teleport(eventPlayer.botTeleportPosition)
 
 
 rule "EGG SWITCHES THE POSITION FOR YOU":

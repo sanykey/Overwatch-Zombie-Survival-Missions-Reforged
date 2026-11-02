@@ -29,7 +29,7 @@ rule "EFFECT/TEXT (PERMANENT)":
     # tmp0: zero-based item index, to choose the row's visibility, name, instructions and color.
     for tmp0 in range(13):
         hudText(
-            getLivingPlayers(Team.1).filter(lambda player: player.currentPowerUp == evalOnce(tmp0) + 1),
+            getLivingPlayers(Team.1).filter(lambda player: player.powerUpItemId == evalOnce(tmp0) + 1),
             [
                 "CURE",
                 "REVIVE",
@@ -76,25 +76,25 @@ rule "PLAYER DROPS POWER UP (MANUAL)":
     @Condition eventPlayer.isHoldingButton(Button.RELOAD) == true
     @Condition isGameplayActive == true
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.currentPowerUp != 0
+    @Condition eventPlayer.powerUpItemId != 0
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
-    supplyPowerUpIdList.append(eventPlayer.currentPowerUp)
+    supplyPowerUpIdList.append(eventPlayer.powerUpItemId)
     supplyPowerUpPositionList.append(eventPlayer.getPosition() + vect(0, 0.25, 0) if eventPlayer.isOnGround() else nearestWalkablePosition(eventPlayer.getPosition()))
     wait()
-    eventPlayer.currentPowerUp = 0
+    eventPlayer.powerUpItemId = 0
     playEffect(eventPlayer, DynamicEffect.DEBUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.getPosition(), 25)
 
 
 rule "PLAYER DROPS POWER UP (DEATH)":
     @Event playerDied
     @Team 1
-    @Condition eventPlayer.currentPowerUp != 0
+    @Condition eventPlayer.powerUpItemId != 0
     
     while not eventPlayer.isOnGround():
         wait(0.25)
-    supplyPowerUpIdList.append(eventPlayer.currentPowerUp)
+    supplyPowerUpIdList.append(eventPlayer.powerUpItemId)
     supplyPowerUpPositionList.append(eventPlayer.getPosition() + vect(0, 0.25, 0))
     wait()
-    eventPlayer.currentPowerUp = 0
+    eventPlayer.powerUpItemId = 0
     playEffect(eventPlayer, DynamicEffect.DEBUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.getPosition(), 25)

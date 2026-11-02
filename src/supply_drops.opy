@@ -97,15 +97,15 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
             supplyPowerUpPositionList.append(supplyDropLandingPosition + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(supplyDropLandingPosition, eventPlayer.getPosition())) + tmp0, 0)) * 2))
     elif len(supplyPowerUpPositionList) > 0 and ((len(supplyPowerUpPositionList.filter(lambda x: distance(x, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), x)) < 0.5 and distance(eventPlayer.getPosition(), x) <= 6))) > 0):
         #Power up effect position
-        eventPlayer.powerUpTradeValues[0] = (sorted(supplyPowerUpPositionList.filter(lambda x: distance(x, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), x)) < 0.5 and distance(eventPlayer.getPosition(), x) <= 6), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x))))[0]
+        eventPlayer.powerUpTradeDataList[0] = (sorted(supplyPowerUpPositionList.filter(lambda x: distance(x, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), x)) < 0.5 and distance(eventPlayer.getPosition(), x) <= 6), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x))))[0]
         #Current power up (or 0 if no current power up)
-        eventPlayer.powerUpTradeValues[2] = eventPlayer.currentPowerUp
+        eventPlayer.powerUpTradeDataList[2] = eventPlayer.powerUpItemId
         wait()
         #Index of position of current power up being aquired
-        eventPlayer.powerUpTradeIndex = supplyPowerUpPositionList.index(eventPlayer.powerUpTradeValues[0])
+        eventPlayer.powerUpTradeIndex = supplyPowerUpPositionList.index(eventPlayer.powerUpTradeDataList[0])
         wait()
         #Pick up power up
-        eventPlayer.currentPowerUp = supplyPowerUpIdList[eventPlayer.powerUpTradeIndex]
+        eventPlayer.powerUpItemId = supplyPowerUpIdList[eventPlayer.powerUpTradeIndex]
         destroyEffect(supplyPowerUpEffectIdList[eventPlayer.powerUpTradeIndex])
         destroyInWorldText(supplyPowerUpTextIdList[eventPlayer.powerUpTradeIndex])
         wait()
@@ -115,10 +115,10 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         del supplyPowerUpTextIdList[eventPlayer.powerUpTradeIndex]
         wait()
         #Trade power ups. Ignore if no power up is currently held.
-        if eventPlayer.powerUpTradeValues[2] != 0:
-            supplyPowerUpIdList.append(eventPlayer.powerUpTradeValues[2])
-            supplyPowerUpPositionList.append(eventPlayer.powerUpTradeValues[0])
-    elif eventPlayer.currentPowerUp != 0:
+        if eventPlayer.powerUpTradeDataList[2] != 0:
+            supplyPowerUpIdList.append(eventPlayer.powerUpTradeDataList[2])
+            supplyPowerUpPositionList.append(eventPlayer.powerUpTradeDataList[0])
+    elif eventPlayer.powerUpItemId != 0:
         wait(0.25, Wait.ABORT_WHEN_FALSE)
         powerUpUsage()
 
@@ -126,36 +126,36 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
 def instantRevive():
     @Name "instantRevive (0-9)"
     
-    eventPlayer.interactEntity = (sorted(getDeadPlayers(Team.1).filter(lambda player: distance(eventPlayer.getPosition(), player.getPosition()) <= REVIVE_RADIUS), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getPosition()))))[0]
+    eventPlayer.powerUpReviveTarget = (sorted(getDeadPlayers(Team.1).filter(lambda player: distance(eventPlayer.getPosition(), player.getPosition()) <= REVIVE_RADIUS), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getPosition()))))[0]
     wait()
-    eventPlayer.interactEntity.setStatusEffect(null, Status.INVINCIBLE, 5)
-    eventPlayer.interactEntity.resurrect()
-    waitUntil(eventPlayer.interactEntity.isAlive(), 3)
+    eventPlayer.powerUpReviveTarget.setStatusEffect(null, Status.INVINCIBLE, 5)
+    eventPlayer.powerUpReviveTarget.resurrect()
+    waitUntil(eventPlayer.powerUpReviveTarget.isAlive(), 3)
     playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.AQUA, eventPlayer.getPosition(), 50)
-    smallMessage([eventPlayer, eventPlayer.interactEntity], "{0} {1}: \"I've got you. Now let's move!\"".format(eventPlayer, heroIcon(eventPlayer.getHero())))
+    smallMessage([eventPlayer, eventPlayer.powerUpReviveTarget], "{0} {1}: \"I've got you. Now let's move!\"".format(eventPlayer, heroIcon(eventPlayer.getHero())))
 
 
 def playerForceField():
     @Name "playerForceField (10-19)"
     
-    eventPlayer.forceFieldPosition = eventPlayer.getPosition()
-    if not entityExists(eventPlayer.powerUpEffects[10]):
-        createEffect(getAllPlayers(), Effect.SPHERE, Color.BLUE, eventPlayer.forceFieldPosition, 7.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEffects[10] = getLastCreatedEntity()
-        hudHeader(eventPlayer, "Force Field: {0}s".format(ceil(eventPlayer.pForceFieldCount1)), HudPosition.RIGHT, 0.2, Color.BLUE, HudReeval.VISIBILITY_AND_STRING)
-        eventPlayer.powerUpEffects[11] = getLastCreatedText()
-    playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.BLUE, eventPlayer.forceFieldPosition, 3)
-    playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.forceFieldPosition, 50)
+    eventPlayer.powerUpForceFieldPosition = eventPlayer.getPosition()
+    if not entityExists(eventPlayer.powerUpEntityIdList[10]):
+        createEffect(getAllPlayers(), Effect.SPHERE, Color.BLUE, eventPlayer.powerUpForceFieldPosition, 7.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        eventPlayer.powerUpEntityIdList[10] = getLastCreatedEntity()
+        hudHeader(eventPlayer, "Force Field: {0}s".format(ceil(eventPlayer.powerUpForceFieldTimeRemaining)), HudPosition.RIGHT, 0.2, Color.BLUE, HudReeval.VISIBILITY_AND_STRING)
+        eventPlayer.powerUpEntityIdList[11] = getLastCreatedText()
+    playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.BLUE, eventPlayer.powerUpForceFieldPosition, 3)
+    playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.powerUpForceFieldPosition, 50)
     #Force field duration
-    for eventPlayer.pForceFieldCount1 in range(10, 0, -0.032):
+    for eventPlayer.powerUpForceFieldTimeRemaining in range(10, 0, -0.032):
         # tmp0: zombie index, to apply the force-field impulse to each nearby living zombie.
         for tmp0 in range(getNumberOfLivingPlayers(Team.2)):
-            if distance(getLivingPlayers(Team.2)[tmp0], eventPlayer.forceFieldPosition) <= 7.5:
-                getLivingPlayers(Team.2)[tmp0].applyImpulse(directionTowards(eventPlayer.forceFieldPosition, getLivingPlayers(Team.2)[tmp0].getPosition()), 6, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+            if distance(getLivingPlayers(Team.2)[tmp0], eventPlayer.powerUpForceFieldPosition) <= 7.5:
+                getLivingPlayers(Team.2)[tmp0].applyImpulse(directionTowards(eventPlayer.powerUpForceFieldPosition, getLivingPlayers(Team.2)[tmp0].getPosition()), 6, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
         wait(0.032)
-    destroyEffect(eventPlayer.powerUpEffects[10])
-    destroyHudText(eventPlayer.powerUpEffects[11])
-    eventPlayer.forceFieldPosition = 0
+    destroyEffect(eventPlayer.powerUpEntityIdList[10])
+    destroyHudText(eventPlayer.powerUpEntityIdList[11])
+    eventPlayer.powerUpForceFieldPosition = 0
 
 
 def noCooldowns():
@@ -163,11 +163,11 @@ def noCooldowns():
     
     playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.AQUA, eventPlayer.getPosition(), 50)
     playEffect(eventPlayer, DynamicEffect.GOOD_PICKUP_EFFECT, Color.RED, eventPlayer, 50)
-    if eventPlayer.powerUpEffects[20] == 0:
-        hudHeader(eventPlayer, "No Cooldowns: {0}s".format(ceil(eventPlayer.pNoCooldownsCount_bCount2)), HudPosition.RIGHT, 0.2, Color.RED, HudReeval.VISIBILITY_AND_STRING)
-        eventPlayer.powerUpEffects[20] = getLastCreatedText()
+    if eventPlayer.powerUpEntityIdList[20] == 0:
+        hudHeader(eventPlayer, "No Cooldowns: {0}s".format(ceil(eventPlayer.powerUpNoCooldownsTimeRemaining)), HudPosition.RIGHT, 0.2, Color.RED, HudReeval.VISIBILITY_AND_STRING)
+        eventPlayer.powerUpEntityIdList[20] = getLastCreatedText()
     #No cooldown powerup duration
-    for eventPlayer.pNoCooldownsCount_bCount2 in range(15, 0, -0.032):
+    for eventPlayer.powerUpNoCooldownsTimeRemaining in range(15, 0, -0.032):
         eventPlayer.setAbilityCooldown(Button.ABILITY_1, 0)
         eventPlayer.setAbilityCooldown(Button.ABILITY_2, 0)
         eventPlayer.setAbilityCooldown(Button.PRIMARY_FIRE, 0)
@@ -183,8 +183,8 @@ def noCooldowns():
         eventPlayer.setAbilityCharge(Button.SECONDARY_FIRE, 2)
         eventPlayer.setAbilityCooldown(Button.RELOAD, 0)
         wait(0.032)
-    destroyHudText(eventPlayer.powerUpEffects[20])
-    eventPlayer.powerUpEffects[20] = 0
+    destroyHudText(eventPlayer.powerUpEntityIdList[20])
+    eventPlayer.powerUpEntityIdList[20] = 0
 
 
 def airStrike():
@@ -193,18 +193,18 @@ def airStrike():
     wait()
     smallMessage(getAllPlayers(), "{0} {1}: \"I've called in an air strike!\"".format(eventPlayer, heroIcon(eventPlayer.getHero())))
     #Air Strike Location
-    eventPlayer.airStrikePosition = raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 40, null, getAllPlayers(), false)
-    if eventPlayer.powerUpEffects[30] == 0:
-        createEffect(getAllPlayers(), Effect.RING, Color.RED, eventPlayer.airStrikePosition, 10, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEffects[30] = getLastCreatedEntity()
-        createEffect(getAllPlayers(), Effect.CLOUD, Color.RED, eventPlayer.airStrikePosition, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEffects[31] = getLastCreatedEntity()
+    eventPlayer.powerUpAirStrikePosition = raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 40, null, getAllPlayers(), false)
+    if eventPlayer.powerUpEntityIdList[30] == 0:
+        createEffect(getAllPlayers(), Effect.RING, Color.RED, eventPlayer.powerUpAirStrikePosition, 10, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        eventPlayer.powerUpEntityIdList[30] = getLastCreatedEntity()
+        createEffect(getAllPlayers(), Effect.CLOUD, Color.RED, eventPlayer.powerUpAirStrikePosition, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        eventPlayer.powerUpEntityIdList[31] = getLastCreatedEntity()
     wait(2)
     #Count up to max radius. Number of explosions = Max radius / step size
-    for eventPlayer.pAirStrikeCount in range(50):
+    for eventPlayer.powerUpAirStrikeIndex in range(50):
         #Random position in ring
         # tmp0: candidate explosion position above the strike area, to raycast onto the ground.
-        tmp0 = eventPlayer.airStrikePosition + vect(0, 5, 0) + directionFromAngles(random.uniform(0, 360), 0) * random.uniform(0, 10)
+        tmp0 = eventPlayer.powerUpAirStrikePosition + vect(0, 5, 0) + directionFromAngles(random.uniform(0, 360), 0) * random.uniform(0, 10)
         #Ray Cast downwards
         # tmp0: ground impact position, shared by this explosion's effects and damage-radius check.
         tmp0 = raycastHitPosition(tmp0, tmp0 + vect(0, -25, 0), null, getAllPlayers(), false)
@@ -215,166 +215,166 @@ def airStrike():
         # tmp1: zombies inside this explosion's radius, to damage them and set their respawn timers.
         tmp1 = getPlayers(Team.2).filter(lambda player: distance(player.getPosition(), tmp0) < 5)
         damage(tmp1, eventPlayer, 150)
-        tmp1.reviveTimer = 10
+        tmp1.botRespawnDelay = 10
         wait(0.125)
-    destroyEffect(eventPlayer.powerUpEffects[30])
-    destroyEffect(eventPlayer.powerUpEffects[31])
-    eventPlayer.powerUpEffects[30] = 0
+    destroyEffect(eventPlayer.powerUpEntityIdList[30])
+    destroyEffect(eventPlayer.powerUpEntityIdList[31])
+    eventPlayer.powerUpEntityIdList[30] = 0
 
 
 def healBeacon():
     @Name "beaconofHealing (40-49)"
     
-    eventPlayer.healBeaconPosition = eventPlayer.getPosition()
-    if not entityExists(eventPlayer.powerUpEffects[40]):
-        createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.YELLOW, eventPlayer.healBeaconPosition + vect(0, -2, 0), 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEffects[40] = getLastCreatedEntity()
-        createEffect(getAllPlayers(), Effect.RING, Color.YELLOW, eventPlayer.healBeaconPosition, 10, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEffects[41] = getLastCreatedEntity()
-        hudHeader(eventPlayer, "Beacon of Healing: {0}s".format(ceil(eventPlayer.pHealBeaconCount)), HudPosition.RIGHT, 0.2, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)
-        eventPlayer.powerUpEffects[42] = getLastCreatedText()
+    eventPlayer.powerUpHealBeaconPosition = eventPlayer.getPosition()
+    if not entityExists(eventPlayer.powerUpEntityIdList[40]):
+        createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition + vect(0, -2, 0), 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        eventPlayer.powerUpEntityIdList[40] = getLastCreatedEntity()
+        createEffect(getAllPlayers(), Effect.RING, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition, 10, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        eventPlayer.powerUpEntityIdList[41] = getLastCreatedEntity()
+        hudHeader(eventPlayer, "Beacon of Healing: {0}s".format(ceil(eventPlayer.powerUpHealBeaconTimeRemaining)), HudPosition.RIGHT, 0.2, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)
+        eventPlayer.powerUpEntityIdList[42] = getLastCreatedText()
         createEffect(getAllPlayers(), Effect.GOOD_AURA, Color.YELLOW, eventPlayer, distance(eventPlayer.getEyePosition(), eventPlayer.getPosition()) * 0.9, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEffects[43] = getLastCreatedEntity()
-    playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.YELLOW, eventPlayer.healBeaconPosition, 10)
-    playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.healBeaconPosition, 50)
+        eventPlayer.powerUpEntityIdList[43] = getLastCreatedEntity()
+    playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition, 10)
+    playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.powerUpHealBeaconPosition, 50)
     eventPlayer.setHealingDealt(150)
     #Heal Beacon duration
-    for eventPlayer.pHealBeaconCount in range(30, 0, -1):
+    for eventPlayer.powerUpHealBeaconTimeRemaining in range(30, 0, -1):
         wait(1)
-        playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.YELLOW, eventPlayer.healBeaconPosition + vect(0, 1, 0), 0.1)
-        getPlayersInRadius(eventPlayer.healBeaconPosition, 10, eventPlayer.getTeam()).startHealingOverTime(eventPlayer, 2, 30)
-    destroyEffect(eventPlayer.powerUpEffects[40])
-    destroyEffect(eventPlayer.powerUpEffects[41])
-    destroyHudText(eventPlayer.powerUpEffects[42])
-    destroyEffect(eventPlayer.powerUpEffects[43])
+        playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition + vect(0, 1, 0), 0.1)
+        getPlayersInRadius(eventPlayer.powerUpHealBeaconPosition, 10, eventPlayer.getTeam()).startHealingOverTime(eventPlayer, 2, 30)
+    destroyEffect(eventPlayer.powerUpEntityIdList[40])
+    destroyEffect(eventPlayer.powerUpEntityIdList[41])
+    destroyHudText(eventPlayer.powerUpEntityIdList[42])
+    destroyEffect(eventPlayer.powerUpEntityIdList[43])
     eventPlayer.setHealingDealt(100)
-    eventPlayer.healBeaconPosition = 0
+    eventPlayer.powerUpHealBeaconPosition = 0
 
 
 def sentryTurret():
     @Name "sentryTurret (50-59)"
     
-    eventPlayer.sentryTurretPosition = eventPlayer.getPosition() + Vector.UP if eventPlayer.isOnGround() else nearestWalkablePosition(eventPlayer.getPosition()) + Vector.UP
-    if not entityExists(eventPlayer.powerUpEffects[50]):
-        createEffect(getAllPlayers(), Effect.SPHERE, Color.ORANGE, eventPlayer.sentryTurretPosition, 0.15, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEffects[50] = getLastCreatedEntity()
+    eventPlayer.powerUpTurretPosition = eventPlayer.getPosition() + Vector.UP if eventPlayer.isOnGround() else nearestWalkablePosition(eventPlayer.getPosition()) + Vector.UP
+    if not entityExists(eventPlayer.powerUpEntityIdList[50]):
+        createEffect(getAllPlayers(), Effect.SPHERE, Color.ORANGE, eventPlayer.powerUpTurretPosition, 0.15, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        eventPlayer.powerUpEntityIdList[50] = getLastCreatedEntity()
         # tmp0: turret-leg index, to space three beams 120 degrees apart and store their effect IDs.
         for tmp0 in range(3):
-            createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.sentryTurretPosition, eventPlayer.sentryTurretPosition + directionFromAngles(evalOnce(tmp0) * 120, 60) * 1.5, Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.powerUpEffects[51 + tmp0] = getLastCreatedEntity()
-        createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.sentryTurretPosition, eventPlayer.sentryTurretPosition + (eventPlayer.sentryTurretDirection * 0.5 if len(getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.sentryTurretPosition, player) and not player.teleporting)) else eventPlayer.getFacingDirection() * 0.5), Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEffects[54] = getLastCreatedEntity()
-        hudHeader(eventPlayer, "Sentry Turret: {0}s".format(ceil(eventPlayer.pSentryTurretCount)), HudPosition.RIGHT, 0.2, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING)
-        eventPlayer.powerUpEffects[55] = getLastCreatedText()
-    playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.ORANGE, eventPlayer.sentryTurretPosition, 5)
-    playEffect(getAllPlayers(), DynamicEffect.DEBUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.sentryTurretPosition, 50)
+            createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + directionFromAngles(evalOnce(tmp0) * 120, 60) * 1.5, Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            eventPlayer.powerUpEntityIdList[51 + tmp0] = getLastCreatedEntity()
+        createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + (eventPlayer.powerUpTurretDirection * 0.5 if len(getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.powerUpTurretPosition, player) and not player.botIsTeleporting)) else eventPlayer.getFacingDirection() * 0.5), Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        eventPlayer.powerUpEntityIdList[54] = getLastCreatedEntity()
+        hudHeader(eventPlayer, "Sentry Turret: {0}s".format(ceil(eventPlayer.powerUpTurretTimeRemaining)), HudPosition.RIGHT, 0.2, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING)
+        eventPlayer.powerUpEntityIdList[55] = getLastCreatedText()
+    playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.ORANGE, eventPlayer.powerUpTurretPosition, 5)
+    playEffect(getAllPlayers(), DynamicEffect.DEBUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.powerUpTurretPosition, 50)
     #Sentry Gun Duration
-    for eventPlayer.pSentryTurretCount in range(30, 0, -0.125):
-        if (len(getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.sentryTurretPosition, player) and not player.teleporting))) > 0:
-            eventPlayer.sentryTurretDirection = directionTowards(eventPlayer.sentryTurretPosition, sorted(getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.sentryTurretPosition, player)), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition())))[0].getPosition() + vect(0, 1, 0))
+    for eventPlayer.powerUpTurretTimeRemaining in range(30, 0, -0.125):
+        if (len(getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.powerUpTurretPosition, player) and not player.botIsTeleporting))) > 0:
+            eventPlayer.powerUpTurretDirection = directionTowards(eventPlayer.powerUpTurretPosition, sorted(getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.powerUpTurretPosition, player)), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition())))[0].getPosition() + vect(0, 1, 0))
             # tmp0: turret shot's impact position with random spread, to place its explosion and damage ray.
-            tmp0 = raycastHitPosition(eventPlayer.sentryTurretPosition, eventPlayer.sentryTurretPosition + ((directionFromAngles(random.uniform(-1, 1) + horizontalAngleOfDirection(eventPlayer.sentryTurretDirection), random.uniform(-1, 1) + verticalAngleOfDirection(eventPlayer.sentryTurretDirection))) * 100), getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())), getPlayers(eventPlayer.getTeam()), true)
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, eventPlayer.sentryTurretPosition + eventPlayer.sentryTurretDirection * 0.5, 25)
-            playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer.sentryTurretPosition + eventPlayer.sentryTurretDirection * 0.5, 0.1)
+            tmp0 = raycastHitPosition(eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + ((directionFromAngles(random.uniform(-1, 1) + horizontalAngleOfDirection(eventPlayer.powerUpTurretDirection), random.uniform(-1, 1) + verticalAngleOfDirection(eventPlayer.powerUpTurretDirection))) * 100), getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())), getPlayers(eventPlayer.getTeam()), true)
+            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, eventPlayer.powerUpTurretPosition + eventPlayer.powerUpTurretDirection * 0.5, 25)
+            playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer.powerUpTurretPosition + eventPlayer.powerUpTurretDirection * 0.5, 0.1)
             playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, tmp0, 0.1)
-            damage(raycastHitPlayer(eventPlayer.sentryTurretPosition, eventPlayer.sentryTurretPosition + directionTowards(eventPlayer.sentryTurretPosition, tmp0) * 100, getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())), getPlayers(eventPlayer.getTeam()), true), eventPlayer, 20)
+            damage(raycastHitPlayer(eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + directionTowards(eventPlayer.powerUpTurretPosition, tmp0) * 100, getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())), getPlayers(eventPlayer.getTeam()), true), eventPlayer, 20)
         wait(0.125)
     # tmp0: turret-effect slot 50-54, to destroy the sphere, legs and barrel when the turret expires.
     for tmp0 in range(50, 55):
-        destroyEffect(eventPlayer.powerUpEffects[tmp0])
-    destroyHudText(eventPlayer.powerUpEffects[55])
-    eventPlayer.sentryTurretPosition = 0
+        destroyEffect(eventPlayer.powerUpEntityIdList[tmp0])
+    destroyHudText(eventPlayer.powerUpEntityIdList[55])
+    eventPlayer.powerUpTurretPosition = 0
 
 
 def cloakingDevice():
     @Name "cloakingDevice (60-69)"
     
-    if eventPlayer.powerUpEffects[60] == 0:
-        eventPlayer.movementSpeed *= 1.5
-        eventPlayer.setMoveSpeed(eventPlayer.movementSpeed * 100)
+    if eventPlayer.powerUpEntityIdList[60] == 0:
+        eventPlayer.movementSpeedScale *= 1.5
+        eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
         createEffect(getAllPlayers(), Effect.SPHERE, Color.BLUE, eventPlayer, distance(eventPlayer.getEyePosition(), eventPlayer.getPosition()) * 0.95, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEffects[60] = getLastCreatedEntity()
-        hudText(eventPlayer, "Cloaking Device: {0}s".format(ceil(eventPlayer.pCloakingDeviceCount)), null, "Cancel (Press [{0}] + [{1}])".format(inputBindingString(Button.CROUCH), inputBindingString(Button.INTERACT)) if eventPlayer.pCloakingDeviceCount < 23 else [], HudPosition.RIGHT, 0.2, Color.BLUE, null, Color.BLUE, HudReeval.VISIBILITY_AND_STRING)
-        eventPlayer.powerUpEffects[61] = getLastCreatedText()
-        eventPlayer.invisible++
-    if not eventPlayer.invisible:
+        eventPlayer.powerUpEntityIdList[60] = getLastCreatedEntity()
+        hudText(eventPlayer, "Cloaking Device: {0}s".format(ceil(eventPlayer.powerUpCloakTimeRemaining)), null, "Cancel (Press [{0}] + [{1}])".format(inputBindingString(Button.CROUCH), inputBindingString(Button.INTERACT)) if eventPlayer.powerUpCloakTimeRemaining < 23 else [], HudPosition.RIGHT, 0.2, Color.BLUE, null, Color.BLUE, HudReeval.VISIBILITY_AND_STRING)
+        eventPlayer.powerUpEntityIdList[61] = getLastCreatedText()
+        eventPlayer.invisibilityCount++
+    if not eventPlayer.invisibilityCount:
         smallMessage(eventPlayer, "Cloaking activated. You are now invisible.")
     playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.BLUE, eventPlayer.getPosition(), distance(eventPlayer.getEyePosition(), eventPlayer.getPosition()) * 0.95)
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.getPosition(), 50)
     #Cloaking Duration
-    for eventPlayer.pCloakingDeviceCount in range(25, 0, -1):
-        if eventPlayer.pCloakingDeviceCount < 23 and eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.isHoldingButton(Button.INTERACT):
+    for eventPlayer.powerUpCloakTimeRemaining in range(25, 0, -1):
+        if eventPlayer.powerUpCloakTimeRemaining < 23 and eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.isHoldingButton(Button.INTERACT):
             smallMessage(eventPlayer, "Cloaking deactivated")
             break
         if eventPlayer.isDead():
             break
-        waitUntil(eventPlayer.pCloakingDeviceCount < 23 and eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.isHoldingButton(Button.INTERACT), 1)
-    eventPlayer.invisible--
-    destroyEffect(eventPlayer.powerUpEffects[60])
-    destroyHudText(eventPlayer.powerUpEffects[61])
-    eventPlayer.powerUpEffects[60] = 0
-    if not eventPlayer.invisible:
+        waitUntil(eventPlayer.powerUpCloakTimeRemaining < 23 and eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.isHoldingButton(Button.INTERACT), 1)
+    eventPlayer.invisibilityCount--
+    destroyEffect(eventPlayer.powerUpEntityIdList[60])
+    destroyHudText(eventPlayer.powerUpEntityIdList[61])
+    eventPlayer.powerUpEntityIdList[60] = 0
+    if not eventPlayer.invisibilityCount:
         smallMessage(eventPlayer, "You are now visible")
-    eventPlayer.movementSpeed /= 1.5
-    eventPlayer.setMoveSpeed(eventPlayer.movementSpeed * 100)
+    eventPlayer.movementSpeedScale /= 1.5
+    eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
 
 
 def superNano():
     @Name "superNano (70-79)"
     
-    if eventPlayer.powerUpEffects[70] == 0:
-        eventPlayer.movementSpeed *= 1.5
-        eventPlayer.setMoveSpeed(eventPlayer.movementSpeed * 100)
+    if eventPlayer.powerUpEntityIdList[70] == 0:
+        eventPlayer.movementSpeedScale *= 1.5
+        eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
         createEffect(getAllPlayers(), Effect.GOOD_AURA, Color.RED, eventPlayer, distance(eventPlayer.getEyePosition(), eventPlayer.getPosition()) * 0.95, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEffects[70] = getLastCreatedEntity()
-        hudHeader(eventPlayer, "Super Nano: {0}s".format(ceil(eventPlayer.pSuperNanoCount)), HudPosition.RIGHT, 0.2, Color.RED, HudReeval.VISIBILITY_AND_STRING)
-        eventPlayer.powerUpEffects[71] = getLastCreatedText()
+        eventPlayer.powerUpEntityIdList[70] = getLastCreatedEntity()
+        hudHeader(eventPlayer, "Super Nano: {0}s".format(ceil(eventPlayer.powerUpSuperNanoTimeRemaining)), HudPosition.RIGHT, 0.2, Color.RED, HudReeval.VISIBILITY_AND_STRING)
+        eventPlayer.powerUpEntityIdList[71] = getLastCreatedText()
         createEffect(getAllPlayers(), Effect.BAD_AURA, Color.RED, eventPlayer, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEffects[72] = getLastCreatedEntity()
+        eventPlayer.powerUpEntityIdList[72] = getLastCreatedEntity()
         startDamageModification(getPlayers(Team.2), eventPlayer, 200)
-        eventPlayer.powerUpEffects[73] = getLastDamageModification()
+        eventPlayer.powerUpEntityIdList[73] = getLastDamageModification()
         startDamageModification(eventPlayer, getAllPlayers(), 50)
-        eventPlayer.powerUpEffects[74] = getLastDamageModification()
+        eventPlayer.powerUpEntityIdList[74] = getLastDamageModification()
     heal(eventPlayer, null, 100)
     eventPlayer.setDamageReceived(50)
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.RED, eventPlayer.getPosition(), distance(eventPlayer.getEyePosition(), eventPlayer.getPosition()) * 0.95)
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.RED, eventPlayer.getPosition(), 50)
-    for eventPlayer.pSuperNanoCount in range(20, 0, -1):
+    for eventPlayer.powerUpSuperNanoTimeRemaining in range(20, 0, -1):
         if eventPlayer.isDead():
             break
         wait(1)
     wait(0.25)
-    destroyEffect(eventPlayer.powerUpEffects[70])
-    destroyHudText(eventPlayer.powerUpEffects[71])
-    destroyEffect(eventPlayer.powerUpEffects[72])
-    stopDamageModification(eventPlayer.powerUpEffects[73])
-    stopDamageModification(eventPlayer.powerUpEffects[74])
+    destroyEffect(eventPlayer.powerUpEntityIdList[70])
+    destroyHudText(eventPlayer.powerUpEntityIdList[71])
+    destroyEffect(eventPlayer.powerUpEntityIdList[72])
+    stopDamageModification(eventPlayer.powerUpEntityIdList[73])
+    stopDamageModification(eventPlayer.powerUpEntityIdList[74])
     eventPlayer.setMoveSpeed(100)
     eventPlayer.setDamageReceived(100)
-    eventPlayer.powerUpEffects[70] = 0
-    eventPlayer.movementSpeed /= 1.5
-    eventPlayer.setMoveSpeed(eventPlayer.movementSpeed * 100)
+    eventPlayer.powerUpEntityIdList[70] = 0
+    eventPlayer.movementSpeedScale /= 1.5
+    eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
 
 
 def bouncePad():
     @Name "bouncePad (80-89)"
     
-    eventPlayer.bouncePadPosition = eventPlayer.getPosition() if eventPlayer.isOnGround() else nearestWalkablePosition(eventPlayer.getPosition())
-    if eventPlayer.powerUpEffects[80] == 0:
-        createEffect(getAllPlayers(), Effect.RING, Color.PURPLE, eventPlayer.bouncePadPosition, 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEffects[80] = getLastCreatedEntity()
-        hudHeader(eventPlayer, "Bounce Pad: {0}s".format(ceil(eventPlayer.pBouncePadCount1)), HudPosition.RIGHT, 0.2, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING)
-        eventPlayer.powerUpEffects[81] = getLastCreatedText()
-    playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.PURPLE, eventPlayer.bouncePadPosition, 2)
-    playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, Color.PURPLE, eventPlayer.bouncePadPosition, 50)
+    eventPlayer.powerUpBouncePadPosition = eventPlayer.getPosition() if eventPlayer.isOnGround() else nearestWalkablePosition(eventPlayer.getPosition())
+    if eventPlayer.powerUpEntityIdList[80] == 0:
+        createEffect(getAllPlayers(), Effect.RING, Color.PURPLE, eventPlayer.powerUpBouncePadPosition, 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        eventPlayer.powerUpEntityIdList[80] = getLastCreatedEntity()
+        hudHeader(eventPlayer, "Bounce Pad: {0}s".format(ceil(eventPlayer.powerUpBouncePadTimeRemaining)), HudPosition.RIGHT, 0.2, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING)
+        eventPlayer.powerUpEntityIdList[81] = getLastCreatedText()
+    playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.PURPLE, eventPlayer.powerUpBouncePadPosition, 2)
+    playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, Color.PURPLE, eventPlayer.powerUpBouncePadPosition, 50)
     wait(1)
     #Bounce pad duration
-    for eventPlayer.pBouncePadCount1 in range(60, 0, -0.125):
-        if eventPlayer.pBouncePadCount1 % 0.25 == 0:
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.PURPLE, eventPlayer.bouncePadPosition + vect(0, 0.125, 0), 4)
+    for eventPlayer.powerUpBouncePadTimeRemaining in range(60, 0, -0.125):
+        if eventPlayer.powerUpBouncePadTimeRemaining % 0.25 == 0:
+            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.PURPLE, eventPlayer.powerUpBouncePadPosition + vect(0, 0.125, 0), 4)
         #Determine which players are on the bounce pad
         # tmp0: grounded survivors on this pad, to apply the bounce and play feedback for this tick.
-        tmp0 = getLivingPlayers(Team.1).filter(lambda player: distance(eventPlayer.bouncePadPosition, player.getPosition()) < 2 and player.isOnGround())
+        tmp0 = getLivingPlayers(Team.1).filter(lambda player: distance(eventPlayer.powerUpBouncePadPosition, player.getPosition()) < 2 and player.isOnGround())
         if len(tmp0) > 0:
             #For each bouncer
             # tmp1: index into the survivor list in tmp0, to process every player on this pad.
@@ -383,76 +383,76 @@ def bouncePad():
                 # tmp2: current survivor from tmp0, to apply this tick's upward impulse.
                 tmp2 = tmp0[tmp1]
                 tmp2.applyImpulse(vect(0, 1, 0), 22, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
-            playEffect(tmp0, DynamicEffect.RING_EXPLOSION_SOUND, Color.WHITE, eventPlayer.bouncePadPosition, 50)
+            playEffect(tmp0, DynamicEffect.RING_EXPLOSION_SOUND, Color.WHITE, eventPlayer.powerUpBouncePadPosition, 50)
         wait(0.125)
     wait(0.25)
-    destroyEffect(eventPlayer.powerUpEffects[80])
-    destroyHudText(eventPlayer.powerUpEffects[81])
-    eventPlayer.powerUpEffects[80] = 0
+    destroyEffect(eventPlayer.powerUpEntityIdList[80])
+    destroyHudText(eventPlayer.powerUpEntityIdList[81])
+    eventPlayer.powerUpEntityIdList[80] = 0
 
 
 def ultimateCharger():
     @Name "ultimateCharger (90-99)"
     
-    if eventPlayer.powerUpEffects[90] == 0:
-        hudHeader(eventPlayer, "Ultimate Charger: {0}s".format(ceil(eventPlayer.pUltimateChargerCount)), HudPosition.RIGHT, 0.2, Color.RED, HudReeval.VISIBILITY_AND_STRING)
-        eventPlayer.powerUpEffects[90] = getLastCreatedText()
+    if eventPlayer.powerUpEntityIdList[90] == 0:
+        hudHeader(eventPlayer, "Ultimate Charger: {0}s".format(ceil(eventPlayer.powerUpUltimateTimeRemaining)), HudPosition.RIGHT, 0.2, Color.RED, HudReeval.VISIBILITY_AND_STRING)
+        eventPlayer.powerUpEntityIdList[90] = getLastCreatedText()
     playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.RED, eventPlayer.getPosition(), 50)
     #Bounce pad duration
-    for eventPlayer.pUltimateChargerCount in range(20, 0, -0.125):
+    for eventPlayer.powerUpUltimateTimeRemaining in range(20, 0, -0.125):
         eventPlayer.setUltCharge(eventPlayer.getUltCharge() + 2)
         wait(0.125)
     wait(0.25)
-    destroyHudText(eventPlayer.powerUpEffects[90])
-    eventPlayer.powerUpEffects[90] = 0
+    destroyHudText(eventPlayer.powerUpEntityIdList[90])
+    eventPlayer.powerUpEntityIdList[90] = 0
 
 
 def stun():
     @Name "stun (100-109)"
     
-    if eventPlayer.powerUpEffects[100] == 0:
+    if eventPlayer.powerUpEntityIdList[100] == 0:
         #Stun beam effect
-        createBeam(getAllPlayers(), Beam.BAD, eventPlayer.pStunChase1, eventPlayer.pStunChase1 + ((directionTowards(eventPlayer.pStunChase1, eventPlayer.stunOrigin.getPosition() + losOffsetConst)) * (min(3, distance(eventPlayer.pStunChase1, eventPlayer.stunOrigin.getPosition() + losOffsetConst)))), Color.SKY_BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEffects[100] = getLastCreatedEntity()
+        createBeam(getAllPlayers(), Beam.BAD, eventPlayer.powerUpStunBeamPosition, eventPlayer.powerUpStunBeamPosition + ((directionTowards(eventPlayer.powerUpStunBeamPosition, eventPlayer.powerUpStunOrigin.getPosition() + losOffsetConst)) * (min(3, distance(eventPlayer.powerUpStunBeamPosition, eventPlayer.powerUpStunOrigin.getPosition() + losOffsetConst)))), Color.SKY_BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        eventPlayer.powerUpEntityIdList[100] = getLastCreatedEntity()
     playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.WHITE, eventPlayer.getPosition(), 30)
     #Stun beam lead
-    eventPlayer.pStunChase1 = eventPlayer.getPosition() + losOffsetConst
+    eventPlayer.powerUpStunBeamPosition = eventPlayer.getPosition() + losOffsetConst
     #Stun origin player
-    eventPlayer.stunOrigin = eventPlayer
+    eventPlayer.powerUpStunOrigin = eventPlayer
     #Stun Target
-    eventPlayer.stunTarget = (sorted(getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).filter(lambda player: distance(eventPlayer.getPosition(), player.getPosition()) < 15 * eventPlayer.size), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition()))))[0]
-    chaseAtRate(eventPlayer.pStunChase1, eventPlayer.stunTarget.getPosition() + losOffsetConst, 50)
+    eventPlayer.powerUpStunTarget = (sorted(getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).filter(lambda player: distance(eventPlayer.getPosition(), player.getPosition()) < 15 * eventPlayer.sizeScale), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition()))))[0]
+    chaseAtRate(eventPlayer.powerUpStunBeamPosition, eventPlayer.powerUpStunTarget.getPosition() + losOffsetConst, 50)
     #Number of bounces
-    for eventPlayer.pStunCount in range(50, 0, -1):
-        if eventPlayer.stunTarget == null:
-            if eventPlayer.pStunCount > 13 and not eventPlayer.stunOrigin in bossStateList:
-                eventPlayer.stunOrigin.setStatusEffect(eventPlayer, Status.STUNNED, eventPlayer.pStunCount / 8.3)
+    for eventPlayer.powerUpStunBouncesRemaining in range(50, 0, -1):
+        if eventPlayer.powerUpStunTarget == null:
+            if eventPlayer.powerUpStunBouncesRemaining > 13 and not eventPlayer.powerUpStunOrigin in bossStateList:
+                eventPlayer.powerUpStunOrigin.setStatusEffect(eventPlayer, Status.STUNNED, eventPlayer.powerUpStunBouncesRemaining / 8.3)
             break
-        waitUntil(distance(eventPlayer.pStunChase1, eventPlayer.stunTarget.getPosition() + losOffsetConst) < 0.1, 3)
-        eventPlayer.stunTarget.setStatusEffect(eventPlayer, Status.STUNNED, 0.5 if eventPlayer.stunTarget in bossStateList else 1.5)
-        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.WHITE, eventPlayer.stunTarget, 0.5)
-        playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.stunTarget.getPosition(), 50)
+        waitUntil(distance(eventPlayer.powerUpStunBeamPosition, eventPlayer.powerUpStunTarget.getPosition() + losOffsetConst) < 0.1, 3)
+        eventPlayer.powerUpStunTarget.setStatusEffect(eventPlayer, Status.STUNNED, 0.5 if eventPlayer.powerUpStunTarget in bossStateList else 1.5)
+        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.WHITE, eventPlayer.powerUpStunTarget, 0.5)
+        playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.powerUpStunTarget.getPosition(), 50)
         wait()
         #Previous target is new origin
-        eventPlayer.stunOrigin = eventPlayer.stunTarget
+        eventPlayer.powerUpStunOrigin = eventPlayer.powerUpStunTarget
         #Set next target
-        eventPlayer.stunTarget = random.choice((getLivingPlayers(Team.2).filter(lambda player: distance(eventPlayer.stunOrigin.getPosition(), player.getPosition()) < 15 and not player.teleporting)).exclude(eventPlayer.stunTarget))
-    stopChasing(eventPlayer.pStunChase1)
-    destroyEffect(eventPlayer.powerUpEffects[100])
-    eventPlayer.powerUpEffects[100] = 0
+        eventPlayer.powerUpStunTarget = random.choice((getLivingPlayers(Team.2).filter(lambda player: distance(eventPlayer.powerUpStunOrigin.getPosition(), player.getPosition()) < 15 and not player.botIsTeleporting)).exclude(eventPlayer.powerUpStunTarget))
+    stopChasing(eventPlayer.powerUpStunBeamPosition)
+    destroyEffect(eventPlayer.powerUpEntityIdList[100])
+    eventPlayer.powerUpEntityIdList[100] = 0
 
 
 def powerUpUsage():
     @Name "powerUpUsage"
     
-    switch eventPlayer.currentPowerUp:
+    switch eventPlayer.powerUpItemId:
         #Cure
         case 1:
             playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, Color.GREEN, eventPlayer, 1)
             eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 1)
-            if eventPlayer.infectionLvl > 0:
-                eventPlayer.infected = false
-                eventPlayer.infectionLvl = 0
+            if eventPlayer.infectionLevel > 0:
+                eventPlayer.isInfected = false
+                eventPlayer.infectionLevel = 0
             eventPlayer.startHealingOverTime(eventPlayer, 5, 20)
             smallMessage(eventPlayer, "You are cured!")
             playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.AQUA, eventPlayer.getPosition(), 50)
@@ -487,7 +487,7 @@ def powerUpUsage():
             playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.GREEN, eventPlayer, 6)
             playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.AQUA, eventPlayer.getPosition(), 50)
             smallMessage(eventPlayer, "Your infection is reduced!")
-            getPlayersInRadius(eventPlayer, 3, Team.1, LosCheck.SURFACES).infectionLvl -= 1.5
+            getPlayersInRadius(eventPlayer, 3, Team.1, LosCheck.SURFACES).infectionLevel -= 1.5
             break
         #Sentry Turret
         case 8:
@@ -512,10 +512,10 @@ def powerUpUsage():
         #Stun
         case 13:
             #Check if their are targets nearby and in view angle
-            if getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).any(lambda player: distance(eventPlayer.getPosition(), player.getPosition()) < 15 * eventPlayer.size and angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), player.getEyePosition())) < 45):
+            if getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).any(lambda player: distance(eventPlayer.getPosition(), player.getPosition()) < 15 * eventPlayer.sizeScale and angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), player.getEyePosition())) < 45):
                 startRule(stun)
             else:
                 smallMessage(eventPlayer, "Aim at a nearby target")
                 return
             break
-    eventPlayer.currentPowerUp = 0
+    eventPlayer.powerUpItemId = 0

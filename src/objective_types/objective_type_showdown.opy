@@ -5,7 +5,7 @@ rule "PLAYERS ON OBJECTIVE CONTROL":
     @Event eachPlayer
     @Condition objectiveTypeList[0] == ObjectiveType.SHOWDOWN
     @Condition len(objectivePositionList) > 1
-    @Condition eventPlayer.invisible != true
+    @Condition eventPlayer.invisibilityCount != true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.hasSpawned() == true
     #Objective Cylinder Height As Above, So Below

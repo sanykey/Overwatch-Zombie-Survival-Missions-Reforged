@@ -5,6 +5,8 @@ const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
 const {execFileSync} = require('node:child_process');
 const {files, compile, compiler} = require('./measure-further-optimizations.cjs');
+const playerLayout = require('./player-variable-layout.cjs');
+const {normalizePlayerNames} = require('./verify-player-variables.cjs');
 const root = path.resolve(__dirname, '..');
 const src = path.join(root, 'src');
 const baselineRef = '1a313866755d0a00e6cc8bfcbfc323904c5ff02f';
@@ -30,21 +32,25 @@ const mapping = {
     objectiveCaptureValue: 'objectiveProgressSlot', chase1: 'menuFinaleMotionSlot'
 };
 
-function rules(workshop, map = {}) {
+function rules(workshop, map = {}, playerMap = {}) {
     return [...workshop.matchAll(/^rule \("([^"\n]+)"\) \{([\s\S]*?)^\}/gm)].map(([, name, body]) => ({
         name,
-        body: body.split('\n').filter(line => !/^\s*(?:"|\/\/)/.test(line))
+        body: normalizePlayerNames(body.split('\n').filter(line => !/^\s*(?:"|\/\/)/.test(line))
             .map(line => line.replace(/;\s*\/\/.*$/, ';').trim()).filter(Boolean).join('\n')
             // Global reads and global-action targets only; player.chase1 and bare player-action fields are separate.
             .replace(/\bGlobal\.(\w+)/g, (_, word) => 'Global.' + (map[word] ?? word))
             .replace(/\b((?:Set|Modify|For|Chase|Stop Chasing) Global Variable[^\n(]*\()(\w+)/g,
-                (_, action, word) => action + (map[word] ?? word))
+                (_, action, word) => action + (map[word] ?? word)), playerMap)
     }));
 }
 
 async function main() {
     const baselineFiles = Object.fromEntries(Object.keys(files).map(file => [file,
         execFileSync('git', ['show', `${baselineRef}:src/${file}`], {cwd: root, encoding: 'utf8'}).replace(/\r\n/g, '\n')]));
+    // Host tuning was separately changed and committed with the phase-slot work.
+    // Keep this audit about slot/name changes, using that exact committed debug baseline.
+    baselineFiles['debug.opy'] = execFileSync('git', ['show', `${playerLayout.baselineRef}:src/debug.opy`],
+        {cwd: root, encoding: 'utf8'}).replace(/\r\n/g, '\n');
     await compiler.readyPromise;
     const before = await compile(baselineFiles);
     const after = await compile(files);
@@ -61,7 +67,8 @@ async function main() {
     assert(currentAliases.some(a => a.name === 'rescueMinSpawnDistance' && a.slot === 'phaseSlot2'));
     assert(currentAliases.some(a => a.name === 'satelliteMinTerminalSpacing' && a.slot === 'phaseSlot2'));
 
-    const oldRules = rules(before.result, mapping), newRules = rules(after.result);
+    const playerMap = Object.fromEntries(playerLayout.variables.map(v => [v.old, v.name]));
+    const oldRules = rules(before.result, mapping, playerMap), newRules = rules(after.result);
     assert(oldRules.length > 200, 'No compiled rules parsed');
     assert.equal(newRules.length, oldRules.length);
     let resets = 0, guardedWrites = 0;
@@ -115,6 +122,7 @@ async function main() {
     fs.writeFileSync(path.join(src, 'main.ws.txt'), exported.result);
     const report = {
         date: '2026-11-02', baselineRef,
+        baselineOverrides: {'debug.opy': playerLayout.baselineRef},
         before: {globals: 110, elements: before.elements},
         after: {globals, elements: after.elements},
         sharedSlots: [...new Set(currentAliases.map(a => a.slot))].map(slot => ({slot,

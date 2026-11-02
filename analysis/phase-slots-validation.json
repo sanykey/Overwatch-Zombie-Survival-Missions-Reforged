@@ -1,6 +1,9 @@
 {
   "date": "2026-11-02",
   "baselineRef": "1a313866755d0a00e6cc8bfcbfc323904c5ff02f",
+  "baselineOverrides": {
+    "debug.opy": "9185ddd9b8bc76852ffacdafbfde932a3970f152"
+  },
   "before": {
     "globals": 110,
     "elements": 27213
@@ -200,31 +203,31 @@
   ],
   "warnings": [],
   "sha256": {
-    "bots_game_in_progress.opy": "07f43789aa693b4dba5983a323bc623ec4fee74e054c9e8e13b459e1aa80176f",
+    "bots_game_in_progress.opy": "7aa7840100fd677716dd60d0a91ec360be25412008d39af2be5719f05c4a4bdd",
     "compressed numbers.opy": "6c414884c6273353c17c85e56de05c382cb6401aec19a22132263fd6f4d6d9d7",
-    "debug.opy": "2a2fde87e43bd36516d2db1c25d513df4c49e24eebce71be8ef8440f59a47bb9",
-    "enhancements.opy": "7618b59de8b60fbdff1f9cd6b1a66ca67765ee60772304b4cab83dc3d99ae4c0",
-    "global_game_in_progress.opy": "d58bc88f5999dc0b2a2b4da3b954295a4fb409dc76dfab363488fbc372b7b00c",
-    "global_startup.opy": "268249eef8d25147771bb42850025f1e46e6412bb9a8b8a1f5eb8d7f1d3d0b2c",
-    "global_start_menu.opy": "2205fa24fd700e63b70b31d001b944f0c00556ed8914c153118f437e53fbbada",
-    "hero_tuning.opy": "28d92c1cc23f27f9c444332eff0edd3c9f1f569044d9dde96841b4ad808454aa",
+    "debug.opy": "86ea5811c5a07f735b0eefc11a53c4710a3ebe33ad79e5d96fb13722607be67a",
+    "enhancements.opy": "7e3eb6ae437b7a88a630f38f645510ea888ec0b12e2b426de35af68ee031de38",
+    "global_game_in_progress.opy": "f473a301ab97918868904b9fec1bff4e38ac33e50b01c68c8050d0cbf1dac535",
+    "global_startup.opy": "68bb5a2f7beea4d1ca7985aaba1d7c3b90d84a86ec7977d0568f39e0a163e683",
+    "global_start_menu.opy": "855bed789086f29d015669e9ab78adf93f98fb221918bf795def8014ea1e0b5b",
+    "hero_tuning.opy": "4825b4d1bec2addfac244d4b0bf97de19449517a712d03eb8f9015653e4f1a66",
     "main.opy": "6005995170250d44b35a88576f997014f95de715f521429eda7b9f6dcb1da9fd",
-    "objective_types/objective_type_biomorphing.opy": "cbb5a8a808463f13bafec1c03d44556fc9816ea362a846b36cd7f9854adac88c",
-    "objective_types/objective_type_bosses.opy": "0bb86cbc0da6cbf150d590752ab94fa70b44574059858de3856ecd9cc3c392a2",
-    "objective_types/objective_type_extraction_point.opy": "9e47ac5ff44e429c9ad9e2ee7969f1505333241e36592e0506c8f6a9499a0ded",
-    "objective_types/objective_type_kill_zone.opy": "7d87b12bb0cece74e747db45d21a8cf4ba7d3865e2d51b2d95bdcba17beddf78",
-    "objective_types/objective_type_satellite_uplink.opy": "f42fd9ea20b621ff1fffc6d51f85b31aa08fbf9b5cba6ea132356c53a45272da",
-    "objective_types/objective_type_showdown.opy": "d8ac2aff5cffb99303d98dbd0b3dcc11301a91391d67965fe270346b7481b1a4",
-    "objective_types/objective_type_survivor_rescue.opy": "961fa162fb2fc6659c610452c941cb57472cc3bdd0f6dcb9e5bcd3a1cda1d0b0",
-    "objective_types/objective_type_zombie_egg.opy": "8c3278ef47d21c8c7ec3940a2662dda8b0aef8d04f27324562d26ddfd5c93274",
-    "players_game_in_progress.opy": "c891fb75de988acf8f65bd681f6be4e03c7447f0bee555590dfc3d152f77147f",
-    "player_start_menu.opy": "5d8eff792cb6188825db562a7799e78d769f507c2820e6a9aea01dd3292eb198",
-    "power_ups.opy": "84321529b8925e59bf335eba6d5146c582b655f6360660c90d9717858d484c5b",
+    "objective_types/objective_type_biomorphing.opy": "ecabbcae658db3e936596b396c2a68b61fd50ce7bb9fde681b3af7d13b487bea",
+    "objective_types/objective_type_bosses.opy": "764f3f88254fda09c9f5713d59e268fc910f02102fe8b1aa315cb2d48299ec16",
+    "objective_types/objective_type_extraction_point.opy": "766b2639781a612d9fb3841644a5f08662511848ef852d273ffe78fb7a17e9d5",
+    "objective_types/objective_type_kill_zone.opy": "b18ae7314acdcbeacfe1b8ee594f161f970b67dddc4a477ba4649d5fb4a6808e",
+    "objective_types/objective_type_satellite_uplink.opy": "2c55f54279b78259021fd23865c41f26f1d7b88bad14225124925dc1f082efbc",
+    "objective_types/objective_type_showdown.opy": "a7aea0343f2959f7b8c99a29c016071c6a7c3e52d97d839c0c7f57577d13dd10",
+    "objective_types/objective_type_survivor_rescue.opy": "98221db7e586f6ab246174776fa00a82588e40026459c5b812358a942dc4d5ac",
+    "objective_types/objective_type_zombie_egg.opy": "73e9e636a67e213e42e90db762d8036e35485ac86f8b8f55663c66e8a43e1267",
+    "players_game_in_progress.opy": "d8f903fb9ccadd27df25b704edf040effe91c8128b3e5f0b7d86a882eb1afba1",
+    "player_start_menu.opy": "55a99bd21e4c2b2c9fb81f45ef9770bdc0fec67dab87b6985d04af1fdd6e3fb5",
+    "power_ups.opy": "e39f56b3c12425eae7fb939bedc5f88a1af033dd2258678fb01364320d49e383",
     "settings.opy": "bafdf47e377bfce8871f5e6c8a79684934e6c283130151ce2824d8778cc659a7",
-    "subroutines.opy": "1c62b6891fe33efe3c44dd8beffd510df7cab8ab529b2a6775c2c7e5ad59adb1",
-    "supply_drops.opy": "be3ccc307d02bde4ca89acd717081d7e1910f3db9cc5ca51fe639bc56faa2145",
-    "variables.opy": "4e25e02f12522362ae28b7b08fbb3ed7718d8c2243a4a1989c9d072f2c9b0527",
-    "zombie_types.opy": "dcc14937a699cc4824ecef0dc39ce0e1061b43b4fc8473a9778edea285c0d9b9"
+    "subroutines.opy": "a879cfb163b0ac6d21d9f45101f722a93ca1b6075212d92168ed679ef5855741",
+    "supply_drops.opy": "11b883a1b043b7a6adb591b75adb5f802272b042b3878ac9d307d020440f3cf6",
+    "variables.opy": "75f2ec99a29d46a659f991565994860edf6efbab16ec3c99aa5a716360bf57c5",
+    "zombie_types.opy": "d392a43105fd864f860f9b4eea2e39ca1c1ed34b3eccdfb8b4bec378bf6d942b"
   },
   "limitations": "Static source review and complete compiled-rule comparison. Does not simulate Workshop scheduling, renderer reevaluation, joins or combat. In-game transitions still require validation."
 }

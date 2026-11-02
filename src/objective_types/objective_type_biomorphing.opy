@@ -39,8 +39,8 @@ rule "BIOMORPHING GOAL START":
     biomorphingResourcePositionList = []
     biomorphingResourceEffectIdList = []
     biomorphingResourceTextIdList = []
-    getAllPlayers().playerObjectiveResourceValue = 0
-    getAllPlayers().biowasteType = null
+    getAllPlayers().biomorphingResourceAmount = 0
+    getAllPlayers().biomorphingResourceType = null
     if biomorphingCapturePercent != 0:
         biomorphingGoalColor = objectiveColor
         biomorphingGoalText = "Limit reached! The next goal is..."
@@ -62,8 +62,8 @@ rule "BIOMORPHING GOAL START":
         biomorphingGoalText = "Hand over your blood."
         playEffect(getAllPlayers(), DynamicEffect.DEBUFF_IMPACT_SOUND, null, objectivePositionList[0], 200)
         biomorphingGoalColor = Color.RED
-        getPlayers(Team.1).biowasteType = 3
-        getPlayers(Team.1).playerObjectiveResourceValue = 9999
+        getPlayers(Team.1).biomorphingResourceType = 3
+        getPlayers(Team.1).biomorphingResourceAmount = 9999
     isBiomorphingGoalPending = false
     playEffect(getAllPlayers(), DynamicEffect.BAD_PICKUP_EFFECT, biomorphingGoalColor, objectivePositionList[0], 200)
 
@@ -71,7 +71,7 @@ rule "BIOMORPHING GOAL START":
 rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS":
     @Condition objectiveTypeList[0] == ObjectiveType.BIOMORPHING
     @Condition isObjectiveComplete == false
-    @Condition (len(biomorphingResourcePositionList) + (len(getLivingPlayers(Team.ALL).filter(lambda player: player.playerObjectiveResourceValue > 0))) < 3 or biomorphingCapturePercent >= 100) == true
+    @Condition (len(biomorphingResourcePositionList) + (len(getLivingPlayers(Team.ALL).filter(lambda player: player.biomorphingResourceAmount > 0))) < 3 or biomorphingCapturePercent >= 100) == true
     @Condition isGameplayActive == true
     @Condition (biomorphingGoalQueueList[0] != 3 or biomorphingCapturePercent >= 100) == true
     
@@ -79,14 +79,14 @@ rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS":
     if biomorphingCapturePercent < 100:
         waitUntil(isBiomorphingGoalPending == false, 99999)
         # tmp0: index of a zombie not holding a full resource, to choose the next resource carrier.
-        tmp0 = getPlayers(Team.2).index((getPlayers(Team.2).filter(lambda player: player.playerObjectiveResourceValue != BIOMORPHING_RESOURCE_AMOUNT))[0])
+        tmp0 = getPlayers(Team.2).index((getPlayers(Team.2).filter(lambda player: player.biomorphingResourceAmount != BIOMORPHING_RESOURCE_AMOUNT))[0])
         # tmp1: current zombie list, to resolve the carrier index in tmp0 to a player.
         tmp1 = getPlayers(Team.2)
         # tmp1: selected zombie, kept while biowasteOutputMacro replaces tmp0 with its resource type.
         tmp1 = tmp1[tmp0]
-        tmp1.playerObjectiveResourceValue = BIOMORPHING_RESOURCE_AMOUNT
+        tmp1.biomorphingResourceAmount = BIOMORPHING_RESOURCE_AMOUNT
         biowasteOutputMacro()
-        tmp1.biowasteType = tmp0
+        tmp1.biomorphingResourceType = tmp0
     else:
         # tmp0: reward-item index, to place four power-ups at 90-degree intervals around the objective.
         for tmp0 in range(4):
@@ -102,7 +102,7 @@ rule "BIOWASTE IS PICKED UP":
     @Condition objectiveTypeList[0] == ObjectiveType.BIOMORPHING
     @Condition isGameplayActive == true
     @Condition isObjectiveComplete == false
-    @Condition eventPlayer.playerObjectiveResourceValue <= 0
+    @Condition eventPlayer.biomorphingResourceAmount <= 0
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isAlive() == true
     @Condition len(biomorphingResourcePositionList) > 0
@@ -114,14 +114,14 @@ rule "BIOWASTE IS PICKED UP":
     tmp0 = sorted(biomorphingResourcePositionList, lambda x: distance(eventPlayer.getPosition(), x))[0]
     # tmp1: resource index shared by position, type and visual arrays, to pick up and remove the same orb.
     tmp1 = biomorphingResourcePositionList.index(tmp0)
-    eventPlayer.biowasteType = biomorphingResourceTypeList[tmp1]
+    eventPlayer.biomorphingResourceType = biomorphingResourceTypeList[tmp1]
     destroyEffect(biomorphingResourceEffectIdList[tmp1])
     destroyInWorldText(biomorphingResourceTextIdList[tmp1])
     del biomorphingResourceTypeList[tmp1]
     del biomorphingResourcePositionList[tmp1]
     del biomorphingResourceEffectIdList[tmp1]
     del biomorphingResourceTextIdList[tmp1]
-    eventPlayer.playerObjectiveResourceValue = BIOMORPHING_RESOURCE_AMOUNT
+    eventPlayer.biomorphingResourceAmount = BIOMORPHING_RESOURCE_AMOUNT
     smallMessage(eventPlayer, "  Go to the deposit area!")
     playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.WHITE, eventPlayer.getPosition(), 50)
     playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.WHITE, eventPlayer.getPosition(), 2)
@@ -131,11 +131,11 @@ rule "PLAYER DELIVERS RESOURCE VALUE":
     @Event eachPlayer
     @Team 1
     @Condition objectiveTypeList[0] == ObjectiveType.BIOMORPHING
-    @Condition eventPlayer.invisible != true
-    @Condition eventPlayer.playerObjectiveResourceValue > 0
+    @Condition eventPlayer.invisibilityCount != true
+    @Condition eventPlayer.biomorphingResourceAmount > 0
     @Condition eventPlayer.isAlive() == true
     @Condition distance(objectivePositionList[0], eventPlayer.getPosition()) < objectiveRad
-    @Condition eventPlayer.afk != true
+    @Condition eventPlayer.isAfk != true
     
     eventPlayer.clearStatusEffect(Status.PHASED_OUT)
     if not eventPlayer in objectivePlayerList:
@@ -144,13 +144,13 @@ rule "PLAYER DELIVERS RESOURCE VALUE":
     # tmp0: deposit-time divisor for ordinary biowaste, used to calculate this tick's progress.
     tmp0 = 8.9
     #Extra points if correct biowaste type
-    if biomorphingGoalQueueList[0] == eventPlayer.biowasteType:
+    if biomorphingGoalQueueList[0] == eventPlayer.biomorphingResourceType:
         # tmp0: shorter deposit-time divisor for the requested resource, to award faster progress.
         tmp0 = 2.9
     #Damage player if resource is blood, damage more if above health.
     damage(eventPlayer, eventPlayer, (50.33 if eventPlayer.getHealth() > 200 else 10.33) if biomorphingGoalQueueList[0] == 3 else 0)
     #(Amount per resource / dump time) x tick speed
-    eventPlayer.playerObjectiveResourceValue -= BIOMORPHING_RESOURCE_AMOUNT / 3 * 0.125
+    eventPlayer.biomorphingResourceAmount -= BIOMORPHING_RESOURCE_AMOUNT / 3 * 0.125
     #(Amount per resource / dump time) x tick speed, if resource is blood then this will go slower x the number of players
     biomorphingCapturePercent += (BIOMORPHING_RESOURCE_AMOUNT / (getNumberOfPlayers(Team.1) * 4.167 if biomorphingGoalQueueList[0] == 3 else tmp0)) * 0.125
     if biomorphingCapturePercent >= biomorphingNextCheckpoint:
@@ -160,7 +160,7 @@ rule "PLAYER DELIVERS RESOURCE VALUE":
         biomorphingNextCheckpoint += 25
     if ruleCondition:
         loop()
-    if eventPlayer.playerObjectiveResourceValue <= 0:
+    if eventPlayer.biomorphingResourceAmount <= 0:
         playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.getPosition(), 75)
         playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.WHITE, eventPlayer.getPosition() + vect(0, 0.25, 0), 8)
         smallMessage(eventPlayer, "  Biowaste deposited!")
@@ -170,13 +170,13 @@ rule "PLAYER DELIVERS RESOURCE VALUE":
 rule "BIOWASTE HOLDER DIES, ORB IS QUEUED AND RESOURCE AMOUNT REMOVED":
     @Event playerDied
     @Condition objectiveTypeList[0] == ObjectiveType.BIOMORPHING
-    @Condition eventPlayer.playerObjectiveResourceValue >= BIOMORPHING_RESOURCE_AMOUNT
+    @Condition eventPlayer.biomorphingResourceAmount >= BIOMORPHING_RESOURCE_AMOUNT
     @Condition biomorphingGoalQueueList[0] != 3
     
-    biomorphingDeferredTypeList.append(eventPlayer.biowasteType)
+    biomorphingDeferredTypeList.append(eventPlayer.biomorphingResourceType)
     biomorphingDeferredPositionList.append(nearestWalkablePosition(eventPlayer))
-    eventPlayer.playerObjectiveResourceValue = 0
-    eventPlayer.biowasteType = null
+    eventPlayer.biomorphingResourceAmount = 0
+    eventPlayer.biomorphingResourceType = null
 
 
 rule "BIOWASTE MANAGEMENT":
