@@ -165,8 +165,8 @@ rule "SKIP ASSEMBLING HEROES":
     waitUntil(len(getPlayers(Team.1).filter(lambda player: player.hasSpawned())) > 0 and len(mapGridList) > 0, 99999)
     setMatchTime(60)
     wait()
-    chase1 = getMatchTime()
-    chaseAtRate(chase1, 0, 1, ChaseRateReeval.NONE)
+    pregameCountdown = getMatchTime()
+    chaseAtRate(pregameCountdown, 0, 1, ChaseRateReeval.NONE)
     disableAnnouncer()
     disableGamemodeCompletion()
 
@@ -216,7 +216,7 @@ rule "VARIABLE ASSIGNMENT":
     #Initial extraction zone radius
     extractionZoneRad = 300
     extractionSpeedUp = 2.5
-    objectiveResourcePositionList = []
+    objectivePositionsList = []
     #Relative center of the map
     while walkCenter == null:
         wait(1)
@@ -283,6 +283,10 @@ rule "START GAME":
     destroyAllHudTexts()
     destroyAllIcons()
     destroyAllInWorldTexts()
+    # Enhancement icons no longer have live menu readers; restore the goal text's initial value.
+    biomorphingGoalText = null
+    # The menu angle writer is phase-guarded; preserve the color's original value before the first biogoal.
+    biomorphingGoalColor = null
     wait(0.25)
     setMatchTime(START_TIME + matchEndTime)
     unpauseMatchTime()

@@ -1,6 +1,6 @@
 {
-  "elements": 27697,
-  "globals": 115,
+  "elements": 27218,
+  "globals": 99,
   "playerVariables": 108,
   "warnings": [],
   "method": "Backward scratch liveness in compiled Workshop control flow, including expanded macros, branches, loops, skips and implicit trailing Ends. Calls are conservative boundaries. Reevaluated HUD/effect/icon fields are checked for uncaptured scratch references. No in-game validation.",
@@ -13,7 +13,7 @@
     },
     {
       "name": "objectivesManagement",
-      "controlFlowNodes": 221,
+      "controlFlowNodes": 220,
       "boundaries": 3,
       "visualActions": 5
     },
@@ -37,7 +37,7 @@
     },
     {
       "name": "VARIABLE ASSIGNMENT",
-      "controlFlowNodes": 56,
+      "controlFlowNodes": 48,
       "boundaries": 2,
       "visualActions": 0
     },
@@ -49,7 +49,7 @@
     },
     {
       "name": "GLOBAL MENU INITIALIZATION",
-      "controlFlowNodes": 44,
+      "controlFlowNodes": 45,
       "boundaries": 4,
       "visualActions": 0
     },
@@ -73,7 +73,7 @@
     },
     {
       "name": "determineChallenge",
-      "controlFlowNodes": 25,
+      "controlFlowNodes": 24,
       "boundaries": 1,
       "visualActions": 0
     },
@@ -91,7 +91,7 @@
     },
     {
       "name": "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS",
-      "controlFlowNodes": 22,
+      "controlFlowNodes": 20,
       "boundaries": 2,
       "visualActions": 0
     },
@@ -217,13 +217,31 @@
     },
     {
       "name": "LASER BARRICADE BLOCKS ZOMBIES",
-      "controlFlowNodes": 25,
+      "controlFlowNodes": 26,
       "boundaries": 3,
+      "visualActions": 0
+    },
+    {
+      "name": "PYROTECHNIC APPLIES DAMAGE",
+      "controlFlowNodes": 13,
+      "boundaries": 1,
       "visualActions": 0
     },
     {
       "name": "CHARGE BATTERY (USAGE AND COOLDOWNS)",
       "controlFlowNodes": 11,
+      "boundaries": 1,
+      "visualActions": 0
+    },
+    {
+      "name": "HITCHHIKER ATTACH/DETATCH",
+      "controlFlowNodes": 28,
+      "boundaries": 1,
+      "visualActions": 0
+    },
+    {
+      "name": "HITCHHIKER LIFEBONDS",
+      "controlFlowNodes": 7,
       "boundaries": 1,
       "visualActions": 0
     }

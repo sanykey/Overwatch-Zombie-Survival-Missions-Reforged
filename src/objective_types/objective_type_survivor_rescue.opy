@@ -2,23 +2,23 @@
 
 
 rule "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE":
-    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
+    @Condition objectiveTypeList[0] == ObjectiveType.SURVIVOR_RESCUE
     @Condition isGameplayActive == true
     @Condition isObjectiveComplete == false
-    @Condition (survivorToRescue == null or not entityExists(survivorToRescue)) == true
+    @Condition (rescueSurvivor == null or not entityExists(rescueSurvivor)) == true
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
-    if survivorToRescue == null:
-        testPos = null
-        testPos2 = 115
-        while testPos == null:
-            testPos = random.choice(mapGridList.filter(lambda x: distance(x, objectivePositionList[0]) > testPos2 and distance(x, objectivePositionList[0]) < 120))
-            testPos2 -= 5
+    if rescueSurvivor == null:
+        rescueCandidatePosition = null
+        rescueMinSpawnDistance = 115
+        while rescueCandidatePosition == null:
+            rescueCandidatePosition = random.choice(mapGridList.filter(lambda x: distance(x, objectivePositionList[0]) > rescueMinSpawnDistance and distance(x, objectivePositionList[0]) < 120))
+            rescueMinSpawnDistance -= 5
             wait()
-        createDummy(random.choice(getAllHeroes().filter(lambda x: getNumberOfHeroes(x, Team.1) <= 0)), Team.1, 20, testPos)
-        survivorToRescue = getLastCreatedEntity()
+        createDummy(random.choice(getAllHeroes().filter(lambda x: getNumberOfHeroes(x, Team.1) <= 0)), Team.1, 20, rescueCandidatePosition)
+        rescueSurvivor = getLastCreatedEntity()
     else:
-        survivorToRescue = null
+        rescueSurvivor = null
         isObjectiveComplete = true
     wait(1)
     if ruleCondition:
@@ -28,20 +28,20 @@ rule "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE":
 rule "INITIALIZE SURVIVOR TO BE RESCUED":
     @Event eachPlayer
     @Team 1
-    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
-    @Condition survivorToRescue == eventPlayer
+    @Condition objectiveTypeList[0] == ObjectiveType.SURVIVOR_RESCUE
+    @Condition rescueSurvivor == eventPlayer
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
-    survivorToRescue.path = []
-    survivorToRescue.startPos = survivorToRescue.getPosition()
-    survivorToRescue.botTempValue = false
+    rescueSurvivor.path = []
+    rescueSurvivor.startPos = rescueSurvivor.getPosition()
+    rescueSurvivor.botTempValue = false
     eventPlayer.botFollowTarget = null
     eventPlayer.movementSpeed = 1
     eventPlayer.enhancementId = Enhancement.HITCHHIKER
     eventPlayer.enhancementValue1 = 0
     eventPlayer.enhancementValue2 = false
-    survivorToRescue.setStatusEffect(null, Status.UNKILLABLE, 99999)
-    survivorToRescue.setHealingReceived(110)
+    rescueSurvivor.setStatusEffect(null, Status.UNKILLABLE, 99999)
+    rescueSurvivor.setHealingReceived(110)
     #Objective/Survivor distance
     createInWorldText(getAllPlayers().filter(lambda _: not eventPlayer.botTempValue and distance(localPlayer.getPosition(), objectivePositionList[0]) > 5), "Distance: {0}m".format(distance(localPlayer.getPosition(), eventPlayer.getPosition() if distance(eventPlayer.getPosition(), localPlayer.getPosition()) > objectiveRad else objectivePositionList[0])), eventPlayer.getPosition() if distance(eventPlayer.getPosition(), localPlayer.getPosition()) > objectiveRad else objectivePositionList[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.VIOLET, SpecVisibility.NEVER)
     #Survivor rescue progress bar
@@ -64,8 +64,8 @@ rule "INITIALIZE SURVIVOR TO BE RESCUED":
 rule "SURVIVOR TO BE RESCUED DIES":
     @Event playerDied
     @Team 1
-    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
-    @Condition survivorToRescue == eventPlayer
+    @Condition objectiveTypeList[0] == ObjectiveType.SURVIVOR_RESCUE
+    @Condition rescueSurvivor == eventPlayer
     
     eventPlayer.teleport(nearestWalkablePosition(eventPlayer.getPosition()))
     eventPlayer.resurrect()
@@ -75,116 +75,116 @@ rule "SURVIVOR TO BE RESCUED DIES":
 
 
 rule "SURVIVOR FOLLOW TARGET":
-    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
-    @Condition survivorToRescue.botTempValue == false
-    @Condition survivorToRescue.hasSpawned() == true
-    @Condition survivorToRescue.getHealth() > 1
-    @Condition (playerTargetList.filter(lambda x: x != survivorToRescue and not x.invisible).any(lambda x: distance(survivorToRescue.getPosition(), x.getPosition()) < objectiveRad)) == true
-    @Condition distance(survivorToRescue.getPosition(), objectivePositionList[0]) >= 5
+    @Condition objectiveTypeList[0] == ObjectiveType.SURVIVOR_RESCUE
+    @Condition rescueSurvivor.botTempValue == false
+    @Condition rescueSurvivor.hasSpawned() == true
+    @Condition rescueSurvivor.getHealth() > 1
+    @Condition (playerTargetList.filter(lambda x: x != rescueSurvivor and not x.invisible).any(lambda x: distance(rescueSurvivor.getPosition(), x.getPosition()) < objectiveRad)) == true
+    @Condition distance(rescueSurvivor.getPosition(), objectivePositionList[0]) >= 5
     
-    survivorToRescue.clearStatusEffect(Status.PHASED_OUT)
-    survivorToRescue.randVal = iconString(Icon.SAD)
-    survivorToRescue.botThrottleSpeed = survivorToRescue.getNormalizedHealth() * 0.7
-    survivorToRescue.potentialTargets = playerTargetList.filter(lambda x: x != survivorToRescue and not x.invisible and distance(survivorToRescue.getPosition(), x.getPosition()) < objectiveRad)
-    if survivorToRescue.botFollowTarget == null or not survivorToRescue.botFollowTarget in survivorToRescue.potentialTargets:
-        survivorToRescue.botFollowTarget = (sorted(playerTargetList.filter(lambda x: distance(survivorToRescue.getPosition(), x.getPosition()) < objectiveRad), lambda x: distance(x.getPosition(), objectivePositionList[0])))[0]
-    if not survivorToRescue in playerTargetList:
+    rescueSurvivor.clearStatusEffect(Status.PHASED_OUT)
+    rescueSurvivor.randVal = iconString(Icon.SAD)
+    rescueSurvivor.botThrottleSpeed = rescueSurvivor.getNormalizedHealth() * 0.7
+    rescueSurvivor.potentialTargets = playerTargetList.filter(lambda x: x != rescueSurvivor and not x.invisible and distance(rescueSurvivor.getPosition(), x.getPosition()) < objectiveRad)
+    if rescueSurvivor.botFollowTarget == null or not rescueSurvivor.botFollowTarget in rescueSurvivor.potentialTargets:
+        rescueSurvivor.botFollowTarget = (sorted(playerTargetList.filter(lambda x: distance(rescueSurvivor.getPosition(), x.getPosition()) < objectiveRad), lambda x: distance(x.getPosition(), objectivePositionList[0])))[0]
+    if not rescueSurvivor in playerTargetList:
         #Add surivor to player target list
-        playerTargetList.append(survivorToRescue)
+        playerTargetList.append(rescueSurvivor)
         objectiveRad = 30
     wait(0.25)
     if ruleCondition:
         loop()
     #Remove survivor from player target list
-    playerTargetList.remove(survivorToRescue)
+    playerTargetList.remove(rescueSurvivor)
     #Reset objective radius
-    objectiveRad = objectiveChase1
-    survivorToRescue.botFollowTarget = null
-    survivorToRescue.potentialTargets = []
-    if survivorToRescue.getHealth() <= 1:
-        survivorToRescue.randVal = iconString(Icon.DIZZY)
-        survivorToRescue.setStatusEffect(null, Status.KNOCKED_DOWN, 99999)
-        survivorToRescue.setStatusEffect(null, Status.PHASED_OUT, 99999)
-        waitUntil(survivorToRescue.getNormalizedHealth() > 0.75, 20)
-        survivorToRescue.clearStatusEffect(Status.KNOCKED_DOWN)
+    objectiveRad = rescueSavedRadius
+    rescueSurvivor.botFollowTarget = null
+    rescueSurvivor.potentialTargets = []
+    if rescueSurvivor.getHealth() <= 1:
+        rescueSurvivor.randVal = iconString(Icon.DIZZY)
+        rescueSurvivor.setStatusEffect(null, Status.KNOCKED_DOWN, 99999)
+        rescueSurvivor.setStatusEffect(null, Status.PHASED_OUT, 99999)
+        waitUntil(rescueSurvivor.getNormalizedHealth() > 0.75, 20)
+        rescueSurvivor.clearStatusEffect(Status.KNOCKED_DOWN)
         if ruleCondition:
             loop()
 
 
 rule "CREATE PATH":
-    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
-    @Condition survivorToRescue.botFollowTarget != null
-    @Condition survivorToRescue.botThrottleSpeed > 0
-    @Condition survivorToRescue.botFollowTarget.getAltitude() <= 1.5
-    @Condition (len(survivorToRescue.path) == 0 or distance(survivorToRescue.botFollowTarget.getPosition(), survivorToRescue.path.last()) > 1) == true
+    @Condition objectiveTypeList[0] == ObjectiveType.SURVIVOR_RESCUE
+    @Condition rescueSurvivor.botFollowTarget != null
+    @Condition rescueSurvivor.botThrottleSpeed > 0
+    @Condition rescueSurvivor.botFollowTarget.getAltitude() <= 1.5
+    @Condition (len(rescueSurvivor.path) == 0 or distance(rescueSurvivor.botFollowTarget.getPosition(), rescueSurvivor.path.last()) > 1) == true
     
-    survivorToRescue.path.append(survivorToRescue.botFollowTarget.getPosition())
+    rescueSurvivor.path.append(rescueSurvivor.botFollowTarget.getPosition())
     wait(0.25, Wait.RESTART_WHEN_TRUE)
     if ruleCondition:
         loop()
 
 
 rule "DELETE PATH":
-    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
-    @Condition (survivorToRescue.path.any(lambda x: distance(survivorToRescue.getPosition(), vect(x.x, survivorToRescue.getPosition().y, x.z)) < 0.25 and abs(survivorToRescue.getPosition().y - x.y) < 2)) == true
+    @Condition objectiveTypeList[0] == ObjectiveType.SURVIVOR_RESCUE
+    @Condition (rescueSurvivor.path.any(lambda x: distance(rescueSurvivor.getPosition(), vect(x.x, rescueSurvivor.getPosition().y, x.z)) < 0.25 and abs(rescueSurvivor.getPosition().y - x.y) < 2)) == true
     
-    survivorToRescue.telePos = survivorToRescue.path.index(sorted(survivorToRescue.path, lambda x: distance(survivorToRescue.getPosition(), x))[0])
-    survivorToRescue.path.remove(survivorToRescue.path.filter(lambda _, i: i <= survivorToRescue.telePos))
+    rescueSurvivor.telePos = rescueSurvivor.path.index(sorted(rescueSurvivor.path, lambda x: distance(rescueSurvivor.getPosition(), x))[0])
+    rescueSurvivor.path.remove(rescueSurvivor.path.filter(lambda _, i: i <= rescueSurvivor.telePos))
     wait(0.25, Wait.RESTART_WHEN_TRUE)
     if ruleCondition:
         loop()
 
 
 rule "SURVIVOR FOLLOW TARGET LETS GO":
-    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
-    @Condition survivorToRescue.botFollowTarget != null
-    @Condition survivorToRescue.botFollowTarget.isCommunicating(Comms.GOODBYE) == true
+    @Condition objectiveTypeList[0] == ObjectiveType.SURVIVOR_RESCUE
+    @Condition rescueSurvivor.botFollowTarget != null
+    @Condition rescueSurvivor.botFollowTarget.isCommunicating(Comms.GOODBYE) == true
     
-    survivorToRescue.botFollowTarget = null
+    rescueSurvivor.botFollowTarget = null
 
 
 rule "PLAYER SAYS GROUP UP TO SURVIVOR":
-    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
-    @Condition survivorToRescue.botFollowTarget != null
-    @Condition (survivorToRescue.potentialTargets.any(lambda x: x.isCommunicating(Comms.GROUP_UP) and distance(x.getPosition(), survivorToRescue.getPosition()) < 12)) == true
+    @Condition objectiveTypeList[0] == ObjectiveType.SURVIVOR_RESCUE
+    @Condition rescueSurvivor.botFollowTarget != null
+    @Condition (rescueSurvivor.potentialTargets.any(lambda x: x.isCommunicating(Comms.GROUP_UP) and distance(x.getPosition(), rescueSurvivor.getPosition()) < 12)) == true
     
-    survivorToRescue.botFollowTarget = (sorted(survivorToRescue.potentialTargets.filter(lambda x: x.isCommunicating(Comms.GROUP_UP) and distance(x.getPosition(), survivorToRescue.getPosition()) < 12), lambda x: distance(x.getPosition(), survivorToRescue.getPosition())))[0]
-    survivorToRescue.botTempvalue2 = "{0} {1}".format(heroIcon(survivorToRescue.botFollowTarget.getHero()), iconString(Icon.QUESTION_MARK))
-    survivorToRescue.path = []
+    rescueSurvivor.botFollowTarget = (sorted(rescueSurvivor.potentialTargets.filter(lambda x: x.isCommunicating(Comms.GROUP_UP) and distance(x.getPosition(), rescueSurvivor.getPosition()) < 12), lambda x: distance(x.getPosition(), rescueSurvivor.getPosition())))[0]
+    rescueSurvivor.botTempvalue2 = "{0} {1}".format(heroIcon(rescueSurvivor.botFollowTarget.getHero()), iconString(Icon.QUESTION_MARK))
+    rescueSurvivor.path = []
     wait(3)
-    survivorToRescue.botTempvalue2 = null
+    rescueSurvivor.botTempvalue2 = null
 
 
 rule "SURVIVOR JUMP":
-    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
-    @Condition survivorToRescue.isOnGround() == true
-    @Condition survivorToRescue.getThrottle() != vect(0, 0, 0)
-    @Condition survivorToRescue.getHorizontalSpeed() < survivorToRescue.botThrottleSpeed * 3.5
+    @Condition objectiveTypeList[0] == ObjectiveType.SURVIVOR_RESCUE
+    @Condition rescueSurvivor.isOnGround() == true
+    @Condition rescueSurvivor.getThrottle() != vect(0, 0, 0)
+    @Condition rescueSurvivor.getHorizontalSpeed() < rescueSurvivor.botThrottleSpeed * 3.5
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
-    survivorToRescue.forceButtonPress(Button.JUMP)
+    rescueSurvivor.forceButtonPress(Button.JUMP)
     loop()
 
 
 rule "SURVIVOR REACHES EXTRACTION SITE":
-    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE
+    @Condition objectiveTypeList[0] == ObjectiveType.SURVIVOR_RESCUE
     @Condition isObjectiveComplete == false
-    @Condition survivorToRescue.hasSpawned() == true
-    @Condition distance(survivorToRescue.getPosition(), objectivePositionList[0]) < 5
+    @Condition rescueSurvivor.hasSpawned() == true
+    @Condition distance(rescueSurvivor.getPosition(), objectivePositionList[0]) < 5
     
-    playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, null, survivorToRescue, 200)
-    survivorToRescue.randVal = random.choice([iconString(Icon.HAPPY), iconString(Icon.HEART)])
-    survivorToRescue.startThrottleInDirection(directionTowards(survivorToRescue.getPosition(), objectivePositionList[0]), 0.75 if distance(survivorToRescue.getPosition(), objectivePositionList[0]) > 1 else 0, Relativity.TO_WORLD)
-    survivorToRescue.startFacing(vect(0, 1, 0), 100)
+    playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, null, rescueSurvivor, 200)
+    rescueSurvivor.randVal = random.choice([iconString(Icon.HAPPY), iconString(Icon.HEART)])
+    rescueSurvivor.startThrottleInDirection(directionTowards(rescueSurvivor.getPosition(), objectivePositionList[0]), 0.75 if distance(rescueSurvivor.getPosition(), objectivePositionList[0]) > 1 else 0, Relativity.TO_WORLD)
+    rescueSurvivor.startFacing(vect(0, 1, 0), 100)
     wait(1)
-    survivorToRescue.botTempValue = true
-    survivorToRescue.path = []
-    survivorToRescue.chase1 = survivorToRescue.getPosition()
+    rescueSurvivor.botTempValue = true
+    rescueSurvivor.path = []
+    rescueSurvivor.chase1 = rescueSurvivor.getPosition()
     wait()
-    survivorToRescue.startForcingPosition(survivorToRescue.chase1)
+    rescueSurvivor.startForcingPosition(rescueSurvivor.chase1)
     wait(0.5)
-    chaseAtRate(survivorToRescue.chase1, survivorToRescue.getPosition() + vect(0, 100, 0), 3, ChaseRateReeval.NONE)
+    chaseAtRate(rescueSurvivor.chase1, rescueSurvivor.getPosition() + vect(0, 100, 0), 3, ChaseRateReeval.NONE)
     wait(2)
-    chaseAtRate(survivorToRescue.chase1, survivorToRescue.getPosition() + vect(0, 100, 0), 10, ChaseRateReeval.NONE)
+    chaseAtRate(rescueSurvivor.chase1, rescueSurvivor.getPosition() + vect(0, 100, 0), 10, ChaseRateReeval.NONE)
     wait(3)
-    destroyDummy(Team.1, survivorToRescue.getSlot())
+    destroyDummy(Team.1, rescueSurvivor.getSlot())

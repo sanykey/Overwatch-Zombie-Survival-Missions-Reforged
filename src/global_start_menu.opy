@@ -48,7 +48,9 @@ rule "GLOBAL MENU INITIALIZATION":
                     break
             wait()
     lbl_0:
-    startMenuSpacingAngle = 40
+    # Scene setup can resume after START GAME; the slot then belongs to the Biomorphing color.
+    if isPregameSetup:
+        startMenuSpacingAngle = 40
     #Start screen objective description
     setObjectiveDescription(getAllPlayers(), "Voting ends in {0}s".format(ceil(getMatchTime() - VOTING_END_TIME)) if isVoting else "Select your hero", HudReeval.VISIBILITY_AND_STRING)
 
@@ -232,7 +234,7 @@ rule "END VOTING":
     @Condition getMatchTime() < VOTING_END_TIME
     @Condition len(getPlayers(Team.1).filter(lambda player: player.pregameState > PregameState.SELECTING_HERO)) > 0
     
-    chase1 = VOTING_END_TIME
+    pregameCountdown = VOTING_END_TIME
     startRule(determineZombieMode)
     #Waits until votes have been counted
     waitUntil(not isVoting, 99999)
@@ -394,24 +396,24 @@ def setObjectiveType():
         else:
             #Mixed objective assignment
             objectiveTypeList.append(random.choice(mixedObjectiveTypeList.exclude(objectiveTypeList.filter(lambda _, i: i > len(objectiveTypeList) - 1 - (len(mixedObjectiveTypeList) - 1)))))
-        objectiveCount1 = 0
+        missionPlacementAttemptCount = 0
         while len(objectivePositionList) < len(objectiveTypeList):
             #Limits possible map grid points to set min and max range from last created objective position
-            testPos = random.choice(mapGridList if len(objectivePositionList) == 0 else mapGridList.filter(lambda x: distance(x, objectivePositionList.last()) > objectiveSpacingList[0] and distance(x, objectivePositionList.last()) < min(100, objectiveSpacingList[0] * 3)))
-            testPos += Vector.UP
+            missionCandidatePosition = random.choice(mapGridList if len(objectivePositionList) == 0 else mapGridList.filter(lambda x: distance(x, objectivePositionList.last()) > objectiveSpacingList[0] and distance(x, objectivePositionList.last()) < min(100, objectiveSpacingList[0] * 3)))
+            missionCandidatePosition += Vector.UP
             wait()
             #Minimum objective spacing
-            if len(objectivePositionList) == 0 or objectivePositionList.slice(len(objectivePositionList) - 5, 5).all(lambda x: distance(testPos, x) > objectiveSpacingList[1]):
+            if len(objectivePositionList) == 0 or objectivePositionList.slice(len(objectivePositionList) - 5, 5).all(lambda x: distance(missionCandidatePosition, x) > objectiveSpacingList[1]):
                 #Ensures bosses spawn with head room
-                if objectiveTypeList.last() != ObjectiveType.BOSSES or isInLoS(testPos + vect(0, 0, 0), testPos + vect(0, 10, 0)):
-                    objectivePositionList.append(testPos)
-                    objectiveCount1 = 0
-            objectiveCount1++
+                if objectiveTypeList.last() != ObjectiveType.BOSSES or isInLoS(missionCandidatePosition + vect(0, 0, 0), missionCandidatePosition + vect(0, 10, 0)):
+                    objectivePositionList.append(missionCandidatePosition)
+                    missionPlacementAttemptCount = 0
+            missionPlacementAttemptCount++
             #If Too many attempts
-            if objectiveCount1 > 50:
+            if missionPlacementAttemptCount > 50:
                 del objectivePositionList[len(objectivePositionList) - 1]
                 del objectivePositionList[len(objectivePositionList) - 1]
-                objectiveCount1 = 0
+                missionPlacementAttemptCount = 0
     #Last objective must be extraction objective
     objectiveTypeList[len(objectiveTypeList) - 1] = ObjectiveType.SHOWDOWN
     objectivesManagement()

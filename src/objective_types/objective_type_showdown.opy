@@ -3,7 +3,7 @@
 
 rule "PLAYERS ON OBJECTIVE CONTROL":
     @Event eachPlayer
-    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SHOWDOWN
+    @Condition objectiveTypeList[0] == ObjectiveType.SHOWDOWN
     @Condition len(objectivePositionList) > 1
     @Condition eventPlayer.invisible != true
     @Condition eventPlayer.isAlive() == true
@@ -14,8 +14,8 @@ rule "PLAYERS ON OBJECTIVE CONTROL":
     @Condition distance(vect(objectivePositionList[0].x, eventPlayer.getPosition().y, objectivePositionList[0].z), eventPlayer.getPosition()) < objectiveRad
     
     if eventPlayer.isDummy():
-        if not eventPlayer in queuedGoalList:
-            queuedGoalList.append(eventPlayer)
+        if not eventPlayer in showdownContestingZombieList:
+            showdownContestingZombieList.append(eventPlayer)
     else:
         if not eventPlayer in objectivePlayerList:
             objectivePlayerList.append(eventPlayer)
@@ -23,31 +23,31 @@ rule "PLAYERS ON OBJECTIVE CONTROL":
     if ruleCondition:
         loop()
     objectivePlayerList.remove(eventPlayer)
-    queuedGoalList.remove(eventPlayer)
+    showdownContestingZombieList.remove(eventPlayer)
 
 
 rule "INCREASE OBJECTIVE CAPTURE PERCENTAGE":
-    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SHOWDOWN
+    @Condition objectiveTypeList[0] == ObjectiveType.SHOWDOWN
     @Condition len(objectivePositionList) > 1
     @Condition len(objectivePlayerList) > 0
     @Condition isObjectiveComplete == false
     
     #Proceed to next objective
-    if objectiveCaptureValue >= 100:
+    if showdownCapturePercent >= 100:
         stopChasing(objectiveRad)
         isObjectiveComplete = true
-        queuedGoalList = []
+        showdownContestingZombieList = []
         objectivePlayerList = []
         return
     wait(1, Wait.RESTART_WHEN_TRUE)
     if not ruleCondition:
         return
-    objectiveCaptureValue += len(objectivePlayerList) + 0.25 if len(objectivePlayerList) <= 3 else 3.25
-    playEffect(getPlayers(Team.1), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, objectivePositionList[0], (0.05 * objectiveCaptureValue) ** 2)
-    if objectiveCaptureValue >= goalPost:
-        goalPost += 25
+    showdownCapturePercent += len(objectivePlayerList) + 0.25 if len(objectivePlayerList) <= 3 else 3.25
+    playEffect(getPlayers(Team.1), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, objectivePositionList[0], (0.05 * showdownCapturePercent) ** 2)
+    if showdownCapturePercent >= showdownNextCheckpoint:
+        showdownNextCheckpoint += 25
         playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, objectivePositionList[0], objectiveRad * 2)
-        if goalPost >= 100:
+        if showdownNextCheckpoint >= 100:
             goto lbl_0
         playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, null, objectivePositionList[0], 100)
         smallMessage(getAllPlayers(), "  {0} Checkpoint Reached".format(iconString(Icon.FLAG)))
@@ -57,22 +57,22 @@ rule "INCREASE OBJECTIVE CAPTURE PERCENTAGE":
 
 
 rule "DECREASES CAPTURE PERCENTAGE":
-    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SHOWDOWN
+    @Condition objectiveTypeList[0] == ObjectiveType.SHOWDOWN
     @Condition len(objectivePositionList) > 1
-    @Condition len(queuedGoalList) > 0
+    @Condition len(showdownContestingZombieList) > 0
     @Condition isObjectiveComplete == false
-    @Condition objectiveCaptureValue > goalPost - 25
+    @Condition showdownCapturePercent > showdownNextCheckpoint - 25
     
     wait(1, Wait.RESTART_WHEN_TRUE)
-    if CURRENT_OBJECTIVE_TYPE != ObjectiveType.SHOWDOWN:
+    if objectiveTypeList[0] != ObjectiveType.SHOWDOWN:
         return
     if len(objectivePositionList) <= 1:
         return
-    objectiveCaptureValue -= (3 if len(queuedGoalList) > 3 else len(queuedGoalList)) if difficultySetting == 1 else len(queuedGoalList) + difficultySetting * 0.75
-    playEffect(getPlayers(Team.1), DynamicEffect.DEBUFF_IMPACT_SOUND, null, objectivePositionList[0], (0.05 * objectiveCaptureValue) ** 2)
+    showdownCapturePercent -= (3 if len(showdownContestingZombieList) > 3 else len(showdownContestingZombieList)) if difficultySetting == 1 else len(showdownContestingZombieList) + difficultySetting * 0.75
+    playEffect(getPlayers(Team.1), DynamicEffect.DEBUFF_IMPACT_SOUND, null, objectivePositionList[0], (0.05 * showdownCapturePercent) ** 2)
     objectiveColor = Color.RED
     wait(0.5)
-    if CURRENT_OBJECTIVE_TYPE != ObjectiveType.SHOWDOWN:
+    if objectiveTypeList[0] != ObjectiveType.SHOWDOWN:
         return
     if len(objectivePositionList) <= 1:
         return

@@ -1,0 +1,230 @@
+{
+  "date": "2026-11-02",
+  "baselineRef": "1a313866755d0a00e6cc8bfcbfc323904c5ff02f",
+  "before": {
+    "globals": 110,
+    "elements": 27213
+  },
+  "after": {
+    "globals": 99,
+    "elements": 27218
+  },
+  "sharedSlots": [
+    {
+      "slot": "phaseSlot0",
+      "roles": [
+        "startMenuZombieColorList",
+        "objectiveVisualCleanupIndex"
+      ]
+    },
+    {
+      "slot": "phaseSlot1",
+      "roles": [
+        "startMenuObjectiveColorList",
+        "missionPlacementAttemptCount",
+        "biomorphingCleanupIndex",
+        "satelliteFiringStepsRemaining"
+      ]
+    },
+    {
+      "slot": "phaseSlot2",
+      "roles": [
+        "startMenuEnhancementColorList",
+        "rescueMinSpawnDistance",
+        "satelliteMinTerminalSpacing"
+      ]
+    },
+    {
+      "slot": "phaseSlot3",
+      "roles": [
+        "challengeVoteList",
+        "biomorphingResourceNameList"
+      ]
+    },
+    {
+      "slot": "phaseSlot4",
+      "roles": [
+        "objectiveTypeVoteList",
+        "biomorphingResourceColorList"
+      ]
+    },
+    {
+      "slot": "phaseSlot5",
+      "roles": [
+        "zombieVoteList",
+        "biomorphingQueuedTypeList"
+      ]
+    },
+    {
+      "slot": "phaseSlot6",
+      "roles": [
+        "pregameGlitchText",
+        "extractionFlightDestination"
+      ]
+    },
+    {
+      "slot": "phaseSlot7",
+      "roles": [
+        "isPregameGlitchActive",
+        "extractionFlightSpeed"
+      ]
+    },
+    {
+      "slot": "phaseSlot8",
+      "roles": [
+        "mixedObjectiveTypeList",
+        "finaleExplosionIndex"
+      ]
+    },
+    {
+      "slot": "phaseSlot9",
+      "roles": [
+        "enhancementOptionList",
+        "biomorphingGoalText"
+      ]
+    },
+    {
+      "slot": "phaseSlot10",
+      "roles": [
+        "startMenuSpacingAngle",
+        "biomorphingGoalColor"
+      ]
+    },
+    {
+      "slot": "objectiveProgressSlot",
+      "roles": [
+        "objectiveProgress",
+        "showdownCapturePercent",
+        "biomorphingCapturePercent",
+        "killZoneEliminationScore",
+        "satelliteTerminalProgressList"
+      ]
+    },
+    {
+      "slot": "objectivePositionsSlot",
+      "roles": [
+        "objectivePositionsList",
+        "biomorphingResourcePositionList",
+        "satelliteTerminalPositionList"
+      ]
+    },
+    {
+      "slot": "objectivePlacementSlot",
+      "roles": [
+        "missionCandidatePosition",
+        "rescueCandidatePosition"
+      ]
+    },
+    {
+      "slot": "objectiveMotionSlot",
+      "roles": [
+        "rescueSavedRadius",
+        "killZoneCenter",
+        "satelliteLaserPosition"
+      ]
+    },
+    {
+      "slot": "objectiveCheckpointSlot",
+      "roles": [
+        "objectiveNextCheckpoint",
+        "showdownNextCheckpoint",
+        "biomorphingNextCheckpoint"
+      ]
+    },
+    {
+      "slot": "objectiveQueueSlot",
+      "roles": [
+        "showdownContestingZombieList",
+        "biomorphingGoalQueueList"
+      ]
+    },
+    {
+      "slot": "objectiveActorSlot",
+      "roles": [
+        "objectiveActor",
+        "rescueSurvivor",
+        "satelliteLaserTarget"
+      ]
+    },
+    {
+      "slot": "menuFinaleMotionSlot",
+      "roles": [
+        "pregameCountdown",
+        "nukeProjectilePosition"
+      ]
+    },
+    {
+      "slot": "bossStateList",
+      "roles": [
+        "bossesStateList",
+        "zombieEggStateList"
+      ]
+    }
+  ],
+  "legacyVariableMapping": {
+    "startMenuZombieColorList": "phaseSlot0",
+    "objectiveEntitiesCount": "phaseSlot0",
+    "startMenuObjectiveColorList": "phaseSlot1",
+    "objectiveCount1": "phaseSlot1",
+    "startMenuEnhancementColorList": "phaseSlot2",
+    "testPos2": "phaseSlot2",
+    "challengeVoteList": "phaseSlot3",
+    "biomorphingResourceNameList": "phaseSlot3",
+    "objectiveTypeVoteList": "phaseSlot4",
+    "biomorphingResourceColorList": "phaseSlot4",
+    "zombieVoteList": "phaseSlot5",
+    "biomorphingQueuedTypeList": "phaseSlot5",
+    "pregameGlitchText": "phaseSlot6",
+    "extractionFlightDestination": "phaseSlot6",
+    "isPregameGlitchActive": "phaseSlot7",
+    "extractionFlightSpeed": "phaseSlot7",
+    "mixedObjectiveTypeList": "phaseSlot8",
+    "evacCount": "phaseSlot8",
+    "enhancementOptionList": "phaseSlot9",
+    "biomorphingGoalText": "phaseSlot9",
+    "startMenuSpacingAngle": "phaseSlot10",
+    "biomorphingGoalColor": "phaseSlot10",
+    "testPos": "objectivePlacementSlot",
+    "objectiveChase1": "objectiveMotionSlot",
+    "goalPost": "objectiveCheckpointSlot",
+    "queuedGoalList": "objectiveQueueSlot",
+    "survivorToRescue": "objectiveActorSlot",
+    "objectiveResourcePositionList": "objectivePositionsSlot",
+    "objectiveCaptureValue": "objectiveProgressSlot",
+    "chase1": "menuFinaleMotionSlot"
+  },
+  "compiledRulesCompared": 231,
+  "actionChanges": [
+    "START GAME: restore biomorphingGoalText and biomorphingGoalColor to null after deleting pregame texts.",
+    "GLOBAL MENU INITIALIZATION: write the spacing angle only while isPregameSetup is true, preventing a resumed menu writer from overwriting the Biomorphing goal color."
+  ],
+  "warnings": [],
+  "sha256": {
+    "bots_game_in_progress.opy": "07f43789aa693b4dba5983a323bc623ec4fee74e054c9e8e13b459e1aa80176f",
+    "compressed numbers.opy": "6c414884c6273353c17c85e56de05c382cb6401aec19a22132263fd6f4d6d9d7",
+    "debug.opy": "2a2fde87e43bd36516d2db1c25d513df4c49e24eebce71be8ef8440f59a47bb9",
+    "enhancements.opy": "7618b59de8b60fbdff1f9cd6b1a66ca67765ee60772304b4cab83dc3d99ae4c0",
+    "global_game_in_progress.opy": "d58bc88f5999dc0b2a2b4da3b954295a4fb409dc76dfab363488fbc372b7b00c",
+    "global_startup.opy": "268249eef8d25147771bb42850025f1e46e6412bb9a8b8a1f5eb8d7f1d3d0b2c",
+    "global_start_menu.opy": "2205fa24fd700e63b70b31d001b944f0c00556ed8914c153118f437e53fbbada",
+    "hero_tuning.opy": "28d92c1cc23f27f9c444332eff0edd3c9f1f569044d9dde96841b4ad808454aa",
+    "main.opy": "6005995170250d44b35a88576f997014f95de715f521429eda7b9f6dcb1da9fd",
+    "objective_types/objective_type_biomorphing.opy": "cbb5a8a808463f13bafec1c03d44556fc9816ea362a846b36cd7f9854adac88c",
+    "objective_types/objective_type_bosses.opy": "0bb86cbc0da6cbf150d590752ab94fa70b44574059858de3856ecd9cc3c392a2",
+    "objective_types/objective_type_extraction_point.opy": "9e47ac5ff44e429c9ad9e2ee7969f1505333241e36592e0506c8f6a9499a0ded",
+    "objective_types/objective_type_kill_zone.opy": "7d87b12bb0cece74e747db45d21a8cf4ba7d3865e2d51b2d95bdcba17beddf78",
+    "objective_types/objective_type_satellite_uplink.opy": "f42fd9ea20b621ff1fffc6d51f85b31aa08fbf9b5cba6ea132356c53a45272da",
+    "objective_types/objective_type_showdown.opy": "d8ac2aff5cffb99303d98dbd0b3dcc11301a91391d67965fe270346b7481b1a4",
+    "objective_types/objective_type_survivor_rescue.opy": "961fa162fb2fc6659c610452c941cb57472cc3bdd0f6dcb9e5bcd3a1cda1d0b0",
+    "objective_types/objective_type_zombie_egg.opy": "8c3278ef47d21c8c7ec3940a2662dda8b0aef8d04f27324562d26ddfd5c93274",
+    "players_game_in_progress.opy": "c891fb75de988acf8f65bd681f6be4e03c7447f0bee555590dfc3d152f77147f",
+    "player_start_menu.opy": "5d8eff792cb6188825db562a7799e78d769f507c2820e6a9aea01dd3292eb198",
+    "power_ups.opy": "84321529b8925e59bf335eba6d5146c582b655f6360660c90d9717858d484c5b",
+    "settings.opy": "bafdf47e377bfce8871f5e6c8a79684934e6c283130151ce2824d8778cc659a7",
+    "subroutines.opy": "1c62b6891fe33efe3c44dd8beffd510df7cab8ab529b2a6775c2c7e5ad59adb1",
+    "supply_drops.opy": "be3ccc307d02bde4ca89acd717081d7e1910f3db9cc5ca51fe639bc56faa2145",
+    "variables.opy": "4e25e02f12522362ae28b7b08fbb3ed7718d8c2243a4a1989c9d072f2c9b0527",
+    "zombie_types.opy": "dcc14937a699cc4824ecef0dc39ce0e1061b43b4fc8473a9778edea285c0d9b9"
+  },
+  "limitations": "Static source review and complete compiled-rule comparison. Does not simulate Workshop scheduling, renderer reevaluation, joins or combat. In-game transitions still require validation."
+}

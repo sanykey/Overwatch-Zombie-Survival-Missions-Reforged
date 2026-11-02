@@ -2,7 +2,6 @@
 
 #!define BOT_MAX_TELEPORT_RANGE 40
 #!define BIOMORPHING_RESOURCE_AMOUNT 25
-#!define CURRENT_OBJECTIVE_TYPE objectiveTypeList[0]
 #!define ELIMINATIONS_NEEDED_PER_OBJECTIVE 50
 #!define LASER_BARRICADE_HEIGHT 2
 #!define LASER_BARRICADE_WIDTH 5
@@ -57,6 +56,8 @@ enum PregameState:
 
 # Naming: booleans start with is; stable arrays end with List.
 # Objective-type prefixes identify dedicated state; shared/polymorphic slots use neutral names.
+# Use a role alias in each objective; neutral *Slot globals describe storage, not gameplay meaning.
+# Shared names remain appropriate where the meaning is common (objectiveRad, objectiveColor, bossStateList).
 # numbersList is owned by compressed numbers.opy; debugHud is owned by debug.opy.
 
 # Shared scratch slots.
@@ -65,6 +66,60 @@ enum PregameState:
 globalvar tmp0  # Synchronous scratch: number, position, player or list; assign before use and do not retain across waits.
 globalvar tmp1  # Second simultaneously live scratch value; may hold a scalar, player, vector or list.
 globalvar tmp2  # Third simultaneously live scratch value; may hold a scalar, player, vector or list.
+
+# Phase-owned storage, NOT scratch: values may survive waits and reevaluation.
+# START GAME removes all pregame HUD/world text before mission generation can resume.
+# Never restart menu/voting writers after this boundary; initialize each new role before reading it.
+globalvar phaseSlot0  # Menu zombie palette -> objective-visual cleanup index; global_start_menu.opy -> subroutines.opy.
+#!define startMenuZombieColorList phaseSlot0
+#!define objectiveVisualCleanupIndex phaseSlot0
+
+globalvar phaseSlot1  # Menu objective palette -> placement attempts / Biomorphing cleanup / Satellite firing counter.
+# Owners: global_start_menu.opy, then objective_type_biomorphing.opy / objective_type_satellite_uplink.opy.
+#!define startMenuObjectiveColorList phaseSlot1
+#!define missionPlacementAttemptCount phaseSlot1
+#!define biomorphingCleanupIndex phaseSlot1
+#!define satelliteFiringStepsRemaining phaseSlot1
+
+globalvar phaseSlot2  # Menu enhancement palette -> Rescue spawn distance / Satellite terminal spacing (115 / 50 before use).
+# Owners: global_start_menu.opy -> subroutines.opy and objective_type_survivor_rescue.opy / objective_type_satellite_uplink.opy.
+#!define startMenuEnhancementColorList phaseSlot2
+#!define rescueMinSpawnDistance phaseSlot2
+#!define satelliteMinTerminalSpacing phaseSlot2
+
+globalvar phaseSlot3  # Challenge votes (startup/global/player menu) -> Biomorphing names (subroutines, Biomorphing HUD/drops).
+#!define challengeVoteList phaseSlot3
+#!define biomorphingResourceNameList phaseSlot3
+
+globalvar phaseSlot4  # Objective votes (startup/global/player menu) -> Biomorphing colors (subroutines, drops/player icons).
+#!define objectiveTypeVoteList phaseSlot4
+#!define biomorphingResourceColorList phaseSlot4
+
+globalvar phaseSlot5  # Zombie votes (startup/global/player menu) -> resource-type queue, initialized by BIOMORPHING GOAL START.
+#!define zombieVoteList phaseSlot5
+#!define biomorphingQueuedTypeList phaseSlot5
+
+globalvar phaseSlot6  # Menu glitch text -> extraction flight destination; WIN/LOSS CONDITIONS sets it before evacSurvivorList.
+#!define pregameGlitchText phaseSlot6
+#!define extractionFlightDestination phaseSlot6
+
+globalvar phaseSlot7  # Menu glitch flag -> extraction flight speed (2/10/50); menu waits abort when isPregameSetup is cleared.
+#!define isPregameGlitchActive phaseSlot7
+#!define extractionFlightSpeed phaseSlot7
+
+globalvar phaseSlot8  # Mixed objective pool (startup/generation) -> nukeMap explosion counter, on victory or defeat AFTER generation.
+#!define mixedObjectiveTypeList phaseSlot8
+#!define finaleExplosionIndex phaseSlot8
+
+globalvar phaseSlot9  # Menu enhancement icons -> Biomorphing goal text (goal rule/HUD); START GAME restores null after menu cleanup.
+#!define enhancementOptionList phaseSlot9
+#!define biomorphingGoalText phaseSlot9
+
+globalvar phaseSlot10  # Menu spacing/readiness (0 -> 40) -> Biomorphing goal color (goal rule/HUD/announcement).
+# global_start_menu.opy guards its final angle write with isPregameSetup, including after scene-setup waits.
+# START GAME restores null after menu cleanup, before the first Biomorphing HUD can read this slot.
+#!define startMenuSpacingAngle phaseSlot10
+#!define biomorphingGoalColor phaseSlot10
 
 # Shared immutable colors and positions.
 globalvar offsetUpThreeQuartersConst = vect(0, 0.75, 0)    # Vertical offset of 0.75 m for labels, icons and visibility checks.
@@ -100,64 +155,71 @@ globalvar botSpawnWaypointList        # Movement waypoint associated with each c
 globalvar customTeleportPositionList  # Special teleport positions transferred from dying bots to replacement bots.
 globalvar botSpawnTimeList            # Remaining delays for queued zombie replacements, decremented once per second.
 
-# Pregame scene, palettes and voting.
+# Pregame scene. Palettes, votes, enhancement icons and glitch state use phase aliases above.
 globalvar startPos                       # Center/aim position of the pregame hero-selection scene.
 globalvar startCamPos                    # Pregame camera position used to place players and world text.
-globalvar startMenuSpacingAngle          # Hero-scene spacing angle; zero also means menu initialization is not finished.
-globalvar startMenuZombieColorList       # Pregame Zombie Mode HUD colors indexed by option ID.
-globalvar startMenuObjectiveColorList    # Pregame Objective Type HUD colors indexed by raw objective ID.
-globalvar startMenuEnhancementColorList  # Pregame Enhancement HUD colors indexed by enhancement ID.
-globalvar challengeVoteList              # Challenge availability/count entries, indexed by vote option.
-globalvar zombieVoteList                 # Zombie-mode availability/count entries, indexed by vote option.
-globalvar objectiveTypeVoteList          # Objective-type availability/count entries, indexed by raw objective ID.
-globalvar enhancementOptionList          # Enhancement icons/availability used by pregame selection and world text.
-globalvar pregameGlitchText              # Random distorted Challenge text shown during the pregame flashing effect.
-globalvar isPregameGlitchActive          # Enables the pregame Challenge text/color flash.
 
 # Shared objective generation and runtime state.
 globalvar objectivePositionList          # Queued objective positions; index zero is current, the final entry is extraction.
 globalvar objectiveTypeList              # Queued objective types aligned with objectivePositionList.
 globalvar objectiveSpacingList           # Consecutive/minimum placement distances calculated from the map-grid size.
-globalvar mixedObjectiveTypeList         # Allowed Mixed objective types used while building the mission queue.
 globalvar objectiveValue                 # Current type snapshot published when global objective visuals are refreshed.
-globalvar objectiveCaptureValue          # Numeric progress/kill score, or a list of three terminal percentages in Satellite Uplink.
+globalvar objectiveProgressSlot          # Shared progress storage; generic reset in objectivesManagement, role-specific HUD/rules below.
+#!define objectiveProgress objectiveProgressSlot
+#!define showdownCapturePercent objectiveProgressSlot
+#!define biomorphingCapturePercent objectiveProgressSlot
+#!define killZoneEliminationScore objectiveProgressSlot
+#!define satelliteTerminalProgressList objectiveProgressSlot
 globalvar objectiveRad                   # Current objective radius; also chased or temporarily expanded by some objective types.
 globalvar objectiveDescription           # Current task description displayed by the global match HUD.
 globalvar objectiveColor                 # Shared objective visual color, including Showdown progress-loss flashes.
 globalvar isObjectiveComplete            # Requests objective advancement and coordinates objective/player recovery rules.
 globalvar objectivePlayerList            # Players currently capturing, repairing, depositing resources or extracting.
 globalvar objectiveEntityIdList          # Global objective effect/text/icon/progress-bar IDs retained for cleanup.
-globalvar objectiveEntitiesCount         # Index of the yielding global objective-visual cleanup loop.
-globalvar objectiveResourcePositionList  # Dropped-resource positions in Biomorphing or terminal positions in Satellite Uplink.
-globalvar testPos                        # Candidate position retained across waits during mission placement or survivor spawning.
-globalvar testPos2                       # Minimum survivor-spawn distance or minimum spacing between satellite terminals.
-globalvar objectiveCount1                # Shared counter: placement attempts, Biomorphing cleanup, or remaining Satellite firing steps.
-globalvar objectiveChase1                # Saved Rescue radius (number), Kill Zone center (vector), or Satellite laser position (vector).
-globalvar goalPost                       # Next 25-percent progress checkpoint shared by Showdown and Biomorphing.
-globalvar queuedGoalList                 # Showdown: contesting zombies; Biomorphing: queued resource-goal IDs.
-globalvar survivorToRescue               # Rescue NPC or current zombie target followed by the Satellite laser.
+globalvar objectivePositionsSlot         # World-position list; startup reset, then Biomorphing drops or Satellite terminals (subroutines/objectives).
+#!define objectivePositionsList objectivePositionsSlot
+#!define biomorphingResourcePositionList objectivePositionsSlot
+#!define satelliteTerminalPositionList objectivePositionsSlot
+
+globalvar objectivePlacementSlot         # Candidate vector held across waits: mission placement (global menu), then Rescue NPC spawning.
+#!define missionCandidatePosition objectivePlacementSlot
+#!define rescueCandidatePosition objectivePlacementSlot
+
+globalvar objectiveMotionSlot            # Rescue saved radius, Kill Zone center, or chased Satellite laser position; subroutines/objectives/bots.
+#!define rescueSavedRadius objectiveMotionSlot
+#!define killZoneCenter objectiveMotionSlot
+#!define satelliteLaserPosition objectiveMotionSlot
+
+globalvar objectiveCheckpointSlot        # Generic reset, then next 25-percent checkpoint in Showdown or Biomorphing (subroutines/objectives).
+#!define objectiveNextCheckpoint objectiveCheckpointSlot
+#!define showdownNextCheckpoint objectiveCheckpointSlot
+#!define biomorphingNextCheckpoint objectiveCheckpointSlot
+
+globalvar objectiveQueueSlot             # Showdown contesting-zombie list (also bots/HUD), or Biomorphing resource-goal queue.
+#!define showdownContestingZombieList objectiveQueueSlot
+#!define biomorphingGoalQueueList objectiveQueueSlot
+
+globalvar objectiveActorSlot             # Generic transition reset, then Rescue NPC or Satellite laser target; subroutines/objectives/bots.
+#!define objectiveActor objectiveActorSlot
+#!define rescueSurvivor objectiveActorSlot
+#!define satelliteLaserTarget objectiveActorSlot
 
 # Biomorphing objective: goals, resources and deferred drops.
-globalvar biomorphingQueuedTypeList        # Shuffled resource types 0/1/2 assigned to successive zombie resource carriers.
-globalvar biomorphingGoalText              # Current requested-material/blood message displayed by the Biomorphing HUD.
-globalvar biomorphingGoalColor             # Current Biomorphing goal color used by its HUD and announcements.
 globalvar isBiomorphingGoalPending         # Requests Biomorphing resource cleanup and initialization of the next resource goal.
 globalvar biomorphingResourceTypeList      # Types of dropped resources, indexed with the shared resource-position list.
 globalvar biomorphingDeferredTypeList      # Queued resource types awaiting orb creation after their holders die.
 globalvar biomorphingDeferredPositionList  # World positions aligned with biomorphingDeferredTypeList.
 globalvar biomorphingResourceTextIdList    # World-text IDs for dropped resources, retained until pickup or goal cleanup.
 globalvar biomorphingResourceEffectIdList  # Effect IDs for dropped resource orbs, retained until pickup or goal cleanup.
-globalvar biomorphingResourceColorList     # Colors indexed by resource type, including the blood goal.
-globalvar biomorphingResourceNameList      # Resource names indexed by ordinary resource type: head, arm and leg.
 
 # Extraction and shared match-ending visuals.
 globalvar extractionZoneRad            # Shrinking extraction-dome radius; initialized to 300 and also checked by defeat rules.
-globalvar extractionSpeedUp            # Dome shrink speed, initially 2.5 and increased by players at extraction.
-globalvar extractionFlightSpeed        # Successful extraction flight-stage speed, switched between 2, 10 and 50.
-globalvar extractionFlightDestination  # Random shared destination used by the successful extraction flight.
+globalvar extractionSpeedUp            # Dome shrink speed (startup -> subroutines/extraction), starts at 2.5; separate from the late-written menu angle.
 globalvar evacSurvivorList             # Snapshot of extracted players, also used to exclude survivors from finale kills.
-globalvar evacCount                    # Counter for 400 finale explosions, used on both victory and defeat.
-globalvar chase1                       # Pregame hidden timer (number), then the finale projectile position (vector).
+globalvar menuFinaleMotionSlot         # Global hidden countdown (startup/menu/setPrematchTimer), then nukeMap projectile position.
+# nukeMap stops the countdown chase before assigning a vector; unrelated player.chase1 remains a player field.
+#!define pregameCountdown menuFinaleMotionSlot
+#!define nukeProjectilePosition menuFinaleMotionSlot
 
 # Supply drops and ground power-ups.
 globalvar supplyDropLandingPosition  # Target ground position where the current supply drop will land.
@@ -187,6 +249,8 @@ globalvar botThrottleSpeedList   # Per-hero movement throttle values selected fo
 globalvar availableMutationList  # Enabled mutation IDs configured through Workshop settings.
 globalvar miniBossList           # Current miniboss membership, independent of the large objective boss/egg.
 globalvar bossStateList          # Shared Bosses/Zombie Egg state: boss player at index 0, head-height measurement at index 1.
+#!define bossesStateList bossStateList
+#!define zombieEggStateList bossStateList
 globalvar isSmolderEventActive   # Global Winston/Smolder phase affecting spawns, abilities, effects and player HUD.
 
 # Bosses objective: hero rotation.

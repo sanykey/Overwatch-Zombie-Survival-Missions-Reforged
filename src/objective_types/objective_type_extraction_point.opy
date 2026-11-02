@@ -9,7 +9,7 @@ rule "PLAYERS IN EXTRACTION POINT CONTROL":
     @Condition isObjectiveComplete == false
     @Condition isGameplayActive == true
     @Condition eventPlayer.hasSpawned() == true
-    @Condition CURRENT_OBJECTIVE_TYPE == ObjectiveType.SHOWDOWN
+    @Condition objectiveTypeList[0] == ObjectiveType.SHOWDOWN
     @Condition len(objectivePositionList) == 1
     @Condition objectivePositionList[0].y - eventPlayer.getEyePosition().y < 2
     @Condition distance(eventPlayer.getPosition(), vect(objectivePositionList[0].x, eventPlayer.getPosition().y, objectivePositionList[0].z)) < objectiveRad
@@ -136,14 +136,15 @@ def nukeMap():
     
     setMatchTime(60)
     unpauseMatchTime()
-    stopChasing(chase1)
-    chase1 = mapGridList + directionFromAngles(random.randint(0, 359), random.uniform(-45, -60)) * 500
+    # Release the countdown chase before handing its storage to the finale projectile.
+    stopChasing(pregameCountdown)
+    nukeProjectilePosition = mapGridList + directionFromAngles(random.randint(0, 359), random.uniform(-45, -60)) * 500
     wait()
-    chaseOverTime(chase1, mapGridList, 5)
-    while distance(chase1, mapGridList) > 1:
-        playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.SKY_BLUE, chase1, 3)
+    chaseOverTime(nukeProjectilePosition, mapGridList, 5)
+    while distance(nukeProjectilePosition, mapGridList) > 1:
+        playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.SKY_BLUE, nukeProjectilePosition, 3)
         wait()
-    for evacCount in range(400):
+    for finaleExplosionIndex in range(400):
         kill(getPlayers(Team.1).filter(lambda player: not player in evacSurvivorList))
-        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, rgb(255, random.uniform(100, 255), 0), mapGridList + (directionFromAngles(random.uniform(0, 360), 0) * (random.randint(0, (evacCount / 20) ** 2 + 1))), (evacCount / 18) ** 2)
+        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, rgb(255, random.uniform(100, 255), 0), mapGridList + (directionFromAngles(random.uniform(0, 360), 0) * (random.randint(0, (finaleExplosionIndex / 20) ** 2 + 1))), (finaleExplosionIndex / 18) ** 2)
         wait()

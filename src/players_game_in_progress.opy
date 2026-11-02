@@ -6,7 +6,7 @@ subroutine updateUsers
 
 macro playerObjectiveEntityManagementMacro():
     if eventPlayer.objectiveValue != objectiveValue or len(objectivePositionList) == 1:
-        eventPlayer.objectiveValue = CURRENT_OBJECTIVE_TYPE
+        eventPlayer.objectiveValue = objectiveTypeList[0]
         if eventPlayer.getTeam() == Team.1:
             #Destroy all current objective effects and texts
             for eventPlayer.entityCount in range(len(eventPlayer.generalPlayerBotEntities)):

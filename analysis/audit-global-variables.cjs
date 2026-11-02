@@ -25,6 +25,16 @@ function inventory() {
         });
     }
     assert.equal(new Set(variables.map(v => v.name)).size, variables.length);
+    const aliases = Object.fromEntries(included.flatMap(file =>
+        [...files[file].matchAll(/^#!define\s+(\w+)\s+(\w+)\s*$/gm)].map(m => [m[1], m[2]])));
+    function resolve(name, seen = new Set()) {
+        assert(!seen.has(name), 'Cyclic alias: ' + name);
+        seen.add(name);
+        return Object.hasOwn(aliases, name) ? resolve(aliases[name], seen) : name;
+    }
+    for (const variable of variables) {
+        variable.aliases = Object.keys(aliases).filter(name => resolve(name) === variable.name);
+    }
     for (const file of included) {
         let block = 'module';
         const lines = files[file].split('\n');
@@ -33,11 +43,13 @@ function inventory() {
             if (m) block = line.trim().replace(/:$/, '');
             const code = codeOnly(line);
             if (/^(?:globalvar|playervar)\b/.test(code)) return;
+            // Alias declarations are metadata; count actual uses of their role names below.
+            if (/^#!define\s+\w+\s+\w+\s*$/.test(code)) return;
             for (const variable of variables) {
-                const re = new RegExp('(?<![.\\w])' + variable.name + '\\b', 'g');
+                const name = '(?:' + [variable.name, ...variable.aliases].join('|') + ')';
+                const re = new RegExp('(?<![.\\w])' + name + '\\b', 'g');
                 const hits = [...code.matchAll(re)];
                 if (!hits.length) continue;
-                const name = variable.name;
                 const direct = new RegExp('^\\s*' + name + '(?:\\[[^\\n]*?\\])*\\s*(?:[+*/%-]?=(?!=)|\\+\\+|--)');
                 const mutate = new RegExp('^\\s*' + name + '\\.(?:append|remove)\\(');
                 const loop = new RegExp('^\\s*for\\s+' + name + '\\s+in\\b');
@@ -80,7 +92,7 @@ async function main() {
         date: auditDate, elements: baseline.elements, globals: variables.length,
         playerVariables: Object.values(files).join('\n').match(/^playervar /gm)?.length ?? 0,
         warnings: baseline.warnings,
-        method: 'Included OverPy sources only; strings, comments, declarations and player fields excluded from references. Write classification is syntactic, not semantic dataflow. Macro bodies are indexed once, not per expansion. Compiled references are counted separately. No game runtime or performance measurement.',
+        method: 'Included OverPy sources only; strings, comments, declarations and player fields excluded from references. Identifier aliases resolved to physical globals; alias bindings listed as metadata, role uses counted at their source locations. Write classification is syntactic, not semantic dataflow. Macro bodies are indexed once, not per expansion. Compiled references are counted separately. No game runtime or performance measurement.',
         sha256: Object.fromEntries(included.map(file => [file,
             crypto.createHash('sha256').update(files[file]).digest('hex')])),
         variables: variables.map(v => ({...v,
@@ -91,11 +103,12 @@ async function main() {
     fs.writeFileSync(path.join(__dirname, 'global-variable-usage-2026-11-01.json'), JSON.stringify(report, null, 2) + '\n');
     const references = ['# Все обращения к глобальным переменным — обновлено ' + auditDate, '',
         'Сгенерировано `node analysis/audit-global-variables.cjs`. Только файлы, подключённые из `main.opy`.', '',
-        'В строках исключены комментарии, текстовые литералы, объявления и одноимённые поля игрока. Макросы учтены один раз в исходнике; ссылки на глобальные переменные в `#!define` сохранены. Инициализаторы констант находятся по ссылке на объявление. Полные тексты строк доступны в JSON.', '',
+        'В строках исключены комментарии, текстовые литералы, объявления и одноимённые поля игрока. Идентификаторные `#!define`-алиасы разрешены в физические слоты: объявления алиасов перечислены как имена ролей, обращения к ролям учтены по месту использования. Остальные тела макросов учтены один раз в исходнике. Инициализаторы констант находятся по ссылке на объявление. Полные тексты строк доступны в JSON.', '',
         'Количество ссылок в скомпилированном Workshop учитывает раскрытие макросов и оптимизации. Само по себе оно не показывает частоту исполнения или время жизни.', ''];
     for (const v of report.variables) {
         references.push('## ' + v.name, '',
             `Объявление: [${v.declaration.file}:${v.declaration.line}](../src/${v.declaration.file.replaceAll(' ', '%20')}#L${v.declaration.line}). Строк обращений: ${v.referenceLines}; упоминаний: ${v.occurrences}; чтений вида Global в скомпилированном коде: ${v.compiledOccurrences}.`, '');
+        if (v.aliases.length) references.push('Алиасы ролей: ' + v.aliases.map(name => '`' + name + '`').join(', ') + '.', '');
         const groups = new Map();
         for (const r of v.references) {
             const key = r.file + ' — ' + r.block;
@@ -121,13 +134,6 @@ async function probes(baseline) {
         losOffsetConst: 'vect(0, 1.2, 0)', colorChargeBatteryConst: 'rgb(236, 206, 44)',
         dummyHoldingPositionConst: 'vect(500, 500, 500)', colorKevlarConst: 'rgb(240, 129, 26)'
     };
-    const paletteAliases = {startMenuZombieColorList: 'objectiveEntitiesCount',
-        startMenuObjectiveColorList: 'objectiveCount1', startMenuEnhancementColorList: 'testPos2'};
-    const otherAliases = {pregameGlitchText: 'extractionFlightDestination', isPregameGlitchActive: 'extractionFlightSpeed',
-        zombieVoteList: 'biomorphingQueuedTypeList', challengeVoteList: 'biomorphingResourceNameList',
-        objectiveTypeVoteList: 'biomorphingResourceColorList'};
-    const generationAlias = {mixedObjectiveTypeList: 'evacCount'};
-    const nineAliases = {...paletteAliases, ...otherAliases, ...generationAlias};
     function constants(f, values) {
         for (const [name, value] of Object.entries(values)) {
             for (const file of Object.keys(f)) f[file] = f[file].replace(new RegExp('^    ' + name + ' = [^\\n]+\\n', 'gm'), '');
@@ -136,43 +142,9 @@ async function probes(baseline) {
             f['variables.opy'] += '\n#!define ' + symbol + ' ' + value + '\n';
         }
     }
-    function moveExtractionSpeed(f) {
-        const init = '    extractionSpeedUp = 2.5\n';
-        assert(f['global_startup.opy'].includes(init));
-        f['global_startup.opy'] = f['global_startup.opy'].replace(init, '');
-        const destroy = '    destroyAllInWorldTexts()\n';
-        assert(f['global_startup.opy'].includes(destroy));
-        f['global_startup.opy'] = f['global_startup.opy'].replace(destroy, destroy + init);
-        rename(f, {startMenuSpacingAngle: 'extractionSpeedUp'});
-    }
-    function reuseEnhancementOptions(f) {
-        rename(f, {enhancementOptionList: 'biomorphingGoalText'});
-        const boundary = '    destroyAllInWorldTexts()\n';
-        assert(f['global_startup.opy'].includes(boundary));
-        f['global_startup.opy'] = f['global_startup.opy'].replace(boundary, boundary + '    biomorphingGoalText = null\n');
-    }
     const variants = [
         ...Object.entries(literals).map(([name, value]) => ['inline_' + name, f => constants(f, {[name]: value})]),
-        ['inline_six_colors_vectors', f => constants(f, literals)],
-        ['reuse_three_menu_palettes', f => rename(f, paletteAliases)],
-        ['reuse_five_other_menu_slots', f => rename(f, otherAliases)],
-        ['reuse_mixed_pool_for_final_counter', f => rename(f, generationAlias)],
-        ['reuse_spacing_after_moving_extraction_init', moveExtractionSpeed],
-        ['reuse_enhancement_options_with_goal_text_reset', reuseEnhancementOptions],
-        ['combined_nine_phase_aliases', f => rename(f, nineAliases)],
-        ['combined_eleven_phase_aliases', f => {
-            rename(f, nineAliases);
-            reuseEnhancementOptions(f);
-            moveExtractionSpeed(f);
-        }],
-        ['combined_nine_aliases_and_kevlar_literal', f => {
-            rename(f, nineAliases);
-            constants(f, {colorKevlarConst: literals.colorKevlarConst});
-        }],
-        ['combined_nine_aliases_and_six_literals', f => {
-            rename(f, nineAliases);
-            constants(f, literals);
-        }]
+        ['inline_six_colors_vectors', f => constants(f, literals)]
     ];
     const results = [];
     for (const [name, transform] of variants) {
@@ -187,7 +159,7 @@ async function probes(baseline) {
     fs.writeFileSync(path.join(__dirname, 'global-variable-probes-2026-11-01.json'), JSON.stringify({
         date: auditDate, baseline: baseline.elements,
         baselineGlobals: Object.values(files).join('\n').match(/^globalvar /gm).length,
-        method: 'Remaining candidates compiled in memory against current sources. Successful compilation confirms size and name resolution, not asynchronous lifetime safety or runtime performance. Shared objectiveCount1 already serves mission generation, Biomorphing cleanup and Satellite firing in the baseline.',
+        method: 'Remaining constant-inlining candidates compiled in memory against current sources, which already implement eleven phase transfers via aliases. Successful compilation confirms size and name resolution, not asynchronous lifetime safety or runtime performance. The menu spacing slot now belongs to the Biomorphing goal color after menu cleanup and is unavailable for extraction speed.',
         results
     }, null, 2) + '\n');
 }

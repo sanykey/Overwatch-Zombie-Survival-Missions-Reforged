@@ -9,28 +9,28 @@ subroutine locateAveragePlayerLocation
 
 macro botTeleportCenterMacro():
     #Standoff, Extraction, Biomorphing, Zombie Egg
-    if CURRENT_OBJECTIVE_TYPE in [ObjectiveType.SHOWDOWN, ObjectiveType.BIOMORPHING, ObjectiveType.ZOMBIE_EGG]:
+    if objectiveTypeList[0] in [ObjectiveType.SHOWDOWN, ObjectiveType.BIOMORPHING, ObjectiveType.ZOMBIE_EGG]:
         eventPlayer.averagePlayersPos = sorted(playerTargetList, lambda x: distance(x.getPosition(), objectivePositionList[0]))[0].getPosition()
     #Boss
-    elif CURRENT_OBJECTIVE_TYPE == ObjectiveType.BOSSES:
+    elif objectiveTypeList[0] == ObjectiveType.BOSSES:
         eventPlayer.averagePlayersPos = sorted(playerTargetList, lambda x: distance(x.getPosition(), bossStateList[0].getPosition()))[0].getPosition()
     #Survivor Rescue
-    elif CURRENT_OBJECTIVE_TYPE == ObjectiveType.SURVIVOR_RESCUE:
-        if survivorToRescue.botFollowTarget == null:
-            eventPlayer.averagePlayersPos = sorted(playerTargetList, lambda x: distance(x.getPosition(), survivorToRescue.getPosition()))[0].getPosition()
+    elif objectiveTypeList[0] == ObjectiveType.SURVIVOR_RESCUE:
+        if rescueSurvivor.botFollowTarget == null:
+            eventPlayer.averagePlayersPos = sorted(playerTargetList, lambda x: distance(x.getPosition(), rescueSurvivor.getPosition()))[0].getPosition()
         else:
-            eventPlayer.averagePlayersPos = survivorToRescue.botFollowTarget.getPosition()
+            eventPlayer.averagePlayersPos = rescueSurvivor.botFollowTarget.getPosition()
     #Killzone
-    elif CURRENT_OBJECTIVE_TYPE == ObjectiveType.KILL_ZONE:
+    elif objectiveTypeList[0] == ObjectiveType.KILL_ZONE:
         #If players are in the killzone
-        if len(playerTargetList.filter(lambda x: distance(x.getPosition(), objectiveChase1) < objectiveRad)) > 0:
+        if len(playerTargetList.filter(lambda x: distance(x.getPosition(), killZoneCenter) < objectiveRad)) > 0:
             #Player closeset to the center of the killzone
-            eventPlayer.averagePlayersPos = sorted(playerTargetList, lambda x: distance(x.getPosition(), objectiveChase1))[0].getPosition()
+            eventPlayer.averagePlayersPos = sorted(playerTargetList, lambda x: distance(x.getPosition(), killZoneCenter))[0].getPosition()
         else:
             #Average player positon
             locateAveragePlayerLocation()
     #Satellite Uplink
-    elif CURRENT_OBJECTIVE_TYPE == ObjectiveType.SATELLITE_UPLINK:
+    elif objectiveTypeList[0] == ObjectiveType.SATELLITE_UPLINK:
         #Checks if any players are currently repairing terminals
         if len(objectivePlayerList) > 0:
             eventPlayer.averagePlayersPos = random.choice(objectivePlayerList).getPosition()
@@ -73,7 +73,7 @@ rule "BOT INITIALIZATION":
     #Damage over time duration
     chaseAtRate(eventPlayer.damageOverTimeDuration, -1, 0.95, ChaseRateReeval.NONE)
     #Bot target warning icon (flashing)
-    createIcon(getAllPlayers() if eventPlayer in queuedGoalList else eventPlayer.botTarget.filter(lambda x: eventPlayer.isAlive() and not x.isInViewAngle(eventPlayer.getPosition(), 55)), eventPlayer, Icon.WARNING, IconReeval.VISIBILITY_POSITION_AND_COLOR, Color.RED if (((ceil(getTotalTimeElapsed() * (4 if distance(eventPlayer.getPosition(), localPlayer.getPosition()) > 10 else 8))) % 2) == 0) else Color.YELLOW)
+    createIcon(getAllPlayers() if eventPlayer in showdownContestingZombieList else eventPlayer.botTarget.filter(lambda x: eventPlayer.isAlive() and not x.isInViewAngle(eventPlayer.getPosition(), 55)), eventPlayer, Icon.WARNING, IconReeval.VISIBILITY_POSITION_AND_COLOR, Color.RED if (((ceil(getTotalTimeElapsed() * (4 if distance(eventPlayer.getPosition(), localPlayer.getPosition()) > 10 else 8))) % 2) == 0) else Color.YELLOW)
     waitUntil(eventPlayer.hasSpawned(), 2)
     eventPlayer.setMaxHealth(30 if eventPlayer.getHero() in [Hero.SYMMETRA, Hero.HAZARD, Hero.ILLARI] else 1)
     eventPlayer.initialMaxHealth = eventPlayer.getMaxHealth()
@@ -124,15 +124,15 @@ rule "BOT DIES":
         wait(random.randint(1, 4))
         eventPlayer.forceButtonPress(Button.ULTIMATE)
         return
-    if eventPlayer in queuedGoalList:
+    if eventPlayer in showdownContestingZombieList:
         # tmp0: random kill-bonus roll, to decide whether this zombie awards objective progress.
         tmp0 = random.randint(150, eventPlayer.health)
         if tmp0 > 175 or difficultySetting <= 3:
-            objectiveCaptureValue += 10 if eventPlayer.health > 500 else eventPlayer.health * (0.04 if difficultySetting <= 2 else 0.035)
+            showdownCapturePercent += 10 if eventPlayer.health > 500 else eventPlayer.health * (0.04 if difficultySetting <= 2 else 0.035)
             smallMessage(getAllPlayers(), " {0}  Kill Bonus".format(iconString(Icon.PLUS)))
             #Miniboss kill bonus
             if eventPlayer in miniBossList:
-                objectiveCaptureValue += 10
+                showdownCapturePercent += 10
             playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, null, objectivePositionList[0], 100)
     wait(3 if eventPlayer.getHero() in [Hero.SYMMETRA, Hero.ANA] else 0)
     eventPlayer.botTarget = null
@@ -523,7 +523,7 @@ rule "MINIBOSS MESSAGE":
     @Event eachPlayer
     @Team 2
     @Condition eventPlayer in miniBossList == true
-    @Condition CURRENT_OBJECTIVE_TYPE != ObjectiveType.SHOWDOWN
+    @Condition objectiveTypeList[0] != ObjectiveType.SHOWDOWN
     @Condition isGameplayActive == true
     @Condition eventPlayer.initializing != false
     
