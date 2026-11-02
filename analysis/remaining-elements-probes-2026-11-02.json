@@ -1,0 +1,160 @@
+{
+  "date": "2026-11-02",
+  "compiler": "OverPy 9.7.20",
+  "baselineRef": "20881df2c6e284fe7b3da06e1d57655a8c372d25",
+  "baseline": {
+    "elements": 27102,
+    "globalVariables": 102,
+    "playerVariables": 74
+  },
+  "srcChanged": false,
+  "inGameValidated": false,
+  "runtimeBenchmarked": false,
+  "warningsSuppressedByMainSource": true,
+  "sourceSha256": {
+    "bots_game_in_progress.opy": "e401c4ed97cd33a03d6bf82331737e9f3f16bb932d2f6eda554b052ee0140105",
+    "compressed numbers.opy": "6c414884c6273353c17c85e56de05c382cb6401aec19a22132263fd6f4d6d9d7",
+    "debug.opy": "86ea5811c5a07f735b0eefc11a53c4710a3ebe33ad79e5d96fb13722607be67a",
+    "enhancements.opy": "4e908e0f6d4de74ecb8f28578c9cf86e4d1bd9329b98dd42aa0ed01c1fb8840a",
+    "global_game_in_progress.opy": "f473a301ab97918868904b9fec1bff4e38ac33e50b01c68c8050d0cbf1dac535",
+    "global_startup.opy": "d96e5cde399f737a5b2ac6eca226922e9fd4903df3fae7222227d364aa4fc27f",
+    "global_start_menu.opy": "61d99328c0d44cc58ceb831e3c06f78758d1eb80ed11377213de6de3c70b7c8f",
+    "hero_tuning.opy": "4825b4d1bec2addfac244d4b0bf97de19449517a712d03eb8f9015653e4f1a66",
+    "main.opy": "6005995170250d44b35a88576f997014f95de715f521429eda7b9f6dcb1da9fd",
+    "objective_types/objective_type_biomorphing.opy": "6ac53caf2df7b8d11a7fa1a0d33c00e4bd5a66669f0e57cbf0bb76504477766d",
+    "objective_types/objective_type_bosses.opy": "e4f857bd67b84c236e450e15221045a5e18937996211e81ee91be02ba3aafed8",
+    "objective_types/objective_type_extraction_point.opy": "eb96d814e10af73df99f118e7dbfc148d9a86fa0d317d84abae7d7fa3218cc0a",
+    "objective_types/objective_type_kill_zone.opy": "984c23489e22d84fb3b5d5f0c30a1575c83494d8b24ae4548cc6cb23b46ea6c0",
+    "objective_types/objective_type_satellite_uplink.opy": "98e93d7070e8db8dea35614a1c5356a6aefa957d720a6f17de523005d3f7babf",
+    "objective_types/objective_type_showdown.opy": "f89cf57506b6b22fd51ffa0d5186a10e8cf3898788e17a496b41a964c06713f0",
+    "objective_types/objective_type_survivor_rescue.opy": "30d55bdeba18a6ca2ae4f812c249a592d22682bc819969a375b3d4eb323c79d4",
+    "objective_types/objective_type_zombie_egg.opy": "de6e49230dc216b2e7849a05a1bce7b60051ffd624251cadeea122bbc4286f11",
+    "players_game_in_progress.opy": "50638670a90016385cf8ea811e43ca5357bf03e895a3bb8e4710945b3ee24e86",
+    "player_start_menu.opy": "db4eeecf380f8291670235bdd1107b43f63c6c80ae85b132fd029f6cff212a4d",
+    "power_ups.opy": "20a81d3402025218514999300ab31a0fb4df93a2e95e7f0e3957a9e650e8369f",
+    "settings.opy": "bafdf47e377bfce8871f5e6c8a79684934e6c283130151ce2824d8778cc659a7",
+    "subroutines.opy": "19685cfaaf98e90d42ab3cde3dc569270bebfdfa8f0e6850a695c5634ff17dc3",
+    "supply_drops.opy": "1875b33d607828b04d6c4ea1a53dae5429adebdd891a5d1dc056642fb5993889",
+    "variables.opy": "186f668c9d74bdccffcd4667c50968ccd6e4b618f5afd7062d0ce659e46839be",
+    "zombie_types.opy": "5d68f92b29053c01d2700e7496366b81b6acb70e70471cab9009327568b1d0a5"
+  },
+  "candidates": [
+    {
+      "name": "item_entity_fields",
+      "elements": 26984,
+      "saved": 118,
+      "globalVariables": 102,
+      "playerVariables": 95,
+      "detail": {
+        "indices": [
+          10,
+          11,
+          20,
+          30,
+          31,
+          40,
+          41,
+          42,
+          43,
+          55,
+          60,
+          61,
+          70,
+          71,
+          72,
+          73,
+          74,
+          80,
+          81,
+          90,
+          100
+        ],
+        "addedPlayerSlots": 21,
+        "retainedIndexedSlots": "50..54"
+      },
+      "emittedWarnings": 0
+    },
+    {
+      "name": "vote_fields",
+      "elements": 26959,
+      "saved": 143,
+      "globalVariables": 102,
+      "playerVariables": 76,
+      "detail": {
+        "addedPlayerSlots": 2,
+        "reusedSlot": "actorTeamSlot3 (challenge vote)"
+      },
+      "emittedWarnings": 0
+    },
+    {
+      "name": "trade_fields",
+      "elements": 27093,
+      "saved": 9,
+      "globalVariables": 102,
+      "playerVariables": 75,
+      "detail": {
+        "addedPlayerSlots": 1,
+        "reusedSlot": "actorTeamSlot3 (trade position, after voting)"
+      },
+      "emittedWarnings": 0
+    },
+    {
+      "name": "item_hud_format",
+      "elements": 27053,
+      "saved": 49,
+      "globalVariables": 102,
+      "playerVariables": 74,
+      "detail": {
+        "formatsBefore": 13,
+        "formatsAfter": 1
+      },
+      "emittedWarnings": 0
+    },
+    {
+      "name": "ai_reset_blocks",
+      "elements": 27092,
+      "saved": 10,
+      "globalVariables": 102,
+      "playerVariables": 74,
+      "detail": {
+        "occurrences": [
+          5,
+          4
+        ],
+        "newSubroutines": 2,
+        "waitsInExtractedBlocks": 0
+      },
+      "emittedWarnings": 0
+    },
+    {
+      "name": "spawn_cleanup",
+      "elements": 27090,
+      "saved": 12,
+      "globalVariables": 102,
+      "playerVariables": 74,
+      "detail": {
+        "occurrences": 2,
+        "newSubroutines": 1,
+        "waitsInExtractedBlocks": 0
+      },
+      "emittedWarnings": 0
+    },
+    {
+      "name": "shared_item_palette",
+      "elements": 27078,
+      "saved": 24,
+      "globalVariables": 103,
+      "playerVariables": 74,
+      "detail": {
+        "addedGlobalSlots": 1
+      },
+      "emittedWarnings": 0
+    }
+  ],
+  "combined": {
+    "elements": 26737,
+    "saved": 365,
+    "globalVariables": 103,
+    "playerVariables": 98
+  }
+}

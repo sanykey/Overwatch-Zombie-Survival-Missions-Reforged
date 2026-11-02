@@ -52,7 +52,7 @@ function checkLayout(files) {
 }
 
 async function main() {
-    return require('./verify-player-slot-sharing.cjs').main();
+    return require('./verify-remaining-elements.cjs').main();
 }
 module.exports = {normalizePlayerNames, rules, compare, checkLayout};
 if (require.main === module) main().catch(error => {console.error(error); process.exitCode = 1;});

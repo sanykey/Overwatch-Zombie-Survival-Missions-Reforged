@@ -50,17 +50,41 @@ enum ObjectiveType:
     SATELLITE_UPLINK = 7,
     MIXED_OBJECTIVES = 9,
 
-# Vote indices in pregameVoteList; slots 0-1 are unused after extracting pregameState/isPregameVoting.
-enum PlayerMenuStatusField:
-    CHALLENGE_VOTE = 2,
-    ZOMBIE_MODE_VOTE = 3,
-    OBJECTIVE_TYPE_VOTE = 4,
-
 # Ordered states for pregame hero selection and readiness; jump/crouch move one step at a time.
 enum PregameState:
     SELECTING_HERO = 0,
     HERO_SELECTED = 1,
     READY = 2,
+
+# Sparse indices in powerUpEntityIdList; values identify storage slots, not item IDs.
+# Turret effect slots 50..54 stay contiguous for creation and cleanup loops.
+enum PowerUpEntitySlot:
+    FORCE_FIELD_SPHERE = 10,
+    FORCE_FIELD_HUD = 11,
+    NO_COOLDOWNS_HUD = 20,
+    AIR_STRIKE_RING = 30,
+    AIR_STRIKE_CLOUD = 31,
+    HEAL_BEACON_LIGHT_SHAFT = 40,
+    HEAL_BEACON_RING = 41,
+    HEAL_BEACON_HUD = 42,
+    HEAL_BEACON_AURA = 43,
+    SENTRY_TURRET_BODY = 50,
+    SENTRY_TURRET_LEG_1 = 51,
+    SENTRY_TURRET_LEG_2 = 52,
+    SENTRY_TURRET_LEG_3 = 53,
+    SENTRY_TURRET_BARREL = 54,
+    SENTRY_TURRET_HUD = 55,
+    CLOAKING_DEVICE_SPHERE = 60,
+    CLOAKING_DEVICE_HUD = 61,
+    SUPER_NANO_GOOD_AURA = 70,
+    SUPER_NANO_HUD = 71,
+    SUPER_NANO_BAD_AURA = 72,
+    SUPER_NANO_DAMAGE_DEALT_MODIFICATION = 73,
+    SUPER_NANO_DAMAGE_RECEIVED_MODIFICATION = 74,
+    BOUNCE_PAD_RING = 80,
+    BOUNCE_PAD_HUD = 81,
+    ULTIMATE_CHARGER_HUD = 90,
+    STUN_BEAM = 100,
 
 # Global variables
 
@@ -153,6 +177,9 @@ globalvar colorKevlarConst = rgb(240, 129, 26)           # Shared Kevlar color u
 globalvar offsetDownHundredConst = vect(0, -100, 0)       # Downward offset of 100 m for raycasts, hidden effects and dead-player storage. Source uses: 7 (excluding declaration).
 globalvar offsetUpOneAndHalfConst = vect(0, 1.5, 0)       # Vertical offset of 1.5 m for the pregame camera and player labels. Source uses: 6 (excluding declaration).
 globalvar offsetUpQuarterConst = vect(0, 0.25, 0)         # Vertical offset of 0.25 m for impulses, power-up drops and effects. Source uses: 5 (excluding declaration).
+
+# Immutable palette indexed by item ID minus one; shared by ground items and their HUD.
+globalvar powerUpColorListConst = [Color.GREEN, Color.YELLOW, Color.BLUE, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.BLUE, Color.RED, Color.PURPLE, Color.RED, Color.WHITE]
 
 # Match state and configuration.
 globalvar isPregameSetup        # Pregame hero selection/voting is active; cleared by START GAME before gameplay activation.
@@ -289,7 +316,8 @@ globalvar bossesExcludedHeroList   # Hero types excluded from the Bosses objecti
 
 # Gameplay uses role aliases; neutral slots describe storage.
 # Team-exclusive sharing is per receiver: never write a bot role on Team 1 or a player role on Team 2.
-# Votes -> trade data on humans; Rescue path lives on a separate Team 1 dummy.
+# Three vote fields -> trade position, trade index and previous item on humans.
+# Rescue path lives on a separate Team 1 dummy; trade fields must survive waits.
 # END VOTING aborts after the phase boundary; all pregame visuals are destroyed before runtime.
 # Keep pregameState for late joins, botBaseHealth for unscoped Kill Zone reads,
 # and botBiteDamage for the shared explosion helper. Keep default-only reads on both teams separate.
@@ -499,13 +527,13 @@ playervar actorTeamSlot2  # Team 2: botReturnMotionSlot; Team 1: powerUpItemId. 
 # Currently carried supply item ID; zero means no item.
 #!define powerUpItemId actorTeamSlot2
 
-playervar actorTeamSlot3  # Team 2 teleport flag; Team 1 human votes -> item trade data, or Rescue dummy path. Late vote writers are phase-guarded; trade indices 0 and 2 are assigned before reading.
+playervar actorTeamSlot3  # Team 2 teleport flag; Team 1 human challenge vote -> trade position, or Rescue dummy path. Menu writers are phase-guarded; trade position is assigned before reading.
 # Zombie is inside enterExitTeleport; spawn/target/ability consumers also read it.
 #!define botIsTeleporting actorTeamSlot3
-# Trade record: aimed ground position at index 0 and previous item ID at index 2.
-#!define powerUpTradeDataList actorTeamSlot3
-# Player votes indexed by PlayerMenuStatusField; slots 0 and 1 stay unused.
-#!define pregameVoteList actorTeamSlot3
+# Aimed ground-item position; retained across all waits in the exchange.
+#!define powerUpTradePosition actorTeamSlot3
+# Human challenge vote during pregame only; END VOTING aborts after the phase boundary.
+#!define pregameChallengeVote actorTeamSlot3
 # Recorded leader positions followed and trimmed by the Rescue NPC.
 #!define rescuePathList actorTeamSlot3
 
@@ -514,7 +542,7 @@ playervar actorTeamSlot4  # Team 2: botLoopIndexSlot; Team 1: powerUpEntityIdLis
 #!define botStalkerFadeIndex actorTeamSlot4
 # Index into Ensnarer affected targets.
 #!define botEnsnarerTargetIndex actorTeamSlot4
-# Sparse effect/HUD/damage-modification IDs owned by active items, keyed by item ID range.
+# Sparse effect/HUD/damage-modification IDs owned by active items, indexed by PowerUpEntitySlot.
 #!define powerUpEntityIdList actorTeamSlot4
 
 playervar actorTeamSlot5  # Team 2: botTarget; Team 1: powerUpAirStrikeIndex. Receivers, not rule teams, own the storage.
@@ -613,11 +641,13 @@ playervar actorTeamSlot20  # Team 2: botCustomTeleportPosition; Team 1: powerUpA
 # Ground center of the active air-strike area.
 #!define powerUpAirStrikePosition actorTeamSlot20
 
-playervar actorTeamSlot21  # Team 2: botLastTarget; Team 1: powerUpTradeIndex. Receivers, not rule teams, own the storage.
+playervar actorTeamSlot21  # Team 2: botLastTarget; Team 1: objective vote -> trade index. Exchange assigns its index before reading it; pregame readers/writers end before gameplay.
 # Last visible/attacking target retained when zombie line of sight is lost.
 #!define botLastTarget actorTeamSlot21
 # Index of the aimed ground item in the global supply item arrays.
 #!define powerUpTradeIndex actorTeamSlot21
+# Human objective vote during pregame only; distinct from the selected global objective mode.
+#!define pregameObjectiveVote actorTeamSlot21
 
 playervar actorTeamSlot22  # Team 2: botAbilityStateSlot; Team 1: enhancementStateSlot1. Receivers, not rule teams, own the storage.
 # Remaining shared zombie special-ability cooldown.
@@ -710,3 +740,7 @@ playervar objectiveActorKindSlot  # Biomorphing resource type on both teams, or 
 #!define biomorphingResourceType objectiveActorKindSlot
 # Rescue NPC mood/status icon: halo, sad, dizzy or extraction celebration.
 #!define rescueMoodIcon objectiveActorKindSlot
+
+playervar menuTradeItemSlot  # Human zombie vote -> previous carried item ID. No chase owns this slot; exchange assigns it before its first wait/read.
+#!define pregameZombieVote menuTradeItemSlot
+#!define powerUpTradePreviousItemId menuTradeItemSlot

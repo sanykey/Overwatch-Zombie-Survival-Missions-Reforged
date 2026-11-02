@@ -5,7 +5,7 @@
 macro powerUpAssignmentMacro():
     #Names/colors follow item IDs 1-13; effect and text positions keep separate indices.
     if supplyPowerUpIdList[len(supplyPowerUpEffectIdList)] >= 1 and supplyPowerUpIdList[len(supplyPowerUpEffectIdList)] <= 13:
-        createEffect(getAllPlayers(), Effect.ORB, [Color.GREEN, Color.YELLOW, Color.BLUE, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.BLUE, Color.RED, Color.PURPLE, Color.RED, Color.WHITE][supplyPowerUpIdList[len(supplyPowerUpEffectIdList)] - 1], supplyPowerUpPositionList[len(supplyPowerUpEffectIdList)], 1, EffectReeval.VISIBILITY)
+        createEffect(getAllPlayers(), Effect.ORB, powerUpColorListConst[supplyPowerUpIdList[len(supplyPowerUpEffectIdList)] - 1], supplyPowerUpPositionList[len(supplyPowerUpEffectIdList)], 1, EffectReeval.VISIBILITY)
         createInWorldText(getAllPlayers(), ["CURE", "Revive", "Force Field", "No Cooldowns", "Air Strike", "Beacon of Healing", "Vaccine", "Sentry Turret", "Cloaking Device", "Super Nano", "Bounce Pad", "Ultimate Charger", "Stun"][supplyPowerUpIdList[len(supplyPowerUpEffectIdList)] - 1], supplyPowerUpPositionList[len(supplyPowerUpTextIdList)], 1, Clip.SURFACES, WorldTextReeval.VISIBILITY)
 
 
@@ -24,9 +24,7 @@ rule "EFFECT/TEXT (PERMANENT)":
     @Condition isGameplayActive == true
     
     #One row per item ID (1-13); capture the index and the resolved color.
-    # powerUpHudColorList: colors indexed by item ID minus 1, to give each power-up HUD row its item color.
-    #!define powerUpHudColorList tmp1
-    powerUpHudColorList = [Color.GREEN, Color.YELLOW, Color.BLUE, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.BLUE, Color.RED, Color.PURPLE, Color.RED, Color.WHITE]
+    # Capture each row's color directly from the immutable shared item palette.
     # powerUpHudItemIndex: zero-based item index, to choose the row's visibility, name, instructions and color.
     #!define powerUpHudItemIndex tmp0
     for powerUpHudItemIndex in range(13):
@@ -65,9 +63,9 @@ rule "EFFECT/TEXT (PERMANENT)":
             ][evalOnce(powerUpHudItemIndex)],
             HudPosition.LEFT,
             100,
-            evalOnce(powerUpHudColorList[powerUpHudItemIndex]),
-            evalOnce(powerUpHudColorList[powerUpHudItemIndex]),
-            evalOnce(powerUpHudColorList[powerUpHudItemIndex]),
+            evalOnce(powerUpColorListConst[powerUpHudItemIndex]),
+            evalOnce(powerUpColorListConst[powerUpHudItemIndex]),
+            evalOnce(powerUpColorListConst[powerUpHudItemIndex]),
             HudReeval.VISIBILITY_AND_STRING
         )
 

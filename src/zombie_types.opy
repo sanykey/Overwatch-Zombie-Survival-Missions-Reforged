@@ -1,5 +1,7 @@
 #!mainFile "main.opy"
 
+subroutine resumeBotFacingAndMovement
+subroutine resumeBotMovementAndFacing
 subroutine smolderBoost
 subroutine spawnGasCloud
 subroutine abilityThrowdown
@@ -55,9 +57,7 @@ rule "BASIC (REAPER) SHADOW STEP (BOSS)":
                 #Push target straight up
                 eventPlayer.botAbilityTarget.applyImpulse(vect(0, 1, 0), 0.5, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
         wait(0.032)
-    eventPlayer.botIsThrottleOverridden = false
-    eventPlayer.botIsFacingOverridden = false
-    startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
+    resumeBotMovementAndFacing()
     eventPlayer.setAbilityCooldown(Button.ABILITY_2, 5)
     eventPlayer.setAbilityCooldown(Button.ABILITY_1, 0)
 
@@ -133,9 +133,7 @@ rule "RUSHER MOLTEN CORE (BOSS)":
         wait(0.25)
     eventPlayer.cancelPrimaryAction()
     eventPlayer.clearStatusEffect(Status.ROOTED)
-    eventPlayer.botIsFacingOverridden = false
-    eventPlayer.botIsThrottleOverridden = false
-    startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
+    resumeBotFacingAndMovement()
     waitUntil(not eventPlayer.isUsingAbility2(), 1)
     removeHealthPool(eventPlayer.botRusherHealthPoolId)
     eventPlayer.setAbilityCooldown(Button.ABILITY_2, 10)
@@ -203,9 +201,7 @@ rule "BEHEMOTH (ROAD) TOXIC CLOUD":
         eventPlayer.botGasAimPosition = raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 20 * eventPlayer.sizeScale, null, getAllPlayers(), false)
         #Launch Gas Projectile
         chaseAtRate(eventPlayer.botGasProjectilePosition, eventPlayer.botGasAimPosition, 20 * eventPlayer.sizeScale / 3, ChaseRateReeval.NONE)
-        eventPlayer.botIsFacingOverridden = false
-        eventPlayer.botIsThrottleOverridden = false
-        startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
+        resumeBotFacingAndMovement()
         #Gas Cloud Positions
         eventPlayer.botGasPositionList = []
         #Gas Cloud Areas of Effect
@@ -544,9 +540,7 @@ rule "CHARGER (MAUGA) CHARGE":
     #Charger walk backwards duration
     for eventPlayer.botChargerWindupProgress in range(0, 1, 0.064):
         if eventPlayer.isCrowdControlled or eventPlayer.isDead():
-            eventPlayer.botIsFacingOverridden = false
-            eventPlayer.botIsThrottleOverridden = false
-            startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
+            resumeBotFacingAndMovement()
             return
         wait(0.064)
     eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition() if eventPlayer.botChargerDestination == null else eventPlayer.botChargerDestination), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
@@ -559,9 +553,7 @@ rule "CHARGER (MAUGA) CHARGE":
     eventPlayer.stopFacing()
     eventPlayer.forceButtonPress(Button.PRIMARY_FIRE)
     eventPlayer.setMoveSpeed(100)
-    eventPlayer.botIsFacingOverridden = false
-    eventPlayer.botIsThrottleOverridden = false
-    startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
+    resumeBotFacingAndMovement()
     eventPlayer.botIsWallPhaseAllowed = true
     waitUntil(not eventPlayer.isUsingAbility1(), 10)
     eventPlayer.setAbilityCooldown(Button.ABILITY_1, 4 if eventPlayer in bossStateList else 6)
@@ -685,9 +677,7 @@ rule "PRIME SLIMER (EMRE) FLIGHT (BOSS)":
                     #Push target away
                     eventPlayer.botAbilityTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botAbilityTarget.getPosition())), -20), 0.75, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
             wait(0.032)
-        eventPlayer.botIsThrottleOverridden = false
-        eventPlayer.botIsFacingOverridden = false
-        startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
+        resumeBotMovementAndFacing()
         wait(0.25)
     eventPlayer.botIsThrottleOverridden = false
     startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
@@ -797,9 +787,7 @@ rule "STALKER (MOIRA) FADE":
         else:
             eventPlayer.botIsWallPhaseAllowed = true
             wait(0.75)
-    eventPlayer.botIsThrottleOverridden = false
-    eventPlayer.botIsFacingOverridden = false
-    startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
+    resumeBotMovementAndFacing()
     eventPlayer.botIsWallPhaseAllowed = true
     eventPlayer.enablePlayerCollision()
     eventPlayer.setAbilityCooldown(Button.ABILITY_1, 10 if eventPlayer in bossStateList else 5)
@@ -874,9 +862,7 @@ rule "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES":
         eventPlayer.setPrimaryFireEnabled(true)
         eventPlayer.forceButtonPress(Button.PRIMARY_FIRE)
     wait(0.5)
-    eventPlayer.botIsThrottleOverridden = false
-    eventPlayer.botIsFacingOverridden = false
-    startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
+    resumeBotMovementAndFacing()
     eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD)
 
 
@@ -1074,9 +1060,7 @@ rule "DAYTAKER (ILLARI) BURST":
     #Boss Collision
     if eventPlayer in bossStateList:
         eventPlayer.botIsWallPhaseAllowed = true
-    eventPlayer.botIsThrottleOverridden = false
-    eventPlayer.botIsFacingOverridden = false
-    startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
+    resumeBotMovementAndFacing()
     eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD)
 
 
@@ -1499,3 +1483,17 @@ def spawnGasCloud():
     eventPlayer.botGasRadiusList.append(0)
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.LIME_GREEN, eventPlayer.botGasProjectilePosition, 0.4 * eventPlayer.sizeScale)
     playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.LIME_GREEN, eventPlayer.botGasProjectilePosition, 75)
+
+
+def resumeBotMovementAndFacing():
+    # Synchronous reset; preserve the caller's throttle-then-facing order and NOOP start.
+    eventPlayer.botIsThrottleOverridden = false
+    eventPlayer.botIsFacingOverridden = false
+    startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
+
+
+def resumeBotFacingAndMovement():
+    # Synchronous reset; preserve the caller's facing-then-throttle order and NOOP start.
+    eventPlayer.botIsFacingOverridden = false
+    eventPlayer.botIsThrottleOverridden = false
+    startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)

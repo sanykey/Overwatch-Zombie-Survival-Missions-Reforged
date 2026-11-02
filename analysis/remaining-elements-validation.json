@@ -1,0 +1,60 @@
+{
+  "baselineRef": "20881df2c6e284fe7b3da06e1d57655a8c372d25",
+  "compiler": "OverPy 9.7.20",
+  "before": {
+    "elements": 27102,
+    "globalVariables": 102,
+    "playerVariables": 74
+  },
+  "after": {
+    "elements": 26902,
+    "globalVariables": 103,
+    "playerVariables": 75
+  },
+  "savedElements": 200,
+  "storage": {
+    "pregameChallengeVote": "actorTeamSlot3",
+    "powerUpTradePosition": "actorTeamSlot3",
+    "pregameObjectiveVote": "actorTeamSlot21",
+    "pregameZombieVote": "menuTradeItemSlot",
+    "powerUpTradePreviousItemId": "menuTradeItemSlot"
+  },
+  "sourceReconstructionChecked": true,
+  "compiledRulesCompared": 234,
+  "readyPredicateCases": 9251,
+  "scratchRulesChecked": 42,
+  "independentStorageCompared": true,
+  "negativeAuditCases": 2,
+  "directIncludeBuildChecked": true,
+  "emittedWarnings": [],
+  "warningsSuppressedByMainSource": true,
+  "sourceSha256": {
+    "bots_game_in_progress.opy": "cf0e1f244a959a6efd43bf2854f5d2a127e77a03e87e73a597d6efba043a42f0",
+    "compressed numbers.opy": "6c414884c6273353c17c85e56de05c382cb6401aec19a22132263fd6f4d6d9d7",
+    "debug.opy": "86ea5811c5a07f735b0eefc11a53c4710a3ebe33ad79e5d96fb13722607be67a",
+    "enhancements.opy": "4e908e0f6d4de74ecb8f28578c9cf86e4d1bd9329b98dd42aa0ed01c1fb8840a",
+    "global_game_in_progress.opy": "f473a301ab97918868904b9fec1bff4e38ac33e50b01c68c8050d0cbf1dac535",
+    "global_startup.opy": "d96e5cde399f737a5b2ac6eca226922e9fd4903df3fae7222227d364aa4fc27f",
+    "global_start_menu.opy": "dd6aff5284f5fcb33ae9c1408666d2617026b4a1dbd9f063ba4177c83296e0f9",
+    "hero_tuning.opy": "4825b4d1bec2addfac244d4b0bf97de19449517a712d03eb8f9015653e4f1a66",
+    "main.opy": "6005995170250d44b35a88576f997014f95de715f521429eda7b9f6dcb1da9fd",
+    "objective_types/objective_type_biomorphing.opy": "6ac53caf2df7b8d11a7fa1a0d33c00e4bd5a66669f0e57cbf0bb76504477766d",
+    "objective_types/objective_type_bosses.opy": "e4f857bd67b84c236e450e15221045a5e18937996211e81ee91be02ba3aafed8",
+    "objective_types/objective_type_extraction_point.opy": "eb96d814e10af73df99f118e7dbfc148d9a86fa0d317d84abae7d7fa3218cc0a",
+    "objective_types/objective_type_kill_zone.opy": "984c23489e22d84fb3b5d5f0c30a1575c83494d8b24ae4548cc6cb23b46ea6c0",
+    "objective_types/objective_type_satellite_uplink.opy": "98e93d7070e8db8dea35614a1c5356a6aefa957d720a6f17de523005d3f7babf",
+    "objective_types/objective_type_showdown.opy": "f89cf57506b6b22fd51ffa0d5186a10e8cf3898788e17a496b41a964c06713f0",
+    "objective_types/objective_type_survivor_rescue.opy": "30d55bdeba18a6ca2ae4f812c249a592d22682bc819969a375b3d4eb323c79d4",
+    "objective_types/objective_type_zombie_egg.opy": "de6e49230dc216b2e7849a05a1bce7b60051ffd624251cadeea122bbc4286f11",
+    "players_game_in_progress.opy": "50638670a90016385cf8ea811e43ca5357bf03e895a3bb8e4710945b3ee24e86",
+    "player_start_menu.opy": "c7aa3d030daea84bc5f09562f81863bc58937cae6032855535129db4864a9447",
+    "power_ups.opy": "ffa5452a79eddb12708664df555fb4199de874b03dad342836dc5114c3bf6482",
+    "settings.opy": "bafdf47e377bfce8871f5e6c8a79684934e6c283130151ce2824d8778cc659a7",
+    "subroutines.opy": "19685cfaaf98e90d42ab3cde3dc569270bebfdfa8f0e6850a695c5634ff17dc3",
+    "supply_drops.opy": "dffe44f760723ba62c14b22a716b0236ed4e559f177904cb178a1bdd7bf90581",
+    "variables.opy": "4b7cfdbaeecfd6ebd39cd0f02abe3336692e14ebf244484abc27a8ea2879163d",
+    "zombie_types.opy": "b11120d3d78bf8c79c13e43ef8799135be73ac069a8bee57ad7e26004d3bd2ec"
+  },
+  "inGameValidated": false,
+  "runtimeBenchmarked": false
+}

@@ -1,5 +1,6 @@
 #!mainFile "main.opy"
 
+subroutine removeBotSpawnPoint
 subroutine enterExitTeleport
 subroutine teleportBots
 subroutine successfulTeleportStatus
@@ -474,9 +475,7 @@ def teleportBots():
                 eventPlayer.botIsTeleporting = false
             #Teleport was unsuccessful due to line of sight and view angle
             elif eventPlayer.botTeleportPosition in botSpawnPointList:
-                del botSpawnWaypointList[botSpawnPointList.index(eventPlayer.botTeleportPosition)]
-                del botSpawnPointTimerList[botSpawnPointList.index(eventPlayer.botTeleportPosition)]
-                botSpawnPointList.remove(eventPlayer.botTeleportPosition)
+                removeBotSpawnPoint()
     else:
         eventPlayer.teleport(eventPlayer.botCustomTeleportPosition)
         eventPlayer.botCustomTeleportPosition = null
@@ -517,9 +516,7 @@ def updateBotSpawnPoints():
         botSpawnWaypointList.append(eventPlayer.botSpawnWaypoint)
         botSpawnPointTimerList.append(0)
     elif not eventPlayer.botIsTeleportConfirmed and eventPlayer.botTeleportPosition in botSpawnPointList:
-        del botSpawnWaypointList[botSpawnPointList.index(eventPlayer.botTeleportPosition)]
-        del botSpawnPointTimerList[botSpawnPointList.index(eventPlayer.botTeleportPosition)]
-        botSpawnPointList.remove(eventPlayer.botTeleportPosition)
+        removeBotSpawnPoint()
 
 
 rule "MINIBOSS MESSAGE":
@@ -533,3 +530,10 @@ rule "MINIBOSS MESSAGE":
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     bigMessage(getAllPlayers(), "A Contestor approaches")
 
+
+
+def removeBotSpawnPoint():
+    # Synchronous: retain the original deletion order so parallel arrays stay aligned.
+    del botSpawnWaypointList[botSpawnPointList.index(eventPlayer.botTeleportPosition)]
+    del botSpawnPointTimerList[botSpawnPointList.index(eventPlayer.botTeleportPosition)]
+    botSpawnPointList.remove(eventPlayer.botTeleportPosition)
