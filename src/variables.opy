@@ -61,6 +61,7 @@ enum PregameState:
 # numbersList is owned by compressed numbers.opy; debugHud is owned by debug.opy.
 
 # Shared scratch slots.
+# Define a semantic #!define alias next to each use; access scratch through that alias.
 # Finish scratch use before wait/waitUntil or async calls; use separate slots for simultaneous values.
 # Capture scratch references in reevaluated visuals with evalOnce, and document each assignment locally.
 globalvar tmp0  # Synchronous scratch, including Rescue path index and Anran spawn source; assign before use, never retain across waits/calls.
@@ -259,173 +260,65 @@ globalvar bossesExcludedHeroList   # Hero types excluded from the Bosses objecti
 
 # Player variables
 
-# Prefixes: bot / enhancement / powerUp identify exclusive owners or functionality.
-# Boolean roles use is (or owner + Is); array roles end in List. *Slot storage may have multiple types.
-# Shared slots retain their original allocation/lifetime. Use a role alias; do not add cross-owner writes.
+# Gameplay uses role aliases; neutral slots describe storage.
+# Team-exclusive sharing is per receiver: never write a bot role on Team 1 or a player role on Team 2.
+# Votes -> trade data on humans; Rescue path lives on a separate Team 1 dummy.
+# END VOTING aborts after the phase boundary; all pregame visuals are destroyed before runtime.
+# Keep pregameState for late joins, botBaseHealth for unscoped Kill Zone reads,
+# and botBiteDamage for the shared explosion helper. Keep default-only reads on both teams separate.
 
 # Team 2 zombies: AI, abilities, bosses and bot visuals.
-playervar botTeleportCenter  # Zombie teleport/search center; bot teleport rules, Egg and boss return.
-playervar botIsSelectingTarget  # selectTarget is running; blocks competing zombie target/teleport work.
-playervar botReturnMotionSlot  # Boss return timer, then an eye-position snapshot; objective_type_bosses.
-# Seconds without a target before boss return (chased to 15).
-#!define botReturnTime botReturnMotionSlot
-# Boss eye-position snapshot written and cleared during return; currently not read.
-#!define botReturnPosition botReturnMotionSlot
-playervar botIsTeleporting  # Zombie is inside enterExitTeleport; spawn/target/ability consumers also read it.
-playervar botLoopIndexSlot  # Existing yielding loop index shared by Stalker fades and Ensnarer blocking.
-# Repeated Moira fade/attack index.
-#!define botStalkerFadeIndex botLoopIndexSlot
-# Index into Ensnarer affected targets.
-#!define botEnsnarerTargetIndex botLoopIndexSlot
-playervar botTarget  # Zombie AI combat target; subroutines, bot abilities and objectives; cleared when its Team 1 target is downed.
 playervar botBiteDamage  # Difficulty/hero-scaled zombie bite damage, also used by zombie abilities and explosions.
-playervar botBiteDuration  # Zombie melee damage-over-time duration, including mutation overrides.
-playervar botIsTeleportConfirmed  # Zombie teleport/spawn position has been accepted and may be added to the spawn cache.
-playervar botReigniteDestination  # Zombie emergence destination near Anran; false clears the position after the rise.
-playervar botIsWallPhaseAllowed  # Zombie may pass spawn doors; special abilities temporarily disable this permission.
-playervar botAbilityTarget  # Zombie special-ability target: teleport/grab host, flight target or affected player.
-playervar botTeleportPosition  # Zombie teleport candidate/accepted position; bot teleport rules, Egg and spawn-cache updates; zero clears it.
-playervar botBossHealth  # Virtual boss/egg health adjusted by damage events; -1 when not a boss.
-playervar botIsWallCollisionEnabled  # Cached zombie environment-collision state, restored by abilities and spawn-door handling.
-playervar botIsFacingOverridden  # Special zombie ability controls facing instead of normal target tracking.
-playervar botIsThrottleOverridden  # Special zombie ability controls movement instead of the normal AI throttle.
-playervar botConfiguredHero  # Last zombie hero for which bot entity/stat initialization was performed.
-playervar botMutationId  # Selected mutation ID; zero means no mutation.
+
 playervar botBaseHealth  # Configured zombie maximum health, including mutations/boss overrides and recoil thresholds.
-playervar botIsInitializing  # Zombie respawn/stat initialization is in progress; spawn/teleport/objective rules wait for it.
-playervar botKnockbackScale  # Zombie knockback-received multiplier, including Brute/mutation adjustments.
-playervar botCustomTeleportPosition  # Special zombie replacement position carried from customTeleportPositionList; null when unused.
-playervar botLastTarget  # Last visible/attacking target retained when zombie line of sight is lost.
-playervar botAbilityStateSlot  # Zombie ability cooldown number or Behemoth cloud-position array; not always an array.
-# Remaining shared zombie special-ability cooldown.
-#!define botAbilityCooldown botAbilityStateSlot
-# Boss Behemoth active gas-cloud positions.
-#!define botGasPositionList botAbilityStateSlot
-playervar botGasRadiusList  # Boss Behemoth gas-cloud radii, aligned with botGasPositionList.
-playervar botSpawnWaypoint  # Movement waypoint associated with the accepted zombie spawn point.
-playervar botCandidateTarget  # Candidate zombie target under line-of-sight testing in selectTarget.
-playervar botIsTeleportAllowed  # Zombie initialization has enabled teleport processing.
-playervar botReigniteRisePosition  # Zombie emergence position chased upward near Anran; zombie_types forces this position across the rise wait.
-playervar botResourceIconIdList  # Zombie Biomorphing resource icon IDs; separate from the zombie visual-effect list.
 
 # Team 1 players/allied actors: survival, infection and reconnect state.
 playervar isPlayerActive  # Player has completed initial menu activation; used by voting, roster and downed-player rules.
+
 playervar isReviving  # Nearby allies are currently advancing this player's revive progress.
+
 playervar reviveDuration  # Required revive duration; restored from reconnect data and increased after revives.
+
 playervar isInfected  # Player infection has activated; infection rules, cures and Zombie Hybrid read this flag.
+
 playervar rescueTimeRemaining  # Time left to rescue a downed player; reconnect cache and extraction dome may adjust it.
+
 playervar infectionLevel  # Player infection/vaccine level; negative values represent vaccination.
-playervar team1PositionSlot  # Team 1 hero-selection position or Rescue NPC path origin.
-# Per-player position in the pregame hero-selection scene.
-#!define pregamePosition team1PositionSlot
-# Rescue NPC spawn/path origin used by its progress HUD.
-#!define rescueStartPosition team1PositionSlot
-playervar extractionDestination  # Per-player final flight destination, calculated from the shared extraction direction.
+
 playervar invisibilityCount  # Stacking invisibility/untargetability counter; hero abilities and Cloaking Device increment/decrement it. Not a boolean.
+
 playervar infectionDamageOverTimeId  # Active player infection damage-over-time ID; Zombie Hybrid stops this same damage instance.
+
 playervar reconnectUserIndex  # Player name index into userNameList/playerStatsList for reconnect restoration.
+
 playervar isAfk  # Player is treated as inactive/AFK and excluded from objectives or extraction counts.
+
 playervar isHeroSwitchRespawn  # Player has switched heroes; prevents repeating first-spawn and enhancement initialization.
 
 # Enhancements only (enhancement prefix; includes the Rescue Hitchhiker setup).
 playervar enhancementId  # Selected Enhancement enum; pregame selection, runtime behavior and Rescue Hitchhiker initialization.
-playervar enhancementStateSlot1  # Primary enhancement state; each enhancement owns a distinct role alias.
-# Zombie Hybrid explosion cooldown in seconds.
-#!define enhancementHybridCooldown enhancementStateSlot1
-# Barrier placement facing direction.
-#!define enhancementBarrierFacing enhancementStateSlot1
-# Pyrotechnic hit queue; repeated targets determine fire damage.
-#!define enhancementPyroHitList enhancementStateSlot1
-# Total infection levels cured by Plague Doctor.
-#!define enhancementPlagueCureTotal enhancementStateSlot1
-# Born to Battle has an unspent ability reset.
-#!define enhancementIsBattleResetReady enhancementStateSlot1
-# Placed Charge Battery position; zero clears it.
-#!define enhancementBatteryPosition enhancementStateSlot1
-# Hitchhiker carrier; zero when detached.
-#!define enhancementHitchhikerCarrier enhancementStateSlot1
-# P.U.P. mode color.
-#!define enhancementPupColor enhancementStateSlot1
-playervar enhancementStateSlot2  # Secondary enhancement state shared by mutually selected enhancements.
-# Direction from the first barrier corner toward the second.
-#!define enhancementBarrierEdgeDirection enhancementStateSlot2
-# Born to Battle button whose charge/cooldown is reset.
-#!define enhancementBattleAbilityButton enhancementStateSlot2
-# Battery remaining reuse cooldown.
-#!define enhancementBatteryReuseCooldown enhancementStateSlot2
-# Extra health-pool ID on the Hitchhiker passenger.
-#!define enhancementHitchhikerPassengerPoolId enhancementStateSlot2
-# P.U.P. attack beam is active.
-#!define enhancementIsPupBeamActive enhancementStateSlot2
-playervar enhancementStateSlot3  # Barrier cooldown, battery reuse duration, or P.U.P. target.
-# Barrier remaining placement cooldown.
-#!define enhancementBarrierPlacementCooldown enhancementStateSlot3
-# Full battery reuse cooldown used for progress scaling (10 seconds).
-#!define enhancementBatteryReuseDuration enhancementStateSlot3
-# Current P.U.P. enemy target; null while idle.
-#!define enhancementPupTarget enhancementStateSlot3
-playervar enhancementStateSlot4  # Barrier center, battery placement timer, or P.U.P. freeze-aura flag.
-# Placed barrier center.
-#!define enhancementBarrierPosition enhancementStateSlot4
-# Battery remaining placement cooldown.
-#!define enhancementBatteryPlacementCooldown enhancementStateSlot4
-# P.U.P. freezing aura is visible.
-#!define enhancementIsPupFreezeAuraActive enhancementStateSlot4
-playervar enhancementPositionSlot  # Barrier first corner or chased P.U.P. position.
-# Barrier first lower corner.
-#!define enhancementBarrierCorner1 enhancementPositionSlot
-# Chased P.U.P. world position.
-#!define enhancementPupPosition enhancementPositionSlot
-playervar enhancementStateSlot6  # Barrier second corner or P.U.P. ability cooldown.
-# Barrier second lower corner.
-#!define enhancementBarrierCorner2 enhancementStateSlot6
-# P.U.P. remaining ability cooldown (1 or 2 seconds).
-#!define enhancementPupCooldown enhancementStateSlot6
-playervar enhancementBarrierHealth  # Laser Barricade health; placement, collision damage, regeneration and HUD.
+
 playervar enhancementHitchhikerPassenger  # Passenger attached to this carrier; null when absent. Infection rules also query it.
+
 playervar enhancementHitchhikerCarrierPoolId  # Extra health-pool ID granted to a Hitchhiker carrier, retained for removal.
 
 # Supply power-ups only (powerUp prefix).
-playervar powerUpForceFieldTimeRemaining  # Remaining Force Field seconds; yielding loop and item HUD in supply_drops.
-playervar powerUpReviveTarget  # Dead Team 1 target retained across instantRevive waits.
-playervar powerUpItemId  # Currently carried supply item ID; zero means no item.
-playervar powerUpTradeDataList  # Trade record: aimed ground position at index 0 and previous item ID at index 2.
-playervar powerUpEntityIdList  # Sparse effect/HUD/damage-modification IDs owned by active items, keyed by item ID range.
-playervar powerUpAirStrikeIndex  # Index of 50 air-strike impacts; retained across waits.
-playervar powerUpHealBeaconTimeRemaining  # Remaining healing-beacon seconds; loop and HUD.
-playervar powerUpTurretTimeRemaining  # Remaining sentry-turret seconds; loop and HUD.
-playervar powerUpCloakTimeRemaining  # Remaining cloak seconds and early-cancel threshold.
-playervar powerUpSuperNanoTimeRemaining  # Remaining Super Nano seconds; yielding loop and HUD.
-playervar powerUpUltimateTimeRemaining  # Remaining Ultimate Charger seconds; loop and HUD.
-playervar powerUpStunBouncesRemaining  # Remaining stun-chain steps, also scaling the terminal stun duration.
-playervar powerUpStunBeamPosition  # Chased stun-chain beam endpoint retained across bounces/waits.
-playervar powerUpTurretPosition  # Placed sentry-turret position; zero clears it.
-playervar powerUpStunTarget  # Next zombie hit by the active stun chain.
-playervar powerUpHealBeaconPosition  # Placed healing-beacon position; zero clears it.
-playervar powerUpForceFieldPosition  # Placed Force Field position; zero clears it.
-playervar powerUpBouncePadPosition  # Placed Bounce Pad ground position.
-playervar powerUpStunOrigin  # Current beam origin in the stun chain: wearer first, then previous target.
-playervar powerUpTurretDirection  # Current sentry firing direction, captured by turret visuals and raycasts.
-playervar powerUpAirStrikePosition  # Ground center of the active air-strike area.
-playervar powerUpTradeIndex  # Index of the aimed ground item in the global supply item arrays.
-
 # Team 1 pregame selection and voting.
-playervar pregameVoteList  # Player votes indexed by PlayerMenuStatusField; slots 0 and 1 stay unused.
 playervar pregameState  # PregameState hero-selection/readiness state; zero is also the late-join default.
+
 playervar isPregameVoting  # This Team 1 player is adjusting votes; separate from global isVoting.
 
 # Team 1 Survivor Rescue NPC.
-playervar rescueMoodIcon  # Rescue NPC mood/status icon: halo, sad, dizzy or extraction celebration.
 playervar rescueLeader  # Team 1 player followed by the Rescue NPC; bot teleport logic reads the NPC's field.
-playervar rescuePathList  # Recorded leader positions followed and trimmed by the Rescue NPC.
 
 # Biomorphing carriers on both teams.
-playervar biomorphingResourceType  # Material type carried by a player or zombie; null when empty and 3 for the blood goal.
 playervar biomorphingResourceAmount  # Biowaste amount carried by either team; Team 1 deposits it and blood uses sentinel 9999.
 
 # Explosion presentation shared by zombies and Zombie Hybrid.
 playervar explosionInnerColor  # Inner explosion color shared by ordinary zombies and Zombie Hybrid.
+
 playervar explosionOuterColor  # Outer explosion color shared by ordinary zombies and Zombie Hybrid.
+
 playervar explosionScale  # Explosion radius/sound multiplier; zombie warning setup and Hybrid initialization assign it.
 
 # Both teams or multiple systems: shared stats, visuals and role-owned storage.
@@ -434,22 +327,27 @@ playervar aiThrottleSpeedSlot  # Zombie movement throttle or Team 1 Rescue follo
 #!define botThrottleSpeed aiThrottleSpeedSlot
 # Rescue follow throttle scaled by NPC health.
 #!define rescueThrottleSpeed aiThrottleSpeedSlot
+
 playervar recoveryTimeSlot  # Existing Team 1 revive countdown / Team 2 replacement delay; no additional slot sharing.
 # Remaining time until a downed Team 1 player is revived.
 #!define reviveTimeRemaining recoveryTimeSlot
 # Delay assigned to the next zombie replacement; bosses, objectives and air strike may change it.
 #!define botRespawnDelay recoveryTimeSlot
+
 playervar isCrowdControlled  # Set/reset on zombies by stun management; also queried on Team 1 Hitchhiker carriers (default false).
+
 playervar actorCountdownSlot  # Existing Team 1 item countdown / Team 2 Charger windup progression.
 # No Cooldowns remaining seconds (15 down to 0).
 #!define powerUpNoCooldownsTimeRemaining actorCountdownSlot
 # Mauga charge windup progression from 0 to 1.
 #!define botChargerWindupProgress actorCountdownSlot
+
 playervar controlStateSlot  # Player crowd-control immunity flag or zombie boss return target; hero_tuning/zombie abilities/Bosses.
 # Team 1 immunity window after Brute/Downfallen control.
 #!define isCrowdControlCooldownActive controlStateSlot
 # Boss return target retained across the return animation.
 #!define botReturnTarget controlStateSlot
+
 playervar actorMotionSlot1  # Existing per-hero numeric/vector chase or Rescue extraction position; no change to chase lifetime.
 # Behemoth traveling gas projectile position.
 #!define botGasProjectilePosition actorMotionSlot1
@@ -465,11 +363,13 @@ playervar actorMotionSlot1  # Existing per-hero numeric/vector chase or Rescue e
 #!define botEnsnarerMeleeAngle actorMotionSlot1
 # Rescue NPC flight position chased upward after reaching extraction.
 #!define rescueExtractionPosition actorMotionSlot1
+
 playervar actorMotionSlot2  # Team 2 toxic-cloud duration or Team 1 extraction flight position.
 # Normal Behemoth toxic-cloud duration.
 #!define botGasCloudTimeRemaining actorMotionSlot2
 # Player position chased through the extraction flight stages.
 #!define extractionFlightPosition actorMotionSlot2
+
 playervar actorAbilitySlot2  # Existing zombie secondary state or temporary Rescue follow message.
 # Common reset/secondary zombie state.
 #!define botAuxiliaryState actorAbilitySlot2
@@ -479,12 +379,15 @@ playervar actorAbilitySlot2  # Existing zombie secondary state or temporary Resc
 #!define botIsReigniteActive actorAbilitySlot2
 # Hazard boss melee sequence is in progress.
 #!define botIsEnsnarerMeleeActive actorAbilitySlot2
+
 playervar initialMaxHealth  # Cached native/player maximum health before custom scaling; used by infection and Hitchhiker health pools.
+
 playervar isAttached  # Actor is attached to a host; zombie attachment and Team 1 Hitchhiker share the same meaning.
 # Zombie is attached to another actor.
 #!define botIsAttached isAttached
 # Hitchhiker passenger is attached; shared Team 1 carrier queries use isAttached.
 #!define enhancementIsHitchhiking isAttached
+
 playervar candidateTargetList  # Boss target-visibility snapshot, Rescue leader candidates or barricade collision targets; downed-player cleanup removes invalid candidates.
 # Final selectTarget candidate snapshot, retained for reevaluated boss-distance-text visibility; cleared on bot death/boss initialization.
 #!define botPotentialTargetList candidateTargetList
@@ -492,7 +395,9 @@ playervar candidateTargetList  # Boss target-visibility snapshot, Rescue leader 
 #!define rescuePotentialLeaderList candidateTargetList
 # Zombies crossing the player's barricade, processed synchronously.
 #!define enhancementBarrierTargetList candidateTargetList
+
 playervar sizeScale  # Actor size multiplier; shared by players, zombies, Rescue, item ranges and enhancements.
+
 playervar actorAbilitySlot1  # Existing per-zombie ability state or Team 1 Rescue extraction flag.
 # Generic state reset in botRespawnInitialization.
 #!define botAbilityState actorAbilitySlot1
@@ -520,22 +425,261 @@ playervar actorAbilitySlot1  # Existing per-zombie ability state or Team 1 Rescu
 #!define botIsEnsnarerBlocking actorAbilitySlot1
 # Winston enrage/slam state 0, 1 or 2; intentionally not a boolean.
 #!define botSmolderState actorAbilitySlot1
+
 playervar objectiveTypeSnapshot  # Last objective type whose per-actor visuals were initialized; used on both teams.
+
 playervar visualEntityIdList  # Zombie effects or Team 1 objective icons retained for yielding cleanup.
 # Per-zombie effects created by bot entity management/mutations.
 #!define botVisualEntityIdList visualEntityIdList
 # Team 1 objective icons removed by player objective visual management.
 #!define playerObjectiveIconIdList visualEntityIdList
+
 playervar visualCleanupIndex  # Per-actor effect/icon cleanup index; the loops yield and cannot use global scratch.
+
 playervar actorLoopSlot  # Existing Ensnarer melee loop index / Bounce Pad duration.
 # Repeated Hazard boss ultimate index.
 #!define botEnsnarerUltimateIndex actorLoopSlot
 # Remaining Bounce Pad seconds.
 #!define powerUpBouncePadTimeRemaining actorLoopSlot
+
 playervar abilityTargetList  # Zombie special-ability targets or common zombie/Hybrid explosion targets.
 # Targets affected by zombie grabs, clouds, flight and slam abilities.
 #!define botSpecialTargetList abilityTargetList
 # Targets of explosionSequence, called by zombies and Team 1 Zombie Hybrid.
 #!define explosionTargetList abilityTargetList
+
 playervar movementSpeedScale  # Movement-speed multiplier used by zombie AI, players/Rescue, crowd control and supply items.
+
 playervar damageOverTimeRemaining  # Tracked DoT duration, normally chased on zombies; one Rusher rule writes it on the victim. Preserve that receiver.
+
+playervar actorTeamSlot0  # Team 2: botTeleportCenter; Team 1: powerUpForceFieldTimeRemaining. Receivers, not rule teams, own the storage.
+# Zombie teleport/search center; bot teleport rules, Egg and boss return.
+#!define botTeleportCenter actorTeamSlot0
+# Remaining Force Field seconds; yielding loop and item HUD in supply_drops.
+#!define powerUpForceFieldTimeRemaining actorTeamSlot0
+
+playervar actorTeamSlot1  # Team 2: botIsSelectingTarget; Team 1: powerUpReviveTarget. Receivers, not rule teams, own the storage.
+# selectTarget is running; blocks competing zombie target/teleport work.
+#!define botIsSelectingTarget actorTeamSlot1
+# Dead Team 1 target retained across instantRevive waits.
+#!define powerUpReviveTarget actorTeamSlot1
+
+playervar actorTeamSlot2  # Team 2: botReturnMotionSlot; Team 1: powerUpItemId. Receivers, not rule teams, own the storage.
+# Seconds without a target before boss return (chased to 15).
+#!define botReturnTime actorTeamSlot2
+# Boss eye-position snapshot written and cleared during return; currently not read.
+#!define botReturnPosition actorTeamSlot2
+# Currently carried supply item ID; zero means no item.
+#!define powerUpItemId actorTeamSlot2
+
+playervar actorTeamSlot3  # Team 2 teleport flag; Team 1 human votes -> item trade data, or Rescue dummy path. Late vote writers are phase-guarded; trade indices 0 and 2 are assigned before reading.
+# Zombie is inside enterExitTeleport; spawn/target/ability consumers also read it.
+#!define botIsTeleporting actorTeamSlot3
+# Trade record: aimed ground position at index 0 and previous item ID at index 2.
+#!define powerUpTradeDataList actorTeamSlot3
+# Player votes indexed by PlayerMenuStatusField; slots 0 and 1 stay unused.
+#!define pregameVoteList actorTeamSlot3
+# Recorded leader positions followed and trimmed by the Rescue NPC.
+#!define rescuePathList actorTeamSlot3
+
+playervar actorTeamSlot4  # Team 2: botLoopIndexSlot; Team 1: powerUpEntityIdList. Receivers, not rule teams, own the storage.
+# Repeated Moira fade/attack index.
+#!define botStalkerFadeIndex actorTeamSlot4
+# Index into Ensnarer affected targets.
+#!define botEnsnarerTargetIndex actorTeamSlot4
+# Sparse effect/HUD/damage-modification IDs owned by active items, keyed by item ID range.
+#!define powerUpEntityIdList actorTeamSlot4
+
+playervar actorTeamSlot5  # Team 2: botTarget; Team 1: powerUpAirStrikeIndex. Receivers, not rule teams, own the storage.
+# Zombie AI combat target; subroutines, bot abilities and objectives; cleared when its Team 1 target is downed.
+#!define botTarget actorTeamSlot5
+# Index of 50 air-strike impacts; retained across waits.
+#!define powerUpAirStrikeIndex actorTeamSlot5
+
+playervar actorTeamSlot6  # Team 2: botBiteDuration; Team 1: powerUpHealBeaconTimeRemaining. Receivers, not rule teams, own the storage.
+# Zombie melee damage-over-time duration, including mutation overrides.
+#!define botBiteDuration actorTeamSlot6
+# Remaining healing-beacon seconds; loop and HUD.
+#!define powerUpHealBeaconTimeRemaining actorTeamSlot6
+
+playervar actorTeamSlot7  # Team 2: botIsTeleportConfirmed; Team 1: powerUpTurretTimeRemaining. Receivers, not rule teams, own the storage.
+# Zombie teleport/spawn position has been accepted and may be added to the spawn cache.
+#!define botIsTeleportConfirmed actorTeamSlot7
+# Remaining sentry-turret seconds; loop and HUD.
+#!define powerUpTurretTimeRemaining actorTeamSlot7
+
+playervar actorTeamSlot8  # Team 2: botReigniteDestination; Team 1: powerUpCloakTimeRemaining. Receivers, not rule teams, own the storage.
+# Zombie emergence destination near Anran; false clears the position after the rise.
+#!define botReigniteDestination actorTeamSlot8
+# Remaining cloak seconds and early-cancel threshold.
+#!define powerUpCloakTimeRemaining actorTeamSlot8
+
+playervar actorTeamSlot9  # Team 2: botIsWallPhaseAllowed; Team 1: powerUpSuperNanoTimeRemaining. Receivers, not rule teams, own the storage.
+# Zombie may pass spawn doors; special abilities temporarily disable this permission.
+#!define botIsWallPhaseAllowed actorTeamSlot9
+# Remaining Super Nano seconds; yielding loop and HUD.
+#!define powerUpSuperNanoTimeRemaining actorTeamSlot9
+
+playervar actorTeamSlot10  # Team 2: botAbilityTarget; Team 1: powerUpUltimateTimeRemaining. Receivers, not rule teams, own the storage.
+# Zombie special-ability target: teleport/grab host, flight target or affected player.
+#!define botAbilityTarget actorTeamSlot10
+# Remaining Ultimate Charger seconds; loop and HUD.
+#!define powerUpUltimateTimeRemaining actorTeamSlot10
+
+playervar actorTeamSlot11  # Team 2: botTeleportPosition; Team 1: powerUpStunBouncesRemaining. Receivers, not rule teams, own the storage.
+# Zombie teleport candidate/accepted position; bot teleport rules, Egg and spawn-cache updates; zero clears it.
+#!define botTeleportPosition actorTeamSlot11
+# Remaining stun-chain steps, also scaling the terminal stun duration.
+#!define powerUpStunBouncesRemaining actorTeamSlot11
+
+playervar actorTeamSlot12  # Team 2: botBossHealth; Team 1: powerUpStunBeamPosition. Receivers, not rule teams, own the storage.
+# Virtual boss/egg health adjusted by damage events; -1 when not a boss.
+#!define botBossHealth actorTeamSlot12
+# Chased stun-chain beam endpoint retained across bounces/waits.
+#!define powerUpStunBeamPosition actorTeamSlot12
+
+playervar actorTeamSlot13  # Team 2: botIsWallCollisionEnabled; Team 1: powerUpTurretPosition. Receivers, not rule teams, own the storage.
+# Cached zombie environment-collision state, restored by abilities and spawn-door handling.
+#!define botIsWallCollisionEnabled actorTeamSlot13
+# Placed sentry-turret position; zero clears it.
+#!define powerUpTurretPosition actorTeamSlot13
+
+playervar actorTeamSlot14  # Team 2: botIsFacingOverridden; Team 1: powerUpStunTarget. Receivers, not rule teams, own the storage.
+# Special zombie ability controls facing instead of normal target tracking.
+#!define botIsFacingOverridden actorTeamSlot14
+# Next zombie hit by the active stun chain.
+#!define powerUpStunTarget actorTeamSlot14
+
+playervar actorTeamSlot15  # Team 2: botIsThrottleOverridden; Team 1: powerUpHealBeaconPosition. Receivers, not rule teams, own the storage.
+# Special zombie ability controls movement instead of the normal AI throttle.
+#!define botIsThrottleOverridden actorTeamSlot15
+# Placed healing-beacon position; zero clears it.
+#!define powerUpHealBeaconPosition actorTeamSlot15
+
+playervar actorTeamSlot16  # Team 2: botConfiguredHero; Team 1: powerUpForceFieldPosition. Receivers, not rule teams, own the storage.
+# Last zombie hero for which bot entity/stat initialization was performed.
+#!define botConfiguredHero actorTeamSlot16
+# Placed Force Field position; zero clears it.
+#!define powerUpForceFieldPosition actorTeamSlot16
+
+playervar actorTeamSlot17  # Team 2: botMutationId; Team 1: powerUpBouncePadPosition. Receivers, not rule teams, own the storage.
+# Selected mutation ID; zero means no mutation.
+#!define botMutationId actorTeamSlot17
+# Placed Bounce Pad ground position.
+#!define powerUpBouncePadPosition actorTeamSlot17
+
+playervar actorTeamSlot18  # Team 2: botIsInitializing; Team 1: powerUpStunOrigin. Receivers, not rule teams, own the storage.
+# Zombie respawn/stat initialization is in progress; spawn/teleport/objective rules wait for it.
+#!define botIsInitializing actorTeamSlot18
+# Current beam origin in the stun chain: wearer first, then previous target.
+#!define powerUpStunOrigin actorTeamSlot18
+
+playervar actorTeamSlot19  # Team 2: botKnockbackScale; Team 1: powerUpTurretDirection. Receivers, not rule teams, own the storage.
+# Zombie knockback-received multiplier, including Brute/mutation adjustments.
+#!define botKnockbackScale actorTeamSlot19
+# Current sentry firing direction, captured by turret visuals and raycasts.
+#!define powerUpTurretDirection actorTeamSlot19
+
+playervar actorTeamSlot20  # Team 2: botCustomTeleportPosition; Team 1: powerUpAirStrikePosition. Receivers, not rule teams, own the storage.
+# Special zombie replacement position carried from customTeleportPositionList; null when unused.
+#!define botCustomTeleportPosition actorTeamSlot20
+# Ground center of the active air-strike area.
+#!define powerUpAirStrikePosition actorTeamSlot20
+
+playervar actorTeamSlot21  # Team 2: botLastTarget; Team 1: powerUpTradeIndex. Receivers, not rule teams, own the storage.
+# Last visible/attacking target retained when zombie line of sight is lost.
+#!define botLastTarget actorTeamSlot21
+# Index of the aimed ground item in the global supply item arrays.
+#!define powerUpTradeIndex actorTeamSlot21
+
+playervar actorTeamSlot22  # Team 2: botAbilityStateSlot; Team 1: enhancementStateSlot1. Receivers, not rule teams, own the storage.
+# Remaining shared zombie special-ability cooldown.
+#!define botAbilityCooldown actorTeamSlot22
+# Boss Behemoth active gas-cloud positions.
+#!define botGasPositionList actorTeamSlot22
+# Zombie Hybrid explosion cooldown in seconds.
+#!define enhancementHybridCooldown actorTeamSlot22
+# Barrier placement facing direction.
+#!define enhancementBarrierFacing actorTeamSlot22
+# Pyrotechnic hit queue; repeated targets determine fire damage.
+#!define enhancementPyroHitList actorTeamSlot22
+# Total infection levels cured by Plague Doctor.
+#!define enhancementPlagueCureTotal actorTeamSlot22
+# Born to Battle has an unspent ability reset.
+#!define enhancementIsBattleResetReady actorTeamSlot22
+# Placed Charge Battery position; zero clears it.
+#!define enhancementBatteryPosition actorTeamSlot22
+# Hitchhiker carrier; zero when detached.
+#!define enhancementHitchhikerCarrier actorTeamSlot22
+# P.U.P. mode color.
+#!define enhancementPupColor actorTeamSlot22
+
+playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateSlot2. Receivers, not rule teams, own the storage.
+# Boss Behemoth gas-cloud radii, aligned with botGasPositionList.
+#!define botGasRadiusList actorTeamSlot23
+# Direction from the first barrier corner toward the second.
+#!define enhancementBarrierEdgeDirection actorTeamSlot23
+# Born to Battle button whose charge/cooldown is reset.
+#!define enhancementBattleAbilityButton actorTeamSlot23
+# Battery remaining reuse cooldown.
+#!define enhancementBatteryReuseCooldown actorTeamSlot23
+# Extra health-pool ID on the Hitchhiker passenger.
+#!define enhancementHitchhikerPassengerPoolId actorTeamSlot23
+# P.U.P. attack beam is active.
+#!define enhancementIsPupBeamActive actorTeamSlot23
+
+playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateSlot3. Receivers, not rule teams, own the storage.
+# Movement waypoint associated with the accepted zombie spawn point.
+#!define botSpawnWaypoint actorTeamSlot24
+# Barrier remaining placement cooldown.
+#!define enhancementBarrierPlacementCooldown actorTeamSlot24
+# Full battery reuse cooldown used for progress scaling (10 seconds).
+#!define enhancementBatteryReuseDuration actorTeamSlot24
+# Current P.U.P. enemy target; null while idle.
+#!define enhancementPupTarget actorTeamSlot24
+
+playervar actorTeamSlot25  # Team 2: botCandidateTarget; Team 1: enhancementStateSlot4. Receivers, not rule teams, own the storage.
+# Candidate zombie target under line-of-sight testing in selectTarget.
+#!define botCandidateTarget actorTeamSlot25
+# Placed barrier center.
+#!define enhancementBarrierPosition actorTeamSlot25
+# Battery remaining placement cooldown.
+#!define enhancementBatteryPlacementCooldown actorTeamSlot25
+# P.U.P. freezing aura is visible.
+#!define enhancementIsPupFreezeAuraActive actorTeamSlot25
+
+playervar actorTeamSlot26  # Team 2: botIsTeleportAllowed; Team 1: enhancementPositionSlot. Receivers, not rule teams, own the storage.
+# Zombie initialization has enabled teleport processing.
+#!define botIsTeleportAllowed actorTeamSlot26
+# Barrier first lower corner.
+#!define enhancementBarrierCorner1 actorTeamSlot26
+# Chased P.U.P. world position.
+#!define enhancementPupPosition actorTeamSlot26
+
+playervar actorTeamSlot27  # Team 2: botReigniteRisePosition; Team 1: enhancementStateSlot6. Receivers, not rule teams, own the storage.
+# Zombie emergence position chased upward near Anran; zombie_types forces this position across the rise wait.
+#!define botReigniteRisePosition actorTeamSlot27
+# Barrier second lower corner.
+#!define enhancementBarrierCorner2 actorTeamSlot27
+# P.U.P. remaining ability cooldown (1 or 2 seconds).
+#!define enhancementPupCooldown actorTeamSlot27
+
+playervar actorTeamSlot28  # Team 2: botResourceIconIdList; Team 1: enhancementBarrierHealth. Receivers, not rule teams, own the storage.
+# Zombie Biomorphing resource icon IDs; separate from the zombie visual-effect list.
+#!define botResourceIconIdList actorTeamSlot28
+# Laser Barricade health; placement, collision damage, regeneration and HUD.
+#!define enhancementBarrierHealth actorTeamSlot28
+
+playervar team1PositionSlot  # Pregame position -> final extraction destination on humans; Rescue NPC path origin on its own actor. No chase owns this slot.
+# Per-player position in the pregame hero-selection scene.
+#!define pregamePosition team1PositionSlot
+# Rescue NPC spawn/path origin used by its progress HUD.
+#!define rescueStartPosition team1PositionSlot
+# Per-player final flight destination, calculated from the shared extraction direction.
+#!define extractionDestination team1PositionSlot
+
+playervar objectiveActorKindSlot  # Biomorphing resource type on both teams, or Rescue NPC mood. Goal writers recheck the objective after waits; Rescue completes only after its dummy is destroyed.
+# Material type carried by a player or zombie; null when empty and 3 for the blood goal.
+#!define biomorphingResourceType objectiveActorKindSlot
+# Rescue NPC mood/status icon: halo, sad, dizzy or extraction celebration.
+#!define rescueMoodIcon objectiveActorKindSlot

@@ -8,6 +8,7 @@ const {files, compile, compiler} = require('./measure-further-optimizations.cjs'
 const playerLayout = require('./player-variable-layout.cjs');
 const {normalizePlayerNames, compare: comparePlayerPackage} = require('./verify-player-variables.cjs');
 const playerChanges = require('./probe-player-temporaries-2026-11-02.cjs');
+const playerSharing = require('./player-slot-sharing.cjs');
 const root = path.resolve(__dirname, '..');
 const src = path.join(root, 'src');
 const baselineRef = '1a313866755d0a00e6cc8bfcbfc323904c5ff02f';
@@ -57,12 +58,15 @@ async function main() {
     // Keep the original phase proof intact, then compose the reviewed player-local changes.
     const phaseTargetFiles = playerChanges.baselineFiles();
     const phaseTarget = await compile(phaseTargetFiles);
-    const expectedCurrent = await compile(playerChanges.applyConservativePackage({...phaseTargetFiles}));
+    const playerTemporaryFiles = playerChanges.applyConservativePackage({...phaseTargetFiles});
+    const playerTemporaryTarget = await compile(playerTemporaryFiles);
+    const expectedCurrent = await compile(playerSharing.guardObjective(playerSharing.guardMenu({...playerTemporaryFiles})));
     const after = await compile(files);
     assert.deepEqual(after.warnings, []);
     assert.equal(before.elements, 27213);
     assert.equal(phaseTarget.elements, before.elements + 5);
-    assert.equal(after.elements, phaseTarget.elements - 30);
+    assert.equal(playerTemporaryTarget.elements, phaseTarget.elements - 30);
+    assert.equal(after.elements, expectedCurrent.elements);
     const globals = Object.values(files).join('\n').match(/^globalvar /gm).length;
     assert.equal(globals, 99);
     const declarations = new Set([...files['variables.opy'].matchAll(/^globalvar (\w+)/gm)].map(m => m[1]));
@@ -107,7 +111,9 @@ async function main() {
     });
     assert.equal(resets, 2);
     assert.equal(guardedWrites, 1);
-    const playerPackageComparison = comparePlayerPackage(expectedCurrent, after);
+    const playerMapping = {...playerSharing.mapping, ...Object.fromEntries(
+        Object.entries(playerChanges.playerSlotRenames).map(([old, name]) => [old, playerSharing.mapping[name] ?? name]))};
+    const playerPackageComparison = comparePlayerPackage(expectedCurrent, after, playerMapping);
 
     // Preserve zero as the menu readiness sentinel and the early extraction-speed initialization.
     assert.match(files['global_startup.opy'], /extractionSpeedUp = 2\.5/);
@@ -135,7 +141,7 @@ async function main() {
         phaseComparisonTargetRef: playerChanges.baselineRef,
         before: {globals: 110, elements: before.elements},
         phaseTarget: {globals: 99, playerVariables: 108, elements: phaseTarget.elements},
-        after: {globals, playerVariables: 107, elements: after.elements},
+        after: {globals, playerVariables: 74, elements: after.elements},
         playerPackageComparison,
         sharedSlots: [...new Set(currentAliases.map(a => a.slot))].map(slot => ({slot,
             roles: currentAliases.filter(a => a.slot === slot).map(a => a.name)})),
@@ -144,7 +150,8 @@ async function main() {
         actionChanges: [
             'START GAME: restore biomorphingGoalText and biomorphingGoalColor to null after deleting pregame texts.',
             'GLOBAL MENU INITIALIZATION: write the spacing angle only while isPregameSetup is true, preventing a resumed menu writer from overwriting the Biomorphing goal color.',
-            'Player temporary package: compare all current rules with the reviewed transformation of phaseComparisonTargetRef; retain the boss-distance candidate snapshot, capture mutation outline color, rename remaining single-role slots.'
+            'Player temporary package: retain the boss-distance candidate snapshot, capture mutation outline color, rename remaining single-role slots.',
+            'Player storage: compose the reviewed team/phase/objective sharing and four guards after yielding menu/Biomorphing actions. See player-slot-sharing-validation.json.'
         ],
         warnings: after.warnings,
         sha256: Object.fromEntries(Object.entries(files).map(([file, source]) => [file,

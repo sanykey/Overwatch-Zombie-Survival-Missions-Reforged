@@ -44,9 +44,10 @@ rule "BASIC (REAPER) SHADOW STEP (BOSS)":
     eventPlayer.startFacing(vect(-1, 0, 0), 180, Relativity.TO_PLAYER)
     while eventPlayer.isUsingAbility1():
         entityFloat()
-        # tmp0: floated-player index, to push each affected player upward during the shadow-step ability.
-        for tmp0 in range(len(eventPlayer.botSpecialTargetList)):
-            eventPlayer.botAbilityTarget = eventPlayer.botSpecialTargetList[tmp0]
+        # shadowStepFloatTargetIndex: floated-player index, to push each affected player upward during the shadow-step ability.
+        #!define shadowStepFloatTargetIndex tmp0
+        for shadowStepFloatTargetIndex in range(len(eventPlayer.botSpecialTargetList)):
+            eventPlayer.botAbilityTarget = eventPlayer.botSpecialTargetList[shadowStepFloatTargetIndex]
             if eventPlayer.botAbilityTarget.getPosition().y < eventPlayer.getPosition().y + 4 * eventPlayer.sizeScale:
                 #Make target float up
                 eventPlayer.botAbilityTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.botAbilityTarget.getPosition(), eventPlayer.getPosition())), -50), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
@@ -232,11 +233,12 @@ rule "BEHEMOTH GAS STREAM (BOSS)":
     @Condition len(eventPlayer.botGasPositionList) > 0
     
     eventPlayer.botSpecialTargetList = []
-    # tmp0: gas-cloud index, to expand its radius and collect newly hit players.
-    for tmp0 in range(len(eventPlayer.botGasPositionList)):
-        if eventPlayer.botGasRadiusList[tmp0] < 6 * eventPlayer.sizeScale:
-            eventPlayer.botGasRadiusList[tmp0] += 0.2 * eventPlayer.sizeScale
-        eventPlayer.botSpecialTargetList.append(playerTargetList.filter(lambda x: not x in eventPlayer.botSpecialTargetList and distance(eventPlayer.botGasPositionList[tmp0], vect(x.getEyePosition().x, eventPlayer.botGasPositionList[tmp0].y, x.getEyePosition().z)) < eventPlayer.botGasRadiusList[tmp0] and abs(eventPlayer.botGasPositionList[tmp0].y - x.getEyePosition().y) < eventPlayer.botGasRadiusList[tmp0] / 5))
+    # behemothGasCloudIndex: gas-cloud index, to expand its radius and collect newly hit players.
+    #!define behemothGasCloudIndex tmp0
+    for behemothGasCloudIndex in range(len(eventPlayer.botGasPositionList)):
+        if eventPlayer.botGasRadiusList[behemothGasCloudIndex] < 6 * eventPlayer.sizeScale:
+            eventPlayer.botGasRadiusList[behemothGasCloudIndex] += 0.2 * eventPlayer.sizeScale
+        eventPlayer.botSpecialTargetList.append(playerTargetList.filter(lambda x: not x in eventPlayer.botSpecialTargetList and distance(eventPlayer.botGasPositionList[behemothGasCloudIndex], vect(x.getEyePosition().x, eventPlayer.botGasPositionList[behemothGasCloudIndex].y, x.getEyePosition().z)) < eventPlayer.botGasRadiusList[behemothGasCloudIndex] and abs(eventPlayer.botGasPositionList[behemothGasCloudIndex].y - x.getEyePosition().y) < eventPlayer.botGasRadiusList[behemothGasCloudIndex] / 5))
     eventPlayer.botSpecialTargetList.startDamageOverTime(eventPlayer, 2.5, eventPlayer.botBiteDamage * 0.1)
     if eventPlayer.damageOverTimeRemaining < 2.5 and len(eventPlayer.botSpecialTargetList) > 0:
         eventPlayer.damageOverTimeRemaining = 2.5
@@ -414,9 +416,10 @@ rule "ZOMBIES SPAWN AT REIGNITED":
     playEffect(getAllPlayers(), DynamicEffect.BAD_PICKUP_EFFECT, Color.ORANGE, eventPlayer, 0.5)
     eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 2)
     eventPlayer.setStatusEffect(null, Status.BURNING, 2.3)
-    # tmp0: active Anran used only by the immediate emergence-destination search.
-    tmp0 = getPlayersOnHero(Hero.ANRAN, Team.2).filter(lambda player: player.botIsReigniteActive)[0]
-    eventPlayer.botReigniteDestination = random.choice(mapGridList.filter(lambda x: distance(tmp0.getPosition(), x) > 2 and distance(tmp0.getPosition(), x) < 7))
+    # reigniteSpawnSource: active Anran used only by the immediate emergence-destination search.
+    #!define reigniteSpawnSource tmp0
+    reigniteSpawnSource = getPlayersOnHero(Hero.ANRAN, Team.2).filter(lambda player: player.botIsReigniteActive)[0]
+    eventPlayer.botReigniteDestination = random.choice(mapGridList.filter(lambda x: distance(reigniteSpawnSource.getPosition(), x) > 2 and distance(reigniteSpawnSource.getPosition(), x) < 7))
     eventPlayer.botReigniteRisePosition = eventPlayer.botReigniteDestination - vect(0, 2, 0)
     eventPlayer.startForcingPosition(eventPlayer.botReigniteRisePosition)
     chaseOverTime(eventPlayer.botReigniteRisePosition, eventPlayer.botReigniteDestination, 1.5)
@@ -671,9 +674,10 @@ rule "PRIME SLIMER (EMRE) FLIGHT (BOSS)":
                 eventPlayer.forceButtonPress(Button.JUMP)
             #Entities that will be floated
             entityFloat()
-            # tmp0: floated-player index, to lift low targets and push higher targets away during flight.
-            for tmp0 in range(len(eventPlayer.botSpecialTargetList)):
-                eventPlayer.botAbilityTarget = eventPlayer.botSpecialTargetList[tmp0]
+            # slimerFlightTargetIndex: floated-player index, to lift low targets and push higher targets away during flight.
+            #!define slimerFlightTargetIndex tmp0
+            for slimerFlightTargetIndex in range(len(eventPlayer.botSpecialTargetList)):
+                eventPlayer.botAbilityTarget = eventPlayer.botSpecialTargetList[slimerFlightTargetIndex]
                 if eventPlayer.botAbilityTarget.getPosition().y < eventPlayer.getPosition().y:
                     #Make target float up
                     eventPlayer.botAbilityTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.botAbilityTarget.getPosition(), eventPlayer.getPosition())), -75), 0.75, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
@@ -1285,9 +1289,10 @@ rule "SMOLDER SUPER SLAM":
     playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, eventPlayer.getPosition(), 100)
     eventPlayer.botSpecialTargetList = playerTargetList.concat(getLivingPlayers(Team.2)).exclude(eventPlayer).filter(lambda x: not x.hasStatus(Status.PHASED_OUT) and distance(eventPlayer.getPosition(), x.getPosition()) < 7.5 * eventPlayer.sizeScale and isInLoS(eventPlayer.getPosition() + losOffsetConst, x.getPosition() + losOffsetConst))
     (eventPlayer.botSpecialTargetList.filter(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < 5 * eventPlayer.sizeScale and isInLoS(eventPlayer.getPosition() + losOffsetConst, x.getPosition() + losOffsetConst, BarrierLos.BLOCKED_BY_ENEMY_BARRIERS))).setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 0.35)
-    # tmp0: shockwave target index, to apply distance-scaled knockback to each affected player.
-    for tmp0 in range(len(eventPlayer.botSpecialTargetList)):
-        eventPlayer.botAbilityTarget = eventPlayer.botSpecialTargetList[tmp0]
+    # smolderShockwaveTargetIndex: shockwave target index, to apply distance-scaled knockback to each affected player.
+    #!define smolderShockwaveTargetIndex tmp0
+    for smolderShockwaveTargetIndex in range(len(eventPlayer.botSpecialTargetList)):
+        eventPlayer.botAbilityTarget = eventPlayer.botSpecialTargetList[smolderShockwaveTargetIndex]
         eventPlayer.botAbilityTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botAbilityTarget.getPosition())), -25), (15 if distance(eventPlayer.getPosition(), eventPlayer.botAbilityTarget.getPosition()) < 5 * eventPlayer.sizeScale else 7.5) * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
 
 

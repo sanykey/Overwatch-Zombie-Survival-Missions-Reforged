@@ -24,12 +24,14 @@ rule "EFFECT/TEXT (PERMANENT)":
     @Condition isGameplayActive == true
     
     #One row per item ID (1-13); capture the index and the resolved color.
-    # tmp1: colors indexed by item ID minus 1, to give each power-up HUD row its item color.
-    tmp1 = [Color.GREEN, Color.YELLOW, Color.BLUE, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.BLUE, Color.RED, Color.PURPLE, Color.RED, Color.WHITE]
-    # tmp0: zero-based item index, to choose the row's visibility, name, instructions and color.
-    for tmp0 in range(13):
+    # powerUpHudColorList: colors indexed by item ID minus 1, to give each power-up HUD row its item color.
+    #!define powerUpHudColorList tmp1
+    powerUpHudColorList = [Color.GREEN, Color.YELLOW, Color.BLUE, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.BLUE, Color.RED, Color.PURPLE, Color.RED, Color.WHITE]
+    # powerUpHudItemIndex: zero-based item index, to choose the row's visibility, name, instructions and color.
+    #!define powerUpHudItemIndex tmp0
+    for powerUpHudItemIndex in range(13):
         hudText(
-            getLivingPlayers(Team.1).filter(lambda player: player.powerUpItemId == evalOnce(tmp0) + 1),
+            getLivingPlayers(Team.1).filter(lambda player: player.powerUpItemId == evalOnce(powerUpHudItemIndex) + 1),
             [
                 "CURE",
                 "REVIVE",
@@ -44,7 +46,7 @@ rule "EFFECT/TEXT (PERMANENT)":
                 "Bounce Pad",
                 "Ultimate Charger",
                 "Stun"
-            ][evalOnce(tmp0)],
+            ][evalOnce(powerUpHudItemIndex)],
             "Hold [{0}] to drop your power up".format(inputBindingString(Button.RELOAD)),
             [
                 "Hold [{0}] to stop all damage over time and cure yourself".format(inputBindingString(Button.INTERACT)),
@@ -60,12 +62,12 @@ rule "EFFECT/TEXT (PERMANENT)":
                 "Hold [{0}] to place a bounce pad".format(inputBindingString(Button.INTERACT)),
                 "Hold [{0}] to rapidly charge your ultimate".format(inputBindingString(Button.INTERACT)),
                 "Hold [{0}] to stun nearby enemies".format(inputBindingString(Button.INTERACT))
-            ][evalOnce(tmp0)],
+            ][evalOnce(powerUpHudItemIndex)],
             HudPosition.LEFT,
             100,
-            evalOnce(tmp1[tmp0]),
-            evalOnce(tmp1[tmp0]),
-            evalOnce(tmp1[tmp0]),
+            evalOnce(powerUpHudColorList[powerUpHudItemIndex]),
+            evalOnce(powerUpHudColorList[powerUpHudItemIndex]),
+            evalOnce(powerUpHudColorList[powerUpHudItemIndex]),
             HudReeval.VISIBILITY_AND_STRING
         )
 

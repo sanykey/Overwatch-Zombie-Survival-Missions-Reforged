@@ -53,10 +53,11 @@ rule "INITIALIZE SURVIVOR TO BE RESCUED":
     createEffect(getAllPlayers(), Effect.RING, Color.VIOLET if eventPlayer.rescueLeader != null else Color.RED, eventPlayer, objectiveRad)
     #Zombie slowing ring
     createEffect(getAllPlayers().filter(lambda _: eventPlayer.getNormalizedHealth() < 1), Effect.BAD_AURA, Color.PURPLE, eventPlayer, 1)
-    # tmp0: survivor path-marker index, to create rings every three path points using evalOnce.
-    for tmp0 in range(10):
+    # rescuePathMarkerIndex: survivor path-marker index, to create rings every three path points using evalOnce.
+    #!define rescuePathMarkerIndex tmp0
+    for rescuePathMarkerIndex in range(10):
         #Path Markers
-        createEffect(getAllPlayers().filter(lambda _: len(eventPlayer.rescuePathList) > evalOnce(tmp0 * 3)), Effect.RING, Color.VIOLET, eventPlayer.rescuePathList[evalOnce(tmp0) * 3], 0.2)
+        createEffect(getAllPlayers().filter(lambda _: len(eventPlayer.rescuePathList) > evalOnce(rescuePathMarkerIndex * 3)), Effect.RING, Color.VIOLET, eventPlayer.rescuePathList[evalOnce(rescuePathMarkerIndex) * 3], 0.2)
     eventPlayer.startFacing(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getEyePosition(), eventPlayer.rescueLeader.getEyePosition())), 80 if eventPlayer.rescueLeader == null else verticalAngleOfDirection(directionTowards(eventPlayer.getEyePosition(), eventPlayer.rescueLeader.getEyePosition()))), 100)
     eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), (eventPlayer.rescuePathList.filter(lambda x: distance(eventPlayer.getPosition(), x) < 2)).last() if eventPlayer.rescuePathList.any(lambda x: distance(eventPlayer.getPosition(), x) < 2) else eventPlayer.rescueLeader.getPosition()), 0 if eventPlayer.rescueLeader == null or distance(eventPlayer.getPosition(), eventPlayer.rescueLeader.getPosition()) < 1.5 else eventPlayer.rescueThrottleSpeed, Relativity.TO_WORLD)
 
@@ -128,9 +129,10 @@ rule "DELETE PATH":
     @Condition objectiveTypeList[0] == ObjectiveType.SURVIVOR_RESCUE
     @Condition (rescueSurvivor.rescuePathList.any(lambda x: distance(rescueSurvivor.getPosition(), vect(x.x, rescueSurvivor.getPosition().y, x.z)) < 0.25 and abs(rescueSurvivor.getPosition().y - x.y) < 2)) == true
     
-    # tmp0: reached path index, consumed by the immediate path trim.
-    tmp0 = rescueSurvivor.rescuePathList.index(sorted(rescueSurvivor.rescuePathList, lambda x: distance(rescueSurvivor.getPosition(), x))[0])
-    rescueSurvivor.rescuePathList.remove(rescueSurvivor.rescuePathList.filter(lambda _, i: i <= tmp0))
+    # rescueReachedPathIndex: reached path index, consumed by the immediate path trim.
+    #!define rescueReachedPathIndex tmp0
+    rescueReachedPathIndex = rescueSurvivor.rescuePathList.index(sorted(rescueSurvivor.rescuePathList, lambda x: distance(rescueSurvivor.getPosition(), x))[0])
+    rescueSurvivor.rescuePathList.remove(rescueSurvivor.rescuePathList.filter(lambda _, i: i <= rescueReachedPathIndex))
     wait(0.25, Wait.RESTART_WHEN_TRUE)
     if ruleCondition:
         loop()

@@ -85,6 +85,8 @@ rule "PLAYER SELECTS/RESELECTS HERO":
         eventPlayer.isPlayerActive = true
         wait(5, Wait.RESTART_WHEN_TRUE)
         #Force players that have not voted or selected an enhancement to lock in their hero
+        if not isPregameSetup:
+            return
         if isVoting and (eventPlayer.pregameVoteList.slice(PlayerMenuStatusField.CHALLENGE_VOTE, 3).all(lambda x: x == 0 and eventPlayer.enhancementId == Enhancement.NO_PREFERENCE)) or not isVoting and eventPlayer.enhancementId == Enhancement.NO_PREFERENCE:
             eventPlayer.forceButtonPress(Button.JUMP)
     if ruleCondition:
@@ -234,26 +236,28 @@ rule "PREVENT PLAYERS FROM LEAVING START EARLY":
 def randomActions():
     @Name "randomActions"
     
-    # tmp0: random emote direction 1-4, to choose one communication before the next wait.
-    tmp0 = random.randint(1, 4)
+    # pregameEmoteDirection: random emote direction 1-4, to choose one communication before the next wait.
+    #!define pregameEmoteDirection tmp0
+    pregameEmoteDirection = random.randint(1, 4)
     #Random emote
-    if tmp0 <= 1:
+    if pregameEmoteDirection <= 1:
         eventPlayer.communicate(Comms.EMOTE_UP)
-    elif tmp0 <= 2:
+    elif pregameEmoteDirection <= 2:
         eventPlayer.communicate(Comms.EMOTE_DOWN)
-    elif tmp0 <= 3:
+    elif pregameEmoteDirection <= 3:
         eventPlayer.communicate(Comms.EMOTE_LEFT)
     else:
         eventPlayer.communicate(Comms.EMOTE_RIGHT)
     wait(1)
-    # tmp0: random voice-line direction 1-4, to choose one communication before the next wait.
-    tmp0 = random.randint(1, 4)
+    # pregameVoiceLineDirection: random voice-line direction 1-4, to choose one communication before the next wait.
+    #!define pregameVoiceLineDirection tmp0
+    pregameVoiceLineDirection = random.randint(1, 4)
     #Random voice line
-    if tmp0 <= 1:
+    if pregameVoiceLineDirection <= 1:
         eventPlayer.communicate(Comms.VOICE_LINE_UP)
-    elif tmp0 <= 2:
+    elif pregameVoiceLineDirection <= 2:
         eventPlayer.communicate(Comms.VOICE_LINE_DOWN)
-    elif tmp0 <= 3:
+    elif pregameVoiceLineDirection <= 3:
         eventPlayer.communicate(Comms.VOICE_LINE_LEFT)
     else:
         eventPlayer.communicate(Comms.VOICE_LINE_RIGHT)

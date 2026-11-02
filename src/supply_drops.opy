@@ -31,13 +31,15 @@ rule "GENERATE SUPPLY DROPS":
     wait(random.uniform(1.5, 2) * 60)
     while supplyDropLandingPosition == null:
         #Find the closest player to the objective
-        # tmp0: player closest to the objective, used as the center for choosing a supply-drop location.
-        tmp0 = sorted(playerTargetList, lambda x: distance(x.getPosition(), objectivePositionList[0]))[0]
-        # tmp1: candidate drop position 20-35m from tmp0, to check clearance from all players.
-        tmp1 = random.choice(mapGridList.filter(lambda x: distance(tmp0.getPosition(), x) < 35 and distance(tmp0.getPosition(), x) > 20))
-        if playerTargetList.all(lambda x: distance(tmp1, x.getPosition()) > 20):
+        # supplyDropClosestPlayer: player closest to the objective, used as the center for choosing a supply-drop location.
+        #!define supplyDropClosestPlayer tmp0
+        supplyDropClosestPlayer = sorted(playerTargetList, lambda x: distance(x.getPosition(), objectivePositionList[0]))[0]
+        # supplyDropCandidatePosition: candidate drop position 20-35m from supplyDropClosestPlayer, to check clearance from all players.
+        #!define supplyDropCandidatePosition tmp1
+        supplyDropCandidatePosition = random.choice(mapGridList.filter(lambda x: distance(supplyDropClosestPlayer.getPosition(), x) < 35 and distance(supplyDropClosestPlayer.getPosition(), x) > 20))
+        if playerTargetList.all(lambda x: distance(supplyDropCandidatePosition, x.getPosition()) > 20):
             #Sets supply drop location
-            supplyDropLandingPosition = tmp1
+            supplyDropLandingPosition = supplyDropCandidatePosition
             #Sets supply drop location to be placed on ground (in the case that a walkable position is underground for some reason)
             supplyDropLandingPosition = raycastHitPosition(supplyDropLandingPosition + vect(0, 2, 0), supplyDropLandingPosition + vect(0, 0, 0), getAllPlayers(), getAllPlayers(), false)
         wait(0.25)
@@ -87,14 +89,16 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         playEffect(getPlayers(Team.1), DynamicEffect.GOOD_EXPLOSION, Color.AQUA, supplyDropPosition, 0.5)
         playEffect(getPlayers(Team.1), DynamicEffect.BUFF_EXPLOSION_SOUND, Color.AQUA, supplyDropPosition, 50)
         #Power ups per supply drop
-        # tmp0: item counter, to append the configured number of random power-up IDs.
-        for tmp0 in range(supplyDropPowerUpCount):
+        # supplyDropGeneratedItemIndex: item counter, to append the configured number of random power-up IDs.
+        #!define supplyDropGeneratedItemIndex tmp0
+        for supplyDropGeneratedItemIndex in range(supplyDropPowerUpCount):
             #Range of power ups
             supplyPowerUpIdList.append(random.randint(1, 13))
         #Spacing of power ups
-        # tmp0: item angle offset in degrees, to spread the opened supply drop's items toward the player.
-        for tmp0 in range(-60, 61, 120 / (supplyDropPowerUpCount - 1)):
-            supplyPowerUpPositionList.append(supplyDropLandingPosition + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(supplyDropLandingPosition, eventPlayer.getPosition())) + tmp0, 0)) * 2))
+        # supplyDropItemAngleOffset: item angle offset in degrees, to spread the opened supply drop's items toward the player.
+        #!define supplyDropItemAngleOffset tmp0
+        for supplyDropItemAngleOffset in range(-60, 61, 120 / (supplyDropPowerUpCount - 1)):
+            supplyPowerUpPositionList.append(supplyDropLandingPosition + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(supplyDropLandingPosition, eventPlayer.getPosition())) + supplyDropItemAngleOffset, 0)) * 2))
     elif len(supplyPowerUpPositionList) > 0 and ((len(supplyPowerUpPositionList.filter(lambda x: distance(x, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), x)) < 0.5 and distance(eventPlayer.getPosition(), x) <= 6))) > 0):
         #Power up effect position
         eventPlayer.powerUpTradeDataList[0] = (sorted(supplyPowerUpPositionList.filter(lambda x: distance(x, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), x)) < 0.5 and distance(eventPlayer.getPosition(), x) <= 6), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x))))[0]
@@ -148,10 +152,11 @@ def playerForceField():
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.powerUpForceFieldPosition, 50)
     #Force field duration
     for eventPlayer.powerUpForceFieldTimeRemaining in range(10, 0, -0.032):
-        # tmp0: zombie index, to apply the force-field impulse to each nearby living zombie.
-        for tmp0 in range(getNumberOfLivingPlayers(Team.2)):
-            if distance(getLivingPlayers(Team.2)[tmp0], eventPlayer.powerUpForceFieldPosition) <= 7.5:
-                getLivingPlayers(Team.2)[tmp0].applyImpulse(directionTowards(eventPlayer.powerUpForceFieldPosition, getLivingPlayers(Team.2)[tmp0].getPosition()), 6, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+        # forceFieldZombieIndex: zombie index, to apply the force-field impulse to each nearby living zombie.
+        #!define forceFieldZombieIndex tmp0
+        for forceFieldZombieIndex in range(getNumberOfLivingPlayers(Team.2)):
+            if distance(getLivingPlayers(Team.2)[forceFieldZombieIndex], eventPlayer.powerUpForceFieldPosition) <= 7.5:
+                getLivingPlayers(Team.2)[forceFieldZombieIndex].applyImpulse(directionTowards(eventPlayer.powerUpForceFieldPosition, getLivingPlayers(Team.2)[forceFieldZombieIndex].getPosition()), 6, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
         wait(0.032)
     destroyEffect(eventPlayer.powerUpEntityIdList[10])
     destroyHudText(eventPlayer.powerUpEntityIdList[11])
@@ -203,19 +208,22 @@ def airStrike():
     #Count up to max radius. Number of explosions = Max radius / step size
     for eventPlayer.powerUpAirStrikeIndex in range(50):
         #Random position in ring
-        # tmp0: candidate explosion position above the strike area, to raycast onto the ground.
-        tmp0 = eventPlayer.powerUpAirStrikePosition + vect(0, 5, 0) + directionFromAngles(random.uniform(0, 360), 0) * random.uniform(0, 10)
+        # airStrikeRayStartPosition: candidate explosion position above the strike area, to raycast onto the ground.
+        #!define airStrikeRayStartPosition tmp0
+        airStrikeRayStartPosition = eventPlayer.powerUpAirStrikePosition + vect(0, 5, 0) + directionFromAngles(random.uniform(0, 360), 0) * random.uniform(0, 10)
         #Ray Cast downwards
-        # tmp0: ground impact position, shared by this explosion's effects and damage-radius check.
-        tmp0 = raycastHitPosition(tmp0, tmp0 + vect(0, -25, 0), null, getAllPlayers(), false)
-        playEffect(getAllPlayers(), DynamicEffect.BAD_PICKUP_EFFECT, Color.ORANGE, tmp0, 2.5)
-        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, tmp0, 5)
-        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, tmp0, 100)
-        playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, Color.ORANGE, tmp0, 100)
-        # tmp1: zombies inside this explosion's radius, to damage them and set their respawn timers.
-        tmp1 = getPlayers(Team.2).filter(lambda player: distance(player.getPosition(), tmp0) < 5)
-        damage(tmp1, eventPlayer, 150)
-        tmp1.botRespawnDelay = 10
+        # airStrikeImpactPosition: ground impact position, shared by this explosion's effects and damage-radius check.
+        #!define airStrikeImpactPosition tmp0
+        airStrikeImpactPosition = raycastHitPosition(airStrikeRayStartPosition, airStrikeRayStartPosition + vect(0, -25, 0), null, getAllPlayers(), false)
+        playEffect(getAllPlayers(), DynamicEffect.BAD_PICKUP_EFFECT, Color.ORANGE, airStrikeImpactPosition, 2.5)
+        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, airStrikeImpactPosition, 5)
+        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, airStrikeImpactPosition, 100)
+        playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, Color.ORANGE, airStrikeImpactPosition, 100)
+        # airStrikeAffectedZombieList: zombies inside this explosion's radius, to damage them and set their respawn timers.
+        #!define airStrikeAffectedZombieList tmp1
+        airStrikeAffectedZombieList = getPlayers(Team.2).filter(lambda player: distance(player.getPosition(), airStrikeImpactPosition) < 5)
+        damage(airStrikeAffectedZombieList, eventPlayer, 150)
+        airStrikeAffectedZombieList.botRespawnDelay = 10
         wait(0.125)
     destroyEffect(eventPlayer.powerUpEntityIdList[30])
     destroyEffect(eventPlayer.powerUpEntityIdList[31])
@@ -258,10 +266,11 @@ def sentryTurret():
     if not entityExists(eventPlayer.powerUpEntityIdList[50]):
         createEffect(getAllPlayers(), Effect.SPHERE, Color.ORANGE, eventPlayer.powerUpTurretPosition, 0.15, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.powerUpEntityIdList[50] = getLastCreatedEntity()
-        # tmp0: turret-leg index, to space three beams 120 degrees apart and store their effect IDs.
-        for tmp0 in range(3):
-            createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + directionFromAngles(evalOnce(tmp0) * 120, 60) * 1.5, Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.powerUpEntityIdList[51 + tmp0] = getLastCreatedEntity()
+        # turretLegVisualIndex: turret-leg index, to space three beams 120 degrees apart and store their effect IDs.
+        #!define turretLegVisualIndex tmp0
+        for turretLegVisualIndex in range(3):
+            createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + directionFromAngles(evalOnce(turretLegVisualIndex) * 120, 60) * 1.5, Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            eventPlayer.powerUpEntityIdList[51 + turretLegVisualIndex] = getLastCreatedEntity()
         createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + (eventPlayer.powerUpTurretDirection * 0.5 if len(getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.powerUpTurretPosition, player) and not player.botIsTeleporting)) else eventPlayer.getFacingDirection() * 0.5), Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.powerUpEntityIdList[54] = getLastCreatedEntity()
         hudHeader(eventPlayer, "Sentry Turret: {0}s".format(ceil(eventPlayer.powerUpTurretTimeRemaining)), HudPosition.RIGHT, 0.2, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING)
@@ -272,16 +281,18 @@ def sentryTurret():
     for eventPlayer.powerUpTurretTimeRemaining in range(30, 0, -0.125):
         if (len(getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.powerUpTurretPosition, player) and not player.botIsTeleporting))) > 0:
             eventPlayer.powerUpTurretDirection = directionTowards(eventPlayer.powerUpTurretPosition, sorted(getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.powerUpTurretPosition, player)), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition())))[0].getPosition() + vect(0, 1, 0))
-            # tmp0: turret shot's impact position with random spread, to place its explosion and damage ray.
-            tmp0 = raycastHitPosition(eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + ((directionFromAngles(random.uniform(-1, 1) + horizontalAngleOfDirection(eventPlayer.powerUpTurretDirection), random.uniform(-1, 1) + verticalAngleOfDirection(eventPlayer.powerUpTurretDirection))) * 100), getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())), getPlayers(eventPlayer.getTeam()), true)
+            # turretShotImpactPosition: turret shot's impact position with random spread, to place its explosion and damage ray.
+            #!define turretShotImpactPosition tmp0
+            turretShotImpactPosition = raycastHitPosition(eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + ((directionFromAngles(random.uniform(-1, 1) + horizontalAngleOfDirection(eventPlayer.powerUpTurretDirection), random.uniform(-1, 1) + verticalAngleOfDirection(eventPlayer.powerUpTurretDirection))) * 100), getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())), getPlayers(eventPlayer.getTeam()), true)
             playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, eventPlayer.powerUpTurretPosition + eventPlayer.powerUpTurretDirection * 0.5, 25)
             playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer.powerUpTurretPosition + eventPlayer.powerUpTurretDirection * 0.5, 0.1)
-            playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, tmp0, 0.1)
-            damage(raycastHitPlayer(eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + directionTowards(eventPlayer.powerUpTurretPosition, tmp0) * 100, getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())), getPlayers(eventPlayer.getTeam()), true), eventPlayer, 20)
+            playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, turretShotImpactPosition, 0.1)
+            damage(raycastHitPlayer(eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + directionTowards(eventPlayer.powerUpTurretPosition, turretShotImpactPosition) * 100, getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())), getPlayers(eventPlayer.getTeam()), true), eventPlayer, 20)
         wait(0.125)
-    # tmp0: turret-effect slot 50-54, to destroy the sphere, legs and barrel when the turret expires.
-    for tmp0 in range(50, 55):
-        destroyEffect(eventPlayer.powerUpEntityIdList[tmp0])
+    # turretCleanupEffectIndex: turret-effect slot 50-54, to destroy the sphere, legs and barrel when the turret expires.
+    #!define turretCleanupEffectIndex tmp0
+    for turretCleanupEffectIndex in range(50, 55):
+        destroyEffect(eventPlayer.powerUpEntityIdList[turretCleanupEffectIndex])
     destroyHudText(eventPlayer.powerUpEntityIdList[55])
     eventPlayer.powerUpTurretPosition = 0
 
@@ -373,17 +384,20 @@ def bouncePad():
         if eventPlayer.powerUpBouncePadTimeRemaining % 0.25 == 0:
             playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.PURPLE, eventPlayer.powerUpBouncePadPosition + vect(0, 0.125, 0), 4)
         #Determine which players are on the bounce pad
-        # tmp0: grounded survivors on this pad, to apply the bounce and play feedback for this tick.
-        tmp0 = getLivingPlayers(Team.1).filter(lambda player: distance(eventPlayer.powerUpBouncePadPosition, player.getPosition()) < 2 and player.isOnGround())
-        if len(tmp0) > 0:
+        # bouncePadSurvivorList: grounded survivors on this pad, to apply the bounce and play feedback for this tick.
+        #!define bouncePadSurvivorList tmp0
+        bouncePadSurvivorList = getLivingPlayers(Team.1).filter(lambda player: distance(eventPlayer.powerUpBouncePadPosition, player.getPosition()) < 2 and player.isOnGround())
+        if len(bouncePadSurvivorList) > 0:
             #For each bouncer
-            # tmp1: index into the survivor list in tmp0, to process every player on this pad.
-            for tmp1 in range(len(tmp0)):
+            # bouncePadSurvivorIndex: index into the survivor list in bouncePadSurvivorList, to process every player on this pad.
+            #!define bouncePadSurvivorIndex tmp1
+            for bouncePadSurvivorIndex in range(len(bouncePadSurvivorList)):
                 #Current bouncer
-                # tmp2: current survivor from tmp0, to apply this tick's upward impulse.
-                tmp2 = tmp0[tmp1]
-                tmp2.applyImpulse(vect(0, 1, 0), 22, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
-            playEffect(tmp0, DynamicEffect.RING_EXPLOSION_SOUND, Color.WHITE, eventPlayer.powerUpBouncePadPosition, 50)
+                # bouncePadSurvivor: current survivor from bouncePadSurvivorList, to apply this tick's upward impulse.
+                #!define bouncePadSurvivor tmp2
+                bouncePadSurvivor = bouncePadSurvivorList[bouncePadSurvivorIndex]
+                bouncePadSurvivor.applyImpulse(vect(0, 1, 0), 22, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+            playEffect(bouncePadSurvivorList, DynamicEffect.RING_EXPLOSION_SOUND, Color.WHITE, eventPlayer.powerUpBouncePadPosition, 50)
         wait(0.125)
     wait(0.25)
     destroyEffect(eventPlayer.powerUpEntityIdList[80])

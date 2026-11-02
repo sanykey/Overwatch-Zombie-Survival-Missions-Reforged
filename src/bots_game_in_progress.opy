@@ -125,9 +125,10 @@ rule "BOT DIES":
         eventPlayer.forceButtonPress(Button.ULTIMATE)
         return
     if eventPlayer in showdownContestingZombieList:
-        # tmp0: random kill-bonus roll, to decide whether this zombie awards objective progress.
-        tmp0 = random.randint(150, eventPlayer.botBaseHealth)
-        if tmp0 > 175 or difficultySetting <= 3:
+        # botKillBonusRoll: random kill-bonus roll, to decide whether this zombie awards objective progress.
+        #!define botKillBonusRoll tmp0
+        botKillBonusRoll = random.randint(150, eventPlayer.botBaseHealth)
+        if botKillBonusRoll > 175 or difficultySetting <= 3:
             showdownCapturePercent += 10 if eventPlayer.botBaseHealth > 500 else eventPlayer.botBaseHealth * (0.04 if difficultySetting <= 2 else 0.035)
             smallMessage(getAllPlayers(), " {0}  Kill Bonus".format(iconString(Icon.PLUS)))
             #Miniboss kill bonus
@@ -454,14 +455,15 @@ def teleportBots():
             eventPlayer.botTeleportPosition = 0
             #Teleport with max distance constraint no view angle constraint
             while eventPlayer.botTeleportPosition == 0 or playerTargetList.any(lambda x: distance(eventPlayer.botTeleportPosition, x.getPosition()) < 15) or playerTargetList.all(lambda x: distance(eventPlayer.botTeleportPosition, x.getPosition()) > BOT_MAX_TELEPORT_RANGE):
-                # tmp0: saved spawn points within teleport range, to choose a nearby destination.
-                tmp0 = botSpawnPointList.filter(lambda x: distance(x, eventPlayer.botTeleportCenter) < BOT_MAX_TELEPORT_RANGE)
+                # teleportCandidateSpawnPointList: saved spawn points within teleport range, to choose a nearby destination.
+                #!define teleportCandidateSpawnPointList tmp0
+                teleportCandidateSpawnPointList = botSpawnPointList.filter(lambda x: distance(x, eventPlayer.botTeleportCenter) < BOT_MAX_TELEPORT_RANGE)
                 #Filter out spawn points on cooldown
-                # tmp0: nearby spawn points whose cooldown permits use, to choose a ready destination.
-                tmp0 = tmp0.filter(lambda x: botSpawnPointTimerList[botSpawnPointList.index(x)] < 15)
+                # teleportCandidateSpawnPointList: nearby spawn points whose cooldown permits use, to choose a ready destination.
+                teleportCandidateSpawnPointList = teleportCandidateSpawnPointList.filter(lambda x: botSpawnPointTimerList[botSpawnPointList.index(x)] < 15)
                 #Bots utilize saved spawn points
-                if len(botSpawnPointList) > 0 and len(tmp0) > 0:
-                    eventPlayer.botTeleportPosition = random.choice(tmp0)
+                if len(botSpawnPointList) > 0 and len(teleportCandidateSpawnPointList) > 0:
+                    eventPlayer.botTeleportPosition = random.choice(teleportCandidateSpawnPointList)
                     botSpawnPointTimerList[botSpawnPointList.index(eventPlayer.botTeleportPosition)] += 5
                     break
                 else:
@@ -488,14 +490,15 @@ def locateAveragePlayerLocation():
     
     eventPlayer.botTeleportCenter = vect(0, 0, 0)
     if len(objectivePlayerList) == 0 and playerTargetList.any(lambda x: x.getThrottle() != vect(0, 0, 0)):
-        # tmp0: moving-player index, then their count after the loop, to average their positions.
-        for tmp0 in range(len(playerTargetList.filter(lambda x: x.getThrottle() != vect(0, 0, 0)))):
-            eventPlayer.botTeleportCenter += ((playerTargetList.filter(lambda x: x.getThrottle() != vect(0, 0, 0)))[tmp0]).getPosition()
+        # averageTargetPositionIndex: moving-player index, then their count after the loop, to average their positions.
+        #!define averageTargetPositionIndex tmp0
+        for averageTargetPositionIndex in range(len(playerTargetList.filter(lambda x: x.getThrottle() != vect(0, 0, 0)))):
+            eventPlayer.botTeleportCenter += ((playerTargetList.filter(lambda x: x.getThrottle() != vect(0, 0, 0)))[averageTargetPositionIndex]).getPosition()
     else:
-        # tmp0: player index, then the player count after the loop, to average all target positions.
-        for tmp0 in range(len(playerTargetList)):
-            eventPlayer.botTeleportCenter += playerTargetList[tmp0].getPosition()
-    eventPlayer.botTeleportCenter /= tmp0
+        # averageTargetPositionIndex: player index, then the player count after the loop, to average all target positions.
+        for averageTargetPositionIndex in range(len(playerTargetList)):
+            eventPlayer.botTeleportCenter += playerTargetList[averageTargetPositionIndex].getPosition()
+    eventPlayer.botTeleportCenter /= averageTargetPositionIndex
 
 
 def successfulTeleportStatus():

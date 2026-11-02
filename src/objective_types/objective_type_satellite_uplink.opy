@@ -9,9 +9,10 @@ macro fireSatelliteMacro():
     smallMessage(getAllPlayers(), "Connection established!")
     satelliteLaserPosition = objectivePositionList[0]
     #Terminal connection beams
-    # tmp0: terminal index, to connect each terminal to the satellite laser with a beam.
-    for tmp0 in range(len(satelliteTerminalPositionList)):
-        createBeam(getAllPlayers(), Beam.BAD, satelliteLaserPosition + vect(0, 700, 0), satelliteTerminalPositionList[evalOnce(tmp0)] + vect(0, 0, 0), objectiveColor, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    # satelliteFiringTerminalIndex: terminal index, to connect each terminal to the satellite laser with a beam.
+    #!define satelliteFiringTerminalIndex tmp0
+    for satelliteFiringTerminalIndex in range(len(satelliteTerminalPositionList)):
+        createBeam(getAllPlayers(), Beam.BAD, satelliteLaserPosition + vect(0, 700, 0), satelliteTerminalPositionList[evalOnce(satelliteFiringTerminalIndex)] + vect(0, 0, 0), objectiveColor, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         objectiveEntityIdList.append(getLastCreatedEntity())
     wait(1)
     smallMessage(getAllPlayers(), "Preparing to fire...")
@@ -30,9 +31,10 @@ macro fireSatelliteMacro():
     createBeam(getAllPlayers(), Beam.BAD, satelliteLaserPosition + vect(0, 700, 0) + directionFromAngles(getTotalTimeElapsed() * 360, 0) * -1, satelliteLaserPosition + vect(0, -700, 0) + directionFromAngles(getTotalTimeElapsed() * 360, 0) * -1, Color.SKY_BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     objectiveEntityIdList.append(getLastCreatedEntity())
     #Sattellite firing light shafts
-    # tmp0: laser light-shaft layer index, to place six shafts at heights -35 through 65.
-    for tmp0 in range(-1, 5):
-        createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.AQUA, satelliteLaserPosition + (vect(0, -15 + 20 * evalOnce(tmp0), 0)), 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    # satelliteLaserShaftLayerIndex: laser light-shaft layer index, to place six shafts at heights -35 through 65.
+    #!define satelliteLaserShaftLayerIndex tmp0
+    for satelliteLaserShaftLayerIndex in range(-1, 5):
+        createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.AQUA, satelliteLaserPosition + (vect(0, -15 + 20 * evalOnce(satelliteLaserShaftLayerIndex), 0)), 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         objectiveEntityIdList.append(getLastCreatedEntity())
     wait(5)
     smallMessage(getAllPlayers(), "Firing sequence commenced")
@@ -46,14 +48,15 @@ macro fireSatelliteMacro():
             #Chase closest living zombie
             chaseAtRate(satelliteLaserPosition, satelliteLaserTarget.getPosition(), 7.5 if getLivingPlayers(Team.2).any(lambda player: not player.botIsTeleporting) else 0)
         wait(0.5)
-        # tmp0: laser impact position on the ground, shared by explosion visuals and both damage checks.
-        tmp0 = raycastHitPosition(satelliteLaserPosition + vect(0, 2, 0), satelliteLaserPosition + vect(0, -100, 0), getAllPlayers(), getAllPlayers().filter(lambda player: player.isOnGround()), false) + vect(0, 0.1, 0)
-        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.SKY_BLUE, tmp0, 5)
-        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.SKY_BLUE, tmp0, 200)
+        # satelliteLaserImpactPosition: laser impact position on the ground, shared by explosion visuals and both damage checks.
+        #!define satelliteLaserImpactPosition tmp0
+        satelliteLaserImpactPosition = raycastHitPosition(satelliteLaserPosition + vect(0, 2, 0), satelliteLaserPosition + vect(0, -100, 0), getAllPlayers(), getAllPlayers().filter(lambda player: player.isOnGround()), false) + vect(0, 0.1, 0)
+        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.SKY_BLUE, satelliteLaserImpactPosition, 5)
+        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.SKY_BLUE, satelliteLaserImpactPosition, 200)
         #Damage Zombies
-        damage(getPlayers(Team.2).filter(lambda player: distance(player.getPosition(), tmp0) < 5), null, 500)
+        damage(getPlayers(Team.2).filter(lambda player: distance(player.getPosition(), satelliteLaserImpactPosition) < 5), null, 500)
         #Damage Players
-        damage(getPlayers(Team.1).filter(lambda player: distance(player.getPosition(), tmp0) < 5), null, 70)
+        damage(getPlayers(Team.1).filter(lambda player: distance(player.getPosition(), satelliteLaserImpactPosition) < 5), null, 70)
         if satelliteFiringStepsRemaining > 5:
             #Give all bots quick respawn time
             getPlayers(Team.2).botRespawnDelay = 1
@@ -71,19 +74,21 @@ rule "SET UP TERMINAL POSITIONS":
     @Condition (len(satelliteTerminalProgressList) != len(satelliteTerminalPositionList) or satelliteTerminalPositionList.any(lambda x: x.x == null)) == true
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
-    # tmp0: grid points 10-50m from the objective, to choose a terminal location with sufficient spacing.
-    tmp0 = mapGridList.filter(lambda x: distance(x, objectivePositionList[0]) > 10 and distance(x, objectivePositionList[0]) < 50)
+    # satelliteTerminalCandidatePositionList: grid points 10-50m from the objective, to choose a terminal location with sufficient spacing.
+    #!define satelliteTerminalCandidatePositionList tmp0
+    satelliteTerminalCandidatePositionList = mapGridList.filter(lambda x: distance(x, objectivePositionList[0]) > 10 and distance(x, objectivePositionList[0]) < 50)
     if len(satelliteTerminalPositionList) == 0:
-        satelliteTerminalPositionList.append(random.choice(tmp0))
+        satelliteTerminalPositionList.append(random.choice(satelliteTerminalCandidatePositionList))
     else:
-        # tmp1: existing terminal index, to exclude nearby candidate locations from tmp0.
-        for tmp1 in range(len(satelliteTerminalPositionList)):
+        # satelliteSpacingTerminalIndex: existing terminal index, to exclude nearby candidate locations from satelliteTerminalCandidatePositionList.
+        #!define satelliteSpacingTerminalIndex tmp1
+        for satelliteSpacingTerminalIndex in range(len(satelliteTerminalPositionList)):
             #Terminals must be at least x meters apart
-            # tmp0: remaining candidate positions after excluding points too close to terminal tmp1.
-            tmp0.remove(tmp0.filter(lambda x: distance(x, satelliteTerminalPositionList[tmp1]) < satelliteMinTerminalSpacing))
-        if len(tmp0) > 0:
+            # satelliteTerminalCandidatePositionList: remaining candidate positions after excluding points too close to terminal satelliteSpacingTerminalIndex.
+            satelliteTerminalCandidatePositionList.remove(satelliteTerminalCandidatePositionList.filter(lambda x: distance(x, satelliteTerminalPositionList[satelliteSpacingTerminalIndex]) < satelliteMinTerminalSpacing))
+        if len(satelliteTerminalCandidatePositionList) > 0:
             #Successfully find new terminal location
-            satelliteTerminalPositionList.append(random.choice(tmp0))
+            satelliteTerminalPositionList.append(random.choice(satelliteTerminalCandidatePositionList))
         else:
             #Could not find new terminal location. Remove previous
             del satelliteTerminalPositionList[len(satelliteTerminalPositionList) - 1]
@@ -119,21 +124,22 @@ rule "PLAYERS REPAIR TERMINALS":
     @Condition len(objectivePlayerList) > 0
     
     #Check each terminal
-    # tmp0: terminal index, to update its repair progress and announce its completion.
-    for tmp0 in range(len(satelliteTerminalPositionList)):
-        if satelliteTerminalProgressList[tmp0] < 100:
-            if objectivePlayerList.any(lambda x: distance(satelliteTerminalPositionList[tmp0], x.getPosition()) < objectiveRad):
-                if len(objectivePlayerList.filter(lambda x: distance(satelliteTerminalPositionList[tmp0], x.getPosition()) < objectiveRad)) > 1:
+    # satelliteRepairTerminalIndex: terminal index, to update its repair progress and announce its completion.
+    #!define satelliteRepairTerminalIndex tmp0
+    for satelliteRepairTerminalIndex in range(len(satelliteTerminalPositionList)):
+        if satelliteTerminalProgressList[satelliteRepairTerminalIndex] < 100:
+            if objectivePlayerList.any(lambda x: distance(satelliteTerminalPositionList[satelliteRepairTerminalIndex], x.getPosition()) < objectiveRad):
+                if len(objectivePlayerList.filter(lambda x: distance(satelliteTerminalPositionList[satelliteRepairTerminalIndex], x.getPosition()) < objectiveRad)) > 1:
                     #2 or more players on the terminal
-                    satelliteTerminalProgressList[tmp0] += 0.4
+                    satelliteTerminalProgressList[satelliteRepairTerminalIndex] += 0.4
                 #Base Repair Speed
-                satelliteTerminalProgressList[tmp0] += 1.1
+                satelliteTerminalProgressList[satelliteRepairTerminalIndex] += 1.1
                 #If terminal is repaired
-                if satelliteTerminalProgressList[tmp0] >= 100:
-                    satelliteTerminalProgressList[tmp0] = 100
+                if satelliteTerminalProgressList[satelliteRepairTerminalIndex] >= 100:
+                    satelliteTerminalProgressList[satelliteRepairTerminalIndex] = 100
                     bigMessage(getAllPlayers(), "A terminal is back online!")
-                    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, objectiveColor, satelliteTerminalPositionList[tmp0], objectiveRad * 2)
-                    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, objectiveColor, satelliteTerminalPositionList[tmp0], 100)
+                    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, objectiveColor, satelliteTerminalPositionList[satelliteRepairTerminalIndex], objectiveRad * 2)
+                    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, objectiveColor, satelliteTerminalPositionList[satelliteRepairTerminalIndex], 100)
     #All terminals repaired
     if satelliteTerminalProgressList.all(lambda x: x >= 100):
         wait(1)

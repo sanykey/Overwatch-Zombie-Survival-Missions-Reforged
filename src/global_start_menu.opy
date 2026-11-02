@@ -41,9 +41,10 @@ rule "GLOBAL MENU INITIALIZATION":
             startPos = raycastHitPosition(startCamPos - offsetUpThreeQuartersConst, startPos + offsetUpThreeQuartersConst, null, null, false) - offsetUpThreeQuartersConst
             startCamPos = startPos + vect(0, 1.5, 0) + directionFromAngles(horizontalAngleOfDirection(directionTowards(startPos, startCamPos)), 0) * START_CAM_DISTANCE
             #Line of Sight Checks for each player position
-            # tmp0: horizontal angle offset in degrees, to test visibility of each menu position.
-            for tmp0 in range(-26, 27, 2):
-                if not isInLoS(startCamPos, startCamPos + vect(0, -0.75, 0) + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + tmp0, 0)) * START_CAM_DISTANCE)) or not isInLoS(startCamPos + vect(0, -0.75, 0) + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + tmp0, 0)) * START_CAM_DISTANCE), startCamPos):
+            # menuVisibilityAngleOffset: horizontal angle offset in degrees, to test visibility of each menu position.
+            #!define menuVisibilityAngleOffset tmp0
+            for menuVisibilityAngleOffset in range(-26, 27, 2):
+                if not isInLoS(startCamPos, startCamPos + vect(0, -0.75, 0) + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + menuVisibilityAngleOffset, 0)) * START_CAM_DISTANCE)) or not isInLoS(startCamPos + vect(0, -0.75, 0) + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + menuVisibilityAngleOffset, 0)) * START_CAM_DISTANCE), startCamPos):
                     startPos = null
                     break
             wait()
@@ -213,13 +214,14 @@ rule "SPECIAL EFFECT CONTROLS":
     @Condition isPregameSetup == true
     
     if isPregameSetup:
-        # tmp0: random message choice 1-3, to select the special-effect text for this flash.
-        tmp0 = random.randint(1, 3)
-        if tmp0 == 1:
+        # menuGlitchMessageChoice: random message choice 1-3, to select the special-effect text for this flash.
+        #!define menuGlitchMessageChoice tmp0
+        menuGlitchMessageChoice = random.randint(1, 3)
+        if menuGlitchMessageChoice == 1:
             pregameGlitchText = "alglChene oteV: KaMeNrldEr"
-        elif tmp0 == 2:
+        elif menuGlitchMessageChoice == 2:
             pregameGlitchText = "You won't win"
-        elif tmp0 == 3:
+        elif menuGlitchMessageChoice == 3:
             pregameGlitchText = "Don't even try it"
     isPregameGlitchActive = true
     wait(random.uniform(0.063, 0.325), Wait.ABORT_WHEN_FALSE)
@@ -237,7 +239,10 @@ rule "END VOTING":
     pregameCountdown = VOTING_END_TIME
     startRule(determineZombieMode)
     #Waits until votes have been counted
-    waitUntil(not isVoting, 99999)
+    waitUntil(not isVoting or not isPregameSetup, 99999)
+    # Votes share runtime trade/path storage; a resumed menu writer must not touch it.
+    if not isPregameSetup:
+        return
     getPlayers(Team.1).pregameVoteList[PlayerMenuStatusField.CHALLENGE_VOTE] = challengeSetting
     getPlayers(Team.1).pregameVoteList[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] = zombieSetting
     getPlayers(Team.1).pregameVoteList[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] = objectiveTypeSetting
@@ -265,20 +270,21 @@ def determineZombieMode():
     @Name "determineZombieMode"
     
     zombieSetting = 0
-    # tmp0: zombie-mode vote index, to count active players voting for each enabled mode.
-    for tmp0 in range(1, len(zombieVoteList)):
-        if zombieVoteList[tmp0][1]:
-            zombieVoteList[tmp0] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameVoteList[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] == tmp0))
+    # zombieModeVoteIndex: zombie-mode vote index, to count active players voting for each enabled mode.
+    #!define zombieModeVoteIndex tmp0
+    for zombieModeVoteIndex in range(1, len(zombieVoteList)):
+        if zombieVoteList[zombieModeVoteIndex][1]:
+            zombieVoteList[zombieModeVoteIndex] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameVoteList[PlayerMenuStatusField.ZOMBIE_MODE_VOTE] == zombieModeVoteIndex))
         else:
-            zombieVoteList[tmp0] = -1
-    # tmp0: candidate zombie-mode index, to select the winner and resolve tied vote counts.
-    for tmp0 in range(1, len(zombieVoteList)):
-        if zombieVoteList[zombieSetting] < zombieVoteList[tmp0]:
-            zombieSetting = tmp0
-        elif zombieVoteList[zombieSetting] == zombieVoteList[tmp0]:
+            zombieVoteList[zombieModeVoteIndex] = -1
+    # zombieModeVoteIndex: candidate zombie-mode index, to select the winner and resolve tied vote counts.
+    for zombieModeVoteIndex in range(1, len(zombieVoteList)):
+        if zombieVoteList[zombieSetting] < zombieVoteList[zombieModeVoteIndex]:
+            zombieSetting = zombieModeVoteIndex
+        elif zombieVoteList[zombieSetting] == zombieVoteList[zombieModeVoteIndex]:
             #Randomly pick mode to break tie
             if zombieSetting != 0 and random.randint(0, 1) == 0:
-                zombieSetting = tmp0
+                zombieSetting = zombieModeVoteIndex
     #If all players choose no preference, randomize
     if zombieSetting == 0:
         zombieSetting = 1
@@ -305,8 +311,9 @@ def setZombieMode():
     elif zombieSetting == 3:
         #Bot respawn probablities
         botSpawnRateList = []
-        # tmp0: hero-entry counter, to append 19 equal spawn weights for this zombie mode.
-        for tmp0 in range(19):
+        # equalSpawnWeightHeroIndex: hero-entry counter, to append 19 equal spawn weights for this zombie mode.
+        #!define equalSpawnWeightHeroIndex tmp0
+        for equalSpawnWeightHeroIndex in range(19):
             botSpawnRateList.append(5.263)
     #Zombie Shuffle
     elif zombieSetting == 4:
@@ -326,29 +333,32 @@ def determineChallenge():
     @Name "determineChallenge"
     
     challengeSetting = 0
-    # tmp0: challenge vote index, to count active players voting for each enabled difficulty.
-    for tmp0 in range(1, len(challengeVoteList)):
-        if challengeVoteList[tmp0][1]:
-            challengeVoteList[tmp0] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameVoteList[PlayerMenuStatusField.CHALLENGE_VOTE] == tmp0))
+    # challengeVoteIndex: challenge vote index, to count active players voting for each enabled difficulty.
+    #!define challengeVoteIndex tmp0
+    for challengeVoteIndex in range(1, len(challengeVoteList)):
+        if challengeVoteList[challengeVoteIndex][1]:
+            challengeVoteList[challengeVoteIndex] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameVoteList[PlayerMenuStatusField.CHALLENGE_VOTE] == challengeVoteIndex))
         else:
-            challengeVoteList[tmp0] = -1
-    # tmp1: sum of difficulty levels weighted by votes, to calculate the average difficulty vote.
-    tmp1 = 0
-    # tmp0: difficulty index, to include each difficulty's weighted votes in tmp1.
-    for tmp0 in range(1, len(challengeVoteList)):
-        # tmp1: running weighted sum including this difficulty, for the average used to break ties.
-        tmp1 += challengeVoteList[tmp0] * tmp0
-    # tmp1: average difficulty vote, to choose the closer difficulty when vote counts tie.
-    tmp1 /= len(getPlayers(Team.1).filter(lambda player: player.pregameVoteList[PlayerMenuStatusField.CHALLENGE_VOTE] > 0))
-    # tmp0: candidate difficulty index, to choose the winner using votes and distance from tmp1.
-    for tmp0 in range(1, len(challengeVoteList)):
+            challengeVoteList[challengeVoteIndex] = -1
+    # challengeWeightedVoteSum: sum of difficulty levels weighted by votes, to calculate the average difficulty vote.
+    #!define challengeWeightedVoteSum tmp1
+    challengeWeightedVoteSum = 0
+    # challengeVoteIndex: difficulty index, to include each difficulty's weighted votes in challengeWeightedVoteSum.
+    for challengeVoteIndex in range(1, len(challengeVoteList)):
+        # challengeWeightedVoteSum: running weighted sum including this difficulty, for the average used to break ties.
+        challengeWeightedVoteSum += challengeVoteList[challengeVoteIndex] * challengeVoteIndex
+    # challengeAverageVote: average difficulty vote, to choose the closer difficulty when vote counts tie.
+    #!define challengeAverageVote tmp1
+    challengeAverageVote /= len(getPlayers(Team.1).filter(lambda player: player.pregameVoteList[PlayerMenuStatusField.CHALLENGE_VOTE] > 0))
+    # challengeVoteIndex: candidate difficulty index, to choose the winner using votes and distance from challengeAverageVote.
+    for challengeVoteIndex in range(1, len(challengeVoteList)):
         #If difficulty being compared has more votes than current difficulty
-        if challengeVoteList[challengeSetting] < challengeVoteList[tmp0]:
-            challengeSetting = tmp0
-        elif challengeVoteList[tmp0] > 0 and challengeVoteList[challengeSetting] == challengeVoteList[tmp0]:
+        if challengeVoteList[challengeSetting] < challengeVoteList[challengeVoteIndex]:
+            challengeSetting = challengeVoteIndex
+        elif challengeVoteList[challengeVoteIndex] > 0 and challengeVoteList[challengeSetting] == challengeVoteList[challengeVoteIndex]:
             #Pick difficulty closest to the average difficulty vote
-            if abs(challengeSetting - tmp1) > abs(tmp0 - tmp1):
-                challengeSetting = tmp0
+            if abs(challengeSetting - challengeAverageVote) > abs(challengeVoteIndex - challengeAverageVote):
+                challengeSetting = challengeVoteIndex
     #Default difficulty
     if challengeSetting == 0:
         challengeSetting = 1
@@ -359,20 +369,21 @@ def determineObjectiveType():
     @Name "determineObjectiveType"
     
     objectiveTypeSetting = ObjectiveType.NO_PREFERENCE
-    # tmp0: objective-type vote index, to count active players voting for each enabled objective type.
-    for tmp0 in range(ObjectiveType.SHOWDOWN, len(objectiveTypeVoteList)):
-        if objectiveTypeVoteList[tmp0][1]:
-            objectiveTypeVoteList[tmp0] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameVoteList[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == tmp0))
+    # objectiveTypeVoteIndex: objective-type vote index, to count active players voting for each enabled objective type.
+    #!define objectiveTypeVoteIndex tmp0
+    for objectiveTypeVoteIndex in range(ObjectiveType.SHOWDOWN, len(objectiveTypeVoteList)):
+        if objectiveTypeVoteList[objectiveTypeVoteIndex][1]:
+            objectiveTypeVoteList[objectiveTypeVoteIndex] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameVoteList[PlayerMenuStatusField.OBJECTIVE_TYPE_VOTE] == objectiveTypeVoteIndex))
         else:
-            objectiveTypeVoteList[tmp0] = -1
-    # tmp0: candidate objective-type index, to select the winner and resolve tied vote counts.
-    for tmp0 in range(ObjectiveType.SHOWDOWN, len(objectiveTypeVoteList)):
-        if objectiveTypeVoteList[objectiveTypeSetting] < objectiveTypeVoteList[tmp0]:
-            objectiveTypeSetting = tmp0
-        elif objectiveTypeVoteList[objectiveTypeSetting] == objectiveTypeVoteList[tmp0]:
+            objectiveTypeVoteList[objectiveTypeVoteIndex] = -1
+    # objectiveTypeVoteIndex: candidate objective-type index, to select the winner and resolve tied vote counts.
+    for objectiveTypeVoteIndex in range(ObjectiveType.SHOWDOWN, len(objectiveTypeVoteList)):
+        if objectiveTypeVoteList[objectiveTypeSetting] < objectiveTypeVoteList[objectiveTypeVoteIndex]:
+            objectiveTypeSetting = objectiveTypeVoteIndex
+        elif objectiveTypeVoteList[objectiveTypeSetting] == objectiveTypeVoteList[objectiveTypeVoteIndex]:
             #Pick random objective type to break tie
             if objectiveTypeSetting != ObjectiveType.NO_PREFERENCE and random.randint(0, 1) == 0:
-                objectiveTypeSetting = tmp0
+                objectiveTypeSetting = objectiveTypeVoteIndex
     #If all players choose no preference, randomize
     if objectiveTypeSetting == ObjectiveType.NO_PREFERENCE:
         if objectiveTypeVoteList[ObjectiveType.MIXED_OBJECTIVES] != -1:

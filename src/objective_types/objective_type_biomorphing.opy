@@ -3,20 +3,23 @@
 
 
 macro biowasteOutputMacro():
-    # tmp0: next queued biowaste type, returned synchronously to assign to the holder kept in tmp1.
-    tmp0 = biomorphingQueuedTypeList[0]
+    # biowasteOutputType: next queued biowaste type, returned synchronously to assign to the selected holder.
+    #!define biowasteOutputType tmp0
+    biowasteOutputType = biomorphingQueuedTypeList[0]
     del biomorphingQueuedTypeList[0]
     if len(biomorphingQueuedTypeList) == 0:
         biomorphingQueuedTypeList = random.shuffle([0, 1, 2])
 
 
 macro biowasteAssignmentMacro():
-    # Synchronous inputs: tmp0 = type, tmp1 = position. No reevaluated arguments.
-    biomorphingResourceTypeList.append(tmp0)
-    biomorphingResourcePositionList.append(tmp1)
-    createEffect(getAllPlayers(), Effect.ORB, biomorphingResourceColorList[tmp0], tmp1, 1, EffectReeval.NONE)
+    # Synchronous inputs: biowasteOrbType = type, biowasteOrbPosition = position. No reevaluated arguments.
+    #!define biowasteOrbType tmp0
+    biomorphingResourceTypeList.append(biowasteOrbType)
+    #!define biowasteOrbPosition tmp1
+    biomorphingResourcePositionList.append(biowasteOrbPosition)
+    createEffect(getAllPlayers(), Effect.ORB, biomorphingResourceColorList[biowasteOrbType], biowasteOrbPosition, 1, EffectReeval.NONE)
     biomorphingResourceEffectIdList.append(getLastCreatedEntity())
-    createInWorldText(getAllPlayers(), biomorphingResourceNameList[tmp0], tmp1 + offsetUpThreeQuartersConst, 1, Clip.NONE, WorldTextReeval.NONE)
+    createInWorldText(getAllPlayers(), biomorphingResourceNameList[biowasteOrbType], biowasteOrbPosition + offsetUpThreeQuartersConst, 1, Clip.NONE, WorldTextReeval.NONE)
     biomorphingResourceTextIdList.append(getLastCreatedText())
 
 
@@ -32,6 +35,9 @@ rule "BIOMORPHING GOAL START":
         destroyEffect(biomorphingResourceEffectIdList[biomorphingCleanupIndex])
         destroyInWorldText(biomorphingResourceTextIdList[biomorphingCleanupIndex])
         wait()
+    # The resource-type slot belongs to the Rescue NPC after an objective transition.
+    if objectiveTypeList[0] != ObjectiveType.BIOMORPHING:
+        return
     biomorphingQueuedTypeList = random.shuffle([0, 1, 2])
     biomorphingDeferredTypeList = []
     biomorphingDeferredPositionList = []
@@ -49,6 +55,9 @@ rule "BIOMORPHING GOAL START":
         del biomorphingGoalQueueList[0]
         biomorphingGoalQueueList.append(3)
         wait(0.15)
+    # The resource-type slot belongs to the Rescue NPC after an objective transition.
+    if objectiveTypeList[0] != ObjectiveType.BIOMORPHING:
+        return
     if biomorphingGoalQueueList[0] == 0:
         biomorphingGoalText = "Deposit a head for extra points"
         biomorphingGoalColor = Color.BLUE
@@ -78,20 +87,25 @@ rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS":
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     if biomorphingCapturePercent < 100:
         waitUntil(isBiomorphingGoalPending == false, 99999)
-        # tmp0: index of a zombie not holding a full resource, to choose the next resource carrier.
-        tmp0 = getPlayers(Team.2).index((getPlayers(Team.2).filter(lambda player: player.biomorphingResourceAmount != BIOMORPHING_RESOURCE_AMOUNT))[0])
-        # tmp1: current zombie list, to resolve the carrier index in tmp0 to a player.
-        tmp1 = getPlayers(Team.2)
-        # tmp1: selected zombie, kept while biowasteOutputMacro replaces tmp0 with its resource type.
-        tmp1 = tmp1[tmp0]
-        tmp1.biomorphingResourceAmount = BIOMORPHING_RESOURCE_AMOUNT
+        # biowasteCarrierIndex: index of a zombie not holding a full resource, to choose the next resource carrier.
+        #!define biowasteCarrierIndex tmp0
+        biowasteCarrierIndex = getPlayers(Team.2).index((getPlayers(Team.2).filter(lambda player: player.biomorphingResourceAmount != BIOMORPHING_RESOURCE_AMOUNT))[0])
+        # biowasteCarrierCandidateList: current zombie list, to resolve the carrier index in biowasteCarrierIndex to a player.
+        #!define biowasteCarrierCandidateList tmp1
+        biowasteCarrierCandidateList = getPlayers(Team.2)
+        # biowasteCarrier: selected zombie, kept while biowasteOutputMacro replaces biowasteCarrierIndex with its resource type.
+        #!define biowasteCarrier tmp1
+        biowasteCarrier = biowasteCarrierCandidateList[biowasteCarrierIndex]
+        biowasteCarrier.biomorphingResourceAmount = BIOMORPHING_RESOURCE_AMOUNT
         biowasteOutputMacro()
-        tmp1.biomorphingResourceType = tmp0
+        #!define biowasteAssignedType tmp0
+        biowasteCarrier.biomorphingResourceType = biowasteAssignedType
     else:
-        # tmp0: reward-item index, to place four power-ups at 90-degree intervals around the objective.
-        for tmp0 in range(4):
+        # biomorphingRewardItemIndex: reward-item index, to place four power-ups at 90-degree intervals around the objective.
+        #!define biomorphingRewardItemIndex tmp0
+        for biomorphingRewardItemIndex in range(4):
             supplyPowerUpIdList.append(random.randint(1, 13))
-            supplyPowerUpPositionList.append(objectivePositionList[0] + directionFromAngles(90 * tmp0, 0))
+            supplyPowerUpPositionList.append(objectivePositionList[0] + directionFromAngles(90 * biomorphingRewardItemIndex, 0))
         isObjectiveComplete = true
     if ruleCondition:
         loop()
@@ -110,17 +124,19 @@ rule "BIOWASTE IS PICKED UP":
     @Condition (not eventPlayer.isDummy() or eventPlayer.getTeam() == Team.2) == true
     
     wait(0.1, Wait.ABORT_WHEN_FALSE)
-    # tmp0: nearest dropped biowaste position, to identify the resource being picked up.
-    tmp0 = sorted(biomorphingResourcePositionList, lambda x: distance(eventPlayer.getPosition(), x))[0]
-    # tmp1: resource index shared by position, type and visual arrays, to pick up and remove the same orb.
-    tmp1 = biomorphingResourcePositionList.index(tmp0)
-    eventPlayer.biomorphingResourceType = biomorphingResourceTypeList[tmp1]
-    destroyEffect(biomorphingResourceEffectIdList[tmp1])
-    destroyInWorldText(biomorphingResourceTextIdList[tmp1])
-    del biomorphingResourceTypeList[tmp1]
-    del biomorphingResourcePositionList[tmp1]
-    del biomorphingResourceEffectIdList[tmp1]
-    del biomorphingResourceTextIdList[tmp1]
+    # biowastePickupPosition: nearest dropped biowaste position, to identify the resource being picked up.
+    #!define biowastePickupPosition tmp0
+    biowastePickupPosition = sorted(biomorphingResourcePositionList, lambda x: distance(eventPlayer.getPosition(), x))[0]
+    # biowastePickupIndex: resource index shared by position, type and visual arrays, to pick up and remove the same orb.
+    #!define biowastePickupIndex tmp1
+    biowastePickupIndex = biomorphingResourcePositionList.index(biowastePickupPosition)
+    eventPlayer.biomorphingResourceType = biomorphingResourceTypeList[biowastePickupIndex]
+    destroyEffect(biomorphingResourceEffectIdList[biowastePickupIndex])
+    destroyInWorldText(biomorphingResourceTextIdList[biowastePickupIndex])
+    del biomorphingResourceTypeList[biowastePickupIndex]
+    del biomorphingResourcePositionList[biowastePickupIndex]
+    del biomorphingResourceEffectIdList[biowastePickupIndex]
+    del biomorphingResourceTextIdList[biowastePickupIndex]
     eventPlayer.biomorphingResourceAmount = BIOMORPHING_RESOURCE_AMOUNT
     smallMessage(eventPlayer, "  Go to the deposit area!")
     playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.WHITE, eventPlayer.getPosition(), 50)
@@ -141,18 +157,19 @@ rule "PLAYER DELIVERS RESOURCE VALUE":
     if not eventPlayer in objectivePlayerList:
         objectivePlayerList.append(eventPlayer)
     wait(0.125)
-    # tmp0: deposit-time divisor for ordinary biowaste, used to calculate this tick's progress.
-    tmp0 = 8.9
+    # biowasteDepositTimeDivisor: deposit-time divisor for ordinary biowaste, used to calculate this tick's progress.
+    #!define biowasteDepositTimeDivisor tmp0
+    biowasteDepositTimeDivisor = 8.9
     #Extra points if correct biowaste type
     if biomorphingGoalQueueList[0] == eventPlayer.biomorphingResourceType:
-        # tmp0: shorter deposit-time divisor for the requested resource, to award faster progress.
-        tmp0 = 2.9
+        # biowasteDepositTimeDivisor: shorter deposit-time divisor for the requested resource, to award faster progress.
+        biowasteDepositTimeDivisor = 2.9
     #Damage player if resource is blood, damage more if above health.
     damage(eventPlayer, eventPlayer, (50.33 if eventPlayer.getHealth() > 200 else 10.33) if biomorphingGoalQueueList[0] == 3 else 0)
     #(Amount per resource / dump time) x tick speed
     eventPlayer.biomorphingResourceAmount -= BIOMORPHING_RESOURCE_AMOUNT / 3 * 0.125
     #(Amount per resource / dump time) x tick speed, if resource is blood then this will go slower x the number of players
-    biomorphingCapturePercent += (BIOMORPHING_RESOURCE_AMOUNT / (getNumberOfPlayers(Team.1) * 4.167 if biomorphingGoalQueueList[0] == 3 else tmp0)) * 0.125
+    biomorphingCapturePercent += (BIOMORPHING_RESOURCE_AMOUNT / (getNumberOfPlayers(Team.1) * 4.167 if biomorphingGoalQueueList[0] == 3 else biowasteDepositTimeDivisor)) * 0.125
     if biomorphingCapturePercent >= biomorphingNextCheckpoint:
         del biomorphingGoalQueueList[0]
         biomorphingCapturePercent = biomorphingNextCheckpoint
@@ -183,10 +200,12 @@ rule "BIOWASTE MANAGEMENT":
     @Condition len(biomorphingDeferredTypeList) > 0
     
     while len(biomorphingDeferredTypeList) > 0:
-        # tmp0: first queued biowaste type, passed to biowasteAssignmentMacro to create the dropped orb.
-        tmp0 = biomorphingDeferredTypeList[0]
-        # tmp1: matching queued drop position, passed to biowasteAssignmentMacro to place the orb.
-        tmp1 = biomorphingDeferredPositionList[0]
+        # deferredBiowasteType: first queued biowaste type, passed to biowasteAssignmentMacro to create the dropped orb.
+        #!define deferredBiowasteType tmp0
+        deferredBiowasteType = biomorphingDeferredTypeList[0]
+        # deferredBiowastePosition: matching queued drop position, passed to biowasteAssignmentMacro to place the orb.
+        #!define deferredBiowastePosition tmp1
+        deferredBiowastePosition = biomorphingDeferredPositionList[0]
         biowasteAssignmentMacro()
         del biomorphingDeferredTypeList[0]
         del biomorphingDeferredPositionList[0]

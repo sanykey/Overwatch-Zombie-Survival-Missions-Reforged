@@ -1,0 +1,638 @@
+{
+  "date": "2026-11-02",
+  "baselineRef": "e83b831b2e182e0e6bc7fff6e0dad80946e556e8",
+  "before": {
+    "playerVariables": 107,
+    "globals": 99,
+    "elements": 27188
+  },
+  "after": {
+    "playerVariables": 74,
+    "globals": 99,
+    "elements": 27211
+  },
+  "savedPlayerSlots": 33,
+  "aliases": 130,
+  "compiledRulesCompared": 231,
+  "scratchRulesChecked": 42,
+  "scratchRoleAliases": {
+    "aliases": 82,
+    "blocks": 48
+  },
+  "warnings": [],
+  "storage": [
+    {
+      "name": "actorTeamSlot0",
+      "members": [
+        "botTeleportCenter",
+        "powerUpForceFieldTimeRemaining"
+      ],
+      "description": "Team 2: botTeleportCenter; Team 1: powerUpForceFieldTimeRemaining. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot1",
+      "members": [
+        "botIsSelectingTarget",
+        "powerUpReviveTarget"
+      ],
+      "description": "Team 2: botIsSelectingTarget; Team 1: powerUpReviveTarget. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot2",
+      "members": [
+        "botReturnMotionSlot",
+        "powerUpItemId"
+      ],
+      "description": "Team 2: botReturnMotionSlot; Team 1: powerUpItemId. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot3",
+      "members": [
+        "botIsTeleporting",
+        "powerUpTradeDataList",
+        "pregameVoteList",
+        "rescuePathList"
+      ],
+      "description": "Team 2 teleport flag; Team 1 human votes -> item trade data, or Rescue dummy path. Late vote writers are phase-guarded; trade indices 0 and 2 are assigned before reading."
+    },
+    {
+      "name": "actorTeamSlot4",
+      "members": [
+        "botLoopIndexSlot",
+        "powerUpEntityIdList"
+      ],
+      "description": "Team 2: botLoopIndexSlot; Team 1: powerUpEntityIdList. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot5",
+      "members": [
+        "botTarget",
+        "powerUpAirStrikeIndex"
+      ],
+      "description": "Team 2: botTarget; Team 1: powerUpAirStrikeIndex. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot6",
+      "members": [
+        "botBiteDuration",
+        "powerUpHealBeaconTimeRemaining"
+      ],
+      "description": "Team 2: botBiteDuration; Team 1: powerUpHealBeaconTimeRemaining. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot7",
+      "members": [
+        "botIsTeleportConfirmed",
+        "powerUpTurretTimeRemaining"
+      ],
+      "description": "Team 2: botIsTeleportConfirmed; Team 1: powerUpTurretTimeRemaining. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot8",
+      "members": [
+        "botReigniteDestination",
+        "powerUpCloakTimeRemaining"
+      ],
+      "description": "Team 2: botReigniteDestination; Team 1: powerUpCloakTimeRemaining. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot9",
+      "members": [
+        "botIsWallPhaseAllowed",
+        "powerUpSuperNanoTimeRemaining"
+      ],
+      "description": "Team 2: botIsWallPhaseAllowed; Team 1: powerUpSuperNanoTimeRemaining. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot10",
+      "members": [
+        "botAbilityTarget",
+        "powerUpUltimateTimeRemaining"
+      ],
+      "description": "Team 2: botAbilityTarget; Team 1: powerUpUltimateTimeRemaining. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot11",
+      "members": [
+        "botTeleportPosition",
+        "powerUpStunBouncesRemaining"
+      ],
+      "description": "Team 2: botTeleportPosition; Team 1: powerUpStunBouncesRemaining. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot12",
+      "members": [
+        "botBossHealth",
+        "powerUpStunBeamPosition"
+      ],
+      "description": "Team 2: botBossHealth; Team 1: powerUpStunBeamPosition. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot13",
+      "members": [
+        "botIsWallCollisionEnabled",
+        "powerUpTurretPosition"
+      ],
+      "description": "Team 2: botIsWallCollisionEnabled; Team 1: powerUpTurretPosition. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot14",
+      "members": [
+        "botIsFacingOverridden",
+        "powerUpStunTarget"
+      ],
+      "description": "Team 2: botIsFacingOverridden; Team 1: powerUpStunTarget. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot15",
+      "members": [
+        "botIsThrottleOverridden",
+        "powerUpHealBeaconPosition"
+      ],
+      "description": "Team 2: botIsThrottleOverridden; Team 1: powerUpHealBeaconPosition. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot16",
+      "members": [
+        "botConfiguredHero",
+        "powerUpForceFieldPosition"
+      ],
+      "description": "Team 2: botConfiguredHero; Team 1: powerUpForceFieldPosition. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot17",
+      "members": [
+        "botMutationId",
+        "powerUpBouncePadPosition"
+      ],
+      "description": "Team 2: botMutationId; Team 1: powerUpBouncePadPosition. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot18",
+      "members": [
+        "botIsInitializing",
+        "powerUpStunOrigin"
+      ],
+      "description": "Team 2: botIsInitializing; Team 1: powerUpStunOrigin. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot19",
+      "members": [
+        "botKnockbackScale",
+        "powerUpTurretDirection"
+      ],
+      "description": "Team 2: botKnockbackScale; Team 1: powerUpTurretDirection. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot20",
+      "members": [
+        "botCustomTeleportPosition",
+        "powerUpAirStrikePosition"
+      ],
+      "description": "Team 2: botCustomTeleportPosition; Team 1: powerUpAirStrikePosition. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot21",
+      "members": [
+        "botLastTarget",
+        "powerUpTradeIndex"
+      ],
+      "description": "Team 2: botLastTarget; Team 1: powerUpTradeIndex. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot22",
+      "members": [
+        "botAbilityStateSlot",
+        "enhancementStateSlot1"
+      ],
+      "description": "Team 2: botAbilityStateSlot; Team 1: enhancementStateSlot1. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot23",
+      "members": [
+        "botGasRadiusList",
+        "enhancementStateSlot2"
+      ],
+      "description": "Team 2: botGasRadiusList; Team 1: enhancementStateSlot2. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot24",
+      "members": [
+        "botSpawnWaypoint",
+        "enhancementStateSlot3"
+      ],
+      "description": "Team 2: botSpawnWaypoint; Team 1: enhancementStateSlot3. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot25",
+      "members": [
+        "botCandidateTarget",
+        "enhancementStateSlot4"
+      ],
+      "description": "Team 2: botCandidateTarget; Team 1: enhancementStateSlot4. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot26",
+      "members": [
+        "botIsTeleportAllowed",
+        "enhancementPositionSlot"
+      ],
+      "description": "Team 2: botIsTeleportAllowed; Team 1: enhancementPositionSlot. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot27",
+      "members": [
+        "botReigniteRisePosition",
+        "enhancementStateSlot6"
+      ],
+      "description": "Team 2: botReigniteRisePosition; Team 1: enhancementStateSlot6. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "actorTeamSlot28",
+      "members": [
+        "botResourceIconIdList",
+        "enhancementBarrierHealth"
+      ],
+      "description": "Team 2: botResourceIconIdList; Team 1: enhancementBarrierHealth. Receivers, not rule teams, own the storage."
+    },
+    {
+      "name": "team1PositionSlot",
+      "members": [
+        "team1PositionSlot",
+        "extractionDestination"
+      ],
+      "description": "Pregame position -> final extraction destination on humans; Rescue NPC path origin on its own actor. No chase owns this slot."
+    },
+    {
+      "name": "objectiveActorKindSlot",
+      "members": [
+        "biomorphingResourceType",
+        "rescueMoodIcon"
+      ],
+      "description": "Biomorphing resource type on both teams, or Rescue NPC mood. Goal writers recheck the objective after waits; Rescue completes only after its dummy is destroyed."
+    }
+  ],
+  "mapping": {
+    "botTeleportCenter": "actorTeamSlot0",
+    "powerUpForceFieldTimeRemaining": "actorTeamSlot0",
+    "botIsSelectingTarget": "actorTeamSlot1",
+    "powerUpReviveTarget": "actorTeamSlot1",
+    "botReturnMotionSlot": "actorTeamSlot2",
+    "powerUpItemId": "actorTeamSlot2",
+    "botIsTeleporting": "actorTeamSlot3",
+    "powerUpTradeDataList": "actorTeamSlot3",
+    "pregameVoteList": "actorTeamSlot3",
+    "rescuePathList": "actorTeamSlot3",
+    "botLoopIndexSlot": "actorTeamSlot4",
+    "powerUpEntityIdList": "actorTeamSlot4",
+    "botTarget": "actorTeamSlot5",
+    "powerUpAirStrikeIndex": "actorTeamSlot5",
+    "botBiteDuration": "actorTeamSlot6",
+    "powerUpHealBeaconTimeRemaining": "actorTeamSlot6",
+    "botIsTeleportConfirmed": "actorTeamSlot7",
+    "powerUpTurretTimeRemaining": "actorTeamSlot7",
+    "botReigniteDestination": "actorTeamSlot8",
+    "powerUpCloakTimeRemaining": "actorTeamSlot8",
+    "botIsWallPhaseAllowed": "actorTeamSlot9",
+    "powerUpSuperNanoTimeRemaining": "actorTeamSlot9",
+    "botAbilityTarget": "actorTeamSlot10",
+    "powerUpUltimateTimeRemaining": "actorTeamSlot10",
+    "botTeleportPosition": "actorTeamSlot11",
+    "powerUpStunBouncesRemaining": "actorTeamSlot11",
+    "botBossHealth": "actorTeamSlot12",
+    "powerUpStunBeamPosition": "actorTeamSlot12",
+    "botIsWallCollisionEnabled": "actorTeamSlot13",
+    "powerUpTurretPosition": "actorTeamSlot13",
+    "botIsFacingOverridden": "actorTeamSlot14",
+    "powerUpStunTarget": "actorTeamSlot14",
+    "botIsThrottleOverridden": "actorTeamSlot15",
+    "powerUpHealBeaconPosition": "actorTeamSlot15",
+    "botConfiguredHero": "actorTeamSlot16",
+    "powerUpForceFieldPosition": "actorTeamSlot16",
+    "botMutationId": "actorTeamSlot17",
+    "powerUpBouncePadPosition": "actorTeamSlot17",
+    "botIsInitializing": "actorTeamSlot18",
+    "powerUpStunOrigin": "actorTeamSlot18",
+    "botKnockbackScale": "actorTeamSlot19",
+    "powerUpTurretDirection": "actorTeamSlot19",
+    "botCustomTeleportPosition": "actorTeamSlot20",
+    "powerUpAirStrikePosition": "actorTeamSlot20",
+    "botLastTarget": "actorTeamSlot21",
+    "powerUpTradeIndex": "actorTeamSlot21",
+    "botAbilityStateSlot": "actorTeamSlot22",
+    "enhancementStateSlot1": "actorTeamSlot22",
+    "botGasRadiusList": "actorTeamSlot23",
+    "enhancementStateSlot2": "actorTeamSlot23",
+    "botSpawnWaypoint": "actorTeamSlot24",
+    "enhancementStateSlot3": "actorTeamSlot24",
+    "botCandidateTarget": "actorTeamSlot25",
+    "enhancementStateSlot4": "actorTeamSlot25",
+    "botIsTeleportAllowed": "actorTeamSlot26",
+    "enhancementPositionSlot": "actorTeamSlot26",
+    "botReigniteRisePosition": "actorTeamSlot27",
+    "enhancementStateSlot6": "actorTeamSlot27",
+    "botResourceIconIdList": "actorTeamSlot28",
+    "enhancementBarrierHealth": "actorTeamSlot28",
+    "team1PositionSlot": "team1PositionSlot",
+    "extractionDestination": "team1PositionSlot",
+    "biomorphingResourceType": "objectiveActorKindSlot",
+    "rescueMoodIcon": "objectiveActorKindSlot"
+  },
+  "ownership": {
+    "eventReceiverCallGraphChecked": true,
+    "targetReceivers": [
+      {
+        "role": "powerUpItemId",
+        "owner": "1",
+        "file": "power_ups.opy",
+        "line": 32,
+        "source": "getLivingPlayers(Team.1).filter(lambda player: player.powerUpItemId == evalOnce(tmp0) + 1),",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botIsTeleporting",
+        "owner": "2",
+        "file": "objective_types/objective_type_bosses.opy",
+        "line": 10,
+        "source": "@Condition (getLivingPlayers(Team.2).any(lambda player: player.hasSpawned() and not player.botIsTeleporting and player.botTarget == null)) == true",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botIsTeleporting",
+        "owner": "2",
+        "file": "objective_types/objective_type_bosses.opy",
+        "line": 15,
+        "source": "bossesStateList[0] = (getLivingPlayers(Team.2).filter(lambda player: player.hasSpawned() and not miniBossList[player] and not player.botIsTeleporting and player.botTarget == null))[0]",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botIsTeleporting",
+        "owner": "2",
+        "file": "objective_types/objective_type_zombie_egg.opy",
+        "line": 8,
+        "source": "@Condition (getLivingPlayers(Team.2).any(lambda player: not player.botIsTeleporting and player.botTarget == null)) == true",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botIsTeleporting",
+        "owner": "2",
+        "file": "objective_types/objective_type_zombie_egg.opy",
+        "line": 12,
+        "source": "zombieEggStateList[0] = random.choice(getLivingPlayers(Team.2).filter(lambda player: not player.botIsTeleporting and not player.isAttached and player.botTarget == null))",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botIsTeleporting",
+        "owner": "2",
+        "file": "objective_types/objective_type_satellite_uplink.opy",
+        "line": 40,
+        "source": "chaseAtRate(satelliteLaserPosition, satelliteLaserTarget.getPosition(), 7.5 if getLivingPlayers(Team.2).any(lambda player: not player.botIsTeleporting) else 0)",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botIsTeleporting",
+        "owner": "2",
+        "file": "objective_types/objective_type_satellite_uplink.opy",
+        "line": 44,
+        "source": "satelliteLaserTarget = (sorted(getLivingPlayers(Team.2).filter(lambda player: not player.botIsTeleporting), lambda x: distance(x.getPosition(), satelliteLaserPosition)))[0]",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botIsTeleporting",
+        "owner": "2",
+        "file": "objective_types/objective_type_satellite_uplink.opy",
+        "line": 47,
+        "source": "chaseAtRate(satelliteLaserPosition, satelliteLaserTarget.getPosition(), 7.5 if getLivingPlayers(Team.2).any(lambda player: not player.botIsTeleporting) else 0)",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botIsTeleporting",
+        "owner": "2",
+        "file": "zombie_types.opy",
+        "line": 463,
+        "source": "@Condition (getLivingPlayers(Team.2).exclude(eventPlayer).any(lambda x: not x.botIsTeleporting and x.getHero() != Hero.WIDOWMAKER and distance(eventPlayer.getPosition(), x.getPosition()) < 4 * eventPlayer.sizeScale)) == true",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botIsTeleporting",
+        "owner": "2",
+        "file": "zombie_types.opy",
+        "line": 467,
+        "source": "eventPlayer.botAbilityTarget = (sorted(getLivingPlayers(Team.2).exclude(eventPlayer).filter(lambda x: not x.botIsTeleporting and x.getHero() != eventPlayer.getHero()), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))[0]",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botIsTeleporting",
+        "owner": "2",
+        "file": "supply_drops.opy",
+        "line": 265,
+        "source": "createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + (eventPlayer.powerUpTurretDirection * 0.5 if len(getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.powerUpTurretPosition, player) and not player.botIsTeleporting)) else eventPlayer.getFacingDirection() * 0.5), Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botIsTeleporting",
+        "owner": "2",
+        "file": "supply_drops.opy",
+        "line": 273,
+        "source": "if (len(getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.powerUpTurretPosition, player) and not player.botIsTeleporting))) > 0:",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botIsTeleporting",
+        "owner": "2",
+        "file": "supply_drops.opy",
+        "line": 439,
+        "source": "eventPlayer.powerUpStunTarget = random.choice((getLivingPlayers(Team.2).filter(lambda player: distance(eventPlayer.powerUpStunOrigin.getPosition(), player.getPosition()) < 15 and not player.botIsTeleporting)).exclude(eventPlayer.powerUpStunTarget))",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botIsTeleporting",
+        "owner": "2",
+        "file": "enhancements.opy",
+        "line": 520,
+        "source": "waitUntil(eventPlayer.enhancementPupTarget.isDead() or not entityExists(eventPlayer.enhancementPupTarget) or eventPlayer.enhancementPupTarget.botIsTeleporting, 99999)",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botTarget",
+        "owner": "2",
+        "file": "global_game_in_progress.opy",
+        "line": 54,
+        "source": "@Condition (len(getLivingPlayers(Team.2).filter(lambda player: player.botTarget == null and not player in bossStateList))) > 0",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botTarget",
+        "owner": "2",
+        "file": "global_game_in_progress.opy",
+        "line": 60,
+        "source": "((getLivingPlayers(Team.2).filter(lambda player: player.botTarget == null and not player in bossStateList))[0]).teleport(getPayloadPosition())",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botTarget",
+        "owner": "2",
+        "file": "global_game_in_progress.opy",
+        "line": 62,
+        "source": "((getLivingPlayers(Team.2).filter(lambda player: player.botTarget == null and not player in bossStateList))[0]).teleport(getObjectivePosition(0))",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botTarget",
+        "owner": "2",
+        "file": "objective_types/objective_type_bosses.opy",
+        "line": 10,
+        "source": "@Condition (getLivingPlayers(Team.2).any(lambda player: player.hasSpawned() and not player.botIsTeleporting and player.botTarget == null)) == true",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botTarget",
+        "owner": "2",
+        "file": "objective_types/objective_type_bosses.opy",
+        "line": 15,
+        "source": "bossesStateList[0] = (getLivingPlayers(Team.2).filter(lambda player: player.hasSpawned() and not miniBossList[player] and not player.botIsTeleporting and player.botTarget == null))[0]",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botTarget",
+        "owner": "2",
+        "file": "objective_types/objective_type_zombie_egg.opy",
+        "line": 8,
+        "source": "@Condition (getLivingPlayers(Team.2).any(lambda player: not player.botIsTeleporting and player.botTarget == null)) == true",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botTarget",
+        "owner": "2",
+        "file": "objective_types/objective_type_zombie_egg.opy",
+        "line": 12,
+        "source": "zombieEggStateList[0] = random.choice(getLivingPlayers(Team.2).filter(lambda player: not player.botIsTeleporting and not player.isAttached and player.botTarget == null))",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botTarget",
+        "owner": "2",
+        "file": "players_game_in_progress.opy",
+        "line": 135,
+        "source": "(getPlayers(Team.2).filter(lambda player: player.botTarget == eventPlayer)).botTarget = null",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botTarget",
+        "owner": "2",
+        "file": "enhancements.opy",
+        "line": 516,
+        "source": "@Condition (getLivingPlayers(Team.2).any(lambda player: player.botTarget == eventPlayer and distance(eventPlayer.getPosition(), player.getPosition()) < 10)) == true",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botTarget",
+        "owner": "2",
+        "file": "enhancements.opy",
+        "line": 519,
+        "source": "eventPlayer.enhancementPupTarget = (sorted(getLivingPlayers(Team.2).filter(lambda player: player.botTarget == eventPlayer), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))[0]",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botIsTeleportConfirmed",
+        "owner": "2",
+        "file": "bots_game_in_progress.opy",
+        "line": 505,
+        "source": "if not eventPlayer.botIsTeleportConfirmed:",
+        "evidence": "Helper has no event-root caller in the source call graph"
+      },
+      {
+        "role": "botIsTeleportConfirmed",
+        "owner": "2",
+        "file": "bots_game_in_progress.opy",
+        "line": 506,
+        "source": "eventPlayer.botIsTeleportConfirmed = true",
+        "evidence": "Helper has no event-root caller in the source call graph"
+      },
+      {
+        "role": "botIsInitializing",
+        "owner": "2",
+        "file": "objective_types/objective_type_bosses.opy",
+        "line": 17,
+        "source": "waitUntil(bossesStateList[0].botIsInitializing, 3)",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botIsInitializing",
+        "owner": "2",
+        "file": "objective_types/objective_type_bosses.opy",
+        "line": 18,
+        "source": "waitUntil(not bossesStateList[0].botIsInitializing, 5)",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "enhancementStateSlot1",
+        "owner": "1",
+        "file": "enhancements.opy",
+        "line": 287,
+        "source": "attacker.enhancementPyroHitList.append(victim)",
+        "evidence": "explicit target/collection receiver; reviewed with rule conditions"
+      },
+      {
+        "role": "botResourceIconIdList",
+        "owner": "2",
+        "file": "players_game_in_progress.opy",
+        "line": 18,
+        "source": "for eventPlayer.visualCleanupIndex in range(len(eventPlayer.botResourceIconIdList)):",
+        "evidence": "else of eventPlayer.getTeam() == Team.1"
+      },
+      {
+        "role": "botResourceIconIdList",
+        "owner": "2",
+        "file": "players_game_in_progress.opy",
+        "line": 19,
+        "source": "destroyIcon(eventPlayer.botResourceIconIdList[eventPlayer.visualCleanupIndex])",
+        "evidence": "else of eventPlayer.getTeam() == Team.1"
+      },
+      {
+        "role": "botResourceIconIdList",
+        "owner": "2",
+        "file": "players_game_in_progress.opy",
+        "line": 21,
+        "source": "eventPlayer.botResourceIconIdList = []",
+        "evidence": "else of eventPlayer.getTeam() == Team.1"
+      },
+      {
+        "role": "botResourceIconIdList",
+        "owner": "2",
+        "file": "players_game_in_progress.opy",
+        "line": 28,
+        "source": "eventPlayer.botResourceIconIdList.append(getLastCreatedEntity())",
+        "evidence": "else of eventPlayer.getTeam() == Team.1"
+      }
+    ]
+  },
+  "sourceSha256": {
+    "bots_game_in_progress.opy": "749784f43595efda69a9e209e0464c2b4db6ca3e756ce555a8036ca1e390dec4",
+    "compressed numbers.opy": "6c414884c6273353c17c85e56de05c382cb6401aec19a22132263fd6f4d6d9d7",
+    "debug.opy": "86ea5811c5a07f735b0eefc11a53c4710a3ebe33ad79e5d96fb13722607be67a",
+    "enhancements.opy": "4e908e0f6d4de74ecb8f28578c9cf86e4d1bd9329b98dd42aa0ed01c1fb8840a",
+    "global_game_in_progress.opy": "f473a301ab97918868904b9fec1bff4e38ac33e50b01c68c8050d0cbf1dac535",
+    "global_startup.opy": "f3087e159841a17d4ffb2af50f4801a95d89e59988ffaa876d2ce13da4cdce5b",
+    "global_start_menu.opy": "fc9375f37413895cb104238e5bad84e7079cdca036ba10b23f910907f2a66d91",
+    "hero_tuning.opy": "4825b4d1bec2addfac244d4b0bf97de19449517a712d03eb8f9015653e4f1a66",
+    "main.opy": "6005995170250d44b35a88576f997014f95de715f521429eda7b9f6dcb1da9fd",
+    "objective_types/objective_type_biomorphing.opy": "8246168e5b94f138e45548fcf578d8b87e499e4497d395b18466ba26cc02dff3",
+    "objective_types/objective_type_bosses.opy": "764f3f88254fda09c9f5713d59e268fc910f02102fe8b1aa315cb2d48299ec16",
+    "objective_types/objective_type_extraction_point.opy": "766b2639781a612d9fb3841644a5f08662511848ef852d273ffe78fb7a17e9d5",
+    "objective_types/objective_type_kill_zone.opy": "b18ae7314acdcbeacfe1b8ee594f161f970b67dddc4a477ba4649d5fb4a6808e",
+    "objective_types/objective_type_satellite_uplink.opy": "6a7f08a763810d5bdaaaa0a9b17559261a36125ad2d15bb258c69dae69c2921e",
+    "objective_types/objective_type_showdown.opy": "a7aea0343f2959f7b8c99a29c016071c6a7c3e52d97d839c0c7f57577d13dd10",
+    "objective_types/objective_type_survivor_rescue.opy": "7fe6fdef1873dc3fce4743cdfb8d151533b68c0d763d9db9343b79db671600be",
+    "objective_types/objective_type_zombie_egg.opy": "73e9e636a67e213e42e90db762d8036e35485ac86f8b8f55663c66e8a43e1267",
+    "players_game_in_progress.opy": "c914759a145bb321445a9a1e10f4707c73bbb5f1f005ee0452d3990a571e36bc",
+    "player_start_menu.opy": "2c5aa57b21348de17eac33e4102ecdec959306ccd445d091d14224f73bb494c4",
+    "power_ups.opy": "aefe01903a9718813f9eb4ae0acef007d56d49777c81c624284fd2682738217f",
+    "settings.opy": "bafdf47e377bfce8871f5e6c8a79684934e6c283130151ce2824d8778cc659a7",
+    "subroutines.opy": "ddaa14e7c72191ef4bd20a8b97822cbb335296b59e186346ab6a4008676f1750",
+    "supply_drops.opy": "118a2dc5b28b3fba17abbc4555a7f299ed55e189a99c2f61fcec72d6d7468162",
+    "variables.opy": "a2d61bdf2898339a6733678d7efd944bbd0b0b3ed0ddabf61dfa4d86d5f95b62",
+    "zombie_types.opy": "814ffb1e5afab6f81701c4e09b3ae7f4aa0daeaccfa2fba48bcfd845fc1e94c0"
+  },
+  "limitations": "Static source ownership review, call graph, compiled rule equivalence and scratch lifetime checks. No in-game scheduler/renderer test. Import the complete script, not isolated rules."
+}

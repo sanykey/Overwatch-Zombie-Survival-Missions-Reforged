@@ -1,202 +1,129 @@
-# Порядок и имена переменных игрока — 2026-11-02
+# Переменные игрока — 2026-11-02
 
-**107 физических playervar, 99 globalvar, 27 188 элементов.** После организации имён внедрён [консервативный перенос локальных вычислений](player-variable-lifetimes-2026-11-02.md): −1 слот и −30 элементов. Объявления сгруппированы; 76 смысловых алиаса `#!define` раскрываются в существующие слоты. База первоначального переименования — `9185ddd9b8bc76852ffacdafbfde932a3970f152`; пакет временных значений сравнивается с `fddc95aa13042bb5cbdcfebe4295fef74a6ee151`.
+**74 физических playervar, 99 globalvar, 27211 элементов.** Освобождены 33 слота относительно 107 полей ревизии `e83b831b2e182e0e6bc7fff6e0dad80946e556e8`; 130 смысловых алиасов.
 
-Комментарии к каждому физическому полю и каждой роли находятся в `src/variables.opy`. [Индекс обращений](player-variable-references-2026-11-02.md) содержит файлы, правила и строки, [JSON](player-variable-usage-2026-11-02.json) — полные выражения, команды правил и условия. [Проверка](player-variable-validation-2026-11-02.json) хранит сопоставление имён и хеши исходников.
+29 полей Team 2 совмещены с предметами и состояниями улучшений Team 1. Голоса, данные обмена предметами и путь Rescue NPC используют один слот; позиция меню, начало пути NPC и направление финального полёта — другой. Тип биоресурса и настроение NPC совмещены с защитой поздних записей после смены задания.
 
-## Принципы группировки
+[Обоснование безопасности и сценарии игрового прогона](player-slot-sharing-review-2026-11-02.md). [Полный индекс обращений](player-variable-references-2026-11-02.md). [Результат проверок](player-slot-sharing-validation.json).
 
-- Команда правила относится к владельцу события, а не обязательно к получателю поля. Проверены `eventPlayer`, `victim`, `attacker`, поля целей и коллекций, вызовы подпрограмм и Rescue NPC.
-- `bot` означает поле зомби Team 2. Функциональные группы enhancements/power-ups имеют собственные префиксы; они остаются в этих группах даже при чтении из файла другой системы. Остальные поля только Team 1 разделены на выживание, меню и Rescue.
-- Булевы роли используют `is...` или `botIs...` / `enhancementIs...` / `rescueIs...`; массивы заканчиваются на `List`. Сбросы постоянных ссылок и векторов сохранены. Числовые счётчики не превращены в булевы. Временный цвет мутации захватывается контуром через `evalOnce`.
-- Разные назначения одного слота имеют отдельные алиасы. Одинаковый смысл в разных потребителях сохраняет общее имя: например, `initialMaxHealth`, `sizeScale`, `movementSpeedScale`, `isCrowdControlled`. Слоты с единственной оставшейся ролью переименованы в её имя; одиночных алиасов нет.
-- Новое совместное хранение не добавлялось. Порядок физических индексов мог измениться: импортировать следует полный скрипт.
+Получатель поля определяет владельца, а не команда правила. Состояние позднего входа, общие эффекты и поля с чтением исходного нуля сохранены отдельно.
 
-## Важные случаи
+## Team 2 zombies: AI, abilities, bosses and bot visuals
 
-- Цель Laser Barricade перенесена в `tmp2`; оставшаяся цель AI и её очистка используют физический `botTarget`. Бывшие `aiLocationSlot` и `botReigniteMotionSlot` стали физическими `botTeleportPosition` и `botReigniteRisePosition`.
-- В `selectTarget` кандидаты вычисляются в `tmp1`, но итог сохраняется в `botPotentialTargetList`: его читает переоцениваемый текст расстояния до босса. Физический `candidateTargetList` сохраняет также роли Rescue и Barricade.
-- Старый `botFollowTarget` принадлежит NPC Team 1: теперь это `rescueLeader`. Старый `botThrottleSpeed` хранится в `aiThrottleSpeedSlot` с ролями `botThrottleSpeed` / `rescueThrottleSpeed`.
-- `specialCooldown` содержал флаг Team 1 и ссылку на цель босса. Теперь это `controlStateSlot`: `isCrowdControlCooldownActive` / `botReturnTarget`.
-- `invisible` является счётчиком: способности и Cloaking Device делают `++`/`--`. Новое имя `invisibilityCount` сохраняет числовую семантику.
-- `abilityArray1` не всегда массив: `botAbilityStateSlot` имеет роли `botAbilityCooldown` и `botGasPositionList`. `abilityArray2` всегда используется как массив радиусов: `botGasRadiusList`.
-- Старые `chase1`/`chase2`, `botTempValue`/`botTempvalue2`, `telePos`, счётчики смешанных предметов/зомби сохранили физические слоты, но получили имена для конкретных способностей, Rescue и эвакуации.
-- Поля `enhancementValue1..6` представлены хранилищами `enhancement*Slot` с ролями каждого улучшения. `enhancementValue7` принадлежит только баррикаде и переименован в `enhancementBarrierHealth`.
-- `isCrowdControlled` читается и на потенциальном носителе Hitchhiker в Team 1, хотя записи состояния делает AI Team 2. `damageOverTimeRemaining` также оставлен общим: одна ветка Rusher пишет его на `victim`. Эти существующие получатели и ограничения не исправлялись при переименовании.
-- Глобальные `isVoting`, `startPos`, `objectiveValue` сохранены отдельно от бывших одноимённых полей игрока. Проверка компиляции различает пространство `Global.*`, свойства игрока и аргументы player-variable действий.
+| Слот | Тип | Назначение и роли |
+| --- | --- | --- |
+| `botBiteDamage` | number | Difficulty/hero-scaled zombie bite damage, also used by zombie abilities and explosions. |
+| `botBaseHealth` | number | Configured zombie maximum health, including mutations/boss overrides and recoil thresholds. |
 
-## Состав групп
+## Team 1 players/allied actors: survival, infection and reconnect state
 
-| Группа | Физических полей |
-| --- | ---: |
-| Только зомби Team 2 | 31 |
-| Только Team 1: игроки и союзные акторы | 13 |
-| Только функционал enhancements | 10 |
-| Только функционал supply power-ups | 22 |
-| Team 1: меню и голосование | 3 |
-| Team 1: NPC Survivor Rescue | 3 |
-| Biomorphing: носители ресурсов обеих команд | 2 |
-| Общие взрывы зомби и Zombie Hybrid | 3 |
-| Общие состояния и слоты нескольких функционалов | 20 |
+| Слот | Тип | Назначение и роли |
+| --- | --- | --- |
+| `isPlayerActive` | bool | Player has completed initial menu activation; used by voting, roster and downed-player rules. |
+| `isReviving` | bool | Nearby allies are currently advancing this player's revive progress. |
+| `reviveDuration` | number | Required revive duration; restored from reconnect data and increased after revives. |
+| `isInfected` | bool | Player infection has activated; infection rules, cures and Zombie Hybrid read this flag. |
+| `rescueTimeRemaining` | number | Time left to rescue a downed player; reconnect cache and extraction dome may adjust it. |
+| `infectionLevel` | number | Player infection/vaccine level; negative values represent vaccination. |
+| `invisibilityCount` | number | Stacking invisibility/untargetability counter; hero abilities and Cloaking Device increment/decrement it. Not a boolean. |
+| `infectionDamageOverTimeId` | number | Active player infection damage-over-time ID; Zombie Hybrid stops this same damage instance. |
+| `reconnectUserIndex` | number | Player name index into userNameList/playerStatsList for reconnect restoration. |
+| `isAfk` | bool | Player is treated as inactive/AFK and excluded from objectives or extraction counts. |
+| `isHeroSwitchRespawn` | bool | Player has switched heroes; prevents repeating first-spawn and enhancement initialization. |
 
-## Полный список
+## Enhancements only (enhancement prefix; includes the Rescue Hitchhiker setup)
 
-### Только зомби Team 2
+| Слот | Тип | Назначение и роли |
+| --- | --- | --- |
+| `enhancementId` | number | Selected Enhancement enum; pregame selection, runtime behavior and Rescue Hitchhiker initialization. |
+| `enhancementHitchhikerPassenger` | player | Passenger attached to this carrier; null when absent. Infection rules also query it. |
+| `enhancementHitchhikerCarrierPoolId` | number | Extra health-pool ID granted to a Hitchhiker carrier, retained for removal. |
 
-| Физическое поле | Прежнее имя | Тип | Назначение и алиасы |
-| --- | --- | --- | --- |
-| [`botTeleportCenter`](player-variable-references-2026-11-02.md#botteleportcenter) | `averagePlayersPos` | Вектор | Zombie teleport/search center; bot teleport rules, Egg and boss return. |
-| [`botIsSelectingTarget`](player-variable-references-2026-11-02.md#botisselectingtarget) | `targeting` | Булево | selectTarget is running; blocks competing zombie target/teleport work. |
-| [`botReturnMotionSlot`](player-variable-references-2026-11-02.md#botreturnmotionslot) | `mutationChase` | Смешанный | Boss return timer, then an eye-position snapshot; objective_type_bosses. Роли: `botReturnTime` (Число); `botReturnPosition` (Вектор). |
-| [`botIsTeleporting`](player-variable-references-2026-11-02.md#botisteleporting) | `teleporting` | Булево | Zombie is inside enterExitTeleport; spawn/target/ability consumers also read it. |
-| [`botLoopIndexSlot`](player-variable-references-2026-11-02.md#botloopindexslot) | `pForceFieldCount2_bCount1` | Число | Existing yielding loop index shared by Stalker fades and Ensnarer blocking. Роли: `botStalkerFadeIndex` (Число); `botEnsnarerTargetIndex` (Число). |
-| [`botTarget`](player-variable-references-2026-11-02.md#bottarget) | `botTarget` | Игрок/null | Zombie AI combat target; subroutines, bot abilities and objectives; cleared when its Team 1 target is downed. |
-| [`botBiteDamage`](player-variable-references-2026-11-02.md#botbitedamage) | `biteDamage` | Число | Difficulty/hero-scaled zombie bite damage, also used by zombie abilities and explosions. |
-| [`botBiteDuration`](player-variable-references-2026-11-02.md#botbiteduration) | `biteDuration` | Число | Zombie melee damage-over-time duration, including mutation overrides. |
-| [`botIsTeleportConfirmed`](player-variable-references-2026-11-02.md#botisteleportconfirmed) | `successfullyTeleported` | Булево | Zombie teleport/spawn position has been accepted and may be added to the spawn cache. |
-| [`botReigniteDestination`](player-variable-references-2026-11-02.md#botreignitedestination) | `anranPortal` | Вектор | Zombie emergence destination near Anran; false clears the position after the rise. |
-| [`botIsWallPhaseAllowed`](player-variable-references-2026-11-02.md#botiswallphaseallowed) | `canWallPhase` | Булево | Zombie may pass spawn doors; special abilities temporarily disable this permission. |
-| [`botAbilityTarget`](player-variable-references-2026-11-02.md#botabilitytarget) | `botSpecialTarget` | Игрок/null | Zombie special-ability target: teleport/grab host, flight target or affected player. |
-| [`botTeleportPosition`](player-variable-references-2026-11-02.md#botteleportposition) | `telePos` | Вектор | Zombie teleport candidate/accepted position; bot teleport rules, Egg and spawn-cache updates; zero clears it. |
-| [`botBossHealth`](player-variable-references-2026-11-02.md#botbosshealth) | `bossHealth` | Число | Virtual boss/egg health adjusted by damage events; -1 when not a boss. |
-| [`botIsWallCollisionEnabled`](player-variable-references-2026-11-02.md#botiswallcollisionenabled) | `wallCollisionEnabled` | Булево | Cached zombie environment-collision state, restored by abilities and spawn-door handling. |
-| [`botIsFacingOverridden`](player-variable-references-2026-11-02.md#botisfacingoverridden) | `specialFacing` | Булево | Special zombie ability controls facing instead of normal target tracking. |
-| [`botIsThrottleOverridden`](player-variable-references-2026-11-02.md#botisthrottleoverridden) | `specialThrottling` | Булево | Special zombie ability controls movement instead of the normal AI throttle. |
-| [`botConfiguredHero`](player-variable-references-2026-11-02.md#botconfiguredhero) | `botHero` | Герой | Last zombie hero for which bot entity/stat initialization was performed. |
-| [`botMutationId`](player-variable-references-2026-11-02.md#botmutationid) | `mutationValue` | Число | Selected mutation ID; zero means no mutation. |
-| [`botBaseHealth`](player-variable-references-2026-11-02.md#botbasehealth) | `health` | Число | Configured zombie maximum health, including mutations/boss overrides and recoil thresholds. |
-| [`botIsInitializing`](player-variable-references-2026-11-02.md#botisinitializing) | `initializing` | Булево | Zombie respawn/stat initialization is in progress; spawn/teleport/objective rules wait for it. |
-| [`botKnockbackScale`](player-variable-references-2026-11-02.md#botknockbackscale) | `knockbackRecieved` | Число | Zombie knockback-received multiplier, including Brute/mutation adjustments. |
-| [`botCustomTeleportPosition`](player-variable-references-2026-11-02.md#botcustomteleportposition) | `customTelePos` | Вектор | Special zombie replacement position carried from customTeleportPositionList; null when unused. |
-| [`botLastTarget`](player-variable-references-2026-11-02.md#botlasttarget) | `lastTarget` | Игрок/null | Last visible/attacking target retained when zombie line of sight is lost. |
-| [`botAbilityStateSlot`](player-variable-references-2026-11-02.md#botabilitystateslot) | `abilityArray1` | Смешанный | Zombie ability cooldown number or Behemoth cloud-position array; not always an array. Роли: `botAbilityCooldown` (Число); `botGasPositionList` (Массив). |
-| [`botGasRadiusList`](player-variable-references-2026-11-02.md#botgasradiuslist) | `abilityArray2` | Массив | Boss Behemoth gas-cloud radii, aligned with botGasPositionList. |
-| [`botSpawnWaypoint`](player-variable-references-2026-11-02.md#botspawnwaypoint) | `waypoint` | Вектор | Movement waypoint associated with the accepted zombie spawn point. |
-| [`botCandidateTarget`](player-variable-references-2026-11-02.md#botcandidatetarget) | `testTarget` | Игрок/null | Candidate zombie target under line-of-sight testing in selectTarget. |
-| [`botIsTeleportAllowed`](player-variable-references-2026-11-02.md#botisteleportallowed) | `canTeleport` | Булево | Zombie initialization has enabled teleport processing. |
-| [`botReigniteRisePosition`](player-variable-references-2026-11-02.md#botreigniteriseposition) | `anranPortalRise` | Вектор | Zombie emergence position chased upward near Anran; zombie_types forces this position across the rise wait. |
-| [`botResourceIconIdList`](player-variable-references-2026-11-02.md#botresourceiconidlist) | `botResourceEntity` | Массив | Zombie Biomorphing resource icon IDs; separate from the zombie visual-effect list. |
+## Team 1 pregame selection and voting
 
-### Только Team 1: игроки и союзные акторы
+| Слот | Тип | Назначение и роли |
+| --- | --- | --- |
+| `pregameState` | number | PregameState hero-selection/readiness state; zero is also the late-join default. |
+| `isPregameVoting` | bool | This Team 1 player is adjusting votes; separate from global isVoting. |
 
-| Физическое поле | Прежнее имя | Тип | Назначение и алиасы |
-| --- | --- | --- | --- |
-| [`isPlayerActive`](player-variable-references-2026-11-02.md#isplayeractive) | `playerActiveStatus` | Булево | Player has completed initial menu activation; used by voting, roster and downed-player rules. |
-| [`isReviving`](player-variable-references-2026-11-02.md#isreviving) | `reviving` | Булево | Nearby allies are currently advancing this player's revive progress. |
-| [`reviveDuration`](player-variable-references-2026-11-02.md#reviveduration) | `reviveStartTime` | Число | Required revive duration; restored from reconnect data and increased after revives. |
-| [`isInfected`](player-variable-references-2026-11-02.md#isinfected) | `infected` | Булево | Player infection has activated; infection rules, cures and Zombie Hybrid read this flag. |
-| [`rescueTimeRemaining`](player-variable-references-2026-11-02.md#rescuetimeremaining) | `deathTimer` | Число | Time left to rescue a downed player; reconnect cache and extraction dome may adjust it. |
-| [`infectionLevel`](player-variable-references-2026-11-02.md#infectionlevel) | `infectionLvl` | Число | Player infection/vaccine level; negative values represent vaccination. |
-| [`team1PositionSlot`](player-variable-references-2026-11-02.md#team1positionslot) | `startPos` | Вектор | Team 1 hero-selection position or Rescue NPC path origin. Роли: `pregamePosition` (Вектор); `rescueStartPosition` (Вектор). |
-| [`extractionDestination`](player-variable-references-2026-11-02.md#extractiondestination) | `evacPos` | Вектор | Per-player final flight destination, calculated from the shared extraction direction. |
-| [`invisibilityCount`](player-variable-references-2026-11-02.md#invisibilitycount) | `invisible` | Число | Stacking invisibility/untargetability counter; hero abilities and Cloaking Device increment/decrement it. Not a boolean. |
-| [`infectionDamageOverTimeId`](player-variable-references-2026-11-02.md#infectiondamageovertimeid) | `infectionDamage` | Число | Active player infection damage-over-time ID; Zombie Hybrid stops this same damage instance. |
-| [`reconnectUserIndex`](player-variable-references-2026-11-02.md#reconnectuserindex) | `userIndex` | Число | Player name index into userNameList/playerStatsList for reconnect restoration. |
-| [`isAfk`](player-variable-references-2026-11-02.md#isafk) | `afk` | Булево | Player is treated as inactive/AFK and excluded from objectives or extraction counts. |
-| [`isHeroSwitchRespawn`](player-variable-references-2026-11-02.md#isheroswitchrespawn) | `switchedHeroes` | Булево | Player has switched heroes; prevents repeating first-spawn and enhancement initialization. |
+## Team 1 Survivor Rescue NPC
 
-### Только функционал enhancements
+| Слот | Тип | Назначение и роли |
+| --- | --- | --- |
+| `rescueLeader` | player | Team 1 player followed by the Rescue NPC; bot teleport logic reads the NPC's field. |
 
-| Физическое поле | Прежнее имя | Тип | Назначение и алиасы |
-| --- | --- | --- | --- |
-| [`enhancementId`](player-variable-references-2026-11-02.md#enhancementid) | `enhancementId` | Число | Selected Enhancement enum; pregame selection, runtime behavior and Rescue Hitchhiker initialization. |
-| [`enhancementStateSlot1`](player-variable-references-2026-11-02.md#enhancementstateslot1) | `enhancementValue1` | Смешанный | Primary enhancement state; each enhancement owns a distinct role alias. Роли: `enhancementHybridCooldown` (Число); `enhancementBarrierFacing` (Вектор); `enhancementPyroHitList` (Массив); `enhancementPlagueCureTotal` (Число); `enhancementIsBattleResetReady` (Булево); `enhancementBatteryPosition` (Вектор); `enhancementHitchhikerCarrier` (Игрок/null); `enhancementPupColor` (Цвет). |
-| [`enhancementStateSlot2`](player-variable-references-2026-11-02.md#enhancementstateslot2) | `enhancementValue2` | Смешанный | Secondary enhancement state shared by mutually selected enhancements. Роли: `enhancementBarrierEdgeDirection` (Вектор); `enhancementBattleAbilityButton` (Кнопка); `enhancementBatteryReuseCooldown` (Число); `enhancementHitchhikerPassengerPoolId` (Число); `enhancementIsPupBeamActive` (Булево). |
-| [`enhancementStateSlot3`](player-variable-references-2026-11-02.md#enhancementstateslot3) | `enhancementValue3` | Смешанный | Barrier cooldown, battery reuse duration, or P.U.P. target. Роли: `enhancementBarrierPlacementCooldown` (Число); `enhancementBatteryReuseDuration` (Число); `enhancementPupTarget` (Игрок/null). |
-| [`enhancementStateSlot4`](player-variable-references-2026-11-02.md#enhancementstateslot4) | `enhancementValue4` | Смешанный | Barrier center, battery placement timer, or P.U.P. freeze-aura flag. Роли: `enhancementBarrierPosition` (Вектор); `enhancementBatteryPlacementCooldown` (Число); `enhancementIsPupFreezeAuraActive` (Булево). |
-| [`enhancementPositionSlot`](player-variable-references-2026-11-02.md#enhancementpositionslot) | `enhancementValue5` | Вектор | Barrier first corner or chased P.U.P. position. Роли: `enhancementBarrierCorner1` (Вектор); `enhancementPupPosition` (Вектор). |
-| [`enhancementStateSlot6`](player-variable-references-2026-11-02.md#enhancementstateslot6) | `enhancementValue6` | Смешанный | Barrier second corner or P.U.P. ability cooldown. Роли: `enhancementBarrierCorner2` (Вектор); `enhancementPupCooldown` (Число). |
-| [`enhancementBarrierHealth`](player-variable-references-2026-11-02.md#enhancementbarrierhealth) | `enhancementValue7` | Число | Laser Barricade health; placement, collision damage, regeneration and HUD. |
-| [`enhancementHitchhikerPassenger`](player-variable-references-2026-11-02.md#enhancementhitchhikerpassenger) | `hitchhikerPassenger` | Игрок/null | Passenger attached to this carrier; null when absent. Infection rules also query it. |
-| [`enhancementHitchhikerCarrierPoolId`](player-variable-references-2026-11-02.md#enhancementhitchhikercarrierpoolid) | `hitchhikerCarrierHealthPool` | Число | Extra health-pool ID granted to a Hitchhiker carrier, retained for removal. |
+## Biomorphing carriers on both teams
 
-### Только функционал supply power-ups
+| Слот | Тип | Назначение и роли |
+| --- | --- | --- |
+| `biomorphingResourceAmount` | number | Biowaste amount carried by either team; Team 1 deposits it and blood uses sentinel 9999. |
 
-| Физическое поле | Прежнее имя | Тип | Назначение и алиасы |
-| --- | --- | --- | --- |
-| [`powerUpForceFieldTimeRemaining`](player-variable-references-2026-11-02.md#powerupforcefieldtimeremaining) | `pForceFieldCount1` | Число | Remaining Force Field seconds; yielding loop and item HUD in supply_drops. |
-| [`powerUpReviveTarget`](player-variable-references-2026-11-02.md#poweruprevivetarget) | `interactEntity` | Игрок/null | Dead Team 1 target retained across instantRevive waits. |
-| [`powerUpItemId`](player-variable-references-2026-11-02.md#powerupitemid) | `currentPowerUp` | Число | Currently carried supply item ID; zero means no item. |
-| [`powerUpTradeDataList`](player-variable-references-2026-11-02.md#poweruptradedatalist) | `powerUpTradeValues` | Массив | Trade record: aimed ground position at index 0 and previous item ID at index 2. |
-| [`powerUpEntityIdList`](player-variable-references-2026-11-02.md#powerupentityidlist) | `powerUpEffects` | Массив | Sparse effect/HUD/damage-modification IDs owned by active items, keyed by item ID range. |
-| [`powerUpAirStrikeIndex`](player-variable-references-2026-11-02.md#powerupairstrikeindex) | `pAirStrikeCount` | Число | Index of 50 air-strike impacts; retained across waits. |
-| [`powerUpHealBeaconTimeRemaining`](player-variable-references-2026-11-02.md#poweruphealbeacontimeremaining) | `pHealBeaconCount` | Число | Remaining healing-beacon seconds; loop and HUD. |
-| [`powerUpTurretTimeRemaining`](player-variable-references-2026-11-02.md#powerupturrettimeremaining) | `pSentryTurretCount` | Число | Remaining sentry-turret seconds; loop and HUD. |
-| [`powerUpCloakTimeRemaining`](player-variable-references-2026-11-02.md#powerupcloaktimeremaining) | `pCloakingDeviceCount` | Число | Remaining cloak seconds and early-cancel threshold. |
-| [`powerUpSuperNanoTimeRemaining`](player-variable-references-2026-11-02.md#powerupsupernanotimeremaining) | `pSuperNanoCount` | Число | Remaining Super Nano seconds; yielding loop and HUD. |
-| [`powerUpUltimateTimeRemaining`](player-variable-references-2026-11-02.md#powerupultimatetimeremaining) | `pUltimateChargerCount` | Число | Remaining Ultimate Charger seconds; loop and HUD. |
-| [`powerUpStunBouncesRemaining`](player-variable-references-2026-11-02.md#powerupstunbouncesremaining) | `pStunCount` | Число | Remaining stun-chain steps, also scaling the terminal stun duration. |
-| [`powerUpStunBeamPosition`](player-variable-references-2026-11-02.md#powerupstunbeamposition) | `pStunChase1` | Вектор | Chased stun-chain beam endpoint retained across bounces/waits. |
-| [`powerUpTurretPosition`](player-variable-references-2026-11-02.md#powerupturretposition) | `sentryTurretPosition` | Вектор | Placed sentry-turret position; zero clears it. |
-| [`powerUpStunTarget`](player-variable-references-2026-11-02.md#powerupstuntarget) | `stunTarget` | Игрок/null | Next zombie hit by the active stun chain. |
-| [`powerUpHealBeaconPosition`](player-variable-references-2026-11-02.md#poweruphealbeaconposition) | `healBeaconPosition` | Вектор | Placed healing-beacon position; zero clears it. |
-| [`powerUpForceFieldPosition`](player-variable-references-2026-11-02.md#powerupforcefieldposition) | `forceFieldPosition` | Вектор | Placed Force Field position; zero clears it. |
-| [`powerUpBouncePadPosition`](player-variable-references-2026-11-02.md#powerupbouncepadposition) | `bouncePadPosition` | Вектор | Placed Bounce Pad ground position. |
-| [`powerUpStunOrigin`](player-variable-references-2026-11-02.md#powerupstunorigin) | `stunOrigin` | Игрок/null | Current beam origin in the stun chain: wearer first, then previous target. |
-| [`powerUpTurretDirection`](player-variable-references-2026-11-02.md#powerupturretdirection) | `sentryTurretDirection` | Вектор | Current sentry firing direction, captured by turret visuals and raycasts. |
-| [`powerUpAirStrikePosition`](player-variable-references-2026-11-02.md#powerupairstrikeposition) | `airStrikePosition` | Вектор | Ground center of the active air-strike area. |
-| [`powerUpTradeIndex`](player-variable-references-2026-11-02.md#poweruptradeindex) | `powerUpTradeIndex` | Число | Index of the aimed ground item in the global supply item arrays. |
+## Explosion presentation shared by zombies and Zombie Hybrid
 
-### Team 1: меню и голосование
+| Слот | Тип | Назначение и роли |
+| --- | --- | --- |
+| `explosionInnerColor` | color | Inner explosion color shared by ordinary zombies and Zombie Hybrid. |
+| `explosionOuterColor` | color | Outer explosion color shared by ordinary zombies and Zombie Hybrid. |
+| `explosionScale` | number | Explosion radius/sound multiplier; zombie warning setup and Hybrid initialization assign it. |
 
-| Физическое поле | Прежнее имя | Тип | Назначение и алиасы |
-| --- | --- | --- | --- |
-| [`pregameVoteList`](player-variable-references-2026-11-02.md#pregamevotelist) | `playerMenuStatus` | Массив | Player votes indexed by PlayerMenuStatusField; slots 0 and 1 stay unused. |
-| [`pregameState`](player-variable-references-2026-11-02.md#pregamestate) | `pregameState` | Число | PregameState hero-selection/readiness state; zero is also the late-join default. |
-| [`isPregameVoting`](player-variable-references-2026-11-02.md#ispregamevoting) | `isVoting` | Булево | This Team 1 player is adjusting votes; separate from global isVoting. |
+## Both teams or multiple systems: shared stats, visuals and role-owned storage
 
-### Team 1: NPC Survivor Rescue
+| Слот | Тип | Назначение и роли |
+| --- | --- | --- |
+| `aiThrottleSpeedSlot` | number | Zombie movement throttle or Team 1 Rescue follow throttle; subroutines, bots and Rescue. Роли: `botThrottleSpeed` (number); `rescueThrottleSpeed` (number) |
+| `recoveryTimeSlot` | number | Existing Team 1 revive countdown / Team 2 replacement delay; no additional slot sharing. Роли: `reviveTimeRemaining` (number); `botRespawnDelay` (number) |
+| `isCrowdControlled` | bool | Set/reset on zombies by stun management; also queried on Team 1 Hitchhiker carriers (default false). |
+| `actorCountdownSlot` | number | Existing Team 1 item countdown / Team 2 Charger windup progression. Роли: `powerUpNoCooldownsTimeRemaining` (number); `botChargerWindupProgress` (number) |
+| `controlStateSlot` | mixed | Player crowd-control immunity flag or zombie boss return target; hero_tuning/zombie abilities/Bosses. Роли: `isCrowdControlCooldownActive` (bool); `botReturnTarget` (player) |
+| `actorMotionSlot1` | mixed | Existing per-hero numeric/vector chase or Rescue extraction position; no change to chase lifetime. Роли: `botGasProjectilePosition` (vector); `botTentaclePosition` (vector); `botBlasterCharge` (number); `botDaytakerCharge` (number); `botSmolderAnger` (number); `botEnsnarerMeleeAngle` (number); `rescueExtractionPosition` (vector) |
+| `actorMotionSlot2` | mixed | Team 2 toxic-cloud duration or Team 1 extraction flight position. Роли: `botGasCloudTimeRemaining` (number); `extractionFlightPosition` (vector) |
+| `actorAbilitySlot2` | mixed | Existing zombie secondary state or temporary Rescue follow message. Роли: `botAuxiliaryState` (mixed); `rescueFollowMessage` (string); `botIsReigniteActive` (bool); `botIsEnsnarerMeleeActive` (bool) |
+| `initialMaxHealth` | number | Cached native/player maximum health before custom scaling; used by infection and Hitchhiker health pools. |
+| `isAttached` | bool | Actor is attached to a host; zombie attachment and Team 1 Hitchhiker share the same meaning. Роли: `botIsAttached` (bool); `enhancementIsHitchhiking` (bool) |
+| `candidateTargetList` | array | Boss target-visibility snapshot, Rescue leader candidates or barricade collision targets; downed-player cleanup removes invalid candidates. Роли: `botPotentialTargetList` (array); `rescuePotentialLeaderList` (array); `enhancementBarrierTargetList` (array) |
+| `sizeScale` | number | Actor size multiplier; shared by players, zombies, Rescue, item ranges and enhancements. |
+| `actorAbilitySlot1` | mixed | Existing per-zombie ability state or Team 1 Rescue extraction flag. Роли: `botAbilityState` (mixed); `rescueIsExtracting` (bool); `botIsBomberPrimed` (bool); `botRusherHealthPoolId` (number); `botGasAimPosition` (vector); `botIsReigniteAttackUsed` (bool); `botRiderGrapplePosition` (vector); `botChargerDestination` (vector); `botTentacleTargetPosition` (vector); `botIsStrikerStrikeActive` (bool); `botIsDownfallenGrabbing` (bool); `botIsEnsnarerBlocking` (bool); `botSmolderState` (number) |
+| `objectiveTypeSnapshot` | number | Last objective type whose per-actor visuals were initialized; used on both teams. |
+| `visualEntityIdList` | array | Zombie effects or Team 1 objective icons retained for yielding cleanup. Роли: `botVisualEntityIdList` (array); `playerObjectiveIconIdList` (array) |
+| `visualCleanupIndex` | number | Per-actor effect/icon cleanup index; the loops yield and cannot use global scratch. |
+| `actorLoopSlot` | number | Existing Ensnarer melee loop index / Bounce Pad duration. Роли: `botEnsnarerUltimateIndex` (number); `powerUpBouncePadTimeRemaining` (number) |
+| `abilityTargetList` | array | Zombie special-ability targets or common zombie/Hybrid explosion targets. Роли: `botSpecialTargetList` (array); `explosionTargetList` (array) |
+| `movementSpeedScale` | number | Movement-speed multiplier used by zombie AI, players/Rescue, crowd control and supply items. |
+| `damageOverTimeRemaining` | number | Tracked DoT duration, normally chased on zombies; one Rusher rule writes it on the victim. Preserve that receiver. |
+| `actorTeamSlot0` | mixed | Team 2: botTeleportCenter; Team 1: powerUpForceFieldTimeRemaining. Receivers, not rule teams, own the storage. Роли: `botTeleportCenter` (vector); `powerUpForceFieldTimeRemaining` (number) |
+| `actorTeamSlot1` | mixed | Team 2: botIsSelectingTarget; Team 1: powerUpReviveTarget. Receivers, not rule teams, own the storage. Роли: `botIsSelectingTarget` (bool); `powerUpReviveTarget` (player) |
+| `actorTeamSlot2` | mixed | Team 2: botReturnMotionSlot; Team 1: powerUpItemId. Receivers, not rule teams, own the storage. Роли: `botReturnTime` (number); `botReturnPosition` (vector); `powerUpItemId` (number) |
+| `actorTeamSlot3` | mixed | Team 2 teleport flag; Team 1 human votes -> item trade data, or Rescue dummy path. Late vote writers are phase-guarded; trade indices 0 and 2 are assigned before reading. Роли: `botIsTeleporting` (bool); `powerUpTradeDataList` (array); `pregameVoteList` (array); `rescuePathList` (array) |
+| `actorTeamSlot4` | mixed | Team 2: botLoopIndexSlot; Team 1: powerUpEntityIdList. Receivers, not rule teams, own the storage. Роли: `botStalkerFadeIndex` (number); `botEnsnarerTargetIndex` (number); `powerUpEntityIdList` (array) |
+| `actorTeamSlot5` | mixed | Team 2: botTarget; Team 1: powerUpAirStrikeIndex. Receivers, not rule teams, own the storage. Роли: `botTarget` (player); `powerUpAirStrikeIndex` (number) |
+| `actorTeamSlot6` | mixed | Team 2: botBiteDuration; Team 1: powerUpHealBeaconTimeRemaining. Receivers, not rule teams, own the storage. Роли: `botBiteDuration` (number); `powerUpHealBeaconTimeRemaining` (number) |
+| `actorTeamSlot7` | mixed | Team 2: botIsTeleportConfirmed; Team 1: powerUpTurretTimeRemaining. Receivers, not rule teams, own the storage. Роли: `botIsTeleportConfirmed` (bool); `powerUpTurretTimeRemaining` (number) |
+| `actorTeamSlot8` | mixed | Team 2: botReigniteDestination; Team 1: powerUpCloakTimeRemaining. Receivers, not rule teams, own the storage. Роли: `botReigniteDestination` (vector); `powerUpCloakTimeRemaining` (number) |
+| `actorTeamSlot9` | mixed | Team 2: botIsWallPhaseAllowed; Team 1: powerUpSuperNanoTimeRemaining. Receivers, not rule teams, own the storage. Роли: `botIsWallPhaseAllowed` (bool); `powerUpSuperNanoTimeRemaining` (number) |
+| `actorTeamSlot10` | mixed | Team 2: botAbilityTarget; Team 1: powerUpUltimateTimeRemaining. Receivers, not rule teams, own the storage. Роли: `botAbilityTarget` (player); `powerUpUltimateTimeRemaining` (number) |
+| `actorTeamSlot11` | mixed | Team 2: botTeleportPosition; Team 1: powerUpStunBouncesRemaining. Receivers, not rule teams, own the storage. Роли: `botTeleportPosition` (vector); `powerUpStunBouncesRemaining` (number) |
+| `actorTeamSlot12` | mixed | Team 2: botBossHealth; Team 1: powerUpStunBeamPosition. Receivers, not rule teams, own the storage. Роли: `botBossHealth` (number); `powerUpStunBeamPosition` (vector) |
+| `actorTeamSlot13` | mixed | Team 2: botIsWallCollisionEnabled; Team 1: powerUpTurretPosition. Receivers, not rule teams, own the storage. Роли: `botIsWallCollisionEnabled` (bool); `powerUpTurretPosition` (vector) |
+| `actorTeamSlot14` | mixed | Team 2: botIsFacingOverridden; Team 1: powerUpStunTarget. Receivers, not rule teams, own the storage. Роли: `botIsFacingOverridden` (bool); `powerUpStunTarget` (player) |
+| `actorTeamSlot15` | mixed | Team 2: botIsThrottleOverridden; Team 1: powerUpHealBeaconPosition. Receivers, not rule teams, own the storage. Роли: `botIsThrottleOverridden` (bool); `powerUpHealBeaconPosition` (vector) |
+| `actorTeamSlot16` | mixed | Team 2: botConfiguredHero; Team 1: powerUpForceFieldPosition. Receivers, not rule teams, own the storage. Роли: `botConfiguredHero` (hero); `powerUpForceFieldPosition` (vector) |
+| `actorTeamSlot17` | mixed | Team 2: botMutationId; Team 1: powerUpBouncePadPosition. Receivers, not rule teams, own the storage. Роли: `botMutationId` (number); `powerUpBouncePadPosition` (vector) |
+| `actorTeamSlot18` | mixed | Team 2: botIsInitializing; Team 1: powerUpStunOrigin. Receivers, not rule teams, own the storage. Роли: `botIsInitializing` (bool); `powerUpStunOrigin` (player) |
+| `actorTeamSlot19` | mixed | Team 2: botKnockbackScale; Team 1: powerUpTurretDirection. Receivers, not rule teams, own the storage. Роли: `botKnockbackScale` (number); `powerUpTurretDirection` (vector) |
+| `actorTeamSlot20` | mixed | Team 2: botCustomTeleportPosition; Team 1: powerUpAirStrikePosition. Receivers, not rule teams, own the storage. Роли: `botCustomTeleportPosition` (vector); `powerUpAirStrikePosition` (vector) |
+| `actorTeamSlot21` | mixed | Team 2: botLastTarget; Team 1: powerUpTradeIndex. Receivers, not rule teams, own the storage. Роли: `botLastTarget` (player); `powerUpTradeIndex` (number) |
+| `actorTeamSlot22` | mixed | Team 2: botAbilityStateSlot; Team 1: enhancementStateSlot1. Receivers, not rule teams, own the storage. Роли: `botAbilityCooldown` (number); `botGasPositionList` (array); `enhancementHybridCooldown` (number); `enhancementBarrierFacing` (vector); `enhancementPyroHitList` (array); `enhancementPlagueCureTotal` (number); `enhancementIsBattleResetReady` (bool); `enhancementBatteryPosition` (vector); `enhancementHitchhikerCarrier` (player); `enhancementPupColor` (color) |
+| `actorTeamSlot23` | mixed | Team 2: botGasRadiusList; Team 1: enhancementStateSlot2. Receivers, not rule teams, own the storage. Роли: `botGasRadiusList` (array); `enhancementBarrierEdgeDirection` (vector); `enhancementBattleAbilityButton` (button); `enhancementBatteryReuseCooldown` (number); `enhancementHitchhikerPassengerPoolId` (number); `enhancementIsPupBeamActive` (bool) |
+| `actorTeamSlot24` | mixed | Team 2: botSpawnWaypoint; Team 1: enhancementStateSlot3. Receivers, not rule teams, own the storage. Роли: `botSpawnWaypoint` (vector); `enhancementBarrierPlacementCooldown` (number); `enhancementBatteryReuseDuration` (number); `enhancementPupTarget` (player) |
+| `actorTeamSlot25` | mixed | Team 2: botCandidateTarget; Team 1: enhancementStateSlot4. Receivers, not rule teams, own the storage. Роли: `botCandidateTarget` (player); `enhancementBarrierPosition` (vector); `enhancementBatteryPlacementCooldown` (number); `enhancementIsPupFreezeAuraActive` (bool) |
+| `actorTeamSlot26` | mixed | Team 2: botIsTeleportAllowed; Team 1: enhancementPositionSlot. Receivers, not rule teams, own the storage. Роли: `botIsTeleportAllowed` (bool); `enhancementBarrierCorner1` (vector); `enhancementPupPosition` (vector) |
+| `actorTeamSlot27` | mixed | Team 2: botReigniteRisePosition; Team 1: enhancementStateSlot6. Receivers, not rule teams, own the storage. Роли: `botReigniteRisePosition` (vector); `enhancementBarrierCorner2` (vector); `enhancementPupCooldown` (number) |
+| `actorTeamSlot28` | mixed | Team 2: botResourceIconIdList; Team 1: enhancementBarrierHealth. Receivers, not rule teams, own the storage. Роли: `botResourceIconIdList` (array); `enhancementBarrierHealth` (number) |
+| `team1PositionSlot` | mixed | Pregame position -> final extraction destination on humans; Rescue NPC path origin on its own actor. No chase owns this slot. Роли: `pregamePosition` (vector); `rescueStartPosition` (vector); `extractionDestination` (vector) |
+| `objectiveActorKindSlot` | mixed | Biomorphing resource type on both teams, or Rescue NPC mood. Goal writers recheck the objective after waits; Rescue completes only after its dummy is destroyed. Роли: `biomorphingResourceType` (number); `rescueMoodIcon` (icon) |
 
-| Физическое поле | Прежнее имя | Тип | Назначение и алиасы |
-| --- | --- | --- | --- |
-| [`rescueMoodIcon`](player-variable-references-2026-11-02.md#rescuemoodicon) | `randVal` | Иконка | Rescue NPC mood/status icon: halo, sad, dizzy or extraction celebration. |
-| [`rescueLeader`](player-variable-references-2026-11-02.md#rescueleader) | `botFollowTarget` | Игрок/null | Team 1 player followed by the Rescue NPC; bot teleport logic reads the NPC's field. |
-| [`rescuePathList`](player-variable-references-2026-11-02.md#rescuepathlist) | `path` | Массив | Recorded leader positions followed and trimmed by the Rescue NPC. |
+## Проверки
 
-### Biomorphing: носители ресурсов обеих команд
+`node analysis/verify-player-variables.cjs` проверяет все 231 скомпилированное правило, слоты и алиасы, граф вызовов получателей eventPlayer и время жизни scratch; выполняет обычную сборку через include. `node analysis/verify-phase-slots.cjs` сохраняет цепочку сравнения прежних globalvar. `node analysis/audit-player-variables.cjs` обновляет этот документ и индекс.
 
-| Физическое поле | Прежнее имя | Тип | Назначение и алиасы |
-| --- | --- | --- | --- |
-| [`biomorphingResourceType`](player-variable-references-2026-11-02.md#biomorphingresourcetype) | `biowasteType` | Число | Material type carried by a player or zombie; null when empty and 3 for the blood goal. |
-| [`biomorphingResourceAmount`](player-variable-references-2026-11-02.md#biomorphingresourceamount) | `playerObjectiveResourceValue` | Число | Biowaste amount carried by either team; Team 1 deposits it and blood uses sentinel 9999. |
-
-### Общие взрывы зомби и Zombie Hybrid
-
-| Физическое поле | Прежнее имя | Тип | Назначение и алиасы |
-| --- | --- | --- | --- |
-| [`explosionInnerColor`](player-variable-references-2026-11-02.md#explosioninnercolor) | `explosionColor1` | Цвет | Inner explosion color shared by ordinary zombies and Zombie Hybrid. |
-| [`explosionOuterColor`](player-variable-references-2026-11-02.md#explosionoutercolor) | `explosionColor2` | Цвет | Outer explosion color shared by ordinary zombies and Zombie Hybrid. |
-| [`explosionScale`](player-variable-references-2026-11-02.md#explosionscale) | `explosionSize` | Число | Explosion radius/sound multiplier; zombie warning setup and Hybrid initialization assign it. |
-
-### Общие состояния и слоты нескольких функционалов
-
-| Физическое поле | Прежнее имя | Тип | Назначение и алиасы |
-| --- | --- | --- | --- |
-| [`aiThrottleSpeedSlot`](player-variable-references-2026-11-02.md#aithrottlespeedslot) | `botThrottleSpeed` | Число | Zombie movement throttle or Team 1 Rescue follow throttle; subroutines, bots and Rescue. Роли: `botThrottleSpeed` (Число); `rescueThrottleSpeed` (Число). |
-| [`recoveryTimeSlot`](player-variable-references-2026-11-02.md#recoverytimeslot) | `reviveTimer` | Число | Existing Team 1 revive countdown / Team 2 replacement delay; no additional slot sharing. Роли: `reviveTimeRemaining` (Число); `botRespawnDelay` (Число). |
-| [`isCrowdControlled`](player-variable-references-2026-11-02.md#iscrowdcontrolled) | `crowdControlled` | Булево | Set/reset on zombies by stun management; also queried on Team 1 Hitchhiker carriers (default false). |
-| [`actorCountdownSlot`](player-variable-references-2026-11-02.md#actorcountdownslot) | `pNoCooldownsCount_bCount2` | Число | Existing Team 1 item countdown / Team 2 Charger windup progression. Роли: `powerUpNoCooldownsTimeRemaining` (Число); `botChargerWindupProgress` (Число). |
-| [`controlStateSlot`](player-variable-references-2026-11-02.md#controlstateslot) | `specialCooldown` | Смешанный | Player crowd-control immunity flag or zombie boss return target; hero_tuning/zombie abilities/Bosses. Роли: `isCrowdControlCooldownActive` (Булево); `botReturnTarget` (Игрок/null). |
-| [`actorMotionSlot1`](player-variable-references-2026-11-02.md#actormotionslot1) | `chase1` | Смешанный | Existing per-hero numeric/vector chase or Rescue extraction position; no change to chase lifetime. Роли: `botGasProjectilePosition` (Вектор); `botTentaclePosition` (Вектор); `botBlasterCharge` (Число); `botDaytakerCharge` (Число); `botSmolderAnger` (Число); `botEnsnarerMeleeAngle` (Число); `rescueExtractionPosition` (Вектор). |
-| [`actorMotionSlot2`](player-variable-references-2026-11-02.md#actormotionslot2) | `chase2` | Смешанный | Team 2 toxic-cloud duration or Team 1 extraction flight position. Роли: `botGasCloudTimeRemaining` (Число); `extractionFlightPosition` (Вектор). |
-| [`actorAbilitySlot2`](player-variable-references-2026-11-02.md#actorabilityslot2) | `botTempvalue2` | Смешанный | Existing zombie secondary state or temporary Rescue follow message. Роли: `botAuxiliaryState` (Смешанный); `rescueFollowMessage` (Строка); `botIsReigniteActive` (Булево); `botIsEnsnarerMeleeActive` (Булево). |
-| [`initialMaxHealth`](player-variable-references-2026-11-02.md#initialmaxhealth) | `initialMaxHealth` | Число | Cached native/player maximum health before custom scaling; used by infection and Hitchhiker health pools. |
-| [`isAttached`](player-variable-references-2026-11-02.md#isattached) | `attached` | Булево | Actor is attached to a host; zombie attachment and Team 1 Hitchhiker share the same meaning. Роли: `botIsAttached` (Булево); `enhancementIsHitchhiking` (Булево). |
-| [`candidateTargetList`](player-variable-references-2026-11-02.md#candidatetargetlist) | `potentialTargets` | Массив | Boss target-visibility snapshot, Rescue leader candidates or barricade collision targets; downed-player cleanup removes invalid candidates. Роли: `botPotentialTargetList` (Массив); `rescuePotentialLeaderList` (Массив); `enhancementBarrierTargetList` (Массив). |
-| [`sizeScale`](player-variable-references-2026-11-02.md#sizescale) | `size` | Число | Actor size multiplier; shared by players, zombies, Rescue, item ranges and enhancements. |
-| [`actorAbilitySlot1`](player-variable-references-2026-11-02.md#actorabilityslot1) | `botTempValue` | Смешанный | Existing per-zombie ability state or Team 1 Rescue extraction flag. Роли: `botAbilityState` (Смешанный); `rescueIsExtracting` (Булево); `botIsBomberPrimed` (Булево); `botRusherHealthPoolId` (Число); `botGasAimPosition` (Вектор); `botIsReigniteAttackUsed` (Булево); `botRiderGrapplePosition` (Вектор); `botChargerDestination` (Вектор); `botTentacleTargetPosition` (Вектор); `botIsStrikerStrikeActive` (Булево); `botIsDownfallenGrabbing` (Булево); `botIsEnsnarerBlocking` (Булево); `botSmolderState` (Число). |
-| [`objectiveTypeSnapshot`](player-variable-references-2026-11-02.md#objectivetypesnapshot) | `objectiveValue` | Число | Last objective type whose per-actor visuals were initialized; used on both teams. |
-| [`visualEntityIdList`](player-variable-references-2026-11-02.md#visualentityidlist) | `generalPlayerBotEntities` | Массив | Zombie effects or Team 1 objective icons retained for yielding cleanup. Роли: `botVisualEntityIdList` (Массив); `playerObjectiveIconIdList` (Массив). |
-| [`visualCleanupIndex`](player-variable-references-2026-11-02.md#visualcleanupindex) | `entityCount` | Число | Per-actor effect/icon cleanup index; the loops yield and cannot use global scratch. |
-| [`actorLoopSlot`](player-variable-references-2026-11-02.md#actorloopslot) | `pBouncePadCount1` | Число | Existing Ensnarer melee loop index / Bounce Pad duration. Роли: `botEnsnarerUltimateIndex` (Число); `powerUpBouncePadTimeRemaining` (Число). |
-| [`abilityTargetList`](player-variable-references-2026-11-02.md#abilitytargetlist) | `botSpecialPotentialTargets` | Массив | Zombie special-ability targets or common zombie/Hybrid explosion targets. Роли: `botSpecialTargetList` (Массив); `explosionTargetList` (Массив). |
-| [`movementSpeedScale`](player-variable-references-2026-11-02.md#movementspeedscale) | `movementSpeed` | Число | Movement-speed multiplier used by zombie AI, players/Rescue, crowd control and supply items. |
-| [`damageOverTimeRemaining`](player-variable-references-2026-11-02.md#damageovertimeremaining) | `damageOverTimeDuration` | Число | Tracked DoT duration, normally chased on zombies; one Rusher rule writes it on the victim. Preserve that receiver. |
-
-## Проверки и ограничения
-
-`node analysis/verify-player-variables.cjs` сравнивает все 231 правила с явно заданным пакетом преобразований исходной ревизии после нормализации оставшихся физических имён: события, условия, действия, выражения, аргументы переоценки и chase. Обычная сборка через `#!include` также проверена, локальный `src/main.ws.txt` обновлён. Предупреждений нет при сохранённых подавлениях проекта.
-
-`node analysis/audit-player-variables.cjs` пересоздаёт этот документ и индекс из проверенной классификации `analysis/player-variable-layout.cjs` и текущих исходников. Классификация владения не выводится автоматически из `@Team`.
-
-Проверка в игре не проводилась. Сравнение исключает изменения скомпилированной логики вне согласованного пакета, но не моделирует планирование движка или перенос состояния уже идущего матча.
+Все проверки статические. Игровой прогон не выполнялся. Для обновления импортируйте полный скрипт.

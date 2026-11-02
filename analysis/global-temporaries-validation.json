@@ -1,7 +1,7 @@
 {
-  "elements": 27188,
+  "elements": 27211,
   "globals": 99,
-  "playerVariables": 107,
+  "playerVariables": 74,
   "warnings": [],
   "method": "Backward scratch liveness in compiled Workshop control flow, including expanded macros, branches, loops, skips and implicit trailing Ends. Calls are conservative boundaries. Reevaluated HUD/effect/icon fields are checked for uncaptured scratch references. No in-game validation.",
   "rules": [

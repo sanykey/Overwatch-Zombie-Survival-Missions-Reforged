@@ -29,17 +29,19 @@ macro minibossMutationMacro():
 
 
 macro botStatManagementMacro():
-    # tmp0: current bot hero's table index, to look up bite, movement and damage settings without repeating the hero search.
-    tmp0 = botHeroList.index(eventPlayer.getHero())
-    eventPlayer.botBiteDamage = botBiteDamageList[tmp0]
+    # botStatHeroIndex: current bot hero's table index, to look up bite, movement and damage settings without repeating the hero search.
+    #!define botStatHeroIndex tmp0
+    botStatHeroIndex = botHeroList.index(eventPlayer.getHero())
+    eventPlayer.botBiteDamage = botBiteDamageList[botStatHeroIndex]
     #Re-calibrate bite damage
-    eventPlayer.botBiteDamage *= 100 / botDamageDealtList[tmp0]
-    eventPlayer.botBiteDuration = botBiteDurationList[tmp0]
+    eventPlayer.botBiteDamage *= 100 / botDamageDealtList[botStatHeroIndex]
+    eventPlayer.botBiteDuration = botBiteDurationList[botStatHeroIndex]
     #Range from 0 to 1 in terms of throttle
-    eventPlayer.botThrottleSpeed = botThrottleSpeedList[tmp0]
-    # tmp0: normalized damage multiplier; the hero index is no longer needed after this lookup.
-    tmp0 = botDamageDealtList[tmp0] / 100
-    eventPlayer.setDamageDealt(tmp0 * 100)
+    eventPlayer.botThrottleSpeed = botThrottleSpeedList[botStatHeroIndex]
+    # botStatDamageScale: normalized damage multiplier; the hero index is no longer needed after this lookup.
+    #!define botStatDamageScale tmp0
+    botStatDamageScale = botDamageDealtList[botStatHeroIndex] / 100
+    eventPlayer.setDamageDealt(botStatDamageScale * 100)
     eventPlayer.setDamageReceived(100)
     eventPlayer.movementSpeedScale = 1
     eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100 + ((len(getDeadPlayers(Team.1).filter(lambda player: player.rescueTimeRemaining <= 0))) * 3))
@@ -77,29 +79,30 @@ macro mutationsMacro():
     #Zombies have a chance to mutate. Bosses cannot mutate
     if len(availableMutationList) > 0 and not eventPlayer in bossStateList and (random.uniform(0, 100) < (100 if challengeSetting == 3 or challengeSetting == 5 else createWorkshopSettingFloat("Mutations", "Chance to mutate percentage", 25, 0, 100))):
         eventPlayer.botMutationId = random.choice(availableMutationList)
-        # tmp2: outline color; every enabled mutation assigns it before the capture below.
+        # botMutationOutlineColor: outline color; every enabled mutation assigns it before the capture below.
         #Speed
         if eventPlayer.botMutationId == 1:
             eventPlayer.movementSpeedScale *= 1.5
             eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
-            tmp2 = Color.PURPLE
+            #!define botMutationOutlineColor tmp2
+            botMutationOutlineColor = Color.PURPLE
             eventPlayer.startForcingName("SPEED")
         #Size Growth
         elif eventPlayer.botMutationId == 2:
             eventPlayer.sizeScale *= 1.5
             eventPlayer.botBaseHealth *= eventPlayer.sizeScale
-            tmp2 = Color.VIOLET
+            botMutationOutlineColor = Color.VIOLET
             eventPlayer.startForcingName("XL")
         #Size Reduction
         elif eventPlayer.botMutationId == 3:
             eventPlayer.sizeScale *= 0.6
             eventPlayer.botBaseHealth *= eventPlayer.sizeScale
-            tmp2 = Color.ROSE
+            botMutationOutlineColor = Color.ROSE
             eventPlayer.startForcingName("XS")
         #Radioactive
         elif eventPlayer.botMutationId == 4:
             eventPlayer.botBiteDuration *= 1.5
-            tmp2 = Color.LIME_GREEN
+            botMutationOutlineColor = Color.LIME_GREEN
             eventPlayer.startForcingName("Radioactive")
         #Heavy: enabled mutation IDs are 1..5, so the remaining case is 5.
         else:
@@ -110,10 +113,10 @@ macro mutationsMacro():
             eventPlayer.setMoveSpeed(100 * eventPlayer.movementSpeedScale)
             #Scale health
             eventPlayer.botBaseHealth /= eventPlayer.botKnockbackScale
-            tmp2 = Color.BLACK
+            botMutationOutlineColor = Color.BLACK
             eventPlayer.startForcingName("Heavy")
         #Capture the color so later scratch writes cannot change this persistent outline.
-        eventPlayer.startForcingOutlineFor(getAllPlayers(), true, evalOnce(tmp2))
+        eventPlayer.startForcingOutlineFor(getAllPlayers(), true, evalOnce(botMutationOutlineColor))
     else:
         eventPlayer.botMutationId = 0
 
@@ -142,13 +145,14 @@ macro botEntityManagementMacro():
                 createEffect(getAllPlayers().filter(lambda _: eventPlayer.botGasProjectilePosition != null), Effect.GOOD_AURA, Color.LIME_GREEN, eventPlayer.botGasProjectilePosition, 0.2 * eventPlayer.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
                 eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
                 #Gas Clouds
-                # tmp0: gas-cloud visual index, to create each cloud and ring with a captured array index.
-                for tmp0 in range(3):
+                # botGasVisualIndex: gas-cloud visual index, to create each cloud and ring with a captured array index.
+                #!define botGasVisualIndex tmp0
+                for botGasVisualIndex in range(3):
                     #Cloud Effect
-                    createEffect(getAllPlayers().filter(lambda _: eventPlayer.botGasPositionList[evalOnce(tmp0)] != null), Effect.CLOUD, Color.LIME_GREEN, eventPlayer.botGasPositionList[evalOnce(tmp0)], eventPlayer.botGasRadiusList[evalOnce(tmp0)] + 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                    createEffect(getAllPlayers().filter(lambda _: eventPlayer.botGasPositionList[evalOnce(botGasVisualIndex)] != null), Effect.CLOUD, Color.LIME_GREEN, eventPlayer.botGasPositionList[evalOnce(botGasVisualIndex)], eventPlayer.botGasRadiusList[evalOnce(botGasVisualIndex)] + 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
                     eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
                     #Cloud Effect ring
-                    createEffect(getAllPlayers().filter(lambda _: eventPlayer.botGasPositionList[evalOnce(tmp0)] != null), Effect.RING, Color.LIME_GREEN, eventPlayer.botGasPositionList[evalOnce(tmp0)], eventPlayer.botGasRadiusList[evalOnce(tmp0)] + 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                    createEffect(getAllPlayers().filter(lambda _: eventPlayer.botGasPositionList[evalOnce(botGasVisualIndex)] != null), Effect.RING, Color.LIME_GREEN, eventPlayer.botGasPositionList[evalOnce(botGasVisualIndex)], eventPlayer.botGasRadiusList[evalOnce(botGasVisualIndex)] + 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
                     eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
             else:
                 #Roadhog toxic cloud
@@ -239,9 +243,10 @@ macro globalObjectiveEntityManagementMacro():
             #Extraction zone dome
             createEffect(getLivingPlayers(Team.1).filter(lambda _: extractionZoneRad < 200), Effect.SPHERE, Color.LIME_GREEN, objectivePositionList[0], extractionZoneRad, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             objectiveEntityIdList.append(getLastCreatedEntity())
-            # tmp0: extraction light-shaft layer index, to select heights -2, 22 and 46.
-            for tmp0 in range(3):
-                createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.SKY_BLUE, objectivePositionList[0] + vect(0, [-2, 22, 46][tmp0], 0), objectiveRad, EffectReeval.VISIBILITY)
+            # extractionLightShaftLayerIndex: extraction light-shaft layer index, to select heights -2, 22 and 46.
+            #!define extractionLightShaftLayerIndex tmp0
+            for extractionLightShaftLayerIndex in range(3):
+                createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.SKY_BLUE, objectivePositionList[0] + vect(0, [-2, 22, 46][extractionLightShaftLayerIndex], 0), objectiveRad, EffectReeval.VISIBILITY)
                 objectiveEntityIdList.append(getLastCreatedEntity())
             #Extraction icon
             createIcon(getAllPlayers().exclude(objectivePlayerList), objectivePositionList[0] + vect(0, 1, 0), Icon.ARROW_DOWN, IconReeval.VISIBILITY, Color.SKY_BLUE)
@@ -378,19 +383,20 @@ macro globalObjectiveEntityManagementMacro():
         createInWorldText(objectivePlayerList, "{0}%".format(floor(satelliteTerminalProgressList[satelliteTerminalPositionList.index(sorted(satelliteTerminalPositionList, lambda x: distance(localPlayer.getPosition(), x))[0])])), updateEveryFrame(localPlayer.getEyePosition() + ((directionFromAngles(localPlayer.getHorizontalFacingAngle(), localPlayer.getVerticalFacingAngle() + 15)) * 200)), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, objectiveColor)
         objectiveEntityIdList.append(getLastCreatedText())
         #Terminal effects
-        # tmp0: terminal index, to create its icon, repair ring, screen and distance text.
-        for tmp0 in range(len(satelliteTerminalProgressList)):
+        # satelliteTerminalVisualIndex: terminal index, to create its icon, repair ring, screen and distance text.
+        #!define satelliteTerminalVisualIndex tmp0
+        for satelliteTerminalVisualIndex in range(len(satelliteTerminalProgressList)):
             #Terminal icon
-            createIcon(getPlayers(Team.1).filter(lambda player: distance(player.getPosition(), satelliteTerminalPositionList[evalOnce(tmp0)]) > objectiveRad and satelliteTerminalProgressList[evalOnce(tmp0)] < 100), satelliteTerminalPositionList[evalOnce(tmp0)] + vect(0, 1, 0), Icon.BOLT, IconReeval.VISIBILITY_AND_POSITION, objectiveColor)
+            createIcon(getPlayers(Team.1).filter(lambda player: distance(player.getPosition(), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)]) > objectiveRad and satelliteTerminalProgressList[evalOnce(satelliteTerminalVisualIndex)] < 100), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)] + vect(0, 1, 0), Icon.BOLT, IconReeval.VISIBILITY_AND_POSITION, objectiveColor)
             objectiveEntityIdList.append(getLastCreatedEntity())
             #Terminal repair area ring
-            createEffect(getAllPlayers(), Effect.RING, objectiveColor, satelliteTerminalPositionList[evalOnce(tmp0)], objectiveRad, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            createEffect(getAllPlayers(), Effect.RING, objectiveColor, satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)], objectiveRad, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             objectiveEntityIdList.append(getLastCreatedEntity())
             #Terminal "screen" light shaft
-            createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, objectiveColor, satelliteTerminalPositionList[evalOnce(tmp0)] + directionTowards(satelliteTerminalPositionList[evalOnce(tmp0)], objectivePositionList[0]) * objectiveRad * 0.8 + vect(0, -1.5, 0), 0.25, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, objectiveColor, satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)] + directionTowards(satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)], objectivePositionList[0]) * objectiveRad * 0.8 + vect(0, -1.5, 0), 0.25, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             objectiveEntityIdList.append(getLastCreatedEntity())
             #Objective distance
-            createInWorldText(getAllPlayers().filter(lambda player: satelliteTerminalProgressList[evalOnce(tmp0)] < 100 and distance(player.getPosition(), satelliteTerminalPositionList[evalOnce(tmp0)]) > objectiveRad), "Distance: {0}m".format(distance(localPlayer.getPosition(), satelliteTerminalPositionList[evalOnce(tmp0)])), satelliteTerminalPositionList[evalOnce(tmp0)], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, objectiveColor, SpecVisibility.NEVER)
+            createInWorldText(getAllPlayers().filter(lambda player: satelliteTerminalProgressList[evalOnce(satelliteTerminalVisualIndex)] < 100 and distance(player.getPosition(), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)]) > objectiveRad), "Distance: {0}m".format(distance(localPlayer.getPosition(), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)])), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, objectiveColor, SpecVisibility.NEVER)
             objectiveEntityIdList.append(getLastCreatedText())
 
 
@@ -408,8 +414,9 @@ def setDifficulty():
         botBiteDurationList = numbersList.slice(NL_BITE_DURATIONS_INSANITY_OFFSET, NL_BITE_DURATIONS_INSANITY_LEN)
         #Bot throttle speeds
         botThrottleSpeedList = []
-        # tmp0: hero-entry counter, to fill all 21 Insanity throttle speeds with 1.
-        for tmp0 in range(21):
+        # insanityThrottleHeroIndex: hero-entry counter, to fill all 21 Insanity throttle speeds with 1.
+        #!define insanityThrottleHeroIndex tmp0
+        for insanityThrottleHeroIndex in range(21):
             botThrottleSpeedList.append(1)
         #Bot damage dealt
         botDamageDealtList = numbersList.slice(NL_DAMAGE_DEALT_INSANITY_OFFSET, NL_DAMAGE_DEALT_INSANITY_LEN)
@@ -649,28 +656,30 @@ def selectTarget():
     @Name "selectTarget"
     
     eventPlayer.botIsSelectingTarget = true
-    # tmp1: per-call target calculations; preserve the final snapshot below for the boss distance text.
-    tmp1 = []
+    # botSelectionCandidateList: per-call target calculations; preserve the final snapshot below for the boss distance text.
+    #!define botSelectionCandidateList tmp1
+    botSelectionCandidateList = []
     #Miniboss prioritizes players on objective
     if eventPlayer in miniBossList:
-        tmp1.append(objectivePlayerList.filter(lambda x: not x.isDummy()))
+        botSelectionCandidateList.append(objectivePlayerList.filter(lambda x: not x.isDummy()))
     #Prioitize dummy bots
-    tmp1.append(playerTargetList.filter(lambda x: x.isDummy()))
+    botSelectionCandidateList.append(playerTargetList.filter(lambda x: x.isDummy()))
     #For projectile firing heroes
     if not eventPlayer in bossStateList and eventPlayer.getHero() == Hero.PHARAH:
         #Players in Air
-        tmp1.append(playerTargetList.filter(lambda x: distance(x.getPosition(), nearestWalkablePosition(x.getPosition())) > 5))
+        botSelectionCandidateList.append(playerTargetList.filter(lambda x: distance(x.getPosition(), nearestWalkablePosition(x.getPosition())) > 5))
     #Add players who are below bot to target list
-    tmp1.append(sorted(playerTargetList.exclude(tmp1).filter(lambda x: x.getPosition().y - eventPlayer.getPosition().y < 2.5), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))
+    botSelectionCandidateList.append(sorted(playerTargetList.exclude(botSelectionCandidateList).filter(lambda x: x.getPosition().y - eventPlayer.getPosition().y < 2.5), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))
     #Add remaining players
-    tmp1.append(sorted(playerTargetList.exclude(tmp1), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))
+    botSelectionCandidateList.append(sorted(playerTargetList.exclude(botSelectionCandidateList), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))
     #Remove invisible players
-    tmp1 = tmp1.filter(lambda x: not x.invisibilityCount)
+    botSelectionCandidateList = botSelectionCandidateList.filter(lambda x: not x.invisibilityCount)
     #The reevaluated boss distance-text visibility reads this per-bot snapshot after this call returns.
-    eventPlayer.botPotentialTargetList = tmp1
-    # tmp0: candidate-target index, to select the first target visible to this bot.
-    for tmp0 in range(len(tmp1)):
-        eventPlayer.botCandidateTarget = tmp1[tmp0]
+    eventPlayer.botPotentialTargetList = botSelectionCandidateList
+    # botSelectionCandidateIndex: candidate-target index, to select the first target visible to this bot.
+    #!define botSelectionCandidateIndex tmp0
+    for botSelectionCandidateIndex in range(len(botSelectionCandidateList)):
+        eventPlayer.botCandidateTarget = botSelectionCandidateList[botSelectionCandidateIndex]
         if isInLoS(eventPlayer.botCandidateTarget.getEyePosition(), eventPlayer.getPosition() + losOffsetConst):
             break
         #wait()
@@ -725,9 +734,10 @@ def botRespawnInitialization():
     eventPlayer.botBossHealth = -1
     #Chance for a minboss on high difficulties
     if difficultySetting >= 3 and eventPlayer in bossStateList == false and len(miniBossList.filter(lambda x: entityExists(x))) == 0:
-        # tmp0: miniboss promotion roll, consumed before the possible initialization wait.
-        tmp0 = random.randint(1, 27 if objectiveTypeList[0] == ObjectiveType.SHOWDOWN else 189)
-        if tmp0 == 1:
+        # minibossPromotionRoll: miniboss promotion roll, consumed before the possible initialization wait.
+        #!define minibossPromotionRoll tmp0
+        minibossPromotionRoll = random.randint(1, 27 if objectiveTypeList[0] == ObjectiveType.SHOWDOWN else 189)
+        if minibossPromotionRoll == 1:
             minibossMutationMacro()
             wait(2)
     botStatManagementMacro()

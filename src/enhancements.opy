@@ -232,23 +232,26 @@ rule "LASER BARRICADE BLOCKS ZOMBIES":
     stopChasing(eventPlayer.enhancementBarrierHealth)
     #Filter horizontal distance, feet height, eye height and distance from wall together.
     eventPlayer.enhancementBarrierTargetList = getLivingPlayers(Team.2).filter(lambda target: (distance(eventPlayer.enhancementBarrierPosition, vect(target.getPosition().x, eventPlayer.enhancementBarrierPosition.getPosition().y, target.getPosition().z)) < 0.5 * LASER_BARRICADE_WIDTH) and (target.getPosition().y < eventPlayer.enhancementBarrierPosition.y + LASER_BARRICADE_HEIGHT) and (target.getEyePosition().y > eventPlayer.enhancementBarrierPosition.y) and (distance(vect(target.getPosition().x, eventPlayer.enhancementBarrierCorner1.y, target.getPosition().z), eventPlayer.enhancementBarrierCorner1 + eventPlayer.enhancementBarrierEdgeDirection * (min(LASER_BARRICADE_WIDTH, abs(cosDeg(angleBetweenVectors(eventPlayer.enhancementBarrierEdgeDirection, directionTowards(eventPlayer.enhancementBarrierCorner1, vect(target.getPosition().x, eventPlayer.enhancementBarrierCorner1.y, target.getPosition().z)))) * distance(eventPlayer.enhancementBarrierCorner1, vect(target.getPosition().x, eventPlayer.enhancementBarrierCorner1.y, target.getPosition().z)))))) < 1.5))
-    # tmp1: both push reference points, reconstructed from saved geometry and consumed before wait.
-    tmp1 = [eventPlayer.enhancementBarrierPosition + eventPlayer.enhancementBarrierFacing, eventPlayer.enhancementBarrierPosition + eventPlayer.enhancementBarrierFacing * -1]
-    # tmp0: barricade target index, to damage and push each zombie crossing the barrier.
-    for tmp0 in range(len(eventPlayer.enhancementBarrierTargetList)):
-        # tmp2: current zombie, consumed by this iteration's damage/push actions before wait.
-        tmp2 = eventPlayer.enhancementBarrierTargetList[tmp0]
-        if not tmp2.hasStatus(Status.ROOTED):
+    # barrierPushReferencePointList: both push reference points, reconstructed from saved geometry and consumed before wait.
+    #!define barrierPushReferencePointList tmp1
+    barrierPushReferencePointList = [eventPlayer.enhancementBarrierPosition + eventPlayer.enhancementBarrierFacing, eventPlayer.enhancementBarrierPosition + eventPlayer.enhancementBarrierFacing * -1]
+    # barrierCollisionTargetIndex: barricade target index, to damage and push each zombie crossing the barrier.
+    #!define barrierCollisionTargetIndex tmp0
+    for barrierCollisionTargetIndex in range(len(eventPlayer.enhancementBarrierTargetList)):
+        # barrierCollisionTarget: current zombie, consumed by this iteration's damage/push actions before wait.
+        #!define barrierCollisionTarget tmp2
+        barrierCollisionTarget = eventPlayer.enhancementBarrierTargetList[barrierCollisionTargetIndex]
+        if not barrierCollisionTarget.hasStatus(Status.ROOTED):
             #Damage the barricade
-            eventPlayer.enhancementBarrierHealth -= tmp2.getMaxHealth() * 2.5
-            tmp2.setStatusEffect(eventPlayer, Status.ROOTED, 0.5)
-            damage(tmp2, eventPlayer, 10)
-        if tmp2.getThrottle() == vect(0, 0, 0):
+            eventPlayer.enhancementBarrierHealth -= barrierCollisionTarget.getMaxHealth() * 2.5
+            barrierCollisionTarget.setStatusEffect(eventPlayer, Status.ROOTED, 0.5)
+            damage(barrierCollisionTarget, eventPlayer, 10)
+        if barrierCollisionTarget.getThrottle() == vect(0, 0, 0):
             #If bot is not throttling
-            tmp2.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(tmp1, lambda x: distance(tmp2.getPosition(), x)))[0])), (-1 if tmp2.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(tmp2.getPosition(), tmp2.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
+            barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(barrierPushReferencePointList, lambda x: distance(barrierCollisionTarget.getPosition(), x)))[0])), (-1 if barrierCollisionTarget.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(barrierCollisionTarget.getPosition(), barrierCollisionTarget.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
         else:
             #If bot is throttling
-            tmp2.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(tmp1, lambda x: angleBetweenVectors(worldVector(tmp2.getThrottle(), tmp2, Transform.ROTATION), directionTowards(eventPlayer.enhancementBarrierPosition, x)))).last())), (-1 if tmp2.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(tmp2.getPosition(), tmp2.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+            barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(barrierPushReferencePointList, lambda x: angleBetweenVectors(worldVector(barrierCollisionTarget.getThrottle(), barrierCollisionTarget, Transform.ROTATION), directionTowards(eventPlayer.enhancementBarrierPosition, x)))).last())), (-1 if barrierCollisionTarget.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(barrierCollisionTarget.getPosition(), barrierCollisionTarget.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     wait()
     if ruleCondition:
         loop()
@@ -294,16 +297,18 @@ rule "PYROTECHNIC APPLIES DAMAGE":
     @Condition len(eventPlayer.enhancementPyroHitList) > 0
     
     while len(eventPlayer.enhancementPyroHitList) > 0:
-        # tmp0: zombie to burn; consumed within this iteration before the cooldown wait.
-        tmp0 = eventPlayer.enhancementPyroHitList[0]
-        if tmp0.isAlive():
-            # tmp1: damage per second based on hits in the last cycle, used immediately.
-            tmp1 = min(4 * (len(eventPlayer.enhancementPyroHitList.filter(lambda x: x == tmp0))), 30)
-            if tmp0 in bossStateList:
-                # tmp1: halve this zombie's damage if it is a boss.
-                tmp1 /= 2
-            tmp0.startDamageOverTime(eventPlayer, 3, tmp1)
-        eventPlayer.enhancementPyroHitList.remove(tmp0)
+        # pyroBurnTarget: zombie to burn; consumed within this iteration before the cooldown wait.
+        #!define pyroBurnTarget tmp0
+        pyroBurnTarget = eventPlayer.enhancementPyroHitList[0]
+        if pyroBurnTarget.isAlive():
+            # pyroBurnDamagePerSecond: damage per second based on hits in the last cycle, used immediately.
+            #!define pyroBurnDamagePerSecond tmp1
+            pyroBurnDamagePerSecond = min(4 * (len(eventPlayer.enhancementPyroHitList.filter(lambda x: x == pyroBurnTarget))), 30)
+            if pyroBurnTarget in bossStateList:
+                # pyroBurnDamagePerSecond: halve this zombie's damage if it is a boss.
+                pyroBurnDamagePerSecond /= 2
+            pyroBurnTarget.startDamageOverTime(eventPlayer, 3, pyroBurnDamagePerSecond)
+        eventPlayer.enhancementPyroHitList.remove(pyroBurnTarget)
     wait(0.5)
     if ruleCondition:
         loop()
@@ -417,12 +422,13 @@ rule "CHARGE BATTERY (USAGE AND COOLDOWNS)":
     @Condition eventPlayer.enhancementBatteryPosition != 0
     @Condition (playerTargetList.any(lambda x: x.getUltCharge() < 100 and distance(x.getPosition(), eventPlayer.enhancementBatteryPosition) < 1.5 * x.sizeScale)) == true
     
-    # tmp0: survivor using the battery, to play feedback and grant ultimate charge before cooldown waits.
-    tmp0 = (getLivingPlayers(Team.1).filter(lambda player: player.hasSpawned() and distance(player.getPosition(), eventPlayer.enhancementBatteryPosition) < 1.5))[0]
-    playEffect(tmp0, DynamicEffect.BUFF_IMPACT_SOUND, Color.YELLOW, tmp0, 50)
-    playEffect(tmp0, DynamicEffect.GOOD_EXPLOSION, Color.GRAY, eventPlayer.enhancementBatteryPosition, 3)
-    playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, Color.YELLOW, tmp0, 1)
-    tmp0.setUltCharge(tmp0.getUltCharge() + 15)
+    # batteryChargeRecipient: survivor using the battery, to play feedback and grant ultimate charge before cooldown waits.
+    #!define batteryChargeRecipient tmp0
+    batteryChargeRecipient = (getLivingPlayers(Team.1).filter(lambda player: player.hasSpawned() and distance(player.getPosition(), eventPlayer.enhancementBatteryPosition) < 1.5))[0]
+    playEffect(batteryChargeRecipient, DynamicEffect.BUFF_IMPACT_SOUND, Color.YELLOW, batteryChargeRecipient, 50)
+    playEffect(batteryChargeRecipient, DynamicEffect.GOOD_EXPLOSION, Color.GRAY, eventPlayer.enhancementBatteryPosition, 3)
+    playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, Color.YELLOW, batteryChargeRecipient, 1)
+    batteryChargeRecipient.setUltCharge(batteryChargeRecipient.getUltCharge() + 15)
     eventPlayer.enhancementBatteryReuseCooldown = eventPlayer.enhancementBatteryReuseDuration
     while eventPlayer.enhancementBatteryReuseCooldown > 0:
         wait(0.5)
@@ -442,18 +448,20 @@ rule "HITCHHIKER ATTACH/DETATCH":
         if playerTargetList.exclude(eventPlayer).any(lambda x: not x.isAttached and distance(eventPlayer.getPosition(), x.getPosition()) < 2 * x.sizeScale):
             #Select parent
             eventPlayer.enhancementHitchhikerCarrier = (sorted(playerTargetList.exclude(eventPlayer).filter(lambda x: not x.isCrowdControlled and distance(eventPlayer.getPosition(), x.getPosition()) < x.sizeScale * 2), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition()))))[0]
-            # tmp0: attachment position in world space, converted and captured before any wait.
-            tmp0 = eventPlayer.enhancementHitchhikerCarrier.getPosition() + directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementHitchhikerCarrier.getPosition(), eventPlayer.getPosition())), 0) * eventPlayer.enhancementHitchhikerCarrier.sizeScale + vect(0, eventPlayer.enhancementHitchhikerCarrier.sizeScale, 0)
-            # tmp0: convert the attachment position to the parent's local coordinates.
-            tmp0 = localVector(tmp0, eventPlayer.enhancementHitchhikerCarrier, Transform.ROTATION_AND_TRANSLATION)
+            # hitchhikerWorldAttachmentPosition: attachment position in world space, converted and captured before any wait.
+            #!define hitchhikerWorldAttachmentPosition tmp0
+            hitchhikerWorldAttachmentPosition = eventPlayer.enhancementHitchhikerCarrier.getPosition() + directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementHitchhikerCarrier.getPosition(), eventPlayer.getPosition())), 0) * eventPlayer.enhancementHitchhikerCarrier.sizeScale + vect(0, eventPlayer.enhancementHitchhikerCarrier.sizeScale, 0)
+            # hitchhikerLocalAttachmentOffset: convert the attachment position to the parent's local coordinates.
+            #!define hitchhikerLocalAttachmentOffset tmp0
+            hitchhikerLocalAttachmentOffset = localVector(hitchhikerWorldAttachmentPosition, eventPlayer.enhancementHitchhikerCarrier, Transform.ROTATION_AND_TRANSLATION)
             #Translate player behind parent
-            if tmp0.z > 0:
-                # tmp0: mirror a forward offset behind the parent.
-                tmp0 *= vect(1, 1, -1)
-            # tmp0: raise the final local offset before capturing it in attachTo.
-            tmp0 += Vector.UP
+            if hitchhikerLocalAttachmentOffset.z > 0:
+                # hitchhikerLocalAttachmentOffset: mirror a forward offset behind the parent.
+                hitchhikerLocalAttachmentOffset *= vect(1, 1, -1)
+            # hitchhikerLocalAttachmentOffset: raise the final local offset before capturing it in attachTo.
+            hitchhikerLocalAttachmentOffset += Vector.UP
             eventPlayer.enhancementIsHitchhiking = true
-            eventPlayer.attachTo(eventPlayer.enhancementHitchhikerCarrier, evalOnce(tmp0))
+            eventPlayer.attachTo(eventPlayer.enhancementHitchhikerCarrier, evalOnce(hitchhikerLocalAttachmentOffset))
             smallMessage(eventPlayer, "You are attached")
             eventPlayer.addHealthPool(Health.NORMAL, eventPlayer.enhancementHitchhikerCarrier.initialMaxHealth, true, false)
             eventPlayer.enhancementHitchhikerPassengerPoolId = getLastCreatedHealthPool()
@@ -492,14 +500,17 @@ rule "HITCHHIKER LIFEBONDS":
     #Normalized health difference
     @Condition abs(eventPlayer.getNormalizedHealth() - eventPlayer.enhancementHitchhikerCarrier.getNormalizedHealth()) > 0.01
     
-    # tmp0: health to transfer this update; consumed by both setHealth actions before wait.
-    tmp0 = (abs(eventPlayer.getHealth() * eventPlayer.enhancementHitchhikerCarrier.getMaxHealth() - eventPlayer.enhancementHitchhikerCarrier.getHealth() * eventPlayer.getMaxHealth())) / (eventPlayer.getMaxHealth() + eventPlayer.enhancementHitchhikerCarrier.getMaxHealth())
-    # tmp1: player with lower normalized health, receiving the transfer immediately.
-    tmp1 = sorted(eventPlayer.concat(eventPlayer.enhancementHitchhikerCarrier), lambda x: x.getNormalizedHealth())[0]
-    # tmp2: other player, giving the transfer immediately; keep all three scratch values distinct.
-    tmp2 = eventPlayer.concat(eventPlayer.enhancementHitchhikerCarrier).exclude(tmp1)
-    tmp1.setHealth(tmp1.getHealth() + tmp0)
-    tmp2.setHealth(tmp2.getHealth() - tmp0)
+    # hitchhikerHealthTransferAmount: health to transfer this update; consumed by both setHealth actions before wait.
+    #!define hitchhikerHealthTransferAmount tmp0
+    hitchhikerHealthTransferAmount = (abs(eventPlayer.getHealth() * eventPlayer.enhancementHitchhikerCarrier.getMaxHealth() - eventPlayer.enhancementHitchhikerCarrier.getHealth() * eventPlayer.getMaxHealth())) / (eventPlayer.getMaxHealth() + eventPlayer.enhancementHitchhikerCarrier.getMaxHealth())
+    # hitchhikerHealthRecipient: player with lower normalized health, receiving the transfer immediately.
+    #!define hitchhikerHealthRecipient tmp1
+    hitchhikerHealthRecipient = sorted(eventPlayer.concat(eventPlayer.enhancementHitchhikerCarrier), lambda x: x.getNormalizedHealth())[0]
+    # hitchhikerHealthDonor: other player, giving the transfer immediately; keep all three scratch values distinct.
+    #!define hitchhikerHealthDonor tmp2
+    hitchhikerHealthDonor = eventPlayer.concat(eventPlayer.enhancementHitchhikerCarrier).exclude(hitchhikerHealthRecipient)
+    hitchhikerHealthRecipient.setHealth(hitchhikerHealthRecipient.getHealth() + hitchhikerHealthTransferAmount)
+    hitchhikerHealthDonor.setHealth(hitchhikerHealthDonor.getHealth() - hitchhikerHealthTransferAmount)
     wait()
     if ruleCondition:
         loop()
