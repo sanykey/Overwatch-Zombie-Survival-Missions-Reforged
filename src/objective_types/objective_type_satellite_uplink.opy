@@ -7,7 +7,7 @@ macro fireSatelliteMacro():
     smallMessage(getAllPlayers(), "Connecting to satellite...")
     wait(2)
     smallMessage(getAllPlayers(), "Connection established!")
-    satelliteLaserPosition = objectivePositionList[0]
+    satelliteLaserPosition = currentObjectivePosition
     #Terminal connection beams
     # satelliteFiringTerminalIndex: terminal index, to connect each terminal to the satellite laser with a beam.
     #!define satelliteFiringTerminalIndex tmp0
@@ -68,7 +68,7 @@ macro fireSatelliteMacro():
 
 
 rule "SET UP TERMINAL POSITIONS":
-    @Condition objectiveTypeList[0] == ObjectiveType.SATELLITE_UPLINK
+    @Condition currentObjectiveType == ObjectiveType.SATELLITE_UPLINK
     @Condition isGameplayActive == true
     @Condition isObjectiveComplete == false
     @Condition (len(satelliteTerminalProgressList) != len(satelliteTerminalPositionList) or satelliteTerminalPositionList.any(lambda x: x.x == null)) == true
@@ -76,7 +76,7 @@ rule "SET UP TERMINAL POSITIONS":
     wait(0.016, Wait.ABORT_WHEN_FALSE)
     # satelliteTerminalCandidatePositionList: grid points 10-50m from the objective, to choose a terminal location with sufficient spacing.
     #!define satelliteTerminalCandidatePositionList tmp0
-    satelliteTerminalCandidatePositionList = mapGridList.filter(lambda x: distance(x, objectivePositionList[0]) > 10 and distance(x, objectivePositionList[0]) < 50)
+    satelliteTerminalCandidatePositionList = mapGridList.filter(lambda x: distance(x, currentObjectivePosition) > 10 and distance(x, currentObjectivePosition) < 50)
     if len(satelliteTerminalPositionList) == 0:
         satelliteTerminalPositionList.append(random.choice(satelliteTerminalCandidatePositionList))
     else:
@@ -103,7 +103,7 @@ rule "SET UP TERMINAL POSITIONS":
 rule "PLAYERS AT TERMINALS CONTROLS":
     @Event eachPlayer
     @Team 1
-    @Condition objectiveTypeList[0] == ObjectiveType.SATELLITE_UPLINK
+    @Condition currentObjectiveType == ObjectiveType.SATELLITE_UPLINK
     @Condition isObjectiveComplete == false
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.hasSpawned() == true
@@ -119,7 +119,7 @@ rule "PLAYERS AT TERMINALS CONTROLS":
 
 
 rule "PLAYERS REPAIR TERMINALS":
-    @Condition objectiveTypeList[0] == ObjectiveType.SATELLITE_UPLINK
+    @Condition currentObjectiveType == ObjectiveType.SATELLITE_UPLINK
     @Condition isObjectiveComplete == false
     @Condition len(objectivePlayerList) > 0
     
@@ -144,7 +144,7 @@ rule "PLAYERS REPAIR TERMINALS":
     if satelliteTerminalProgressList.all(lambda x: x >= 100):
         wait(1)
         bigMessage(getAllPlayers(), "All terminals are back online!")
-        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, objectiveColor, objectivePositionList[0], 200)
+        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, objectiveColor, currentObjectivePosition, 200)
         fireSatelliteMacro()
         isObjectiveComplete = true
     wait(0.5)

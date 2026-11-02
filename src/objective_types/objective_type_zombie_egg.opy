@@ -2,7 +2,7 @@
 
 
 rule "ASSIGN ZOMBIE TO BECOME EGG":
-    @Condition objectiveTypeList[0] == ObjectiveType.ZOMBIE_EGG
+    @Condition currentObjectiveType == ObjectiveType.ZOMBIE_EGG
     @Condition isObjectiveComplete == false
     @Condition entityExists(zombieEggStateList[0]) == false
     @Condition (getLivingPlayers(Team.2).any(lambda player: not player.botIsTeleporting and player.botTarget == null)) == true
@@ -17,7 +17,7 @@ rule "ASSIGN ZOMBIE TO BECOME EGG":
 rule "BOT BECOMES ZOMBIE EGG":
     @Event eachPlayer
     @Team 2
-    @Condition objectiveTypeList[0] == ObjectiveType.ZOMBIE_EGG
+    @Condition currentObjectiveType == ObjectiveType.ZOMBIE_EGG
     @Condition isObjectiveComplete == false
     @Condition zombieEggStateList[0] == eventPlayer
     
@@ -31,7 +31,7 @@ rule "BOT BECOMES ZOMBIE EGG":
     eventPlayer.startForcingName("Egg")
     eventPlayer.botIsThrottleOverridden = true
     eventPlayer.setInvisibility(Invis.ALL)
-    eventPlayer.startForcingPosition(objectivePositionList[0] + vect(0, -2.5, 0))
+    eventPlayer.startForcingPosition(currentObjectivePosition + vect(0, -2.5, 0))
     eventPlayer.startModifyingVoicelinePitch(0.5, false)
     eventPlayer.botBaseHealth = 15000
     eventPlayer.botBossHealth = eventPlayer.botBaseHealth
@@ -53,7 +53,7 @@ rule "BOT BECOMES ZOMBIE EGG":
 rule "BOTS TELEPORT TO THE EGG":
     @Event eachPlayer
     @Team 2
-    @Condition objectiveTypeList[0] == ObjectiveType.ZOMBIE_EGG
+    @Condition currentObjectiveType == ObjectiveType.ZOMBIE_EGG
     @Condition isObjectiveComplete != true
     @Condition eventPlayer.botIsInitializing != true
     @Condition eventPlayer.botIsTeleporting != true
@@ -61,24 +61,25 @@ rule "BOTS TELEPORT TO THE EGG":
     @Condition eventPlayer.isAlive() == true
     @Condition entityExists(zombieEggStateList[0]) == true
     @Condition eventPlayer in zombieEggStateList != true
-    @Condition playerTargetList.any(lambda x: distance(objectivePositionList[0], x.getPosition()) < 40) == true
+    @Condition playerTargetList.any(lambda x: distance(currentObjectivePosition, x.getPosition()) < 40) == true
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.botIsTeleportConfirmed = true
     eventPlayer.botCustomTeleportPosition = dummyHoldingPositionConst
-    eventPlayer.botTeleportPosition = objectivePositionList[0]
+    eventPlayer.botTeleportPosition = currentObjectivePosition
     eventPlayer.botTeleportCenter = eventPlayer.botTeleportPosition
     eventPlayer.botRespawnDelay = 1
-    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.LIME_GREEN, objectivePositionList[0], 7)
+    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.LIME_GREEN, currentObjectivePosition, 7)
     eventPlayer.teleport(eventPlayer.botTeleportPosition)
 
 
 rule "EGG SWITCHES THE POSITION FOR YOU":
     @Event playerDealtDamage
     @Team 1
-    @Condition objectiveTypeList[0] == ObjectiveType.ZOMBIE_EGG
+    @Condition currentObjectiveType == ObjectiveType.ZOMBIE_EGG
     @Condition zombieEggStateList[0] == victim
     
     objectivePositionList[0] += directionTowards(victim, attacker) / (3.5 if attacker.isOnGround() else 9)
+    currentObjectivePosition = objectivePositionList[0]
     #Small stop for high ticks of damage
     wait(0.049)

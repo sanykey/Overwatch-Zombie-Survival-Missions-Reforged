@@ -1,0 +1,141 @@
+{
+  "date": "2026-11-02",
+  "baselineRef": "45487b3345f57f7d76fd695f3f9627557d32fd83",
+  "before": {
+    "elements": 27211,
+    "globals": 99,
+    "playerVariables": 74
+  },
+  "unsharedCaches": {
+    "elements": 27096,
+    "globals": 101,
+    "playerVariables": 74
+  },
+  "after": {
+    "elements": 27117,
+    "globals": 99,
+    "playerVariables": 74
+  },
+  "savedElements": 94,
+  "slotSharing": {
+    "globals": 99,
+    "phaseGuards": 4,
+    "typeMenuSentinels": [
+      0,
+      40
+    ],
+    "slots": {
+      "phaseSlot10": [
+        "startMenuSpacingAngle",
+        "currentObjectiveType"
+      ],
+      "phaseSlot11": [
+        "startPos",
+        "biomorphingGoalColor"
+      ],
+      "phaseSlot12": [
+        "startCamPos",
+        "currentObjectivePosition"
+      ]
+    }
+  },
+  "sharingElementCost": 21,
+  "mutations": [
+    {
+      "file": "global_startup.opy",
+      "line": 247,
+      "code": "objectivePositionList = []",
+      "cache": "currentObjectivePosition"
+    },
+    {
+      "file": "global_startup.opy",
+      "line": 249,
+      "code": "objectiveTypeList = []",
+      "cache": "currentObjectiveType"
+    },
+    {
+      "file": "global_start_menu.opy",
+      "line": 415,
+      "code": "objectiveTypeList.append(objectiveTypeSetting)",
+      "cache": "currentObjectiveType"
+    },
+    {
+      "file": "global_start_menu.opy",
+      "line": 419,
+      "code": "objectiveTypeList.append(random.choice(mixedObjectiveTypeList.exclude(objectiveTypeList.filter(lambda _, i: i > len(objectiveTypeList) - 1 - (len(mixedObjectiveTypeList) - 1)))))",
+      "cache": "currentObjectiveType"
+    },
+    {
+      "file": "global_start_menu.opy",
+      "line": 431,
+      "code": "objectivePositionList.append(missionCandidatePosition)",
+      "cache": "currentObjectivePosition"
+    },
+    {
+      "file": "global_start_menu.opy",
+      "line": 437,
+      "code": "del objectivePositionList[len(objectivePositionList) - 1]",
+      "cache": "currentObjectivePosition"
+    },
+    {
+      "file": "global_start_menu.opy",
+      "line": 439,
+      "code": "del objectivePositionList[len(objectivePositionList) - 1]",
+      "cache": "currentObjectivePosition"
+    },
+    {
+      "file": "global_start_menu.opy",
+      "line": 443,
+      "code": "objectiveTypeList[len(objectiveTypeList) - 1] = ObjectiveType.SHOWDOWN",
+      "cache": "currentObjectiveType"
+    },
+    {
+      "file": "objective_types/objective_type_zombie_egg.opy",
+      "line": 82,
+      "code": "objectivePositionList[0] += directionTowards(victim, attacker) / (3.5 if attacker.isOnGround() else 9)",
+      "cache": "currentObjectivePosition"
+    },
+    {
+      "file": "subroutines.opy",
+      "line": 581,
+      "code": "del objectivePositionList[0]",
+      "cache": "currentObjectivePosition"
+    },
+    {
+      "file": "subroutines.opy",
+      "line": 583,
+      "code": "del objectiveTypeList[0]",
+      "cache": "currentObjectiveType"
+    }
+  ],
+  "phaseResets": [
+    {
+      "file": "global_startup.opy",
+      "line": 295,
+      "cache": "currentObjectiveType"
+    },
+    {
+      "file": "global_startup.opy",
+      "line": 296,
+      "cache": "currentObjectivePosition"
+    }
+  ],
+  "reads": {
+    "currentObjectiveType": 46,
+    "currentObjectivePosition": 102
+  },
+  "warnings": [],
+  "scratchRulesChecked": 42,
+  "compiledRulesCompared": 231,
+  "checks": [
+    "All 11 queue mutations immediately refresh their head cache",
+    "Missing/delayed egg, rollback and advancement publications are rejected",
+    "Shared slot aliases, menu sentinels 0/40, four post-wait guards and synchronous camera/visual retirement checked",
+    "Missing phase guards, camera retirement and cache publication are rejected",
+    "All compiled rules match separate guarded storage after normalizing the six role aliases",
+    "Reversing the cache transformation reproduces baseline sources and compiled output",
+    "Direct include build matches the in-memory build",
+    "Compiled scratch lifetime audit"
+  ],
+  "limitations": "Static validation and compilation only; no in-game scheduler/renderer test."
+}

@@ -4,7 +4,7 @@ subroutine bossReturn
 
 
 rule "SPAWN BOSS":
-    @Condition objectiveTypeList[0] == ObjectiveType.BOSSES
+    @Condition currentObjectiveType == ObjectiveType.BOSSES
     @Condition isObjectiveComplete == false
     @Condition len(bossesStateList.filter(lambda x: entityExists(x))) == 0
     @Condition (getLivingPlayers(Team.2).any(lambda player: player.hasSpawned() and not player.botIsTeleporting and player.botTarget == null)) == true
@@ -16,7 +16,7 @@ rule "SPAWN BOSS":
     bossesStateList.teleport(dummyHoldingPositionConst)
     waitUntil(bossesStateList[0].botIsInitializing, 3)
     waitUntil(not bossesStateList[0].botIsInitializing, 5)
-    bossesStateList.teleport(objectivePositionList[0])
+    bossesStateList.teleport(currentObjectivePosition)
     while bossesStateList.any(lambda x: x.isDead()):
         bossesStateList.resurrect()
         waitUntil(bossesStateList[0].isAlive(), 0.25)
@@ -29,7 +29,7 @@ rule "SPAWN BOSS":
 rule "BOT BECOMES BOSS":
     @Event eachPlayer
     @Team 2
-    @Condition objectiveTypeList[0] == ObjectiveType.BOSSES
+    @Condition currentObjectiveType == ObjectiveType.BOSSES
     @Condition isObjectiveComplete == false
     @Condition eventPlayer in bossesStateList == true
     
@@ -86,7 +86,7 @@ rule "BOT BECOMES BOSS":
 rule "BOSS STUCK":
     @Event eachPlayer
     @Team 2
-    @Condition objectiveTypeList[0] == ObjectiveType.BOSSES
+    @Condition currentObjectiveType == ObjectiveType.BOSSES
     @Condition eventPlayer.botIsWallCollisionEnabled == true
     @Condition eventPlayer.botIsWallPhaseAllowed == true
     @Condition eventPlayer.botTarget != null
@@ -169,7 +169,7 @@ rule "BOSS DIES (ALL BOSS OBJECTIVES)":
 rule "BOSS TAKES KNOCKBACK":
     @Event playerReceivedKnockback
     @Team 2
-    @Condition objectiveTypeList[0] == ObjectiveType.BOSSES
+    @Condition currentObjectiveType == ObjectiveType.BOSSES
     @Condition eventPlayer.botIsWallCollisionEnabled == false
     @Condition eventPlayer in bossesStateList == true
     

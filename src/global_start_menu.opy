@@ -20,8 +20,14 @@ rule "GLOBAL MENU INITIALIZATION":
             startPos = walkCenter + directionFromAngles(random.uniform(0, 360), 0) * 150 + vect(0, 30, 0)
         startCamPos = startPos + vect(0, 1.5, 0) + directionFromAngles(horizontalAngleOfDirection(directionTowards(walkCenter, startPos)), 0) * START_CAM_DISTANCE
         wait()
+        # Shared menu storage changes owners at START GAME.
+        if not isPregameSetup:
+            return
         createDummy(Hero.REAPER, Team.2, -1, nearestWalkablePosition(startPos), Vector.FORWARD)
         wait()
+        # Shared menu storage changes owners at START GAME.
+        if not isPregameSetup:
+            return
         getPlayers(Team.2).setInvisibility(Invis.ALL)
         getPlayers(Team.2)[0].startForcingPosition(startPos + vect(0, 15, 0))
         getPlayers(Team.2).startFacing(Vector.FORWARD, 100000)
@@ -48,6 +54,9 @@ rule "GLOBAL MENU INITIALIZATION":
                     startPos = null
                     break
             wait()
+            # Shared menu storage changes owners at START GAME.
+            if not isPregameSetup:
+                return
     lbl_0:
     # Scene setup can resume after START GAME; the slot then belongs to the Biomorphing color.
     if isPregameSetup:
@@ -404,9 +413,11 @@ def setObjectiveType():
     while len(objectiveTypeList) < createWorkshopSettingInt("General", "Number of Objectives", 5, 0, 100) + 1:
         if objectiveTypeSetting != ObjectiveType.MIXED_OBJECTIVES:
             objectiveTypeList.append(objectiveTypeSetting)
+            currentObjectiveType = objectiveTypeList[0]
         else:
             #Mixed objective assignment
             objectiveTypeList.append(random.choice(mixedObjectiveTypeList.exclude(objectiveTypeList.filter(lambda _, i: i > len(objectiveTypeList) - 1 - (len(mixedObjectiveTypeList) - 1)))))
+            currentObjectiveType = objectiveTypeList[0]
         missionPlacementAttemptCount = 0
         while len(objectivePositionList) < len(objectiveTypeList):
             #Limits possible map grid points to set min and max range from last created objective position
@@ -418,14 +429,18 @@ def setObjectiveType():
                 #Ensures bosses spawn with head room
                 if objectiveTypeList.last() != ObjectiveType.BOSSES or isInLoS(missionCandidatePosition + vect(0, 0, 0), missionCandidatePosition + vect(0, 10, 0)):
                     objectivePositionList.append(missionCandidatePosition)
+                    currentObjectivePosition = objectivePositionList[0]
                     missionPlacementAttemptCount = 0
             missionPlacementAttemptCount++
             #If Too many attempts
             if missionPlacementAttemptCount > 50:
                 del objectivePositionList[len(objectivePositionList) - 1]
+                currentObjectivePosition = objectivePositionList[0]
                 del objectivePositionList[len(objectivePositionList) - 1]
+                currentObjectivePosition = objectivePositionList[0]
                 missionPlacementAttemptCount = 0
     #Last objective must be extraction objective
     objectiveTypeList[len(objectiveTypeList) - 1] = ObjectiveType.SHOWDOWN
+    currentObjectiveType = objectiveTypeList[0]
     objectivesManagement()
     isGameplayActive = true

@@ -1412,7 +1412,7 @@ rule "CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)":
     @Team 2
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer in miniBossList == true
-    @Condition (distance(eventPlayer, objectivePositionList[0]) <= objectiveRad or len(objectivePositionList) == 1 and eventPlayer.isOnObjective()) == true
+    @Condition (distance(eventPlayer, currentObjectivePosition) <= objectiveRad or len(objectivePositionList) == 1 and eventPlayer.isOnObjective()) == true
     @Condition eventPlayer.getHero() in [Hero.DOOMFIST, Hero.WRECKING_BALL, Hero.MAUGA] == true
     
     eventPlayer.cancelPrimaryAction()

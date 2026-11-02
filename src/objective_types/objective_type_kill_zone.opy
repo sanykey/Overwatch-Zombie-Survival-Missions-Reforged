@@ -3,7 +3,7 @@
 
 rule "MODIFY KILL ZONE SCORE":
     @Event playerDealtFinalBlow
-    @Condition objectiveTypeList[0] == ObjectiveType.KILL_ZONE
+    @Condition currentObjectiveType == ObjectiveType.KILL_ZONE
     @Condition playerTargetList.concat(victim).any(lambda x: distance(x.getPosition(), killZoneCenter) < objectiveRad) == true
     
     if distance(eventPlayer.getPosition(), killZoneCenter) < objectiveRad or distance(victim.getPosition(), killZoneCenter) < objectiveRad:

@@ -24,7 +24,7 @@ macro biowasteAssignmentMacro():
 
 
 rule "BIOMORPHING GOAL START":
-    @Condition objectiveTypeList[0] == ObjectiveType.BIOMORPHING
+    @Condition currentObjectiveType == ObjectiveType.BIOMORPHING
     @Condition isObjectiveComplete == false
     @Condition isBiomorphingGoalPending == true
     @Condition isGameplayActive == true
@@ -36,7 +36,7 @@ rule "BIOMORPHING GOAL START":
         destroyInWorldText(biomorphingResourceTextIdList[biomorphingCleanupIndex])
         wait()
     # The resource-type slot belongs to the Rescue NPC after an objective transition.
-    if objectiveTypeList[0] != ObjectiveType.BIOMORPHING:
+    if currentObjectiveType != ObjectiveType.BIOMORPHING:
         return
     biomorphingQueuedTypeList = random.shuffle([0, 1, 2])
     biomorphingDeferredTypeList = []
@@ -56,7 +56,7 @@ rule "BIOMORPHING GOAL START":
         biomorphingGoalQueueList.append(3)
         wait(0.15)
     # The resource-type slot belongs to the Rescue NPC after an objective transition.
-    if objectiveTypeList[0] != ObjectiveType.BIOMORPHING:
+    if currentObjectiveType != ObjectiveType.BIOMORPHING:
         return
     if biomorphingGoalQueueList[0] == 0:
         biomorphingGoalText = "Deposit a head for extra points"
@@ -69,16 +69,16 @@ rule "BIOMORPHING GOAL START":
         biomorphingGoalColor = Color.SKY_BLUE
     else:
         biomorphingGoalText = "Hand over your blood."
-        playEffect(getAllPlayers(), DynamicEffect.DEBUFF_IMPACT_SOUND, null, objectivePositionList[0], 200)
+        playEffect(getAllPlayers(), DynamicEffect.DEBUFF_IMPACT_SOUND, null, currentObjectivePosition, 200)
         biomorphingGoalColor = Color.RED
         getPlayers(Team.1).biomorphingResourceType = 3
         getPlayers(Team.1).biomorphingResourceAmount = 9999
     isBiomorphingGoalPending = false
-    playEffect(getAllPlayers(), DynamicEffect.BAD_PICKUP_EFFECT, biomorphingGoalColor, objectivePositionList[0], 200)
+    playEffect(getAllPlayers(), DynamicEffect.BAD_PICKUP_EFFECT, biomorphingGoalColor, currentObjectivePosition, 200)
 
 
 rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS":
-    @Condition objectiveTypeList[0] == ObjectiveType.BIOMORPHING
+    @Condition currentObjectiveType == ObjectiveType.BIOMORPHING
     @Condition isObjectiveComplete == false
     @Condition (len(biomorphingResourcePositionList) + (len(getLivingPlayers(Team.ALL).filter(lambda player: player.biomorphingResourceAmount > 0))) < 3 or biomorphingCapturePercent >= 100) == true
     @Condition isGameplayActive == true
@@ -105,7 +105,7 @@ rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS":
         #!define biomorphingRewardItemIndex tmp0
         for biomorphingRewardItemIndex in range(4):
             supplyPowerUpIdList.append(random.randint(1, 13))
-            supplyPowerUpPositionList.append(objectivePositionList[0] + directionFromAngles(90 * biomorphingRewardItemIndex, 0))
+            supplyPowerUpPositionList.append(currentObjectivePosition + directionFromAngles(90 * biomorphingRewardItemIndex, 0))
         isObjectiveComplete = true
     if ruleCondition:
         loop()
@@ -113,7 +113,7 @@ rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS":
 
 rule "BIOWASTE IS PICKED UP":
     @Event eachPlayer
-    @Condition objectiveTypeList[0] == ObjectiveType.BIOMORPHING
+    @Condition currentObjectiveType == ObjectiveType.BIOMORPHING
     @Condition isGameplayActive == true
     @Condition isObjectiveComplete == false
     @Condition eventPlayer.biomorphingResourceAmount <= 0
@@ -146,11 +146,11 @@ rule "BIOWASTE IS PICKED UP":
 rule "PLAYER DELIVERS RESOURCE VALUE":
     @Event eachPlayer
     @Team 1
-    @Condition objectiveTypeList[0] == ObjectiveType.BIOMORPHING
+    @Condition currentObjectiveType == ObjectiveType.BIOMORPHING
     @Condition eventPlayer.invisibilityCount != true
     @Condition eventPlayer.biomorphingResourceAmount > 0
     @Condition eventPlayer.isAlive() == true
-    @Condition distance(objectivePositionList[0], eventPlayer.getPosition()) < objectiveRad
+    @Condition distance(currentObjectivePosition, eventPlayer.getPosition()) < objectiveRad
     @Condition eventPlayer.isAfk != true
     
     eventPlayer.clearStatusEffect(Status.PHASED_OUT)
@@ -186,7 +186,7 @@ rule "PLAYER DELIVERS RESOURCE VALUE":
 
 rule "BIOWASTE HOLDER DIES, ORB IS QUEUED AND RESOURCE AMOUNT REMOVED":
     @Event playerDied
-    @Condition objectiveTypeList[0] == ObjectiveType.BIOMORPHING
+    @Condition currentObjectiveType == ObjectiveType.BIOMORPHING
     @Condition eventPlayer.biomorphingResourceAmount >= BIOMORPHING_RESOURCE_AMOUNT
     @Condition biomorphingGoalQueueList[0] != 3
     

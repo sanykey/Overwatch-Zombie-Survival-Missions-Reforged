@@ -9,19 +9,19 @@ subroutine locateAveragePlayerLocation
 
 macro botTeleportCenterMacro():
     #Standoff, Extraction, Biomorphing, Zombie Egg
-    if objectiveTypeList[0] in [ObjectiveType.SHOWDOWN, ObjectiveType.BIOMORPHING, ObjectiveType.ZOMBIE_EGG]:
-        eventPlayer.botTeleportCenter = sorted(playerTargetList, lambda x: distance(x.getPosition(), objectivePositionList[0]))[0].getPosition()
+    if currentObjectiveType in [ObjectiveType.SHOWDOWN, ObjectiveType.BIOMORPHING, ObjectiveType.ZOMBIE_EGG]:
+        eventPlayer.botTeleportCenter = sorted(playerTargetList, lambda x: distance(x.getPosition(), currentObjectivePosition))[0].getPosition()
     #Boss
-    elif objectiveTypeList[0] == ObjectiveType.BOSSES:
+    elif currentObjectiveType == ObjectiveType.BOSSES:
         eventPlayer.botTeleportCenter = sorted(playerTargetList, lambda x: distance(x.getPosition(), bossStateList[0].getPosition()))[0].getPosition()
     #Survivor Rescue
-    elif objectiveTypeList[0] == ObjectiveType.SURVIVOR_RESCUE:
+    elif currentObjectiveType == ObjectiveType.SURVIVOR_RESCUE:
         if rescueSurvivor.rescueLeader == null:
             eventPlayer.botTeleportCenter = sorted(playerTargetList, lambda x: distance(x.getPosition(), rescueSurvivor.getPosition()))[0].getPosition()
         else:
             eventPlayer.botTeleportCenter = rescueSurvivor.rescueLeader.getPosition()
     #Killzone
-    elif objectiveTypeList[0] == ObjectiveType.KILL_ZONE:
+    elif currentObjectiveType == ObjectiveType.KILL_ZONE:
         #If players are in the killzone
         if len(playerTargetList.filter(lambda x: distance(x.getPosition(), killZoneCenter) < objectiveRad)) > 0:
             #Player closeset to the center of the killzone
@@ -30,13 +30,13 @@ macro botTeleportCenterMacro():
             #Average player positon
             locateAveragePlayerLocation()
     #Satellite Uplink
-    elif objectiveTypeList[0] == ObjectiveType.SATELLITE_UPLINK:
+    elif currentObjectiveType == ObjectiveType.SATELLITE_UPLINK:
         #Checks if any players are currently repairing terminals
         if len(objectivePlayerList) > 0:
             eventPlayer.botTeleportCenter = random.choice(objectivePlayerList).getPosition()
         else:
             #Closest player to sattelite firing position
-            eventPlayer.botTeleportCenter = sorted(playerTargetList, lambda x: distance(x.getPosition(), objectivePositionList[0]))[0].getPosition()
+            eventPlayer.botTeleportCenter = sorted(playerTargetList, lambda x: distance(x.getPosition(), currentObjectivePosition))[0].getPosition()
     #Default
     else:
         locateAveragePlayerLocation()
@@ -134,7 +134,7 @@ rule "BOT DIES":
             #Miniboss kill bonus
             if eventPlayer in miniBossList:
                 showdownCapturePercent += 10
-            playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, null, objectivePositionList[0], 100)
+            playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, null, currentObjectivePosition, 100)
     wait(3 if eventPlayer.getHero() in [Hero.SYMMETRA, Hero.ANA] else 0)
     eventPlayer.botTarget = null
     eventPlayer.botPotentialTargetList = []
@@ -526,7 +526,7 @@ rule "MINIBOSS MESSAGE":
     @Event eachPlayer
     @Team 2
     @Condition eventPlayer in miniBossList == true
-    @Condition objectiveTypeList[0] != ObjectiveType.SHOWDOWN
+    @Condition currentObjectiveType != ObjectiveType.SHOWDOWN
     @Condition isGameplayActive == true
     @Condition eventPlayer.botIsInitializing != false
     

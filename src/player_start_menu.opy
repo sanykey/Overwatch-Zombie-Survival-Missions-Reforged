@@ -74,6 +74,9 @@ rule "PLAYER SELECTS/RESELECTS HERO":
     else:
         eventPlayer.teleport(eventPlayer.pregamePosition)
     wait()
+    # Shared menu storage changes owners at START GAME.
+    if not isPregameSetup:
+        return
     #Set invisiblity status to 0 each time hero is selected/reselected
     eventPlayer.invisibilityCount = 0
     eventPlayer.setFacing(directionTowards(eventPlayer.pregamePosition, vect(startCamPos.x, eventPlayer.pregamePosition.y, startCamPos.z)), Relativity.TO_WORLD)

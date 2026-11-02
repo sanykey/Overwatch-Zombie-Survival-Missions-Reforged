@@ -9,10 +9,10 @@ rule "PLAYERS IN EXTRACTION POINT CONTROL":
     @Condition isObjectiveComplete == false
     @Condition isGameplayActive == true
     @Condition eventPlayer.hasSpawned() == true
-    @Condition objectiveTypeList[0] == ObjectiveType.SHOWDOWN
+    @Condition currentObjectiveType == ObjectiveType.SHOWDOWN
     @Condition len(objectivePositionList) == 1
-    @Condition objectivePositionList[0].y - eventPlayer.getEyePosition().y < 2
-    @Condition distance(eventPlayer.getPosition(), vect(objectivePositionList[0].x, eventPlayer.getPosition().y, objectivePositionList[0].z)) < objectiveRad
+    @Condition currentObjectivePosition.y - eventPlayer.getEyePosition().y < 2
+    @Condition distance(eventPlayer.getPosition(), vect(currentObjectivePosition.x, eventPlayer.getPosition().y, currentObjectivePosition.z)) < objectiveRad
     
     if not eventPlayer in objectivePlayerList:
         objectivePlayerList.append(eventPlayer)
@@ -31,7 +31,7 @@ rule "EXTRACTION ZONE INFECTION INCREASE":
     @Condition eventPlayer.isAlive() == true
     @Condition len(objectivePositionList) == 1
     @Condition extractionZoneRad < 200
-    @Condition distance(objectivePositionList[0], eventPlayer.getPosition()) > extractionZoneRad
+    @Condition distance(currentObjectivePosition, eventPlayer.getPosition()) > extractionZoneRad
     @Condition eventPlayer in objectivePlayerList == false
     
     wait(1, Wait.ABORT_WHEN_FALSE)
@@ -40,7 +40,7 @@ rule "EXTRACTION ZONE INFECTION INCREASE":
         eventPlayer.isInfected = true
     #Kick players out of the spawn room if dome is closing in.
     while eventPlayer.isInSpawnRoom():
-        eventPlayer.teleport(nearestWalkablePosition(eventPlayer.getPosition() + directionTowards(eventPlayer.getPosition(), objectivePositionList[0]) * 10))
+        eventPlayer.teleport(nearestWalkablePosition(eventPlayer.getPosition() + directionTowards(eventPlayer.getPosition(), currentObjectivePosition) * 10))
         wait(0.125)
     loop()
 
@@ -57,10 +57,10 @@ rule "PLAYER EXTRACTION CONTROL":
     chaseAtRate(eventPlayer.extractionFlightPosition, eventPlayer.extractionFlightPosition + vect(0, 200, 0), extractionFlightSpeed)
     eventPlayer.startForcingPosition(eventPlayer.extractionFlightPosition)
     waitUntil(extractionFlightSpeed > 2, 99999)
-    chaseOverTime(eventPlayer.extractionFlightPosition, objectivePositionList[0] + vect(0, 50, 0) + directionFromAngles(360 / len(evacSurvivorList) * evacSurvivorList.index(eventPlayer), 0) * 3, 5)
+    chaseOverTime(eventPlayer.extractionFlightPosition, currentObjectivePosition + vect(0, 50, 0) + directionFromAngles(360 / len(evacSurvivorList) * evacSurvivorList.index(eventPlayer), 0) * 3, 5)
     waitUntil(extractionFlightSpeed < 10, 99999)
     chaseAtRate(eventPlayer.extractionFlightPosition, eventPlayer.extractionFlightPosition + vect(0, 200, 0), extractionFlightSpeed)
-    eventPlayer.extractionDestination = eventPlayer.extractionFlightPosition + directionTowards(objectivePositionList[0], extractionFlightDestination) * 700
+    eventPlayer.extractionDestination = eventPlayer.extractionFlightPosition + directionTowards(currentObjectivePosition, extractionFlightDestination) * 700
     waitUntil(extractionFlightSpeed > 2, 99999)
     chaseAtRate(eventPlayer.extractionFlightPosition, eventPlayer.extractionDestination, extractionFlightSpeed)
 
@@ -105,10 +105,10 @@ rule "WIN/LOSS CONDITIONS":
         declareRoundVictory(Team.2)
         declareRoundVictory(Team.2)
     else:
-        (getPlayers(Team.1).filter(lambda player: player.hasSpawned() and distance(objectivePositionList[0], vect(player.getPosition().x, objectivePositionList[0].y, player.getPosition().z)) < objectiveRad)).resurrect()
+        (getPlayers(Team.1).filter(lambda player: player.hasSpawned() and distance(currentObjectivePosition, vect(player.getPosition().x, currentObjectivePosition.y, player.getPosition().z)) < objectiveRad)).resurrect()
         getAllPlayers().enableKillFeed()
         wait()
-        extractionFlightDestination = objectivePositionList[0] + vect(0, 250, 0) + directionFromAngles(random.uniform(0, 360), 0) * 500
+        extractionFlightDestination = currentObjectivePosition + vect(0, 250, 0) + directionFromAngles(random.uniform(0, 360), 0) * 500
         extractionFlightSpeed = 2
         evacSurvivorList = objectivePlayerList
         (getPlayers(Team.1).filter(lambda player: not evacSurvivorList[player])).clearStatusEffect(Status.ROOTED)

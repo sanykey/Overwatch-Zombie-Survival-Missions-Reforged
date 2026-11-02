@@ -6,7 +6,7 @@ subroutine updateUsers
 
 macro playerObjectiveEntityManagementMacro():
     if eventPlayer.objectiveTypeSnapshot != objectiveValue or len(objectivePositionList) == 1:
-        eventPlayer.objectiveTypeSnapshot = objectiveTypeList[0]
+        eventPlayer.objectiveTypeSnapshot = currentObjectiveType
         if eventPlayer.getTeam() == Team.1:
             #Destroy all current objective effects and texts
             for eventPlayer.visualCleanupIndex in range(len(eventPlayer.playerObjectiveIconIdList)):
@@ -90,7 +90,7 @@ rule "PLAYER INITIALIZATION":
             wait()
             eventPlayer.teleport(random.choice(mapGridList.filter(lambda x: distance(x, walkCenter) < 15)))
             wait()
-        eventPlayer.setFacing(directionTowards(eventPlayer.getEyePosition(), objectivePositionList[0]), Relativity.TO_WORLD)
+        eventPlayer.setFacing(directionTowards(eventPlayer.getEyePosition(), currentObjectivePosition), Relativity.TO_WORLD)
         eventPlayer.isPlayerActive = true
         eventPlayer.cancelPrimaryAction()
         eventPlayer.clearStatusEffect(Status.INVINCIBLE)
@@ -162,12 +162,12 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
     else:
         eventPlayer.isReviving = false
         #If dome will pass player before their death timer runs out, set the death timer to how long it will take for the dome to reach them
-        if len(objectivePositionList) == 1 and extractionZoneRad - distance(eventPlayer.getPosition(), objectivePositionList[0]) < eventPlayer.rescueTimeRemaining:
-            eventPlayer.rescueTimeRemaining = (extractionZoneRad - distance(eventPlayer.getPosition(), objectivePositionList[0])) / 2.5
+        if len(objectivePositionList) == 1 and extractionZoneRad - distance(eventPlayer.getPosition(), currentObjectivePosition) < eventPlayer.rescueTimeRemaining:
+            eventPlayer.rescueTimeRemaining = (extractionZoneRad - distance(eventPlayer.getPosition(), currentObjectivePosition)) / 2.5
         else:
             eventPlayer.rescueTimeRemaining += -0.5
         #Player is dead outside of extraction zone
-        if len(objectivePositionList) == 1 and distance(objectivePositionList[0], eventPlayer.getPosition()) > extractionZoneRad:
+        if len(objectivePositionList) == 1 and distance(currentObjectivePosition, eventPlayer.getPosition()) > extractionZoneRad:
             eventPlayer.rescueTimeRemaining = 0
         #Player's body falls off of map
         if eventPlayer.getPosition().y - nearestWalkablePosition(eventPlayer.getPosition()).y < -0.1:
@@ -355,7 +355,7 @@ rule "PLAYER TARGET (REMOVE)":
 def teleportToClosestPlayer():
     @Name "teleportToClosestPlayer"
     
-    eventPlayer.teleport(nearestWalkablePosition(sorted(playerTargetList.exclude(eventPlayer), lambda x: distance(x.getPosition(), objectivePositionList[0]))[0].getPosition()))
+    eventPlayer.teleport(nearestWalkablePosition(sorted(playerTargetList.exclude(eventPlayer), lambda x: distance(x.getPosition(), currentObjectivePosition))[0].getPosition()))
 
 
 def updateUsers():

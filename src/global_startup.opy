@@ -245,7 +245,9 @@ rule "VARIABLE ASSIGNMENT":
     for reconnectInitialSlotIndex in range(12):
         playerStatsList.append(-1)
     objectivePositionList = []
+    currentObjectivePosition = objectivePositionList[0]
     objectiveTypeList = []
+    currentObjectiveType = objectiveTypeList[0]
     objectiveRad = 10
     mustReviveTime = 60
     objectivePlayerList = []
@@ -288,9 +290,13 @@ rule "START GAME":
     destroyAllHudTexts()
     destroyAllIcons()
     destroyAllInWorldTexts()
+    # Retire all live camera readers before publishing mission values into menu storage.
+    getPlayers(Team.1).stopCamera()
+    currentObjectiveType = objectiveTypeList[0]
+    currentObjectivePosition = objectivePositionList[0]
     # Enhancement icons no longer have live menu readers; restore the goal text's initial value.
     biomorphingGoalText = null
-    # The menu angle writer is phase-guarded; preserve the color's original value before the first biogoal.
+    # Scene writers abort after the phase boundary; preserve the color's original value before the first biogoal.
     biomorphingGoalColor = null
     wait(0.25)
     setMatchTime(START_TIME + matchEndTime)

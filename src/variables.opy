@@ -126,11 +126,22 @@ globalvar phaseSlot9  # Menu enhancement icons -> Biomorphing goal text (goal ru
 #!define enhancementOptionList phaseSlot9
 #!define biomorphingGoalText phaseSlot9
 
-globalvar phaseSlot10  # Menu spacing/readiness (0 -> 40) -> Biomorphing goal color (goal rule/HUD/announcement).
-# global_start_menu.opy guards its final angle write with isPregameSetup, including after scene-setup waits.
-# START GAME restores null after menu cleanup, before the first Biomorphing HUD can read this slot.
+globalvar phaseSlot10  # Menu spacing/readiness (0 -> 40) -> current objective type.
+# Menu values cannot match objective IDs 1-7; START GAME restores the empty queue head before generation.
+# The final menu angle writer is phase-guarded, including after scene-setup waits.
 #!define startMenuSpacingAngle phaseSlot10
-#!define biomorphingGoalColor phaseSlot10
+#!define currentObjectiveType phaseSlot10
+
+globalvar phaseSlot11  # Menu scene aim position -> Biomorphing goal color.
+# Scene writers abort after every wait when the menu ends; START GAME restores null after visual cleanup.
+#!define startPos phaseSlot11
+#!define biomorphingGoalColor phaseSlot11
+
+globalvar phaseSlot12  # Menu camera position -> current objective position, including moving eggs.
+# START GAME stops cameras, removes menu visuals and restores the empty queue head before generation.
+# Delayed menu readers/writers abort after waits before accessing the new role.
+#!define startCamPos phaseSlot12
+#!define currentObjectivePosition phaseSlot12
 
 # Shared immutable colors and positions.
 globalvar offsetUpThreeQuartersConst = vect(0, 0.75, 0)    # Vertical offset of 0.75 m for labels, icons and visibility checks.
@@ -166,13 +177,16 @@ globalvar botSpawnWaypointList        # Movement waypoint associated with each c
 globalvar customTeleportPositionList  # Special teleport positions transferred from dying bots to replacement bots.
 globalvar botSpawnTimeList            # Remaining delays for queued zombie replacements, decremented once per second.
 
-# Pregame scene. Palettes, votes, enhancement icons and glitch state use phase aliases above.
-globalvar startPos                       # Center/aim position of the pregame hero-selection scene.
-globalvar startCamPos                    # Pregame camera position used to place players and world text.
+# Pregame scene coordinates use phase aliases above.
 
 # Shared objective generation and runtime state.
 globalvar objectivePositionList          # Queued objective positions; index zero is current, the final entry is extraction.
 globalvar objectiveTypeList              # Queued objective types aligned with objectivePositionList.
+
+# Keep these head caches synchronized immediately after every queue mutation, before waits/calls.
+# objectiveValue remains the separate type snapshot published by the objective visuals.
+# currentObjectiveType/currentObjectivePosition use phaseSlot10/phaseSlot12 above.
+# During the menu, type predicates still see a non-objective ID (0 or 40); after cleanup both mirror their queue heads.
 globalvar objectiveSpacingList           # Consecutive/minimum placement distances calculated from the map-grid size.
 globalvar objectiveValue                 # Current type snapshot published when global objective visuals are refreshed.
 globalvar objectiveProgressSlot          # Shared progress storage; generic reset in objectivesManagement, role-specific HUD/rules below.

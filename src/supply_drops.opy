@@ -33,7 +33,7 @@ rule "GENERATE SUPPLY DROPS":
         #Find the closest player to the objective
         # supplyDropClosestPlayer: player closest to the objective, used as the center for choosing a supply-drop location.
         #!define supplyDropClosestPlayer tmp0
-        supplyDropClosestPlayer = sorted(playerTargetList, lambda x: distance(x.getPosition(), objectivePositionList[0]))[0]
+        supplyDropClosestPlayer = sorted(playerTargetList, lambda x: distance(x.getPosition(), currentObjectivePosition))[0]
         # supplyDropCandidatePosition: candidate drop position 20-35m from supplyDropClosestPlayer, to check clearance from all players.
         #!define supplyDropCandidatePosition tmp1
         supplyDropCandidatePosition = random.choice(mapGridList.filter(lambda x: distance(supplyDropClosestPlayer.getPosition(), x) < 35 and distance(supplyDropClosestPlayer.getPosition(), x) > 20))
