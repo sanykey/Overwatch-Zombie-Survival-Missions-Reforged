@@ -15,7 +15,8 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
     if eventPlayer.enhancementId == Enhancement.NO_PREFERENCE:
         #Default Enhancement: Workshop Setting
         # No enhancement state slots: resolve the default enhancement before initializing its state.
-        eventPlayer.enhancementId = createWorkshopSettingEnum("Enhancements", "Default Enhancement", Enhancement.HITCHHIKER, ["No Enhancement", "Kevlar", "Zombie Hybrid", "Laser Barricade", "Brain Killer", "Pyrotechnic", "Plague Doctor", "Born to Battle", "Charge Battery", "Hitchhiker", "P.U.P."])
+        # Workshop requires default index 0 so the first option remains selectable.
+        eventPlayer.enhancementId = createWorkshopSettingEnum("Enhancements", "Default Enhancement", Enhancement.NO_PREFERENCE, ["No Enhancement", "Kevlar", "Zombie Hybrid", "Laser Barricade", "Brain Killer", "Pyrotechnic", "Plague Doctor", "Born to Battle", "Charge Battery", "Hitchhiker", "P.U.P."])
     #Kevlar
     if eventPlayer.enhancementId == Enhancement.KEVLAR:
         #Enhancement Selection: Kevlar
