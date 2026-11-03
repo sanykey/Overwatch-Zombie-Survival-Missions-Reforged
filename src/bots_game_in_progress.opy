@@ -105,7 +105,7 @@ rule "KILL BOTS THAT ARE STUCK OR ARE NOT MOVING":
     @Condition eventPlayer.isCrowdControlled != true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer in bossStateList == false
-    @Condition (eventPlayer.getThrottle() == vect(0, 0, 0) or eventPlayer.getHorizontalSpeed() < 1 * eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale) == true
+    @Condition (magnitude(eventPlayer.getThrottle()) == 0 or eventPlayer.getHorizontalSpeed() < 1 * eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale) == true
     @Condition playerTargetList.all(lambda x: distance(eventPlayer, x) > 2.1 * eventPlayer.sizeScale) == true
     
     if eventPlayer.botTarget != null:
@@ -332,7 +332,7 @@ rule "BOTS MOVE THROUGH SPAWN DOORS":
     @Condition eventPlayer.isCrowdControlled != true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.hasStatus(Status.ROOTED) == false
-    @Condition eventPlayer.getThrottle() != vect(0, 0, 0)
+    @Condition magnitude(eventPlayer.getThrottle()) != 0
     @Condition (eventPlayer.isOnGround() or eventPlayer in bossStateList and eventPlayer.getAltitude() < 10) == true
     #Allows if bot bumps into something
     @Condition eventPlayer.getSpeedInDirection(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION)) < eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale * 3
@@ -496,8 +496,8 @@ def locateAveragePlayerLocation():
     eventPlayer.botTeleportCenter = vect(0, 0, 0)
     # Snapshot the selected players once; consume the list synchronously before any wait or call.
     #!define averageTargetPlayerList tmp1
-    if objectivePlayerList == [] and playerTargetList.any(lambda x: x.getThrottle() != vect(0, 0, 0)):
-        averageTargetPlayerList = playerTargetList.filter(lambda x: x.getThrottle() != vect(0, 0, 0))
+    if objectivePlayerList == [] and playerTargetList.any(lambda x: magnitude(x.getThrottle()) != 0):
+        averageTargetPlayerList = playerTargetList.filter(lambda x: magnitude(x.getThrottle()) != 0)
     else:
         averageTargetPlayerList = playerTargetList
     # Preserve player order and the original loop counter as the divisor, including an empty list.

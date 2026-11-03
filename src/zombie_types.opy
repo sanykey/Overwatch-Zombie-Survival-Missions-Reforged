@@ -94,7 +94,7 @@ rule "RUSHER (TORB) SPEED MECHANICS":
     @Condition eventPlayer.isCrowdControlled != true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isOnGround() == true
-    @Condition eventPlayer.getThrottle() != vect(0, 0, 0)
+    @Condition magnitude(eventPlayer.getThrottle()) != 0
     @Condition eventPlayer in bossStateList == false
     @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 45
     
@@ -534,7 +534,7 @@ rule "CHARGER (MAUGA) CHARGE":
     @Condition eventPlayer.isOnGround() == true
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
     @Condition eventPlayer.isUsingAbility1() == false
-    @Condition eventPlayer.getThrottle() != vect(0, 0, 0)
+    @Condition magnitude(eventPlayer.getThrottle()) != 0
     @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 35
     @Condition (distance(eventPlayer, eventPlayer.botTarget) < 5 or verticalAngleOfDirection(directionTowards(eventPlayer, eventPlayer.botTarget)) > -35) == true
     

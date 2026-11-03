@@ -161,7 +161,7 @@ rule "PLAYER SAYS GROUP UP TO SURVIVOR":
 rule "SURVIVOR JUMP":
     @Condition currentObjectiveType == ObjectiveType.SURVIVOR_RESCUE
     @Condition rescueSurvivor.isOnGround() == true
-    @Condition rescueSurvivor.getThrottle() != vect(0, 0, 0)
+    @Condition magnitude(rescueSurvivor.getThrottle()) != 0
     @Condition rescueSurvivor.getHorizontalSpeed() < rescueSurvivor.rescueThrottleSpeed * 3.5
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)

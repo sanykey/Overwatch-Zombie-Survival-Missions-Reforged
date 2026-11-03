@@ -56,9 +56,9 @@ macro fireSatelliteMacro():
         playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.SKY_BLUE, satelliteLaserImpactPosition, 5)
         playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.SKY_BLUE, satelliteLaserImpactPosition, 200)
         #Damage Zombies
-        damage(getPlayers(Team.2).filter(lambda player: distance(player, satelliteLaserImpactPosition) < 5), null, 500)
+        damage(getPlayersInRadius(satelliteLaserImpactPosition, 5, Team.2), null, 500)
         #Damage Players
-        damage(getPlayers(Team.1).filter(lambda player: distance(player, satelliteLaserImpactPosition) < 5), null, 70)
+        damage(getPlayersInRadius(satelliteLaserImpactPosition, 5, Team.1), null, 70)
         if satelliteFiringStepsRemaining > 5:
             #Give all bots quick respawn time
             getPlayers(Team.2).botRespawnDelay = 1

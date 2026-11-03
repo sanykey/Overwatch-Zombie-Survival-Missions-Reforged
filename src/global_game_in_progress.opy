@@ -112,8 +112,8 @@ rule "PLAYER LEAVES THE GAME":
     @Event playerLeft
     @Condition (playerTargetList.any(lambda x: not entityExists(x)) or objectivePlayerList.any(lambda x: not entityExists(x))) == true
     
-    playerTargetList.remove(playerTargetList.filter(lambda x: not entityExists(x)))
-    objectivePlayerList.remove(objectivePlayerList.filter(lambda x: not entityExists(x)))
+    playerTargetList = playerTargetList.filter(lambda x: entityExists(x))
+    objectivePlayerList = objectivePlayerList.filter(lambda x: entityExists(x))
     wait(1, Wait.RESTART_WHEN_TRUE)
     if ruleCondition:
         loop()

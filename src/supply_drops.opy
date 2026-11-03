@@ -223,7 +223,7 @@ def airStrike():
         playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, Color.ORANGE, airStrikeImpactPosition, 100)
         # airStrikeAffectedZombieList: zombies inside this explosion's radius, to damage them and set their respawn timers.
         #!define airStrikeAffectedZombieList tmp1
-        airStrikeAffectedZombieList = getPlayers(Team.2).filter(lambda player: distance(player, airStrikeImpactPosition) < 5)
+        airStrikeAffectedZombieList = getPlayersInRadius(airStrikeImpactPosition, 5, Team.2)
         damage(airStrikeAffectedZombieList, eventPlayer, 150)
         airStrikeAffectedZombieList.botRespawnDelay = 10
         wait(0.125)

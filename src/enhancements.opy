@@ -251,7 +251,7 @@ rule "LASER BARRICADE BLOCKS ZOMBIES":
             eventPlayer.enhancementBarrierHealth -= barrierCollisionTarget.getMaxHealth() * 2.5
             barrierCollisionTarget.setStatusEffect(eventPlayer, Status.ROOTED, 0.5)
             damage(barrierCollisionTarget, eventPlayer, 10)
-        if barrierCollisionTarget.getThrottle() == vect(0, 0, 0):
+        if magnitude(barrierCollisionTarget.getThrottle()) == 0:
             #If bot is not throttling
             barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(barrierPushReferencePointList, lambda x: distance(barrierCollisionTarget, x)))[0])), (-1 if barrierCollisionTarget.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(barrierCollisionTarget.getPosition(), barrierCollisionTarget.getPosition() + Vector.DOWN, null, getAllPlayers(), false))))), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
         else:
@@ -592,7 +592,7 @@ rule "P.U.P. CONTROL":
                 eventPlayer.enhancementPupTarget.setStatusEffect(eventPlayer, Status.FROZEN, 1.5)
                 wait(0.25, Wait.ABORT_WHEN_FALSE)
             #Freeze zombies around target for shorter time
-            ((getPlayers(Team.2).filter(lambda player: distance(eventPlayer.enhancementPupTarget, player) < 3)).exclude(eventPlayer.enhancementPupTarget)).setStatusEffect(eventPlayer, Status.FROZEN, 0.75)
+            ((getPlayersInRadius(eventPlayer.enhancementPupTarget, 3, Team.2)).exclude(eventPlayer.enhancementPupTarget)).setStatusEffect(eventPlayer, Status.FROZEN, 0.75)
             #P.U.P. color
             eventPlayer.enhancementPupColor = Color.SKY_BLUE
             #Beam visibility
