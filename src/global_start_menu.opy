@@ -80,9 +80,9 @@ rule "EFFECTS/TEXTS":
     #Pre game objective description and match timer
     hudSubtext(getAllPlayers(), "{0} | {1}s".format("Voting will end in {0}s".format(ceil(getMatchTime() - VOTING_END_TIME)) if isVoting else "Select your hero", ceil(getMatchTime())), HudPosition.TOP, -1, rgb(215, 215, 215), HudReeval.VISIBILITY_AND_STRING)
     #Creator/Game Code Promo
-    hudSubtext(getAllPlayers(), "Original Game Code: MPJFR" if ceil(getTotalTimeElapsed() * 0.2) % 2 == 0 else "Game Mode Creator: Mazattack#1183", HudPosition.RIGHT, 0, Color.BLUE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
+    hudSubtext(getAllPlayers(), "Original Game Code: MPJFR" if not (ceil(getTotalTimeElapsed() * 0.2) % 2) else "Game Mode Creator: Mazattack#1183", HudPosition.RIGHT, 0, Color.BLUE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
     #Creator/Game Code Promo
-    hudSubtext(getAllPlayers(), "This is a modified version: 786TW" if ceil(getTotalTimeElapsed() * 0.2) % 2 == 0 else "Modified by: KamenRider#11346", HudPosition.RIGHT, 0, Color.BLUE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
+    hudSubtext(getAllPlayers(), "This is a modified version: 786TW" if not (ceil(getTotalTimeElapsed() * 0.2) % 2) else "Modified by: KamenRider#11346", HudPosition.RIGHT, 0, Color.BLUE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
     #Workshop.codes
     createInWorldText(getAllPlayers().filter(lambda player: player.pregameState < PregameState.READY), "For information on changes: workshop.codes/786TW", startCamPos + directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)), 30), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.ORANGE, SpecVisibility.NEVER)
     #Voting options reminder
@@ -164,7 +164,7 @@ rule "EFFECTS/TEXTS":
             "Objective Type: Bosses {0}".format(iconString(Icon.WARNING)),
             null,
             null,
-            "Objective Type: Kill Zone {0}".format(iconString(Icon.RING_THICK) if ceil(getTotalTimeElapsed() * 1.25) % 2 == 0 else iconString(Icon.RING_THIN)),
+            "Objective Type: Kill Zone {0}".format(iconString(Icon.RING_THICK) if not (ceil(getTotalTimeElapsed() * 1.25) % 2) else iconString(Icon.RING_THIN)),
             "Objective Type: Zombie Egg {0}".format(iconString(Icon.RADIOACTIVE)),
             "Objective Type: Satellite Uplink {0}".format(iconString(Icon.MOON)),
             null,
@@ -293,7 +293,7 @@ def determineZombieMode():
     selectVoteWinner()
     zombieSetting = voteWinnerResult
     #If all players choose no preference, randomize
-    if zombieSetting == 0:
+    if not zombieSetting:
         zombieSetting = 1
     startRule(determineChallenge)
     startRule(setZombieMode)
@@ -350,7 +350,7 @@ def determineChallenge():
             if abs(challengeSetting - challengeAverageVote) > abs(challengeVoteIndex - challengeAverageVote):
                 challengeSetting = challengeVoteIndex
     #Default difficulty
-    if challengeSetting == 0:
+    if not challengeSetting:
         challengeSetting = 1
     startRule(determineObjectiveType)
 
@@ -389,7 +389,7 @@ def selectVoteWinner():
         if voteWinnerCounts[voteWinnerResult] < voteWinnerCounts[voteWinnerIndex]:
             voteWinnerResult = voteWinnerIndex
         elif voteWinnerCounts[voteWinnerResult] == voteWinnerCounts[voteWinnerIndex]:
-            if voteWinnerResult != 0 and random.randint(0, 1) == 0:
+            if voteWinnerResult and not random.randint(0, 1):
                 voteWinnerResult = voteWinnerIndex
 
 

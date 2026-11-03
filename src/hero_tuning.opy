@@ -20,7 +20,7 @@ rule "SOMBRA USES TRANSLOCATOR":
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_2) > 0
     
     eventPlayer.invisibilityCount++
-    waitUntil(eventPlayer.isUsingUltimate() or [Button.PRIMARY_FIRE, Button.ABILITY_1, Button.MELEE].any(lambda x: eventPlayer.isHoldingButton(x) and eventPlayer.getAbilityCooldown(x) == 0), 6.5)
+    waitUntil(eventPlayer.isUsingUltimate() or [Button.PRIMARY_FIRE, Button.ABILITY_1, Button.MELEE].any(lambda x: eventPlayer.isHoldingButton(x) and not eventPlayer.getAbilityCooldown(x)), 6.5)
     eventPlayer.invisibilityCount--
 
 

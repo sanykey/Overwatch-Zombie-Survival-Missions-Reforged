@@ -121,10 +121,10 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         del supplyPowerUpTextIdList[eventPlayer.powerUpTradeIndex]
         wait()
         #Trade power ups. Ignore if no power up is currently held.
-        if eventPlayer.powerUpTradePreviousItemId != 0:
+        if eventPlayer.powerUpTradePreviousItemId:
             supplyPowerUpIdList.append(eventPlayer.powerUpTradePreviousItemId)
             supplyPowerUpPositionList.append(eventPlayer.powerUpTradePosition)
-    elif eventPlayer.powerUpItemId != 0:
+    elif eventPlayer.powerUpItemId:
         wait(0.25, Wait.ABORT_WHEN_FALSE)
         powerUpUsage()
 
@@ -383,7 +383,7 @@ def bouncePad():
     wait(1)
     #Bounce pad duration
     for eventPlayer.powerUpBouncePadTimeRemaining in range(60, 0, -0.125):
-        if eventPlayer.powerUpBouncePadTimeRemaining % 0.25 == 0:
+        if not (eventPlayer.powerUpBouncePadTimeRemaining % 0.25):
             playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.PURPLE, eventPlayer.powerUpBouncePadPosition + 0.125 * Vector.UP, 4)
         #Determine which players are on the bounce pad
         # bouncePadSurvivorList: grounded survivors on this pad, to apply the bounce and play feedback for this tick.

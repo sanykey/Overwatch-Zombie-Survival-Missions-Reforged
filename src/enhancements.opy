@@ -21,7 +21,7 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
         #Enhancement Selection: Kevlar
         # No enhancement state slots are currently used; the future cleanup ID is documented below.
         hudHeader(eventPlayer, "Kevlar {0}".format(iconString(Icon.STOP)), HudPosition.LEFT, 99, colorKevlarConst, HudReeval.STRING)
-        waitUntil(eventPlayer.initialMaxHealth != 0, 99999)
+        waitUntil(eventPlayer.initialMaxHealth, 99999)
         eventPlayer.addHealthPool(Health.ARMOR, 75, true, false)
         # If enhancement switching is added after game start, retain the health pool ID to remove Kevlar armor when switching away.
         # Future Kevlar switching would need to retain getLastCreatedHealthPool().
@@ -251,7 +251,7 @@ rule "LASER BARRICADE BLOCKS ZOMBIES":
             eventPlayer.enhancementBarrierHealth -= barrierCollisionTarget.getMaxHealth() * 2.5
             barrierCollisionTarget.setStatusEffect(eventPlayer, Status.ROOTED, 0.5)
             damage(barrierCollisionTarget, eventPlayer, 10)
-        if magnitude(barrierCollisionTarget.getThrottle()) == 0:
+        if not magnitude(barrierCollisionTarget.getThrottle()):
             #If bot is not throttling
             barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(barrierPushReferencePointList, lambda x: distance(barrierCollisionTarget, x)))[0])), (-1 if barrierCollisionTarget.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(barrierCollisionTarget.getPosition(), barrierCollisionTarget.getPosition() + Vector.DOWN, null, getAllPlayers(), false))))), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
         else:

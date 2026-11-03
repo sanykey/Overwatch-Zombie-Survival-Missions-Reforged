@@ -94,7 +94,7 @@ rule "RUSHER (TORB) SPEED MECHANICS":
     @Condition eventPlayer.isCrowdControlled != true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isOnGround() == true
-    @Condition magnitude(eventPlayer.getThrottle()) != 0
+    @Condition magnitude(eventPlayer.getThrottle())
     @Condition eventPlayer in bossStateList == false
     @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 45
     
@@ -484,7 +484,7 @@ rule "RIDER DETATCH FROM TEAMMATES WHILE ALIVE":
     @Condition eventPlayer.botIsAttached == true
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer.botAbilityTarget.getTeam() == Team.2
-    @Condition (eventPlayer.botIsTeleporting or eventPlayer.botAbilityTarget.botIsTeleporting or distance(eventPlayer.getEyePosition(), eventPlayer.botTarget) < 3 or eventPlayer.botTarget.isOnGround() and eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0 and distance(eventPlayer.getEyePosition(), eventPlayer.botTarget) < 10) == true
+    @Condition (eventPlayer.botIsTeleporting or eventPlayer.botAbilityTarget.botIsTeleporting or distance(eventPlayer.getEyePosition(), eventPlayer.botTarget) < 3 or eventPlayer.botTarget.isOnGround() and not eventPlayer.getAbilityCooldown(Button.ABILITY_1) and distance(eventPlayer.getEyePosition(), eventPlayer.botTarget) < 10) == true
     
     eventPlayer.botAbilityTarget = null
     eventPlayer.botIsAttached = false
@@ -498,7 +498,7 @@ rule "RIDER USE GRAPPLING HOOK":
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer.botIsAttached != true
     @Condition eventPlayer.botTarget.isOnGround() == true
-    @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
+    @Condition not eventPlayer.getAbilityCooldown(Button.ABILITY_1)
     @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 20
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.botTarget) < 20
     @Condition distance(eventPlayer, eventPlayer.botTarget) > 5
@@ -532,9 +532,9 @@ rule "CHARGER (MAUGA) CHARGE":
     @Condition eventPlayer.isCrowdControlled != true
     @Condition eventPlayer.botIsThrottleOverridden != true
     @Condition eventPlayer.isOnGround() == true
-    @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
+    @Condition not eventPlayer.getAbilityCooldown(Button.ABILITY_1)
     @Condition eventPlayer.isUsingAbility1() == false
-    @Condition magnitude(eventPlayer.getThrottle()) != 0
+    @Condition magnitude(eventPlayer.getThrottle())
     @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 35
     @Condition (distance(eventPlayer, eventPlayer.botTarget) < 5 or verticalAngleOfDirection(directionTowards(eventPlayer, eventPlayer.botTarget)) > -35) == true
     

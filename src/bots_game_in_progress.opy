@@ -80,7 +80,7 @@ rule "BOT INITIALIZATION":
     #Damage over time duration
     chaseAtRate(eventPlayer.damageOverTimeRemaining, -1, 0.95, ChaseRateReeval.NONE)
     #Bot target warning icon (flashing)
-    createIcon(getAllPlayers() if eventPlayer in showdownContestingZombieList else eventPlayer.botTarget.filter(lambda x: eventPlayer.isAlive() and not x.isInViewAngle(eventPlayer.getPosition(), 55)), eventPlayer, Icon.WARNING, IconReeval.VISIBILITY_POSITION_AND_COLOR, Color.RED if (((ceil(getTotalTimeElapsed() * (4 if distance(eventPlayer, localPlayer) > 10 else 8))) % 2) == 0) else Color.YELLOW)
+    createIcon(getAllPlayers() if eventPlayer in showdownContestingZombieList else eventPlayer.botTarget.filter(lambda x: eventPlayer.isAlive() and not x.isInViewAngle(eventPlayer.getPosition(), 55)), eventPlayer, Icon.WARNING, IconReeval.VISIBILITY_POSITION_AND_COLOR, Color.RED if (not (((ceil(getTotalTimeElapsed() * (4 if distance(eventPlayer, localPlayer) > 10 else 8))) % 2))) else Color.YELLOW)
     waitUntil(eventPlayer.hasSpawned(), 2)
     eventPlayer.setMaxHealth(30 if eventPlayer.getHero() in [Hero.SYMMETRA, Hero.HAZARD, Hero.ILLARI] else 1)
     eventPlayer.initialMaxHealth = eventPlayer.getMaxHealth()
@@ -105,7 +105,7 @@ rule "KILL BOTS THAT ARE STUCK OR ARE NOT MOVING":
     @Condition eventPlayer.isCrowdControlled != true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer in bossStateList == false
-    @Condition (magnitude(eventPlayer.getThrottle()) == 0 or eventPlayer.getHorizontalSpeed() < 1 * eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale) == true
+    @Condition (not magnitude(eventPlayer.getThrottle()) or eventPlayer.getHorizontalSpeed() < 1 * eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale) == true
     @Condition playerTargetList.all(lambda x: distance(eventPlayer, x) > 2.1 * eventPlayer.sizeScale) == true
     
     if eventPlayer.botTarget != null:
@@ -332,7 +332,7 @@ rule "BOTS MOVE THROUGH SPAWN DOORS":
     @Condition eventPlayer.isCrowdControlled != true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.hasStatus(Status.ROOTED) == false
-    @Condition magnitude(eventPlayer.getThrottle()) != 0
+    @Condition magnitude(eventPlayer.getThrottle())
     @Condition (eventPlayer.isOnGround() or eventPlayer in bossStateList and eventPlayer.getAltitude() < 10) == true
     #Allows if bot bumps into something
     @Condition eventPlayer.getSpeedInDirection(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION)) < eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale * 3
@@ -496,8 +496,8 @@ def locateAveragePlayerLocation():
     eventPlayer.botTeleportCenter = vect(0, 0, 0)
     # Snapshot the selected players once; consume the list synchronously before any wait or call.
     #!define averageTargetPlayerList tmp1
-    if objectivePlayerList == [] and playerTargetList.any(lambda x: magnitude(x.getThrottle()) != 0):
-        averageTargetPlayerList = playerTargetList.filter(lambda x: magnitude(x.getThrottle()) != 0)
+    if objectivePlayerList == [] and playerTargetList.any(lambda x: magnitude(x.getThrottle())):
+        averageTargetPlayerList = playerTargetList.filter(lambda x: magnitude(x.getThrottle()))
     else:
         averageTargetPlayerList = playerTargetList
     # Preserve player order and the original loop counter as the divisor, including an empty list.

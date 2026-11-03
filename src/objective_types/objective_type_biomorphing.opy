@@ -47,11 +47,11 @@ rule "BIOMORPHING GOAL START":
     biomorphingResourceTextIdList = []
     getAllPlayers().biomorphingResourceAmount = 0
     getAllPlayers().biomorphingResourceType = null
-    if biomorphingCapturePercent != 0:
+    if biomorphingCapturePercent:
         biomorphingGoalColor = objectiveColor
         biomorphingGoalText = "Limit reached! The next goal is..."
-    waitUntil(biomorphingCapturePercent == 0, 3)
-    if biomorphingCapturePercent == 0 and biomorphingGoalQueueList[0] == 3:
+    waitUntil(not biomorphingCapturePercent, 3)
+    if not biomorphingCapturePercent and biomorphingGoalQueueList[0] == 3:
         del biomorphingGoalQueueList[0]
         biomorphingGoalQueueList.append(3)
         wait(0.15)

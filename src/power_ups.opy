@@ -85,7 +85,7 @@ rule "PLAYER DROPS POWER UP (MANUAL)":
     @Condition eventPlayer.isHoldingButton(Button.RELOAD) == true
     @Condition isGameplayActive == true
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.powerUpItemId != 0
+    @Condition eventPlayer.powerUpItemId
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     supplyPowerUpIdList.append(eventPlayer.powerUpItemId)
@@ -97,7 +97,7 @@ rule "PLAYER DROPS POWER UP (MANUAL)":
 rule "PLAYER DROPS POWER UP (DEATH)":
     @Event playerDied
     @Team 1
-    @Condition eventPlayer.powerUpItemId != 0
+    @Condition eventPlayer.powerUpItemId
     
     while not eventPlayer.isOnGround():
         wait(0.25)

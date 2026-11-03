@@ -263,7 +263,7 @@ rule "PLAYER AFK":
     @Condition createWorkshopSettingBool("General", "Allow players to go AFK", true, 3) == true
     @Condition eventPlayer.isPlayerActive == true
     @Condition eventPlayer.isAttached != true
-    @Condition magnitude(eventPlayer.getThrottle()) == 0
+    @Condition not magnitude(eventPlayer.getThrottle())
     @Condition eventPlayer.isDummy() == false
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) == false

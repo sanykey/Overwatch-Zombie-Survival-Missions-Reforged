@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **25,350 elements**, freeing up **6,914** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+The current OverPy 9.7.20 build uses **25,283 elements**, freeing up **6,981** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+
+- Numeric zero checks now use the numeric value directly or `not` where appropriate: 14 state/item-ID checks, nine throttle magnitude checks, five HUD blink-phase checks, and six timer/random/cooldown checks. The item IDs are numeric values 1-13 with 0 meaning no item; effect and text entity IDs are unchanged. Together these changes reduce the build from **25,350 to 25,283 elements** without new variables. Verification compares all 268 compiled rules, finds 24 affected rules, checks the direct include build, and reports no warnings. Reproduce the probe with `node analysis/probe-post-25350-2026-11-03.cjs --baseline-ref 41fd37c`; recheck current sources with `node analysis/verify-position-optimizations-2026-11-03.cjs`. In-game validation has not been performed.
 
 - Nine zero-throttle vector comparisons now use `magnitude(...) == 0` or `!= 0`; four simple player-distance filters use `getPlayersInRadius`; and the departed-player rule directly filters two lists to retain existing players. These changes reduce the build from **25,382 to 25,350 elements** without new variables. The verification compares all 268 compiled rules, finds 12 affected rules, checks the direct include build, and reports no warnings. Reproduce the probe with `node analysis/probe-post-25382-2026-11-03.cjs --baseline-ref cd86ff2`; recheck the current source with `node analysis/verify-position-optimizations-2026-11-03.cjs`. Exact-radius boundary behavior and the changes in-game have not been validated.
 

@@ -97,7 +97,7 @@ rule "PLAYER SELECTS/RESELECTS HERO":
         #Force players that have not voted or selected an enhancement to lock in their hero
         if not isPregameSetup:
             return
-        if isVoting and (eventPlayer.pregameChallengeVote == 0 and eventPlayer.pregameZombieVote == 0 and eventPlayer.pregameObjectiveVote == 0 and eventPlayer.enhancementId == Enhancement.NO_PREFERENCE) or not isVoting and eventPlayer.enhancementId == Enhancement.NO_PREFERENCE:
+        if isVoting and (not eventPlayer.pregameChallengeVote and not eventPlayer.pregameZombieVote and not eventPlayer.pregameObjectiveVote and eventPlayer.enhancementId == Enhancement.NO_PREFERENCE) or not isVoting and eventPlayer.enhancementId == Enhancement.NO_PREFERENCE:
             eventPlayer.forceButtonPress(Button.JUMP)
     if ruleCondition:
         loop()
