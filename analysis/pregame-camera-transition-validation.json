@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-04",
+  "beforeRef": "9363ec1cb74c7f5363f3e57746c426585a533dce",
+  "workingRef": "45487b3345f57f7d76fd695f3f9627557d32fd83",
+  "before": {
+    "elements": 25232,
+    "globals": 103,
+    "players": 84
+  },
+  "after": {
+    "elements": 25229,
+    "globals": 105,
+    "players": 84
+  },
+  "rulesCompared": 268,
+  "changedRulesAfterStorageNormalization": [
+    "START GAME"
+  ],
+  "warnings": [],
+  "directIncludeBuild": true,
+  "checks": [
+    "Both camera vectors have storage independent of mission data",
+    "START GAME preserves the camera until per-player initialization completes",
+    "Initial placement/release sequence matches 45487b3 for both special and ordinary modes",
+    "Rejected both unsafe aliases and early global camera release",
+    "Other compiled actions match 9363ec1 after storage-name normalization"
+  ],
+  "limitations": "Static validation and compilation; in-game camera rendering/scheduler not tested."
+}

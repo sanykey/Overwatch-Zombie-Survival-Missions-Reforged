@@ -101,6 +101,7 @@ rule "PLAYER INITIALIZATION":
         eventPlayer.cancelPrimaryAction()
         eventPlayer.clearStatusEffect(Status.INVINCIBLE)
         updateUsers()
+    # Release the pregame camera only after placement and facing, as in the original transition.
     eventPlayer.stopCamera()
     eventPlayer.clearStatusEffect(Status.ROOTED)
     eventPlayer.setInvisibility(Invis.NONE)

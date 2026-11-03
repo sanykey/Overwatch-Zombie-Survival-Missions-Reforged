@@ -69,7 +69,7 @@ rule "GLOBAL MENU INITIALIZATION":
             if not isPregameSetup:
                 return
     lbl_0:
-    # Scene setup can resume after START GAME; the slot then belongs to the Biomorphing color.
+    # Scene setup can resume after START GAME; the angle slot then belongs to the objective type cache.
     if isPregameSetup:
         startMenuSpacingAngle = 40
     #Start screen objective description

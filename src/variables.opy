@@ -163,16 +163,8 @@ globalvar phaseSlot10  # Menu spacing/readiness (0 -> 40) -> current objective t
 #!define startMenuSpacingAngle phaseSlot10
 #!define currentObjectiveType phaseSlot10
 
-globalvar phaseSlot11  # Menu scene aim position -> Biomorphing goal color.
-# Scene writers abort after every wait when the menu ends; START GAME restores null after visual cleanup.
-#!define startPos phaseSlot11
-#!define biomorphingGoalColor phaseSlot11
-
-globalvar phaseSlot12  # Menu camera position -> current objective position, including moving eggs.
-# START GAME stops cameras, removes menu visuals and restores the empty queue head before generation.
-# Delayed menu readers/writers abort after waits before accessing the new role.
-#!define startCamPos phaseSlot12
-#!define currentObjectivePosition phaseSlot12
+globalvar biomorphingGoalColor  # Initialized at START GAME, independently of the still-active pregame camera.
+globalvar currentObjectivePosition  # Mirrors the objective queue head, including moving eggs.
 
 # Shared immutable colors and positions.
 # Use Vector directions directly for unit offsets; scaling adds a multiplication and scalar.
@@ -216,7 +208,10 @@ globalvar botSpawnWaypointList        # Movement waypoint associated with each c
 globalvar customTeleportPositionList  # Special teleport positions transferred from dying bots to replacement bots.
 globalvar botSpawnTimeList            # Remaining delays for queued zombie replacements, decremented once per second.
 
-# Pregame scene coordinates use phase aliases above.
+# Cameras keep reevaluating these coordinates until each player's initialization finishes.
+# Their lifetime overlaps mission initialization; do not share them with gameplay storage.
+globalvar startPos                       # Center/aim position of the pregame hero-selection scene.
+globalvar startCamPos                    # Pregame camera position used to place players and world text.
 
 # Shared objective generation and runtime state.
 globalvar objectivePositionList          # Queued objective positions; index zero is current, the final entry is extraction.
@@ -224,7 +219,7 @@ globalvar objectiveTypeList              # Queued objective types aligned with o
 
 # Keep these head caches synchronized immediately after every queue mutation, before waits/calls.
 # objectiveValue remains the separate type snapshot published by the objective visuals.
-# currentObjectiveType/currentObjectivePosition use phaseSlot10/phaseSlot12 above.
+# currentObjectiveType uses phaseSlot10 above; currentObjectivePosition has independent storage.
 # During the menu, type predicates still see a non-objective ID (0 or 40); after cleanup both mirror their queue heads.
 globalvar objectiveSpacingList           # Consecutive/minimum placement distances calculated from the map-grid size.
 globalvar objectiveValue                 # Current type snapshot published when global objective visuals are refreshed.

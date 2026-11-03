@@ -293,13 +293,13 @@ rule "START GAME":
     destroyAllHudTexts()
     destroyAllIcons()
     destroyAllInWorldTexts()
-    # Retire all live camera readers before publishing mission values into menu storage.
-    getPlayers(Team.1).stopCamera()
+    # Keep the pregame camera until PLAYER INITIALIZATION finishes placement and facing.
+    # Its coordinates have independent storage, so publishing objective caches cannot move it.
     refreshCurrentObjectiveType()
     refreshCurrentObjectivePosition()
     # Enhancement icons no longer have live menu readers; restore the goal text's initial value.
     biomorphingGoalText = null
-    # Scene writers abort after the phase boundary; preserve the color's original value before the first biogoal.
+    # Preserve the color's original value before the first biogoal.
     biomorphingGoalColor = null
     wait(0.25)
     setMatchTime(START_TIME + matchEndTime)
