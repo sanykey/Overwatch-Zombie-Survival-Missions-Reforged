@@ -1,5 +1,5 @@
 {
-  "elements": 26801,
+  "elements": 26793,
   "globals": 103,
   "playerVariables": 75,
   "warnings": [],
@@ -175,7 +175,7 @@
     },
     {
       "name": "BEHEMOTH GAS STREAM (BOSS)",
-      "controlFlowNodes": 12,
+      "controlFlowNodes": 14,
       "boundaries": 1,
       "visualActions": 0
     },

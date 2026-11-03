@@ -234,7 +234,13 @@ rule "BEHEMOTH GAS STREAM (BOSS)":
     for behemothGasCloudIndex in range(len(eventPlayer.botGasPositionList)):
         if eventPlayer.botGasRadiusList[behemothGasCloudIndex] < 6 * eventPlayer.sizeScale:
             eventPlayer.botGasRadiusList[behemothGasCloudIndex] += 0.2 * eventPlayer.sizeScale
-        eventPlayer.botSpecialTargetList.append(playerTargetList.filter(lambda x: not x in eventPlayer.botSpecialTargetList and distance(eventPlayer.botGasPositionList[behemothGasCloudIndex], vect(x.getEyePosition().x, eventPlayer.botGasPositionList[behemothGasCloudIndex].y, x.getEyePosition().z)) < eventPlayer.botGasRadiusList[behemothGasCloudIndex] and abs(eventPlayer.botGasPositionList[behemothGasCloudIndex].y - x.getEyePosition().y) < eventPlayer.botGasRadiusList[behemothGasCloudIndex] / 5))
+        # Capture this cloud's position and post-growth radius; consume both before the tick wait.
+        # Visual effects keep reading the original arrays so they continue to reevaluate normally.
+        #!define behemothGasCloudPosition tmp1
+        #!define behemothGasCloudRadius tmp2
+        behemothGasCloudPosition = eventPlayer.botGasPositionList[behemothGasCloudIndex]
+        behemothGasCloudRadius = eventPlayer.botGasRadiusList[behemothGasCloudIndex]
+        eventPlayer.botSpecialTargetList.append(playerTargetList.filter(lambda x: not x in eventPlayer.botSpecialTargetList and distance(behemothGasCloudPosition, vect(x.getEyePosition().x, behemothGasCloudPosition.y, x.getEyePosition().z)) < behemothGasCloudRadius and abs(behemothGasCloudPosition.y - x.getEyePosition().y) < behemothGasCloudRadius / 5))
     eventPlayer.botSpecialTargetList.startDamageOverTime(eventPlayer, 2.5, eventPlayer.botBiteDamage * 0.1)
     if eventPlayer.damageOverTimeRemaining < 2.5 and len(eventPlayer.botSpecialTargetList) > 0:
         eventPlayer.damageOverTimeRemaining = 2.5
