@@ -6,19 +6,23 @@ subroutine teleportBots
 subroutine successfulTeleportStatus
 subroutine updateBotSpawnPoints
 subroutine locateAveragePlayerLocation
+subroutine setClosestPlayerTeleportCenter
 
 
 macro botTeleportCenterMacro():
     #Standoff, Extraction, Biomorphing, Zombie Egg
     if currentObjectiveType in [ObjectiveType.SHOWDOWN, ObjectiveType.BIOMORPHING, ObjectiveType.ZOMBIE_EGG]:
-        eventPlayer.botTeleportCenter = sorted(playerTargetList, lambda x: distance(x.getPosition(), currentObjectivePosition))[0].getPosition()
+        botTeleportPivot = currentObjectivePosition
+        setClosestPlayerTeleportCenter()
     #Boss
     elif currentObjectiveType == ObjectiveType.BOSSES:
-        eventPlayer.botTeleportCenter = sorted(playerTargetList, lambda x: distance(x.getPosition(), bossStateList[0].getPosition()))[0].getPosition()
+        botTeleportPivot = bossStateList[0].getPosition()
+        setClosestPlayerTeleportCenter()
     #Survivor Rescue
     elif currentObjectiveType == ObjectiveType.SURVIVOR_RESCUE:
         if rescueSurvivor.rescueLeader == null:
-            eventPlayer.botTeleportCenter = sorted(playerTargetList, lambda x: distance(x.getPosition(), rescueSurvivor.getPosition()))[0].getPosition()
+            botTeleportPivot = rescueSurvivor.getPosition()
+            setClosestPlayerTeleportCenter()
         else:
             eventPlayer.botTeleportCenter = rescueSurvivor.rescueLeader.getPosition()
     #Killzone
@@ -26,7 +30,8 @@ macro botTeleportCenterMacro():
         #If players are in the killzone
         if playerTargetList.any(lambda x: distance(x.getPosition(), killZoneCenter) < objectiveRad):
             #Player closeset to the center of the killzone
-            eventPlayer.botTeleportCenter = sorted(playerTargetList, lambda x: distance(x.getPosition(), killZoneCenter))[0].getPosition()
+            botTeleportPivot = killZoneCenter
+            setClosestPlayerTeleportCenter()
         else:
             #Average player positon
             locateAveragePlayerLocation()
@@ -37,7 +42,8 @@ macro botTeleportCenterMacro():
             eventPlayer.botTeleportCenter = random.choice(objectivePlayerList).getPosition()
         else:
             #Closest player to sattelite firing position
-            eventPlayer.botTeleportCenter = sorted(playerTargetList, lambda x: distance(x.getPosition(), currentObjectivePosition))[0].getPosition()
+            botTeleportPivot = currentObjectivePosition
+            setClosestPlayerTeleportCenter()
     #Default
     else:
         locateAveragePlayerLocation()
@@ -504,6 +510,13 @@ def locateAveragePlayerLocation():
     # Pre-existing empty-list behavior: the divisor is 0, and Workshop Divide returns 0, producing a zero center.
     # An early return here alone would not stop the caller's teleport search; this needs a separate fix.
     eventPlayer.botTeleportCenter /= averageTargetPositionIndex
+
+
+def setClosestPlayerTeleportCenter():
+    @Name "setClosestPlayerTeleportCenter"
+
+    # Synchronous input handoff: callers assign botTeleportPivot immediately before this call.
+    eventPlayer.botTeleportCenter = sorted(playerTargetList, lambda x: distance(x.getPosition(), botTeleportPivot))[0].getPosition()
 
 
 def successfulTeleportStatus():

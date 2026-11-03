@@ -13,12 +13,19 @@ rule "GLOBAL MENU INITIALIZATION":
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
     if isSpecialGameMode:
+        # These values are consumed before the next wait; mode selection keeps the original three positions.
+        #!define menuRadius tmp1
+        #!define menuHeight tmp2
         if getCurrentGamemode() == Gamemode.CTF or getCurrentGamemode() == Gamemode.PUSH:
-            startPos = walkCenter + directionFromAngles(random.uniform(0, 360), 0) * 300 + 15 * Vector.UP
+            menuRadius = 300
+            menuHeight = 15
         elif getCurrentGamemode() == Gamemode.CONTROL:
-            startPos = walkCenter + directionFromAngles(random.uniform(0, 360), 0) * 300 + 100 * Vector.UP
+            menuRadius = 300
+            menuHeight = 100
         else:
-            startPos = walkCenter + directionFromAngles(random.uniform(0, 360), 0) * 150 + 30 * Vector.UP
+            menuRadius = 150
+            menuHeight = 30
+        startPos = walkCenter + directionFromAngles(random.uniform(0, 360), 0) * menuRadius + menuHeight * Vector.UP
         startCamPos = startPos + offsetUpOneAndHalfConst + directionFromAngles(horizontalAngleOfDirection(directionTowards(walkCenter, startPos)), 0) * START_CAM_DISTANCE
         wait()
         # Shared menu storage changes owners at START GAME.
@@ -51,7 +58,10 @@ rule "GLOBAL MENU INITIALIZATION":
             # menuVisibilityAngleOffset: horizontal angle offset in degrees, to test visibility of each menu position.
             #!define menuVisibilityAngleOffset tmp0
             for menuVisibilityAngleOffset in range(-26, 27, 2):
-                if not isInLoS(startCamPos, startCamPos + -0.75 * Vector.UP + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + menuVisibilityAngleOffset, 0)) * START_CAM_DISTANCE)) or not isInLoS(startCamPos + -0.75 * Vector.UP + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + menuVisibilityAngleOffset, 0)) * START_CAM_DISTANCE), startCamPos):
+                # Both sight checks use the same point in this iteration, before any wait.
+                #!define menuVisibilityPoint tmp1
+                menuVisibilityPoint = startCamPos + -0.75 * Vector.UP + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)) + menuVisibilityAngleOffset, 0)) * START_CAM_DISTANCE)
+                if not isInLoS(startCamPos, menuVisibilityPoint) or not isInLoS(menuVisibilityPoint, startCamPos):
                     startPos = null
                     break
             wait()
@@ -305,34 +315,17 @@ def setZombieMode():
     botHeroList = [Hero.REAPER, Hero.JUNKRAT, Hero.TORBJORN, Hero.ROADHOG, Hero.REINHARDT, Hero.ANRAN, Hero.WIDOWMAKER, Hero.MAUGA, Hero.MERCY, Hero.WRECKING_BALL, Hero.MOIRA, Hero.PHARAH, Hero.SIGMA, Hero.JUNKER_QUEEN, Hero.ILLARI, Hero.HAZARD, Hero.SYMMETRA, Hero.ANA, Hero.WINSTON, Hero.DOOMFIST, Hero.KIRIKO]
     #Zombie types without a boss variation
     bossesExcludedHeroList = [Hero.JUNKRAT, Hero.ANRAN, Hero.WIDOWMAKER, Hero.JUNKER_QUEEN, Hero.SYMMETRA, Hero.ANA, Hero.DOOMFIST, Hero.KIRIKO, Hero.MAUGA, Hero.SIGMA, Hero.WRECKING_BALL]
-    #All Zombies
-    if zombieSetting == 1:
-        #Bot respawn probablities
-        botSpawnRateList = numbersList.slice(NL_SPAWN_RATES_ALL_ZOMBIES_OFFSET, NL_SPAWN_RATES_ALL_ZOMBIES_LEN)
-    #New Blood
-    elif zombieSetting == 2:
-        #Bot respawn probablities
-        botSpawnRateList = numbersList.slice(NL_SPAWN_RATES_NEW_BLOOD_OFFSET, NL_SPAWN_RATES_NEW_BLOOD_LEN)
     #What'll it be?
-    elif zombieSetting == 3:
+    if zombieSetting == 3:
         #Bot respawn probablities
         botSpawnRateList = []
         # equalSpawnWeightHeroIndex: hero-entry counter, to append 19 equal spawn weights for this zombie mode.
         #!define equalSpawnWeightHeroIndex tmp0
         for equalSpawnWeightHeroIndex in range(19):
             botSpawnRateList.append(5.263)
-    #Zombie Shuffle
-    elif zombieSetting == 4:
-        #Bot respawn probablities
-        botSpawnRateList = numbersList.slice(NL_SPAWN_RATES_SHUFFLE_OFFSET, NL_SPAWN_RATES_SHUFFLE_LEN)
-    #Dinner Rush!
-    elif zombieSetting == 5:
-        #Bot respawn probablities
-        botSpawnRateList = numbersList.slice(NL_SPAWN_RATES_DINNER_RUSH_OFFSET, NL_SPAWN_RATES_DINNER_RUSH_LEN)
-    #Ham N' Hammer
-    elif zombieSetting == 6:
-        #Bot respawn probablities
-        botSpawnRateList = numbersList.slice(NL_SPAWN_RATES_HAM_N_HAMMER_OFFSET, NL_SPAWN_RATES_HAM_N_HAMMER_LEN)
+    elif zombieSetting in [1, 2, 4, 5, 6]:
+        # Mode 3 has no compressed table. Other mode offsets and lengths retain their original order.
+        botSpawnRateList = numbersList.slice([NL_SPAWN_RATES_ALL_ZOMBIES_OFFSET, NL_SPAWN_RATES_NEW_BLOOD_OFFSET, 0, NL_SPAWN_RATES_SHUFFLE_OFFSET, NL_SPAWN_RATES_DINNER_RUSH_OFFSET, NL_SPAWN_RATES_HAM_N_HAMMER_OFFSET][zombieSetting - 1], [NL_SPAWN_RATES_ALL_ZOMBIES_LEN, NL_SPAWN_RATES_NEW_BLOOD_LEN, 0, NL_SPAWN_RATES_SHUFFLE_LEN, NL_SPAWN_RATES_DINNER_RUSH_LEN, NL_SPAWN_RATES_HAM_N_HAMMER_LEN][zombieSetting - 1])
 
 
 def determineChallenge():
@@ -418,11 +411,10 @@ def setObjectiveType():
     while len(objectiveTypeList) < createWorkshopSettingInt("General", "Number of Objectives", 5, 0, 100) + 1:
         if objectiveTypeSetting != ObjectiveType.MIXED_OBJECTIVES:
             objectiveTypeList.append(objectiveTypeSetting)
-            currentObjectiveType = objectiveTypeList[0]
         else:
             #Mixed objective assignment
             objectiveTypeList.append(random.choice(mixedObjectiveTypeList.exclude(objectiveTypeList.filter(lambda _, i: i > len(objectiveTypeList) - 1 - (len(mixedObjectiveTypeList) - 1)))))
-            currentObjectiveType = objectiveTypeList[0]
+        currentObjectiveType = objectiveTypeList[0]
         missionPlacementAttemptCount = 0
         while len(objectivePositionList) < len(objectiveTypeList):
             #Limits possible map grid points to set min and max range from last created objective position

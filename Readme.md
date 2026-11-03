@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **26,271 elements**, freeing up **5,993** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+The current OverPy 9.7.20 build uses **26,188 elements**, freeing up **6,076** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+
+- The special-mode menu position uses one formula with the original radius and height for each mode, and its two line-of-sight checks share a synchronous point. The five compressed zombie spawn-rate tables use one guarded slice; the equal-weight mode retains its loop. Objective generation updates its type cache once after either append. Five bot teleport branches share one nearest-player subroutine, with each pivot passed through `tmp1` immediately before the synchronous call. Together these changes reduce the build from **26,271 → 26,188 (−83 elements)** without new variables. Validation compared all 238 previous compiled rules: only four intended rules changed; expanding the five helper calls restores the original teleport rule. The real include build matches the in-memory build and emits no warnings. In-game validation and runtime benchmarks have not been performed. Recheck: `node analysis/verify-next-elements-2026-11-03.cjs`.
 
 - Shared the two identical downed-player recovery teleports, selected the overtime teleport destination in one call, and wrapped pregame and gameplay spawn-room indices cyclically. Two existence checks now use `.any()`. Together these changes reduce the build from **26,319 → 26,271 (−48 elements)** without new variables. Validation compared all 237 preceding compiled rules: only the seven intended rules changed, and the new subroutine contains one synchronous teleport. The real include build matches the in-memory build and emits no warnings. In-game validation has not been performed. Recheck: `node analysis/verify-fresh-elements-2026-11-03.cjs`.
 

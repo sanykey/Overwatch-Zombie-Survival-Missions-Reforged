@@ -105,7 +105,8 @@ enum PowerUpEntitySlot:
 # Synchronous helper arguments/results require an explicit, audited contract; other calls may overwrite scratch.
 # Capture scratch references in reevaluated visuals with evalOnce, and document each assignment locally.
 globalvar tmp0  # Synchronous scratch, including Rescue path index and Anran spawn source; assign before use, never retain across waits/async work.
-globalvar tmp1  # Second synchronous scratch value, including selectTarget candidates and barricade push geometry; never retain across waits/async work.
+globalvar tmp1  # Second synchronous scratch value, including bot teleport pivot, selectTarget candidates and barricade push geometry; never retain across waits/async work.
+#!define botTeleportPivot tmp1
 globalvar tmp2  # Third synchronous scratch value, including barricade's current target and mutation color captured with evalOnce for the outline; no live reads across waits/async work.
 
 # Phase-owned storage, NOT scratch: values may survive waits and reevaluation.

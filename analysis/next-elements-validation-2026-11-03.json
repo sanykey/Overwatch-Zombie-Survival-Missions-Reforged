@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-03",
+  "before": 26271,
+  "after": 26188,
+  "saved": 83,
+  "originalRulesCompared": 238,
+  "changedRules": [
+    "GLOBAL MENU INITIALIZATION",
+    "setZombieMode",
+    "setObjectiveType",
+    "teleportBots"
+  ],
+  "synchronousHelperCalls": 5,
+  "helperMatchesOriginalSearch": true,
+  "scratchRulesAuditedWithoutHelper": 47,
+  "directIncludeBuild": true,
+  "emittedWarnings": 0,
+  "inGameValidated": false,
+  "runtimeBenchmarked": false
+}
