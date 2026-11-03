@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **26,662 elements**, freeing up **5,602** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **82/128**.
+The current OverPy 9.7.20 build uses **26,628 elements**, freeing up **5,636** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **82/128**.
+
+- Two Laser Barricade collision checks now use a dot product instead of a trigonometric projection onto the saved unit edge direction: **26,662 → 26,628 (−34 elements)**, without new variables. The original absolute value, barricade-width clamp, horizontal point projection, four independent rule conditions and target filter remain. The isolated build changes only `LASER BARRICADE BLOCKS ZOMBIES` and emits no warnings. Numerical checks found differences only at the exact 1.5 m boundary due to floating-point operation order; in-game behavior and runtime load have not been measured.
 
 - Seven frequently used consumable effect and HUD IDs now use dedicated player variables instead of `powerUpEntityIdList`: **26,718 → 26,662 (−56 elements)** for 7 additional player slots. The moved IDs are No Cooldowns HUD, Air Strike Ring, Cloaking Device Sphere, Super Nano Good Aura, Bounce Pad Ring, Ultimate Charger HUD and Stun Beam. All corresponding reads, writes and deletions were replaced; turret IDs with computed indices remain in the array. Replacing the fields with their former indexed expressions restores the original consumable source; only the seven corresponding subroutines changed among 237 compiled rules, with no emitted warnings. In-game validation and runtime benchmarks have not been performed.
 
