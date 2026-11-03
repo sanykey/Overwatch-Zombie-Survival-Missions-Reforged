@@ -1,6 +1,7 @@
 #!mainFile "main.opy"
 
 subroutine teleportToClosestPlayer
+subroutine teleportDownedPlayerToWalkable
 subroutine updateUsers
 subroutine saveAlivePlayerState
 
@@ -143,7 +144,7 @@ rule "PLAYER GETS DOWNED":
         if attacker.getHero() == Hero.REINHARDT and eventAbility == Button.ABILITY_1:
             teleportToClosestPlayer()
         else:
-            eventPlayer.teleport(nearestWalkablePosition(nearestWalkablePosition(eventPlayer.getPosition()) + directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getPosition(), nearestWalkablePosition(eventPlayer.getPosition()))), 0) * 2))
+            teleportDownedPlayerToWalkable()
 
 
 rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
@@ -176,7 +177,7 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
             eventPlayer.rescueTimeRemaining = 0
         #Player's body falls off of map
         if eventPlayer.getPosition().y - nearestWalkablePosition(eventPlayer.getPosition()).y < -0.1:
-            eventPlayer.teleport(nearestWalkablePosition(nearestWalkablePosition(eventPlayer.getPosition()) + directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getPosition(), nearestWalkablePosition(eventPlayer.getPosition()))), 0) * 2))
+            teleportDownedPlayerToWalkable()
     if eventPlayer.reviveTimeRemaining <= 0:
         eventPlayer.reviveDuration++
         eventPlayer.reviveTimeRemaining = eventPlayer.reviveDuration
@@ -360,6 +361,13 @@ def teleportToClosestPlayer():
     @Name "teleportToClosestPlayer"
     
     eventPlayer.teleport(nearestWalkablePosition(sorted(playerTargetList.exclude(eventPlayer), lambda x: distance(x.getPosition(), currentObjectivePosition))[0].getPosition()))
+
+
+def teleportDownedPlayerToWalkable():
+    @Name "teleportDownedPlayerToWalkable"
+
+    # Both downed-player paths use the same synchronous recovery teleport.
+    eventPlayer.teleport(nearestWalkablePosition(nearestWalkablePosition(eventPlayer.getPosition()) + directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getPosition(), nearestWalkablePosition(eventPlayer.getPosition()))), 0) * 2))
 
 
 def updateUsers():

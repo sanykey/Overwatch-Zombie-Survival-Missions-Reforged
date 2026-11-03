@@ -24,9 +24,7 @@ rule "ATTACK SPAWN ROOM CONTROL":
     @Condition isSpecialGameMode != true
     @Condition playerTargetList.any(lambda x: distance(x.getPosition(), activeAttackSpawnRoom) < 45) == true
     
-    spawnRoomIndex++
-    if spawnRoomIndex >= len(attackSpawnRooms):
-        spawnRoomIndex = 0
+    spawnRoomIndex = (spawnRoomIndex + 1) % len(attackSpawnRooms)
     #Make sure players are clear of test spawn room before activating
     if getPlayers(Team.1).filter(lambda player: player.hasSpawned()).all(lambda x: distance(x.getPosition(), attackSpawnRooms[spawnRoomIndex]) > 45):
         activeAttackSpawnRoom = attackSpawnRooms[spawnRoomIndex]
@@ -56,10 +54,7 @@ rule "TRIGGER OVERTIME MUSIC":
     enableMusic()
     if not isSpecialGameMode:
         isOvertimeActive = true
-        if getCurrentGamemode() == Gamemode.ESCORT:
-            ((getLivingPlayers(Team.2).filter(lambda player: player.botTarget == null and not player in bossStateList))[0]).teleport(getPayloadPosition())
-        else:
-            ((getLivingPlayers(Team.2).filter(lambda player: player.botTarget == null and not player in bossStateList))[0]).teleport(getObjectivePosition(0))
+        ((getLivingPlayers(Team.2).filter(lambda player: player.botTarget == null and not player in bossStateList))[0]).teleport(getPayloadPosition() if getCurrentGamemode() == Gamemode.ESCORT else getObjectivePosition(0))
 
 
 rule "ZOMBIE SHUFFLE":

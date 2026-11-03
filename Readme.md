@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **26,319 elements**, freeing up **5,945** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+The current OverPy 9.7.20 build uses **26,271 elements**, freeing up **5,993** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+
+- Shared the two identical downed-player recovery teleports, selected the overtime teleport destination in one call, and wrapped pregame and gameplay spawn-room indices cyclically. Two existence checks now use `.any()`. Together these changes reduce the build from **26,319 → 26,271 (−48 elements)** without new variables. Validation compared all 237 preceding compiled rules: only the seven intended rules changed, and the new subroutine contains one synchronous teleport. The real include build matches the in-memory build and emits no warnings. In-game validation has not been performed. Recheck: `node analysis/verify-fresh-elements-2026-11-03.cjs`.
 
 - The enhancement HUD now combines the selected name with its icon from the existing pregame enhancement menu list. The No Preference title remains icon-free, and all ten other names keep their original icons. This reduces the build from **26,355 → 26,319 (−36 elements)** without new variables. The real include build matches the in-memory Workshop output and emits no warnings. In-game display has not been checked.
 

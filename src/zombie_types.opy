@@ -408,7 +408,7 @@ rule "ZOMBIES SPAWN AT REIGNITED":
     @Condition (eventPlayer.isUsingUltimate() and eventPlayer.getHero() == Hero.ANRAN) != true
     @Condition eventPlayer in bossStateList != true
     @Condition eventPlayer in miniBossList != true
-    @Condition len(getPlayersOnHero(Hero.ANRAN, Team.2).filter(lambda player: player.botIsReigniteActive)) > null
+    @Condition getPlayersOnHero(Hero.ANRAN, Team.2).any(lambda player: player.botIsReigniteActive)
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isCrowdControlled != true
     @Condition eventPlayer.hasStatus(Status.HACKED) != true
