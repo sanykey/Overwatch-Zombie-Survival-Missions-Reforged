@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **25,441 elements**, freeing up **6,823** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+The current OverPy 9.7.20 build uses **25,382 elements**, freeing up **6,882** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+
+- Forty-eight zero-length list checks now compare the list with `[]`, and 11 remaining nested player-position expressions pass the player directly. Together these changes reduce the build from **25,441 to 25,382 elements** without new variables. Verification compares all 268 compiled rules, finds 32 affected rules, checks the direct include build, and reports no warnings. Reproduce the probe with `node analysis/probe-next-current-2026-11-03.cjs --baseline-ref b8369ea`; recheck the current source with `node analysis/verify-position-optimizations-2026-11-03.cjs`. Array comparisons and player-as-position behavior have not been validated in-game.
 
 - Another 63 explicit `getPosition()` wrappers were removed from `distance` and `directionTowards`: 18 second-argument distances, 12 first-argument distances, 12 first-argument directions, 5 second-argument directions, and 16 distances inside player lambdas. This reduces the build from **25,504 to 25,441 elements** without new variables. The verification compares all 268 compiled rules, finds 40 affected rules, checks the direct include build, and reports no warnings. Player-as-position behavior still needs in-game validation. Recheck: `node analysis/verify-position-optimizations-2026-11-03.cjs`.
 

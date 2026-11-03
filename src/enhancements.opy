@@ -299,9 +299,9 @@ rule "PYROTECHNIC APPLIES DAMAGE":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.enhancementId == Enhancement.PYROTECHNIC
-    @Condition len(eventPlayer.enhancementPyroHitList) > 0
+    @Condition eventPlayer.enhancementPyroHitList != []
     
-    while len(eventPlayer.enhancementPyroHitList) > 0:
+    while eventPlayer.enhancementPyroHitList != []:
         # pyroBurnTarget: zombie to burn; consumed within this iteration before the cooldown wait.
         #!define pyroBurnTarget tmp0
         pyroBurnTarget = eventPlayer.enhancementPyroHitList[0]

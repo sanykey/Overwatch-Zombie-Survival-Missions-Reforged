@@ -38,7 +38,7 @@ macro botTeleportCenterMacro():
     #Satellite Uplink
     elif currentObjectiveType == ObjectiveType.SATELLITE_UPLINK:
         #Checks if any players are currently repairing terminals
-        if len(objectivePlayerList) > 0:
+        if objectivePlayerList != []:
             eventPlayer.botTeleportCenter = random.choice(objectivePlayerList).getPosition()
         else:
             #Closest player to sattelite firing position
@@ -71,7 +71,7 @@ rule "BOT INITIALIZATION":
     wait(1, Wait.ABORT_WHEN_FALSE)
     eventPlayer.startHealingOverTime(null, 99999, 9999)
     eventPlayer.botRespawnDelay = 0
-    if len(customTeleportPositionList) > 0:
+    if customTeleportPositionList != []:
         eventPlayer.botCustomTeleportPosition = customTeleportPositionList[0]
         del customTeleportPositionList[0]
     else:
@@ -437,7 +437,7 @@ def enterExitTeleport():
             if eventPlayer.botTeleportPosition in botSpawnPointList:
                 eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, botSpawnWaypointList[botSpawnPointList.index(eventPlayer.botTeleportPosition)]), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
             else:
-                eventPlayer.startThrottleInDirection(directionFromAngles(random.randint(-90, 90) + horizontalAngleOfDirection(directionTowards(eventPlayer, sorted(getLivingPlayers(Team.1).filter(lambda player: player.hasSpawned()), lambda x: distance(eventPlayer, x))[0].getPosition())), 0), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
+                eventPlayer.startThrottleInDirection(directionFromAngles(random.randint(-90, 90) + horizontalAngleOfDirection(directionTowards(eventPlayer, sorted(getLivingPlayers(Team.1).filter(lambda player: player.hasSpawned()), lambda x: distance(eventPlayer, x))[0])), 0), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
         elif eventPlayer.botTarget != null:
             startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
 
@@ -469,7 +469,7 @@ def teleportBots():
                 # teleportCandidateSpawnPointList: nearby spawn points whose cooldown permits use, to choose a ready destination.
                 teleportCandidateSpawnPointList = teleportCandidateSpawnPointList.filter(lambda x: botSpawnPointTimerList[botSpawnPointList.index(x)] < 15)
                 #Bots utilize saved spawn points
-                if len(botSpawnPointList) > 0 and len(teleportCandidateSpawnPointList) > 0:
+                if botSpawnPointList != [] and teleportCandidateSpawnPointList != []:
                     eventPlayer.botTeleportPosition = random.choice(teleportCandidateSpawnPointList)
                     botSpawnPointTimerList[botSpawnPointList.index(eventPlayer.botTeleportPosition)] += 5
                     break
@@ -496,7 +496,7 @@ def locateAveragePlayerLocation():
     eventPlayer.botTeleportCenter = vect(0, 0, 0)
     # Snapshot the selected players once; consume the list synchronously before any wait or call.
     #!define averageTargetPlayerList tmp1
-    if len(objectivePlayerList) == 0 and playerTargetList.any(lambda x: x.getThrottle() != vect(0, 0, 0)):
+    if objectivePlayerList == [] and playerTargetList.any(lambda x: x.getThrottle() != vect(0, 0, 0)):
         averageTargetPlayerList = playerTargetList.filter(lambda x: x.getThrottle() != vect(0, 0, 0))
     else:
         averageTargetPlayerList = playerTargetList

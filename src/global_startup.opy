@@ -103,10 +103,10 @@ rule "SPAWN BOTS":
     @Condition getAverageServerLoad() <= createWorkshopSettingInt("General", "Spawn Zombies When Server Load Average is Less Than", 180, 100, 255, 2)
     #@Condition getNumberOfPlayers(Team.2) < numberOfBots
     @Condition getNumberOfPlayers(Team.ALL) < 24
-    @Condition (len(botSpawnTimeList) > 0 and botSpawnTimeList[0] <= 0 or len(botSpawnTimeList) + getNumberOfPlayers(Team.2) < numberOfBots) == true
+    @Condition (botSpawnTimeList != [] and botSpawnTimeList[0] <= 0 or len(botSpawnTimeList) + getNumberOfPlayers(Team.2) < numberOfBots) == true
     
     botHeroRandomizationMacro()
-    if len(botSpawnTimeList) > 0 and botSpawnTimeList[0] <= 0:
+    if botSpawnTimeList != [] and botSpawnTimeList[0] <= 0:
         del botSpawnTimeList[0]
         wait(0.25)
     else:
@@ -115,18 +115,18 @@ rule "SPAWN BOTS":
         loop()
     wait(sorted(botSpawnTimeList).last(), Wait.RESTART_WHEN_TRUE)
     #Reset spawn times array if conditions are not met
-    if len(botSpawnTimeList) > 0:
+    if botSpawnTimeList != []:
         botSpawnTimeList[0] = 0
     if ruleCondition:
         loop()
 
 
 rule "SPAWN TIME CONTROL":
-    @Condition (len(botSpawnTimeList) > 0 or botSpawnPointTimerList > 0) == true
+    @Condition (botSpawnTimeList != [] or botSpawnPointTimerList > 0) == true
     
-    if len(botSpawnTimeList) > 0:
+    if botSpawnTimeList != []:
         botSpawnTimeList = sorted(botSpawnTimeList.map(lambda x: x - 1))
-    if len(botSpawnPointTimerList) > 0:
+    if botSpawnPointTimerList != []:
         botSpawnPointTimerList = botSpawnPointTimerList.map(lambda x: max(0, x - 1))
     wait(1)
     if ruleCondition:
@@ -171,7 +171,7 @@ rule "SKIP ASSEMBLING HEROES":
         setMatchTime(0)
         wait(0.25)
     setMatchTime(3599)
-    waitUntil(getPlayers(Team.1).any(lambda player: player.hasSpawned()) and len(mapGridList) > 0, 99999)
+    waitUntil(getPlayers(Team.1).any(lambda player: player.hasSpawned()) and mapGridList != [], 99999)
     setMatchTime(60)
     wait()
     pregameCountdown = getMatchTime()
@@ -322,7 +322,7 @@ def generateMapGrid():
         mapGridCandidatePosition = nearestWalkablePosition((random.choice(mapGridList) if len(mapGridList) > 5 else walkCenter) + directionFromAngles(random.uniform(0, 360), random.uniform(-35, 35)) * random.uniform(10, 100))
         #Keep grid points outside both spawn rooms on these five game modes.
         if not getCurrentGamemode() in [Gamemode.CTF, Gamemode.CLASH, Gamemode.PUSH, Gamemode.CONTROL, Gamemode.FLASHPOINT] or getSpawnPoints(Team.2).all(lambda x: distance(x.getPosition(), mapGridCandidatePosition) > 50) and getSpawnPoints(Team.1).all(lambda x: distance(x.getPosition(), mapGridCandidatePosition) > 40):
-            if len(mapGridList) == 0 or mapGridList.all(lambda x: distance(x, mapGridCandidatePosition) > 2.5):
+            if mapGridList == [] or mapGridList.all(lambda x: distance(x, mapGridCandidatePosition) > 2.5):
                 mapGridList.append(mapGridCandidatePosition)
         if isPregameSetup and getMatchTime() + matchEndTime < 2:
             break

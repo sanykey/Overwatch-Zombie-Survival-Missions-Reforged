@@ -69,9 +69,9 @@ rule "PLAYER EXTRACTION CONTROL":
 rule "WIN/LOSS CONDITIONS":
     @Condition isObjectiveComplete == false
     @Condition isGameplayActive == true
-    @Condition (len(objectivePositionList) == 1 and (len(objectivePlayerList) == (len(getPlayers(Team.1).filter(lambda player: player.hasSpawned() and player.rescueTimeRemaining > 0 and not player.isAfk)))) or (len(playerTargetList) == 0 or extractionZoneRad <= 0)) == true
+    @Condition (len(objectivePositionList) == 1 and (len(objectivePlayerList) == (len(getPlayers(Team.1).filter(lambda player: player.hasSpawned() and player.rescueTimeRemaining > 0 and not player.isAfk)))) or (playerTargetList == [] or extractionZoneRad <= 0)) == true
     
-    if len(playerTargetList) == 0 and getPlayersOnHero(Hero.ANRAN, Team.1).any(lambda player: player.getUltCharge() == 100):
+    if playerTargetList == [] and getPlayersOnHero(Hero.ANRAN, Team.1).any(lambda player: player.getUltCharge() == 100):
         wait(5.5, Wait.ABORT_WHEN_FALSE)
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     isGameplayActive = false
@@ -90,7 +90,7 @@ rule "WIN/LOSS CONDITIONS":
     bigMessage(getPlayers(Team.1).filter(lambda player: playerTargetList > 0 and not player in objectivePlayerList), "You were left behind!")
     getPlayers(Team.1).setStatusEffect(null, Status.ROOTED, 99999)
     getPlayers(Team.1).setStatusEffect(null, Status.PHASED_OUT, 99999)
-    if len(playerTargetList) == 0 or objectivePlayerList == []:
+    if playerTargetList == [] or objectivePlayerList == []:
         getPlayers(Team.1).teleport(500 * Vector.UP)
         getAllPlayers().setInvisibility(Invis.ALL)
         wait(0.25)

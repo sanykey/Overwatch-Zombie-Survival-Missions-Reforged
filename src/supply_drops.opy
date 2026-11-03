@@ -158,7 +158,7 @@ def playerForceField():
         #!define forceFieldZombieIndex tmp0
         for forceFieldZombieIndex in range(getNumberOfLivingPlayers(Team.2)):
             if distance(getLivingPlayers(Team.2)[forceFieldZombieIndex], eventPlayer.powerUpForceFieldPosition) <= 7.5:
-                getLivingPlayers(Team.2)[forceFieldZombieIndex].applyImpulse(directionTowards(eventPlayer.powerUpForceFieldPosition, getLivingPlayers(Team.2)[forceFieldZombieIndex].getPosition()), 6, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+                getLivingPlayers(Team.2)[forceFieldZombieIndex].applyImpulse(directionTowards(eventPlayer.powerUpForceFieldPosition, getLivingPlayers(Team.2)[forceFieldZombieIndex]), 6, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
         wait(0.032)
     destroyEffect(eventPlayer.powerUpForceFieldSphereId)
     destroyHudText(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.FORCE_FIELD_HUD])
@@ -389,7 +389,7 @@ def bouncePad():
         # bouncePadSurvivorList: grounded survivors on this pad, to apply the bounce and play feedback for this tick.
         #!define bouncePadSurvivorList tmp0
         bouncePadSurvivorList = getLivingPlayers(Team.1).filter(lambda player: distance(eventPlayer.powerUpBouncePadPosition, player) < 2 and player.isOnGround())
-        if len(bouncePadSurvivorList) > 0:
+        if bouncePadSurvivorList != []:
             bouncePadSurvivorList.applyImpulse(Vector.UP, 22, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
             playEffect(bouncePadSurvivorList, DynamicEffect.RING_EXPLOSION_SOUND, Color.WHITE, eventPlayer.powerUpBouncePadPosition, 50)
         wait(0.125)

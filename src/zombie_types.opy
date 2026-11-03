@@ -231,7 +231,7 @@ rule "BEHEMOTH GAS STREAM (BOSS)":
     @Event eachPlayer
     @Team 2
     @Hero roadhog
-    @Condition len(eventPlayer.botGasPositionList) > 0
+    @Condition eventPlayer.botGasPositionList != []
     
     eventPlayer.botSpecialTargetList = []
     # behemothGasCloudIndex: gas-cloud index, to expand its radius and collect newly hit players.
@@ -247,7 +247,7 @@ rule "BEHEMOTH GAS STREAM (BOSS)":
         behemothGasCloudRadius = eventPlayer.botGasRadiusList[behemothGasCloudIndex]
         eventPlayer.botSpecialTargetList.append(playerTargetList.filter(lambda x: not x in eventPlayer.botSpecialTargetList and distance(behemothGasCloudPosition, vect(x.getEyePosition().x, behemothGasCloudPosition.y, x.getEyePosition().z)) < behemothGasCloudRadius and abs(behemothGasCloudPosition.y - x.getEyePosition().y) < behemothGasCloudRadius / 5))
     eventPlayer.botSpecialTargetList.startDamageOverTime(eventPlayer, 2.5, eventPlayer.botBiteDamage * 0.1)
-    if eventPlayer.damageOverTimeRemaining < 2.5 and len(eventPlayer.botSpecialTargetList) > 0:
+    if eventPlayer.damageOverTimeRemaining < 2.5 and eventPlayer.botSpecialTargetList != []:
         eventPlayer.damageOverTimeRemaining = 2.5
     wait(0.25)
     if ruleCondition:
@@ -260,7 +260,7 @@ rule "BRUTE (REIN) SUPER SEISMIC SLAM":
     @Hero reinhardt
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer.getUltCharge() >= 100
-    @Condition distance(worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION), eventPlayer.botTarget.getPosition()) < 1.5 * eventPlayer.sizeScale
+    @Condition distance(worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION), eventPlayer.botTarget) < 1.5 * eventPlayer.sizeScale
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.ULTIMATE)
@@ -271,9 +271,9 @@ rule "BRUTE (REIN) SUPER SEISMIC SLAM":
         if eventPlayer.isCrowdControlled:
             return
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION), 20 * eventPlayer.sizeScale)
-    (getLivingPlayers(Team.ALL).filter(lambda x: distance(eventPlayer, x) < 20 * eventPlayer.sizeScale and distance(worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION), x.getPosition()) > 1.5 * eventPlayer.sizeScale and isInLoS(eventPlayer.getEyePosition(), x.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) and x != eventPlayer and abs(eventPlayer.getPosition().y - x.getPosition().y) < 2 * eventPlayer.sizeScale)).applyImpulse(Vector.UP, 15 * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+    (getLivingPlayers(Team.ALL).filter(lambda x: distance(eventPlayer, x) < 20 * eventPlayer.sizeScale and distance(worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION), x) > 1.5 * eventPlayer.sizeScale and isInLoS(eventPlayer.getEyePosition(), x.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) and x != eventPlayer and abs(eventPlayer.getPosition().y - x.getPosition().y) < 2 * eventPlayer.sizeScale)).applyImpulse(Vector.UP, 15 * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION), 3 * eventPlayer.sizeScale)
-    (null.concat(getLivingPlayers(Team.2)).filter(lambda x: distance(x.getPosition(), worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION)) < 1.5 * eventPlayer.sizeScale and not x.hasStatus(Status.KNOCKED_DOWN))).setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 2.5)
+    (null.concat(getLivingPlayers(Team.2)).filter(lambda x: distance(x, worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION)) < 1.5 * eventPlayer.sizeScale and not x.hasStatus(Status.KNOCKED_DOWN))).setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 2.5)
 
 
 rule "BRUTE, GLADIATOR, AND SMOLDER ALTERNATE ATTACK CONTROL":
@@ -552,7 +552,7 @@ rule "CHARGER (MAUGA) CHARGE":
             resumeBotFacingAndMovement()
             return
         wait(0.064)
-    eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.botTarget.getPosition() if eventPlayer.botChargerDestination == null else eventPlayer.botChargerDestination), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
+    eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.botTarget if eventPlayer.botChargerDestination == null else eventPlayer.botChargerDestination), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
     eventPlayer.botIsFacingOverridden = true
     faceCurrentThrottle()
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -1137,7 +1137,7 @@ rule "ENSNARER (HAZARD) BLOCKS PLAYERS":
         eventPlayer.botIsEnsnarerBlocking = true
         entityFloat()
         for eventPlayer.botEnsnarerTargetIndex in range(len(eventPlayer.botSpecialTargetList)):
-            eventPlayer.startFacing(directionTowards(eventPlayer, eventPlayer.botSpecialTargetList[eventPlayer.botEnsnarerTargetIndex].getPosition()) + -0.3 * Vector.UP, 10000)
+            eventPlayer.startFacing(directionTowards(eventPlayer, eventPlayer.botSpecialTargetList[eventPlayer.botEnsnarerTargetIndex]) + -0.3 * Vector.UP, 10000)
             eventPlayer.cancelPrimaryAction()
             wait(0.1)
             eventPlayer.forceButtonPress(Button.ABILITY_2)

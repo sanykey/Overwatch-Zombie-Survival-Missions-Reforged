@@ -79,7 +79,7 @@ rule "SET UP TERMINAL POSITIONS":
     # satelliteTerminalCandidatePositionList: grid points 10-50m from the objective, to choose a terminal location with sufficient spacing.
     #!define satelliteTerminalCandidatePositionList tmp0
     satelliteTerminalCandidatePositionList = mapGridList.filter(lambda x: distance(x, currentObjectivePosition) > 10 and distance(x, currentObjectivePosition) < 50)
-    if len(satelliteTerminalPositionList) == 0:
+    if satelliteTerminalPositionList == []:
         satelliteTerminalPositionList.append(random.choice(satelliteTerminalCandidatePositionList))
     else:
         # satelliteSpacingTerminalIndex: existing terminal index, to exclude nearby candidate locations from satelliteTerminalCandidatePositionList.
@@ -88,7 +88,7 @@ rule "SET UP TERMINAL POSITIONS":
             #Terminals must be at least x meters apart
             # satelliteTerminalCandidatePositionList: remaining candidate positions after excluding points too close to terminal satelliteSpacingTerminalIndex.
             satelliteTerminalCandidatePositionList.remove(satelliteTerminalCandidatePositionList.filter(lambda x: distance(x, satelliteTerminalPositionList[satelliteSpacingTerminalIndex]) < satelliteMinTerminalSpacing))
-        if len(satelliteTerminalCandidatePositionList) > 0:
+        if satelliteTerminalCandidatePositionList != []:
             #Successfully find new terminal location
             satelliteTerminalPositionList.append(random.choice(satelliteTerminalCandidatePositionList))
         else:
@@ -123,7 +123,7 @@ rule "PLAYERS AT TERMINALS CONTROLS":
 rule "PLAYERS REPAIR TERMINALS":
     @Condition currentObjectiveType == ObjectiveType.SATELLITE_UPLINK
     @Condition isObjectiveComplete == false
-    @Condition len(objectivePlayerList) > 0
+    @Condition objectivePlayerList != []
     
     #Check each terminal
     # satelliteRepairTerminalIndex: terminal index, to update its repair progress and announce its completion.

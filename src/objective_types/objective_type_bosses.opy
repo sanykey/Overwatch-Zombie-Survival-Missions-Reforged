@@ -39,7 +39,7 @@ rule "BOT BECOMES BOSS":
         eventPlayer.botIsAttached = false
         eventPlayer.detach()
     eventPlayer.setInvisibility(Invis.NONE)
-    if len(bossesAvailableHeroList) == 0:
+    if bossesAvailableHeroList == []:
         if zombieSetting == 4:
             bossesAvailableHeroList = botHeroList
         else:

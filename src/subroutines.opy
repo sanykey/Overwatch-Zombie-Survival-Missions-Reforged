@@ -84,7 +84,7 @@ macro botStatManagementMacro():
 
 macro mutationsMacro():
     #Zombies have a chance to mutate. Bosses cannot mutate
-    if len(availableMutationList) > 0 and not eventPlayer in bossStateList and (random.uniform(0, 100) < (100 if challengeSetting in [3, 5] else createWorkshopSettingFloat("Mutations", "Chance to mutate percentage", 25, 0, 100))):
+    if availableMutationList != [] and not eventPlayer in bossStateList and (random.uniform(0, 100) < (100 if challengeSetting in [3, 5] else createWorkshopSettingFloat("Mutations", "Chance to mutate percentage", 25, 0, 100))):
         eventPlayer.botMutationId = random.choice(availableMutationList)
         # botMutationOutlineColor: outline color; every enabled mutation assigns it before the capture below.
         #Speed
@@ -283,7 +283,7 @@ macro globalObjectiveEntityManagementMacro():
             createEffect(objectivePlayerList, Effect.LIGHT_SHAFT, objectiveColor, currentObjectivePosition + -30 * Vector.UP, objectiveRad)
             objectiveEntityIdList.append(getLastCreatedEntity())
             #Objective beacon
-            createEffect(getAllPlayers().filter(lambda _: len(objectivePlayerList) > 0), Effect.LIGHT_SHAFT, objectiveColor, currentObjectivePosition + -10 * Vector.UP, objectiveRad / 20)
+            createEffect(getAllPlayers().filter(lambda _: objectivePlayerList != []), Effect.LIGHT_SHAFT, objectiveColor, currentObjectivePosition + -10 * Vector.UP, objectiveRad / 20)
             objectiveEntityIdList.append(getLastCreatedEntity())
             #Objective icon
             createIcon(getAllPlayers().exclude(objectivePlayerList), currentObjectivePosition + Vector.UP, Icon.ARROW_DOWN, IconReeval.VISIBILITY_AND_COLOR, objectiveColor)
@@ -292,21 +292,21 @@ macro globalObjectiveEntityManagementMacro():
             createInWorldText(objectivePlayerList, "CAPTURE PERCENTAGE: {0}%".format(floor(showdownCapturePercent)), currentObjectivePosition + Vector.UP, 2, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, objectiveColor)
             objectiveEntityIdList.append(getLastCreatedText())
             #Capture percentage hud text
-            hudText(getAllPlayers(), "Capture Percentage: {0}%".format(floor(showdownCapturePercent)), "Objectives remaining: {0}".format(len(objectivePositionList) - 1), "{0} {2}".format("Allies: {0}".format(len(objectivePlayerList)) if len(objectivePlayerList) > 0 else [], null, "Foes: {0}".format(len(showdownContestingZombieList)) if len(showdownContestingZombieList) > 0 else []), HudPosition.TOP, 1, objectiveColor, objectiveColor, objectiveColor, HudReeval.VISIBILITY_STRING_AND_COLOR)
+            hudText(getAllPlayers(), "Capture Percentage: {0}%".format(floor(showdownCapturePercent)), "Objectives remaining: {0}".format(len(objectivePositionList) - 1), "{0} {2}".format("Allies: {0}".format(len(objectivePlayerList)) if objectivePlayerList != [] else [], null, "Foes: {0}".format(len(showdownContestingZombieList)) if showdownContestingZombieList != [] else []), HudPosition.TOP, 1, objectiveColor, objectiveColor, objectiveColor, HudReeval.VISIBILITY_STRING_AND_COLOR)
             objectiveEntityIdList.append(getLastCreatedText())
     #Bosses
     elif objectiveValue == ObjectiveType.BOSSES:
         #Boss health progress bar
-        progressBarHud(getAllPlayers().filter(lambda _: len(bossesStateList) > 0), bossesStateList[0].getNormalizedHealth() * 100, "Boss Health {0}".format(heroIcon(bossesStateList[0].getHero())), HudPosition.TOP, 2, Color.RED, Color.RED)
+        progressBarHud(getAllPlayers().filter(lambda _: bossesStateList != []), bossesStateList[0].getNormalizedHealth() * 100, "Boss Health {0}".format(heroIcon(bossesStateList[0].getHero())), HudPosition.TOP, 2, Color.RED, Color.RED)
         objectiveEntityIdList.append(getLastCreatedText())
         #Objectives remaining hud text
         hudSubheader(getAllPlayers(), "Objectives Remaining: {0}".format(len(objectivePositionList) - 1) if objectiveTypeSetting != ObjectiveType.BIOMORPHING else "Giant Zombies Remaining: {0}".format(len(objectivePositionList) - 1), HudPosition.TOP, 1, Color.RED, HudReeval.VISIBILITY)
         objectiveEntityIdList.append(getLastCreatedText())
         #Boss icon
-        createIcon(getAllPlayers(), bossesStateList[0].getEyePosition() + Vector.UP if len(bossesStateList) > 0 else currentObjectivePosition, Icon.SKULL, IconReeval.VISIBILITY_AND_POSITION, Color.RED)
+        createIcon(getAllPlayers(), bossesStateList[0].getEyePosition() + Vector.UP if bossesStateList != [] else currentObjectivePosition, Icon.SKULL, IconReeval.VISIBILITY_AND_POSITION, Color.RED)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Boss Distance
-        createInWorldText(getAllPlayers().filter(lambda player: len(bossesStateList) == 0 or not player in bossesStateList[0].botPotentialTargetList), "Distance: {0}m".format(distance(localPlayer, bossesStateList[0]) if len(bossesStateList) > 0 else distance(localPlayer, currentObjectivePosition)), bossesStateList[0].getPosition() if len(bossesStateList) > 0 else currentObjectivePosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.RED, SpecVisibility.NEVER)
+        createInWorldText(getAllPlayers().filter(lambda player: bossesStateList == [] or not player in bossesStateList[0].botPotentialTargetList), "Distance: {0}m".format(distance(localPlayer, bossesStateList[0]) if bossesStateList != [] else distance(localPlayer, currentObjectivePosition)), bossesStateList[0].getPosition() if bossesStateList != [] else currentObjectivePosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.RED, SpecVisibility.NEVER)
         objectiveEntityIdList.append(getLastCreatedText())
     #Biomoprhing
     elif objectiveValue == ObjectiveType.BIOMORPHING:
@@ -329,7 +329,7 @@ macro globalObjectiveEntityManagementMacro():
         createProgressBarInWorldText(localPlayer.filter(lambda x: x in objectivePlayerList), ceil(localPlayer.getNormalizedHealth() * 100) if biomorphingGoalQueueList[0] == 3 else localPlayer.biomorphingResourceAmount / BIOMORPHING_RESOURCE_AMOUNT * 100, "Depositing Biowaste...", updateEveryFrame(localPlayer.getEyePosition() + (directionFromAngles(horizontalAngleOfDirection(localPlayer.getFacingDirection()), verticalAngleOfDirection(localPlayer.getFacingDirection()) + 15))) if localPlayer in objectivePlayerList else evalOnce(localPlayer.getPosition()), 1, Clip.NONE, biomorphingResourceColorList[localPlayer.biomorphingResourceType], Color.WHITE, ProgressWorldTextReeval.VISIBILITY_POSITION_VALUES_AND_COLOR, SpecVisibility.NEVER)
         objectiveEntityIdList.append(getLastCreatedText())
         #Collection site distance (or closest resource distance)
-        createInWorldText(localPlayer.filter(lambda x: not x in objectivePlayerList and (localPlayer.biomorphingResourceAmount > 0 or len(biomorphingResourcePositionList) > 0)), "Distance: {0}m".format(distance(currentObjectivePosition if localPlayer.biomorphingResourceAmount > 0 else sorted(biomorphingResourcePositionList, lambda x: angleBetweenVectors(directionTowards(localPlayer.getEyePosition(), x), localPlayer.getFacingDirection()))[0], localPlayer.getPosition())), currentObjectivePosition if localPlayer.biomorphingResourceAmount > 0 else sorted(biomorphingResourcePositionList, lambda x: angleBetweenVectors(directionTowards(localPlayer.getEyePosition(), x), localPlayer.getFacingDirection()))[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.NEVER)
+        createInWorldText(localPlayer.filter(lambda x: not x in objectivePlayerList and (localPlayer.biomorphingResourceAmount > 0 or biomorphingResourcePositionList != [])), "Distance: {0}m".format(distance(currentObjectivePosition if localPlayer.biomorphingResourceAmount > 0 else sorted(biomorphingResourcePositionList, lambda x: angleBetweenVectors(directionTowards(localPlayer.getEyePosition(), x), localPlayer.getFacingDirection()))[0], localPlayer.getPosition())), currentObjectivePosition if localPlayer.biomorphingResourceAmount > 0 else sorted(biomorphingResourcePositionList, lambda x: angleBetweenVectors(directionTowards(localPlayer.getEyePosition(), x), localPlayer.getFacingDirection()))[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.NEVER)
         objectiveEntityIdList.append(getLastCreatedText())
     #Survivor Rescue
     elif objectiveValue == ObjectiveType.SURVIVOR_RESCUE:
@@ -340,7 +340,7 @@ macro globalObjectiveEntityManagementMacro():
         hudSubheader(getPlayers(Team.1), "Objectives Remaining: {0}".format(len(objectivePositionList) - 1), HudPosition.TOP, 1, Color.VIOLET, HudReeval.VISIBILITY)
         objectiveEntityIdList.append(getLastCreatedText())
         #Objective icon
-        createIcon(getAllPlayers().filter(lambda player: distance(player, rescueSurvivor[0].getPosition()) < objectiveRad and distance(player, currentObjectivePosition) > 5), currentObjectivePosition + Vector.UP, Icon.ARROW_DOWN, IconReeval.VISIBILITY_AND_POSITION, Color.VIOLET)
+        createIcon(getAllPlayers().filter(lambda player: distance(player, rescueSurvivor[0]) < objectiveRad and distance(player, currentObjectivePosition) > 5), currentObjectivePosition + Vector.UP, Icon.ARROW_DOWN, IconReeval.VISIBILITY_AND_POSITION, Color.VIOLET)
         objectiveEntityIdList.append(getLastCreatedEntity())
     #Killzone
     elif objectiveValue == ObjectiveType.KILL_ZONE:

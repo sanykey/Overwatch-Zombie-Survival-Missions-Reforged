@@ -7,7 +7,7 @@ macro biowasteOutputMacro():
     #!define biowasteOutputType tmp0
     biowasteOutputType = biomorphingQueuedTypeList[0]
     del biomorphingQueuedTypeList[0]
-    if len(biomorphingQueuedTypeList) == 0:
+    if biomorphingQueuedTypeList == []:
         biomorphingQueuedTypeList = random.shuffle([0, 1, 2])
 
 
@@ -113,7 +113,7 @@ rule "BIOWASTE IS PICKED UP":
     @Condition eventPlayer.biomorphingResourceAmount <= 0
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isAlive() == true
-    @Condition len(biomorphingResourcePositionList) > 0
+    @Condition biomorphingResourcePositionList != []
     @Condition (biomorphingResourcePositionList.any(lambda x: distance(x, eventPlayer) < 2 or distance(x, eventPlayer.getEyePosition()) < 2)) == true
     @Condition (not eventPlayer.isDummy() or eventPlayer.getTeam() == Team.2) == true
     
@@ -191,9 +191,9 @@ rule "BIOWASTE HOLDER DIES, ORB IS QUEUED AND RESOURCE AMOUNT REMOVED":
 
 
 rule "BIOWASTE MANAGEMENT":
-    @Condition len(biomorphingDeferredTypeList) > 0
+    @Condition biomorphingDeferredTypeList != []
     
-    while len(biomorphingDeferredTypeList) > 0:
+    while biomorphingDeferredTypeList != []:
         # deferredBiowasteType: first queued biowaste type, passed to biowasteAssignmentMacro to create the dropped orb.
         #!define deferredBiowasteType tmp0
         deferredBiowasteType = biomorphingDeferredTypeList[0]

@@ -29,7 +29,7 @@ rule "PLAYERS ON OBJECTIVE CONTROL":
 rule "INCREASE OBJECTIVE CAPTURE PERCENTAGE":
     @Condition currentObjectiveType == ObjectiveType.SHOWDOWN
     @Condition len(objectivePositionList) > 1
-    @Condition len(objectivePlayerList) > 0
+    @Condition objectivePlayerList != []
     @Condition isObjectiveComplete == false
     
     #Proceed to next objective
@@ -59,7 +59,7 @@ rule "INCREASE OBJECTIVE CAPTURE PERCENTAGE":
 rule "DECREASES CAPTURE PERCENTAGE":
     @Condition currentObjectiveType == ObjectiveType.SHOWDOWN
     @Condition len(objectivePositionList) > 1
-    @Condition len(showdownContestingZombieList) > 0
+    @Condition showdownContestingZombieList != []
     @Condition isObjectiveComplete == false
     @Condition showdownCapturePercent > showdownNextCheckpoint - 25
     

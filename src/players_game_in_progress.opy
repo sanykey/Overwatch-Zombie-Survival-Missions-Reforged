@@ -360,7 +360,7 @@ rule "PLAYER TARGET (REMOVE)":
 def teleportToClosestPlayer():
     @Name "teleportToClosestPlayer"
     
-    eventPlayer.teleport(nearestWalkablePosition(sorted(playerTargetList.exclude(eventPlayer), lambda x: distance(x.getPosition(), currentObjectivePosition))[0].getPosition()))
+    eventPlayer.teleport(nearestWalkablePosition(sorted(playerTargetList.exclude(eventPlayer), lambda x: distance(x, currentObjectivePosition))[0].getPosition()))
 
 
 def teleportDownedPlayerToWalkable():

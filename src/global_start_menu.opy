@@ -9,7 +9,7 @@ subroutine selectVoteWinner
 
 rule "GLOBAL MENU INITIALIZATION":
     @Condition isPregameSetup == true
-    @Condition len(mapGridList) > 0
+    @Condition mapGridList != []
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
     if isSpecialGameMode:
@@ -409,11 +409,11 @@ def setObjectiveType():
         missionPlacementAttemptCount = 0
         while len(objectivePositionList) < len(objectiveTypeList):
             #Limits possible map grid points to set min and max range from last created objective position
-            missionCandidatePosition = random.choice(mapGridList if len(objectivePositionList) == 0 else mapGridList.filter(lambda x: distance(x, objectivePositionList.last()) > objectiveSpacingList[0] and distance(x, objectivePositionList.last()) < min(100, objectiveSpacingList[0] * 3)))
+            missionCandidatePosition = random.choice(mapGridList if objectivePositionList == [] else mapGridList.filter(lambda x: distance(x, objectivePositionList.last()) > objectiveSpacingList[0] and distance(x, objectivePositionList.last()) < min(100, objectiveSpacingList[0] * 3)))
             missionCandidatePosition += Vector.UP
             wait()
             #Minimum objective spacing
-            if len(objectivePositionList) == 0 or objectivePositionList.slice(len(objectivePositionList) - 5, 5).all(lambda x: distance(missionCandidatePosition, x) > objectiveSpacingList[1]):
+            if objectivePositionList == [] or objectivePositionList.slice(len(objectivePositionList) - 5, 5).all(lambda x: distance(missionCandidatePosition, x) > objectiveSpacingList[1]):
                 #Ensures bosses spawn with head room
                 if objectiveTypeList.last() != ObjectiveType.BOSSES or isInLoS(missionCandidatePosition + vect(0, 0, 0), missionCandidatePosition + 10 * Vector.UP):
                     objectivePositionList.append(missionCandidatePosition)

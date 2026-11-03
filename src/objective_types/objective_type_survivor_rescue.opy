@@ -43,7 +43,7 @@ rule "INITIALIZE SURVIVOR TO BE RESCUED":
     rescueSurvivor.setStatusEffect(null, Status.UNKILLABLE, 99999)
     rescueSurvivor.setHealingReceived(110)
     #Objective/Survivor distance
-    createInWorldText(getAllPlayers().filter(lambda _: not eventPlayer.rescueIsExtracting and distance(localPlayer, currentObjectivePosition) > 5), "Distance: {0}m".format(distance(localPlayer, eventPlayer.getPosition() if distance(eventPlayer, localPlayer) > objectiveRad else currentObjectivePosition)), eventPlayer.getPosition() if distance(eventPlayer, localPlayer) > objectiveRad else currentObjectivePosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.VIOLET, SpecVisibility.NEVER)
+    createInWorldText(getAllPlayers().filter(lambda _: not eventPlayer.rescueIsExtracting and distance(localPlayer, currentObjectivePosition) > 5), "Distance: {0}m".format(distance(localPlayer, eventPlayer if distance(eventPlayer, localPlayer) > objectiveRad else currentObjectivePosition)), eventPlayer.getPosition() if distance(eventPlayer, localPlayer) > objectiveRad else currentObjectivePosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.VIOLET, SpecVisibility.NEVER)
     #Survivor rescue progress bar
     progressBarHud(getAllPlayers(), 100 if eventPlayer.rescueIsExtracting else ((distance(vect(currentObjectivePosition.x, eventPlayer.rescueStartPosition.y, currentObjectivePosition.z), eventPlayer.rescueStartPosition) - distance(eventPlayer, vect(currentObjectivePosition.x, eventPlayer.getPosition().y, currentObjectivePosition.z))) / distance(vect(currentObjectivePosition.x, eventPlayer.rescueStartPosition.y, currentObjectivePosition.z), eventPlayer.rescueStartPosition)) * 100, "Survivor Rescue Progress", HudPosition.TOP, 2, Color.VIOLET, Color.VIOLET, ProgressHudReeval.VISIBILITY_AND_VALUES)
     #Survivor icon
@@ -59,7 +59,7 @@ rule "INITIALIZE SURVIVOR TO BE RESCUED":
         #Path Markers
         createEffect(getAllPlayers().filter(lambda _: len(eventPlayer.rescuePathList) > evalOnce(rescuePathMarkerIndex * 3)), Effect.RING, Color.VIOLET, eventPlayer.rescuePathList[evalOnce(rescuePathMarkerIndex) * 3], 0.2)
     eventPlayer.startFacing(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getEyePosition(), eventPlayer.rescueLeader.getEyePosition())), 80 if eventPlayer.rescueLeader == null else verticalAngleOfDirection(directionTowards(eventPlayer.getEyePosition(), eventPlayer.rescueLeader.getEyePosition()))), 100)
-    eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, (eventPlayer.rescuePathList.filter(lambda x: distance(eventPlayer, x) < 2)).last() if eventPlayer.rescuePathList.any(lambda x: distance(eventPlayer, x) < 2) else eventPlayer.rescueLeader.getPosition()), 0 if eventPlayer.rescueLeader == null or distance(eventPlayer, eventPlayer.rescueLeader) < 1.5 else eventPlayer.rescueThrottleSpeed, Relativity.TO_WORLD)
+    eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, (eventPlayer.rescuePathList.filter(lambda x: distance(eventPlayer, x) < 2)).last() if eventPlayer.rescuePathList.any(lambda x: distance(eventPlayer, x) < 2) else eventPlayer.rescueLeader), 0 if eventPlayer.rescueLeader == null or distance(eventPlayer, eventPlayer.rescueLeader) < 1.5 else eventPlayer.rescueThrottleSpeed, Relativity.TO_WORLD)
 
 
 rule "SURVIVOR TO BE RESCUED DIES":
@@ -117,7 +117,7 @@ rule "CREATE PATH":
     @Condition rescueSurvivor.rescueLeader != null
     @Condition rescueSurvivor.rescueThrottleSpeed > 0
     @Condition rescueSurvivor.rescueLeader.getAltitude() <= 1.5
-    @Condition (len(rescueSurvivor.rescuePathList) == 0 or distance(rescueSurvivor.rescueLeader, rescueSurvivor.rescuePathList.last()) > 1) == true
+    @Condition (rescueSurvivor.rescuePathList == [] or distance(rescueSurvivor.rescueLeader, rescueSurvivor.rescuePathList.last()) > 1) == true
     
     rescueSurvivor.rescuePathList.append(rescueSurvivor.rescueLeader.getPosition())
     wait(0.25, Wait.RESTART_WHEN_TRUE)
