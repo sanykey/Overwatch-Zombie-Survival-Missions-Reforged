@@ -5,7 +5,7 @@ const path = require('node:path');
 const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
 const {execFileSync} = require('node:child_process');
-const {files, compile, compiler, src} = require('./measure-further-optimizations.cjs');
+const {files, compile, compiler, src, editBlock} = require('./measure-further-optimizations.cjs');
 const {rules} = require('./verify-player-variables.cjs');
 const {checkWorkshop} = require('./verify-global-temporaries.cjs');
 const baselineRef = '3a212d6';
@@ -60,14 +60,32 @@ function prepareScratchAudit(output) {
 
 async function main() {
     const file = 'subroutines.opy';
-    const baseline = {...files, [file]: execFileSync('git', ['show', `${baselineRef}:src/${file}`],
+    const historicalBaseline = {...files, [file]: execFileSync('git', ['show', `${baselineRef}:src/${file}`],
         {cwd: path.dirname(src), encoding: 'utf8'}).replace(/\r\n/g, '\n')};
+    // Reverse only HUD extraction, retaining unrelated changes such as the cleanup ID snapshot.
+    const baseline = {...files};
+    assert(baseline[file].includes('subroutine createRemainingObjectivesHud\n'));
+    baseline[file] = baseline[file].replace('subroutine createRemainingObjectivesHud\n', '')
+        .replace(/^#!define remainingObjectivesHudColor tmp2\n/m, '');
+    editBlock(baseline, file, 'def createRemainingObjectivesHud():', () => '');
+    for (const color of ['RED', 'LIME_GREEN']) {
+        const handoff = `        remainingObjectivesHudColor = Color.${color}\n        createRemainingObjectivesHud()`;
+        assert.equal(baseline[file].split(handoff).length - 1, 1);
+        baseline[file] = baseline[file].replace(handoff,
+            `        hudSubheader(getAllPlayers(), "Objectives Remaining: {0}".format(len(objectivePositionList) - 1), HudPosition.TOP, 1, Color.${color}, HudReeval.VISIBILITY)\n        objectiveEntityIdList.append(getLastCreatedText())`);
+    }
     await compiler.readyPromise;
     const before = await compile(baseline), after = await compile(files);
+    const historical = await compile(historicalBaseline);
     assert.deepEqual(before.warnings, []);
     assert.deepEqual(after.warnings, []);
+    assert.deepEqual(historical.warnings, []);
     assert.equal(before.elements - after.elements, 6);
     const original = rules(before.result), updated = rules(after.result);
+    const historicalCaller = rules(historical.result).find(r => r.name === 'objectivesManagement');
+    for (const color of colors)
+        assert(historicalCaller.body.includes(hudAction.replace('Global.tmp2', color) + '\n' + registerId),
+            'HUD reference must still match the original creation and ID registration');
     const helper = updated.find(r => r.body.includes('\ncreateRemainingObjectivesHud;\n'));
     assert(helper, 'Missing shared HUD helper');
     auditHelper(actions(helper));
@@ -114,6 +132,7 @@ async function main() {
     fs.writeFileSync(path.join(src, 'main.ws.txt'), exported.result);
     const all = Object.values(files).join('\n');
     const report = {date: '2026-11-03', compiler: 'OverPy 9.7.20', baselineSubroutinesRef: baselineRef,
+        baselineMethod: 'Reverse only shared HUD extraction in current sources; additionally check both HUD actions against the historical implementation.',
         before: before.elements, after: after.elements, saved: before.elements - after.elements,
         globalVariables: (all.match(/^globalvar /gm) || []).length, playerVariables: (all.match(/^playervar /gm) || []).length,
         originalCompiledRulesCompared: original.length, synchronousHelperCalls: 2, helperContainsAsyncWork: false,

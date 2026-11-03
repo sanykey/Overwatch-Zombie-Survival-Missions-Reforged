@@ -229,12 +229,16 @@ macro globalObjectiveEntityManagementMacro():
     objectiveValue = currentObjectiveType
     #Destroy all current objective effects and texts
     for objectiveVisualCleanupIndex in range(len(objectiveEntityIdList)):
-        destroyProgressBarHud(objectiveEntityIdList[objectiveVisualCleanupIndex])
-        destroyProgressBarInWorldText(objectiveEntityIdList[objectiveVisualCleanupIndex])
-        destroyEffect(objectiveEntityIdList[objectiveVisualCleanupIndex])
-        destroyHudText(objectiveEntityIdList[objectiveVisualCleanupIndex])
-        destroyIcon(objectiveEntityIdList[objectiveVisualCleanupIndex])
-        destroyInWorldText(objectiveEntityIdList[objectiveVisualCleanupIndex])
+        # Only this iteration's ID is scratch; the phase-owned loop index must survive wait().
+        # Re-read the ID each iteration and consume it in all six deletion actions before yielding.
+        #!define objectiveVisualCleanupId tmp0
+        objectiveVisualCleanupId = objectiveEntityIdList[objectiveVisualCleanupIndex]
+        destroyProgressBarHud(objectiveVisualCleanupId)
+        destroyProgressBarInWorldText(objectiveVisualCleanupId)
+        destroyEffect(objectiveVisualCleanupId)
+        destroyHudText(objectiveVisualCleanupId)
+        destroyIcon(objectiveVisualCleanupId)
+        destroyInWorldText(objectiveVisualCleanupId)
         wait()
     objectiveEntityIdList = []
     #Capture Point/Extraction Point

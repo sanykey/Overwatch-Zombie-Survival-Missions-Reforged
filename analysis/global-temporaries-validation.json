@@ -1,5 +1,5 @@
 {
-  "elements": 26774,
+  "elements": 26746,
   "globals": 103,
   "playerVariables": 75,
   "warnings": [],
@@ -13,7 +13,7 @@
     },
     {
       "name": "objectivesManagement",
-      "controlFlowNodes": 222,
+      "controlFlowNodes": 223,
       "boundaries": 3,
       "visualActions": 7
     },
@@ -163,7 +163,7 @@
     },
     {
       "name": "locateAveragePlayerLocation",
-      "controlFlowNodes": 11,
+      "controlFlowNodes": 10,
       "boundaries": 0,
       "visualActions": 0
     },

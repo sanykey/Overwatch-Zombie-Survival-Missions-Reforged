@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **26,759 elements**, freeing up **5,505** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+The current OverPy 9.7.20 build uses **26,746 elements**, freeing up **5,518** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+
+- Objective cleanup reads each ID once per iteration into the existing `tmp0`, then performs the original six deletions before waiting: **26,759 → 26,746 (−13 elements)**, without new variables. The loop index remains in `phaseSlot0` across `wait()`; the ID is read again after each wait. `node analysis/verify-objective-cleanup-id.cjs` compares all 237 compiled rules after substituting the original ID expression back and rejects three unsafe variants. Deletion order, the wait and list reset are preserved; shared HUD validation also passes. In-game validation and runtime benchmarks have not been performed. [Validation results](analysis/objective-cleanup-id-validation-2026-11-03.json).
 
 - Bot teleport target-position averaging now uses one shared loop and one synchronous snapshot of the selected list: **26,774 → 26,759 (−15 elements)**, without new variables. The selection condition, summation order and original loop-counter divisor are preserved; compiled loop factoring was checked and the other 236 rules match. Comments document existing edge cases: an empty list yields a zero center, and targets can disappear during waits before destination selection; guarding these cases requires a separate fix. In-game validation and runtime benchmarks have not been performed.
 

@@ -2,8 +2,9 @@
   "date": "2026-11-03",
   "compiler": "OverPy 9.7.20",
   "baselineSubroutinesRef": "3a212d6",
-  "before": 26780,
-  "after": 26774,
+  "baselineMethod": "Reverse only shared HUD extraction in current sources; additionally check both HUD actions against the historical implementation.",
+  "before": 26752,
+  "after": 26746,
   "saved": 6,
   "globalVariables": 103,
   "playerVariables": 75,
@@ -24,5 +25,5 @@
   "warningsSuppressedByMainSource": true,
   "inGameValidated": false,
   "runtimeBenchmarked": false,
-  "subroutinesSha256": "137d83bfd917a3f0d09f1f2e5ea1901b06fbac925520a647e45036b26d1fa167"
+  "subroutinesSha256": "937b38089581f30d8eac4004080bb98debb1c9e355d9b69cb5aea98885cd885c"
 }
