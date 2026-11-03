@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **26,793 elements**, freeing up **5,471** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+The current OverPy 9.7.20 build uses **26,780 elements**, freeing up **5,484** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+
+- Combined two identical `ReconnectStatus.ALIVE` record writes in the synchronous `saveAlivePlayerState`: **26,793 → 26,780 (−13 elements)**, without new variables or `tmp0..2` usage. Both original save points remain after the living player's timer reset and after user registration; the helper saves the same five fields at the same `eventPlayer` index. `DOWNED`/`DEAD` writes are unchanged. `node analysis/verify-alive-player-save.cjs` compares all 235 original compiled rules after substituting the record write for each call and rejects three unsafe variants. Reconnect validation also passes; its baseline now isolates the snapshot optimization from unrelated changes in the same file. In-game validation and runtime benchmarks have not been performed. [Validation results](analysis/alive-player-save-validation-2026-11-03.json).
 
 - Boss Behemoth gas processing reads each cloud's position and updated radius once into the existing `tmp1`/`tmp2`: **26,801 → 26,793 (−8 elements)**, without new variables. Snapshots are assigned after radius growth and consumed only by the synchronous target filter before the wait; visual effects keep reading the original arrays. Radius growth, target deduplication, damage and the 0.25 s tick are preserved. `node analysis/verify-gas-cloud-snapshots.cjs` compares all 235 compiled rules after substituting the snapshot expressions back, audits ordering and scratch lifetimes, and rejects three unsafe variants. In-game validation and runtime benchmarks have not been performed. [Validation results](analysis/gas-cloud-validation-2026-11-03.json).
 

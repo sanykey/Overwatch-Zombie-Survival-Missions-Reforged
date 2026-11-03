@@ -2,6 +2,7 @@
 
 subroutine teleportToClosestPlayer
 subroutine updateUsers
+subroutine saveAlivePlayerState
 
 
 macro playerObjectiveEntityManagementMacro():
@@ -203,8 +204,7 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
     eventPlayer.isReviving = false
     if eventPlayer.isAlive():
         eventPlayer.rescueTimeRemaining = mustReviveTime
-        # Save row in ReconnectField order.
-        playerStatsList[eventPlayer.reconnectUserIndex] = [ReconnectStatus.ALIVE, eventPlayer.rescueTimeRemaining, eventPlayer.reviveTimeRemaining, eventPlayer.reviveDuration, eventPlayer.getPosition()]
+        saveAlivePlayerState()
 
 
 rule "PLAYER PICKS UP HEALTH PACK":
@@ -370,5 +370,11 @@ def updateUsers():
         userNameList.append("{0}".format(eventPlayer))
         #Index of user in user array
         eventPlayer.reconnectUserIndex = userNameList.index("{0}".format(eventPlayer))
-        # Save row in ReconnectField order.
-        playerStatsList[eventPlayer.reconnectUserIndex] = [ReconnectStatus.ALIVE, eventPlayer.rescueTimeRemaining, eventPlayer.reviveTimeRemaining, eventPlayer.reviveDuration, eventPlayer.getPosition()]
+        saveAlivePlayerState()
+
+
+def saveAlivePlayerState():
+    # Synchronous record write using the caller's eventPlayer and reconnectUserIndex; no scratch or waits.
+    # Callers keep their original lifecycle checks and timer/index initialization before this call.
+    # Save row in ReconnectField order.
+    playerStatsList[eventPlayer.reconnectUserIndex] = [ReconnectStatus.ALIVE, eventPlayer.rescueTimeRemaining, eventPlayer.reviveTimeRemaining, eventPlayer.reviveDuration, eventPlayer.getPosition()]

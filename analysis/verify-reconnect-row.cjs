@@ -12,7 +12,7 @@ const baselineRef = '66b2054';
 const file = 'players_game_in_progress.opy';
 
 async function main() {
-    const baseline = {...files, [file]: execFileSync('git', ['show', `${baselineRef}:src/${file}`],
+    const historicalBaseline = {...files, [file]: execFileSync('git', ['show', `${baselineRef}:src/${file}`],
         {cwd: path.dirname(src), encoding: 'utf8'}).replace(/\r\n/g, '\n')};
     const source = files[file];
     const enumValues = {
@@ -38,17 +38,25 @@ async function main() {
     const finalStatus = 'if playerStatsList[eventPlayer.reconnectUserIndex][0] == 2:';
     const numericEnd = numericSource.indexOf('                while eventPlayer.isAlive():');
     assert(numericSource.indexOf(finalStatus, numericEnd) > numericEnd, 'Post-wait status must remain a live array read');
+    // Reverse only this optimization, retaining unrelated helpers added to the same source file.
+    const baseline = {...files, [file]: source.replace(assignment, '')
+        .replaceAll('reconnectRowSnapshot[', 'playerStatsList[eventPlayer.reconnectUserIndex][')};
 
     await compiler.readyPromise;
     const before = await compile(baseline), after = await compile(files);
+    const historical = await compile(historicalBaseline);
     const numeric = await compile({...files, [file]: numericSource});
     assert.deepEqual(before.warnings, []);
     assert.deepEqual(after.warnings, []);
+    assert.deepEqual(historical.warnings, []);
     assert.deepEqual(numeric.warnings, []);
     assert.equal(numeric.elements, after.elements);
     assert.deepEqual(rules(numeric.result), rules(after.result), 'Enums changed compiled rules');
     assert.equal(before.elements - after.elements, 18);
     const original = rules(before.result), current = rules(after.result);
+    assert.deepEqual(original.find(r => r.name === 'PLAYER INITIALIZATION'),
+        rules(historical.result).find(r => r.name === 'PLAYER INITIALIZATION'),
+        'Reconstructed initialization must still match the original uncached implementation');
     assert.equal(current.length, original.length);
     const snapshotExpression = 'Value In Array(Global.playerStatsList, (Event Player).reconnectUserIndex)';
     const snapshotAction = `Set Global Variable(tmp0, ${snapshotExpression});`;
@@ -87,6 +95,7 @@ async function main() {
     fs.writeFileSync(path.join(src, 'main.ws.txt'), exported.result);
     const all = Object.values(files).join('\n');
     const report = {date: '2026-11-03', compiler: 'OverPy 9.7.20', baselinePlayerSourceRef: baselineRef,
+        baselineMethod: 'Reverse only the reconnect snapshot in current sources; additionally compare the uncached initializer with the historical implementation.',
         before: before.elements, after: after.elements, saved: before.elements - after.elements,
         globalVariables: (all.match(/^globalvar /gm) || []).length, playerVariables: (all.match(/^playervar /gm) || []).length,
         compiledRulesCompared: original.length, cachedReads: 6, postWaitStatusReadPreserved: true,
