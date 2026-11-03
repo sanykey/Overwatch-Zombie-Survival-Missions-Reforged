@@ -1,4 +1,8 @@
 #!mainFile "main.opy"
+subroutine applyBriefBurnAndRoot
+subroutine reenableBotWallAndJump
+subroutine restoreBotThrottle
+subroutine beginBotOverride
 
 subroutine startBlasterDaytakerFacing
 subroutine playReignitedWarningPair
@@ -44,9 +48,7 @@ rule "BASIC (REAPER) SHADOW STEP (BOSS)":
         eventPlayer.forceButtonPress(Button.ABILITY_2)
     eventPlayer.forceButtonPress(Button.ABILITY_1)
     wait(0.25)
-    eventPlayer.botIsThrottleOverridden = true
-    eventPlayer.stopThrottleInDirection()
-    eventPlayer.botIsFacingOverridden = true
+    beginBotOverride()
     eventPlayer.startFacing(Vector.RIGHT, 180, Relativity.TO_PLAYER)
     while eventPlayer.isUsingAbility1():
         entityFloat()
@@ -192,9 +194,7 @@ rule "BEHEMOTH (ROAD) TOXIC CLOUD":
     eventPlayer.stopForcingButton(Button.ABILITY_2)
     if eventPlayer in bossStateList and eventPlayer.getUltCharge() >= 100:
         eventPlayer.setUltCharge(0)
-        eventPlayer.botIsThrottleOverridden = true
-        eventPlayer.stopThrottleInDirection()
-        eventPlayer.botIsFacingOverridden = true
+        beginBotOverride()
         eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition()), 1500 if eventPlayer.botIsAttached else 0 if eventPlayer.isCrowdControlled or eventPlayer.botTarget == null else 100)
         wait(1)
         waitUntil(angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition())) < 5, 5)
@@ -270,7 +270,7 @@ rule "BRUTE (REIN) SUPER SEISMIC SLAM":
         if eventPlayer.isCrowdControlled:
             return
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION), 20 * eventPlayer.sizeScale)
-    (getLivingPlayers(Team.ALL).exclude(eventPlayer).filter(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < 20 * eventPlayer.sizeScale and distance(worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION), x.getPosition()) > 1.5 * eventPlayer.sizeScale and isInLoS(eventPlayer.getEyePosition(), x.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) and x != eventPlayer and abs(eventPlayer.getPosition().y - x.getPosition().y) < 2 * eventPlayer.sizeScale)).applyImpulse(Vector.UP, 15 * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+    (getLivingPlayers(Team.ALL).filter(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < 20 * eventPlayer.sizeScale and distance(worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION), x.getPosition()) > 1.5 * eventPlayer.sizeScale and isInLoS(eventPlayer.getEyePosition(), x.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) and x != eventPlayer and abs(eventPlayer.getPosition().y - x.getPosition().y) < 2 * eventPlayer.sizeScale)).applyImpulse(Vector.UP, 15 * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION), 3 * eventPlayer.sizeScale)
     (null.concat(getLivingPlayers(Team.2)).filter(lambda x: distance(x.getPosition(), worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION)) < 1.5 * eventPlayer.sizeScale and not x.hasStatus(Status.KNOCKED_DOWN))).setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 2.5)
 
@@ -626,8 +626,7 @@ rule "SLIMER (MERCY) TENTACLE GRAB":
     if eventPlayer in bossStateList and eventPlayer.isUsingUltimate():
         wait(0.25)
     else:
-        eventPlayer.botIsThrottleOverridden = false
-        startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
+        restoreBotThrottle()
         wait(2.25 if eventPlayer.botTarget.isInAir() else 4.5)
     if ruleCondition:
         loop()
@@ -650,9 +649,7 @@ rule "PRIME SLIMER (EMRE) FLIGHT (BOSS)":
     waitUntil(not eventPlayer.hasStatus(Status.HACKED), 1)
     eventPlayer.botIsThrottleOverridden = true
     while not eventPlayer.isJumping():
-        eventPlayer.botIsWallCollisionEnabled = true
-        eventPlayer.enableEnvironmentCollision()
-        eventPlayer.forceButtonPress(Button.JUMP)
+        reenableBotWallAndJump()
         waitUntil(eventPlayer.isJumping(), 1)
     eventPlayer.applyImpulse(Vector.UP, random.uniform(6, 10) * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     wait()
@@ -669,9 +666,7 @@ rule "PRIME SLIMER (EMRE) FLIGHT (BOSS)":
             eventPlayer.forceButtonPress(Button.SECONDARY_FIRE)
             #Altitude too low
             if eventPlayer.getAltitude() < 3:
-                eventPlayer.botIsWallCollisionEnabled = true
-                eventPlayer.enableEnvironmentCollision()
-                eventPlayer.forceButtonPress(Button.JUMP)
+                reenableBotWallAndJump()
             #Entities that will be floated
             entityFloat()
             # slimerFlightTargetIndex: floated-player index, to lift low targets and push higher targets away during flight.
@@ -687,8 +682,7 @@ rule "PRIME SLIMER (EMRE) FLIGHT (BOSS)":
             wait(0.032)
         resumeBotMovementAndFacing()
         wait(0.25)
-    eventPlayer.botIsThrottleOverridden = false
-    startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
+    restoreBotThrottle()
     wait(10)
     if ruleCondition:
         loop()
@@ -820,9 +814,7 @@ rule "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES":
     @Condition eventPlayer.isCrowdControlled != true
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) <= 0
     
-    eventPlayer.botIsThrottleOverridden = true
-    eventPlayer.stopThrottleInDirection()
-    eventPlayer.botIsFacingOverridden = true
+    beginBotOverride()
     startBlasterDaytakerFacing()
     eventPlayer.botBlasterCharge = 0
     eventPlayer.setDamageReceived(50)
@@ -952,8 +944,7 @@ rule "DOWNFALLEN GRABS PLAYER":
         eventPlayer.botAbilityTarget.setStatusEffect(null, Status.KNOCKED_DOWN, 1.75)
     waitUntil(not eventPlayer.isUsingUltimate(), 99999)
     eventPlayer.botAuxiliaryState = null
-    eventPlayer.botIsThrottleOverridden = false
-    startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
+    restoreBotThrottle()
     eventPlayer.botIsWallPhaseAllowed = true
     wait(7)
     eventPlayer.botIsDownfallenGrabbing = false
@@ -1132,8 +1123,7 @@ rule "CADAVER (ANA) DETONATION":
     #Pre-explosion sound
     playEffect(getAllPlayers(), DynamicEffect.DEBUFF_IMPACT_SOUND, Color.ORANGE, eventPlayer, 200)
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.VIOLET, eventPlayer, 0.5 * eventPlayer.sizeScale)
-    eventPlayer.setStatusEffect(null, Status.BURNING, 0.6)
-    eventPlayer.setStatusEffect(null, Status.ROOTED, 0.6)
+    applyBriefBurnAndRoot()
     abilityThrowdown()
     wait(0.1)
     kill(eventPlayer)
@@ -1463,8 +1453,7 @@ def explosionWarning():
     #Pre-explosion sound
     playReignitedWarningPair()
     eventPlayer.explosionScale = eventPlayer.sizeScale
-    eventPlayer.setStatusEffect(null, Status.BURNING, 0.6)
-    eventPlayer.setStatusEffect(null, Status.ROOTED, 0.6)
+    applyBriefBurnAndRoot()
     wait(0.5)
     eventPlayer.botIsBomberPrimed = false
     if eventPlayer.isDead():
@@ -1501,8 +1490,7 @@ def resumeBotMovementAndFacing():
 def resumeBotFacingAndMovement():
     # Synchronous reset; preserve the caller's facing-then-throttle order and NOOP start.
     eventPlayer.botIsFacingOverridden = false
-    eventPlayer.botIsThrottleOverridden = false
-    startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
+    restoreBotThrottle()
 
 
 def startBlasterDaytakerFacing():
@@ -1523,3 +1511,33 @@ def playReignitedWarningPair():
     playEffect(getAllPlayers(), DynamicEffect.DEBUFF_IMPACT_SOUND, Color.ORANGE, eventPlayer, 200)
     #Scaled
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer, 0.5 * eventPlayer.sizeScale)
+
+
+def beginBotOverride():
+    @Name "beginBotOverride"
+
+    eventPlayer.botIsThrottleOverridden = true
+    eventPlayer.stopThrottleInDirection()
+    eventPlayer.botIsFacingOverridden = true
+
+
+def restoreBotThrottle():
+    @Name "restoreBotThrottle"
+
+    eventPlayer.botIsThrottleOverridden = false
+    startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
+
+
+def reenableBotWallAndJump():
+    @Name "reenableBotWallAndJump"
+
+    eventPlayer.botIsWallCollisionEnabled = true
+    eventPlayer.enableEnvironmentCollision()
+    eventPlayer.forceButtonPress(Button.JUMP)
+
+
+def applyBriefBurnAndRoot():
+    @Name "applyBriefBurnAndRoot"
+
+    eventPlayer.setStatusEffect(null, Status.BURNING, 0.6)
+    eventPlayer.setStatusEffect(null, Status.ROOTED, 0.6)

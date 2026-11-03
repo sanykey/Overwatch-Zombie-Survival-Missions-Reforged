@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-03",
+  "baselineRef": "6593219",
+  "before": 25848,
+  "after": 25798,
+  "saved": 50,
+  "oldRules": 255,
+  "newRules": 267,
+  "newHelpersChecked": 12,
+  "voteHandoffsChecked": 4,
+  "scratchRulesCheckedExcludingExistingBotHelper": 53,
+  "directIncludeBuild": true,
+  "emittedWarnings": 0,
+  "inGameValidated": false
+}

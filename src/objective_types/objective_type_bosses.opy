@@ -1,4 +1,5 @@
 #!mainFile "../main.opy"
+subroutine completeBossObjective
 
 subroutine bossReturn
 
@@ -145,9 +146,7 @@ rule "BOSS DIES (ALL BOSS OBJECTIVES)":
             if eventPlayer.getHero() == Hero.ILLARI and attacker.getTeam() == Team.1:
                 illariUlt()
         else:
-            isObjectiveComplete = true
-            bossesStateList[bossesStateList.index(eventPlayer)] = 0
-            eventPlayer.botRespawnDelay = 10
+            completeBossObjective()
             goto lbl_0
     #Resurrects player if event damage was greater than 1000 and their health still is higher than 0hp.
     elif eventDamage - 1000 > 0:
@@ -156,9 +155,7 @@ rule "BOSS DIES (ALL BOSS OBJECTIVES)":
         waitUntil(eventPlayer.isAlive(), 5)
         applyBotBossHealth()
     else:
-        isObjectiveComplete = true
-        bossesStateList[bossesStateList.index(eventPlayer)] = 0
-        eventPlayer.botRespawnDelay = 10
+        completeBossObjective()
         (getPlayersOnHero(Hero.WINSTON, Team.2) if eventPlayer.getHero() == Hero.WINSTON else []).setStatusEffect(null, Status.KNOCKED_DOWN, 12)
         lbl_0:
     wait(0.25, Wait.RESTART_WHEN_TRUE)
@@ -208,3 +205,11 @@ def bossReturn():
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.BLACK, eventPlayer, 3)
     eventPlayer.botReturnPosition = 0
     eventPlayer.botReturnTarget = null
+
+
+def completeBossObjective():
+    @Name "completeBossObjective"
+
+    isObjectiveComplete = true
+    bossesStateList[bossesStateList.index(eventPlayer)] = 0
+    eventPlayer.botRespawnDelay = 10

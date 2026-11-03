@@ -10,6 +10,7 @@ subroutine excludeCurrentHeroFromSelection
 subroutine applyBotKnockbackScale
 subroutine applyCurrentSizeScale
 subroutine applyBotBossHealth
+subroutine resolveReconnectUserIndex
 subroutine enableDisableAbilities
 subroutine setDifficulty
 subroutine botRespawnInitialization
@@ -883,3 +884,9 @@ def applyBotBossHealth():
     @Name "applyBotBossHealth"
 
     eventPlayer.setHealth(eventPlayer.botBossHealth)
+
+
+def resolveReconnectUserIndex():
+    @Name "resolveReconnectUserIndex"
+
+    eventPlayer.reconnectUserIndex = userNameList.index("{0}".format(eventPlayer))

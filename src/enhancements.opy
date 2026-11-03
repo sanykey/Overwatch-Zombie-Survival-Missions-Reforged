@@ -1,4 +1,5 @@
 #!mainFile "main.opy"
+subroutine resetBattleAbilityCharge
 
 subroutine checkEnhancementPlacement
 subroutine startPupDefaultChase
@@ -348,15 +349,13 @@ rule "BORN TO BATTLE PLAYER USES ABILITY CHARGE":
     if eventPlayer.getHero() in [Hero.REINHARDT, Hero.ZARYA] and eventPlayer.enhancementBattleAbilityButton == Button.ABILITY_2:
         waitUntil(eventPlayer.isUsingAbility2(), 0.016)
         if not eventPlayer.isUsingAbility2():
-            eventPlayer.setAbilityCharge(eventPlayer.enhancementBattleAbilityButton, 1)
-            eventPlayer.enhancementIsBattleResetReady = false
+            resetBattleAbilityCharge()
         return
     #Temp zarya fix ability 1
     if eventPlayer.getHero() == Hero.ZARYA and eventPlayer.enhancementBattleAbilityButton == Button.ABILITY_1:
         waitUntil(eventPlayer.isUsingAbility1(), 0.016)
         if not eventPlayer.isUsingAbility1():
-            eventPlayer.setAbilityCharge(eventPlayer.enhancementBattleAbilityButton, 1)
-            eventPlayer.enhancementIsBattleResetReady = false
+            resetBattleAbilityCharge()
         return
     if eventPlayer.getHero() == Hero.REAPER:
         goto lbl_0
@@ -632,3 +631,10 @@ def startPupDefaultChase():
     @Name "startPupDefaultChase"
 
     chaseAtRate(eventPlayer.enhancementPupPosition, eventPlayer.getEyePosition() + directionTowards(eventPlayer.getEyePosition(), eventPlayer.enhancementPupPosition), abs(distance(eventPlayer.getEyePosition(), eventPlayer.enhancementPupPosition) - 1))
+
+
+def resetBattleAbilityCharge():
+    @Name "resetBattleAbilityCharge"
+
+    eventPlayer.setAbilityCharge(eventPlayer.enhancementBattleAbilityButton, 1)
+    eventPlayer.enhancementIsBattleResetReady = false

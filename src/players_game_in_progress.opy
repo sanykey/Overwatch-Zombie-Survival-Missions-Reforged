@@ -70,7 +70,7 @@ rule "PLAYER INITIALIZATION":
             eventPlayer.isPlayerActive = true
         else:
             #Index of user in user array
-            eventPlayer.reconnectUserIndex = userNameList.index("{0}".format(eventPlayer))
+            resolveReconnectUserIndex()
             # Read-only snapshot for this synchronous segment; do not retain it across kill()/wait().
             #!define reconnectRowSnapshot tmp0
             reconnectRowSnapshot = playerStatsList[eventPlayer.reconnectUserIndex]
@@ -377,7 +377,7 @@ def updateUsers():
         #Add event player to users list
         userNameList.append("{0}".format(eventPlayer))
         #Index of user in user array
-        eventPlayer.reconnectUserIndex = userNameList.index("{0}".format(eventPlayer))
+        resolveReconnectUserIndex()
         saveAlivePlayerState()
 
 

@@ -1,5 +1,9 @@
 #!mainFile "main.opy"
 
+subroutine advanceChallengeVote
+subroutine advanceZombieVote
+subroutine advanceObjectiveVote
+subroutine advanceEnhancementChoice
 subroutine randomActions
 subroutine attachPlayerToPregameAnchor
 
@@ -142,9 +146,9 @@ rule "PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)":
     eventPlayer.isPregameVoting = true
     #!define pregameChallengeVoteOffset tmp0
     pregameChallengeVoteOffset = 1 if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else len(challengeVoteList) - 1
-    eventPlayer.pregameChallengeVote = (eventPlayer.pregameChallengeVote + pregameChallengeVoteOffset) % len(challengeVoteList)
+    advanceChallengeVote()
     while not challengeVoteList[eventPlayer.pregameChallengeVote][1]:
-        eventPlayer.pregameChallengeVote = (eventPlayer.pregameChallengeVote + pregameChallengeVoteOffset) % len(challengeVoteList)
+        advanceChallengeVote()
 
 
 rule "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)":
@@ -159,9 +163,9 @@ rule "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)":
     eventPlayer.isPregameVoting = true
     #!define pregameZombieVoteOffset tmp0
     pregameZombieVoteOffset = 1 if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else len(zombieVoteList) - 1
-    eventPlayer.pregameZombieVote = (eventPlayer.pregameZombieVote + pregameZombieVoteOffset) % len(zombieVoteList)
+    advanceZombieVote()
     while not zombieVoteList[eventPlayer.pregameZombieVote][1]:
-        eventPlayer.pregameZombieVote = (eventPlayer.pregameZombieVote + pregameZombieVoteOffset) % len(zombieVoteList)
+        advanceZombieVote()
 
 
 rule "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)":
@@ -176,9 +180,9 @@ rule "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)":
     eventPlayer.isPregameVoting = true
     #!define pregameObjectiveVoteOffset tmp0
     pregameObjectiveVoteOffset = 1 if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else len(objectiveTypeVoteList) - 1
-    eventPlayer.pregameObjectiveVote = (eventPlayer.pregameObjectiveVote + pregameObjectiveVoteOffset) % len(objectiveTypeVoteList)
+    advanceObjectiveVote()
     while not objectiveTypeVoteList[eventPlayer.pregameObjectiveVote][1]:
-        eventPlayer.pregameObjectiveVote = (eventPlayer.pregameObjectiveVote + pregameObjectiveVoteOffset) % len(objectiveTypeVoteList)
+        advanceObjectiveVote()
 
 
 rule "PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)":
@@ -190,9 +194,9 @@ rule "PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)":
     
     #!define enhancementIdOffset tmp0
     enhancementIdOffset = 1 if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else len(enhancementOptionList) - 1
-    eventPlayer.enhancementId = (eventPlayer.enhancementId + enhancementIdOffset) % len(enhancementOptionList)
+    advanceEnhancementChoice()
     while not enhancementOptionList[eventPlayer.enhancementId]:
-        eventPlayer.enhancementId = (eventPlayer.enhancementId + enhancementIdOffset) % len(enhancementOptionList)
+        advanceEnhancementChoice()
 
 
 rule "UPDATE PREGAME VOTING STATUS":
@@ -261,3 +265,27 @@ def attachPlayerToPregameAnchor():
     @Name "attachPlayerToPregameAnchor"
 
     eventPlayer.attachTo(getPlayers(Team.2)[0], localVector(eventPlayer.pregamePosition, getPlayers(Team.2)[0], Transform.ROTATION_AND_TRANSLATION))
+
+
+def advanceChallengeVote():
+    @Name "advanceChallengeVote"
+
+    eventPlayer.pregameChallengeVote = (eventPlayer.pregameChallengeVote + pregameChallengeVoteOffset) % len(challengeVoteList)
+
+
+def advanceZombieVote():
+    @Name "advanceZombieVote"
+
+    eventPlayer.pregameZombieVote = (eventPlayer.pregameZombieVote + pregameZombieVoteOffset) % len(zombieVoteList)
+
+
+def advanceObjectiveVote():
+    @Name "advanceObjectiveVote"
+
+    eventPlayer.pregameObjectiveVote = (eventPlayer.pregameObjectiveVote + pregameObjectiveVoteOffset) % len(objectiveTypeVoteList)
+
+
+def advanceEnhancementChoice():
+    @Name "advanceEnhancementChoice"
+
+    eventPlayer.enhancementId = (eventPlayer.enhancementId + enhancementIdOffset) % len(enhancementOptionList)

@@ -1,4 +1,5 @@
 #!mainFile "main.opy"
+subroutine finishPowerUpDrop
 
 
 
@@ -90,8 +91,7 @@ rule "PLAYER DROPS POWER UP (MANUAL)":
     supplyPowerUpIdList.append(eventPlayer.powerUpItemId)
     supplyPowerUpPositionList.append(eventPlayer.getPosition() + offsetUpQuarterConst if eventPlayer.isOnGround() else nearestWalkablePosition(eventPlayer.getPosition()))
     wait()
-    eventPlayer.powerUpItemId = 0
-    playEffect(eventPlayer, DynamicEffect.DEBUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.getPosition(), 25)
+    finishPowerUpDrop()
 
 
 rule "PLAYER DROPS POWER UP (DEATH)":
@@ -104,5 +104,11 @@ rule "PLAYER DROPS POWER UP (DEATH)":
     supplyPowerUpIdList.append(eventPlayer.powerUpItemId)
     supplyPowerUpPositionList.append(eventPlayer.getPosition() + offsetUpQuarterConst)
     wait()
+    finishPowerUpDrop()
+
+
+def finishPowerUpDrop():
+    @Name "finishPowerUpDrop"
+
     eventPlayer.powerUpItemId = 0
     playEffect(eventPlayer, DynamicEffect.DEBUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.getPosition(), 25)
