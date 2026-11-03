@@ -16,7 +16,7 @@ rule "GLOBAL MENU INITIALIZATION":
         # These values are consumed before the next wait; mode selection keeps the original three positions.
         #!define menuRadius tmp1
         #!define menuHeight tmp2
-        if getCurrentGamemode() == Gamemode.CTF or getCurrentGamemode() == Gamemode.PUSH:
+        if getCurrentGamemode() in [Gamemode.CTF, Gamemode.PUSH]:
             menuRadius = 300
             menuHeight = 15
         elif getCurrentGamemode() == Gamemode.CONTROL:
@@ -431,10 +431,11 @@ def setObjectiveType():
             missionPlacementAttemptCount++
             #If Too many attempts
             if missionPlacementAttemptCount > 50:
-                del objectivePositionList[len(objectivePositionList) - 1]
-                currentObjectivePosition = objectivePositionList[0]
-                del objectivePositionList[len(objectivePositionList) - 1]
-                currentObjectivePosition = objectivePositionList[0]
+                # Preserve both removals and refresh the head after each one.
+                #!define missionRollbackIndex tmp0
+                for missionRollbackIndex in range(2):
+                    del objectivePositionList[len(objectivePositionList) - 1]
+                    currentObjectivePosition = objectivePositionList[0]
                 missionPlacementAttemptCount = 0
     #Last objective must be extraction objective
     objectiveTypeList[len(objectiveTypeList) - 1] = ObjectiveType.SHOWDOWN

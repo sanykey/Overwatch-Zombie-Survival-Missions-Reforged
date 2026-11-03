@@ -1389,7 +1389,7 @@ rule "BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)
         eventPlayer.botAbilityCooldown += 4
         eventPlayer.forceButtonPress(Button.ULTIMATE)
         wait(1)
-    eventPlayer.forceButtonPress(Button.ULTIMATE if eventPlayer.getHero() == Hero.JUNKER_QUEEN or eventPlayer.getHero() == Hero.KIRIKO else Button.ABILITY_1)
+    eventPlayer.forceButtonPress(Button.ULTIMATE if eventPlayer.getHero() in [Hero.JUNKER_QUEEN, Hero.KIRIKO] else Button.ABILITY_1)
     eventPlayer.botIsFacingOverridden = false
     restoreDefaultFacingMovement()
     eventPlayer.applyImpulse((2.5 if eventPlayer.getHero() in [Hero.DOOMFIST, Hero.HAZARD] else 0) * Vector.UP, 5 if eventPlayer.getHero() == Hero.HAZARD else 10, Relativity.TO_PLAYER, Impulse.INCORPORATE_CONTRARY_MOTION)

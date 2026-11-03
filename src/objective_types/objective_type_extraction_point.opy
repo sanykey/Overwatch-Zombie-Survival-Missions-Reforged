@@ -70,7 +70,7 @@ rule "WIN/LOSS CONDITIONS":
     @Condition isGameplayActive == true
     @Condition (len(objectivePositionList) == 1 and (len(objectivePlayerList) == (len(getPlayers(Team.1).filter(lambda player: player.hasSpawned() and player.rescueTimeRemaining > 0 and not player.isAfk)))) or (len(playerTargetList) == 0 or extractionZoneRad <= 0)) == true
     
-    if (len(playerTargetList) == 0 or playerTargetList == []) and getPlayersOnHero(Hero.ANRAN, Team.1).any(lambda player: player.getUltCharge() == 100):
+    if len(playerTargetList) == 0 and getPlayersOnHero(Hero.ANRAN, Team.1).any(lambda player: player.getUltCharge() == 100):
         wait(5.5, Wait.ABORT_WHEN_FALSE)
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     isGameplayActive = false

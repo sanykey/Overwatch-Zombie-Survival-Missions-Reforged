@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-03",
+  "before": 26188,
+  "after": 26139,
+  "saved": 49,
+  "originalRulesCompared": 239,
+  "changedRules": [
+    "botRespawnInitialization",
+    "explosionSequence",
+    "generateMapGrid",
+    "GLOBAL MENU INITIALIZATION",
+    "setObjectiveType",
+    "SWARM SHOOTOUT",
+    "RANDOM ABILITIES",
+    "WIN/LOSS CONDITIONS",
+    "BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)"
+  ],
+  "rollbackStepsPreserved": 2,
+  "scratchRulesCheckedExcludingExistingBotHelper": 48,
+  "directIncludeBuild": true,
+  "emittedWarnings": 0,
+  "inGameValidated": false,
+  "runtimeBenchmarked": false
+}

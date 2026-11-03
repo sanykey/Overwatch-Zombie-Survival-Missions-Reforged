@@ -73,7 +73,7 @@ rule "ZOMBIE SHUFFLE":
 rule "SWARM SHOOTOUT":
     @Event eachPlayer
     @Team 2
-    @Condition (challengeSetting == 2 or challengeSetting == 5) == true
+    @Condition (challengeSetting in [2, 5]) == true
     
     startDamageModification(getPlayers(Team.1), eventPlayer, 72)
     waitUntil(eventPlayer.botTarget != false, 99999)
@@ -89,7 +89,7 @@ rule "SWARM SHOOTOUT":
 rule "RANDOM ABILITIES":
     @Event eachPlayer
     @Team 2
-    @Condition (challengeSetting == 3 or challengeSetting == 5 or isSmolderEventActive) == true
+    @Condition (challengeSetting in [3, 5] or isSmolderEventActive) == true
     @Condition eventPlayer in bossStateList != true
     @Condition isPregameSetup == false
     

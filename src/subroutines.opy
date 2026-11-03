@@ -63,7 +63,7 @@ macro botStatManagementMacro():
         eventPlayer.sizeScale *= 0.7
         eventPlayer.botSmolderAnger = 2
         eventPlayer.startScalingBarriers(eventPlayer.sizeScale)
-    elif eventPlayer.getHero() == Hero.ANA or eventPlayer.getHero() == Hero.KIRIKO:
+    elif eventPlayer.getHero() in [Hero.ANA, Hero.KIRIKO]:
         eventPlayer.setProjectileGravity(500)
     elif eventPlayer.getHero() == Hero.SIGMA:
         eventPlayer.setProjectileSpeed(100 * eventPlayer.sizeScale * 0.5)
@@ -78,7 +78,7 @@ macro botStatManagementMacro():
 
 macro mutationsMacro():
     #Zombies have a chance to mutate. Bosses cannot mutate
-    if len(availableMutationList) > 0 and not eventPlayer in bossStateList and (random.uniform(0, 100) < (100 if challengeSetting == 3 or challengeSetting == 5 else createWorkshopSettingFloat("Mutations", "Chance to mutate percentage", 25, 0, 100))):
+    if len(availableMutationList) > 0 and not eventPlayer in bossStateList and (random.uniform(0, 100) < (100 if challengeSetting in [3, 5] else createWorkshopSettingFloat("Mutations", "Chance to mutate percentage", 25, 0, 100))):
         eventPlayer.botMutationId = random.choice(availableMutationList)
         # botMutationOutlineColor: outline color; every enabled mutation assigns it before the capture below.
         #Speed
@@ -795,10 +795,13 @@ def explosionSequence():
             eventPlayer.damageOverTimeRemaining = 3
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, eventPlayer.explosionOuterColor, eventPlayer.getPosition(), 6 * eventPlayer.explosionScale)
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, eventPlayer.explosionInnerColor, eventPlayer.getPosition(), 3 * eventPlayer.explosionScale)
+    # Both synchronous sounds use the same radius before the wait.
+    #!define explosionSoundRadius tmp1
+    explosionSoundRadius = 150 * eventPlayer.explosionScale
     #Scaled
-    playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, Color.YELLOW, eventPlayer.getPosition(), 150 * eventPlayer.explosionScale)
+    playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, Color.YELLOW, eventPlayer.getPosition(), explosionSoundRadius)
     #Scaled
-    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.YELLOW, eventPlayer.getPosition(), 150 * eventPlayer.explosionScale)
+    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.YELLOW, eventPlayer.getPosition(), explosionSoundRadius)
     wait(0.25)
 
 

@@ -317,8 +317,8 @@ def generateMapGrid():
         # mapGridCandidatePosition: candidate walkable grid point, to check spawn-room clearance and point spacing.
         #!define mapGridCandidatePosition tmp0
         mapGridCandidatePosition = nearestWalkablePosition((random.choice(mapGridList) if len(mapGridList) > 5 else walkCenter) + directionFromAngles(random.uniform(0, 360), random.uniform(-35, 35)) * random.uniform(10, 100))
-        #Do not grid points inside spawn rooms on CTF maps
-        if getCurrentGamemode() != Gamemode.CTF and getCurrentGamemode() != Gamemode.CLASH and getCurrentGamemode() != Gamemode.PUSH and getCurrentGamemode() != Gamemode.CONTROL and getCurrentGamemode() != Gamemode.FLASHPOINT or getSpawnPoints(Team.2).all(lambda x: distance(x.getPosition(), mapGridCandidatePosition) > 50) and getSpawnPoints(Team.1).all(lambda x: distance(x.getPosition(), mapGridCandidatePosition) > 40):
+        #Keep grid points outside both spawn rooms on these five game modes.
+        if not getCurrentGamemode() in [Gamemode.CTF, Gamemode.CLASH, Gamemode.PUSH, Gamemode.CONTROL, Gamemode.FLASHPOINT] or getSpawnPoints(Team.2).all(lambda x: distance(x.getPosition(), mapGridCandidatePosition) > 50) and getSpawnPoints(Team.1).all(lambda x: distance(x.getPosition(), mapGridCandidatePosition) > 40):
             if len(mapGridList) == 0 or mapGridList.all(lambda x: distance(x, mapGridCandidatePosition) > 2.5):
                 mapGridList.append(mapGridCandidatePosition)
         if isPregameSetup and getMatchTime() + matchEndTime < 2:
