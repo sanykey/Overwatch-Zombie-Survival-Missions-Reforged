@@ -12,6 +12,7 @@ subroutine setPrematchTimer
 subroutine explosionSequence
 subroutine illariUlt
 subroutine abilityPlacement
+subroutine createRemainingObjectivesHud
 
 
 macro minibossMutationMacro():
@@ -221,6 +222,9 @@ macro botEntityManagementMacro():
             eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
 
 
+# Synchronous input for the shared HUD; its color is evaluated only when the HUD is created.
+#!define remainingObjectivesHudColor tmp2
+
 macro globalObjectiveEntityManagementMacro():
     objectiveValue = currentObjectiveType
     #Destroy all current objective effects and texts
@@ -334,8 +338,8 @@ macro globalObjectiveEntityManagementMacro():
         progressBarHud(getAllPlayers(), killZoneEliminationScore / ELIMINATIONS_NEEDED_PER_OBJECTIVE * 100, "Kill Zone Elimination Progress", HudPosition.TOP, 2, Color.RED, Color.RED, ProgressHudReeval.VISIBILITY_AND_VALUES)
         objectiveEntityIdList.append(getLastCreatedText())
         #Objectives Remaining Hud Text
-        hudSubheader(getAllPlayers(), "Objectives Remaining: {0}".format(len(objectivePositionList) - 1), HudPosition.TOP, 1, Color.RED, HudReeval.VISIBILITY)
-        objectiveEntityIdList.append(getLastCreatedText())
+        remainingObjectivesHudColor = Color.RED
+        createRemainingObjectivesHud()
         #Objective distance
         createInWorldText(getAllPlayers().filter(lambda player: distance(player.getPosition(), killZoneCenter) > objectiveRad), "Distance: {0}m".format(distance(localPlayer.getPosition(), killZoneCenter) - objectiveRad), killZoneCenter, 1, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.RED, SpecVisibility.NEVER)
         objectiveEntityIdList.append(getLastCreatedText())
@@ -357,8 +361,8 @@ macro globalObjectiveEntityManagementMacro():
         progressBarHud(getAllPlayers().filter(lambda _: zombieEggStateList[0] != null), zombieEggStateList[0].getNormalizedHealth() * 100, "Zombie Egg Health", HudPosition.TOP, 2, Color.LIME_GREEN, Color.LIME_GREEN)
         objectiveEntityIdList.append(getLastCreatedText())
         #Objectives Remaining Hud Text
-        hudSubheader(getAllPlayers(), "Objectives Remaining: {0}".format(len(objectivePositionList) - 1), HudPosition.TOP, 1, Color.LIME_GREEN, HudReeval.VISIBILITY)
-        objectiveEntityIdList.append(getLastCreatedText())
+        remainingObjectivesHudColor = Color.LIME_GREEN
+        createRemainingObjectivesHud()
         #Objective distance
         createInWorldText(getAllPlayers(), "Destroy: {0}m".format(distance(localPlayer.getPosition(), currentObjectivePosition)), currentObjectivePosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.LIME_GREEN, SpecVisibility.NEVER)
         objectiveEntityIdList.append(getLastCreatedText())
@@ -398,6 +402,13 @@ macro globalObjectiveEntityManagementMacro():
             #Objective distance
             createInWorldText(getAllPlayers().filter(lambda player: satelliteTerminalProgressList[evalOnce(satelliteTerminalVisualIndex)] < 100 and distance(player.getPosition(), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)]) > objectiveRad), "Distance: {0}m".format(distance(localPlayer.getPosition(), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)])), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, objectiveColor, SpecVisibility.NEVER)
             objectiveEntityIdList.append(getLastCreatedText())
+
+
+def createRemainingObjectivesHud():
+    # Synchronous only: register this HUD's ID immediately, without waits or other text creation.
+    # Reevaluate visibility only; the initial scratch color must never become a live HUD dependency.
+    hudSubheader(getAllPlayers(), "Objectives Remaining: {0}".format(len(objectivePositionList) - 1), HudPosition.TOP, 1, remainingObjectivesHudColor, HudReeval.VISIBILITY)
+    objectiveEntityIdList.append(getLastCreatedText())
 
 
 def setDifficulty():

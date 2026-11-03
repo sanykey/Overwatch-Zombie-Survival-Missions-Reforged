@@ -1,9 +1,9 @@
 {
-  "elements": 26780,
+  "elements": 26774,
   "globals": 103,
   "playerVariables": 75,
   "warnings": [],
-  "method": "Backward scratch liveness in compiled Workshop control flow, including expanded macros, branches, loops, skips and implicit trailing Ends. Calls are conservative boundaries unless an explicit synchronous helper contract is validated before inlining. Reevaluated HUD/effect/icon fields are checked for uncaptured scratch references. No in-game validation.",
+  "method": "Backward scratch liveness in compiled Workshop control flow, including expanded macros, branches, loops, skips and implicit trailing Ends. Calls are conservative boundaries unless an explicit synchronous helper contract is validated before expanding or summarizing its scratch effects. Reevaluated HUD/effect/icon fields are checked for uncaptured scratch references. No in-game validation.",
   "rules": [
     {
       "name": "setDifficulty",
@@ -15,7 +15,7 @@
       "name": "objectivesManagement",
       "controlFlowNodes": 222,
       "boundaries": 3,
-      "visualActions": 5
+      "visualActions": 7
     },
     {
       "name": "selectTarget",

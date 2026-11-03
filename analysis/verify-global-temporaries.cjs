@@ -162,12 +162,14 @@ function checkRule(name, actions) {
 }
 
 function checkWorkshop(output) {
-    // Validate no-yield contracts and exact input/call/result handoffs before inlining audited helpers.
+    // Validate no-yield contracts and exact handoffs before expanding or summarizing audited helpers.
     // All other subroutine calls remain conservative scratch boundaries.
     if (/^\s*selectVoteWinner;$/m.test(output))
         output = require('./verify-vote-winner.cjs').prepareScratchAudit(output);
     if (/^\s*checkEnhancementPlacement;$/m.test(output))
         output = require('./verify-enhancement-placement.cjs').prepareScratchAudit(output);
+    if (/^\s*createRemainingObjectivesHud;$/m.test(output))
+        output = require('./verify-remaining-objectives-hud.cjs').prepareScratchAudit(output);
     const results = [];
     for (const m of output.matchAll(/^rule \("((?:\\.|[^"\\])*)"\) \{\n([\s\S]*?)^\}/gm)) {
         const [, name, body] = m;
@@ -204,7 +206,7 @@ async function main() {
         globals: [...source.matchAll(/^globalvar /gm)].length,
         playerVariables: [...source.matchAll(/^playervar /gm)].length,
         warnings: compiled.warnings,
-        method: 'Backward scratch liveness in compiled Workshop control flow, including expanded macros, branches, loops, skips and implicit trailing Ends. Calls are conservative boundaries unless an explicit synchronous helper contract is validated before inlining. Reevaluated HUD/effect/icon fields are checked for uncaptured scratch references. No in-game validation.',
+        method: 'Backward scratch liveness in compiled Workshop control flow, including expanded macros, branches, loops, skips and implicit trailing Ends. Calls are conservative boundaries unless an explicit synchronous helper contract is validated before expanding or summarizing its scratch effects. Reevaluated HUD/effect/icon fields are checked for uncaptured scratch references. No in-game validation.',
         rules
     };
     fs.writeFileSync(path.join(__dirname, 'global-temporaries-validation.json'), JSON.stringify(report, null, 2) + '\n');

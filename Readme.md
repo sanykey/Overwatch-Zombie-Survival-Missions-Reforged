@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **26,780 elements**, freeing up **5,484** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+The current OverPy 9.7.20 build uses **26,774 elements**, freeing up **5,490** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+
+- Kill Zone and Zombie Egg now share the synchronous `createRemainingObjectivesHud`: **26,780 → 26,774 (−6 elements)**, without new variables. The red/lime-green initial color is passed through `tmp2` immediately before the call and read only at creation; only visibility reevaluates using the original `getAllPlayers()` expression. Text, position, sort order, HUD count and immediate ID registration for cleanup are preserved. `node analysis/verify-remaining-objectives-hud.cjs` compares all 236 original compiled rules after restoring the two calls and rejects four unsafe changes, including color reevaluation and missing ID registration. In-game validation and runtime benchmarks have not been performed. [Validation results](analysis/remaining-objectives-hud-validation-2026-11-03.json).
 
 - Combined two identical `ReconnectStatus.ALIVE` record writes in the synchronous `saveAlivePlayerState`: **26,793 → 26,780 (−13 elements)**, without new variables or `tmp0..2` usage. Both original save points remain after the living player's timer reset and after user registration; the helper saves the same five fields at the same `eventPlayer` index. `DOWNED`/`DEAD` writes are unchanged. `node analysis/verify-alive-player-save.cjs` compares all 235 original compiled rules after substituting the record write for each call and rejects three unsafe variants. Reconnect validation also passes; its baseline now isolates the snapshot optimization from unrelated changes in the same file. In-game validation and runtime benchmarks have not been performed. [Validation results](analysis/alive-player-save-validation-2026-11-03.json).
 
