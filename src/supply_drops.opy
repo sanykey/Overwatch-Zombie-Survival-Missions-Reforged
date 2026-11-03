@@ -304,7 +304,7 @@ def cloakingDevice():
     
     if eventPlayer.powerUpCloakingDeviceSphereId == 0:
         eventPlayer.movementSpeedScale *= 1.5
-        eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
+        applyScaledMoveSpeed()
         createEffect(getAllPlayers(), Effect.SPHERE, Color.BLUE, eventPlayer, distance(eventPlayer.getEyePosition(), eventPlayer.getPosition()) * 0.95, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.powerUpCloakingDeviceSphereId = getLastCreatedEntity()
         hudText(eventPlayer, "Cloaking Device: {0}s".format(ceil(eventPlayer.powerUpCloakTimeRemaining)), null, "Cancel (Press [{0}] + [{1}])".format(inputBindingString(Button.CROUCH), inputBindingString(Button.INTERACT)) if eventPlayer.powerUpCloakTimeRemaining < 23 else [], HudPosition.RIGHT, 0.2, Color.BLUE, null, Color.BLUE, HudReeval.VISIBILITY_AND_STRING)
@@ -329,7 +329,7 @@ def cloakingDevice():
     if not eventPlayer.invisibilityCount:
         smallMessage(eventPlayer, "You are now visible")
     eventPlayer.movementSpeedScale /= 1.5
-    eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
+    applyScaledMoveSpeed()
 
 
 def superNano():
@@ -337,7 +337,7 @@ def superNano():
     
     if eventPlayer.powerUpSuperNanoGoodAuraId == 0:
         eventPlayer.movementSpeedScale *= 1.5
-        eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
+        applyScaledMoveSpeed()
         createEffect(getAllPlayers(), Effect.GOOD_AURA, Color.RED, eventPlayer, distance(eventPlayer.getEyePosition(), eventPlayer.getPosition()) * 0.95, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.powerUpSuperNanoGoodAuraId = getLastCreatedEntity()
         hudHeader(eventPlayer, "Super Nano: {0}s".format(ceil(eventPlayer.powerUpSuperNanoTimeRemaining)), HudPosition.RIGHT, 0.2, Color.RED, HudReeval.VISIBILITY_AND_STRING)
@@ -366,7 +366,7 @@ def superNano():
     eventPlayer.setDamageReceived(100)
     eventPlayer.powerUpSuperNanoGoodAuraId = 0
     eventPlayer.movementSpeedScale /= 1.5
-    eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
+    applyScaledMoveSpeed()
 
 
 def bouncePad():

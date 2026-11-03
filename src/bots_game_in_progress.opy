@@ -88,7 +88,7 @@ rule "BOT INITIALIZATION":
     eventPlayer.addHealthPool(Health.NORMAL, max(0, eventPlayer.botBaseHealth - eventPlayer.initialMaxHealth), true)
     #Bot Health Pool
     eventPlayer.addHealthPool(Health.NORMAL, max(0, eventPlayer.botBaseHealth - 10000), true)
-    eventPlayer.startFacing(eventPlayer.getThrottle(), 100, Relativity.TO_PLAYER)
+    faceCurrentThrottle()
     eventPlayer.setRespawnTime(30)
     if not eventPlayer in bossStateList:
         botRespawnInitialization()

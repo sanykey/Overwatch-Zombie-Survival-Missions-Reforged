@@ -124,7 +124,7 @@ rule "PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY)":
             if eventPlayer.pregameState == PregameState.SELECTING_HERO:
                 #Update player voting status
                 eventPlayer.isPregameVoting = false
-                eventPlayer.setAllowedHeroes(getAllHeroes().exclude(eventPlayer.getHero()))
+                excludeCurrentHeroFromSelection()
                 waitUntil(not eventPlayer.hasSpawned(), 1)
                 wait()
                 eventPlayer.setAllowedHeroes(getAllHeroes())

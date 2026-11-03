@@ -41,7 +41,7 @@ rule "PLAYER INITIALIZATION":
     eventPlayer.initialMaxHealth = eventPlayer.getMaxHealth()
     eventPlayer.invisibilityCount = false
     eventPlayer.movementSpeedScale = 1
-    eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
+    applyScaledMoveSpeed()
     eventPlayer.isAttached = false
     eventPlayer.isAfk = false
     if eventPlayer.isHeroSwitchRespawn == true:
@@ -298,7 +298,7 @@ rule "PLAYER SWITCHES HERO":
     @Condition eventPlayer.isAlive() == true
     
     wait(5, Wait.ABORT_WHEN_FALSE)
-    eventPlayer.setAllowedHeroes(getAllHeroes().exclude(eventPlayer.getHero()))
+    excludeCurrentHeroFromSelection()
     eventPlayer.detach()
     waitUntil(not eventPlayer.hasSpawned(), 1)
     wait()

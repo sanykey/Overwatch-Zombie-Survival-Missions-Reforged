@@ -553,7 +553,7 @@ rule "CHARGER (MAUGA) CHARGE":
         wait(0.064)
     eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition() if eventPlayer.botChargerDestination == null else eventPlayer.botChargerDestination), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
     eventPlayer.botIsFacingOverridden = true
-    eventPlayer.startFacing(eventPlayer.getThrottle(), 100, Relativity.TO_PLAYER)
+    faceCurrentThrottle()
     eventPlayer.forceButtonPress(Button.ABILITY_1)
     #Charge End
     waitUntil(not eventPlayer.isUsingAbility1(), 2 if eventPlayer in bossStateList else 3.5)
@@ -776,13 +776,13 @@ rule "STALKER (MOIRA) FADE":
             eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition()), 0 if eventPlayer.isCrowdControlled else 100)
             eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botLastTarget.getPosition()), 0 if distance(eventPlayer.getPosition(), eventPlayer.botLastTarget.getPosition()) < 3 and eventPlayer.isUsingAbility1() else eventPlayer.botThrottleSpeed, Relativity.TO_WORLD)
         eventPlayer.movementSpeedScale *= 2
-        eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
+        applyScaledMoveSpeed()
         eventPlayer.forceButtonPress(Button.ABILITY_1)
         wait(0.125)
         waitUntil(not eventPlayer.isUsingAbility1(), 2)
         eventPlayer.setAbilityCooldown(Button.ABILITY_1, 0)
         eventPlayer.movementSpeedScale /= 2
-        eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
+        applyScaledMoveSpeed()
         if eventPlayer.isDead() or eventPlayer.isCrowdControlled or eventPlayer.hasStatus(Status.HACKED):
             break
         if eventPlayer in bossStateList:
@@ -1200,7 +1200,7 @@ rule "SMOLDER (WINSTON) SEES PLAYER":
     eventPlayer.forceButtonPress(Button.ABILITY_2)
     eventPlayer.startForcingButton(Button.CROUCH)
     eventPlayer.movementSpeedScale *= 0.1
-    eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
+    applyScaledMoveSpeed()
     eventPlayer.botSmolderState = 1
     #Death timer
     chaseOverTime(eventPlayer.botSmolderAnger, 0, 6, ChaseTimeReeval.NONE)
@@ -1479,9 +1479,9 @@ def smolderBoost():
     eventPlayer.setUltCharge(100)
     eventPlayer.forceButtonPress(Button.ULTIMATE)
     eventPlayer.sizeScale *= 1.5
-    eventPlayer.startScalingSize(eventPlayer.sizeScale, false)
+    applyCurrentSizeScale()
     eventPlayer.movementSpeedScale *= 9
-    eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
+    applyScaledMoveSpeed()
 
 
 def spawnGasCloud():

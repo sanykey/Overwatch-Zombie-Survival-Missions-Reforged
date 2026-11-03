@@ -36,7 +36,7 @@ rule "BOT BECOMES ZOMBIE EGG":
     eventPlayer.botBaseHealth = 15000
     eventPlayer.botBossHealth = eventPlayer.botBaseHealth
     eventPlayer.sizeScale = 2.5
-    eventPlayer.startScalingSize(eventPlayer.sizeScale, false)
+    applyCurrentSizeScale()
     eventPlayer.setHealth(eventPlayer.getMaxHealth())
     waitUntil(eventPlayer.botIsWallCollisionEnabled == true, 5)
     eventPlayer.botIsWallCollisionEnabled = false
@@ -80,6 +80,6 @@ rule "EGG SWITCHES THE POSITION FOR YOU":
     @Condition zombieEggStateList[0] == victim
     
     objectivePositionList[0] += directionTowards(victim, attacker) / (3.5 if attacker.isOnGround() else 9)
-    currentObjectivePosition = objectivePositionList[0]
+    refreshCurrentObjectivePosition()
     #Small stop for high ticks of damage
     wait(0.049)

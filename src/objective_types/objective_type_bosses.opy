@@ -112,7 +112,7 @@ rule "BOSS HEALTH CONTROL (ALL BOSS OBJECTIVES)":
     @Condition eventPlayer in bossesStateList == true
     
     eventPlayer.botBossHealth = eventPlayer.getHealth() + eventDamage - 1000
-    eventPlayer.setHealth(eventPlayer.botBossHealth)
+    applyBotBossHealth()
 
 
 rule "BOSS DIES (ALL BOSS OBJECTIVES)":
@@ -138,7 +138,7 @@ rule "BOSS DIES (ALL BOSS OBJECTIVES)":
                 wait()
                 eventPlayer.resurrect()
                 waitUntil(eventPlayer.isAlive(), 0.25)
-            eventPlayer.setHealth(eventPlayer.botBossHealth)
+            applyBotBossHealth()
             if eventPlayer.botTarget == null:
                 eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botLastTarget.getPosition()), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
             #Illari punishes with ultimate
@@ -154,7 +154,7 @@ rule "BOSS DIES (ALL BOSS OBJECTIVES)":
         eventPlayer.botBossHealth = eventDamage - 1000
         eventPlayer.resurrect()
         waitUntil(eventPlayer.isAlive(), 5)
-        eventPlayer.setHealth(eventPlayer.botBossHealth)
+        applyBotBossHealth()
     else:
         isObjectiveComplete = true
         bossesStateList[bossesStateList.index(eventPlayer)] = 0

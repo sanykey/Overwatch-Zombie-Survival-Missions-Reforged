@@ -2,6 +2,14 @@
 
 # Shared subroutines used by multiple sections (including their dependencies).
 
+subroutine applyScaledMoveSpeed
+subroutine refreshCurrentObjectivePosition
+subroutine refreshCurrentObjectiveType
+subroutine faceCurrentThrottle
+subroutine excludeCurrentHeroFromSelection
+subroutine applyBotKnockbackScale
+subroutine applyCurrentSizeScale
+subroutine applyBotBossHealth
 subroutine enableDisableAbilities
 subroutine setDifficulty
 subroutine botRespawnInitialization
@@ -54,7 +62,7 @@ macro botStatManagementMacro():
     eventPlayer.setKnockbackReceived(100)
     if eventPlayer.getHero() == Hero.REINHARDT:
         eventPlayer.botKnockbackScale = 0.7
-        eventPlayer.setKnockbackReceived(100 * eventPlayer.botKnockbackScale)
+        applyBotKnockbackScale()
     elif eventPlayer.getHero() == Hero.MERCY:
         eventPlayer.setProjectileSpeed(75 if eventPlayer in bossStateList else 20)
     elif eventPlayer.getHero() == Hero.ILLARI:
@@ -84,7 +92,7 @@ macro mutationsMacro():
         #Speed
         if eventPlayer.botMutationId == 1:
             eventPlayer.movementSpeedScale *= 1.5
-            eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
+            applyScaledMoveSpeed()
             #!define botMutationOutlineColor tmp2
             botMutationOutlineColor = Color.PURPLE
             eventPlayer.startForcingName("SPEED")
@@ -108,7 +116,7 @@ macro mutationsMacro():
         #Heavy: enabled mutation IDs are 1..5, so the remaining case is 5.
         else:
             eventPlayer.botKnockbackScale *= 0.5
-            eventPlayer.setKnockbackReceived(100 * eventPlayer.botKnockbackScale)
+            applyBotKnockbackScale()
             #Scale move speed
             eventPlayer.movementSpeedScale *= eventPlayer.botKnockbackScale
             eventPlayer.setMoveSpeed(100 * eventPlayer.movementSpeedScale)
@@ -590,9 +598,9 @@ def objectivesManagement():
             bigMessage(getAllPlayers(), ["Showdown Conquered!", "Giant zombie eliminated!", "Biomorphing completed!", "The survivors have been rescued!", "The kill zone has been cleared!", "The egg has been destroyed!", "Firing sequence complete!"][currentObjectiveType - 1])
         wait()
         del objectivePositionList[0]
-        currentObjectivePosition = objectivePositionList[0]
+        refreshCurrentObjectivePosition()
         del objectiveTypeList[0]
-        currentObjectiveType = objectiveTypeList[0]
+        refreshCurrentObjectiveType()
         bossStateList = []
         satelliteLaserTarget = null
     wait(0.25)
@@ -709,7 +717,7 @@ def restoreDefaultFacingMovement():
             eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()), eventPlayer.botThrottleSpeed if distance(eventPlayer.getPosition(), vect(eventPlayer.botTarget.getPosition().x, eventPlayer.getPosition().y, eventPlayer.botTarget.getPosition().z)) > 2 * min(1, eventPlayer.sizeScale) else 0, Relativity.TO_WORLD)
     else:
         eventPlayer.startThrottleInDirection(eventPlayer.getFacingDirection(), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
-        eventPlayer.startFacing(eventPlayer.getThrottle(), 100, Relativity.TO_PLAYER)
+        faceCurrentThrottle()
 
 
 def botRespawnInitialization():
@@ -754,7 +762,7 @@ def botRespawnInitialization():
         goto lbl_0
     mutationsMacro()
     lbl_0:
-    eventPlayer.startScalingSize(eventPlayer.sizeScale, false)
+    applyCurrentSizeScale()
     botEntityManagementMacro()
     waitUntil(eventPlayer.getHealth() >= eventPlayer.botBaseHealth, 5)
     eventPlayer.stopAllHealingOverTime()
@@ -816,7 +824,7 @@ def illariUlt():
     wait(1)
     eventPlayer.forceButtonPress(Button.ULTIMATE)
     eventPlayer.movementSpeedScale /= 3
-    eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
+    applyScaledMoveSpeed()
     wait(1.5)
     if eventPlayer.isDead():
         return
@@ -826,4 +834,52 @@ def illariUlt():
     lbl_0:
     waitUntil(eventPlayer.isUsingUltimate(), false)
     eventPlayer.movementSpeedScale *= 3
+    applyScaledMoveSpeed()
+
+
+def applyScaledMoveSpeed():
+    @Name "applyScaledMoveSpeed"
+
     eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
+
+
+def refreshCurrentObjectivePosition():
+    @Name "refreshCurrentObjectivePosition"
+
+    currentObjectivePosition = objectivePositionList[0]
+
+
+def refreshCurrentObjectiveType():
+    @Name "refreshCurrentObjectiveType"
+
+    currentObjectiveType = objectiveTypeList[0]
+
+
+def faceCurrentThrottle():
+    @Name "faceCurrentThrottle"
+
+    eventPlayer.startFacing(eventPlayer.getThrottle(), 100, Relativity.TO_PLAYER)
+
+
+def excludeCurrentHeroFromSelection():
+    @Name "excludeCurrentHeroFromSelection"
+
+    eventPlayer.setAllowedHeroes(getAllHeroes().exclude(eventPlayer.getHero()))
+
+
+def applyBotKnockbackScale():
+    @Name "applyBotKnockbackScale"
+
+    eventPlayer.setKnockbackReceived(100 * eventPlayer.botKnockbackScale)
+
+
+def applyCurrentSizeScale():
+    @Name "applyCurrentSizeScale"
+
+    eventPlayer.startScalingSize(eventPlayer.sizeScale, false)
+
+
+def applyBotBossHealth():
+    @Name "applyBotBossHealth"
+
+    eventPlayer.setHealth(eventPlayer.botBossHealth)

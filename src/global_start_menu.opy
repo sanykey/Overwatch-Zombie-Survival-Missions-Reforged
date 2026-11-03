@@ -414,7 +414,7 @@ def setObjectiveType():
         else:
             #Mixed objective assignment
             objectiveTypeList.append(random.choice(mixedObjectiveTypeList.exclude(objectiveTypeList.filter(lambda _, i: i > len(objectiveTypeList) - 1 - (len(mixedObjectiveTypeList) - 1)))))
-        currentObjectiveType = objectiveTypeList[0]
+        refreshCurrentObjectiveType()
         missionPlacementAttemptCount = 0
         while len(objectivePositionList) < len(objectiveTypeList):
             #Limits possible map grid points to set min and max range from last created objective position
@@ -426,7 +426,7 @@ def setObjectiveType():
                 #Ensures bosses spawn with head room
                 if objectiveTypeList.last() != ObjectiveType.BOSSES or isInLoS(missionCandidatePosition + vect(0, 0, 0), missionCandidatePosition + 10 * Vector.UP):
                     objectivePositionList.append(missionCandidatePosition)
-                    currentObjectivePosition = objectivePositionList[0]
+                    refreshCurrentObjectivePosition()
                     missionPlacementAttemptCount = 0
             missionPlacementAttemptCount++
             #If Too many attempts
@@ -435,10 +435,10 @@ def setObjectiveType():
                 #!define missionRollbackIndex tmp0
                 for missionRollbackIndex in range(2):
                     del objectivePositionList[len(objectivePositionList) - 1]
-                    currentObjectivePosition = objectivePositionList[0]
+                    refreshCurrentObjectivePosition()
                 missionPlacementAttemptCount = 0
     #Last objective must be extraction objective
     objectiveTypeList[len(objectiveTypeList) - 1] = ObjectiveType.SHOWDOWN
-    currentObjectiveType = objectiveTypeList[0]
+    refreshCurrentObjectiveType()
     objectivesManagement()
     isGameplayActive = true
