@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **26,454 elements**, freeing up **5,810** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+The current OverPy 9.7.20 build uses **26,407 elements**, freeing up **5,857** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+
+- The three remaining pregame vote HUDs now target Team 1 directly, because their vote IDs are initialized to valid menu entries. The unused compressed menu vote ID table was removed. Extraction light-shaft heights now use `24 * index - 2`, preserving the original −2, 22 and 46 positions. These changes reduce the build from **26,454 → 26,407 (−47 elements)** without new variables: −44 from the HUDs and −3 from the shaft heights. The real include build matched the in-memory Workshop output and emitted no warnings. In-game validation and runtime benchmarks have not been performed.
 
 - Pregame challenge and zombie vote rows now share a mapped `[null, value]` wrapper; enabled mixed objectives and mutations derive their consecutive IDs from setting indices; the enhancement HUD is shown to Team 1 players directly. Together these changes reduce the build from **26,545 → 26,454 (−91 elements)** without new variables. Workshop setting expressions and their order are unchanged; all 160 objective/mutation toggle combinations were checked. The real include build emitted no warnings and matched the in-memory Workshop output. In-game validation and runtime benchmarks have not been performed.
 

@@ -254,7 +254,7 @@ macro globalObjectiveEntityManagementMacro():
             # extractionLightShaftLayerIndex: extraction light-shaft layer index, to select heights -2, 22 and 46.
             #!define extractionLightShaftLayerIndex tmp0
             for extractionLightShaftLayerIndex in range(3):
-                createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.SKY_BLUE, currentObjectivePosition + ([-2, 22, 46][extractionLightShaftLayerIndex]) * Vector.UP, objectiveRad, EffectReeval.VISIBILITY)
+                createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.SKY_BLUE, currentObjectivePosition + (24 * extractionLightShaftLayerIndex - 2) * Vector.UP, objectiveRad, EffectReeval.VISIBILITY)
                 objectiveEntityIdList.append(getLastCreatedEntity())
             #Extraction icon
             createIcon(getAllPlayers().exclude(objectivePlayerList), currentObjectivePosition + Vector.UP, Icon.ARROW_DOWN, IconReeval.VISIBILITY, Color.SKY_BLUE)

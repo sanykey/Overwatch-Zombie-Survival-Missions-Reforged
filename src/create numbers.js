@@ -156,11 +156,6 @@ const numbers = [
     len: "NL_DAMAGE_DEALT_EXPERT_LEN",
     list: [90, 125, 50, 50, 130, 40, 50, 50, 50, 150, 1, 75, 75, 90, 75, 85, 100, 125, 100, 100, 100],
   },
-  { // Menu vote IDs: Challenge uses the first 6, Zombie Mode uses all 7.
-    offset: "NL_MENU_VOTE_IDS_OFFSET",
-    len: "NL_MENU_VOTE_IDS_LEN",
-    list: [0, 1, 2, 3, 4, 5, 6],
-  },
 ];
 
 let numberIndex = 0;

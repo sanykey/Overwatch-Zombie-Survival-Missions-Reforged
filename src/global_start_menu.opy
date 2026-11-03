@@ -86,10 +86,10 @@ rule "EFFECTS/TEXTS":
     #One reevaluated HUD per category; localPlayer selects the viewer's current option.
     #Do not capture vote indices or dynamic text/colors with evalOnce.
     #Empty descriptions must be strings: null selected from an array displays as 0.
-    #Both vote filters share the 0-6 sequence; Challenge excludes the final entry.
+    #Team 1 vote IDs are initialized to valid menu entries before players use the menu.
     #Challenge
     hudText(
-        getAllPlayers().filter(lambda player: player.pregameChallengeVote in numbersList.slice(NL_MENU_VOTE_IDS_OFFSET, NL_MENU_VOTE_IDS_LEN - 1)),
+        getPlayers(Team.1),
         [
             "Challenge: No Preference",
             "Challenge: None",
@@ -117,7 +117,7 @@ rule "EFFECTS/TEXTS":
     #Zombie Mode
     startMenuZombieColorList = [Color.AQUA, Color.ORANGE, Color.RED, Color.PURPLE, Color.LIME_GREEN, Color.BLUE, Color.GRAY]
     hudText(
-        getAllPlayers().filter(lambda player: player.pregameZombieVote in numbersList.slice(NL_MENU_VOTE_IDS_OFFSET, NL_MENU_VOTE_IDS_LEN)),
+        getPlayers(Team.1),
         [
             "Zombie Mode: No Preference",
             "Zombie Mode: All Zombies",
@@ -147,7 +147,7 @@ rule "EFFECTS/TEXTS":
     #Objective Type: arrays use raw IDs; 3, 4 and 8 have no standalone menu row.
     startMenuObjectiveColorList = [Color.AQUA, Color.ORANGE, Color.RED, null, null, Color.RED, Color.LIME_GREEN, rgb(12, 129, 132), null, Color.PURPLE]
     hudText(
-        getAllPlayers().filter(lambda player: player.pregameObjectiveVote in [ObjectiveType.NO_PREFERENCE, ObjectiveType.SHOWDOWN, ObjectiveType.BOSSES, ObjectiveType.KILL_ZONE, ObjectiveType.ZOMBIE_EGG, ObjectiveType.SATELLITE_UPLINK, ObjectiveType.MIXED_OBJECTIVES]),
+        getPlayers(Team.1),
         [
             "Objective Type: No Preference",
             "Objective Type: Showdown {0}".format(abilityIconString(Hero.BRIGITTE, Button.ULTIMATE)),
