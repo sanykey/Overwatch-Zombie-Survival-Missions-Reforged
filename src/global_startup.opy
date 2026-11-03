@@ -143,7 +143,7 @@ rule "START GAME IF WAITING FOR PLAYERS":
 
 
 rule "SKIP ASSEMBLING HEROES":
-    @Condition (isAssemblingHeroes() or isPregameSetup and len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive)) == 0) == true
+    @Condition (isAssemblingHeroes() or isPregameSetup and not getPlayers(Team.1).any(lambda player: player.isPlayerActive)) == true
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
     isVoting = true
@@ -168,7 +168,7 @@ rule "SKIP ASSEMBLING HEROES":
         setMatchTime(0)
         wait(0.25)
     setMatchTime(3599)
-    waitUntil(len(getPlayers(Team.1).filter(lambda player: player.hasSpawned())) > 0 and len(mapGridList) > 0, 99999)
+    waitUntil(getPlayers(Team.1).any(lambda player: player.hasSpawned()) and len(mapGridList) > 0, 99999)
     setMatchTime(60)
     wait()
     pregameCountdown = getMatchTime()
@@ -274,7 +274,7 @@ rule "VARIABLE ASSIGNMENT":
 rule "START GAME":
     @Condition isPregameSetup != false
     @Condition getMatchTime() <= 0.1
-    @Condition len(getPlayers(Team.1).filter(lambda player: player.hasSpawned())) > 0
+    @Condition getPlayers(Team.1).any(lambda player: player.hasSpawned())
     
     if isInSetup():
         setMatchTime(0)

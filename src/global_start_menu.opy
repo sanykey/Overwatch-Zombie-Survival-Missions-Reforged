@@ -244,7 +244,7 @@ rule "END VOTING":
     @Condition isVoting == true
     @Condition isPregameSetup == true
     @Condition getMatchTime() < VOTING_END_TIME
-    @Condition len(getPlayers(Team.1).filter(lambda player: player.pregameState > PregameState.SELECTING_HERO)) > 0
+    @Condition getPlayers(Team.1).any(lambda player: player.pregameState > PregameState.SELECTING_HERO)
     
     pregameCountdown = VOTING_END_TIME
     startRule(determineZombieMode)

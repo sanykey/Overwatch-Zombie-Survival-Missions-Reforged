@@ -51,7 +51,7 @@ rule "TRIGGER OVERTIME MUSIC":
     @Condition isGameplayActive == true
     @Condition isOvertimeActive == false
     @Condition getMatchTime() < matchEndTime + 3
-    @Condition (len(getLivingPlayers(Team.2).filter(lambda player: player.botTarget == null and not player in bossStateList))) > 0
+    @Condition getLivingPlayers(Team.2).any(lambda player: player.botTarget == null and not player in bossStateList)
     
     enableMusic()
     if not isSpecialGameMode:

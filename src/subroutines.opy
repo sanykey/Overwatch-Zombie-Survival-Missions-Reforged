@@ -504,7 +504,7 @@ def setPrematchTimer():
         #Event Player is not voting
         else:
             #All players are finished voting
-            if getMatchTime() > 5 + VOTING_END_TIME and ((len(getPlayers(Team.1).filter(lambda player: player.isPregameVoting == false and player.pregameState > PregameState.SELECTING_HERO))) == getNumberOfPlayers(Team.1)):
+            if getMatchTime() > 5 + VOTING_END_TIME and getPlayers(Team.1).all(lambda player: player.isPregameVoting == false and player.pregameState > PregameState.SELECTING_HERO):
                 setMatchTime(5 + VOTING_END_TIME)
             elif getMatchTime() > 20 + VOTING_END_TIME and ((len(getPlayers(Team.1).filter(lambda player: player.isPregameVoting == false and player.pregameState > PregameState.SELECTING_HERO))) == len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive))):
                 setMatchTime(20 + VOTING_END_TIME)
@@ -514,7 +514,7 @@ def setPrematchTimer():
         if eventPlayer.pregameState < PregameState.READY:
             setMatchTime(pregameCountdown)
         else:
-            if getMatchTime() > 10 and len(getPlayers(Team.1).filter(lambda player: player.pregameState == PregameState.READY)) == getNumberOfPlayers(Team.1):
+            if getMatchTime() > 10 and getPlayers(Team.1).all(lambda player: player.pregameState == PregameState.READY):
                 setMatchTime(15)
                 wait()
                 setMatchTime(10)
@@ -742,7 +742,7 @@ def botRespawnInitialization():
     eventPlayer.botIsSelectingTarget = false
     eventPlayer.botBossHealth = -1
     #Chance for a minboss on high difficulties
-    if difficultySetting >= Difficulty.EXPERT and eventPlayer in bossStateList == false and len(miniBossList.filter(lambda x: entityExists(x))) == 0:
+    if difficultySetting >= Difficulty.EXPERT and eventPlayer in bossStateList == false and not miniBossList.any(lambda x: entityExists(x)):
         # minibossPromotionRoll: miniboss promotion roll, consumed before the possible initialization wait.
         #!define minibossPromotionRoll tmp0
         minibossPromotionRoll = random.randint(1, 27 if currentObjectiveType == ObjectiveType.SHOWDOWN else 189)
@@ -781,7 +781,7 @@ def abilityPlacement():
 def explosionSequence():
     @Name "explosionSequence"
     
-    eventPlayer.explosionTargetList = getPlayers(Team.2) if not eventPlayer.isDummy() else getAllPlayers().filter(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < eventPlayer.explosionScale * 6 and (isInLoS(x.getEyePosition(), eventPlayer.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) if eventPlayer.isDummy() else true))
+    eventPlayer.explosionTargetList = getPlayers(Team.2) if not eventPlayer.isDummy() else getAllPlayers().filter(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < eventPlayer.explosionScale * 6 and isInLoS(x.getEyePosition(), eventPlayer.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS))
     #Scaled
     damage(eventPlayer.explosionTargetList, eventPlayer, eventPlayer.botBiteDamage * 2.5 if eventPlayer.isDummy() else eventPlayer.infectionLevel * 100)
     if eventPlayer.isDummy():

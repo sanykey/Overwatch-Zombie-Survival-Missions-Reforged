@@ -99,7 +99,7 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         #!define supplyDropItemAngleOffset tmp0
         for supplyDropItemAngleOffset in range(-60, 61, 120 / (supplyDropPowerUpCount - 1)):
             supplyPowerUpPositionList.append(supplyDropLandingPosition + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(supplyDropLandingPosition, eventPlayer.getPosition())) + supplyDropItemAngleOffset, 0)) * 2))
-    elif len(supplyPowerUpPositionList) > 0 and ((len(supplyPowerUpPositionList.filter(lambda x: distance(x, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), x)) < 0.5 and distance(eventPlayer.getPosition(), x) <= 6))) > 0):
+    elif supplyPowerUpPositionList.any(lambda x: distance(x, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), x)) < 0.5 and distance(eventPlayer.getPosition(), x) <= 6):
         #Power up effect position
         eventPlayer.powerUpTradePosition = (sorted(supplyPowerUpPositionList.filter(lambda x: distance(x, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), x)) < 0.5 and distance(eventPlayer.getPosition(), x) <= 6), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x))))[0]
         #Current power up (or 0 if no current power up)
@@ -279,7 +279,7 @@ def sentryTurret():
     playEffect(getAllPlayers(), DynamicEffect.DEBUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.powerUpTurretPosition, 50)
     #Sentry Gun Duration
     for eventPlayer.powerUpTurretTimeRemaining in range(30, 0, -0.125):
-        if (len(getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.powerUpTurretPosition, player) and not player.botIsTeleporting))) > 0:
+        if getLivingPlayers(Team.2).any(lambda player: isInLoS(eventPlayer.powerUpTurretPosition, player) and not player.botIsTeleporting):
             eventPlayer.powerUpTurretDirection = directionTowards(eventPlayer.powerUpTurretPosition, sorted(getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.powerUpTurretPosition, player)), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition())))[0].getPosition() + Vector.UP)
             # turretShotImpactPosition: turret shot's impact position with random spread, to place its explosion and damage ray.
             #!define turretShotImpactPosition tmp0
@@ -465,7 +465,7 @@ def powerUpUsage():
             break
         #Instant Revive
         case 2:
-            if len(getDeadPlayers(Team.1).filter(lambda player: distance(eventPlayer.getPosition(), player.getPosition()) <= REVIVE_RADIUS)) == 0:
+            if not getDeadPlayers(Team.1).any(lambda player: distance(eventPlayer.getPosition(), player.getPosition()) <= REVIVE_RADIUS):
                 return
             startRule(instantRevive)
             break

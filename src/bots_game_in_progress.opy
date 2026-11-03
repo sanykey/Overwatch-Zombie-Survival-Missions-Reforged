@@ -24,7 +24,7 @@ macro botTeleportCenterMacro():
     #Killzone
     elif currentObjectiveType == ObjectiveType.KILL_ZONE:
         #If players are in the killzone
-        if len(playerTargetList.filter(lambda x: distance(x.getPosition(), killZoneCenter) < objectiveRad)) > 0:
+        if playerTargetList.any(lambda x: distance(x.getPosition(), killZoneCenter) < objectiveRad):
             #Player closeset to the center of the killzone
             eventPlayer.botTeleportCenter = sorted(playerTargetList, lambda x: distance(x.getPosition(), killZoneCenter))[0].getPosition()
         else:

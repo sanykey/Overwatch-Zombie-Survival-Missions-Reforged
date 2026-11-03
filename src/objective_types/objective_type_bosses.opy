@@ -6,7 +6,7 @@ subroutine bossReturn
 rule "SPAWN BOSS":
     @Condition currentObjectiveType == ObjectiveType.BOSSES
     @Condition isObjectiveComplete == false
-    @Condition len(bossesStateList.filter(lambda x: entityExists(x))) == 0
+    @Condition not bossesStateList.any(lambda x: entityExists(x))
     @Condition (getLivingPlayers(Team.2).any(lambda player: player.hasSpawned() and not player.botIsTeleporting and player.botTarget == null)) == true
     #Keeps amount of different bots within the max limit.
     @Condition len(botHeroList.filter(lambda x: getNumberOfHeroes(x, Team.2) > 0)) < (uniqueSkinCap - max(getNumberOfSlots(Team.1), getNumberOfPlayers(Team.1)))
