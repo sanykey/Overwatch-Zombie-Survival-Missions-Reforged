@@ -557,41 +557,37 @@ def objectivesManagement():
             case ObjectiveType.SHOWDOWN:
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, currentObjectivePosition, objectiveRad * 2)
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, currentObjectivePosition, 200)
-                bigMessage(getAllPlayers(), "Showdown Conquered!")
                 break
             #Checks if current objective is bosses
             case ObjectiveType.BOSSES:
-                bigMessage(getAllPlayers(), "Giant zombie eliminated!")
                 break
             #Checks if current objective is biomorphing
             case ObjectiveType.BIOMORPHING:
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.GREEN, currentObjectivePosition, objectiveRad)
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ROSE, currentObjectivePosition, 200)
-                bigMessage(getAllPlayers(), "Biomorphing completed!")
                 break
             #Checks if current objective is survivor rescue
             case ObjectiveType.SURVIVOR_RESCUE:
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.VIOLET, currentObjectivePosition, objectiveRad)
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.VIOLET, currentObjectivePosition, 200)
-                bigMessage(getAllPlayers(), "The survivors have been rescued!")
                 break
             #Checks if current objective is kill zone
             case ObjectiveType.KILL_ZONE:
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.RED, killZoneCenter, 200)
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.RED, killZoneCenter, objectiveRad * 2)
-                bigMessage(getAllPlayers(), "The kill zone has been cleared!")
                 break
             #Checks if current objective is Zombie Egg
             case ObjectiveType.ZOMBIE_EGG:
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.LIME_GREEN, currentObjectivePosition, 200)
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.LIME_GREEN, currentObjectivePosition, objectiveRad * 2)
                 playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.LIME_GREEN, currentObjectivePosition, 3)
-                bigMessage(getAllPlayers(), "The egg has been destroyed!")
                 break
             #Checks if current objective is Satellite Uplink
             case ObjectiveType.SATELLITE_UPLINK:
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.LIME_GREEN, currentObjectivePosition, 200)
-                bigMessage(getAllPlayers(), "Firing sequence complete!")
+        # Objective IDs 1..7 are contiguous; unsupported IDs previously produced no completion message.
+        if currentObjectiveType >= ObjectiveType.SHOWDOWN and currentObjectiveType <= ObjectiveType.SATELLITE_UPLINK:
+            bigMessage(getAllPlayers(), ["Showdown Conquered!", "Giant zombie eliminated!", "Biomorphing completed!", "The survivors have been rescued!", "The kill zone has been cleared!", "The egg has been destroyed!", "Firing sequence complete!"][currentObjectiveType - 1])
         wait()
         del objectivePositionList[0]
         currentObjectivePosition = objectivePositionList[0]
@@ -608,9 +604,11 @@ def objectivesManagement():
         objectiveRad = 10
         bigMessage(getAllPlayers(), "Get to the extraction point!")
     else:
+        # Keep the previous description for unsupported objective IDs, as the switch did.
+        if currentObjectiveType >= ObjectiveType.SHOWDOWN and currentObjectiveType <= ObjectiveType.SATELLITE_UPLINK:
+            objectiveDescription = ["Keep zombies away in the Showdown!", "Eliminate the boss", "Convert biowaste into powerups!", "Rescue survivors", "Clear the kill zone", "Destroy the egg", "Repair satellite control terminals"][currentObjectiveType - 1]
         switch currentObjectiveType:
             case ObjectiveType.SHOWDOWN:
-                objectiveDescription = "Keep zombies away in the Showdown!"
                 showdownCapturePercent = 0
                 chaseAtRate(objectiveRad, max(5, showdownCapturePercent / 4), 1)
                 objectiveColor = Color.ORANGE
@@ -619,11 +617,9 @@ def objectivesManagement():
                 showdownContestingZombieList = []
                 break
             case ObjectiveType.BOSSES:
-                objectiveDescription = "Eliminate the boss"
                 bigMessage(getAllPlayers(), "Eliminate the giant zombie!")
                 break
             case ObjectiveType.BIOMORPHING:
-                objectiveDescription = "Convert biowaste into powerups!"
                 biomorphingCapturePercent = 0
                 biomorphingResourcePositionList = []
                 getAllPlayers().biomorphingResourceAmount = 0
@@ -637,26 +633,22 @@ def objectivesManagement():
                 biomorphingNextCheckpoint = 25
                 break
             case ObjectiveType.SURVIVOR_RESCUE:
-                objectiveDescription = "Rescue survivors"
                 rescueSurvivor = null
                 objectiveRad = 10
                 rescueSavedRadius = objectiveRad
                 bigMessage(getAllPlayers(), "Locate survivors and bring them to the extraction site!")
                 break
             case ObjectiveType.KILL_ZONE:
-                objectiveDescription = "Clear the kill zone"
                 objectiveRad = 20
                 killZoneCenter = currentObjectivePosition
                 bigMessage(getAllPlayers(), "Get to the kill zone and clear zombies!")
                 killZoneEliminationScore = 0
                 break
             case ObjectiveType.ZOMBIE_EGG:
-                objectiveDescription = "Destroy the egg"
                 objectiveRad = 0
                 bigMessage(getAllPlayers(), "Destroy the zombie egg!")
                 break
             case ObjectiveType.SATELLITE_UPLINK:
-                objectiveDescription = "Repair satellite control terminals"
                 objectiveRad = 3
                 objectiveColor = rgb(28, 169, 201)
                 satelliteTerminalPositionList = []

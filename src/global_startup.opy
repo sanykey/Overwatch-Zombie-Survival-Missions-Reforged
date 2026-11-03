@@ -18,15 +18,16 @@ macro setAvailableObjectivesMacro():
     #Set objective type votes empty
     objectiveTypeVoteList[ObjectiveType.MIXED_OBJECTIVES] = [null, createWorkshopSettingBool("Available Objective Types", "Mixed Objectives", true, 8)]
     #Mixed Objectives pool
+    # These objective IDs are consecutive (1-7), so each enabled setting uses its index plus one.
     mixedObjectiveTypeList = [
-        ObjectiveType.SHOWDOWN if createWorkshopSettingBool("Mixed Objectives Pool", "Standoff.", true, 1) else ObjectiveType.NO_PREFERENCE,
-        ObjectiveType.BOSSES if createWorkshopSettingBool("Mixed Objectives Pool", "Bosses.", true, 2) else ObjectiveType.NO_PREFERENCE,
-        ObjectiveType.BIOMORPHING if createWorkshopSettingBool("Mixed Objectives Pool", "Biomorphing.", true, 3) else ObjectiveType.NO_PREFERENCE,
-        ObjectiveType.SURVIVOR_RESCUE if createWorkshopSettingBool("Mixed Objectives Pool", "Survivor Rescue.", true, 4) else ObjectiveType.NO_PREFERENCE,
-        ObjectiveType.KILL_ZONE if createWorkshopSettingBool("Mixed Objectives Pool", "Kill Zone.", true, 5) else ObjectiveType.NO_PREFERENCE,
-        ObjectiveType.ZOMBIE_EGG if createWorkshopSettingBool("Mixed Objectives Pool", "Zombie Egg.", true, 6) else ObjectiveType.NO_PREFERENCE,
-        ObjectiveType.SATELLITE_UPLINK if createWorkshopSettingBool("Mixed Objectives Pool", "Satellite Uplink.", true, 7) else ObjectiveType.NO_PREFERENCE,
-    ]
+        createWorkshopSettingBool("Mixed Objectives Pool", "Standoff.", true, 1),
+        createWorkshopSettingBool("Mixed Objectives Pool", "Bosses.", true, 2),
+        createWorkshopSettingBool("Mixed Objectives Pool", "Biomorphing.", true, 3),
+        createWorkshopSettingBool("Mixed Objectives Pool", "Survivor Rescue.", true, 4),
+        createWorkshopSettingBool("Mixed Objectives Pool", "Kill Zone.", true, 5),
+        createWorkshopSettingBool("Mixed Objectives Pool", "Zombie Egg.", true, 6),
+        createWorkshopSettingBool("Mixed Objectives Pool", "Satellite Uplink.", true, 7),
+    ].map(lambda enabled, i: i + 1 if enabled else ObjectiveType.NO_PREFERENCE)
     #Removed disabled objectives
     mixedObjectiveTypeList.remove(ObjectiveType.NO_PREFERENCE)
 
@@ -75,13 +76,14 @@ macro botHeroRandomizationMacro():
 
 
 macro enableMutationsMacro():
+    # Mutation IDs are consecutive (1-5) and follow the setting order.
     availableMutationList = [
-        1 if createWorkshopSettingBool("Mutations", "Speed", true) else 0,
-        2 if createWorkshopSettingBool("Mutations", "Size Growth", true, 1) else 0,
-        3 if createWorkshopSettingBool("Mutations", "Size Reduction", true, 2) else 0,
-        4 if createWorkshopSettingBool("Mutations", "Radioactive", true, 3) else 0,
-        5 if createWorkshopSettingBool("Mutations", "Heavy", true, 4) else 0,
-    ]
+        createWorkshopSettingBool("Mutations", "Speed", true),
+        createWorkshopSettingBool("Mutations", "Size Growth", true, 1),
+        createWorkshopSettingBool("Mutations", "Size Reduction", true, 2),
+        createWorkshopSettingBool("Mutations", "Radioactive", true, 3),
+        createWorkshopSettingBool("Mutations", "Heavy", true, 4),
+    ].map(lambda enabled, i: i + 1 if enabled else 0)
     availableMutationList.remove(0)
 
 
@@ -147,9 +149,9 @@ rule "SKIP ASSEMBLING HEROES":
     isVoting = true
     enableEnhancementsMacro()
     #Set difficulty votes empty
-    challengeVoteList = [[null, true], [null, true], [null, createWorkshopSettingBool("Challenge Toggle", "Swarm Shootout", true, 1)], [null, createWorkshopSettingBool("Challenge Toggle", "Random Abilities", true, 2)], [null, createWorkshopSettingBool("Challenge Toggle", "Insanity", true, 3)], [null, createWorkshopSettingBool("Challenge Toggle", "Pandora's Box", true, 4)]]
+    challengeVoteList = [true, true, createWorkshopSettingBool("Challenge Toggle", "Swarm Shootout", true, 1), createWorkshopSettingBool("Challenge Toggle", "Random Abilities", true, 2), createWorkshopSettingBool("Challenge Toggle", "Insanity", true, 3), createWorkshopSettingBool("Challenge Toggle", "Pandora's Box", true, 4)].map(lambda enabled: [null, enabled])
     #Set zombie modes empty
-    zombieVoteList = [[null, true], [null, "All Zombies"], [null, createWorkshopSettingBool("Zombie Mode Toggle", "New Blood", true, 1)], [null, createWorkshopSettingBool("Zombie Mode Toggle", "What'll it be?", true, 2)], [null, createWorkshopSettingBool("Zombie Mode Toggle", "Zombie Shuffle", true, 3)], [null, createWorkshopSettingBool("Zombie Mode Toggle", "Dinner Rush!", true, 4)], [null, createWorkshopSettingBool("Zombie Mode Toggle", "Ham N' Hammer!", true, 5)]]
+    zombieVoteList = [true, "All Zombies", createWorkshopSettingBool("Zombie Mode Toggle", "New Blood", true, 1), createWorkshopSettingBool("Zombie Mode Toggle", "What'll it be?", true, 2), createWorkshopSettingBool("Zombie Mode Toggle", "Zombie Shuffle", true, 3), createWorkshopSettingBool("Zombie Mode Toggle", "Dinner Rush!", true, 4), createWorkshopSettingBool("Zombie Mode Toggle", "Ham N' Hammer!", true, 5)].map(lambda enabled: [null, enabled])
     setAvailableObjectivesMacro()
     #Set/Reset to default 0
     difficultySetting = Difficulty.UNSET

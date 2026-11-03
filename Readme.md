@@ -8,7 +8,11 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **26,565 elements**, freeing up **5,699** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+The current OverPy 9.7.20 build uses **26,454 elements**, freeing up **5,810** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+
+- Pregame challenge and zombie vote rows now share a mapped `[null, value]` wrapper; enabled mixed objectives and mutations derive their consecutive IDs from setting indices; the enhancement HUD is shown to Team 1 players directly. Together these changes reduce the build from **26,545 → 26,454 (−91 elements)** without new variables. Workshop setting expressions and their order are unchanged; all 160 objective/mutation toggle combinations were checked. The real include build emitted no warnings and matched the in-memory Workshop output. In-game validation and runtime benchmarks have not been performed.
+
+- Completion messages for the seven objective types and descriptions of the next objective now use shared lookup tables: **26,565 → 26,545 (−20 elements)**, without new variables. Each completion message still follows its effects and precedes the wait; unsupported IDs still produce no completion message or description change. All seven strings in each table were checked against the prior values. Only `objectivesManagement` changed among 237 compiled rules; the real include build matched the in-memory build and emitted no warnings. In-game validation and runtime benchmarks have not been performed.
 
 - The Force Field sphere and Heal Beacon light shaft IDs now use dedicated player variables instead of `powerUpEntityIdList`: **26,579 → 26,565 (−14 elements)** for 2 player slots. All three references to each ID were replaced: the existence check, assignment after creation and effect destruction. Only the two corresponding subroutines changed among 237 compiled rules; the real include build matched the in-memory build and emitted no warnings. In-game validation and runtime benchmarks have not been performed.
 

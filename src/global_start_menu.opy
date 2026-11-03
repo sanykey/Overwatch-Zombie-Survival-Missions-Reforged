@@ -183,7 +183,7 @@ rule "EFFECTS/TEXTS":
     #Enhancement
     startMenuEnhancementColorList = [Color.AQUA, colorKevlarConst, Color.GRAY, Color.BLUE, Color.RED, Color.ORANGE, Color.GREEN, Color.GRAY, colorChargeBatteryConst, Color.PURPLE, Color.BLUE]
     hudText(
-        getAllPlayers().filter(lambda player: player.enhancementId in [Enhancement.NO_PREFERENCE, Enhancement.KEVLAR, Enhancement.ZOMBIE_HYBRID, Enhancement.LASER_BARRICADE, Enhancement.BRAIN_KILLER, Enhancement.PYROTECHNIC, Enhancement.PLAGUE_DOCTOR, Enhancement.BORN_TO_BATTLE, Enhancement.CHARGE_BATTERY, Enhancement.HITCHHIKER, Enhancement.PUP]),
+        getPlayers(Team.1),
         [
             "Enhancement: No Preference",
             "Enhancement: Kevlar {0}".format(iconString(Icon.STOP)),
