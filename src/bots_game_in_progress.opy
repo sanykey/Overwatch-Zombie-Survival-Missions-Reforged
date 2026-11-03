@@ -553,6 +553,8 @@ rule "MINIBOSS MESSAGE":
 
 def removeBotSpawnPoint():
     # Synchronous: retain the original deletion order so parallel arrays stay aligned.
-    del botSpawnWaypointList[botSpawnPointList.index(eventPlayer.botTeleportPosition)]
-    del botSpawnPointTimerList[botSpawnPointList.index(eventPlayer.botTeleportPosition)]
+    #!define removedBotSpawnPointIndex tmp0
+    removedBotSpawnPointIndex = botSpawnPointList.index(eventPlayer.botTeleportPosition)
+    del botSpawnWaypointList[removedBotSpawnPointIndex]
+    del botSpawnPointTimerList[removedBotSpawnPointIndex]
     botSpawnPointList.remove(eventPlayer.botTeleportPosition)

@@ -1,5 +1,7 @@
 #!mainFile "../main.opy"
 
+subroutine chaseSatelliteTarget
+
 
 
 macro fireSatelliteMacro():
@@ -39,14 +41,14 @@ macro fireSatelliteMacro():
     wait(5)
     smallMessage(getAllPlayers(), "Firing sequence commenced")
     #Chase closest living zombie
-    chaseAtRate(satelliteLaserPosition, satelliteLaserTarget.getPosition(), 7.5 if getLivingPlayers(Team.2).any(lambda player: not player.botIsTeleporting) else 0)
+    chaseSatelliteTarget()
     #Fire satellite
     for satelliteFiringStepsRemaining in range(40, 0, -1):
         stopChasing(satelliteLaserPosition)
         satelliteLaserTarget = (sorted(getLivingPlayers(Team.2).filter(lambda player: not player.botIsTeleporting), lambda x: distance(x.getPosition(), satelliteLaserPosition)))[0]
         if satelliteLaserTarget != null:
             #Chase closest living zombie
-            chaseAtRate(satelliteLaserPosition, satelliteLaserTarget.getPosition(), 7.5 if getLivingPlayers(Team.2).any(lambda player: not player.botIsTeleporting) else 0)
+            chaseSatelliteTarget()
         wait(0.5)
         # satelliteLaserImpactPosition: laser impact position on the ground, shared by explosion visuals and both damage checks.
         #!define satelliteLaserImpactPosition tmp0
@@ -153,3 +155,9 @@ rule "PLAYERS REPAIR TERMINALS":
     wait(0.5)
     if ruleCondition:
         loop()
+
+
+def chaseSatelliteTarget():
+    @Name "chaseSatelliteTarget"
+
+    chaseAtRate(satelliteLaserPosition, satelliteLaserTarget.getPosition(), 7.5 if getLivingPlayers(Team.2).any(lambda player: not player.botIsTeleporting) else 0)

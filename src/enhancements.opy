@@ -1,6 +1,7 @@
 #!mainFile "main.opy"
 
 subroutine checkEnhancementPlacement
+subroutine startPupDefaultChase
 
 rule "PLAYER ENHANCEMENT INITIALIZATION":
     @Event eachPlayer
@@ -136,7 +137,7 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             #Postion of P.U.P.
             eventPlayer.enhancementPupPosition = eventPlayer.getPosition() + 200 * Vector.UP
             #P.U.P. Default movment
-            chaseAtRate(eventPlayer.enhancementPupPosition, eventPlayer.getEyePosition() + directionTowards(eventPlayer.getEyePosition(), eventPlayer.enhancementPupPosition), abs(distance(eventPlayer.getEyePosition(), eventPlayer.enhancementPupPosition) - 1))
+            startPupDefaultChase()
             eventPlayer.enhancementPupCooldown = 0
             #P.U.P. ability cooldown
             chaseAtRate(eventPlayer.enhancementPupCooldown, 0, 0 if eventPlayer.enhancementIsPupBeamActive else 1)
@@ -554,7 +555,7 @@ rule "P.U.P. TARGET":
     eventPlayer.enhancementIsPupFreezeAuraActive = false
     wait(0.5, Wait.RESTART_WHEN_TRUE)
     #P.U.P. Default movement
-    chaseAtRate(eventPlayer.enhancementPupPosition, eventPlayer.getEyePosition() + directionTowards(eventPlayer.getEyePosition(), eventPlayer.enhancementPupPosition), abs(distance(eventPlayer.getEyePosition(), eventPlayer.enhancementPupPosition) - 1))
+    startPupDefaultChase()
 
 
 rule "P.U.P. CONTROL":
@@ -625,3 +626,9 @@ rule "P.U.P. CONTROL":
         wait(1, Wait.ABORT_WHEN_FALSE)
     if ruleCondition:
         loop()
+
+
+def startPupDefaultChase():
+    @Name "startPupDefaultChase"
+
+    chaseAtRate(eventPlayer.enhancementPupPosition, eventPlayer.getEyePosition() + directionTowards(eventPlayer.getEyePosition(), eventPlayer.enhancementPupPosition), abs(distance(eventPlayer.getEyePosition(), eventPlayer.enhancementPupPosition) - 1))

@@ -1,5 +1,7 @@
 #!mainFile "main.opy"
 
+subroutine startBlasterDaytakerFacing
+
 subroutine resumeBotFacingAndMovement
 subroutine resumeBotMovementAndFacing
 subroutine smolderBoost
@@ -821,7 +823,7 @@ rule "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES":
     eventPlayer.botIsThrottleOverridden = true
     eventPlayer.stopThrottleInDirection()
     eventPlayer.botIsFacingOverridden = true
-    eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition()), 0 if eventPlayer.isCrowdControlled or eventPlayer.isOnGround() and eventPlayer.botTarget == null else 100)
+    startBlasterDaytakerFacing()
     eventPlayer.botBlasterCharge = 0
     eventPlayer.setDamageReceived(50)
     #charge up attack
@@ -1002,7 +1004,7 @@ rule "DAYTAKER (ILLARI) BURST":
     wait(0.1, Wait.ABORT_WHEN_FALSE)
     eventPlayer.botIsThrottleOverridden = true
     eventPlayer.botIsFacingOverridden = true
-    eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition()), 0 if eventPlayer.isCrowdControlled or eventPlayer.isOnGround() and eventPlayer.botTarget == null else 100)
+    startBlasterDaytakerFacing()
     eventPlayer.botDaytakerCharge = 0
     #charge up attack
     chaseOverTime(eventPlayer.botDaytakerCharge, 2, 2 if eventPlayer in bossStateList else 1, ChaseTimeReeval.NONE)
@@ -1503,3 +1505,9 @@ def resumeBotFacingAndMovement():
     eventPlayer.botIsFacingOverridden = false
     eventPlayer.botIsThrottleOverridden = false
     startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
+
+
+def startBlasterDaytakerFacing():
+    @Name "startBlasterDaytakerFacing"
+
+    eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition()), 0 if eventPlayer.isCrowdControlled or eventPlayer.isOnGround() and eventPlayer.botTarget == null else 100)

@@ -52,8 +52,10 @@ macro botHeroRandomizationMacro():
     # spawnedBotHeroList: hero types already present among zombies, to check the unique-skin limit.
     #!define spawnedBotHeroList tmp0
     spawnedBotHeroList = botHeroList.filter(lambda x: getNumberOfHeroes(x, Team.2) > 0)
+    # botSpawnSelectedHero: selected bot hero after the last use of spawnedBotHeroList.
+    #!define botSpawnSelectedHero tmp0
     if isSmolderEventActive:
-        createDummy(Hero.WINSTON, Team.2, -1, dummyHoldingPositionConst)
+        botSpawnSelectedHero = Hero.WINSTON
     #Determines if count of current different zombie types is less than the maximum amount allowed
     elif len(spawnedBotHeroList) < (uniqueSkinCap - max(getNumberOfSlots(Team.1), getNumberOfPlayers(Team.1))):
         # botSpawnWeightRoll: random threshold for weighted hero selection; the hero list is no longer needed.
@@ -70,9 +72,10 @@ macro botHeroRandomizationMacro():
             botSpawnHeroIndex++
             # botSpawnCumulativeWeight: cumulative weight including this hero, to test whether botSpawnWeightRoll falls in its range.
             botSpawnCumulativeWeight += botSpawnRateList[botSpawnHeroIndex]
-        createDummy(botHeroList[botSpawnHeroIndex], Team.2, -1, dummyHoldingPositionConst)
+        botSpawnSelectedHero = botHeroList[botSpawnHeroIndex]
     else:
-        createDummy(sorted(botHeroList, lambda _, i: botSpawnRateList[i]).last(), Team.2, -1, dummyHoldingPositionConst)
+        botSpawnSelectedHero = sorted(botHeroList, lambda _, i: botSpawnRateList[i]).last()
+    createDummy(botSpawnSelectedHero, Team.2, -1, dummyHoldingPositionConst)
 
 
 macro enableMutationsMacro():

@@ -1,5 +1,7 @@
 #!mainFile "main.opy"
 
+subroutine playAquaPowerUpSound
+
 subroutine powerUpUsage
 subroutine playerForceField
 subroutine noCooldowns
@@ -135,7 +137,7 @@ def instantRevive():
     eventPlayer.powerUpReviveTarget.setStatusEffect(null, Status.INVINCIBLE, 5)
     eventPlayer.powerUpReviveTarget.resurrect()
     waitUntil(eventPlayer.powerUpReviveTarget.isAlive(), 3)
-    playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.AQUA, eventPlayer.getPosition(), 50)
+    playAquaPowerUpSound()
     smallMessage([eventPlayer, eventPlayer.powerUpReviveTarget], "{0} {1}: \"I've got you. Now let's move!\"".format(eventPlayer, heroIcon(eventPlayer.getHero())))
 
 
@@ -166,7 +168,7 @@ def playerForceField():
 def noCooldowns():
     @Name "noCooldowns (20-29)"
     
-    playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.AQUA, eventPlayer.getPosition(), 50)
+    playAquaPowerUpSound()
     playEffect(eventPlayer, DynamicEffect.GOOD_PICKUP_EFFECT, Color.RED, eventPlayer, 50)
     if eventPlayer.powerUpNoCooldownsHudId == 0:
         hudHeader(eventPlayer, "No Cooldowns: {0}s".format(ceil(eventPlayer.powerUpNoCooldownsTimeRemaining)), HudPosition.RIGHT, 0.2, Color.RED, HudReeval.VISIBILITY_AND_STRING)
@@ -461,7 +463,7 @@ def powerUpUsage():
                 eventPlayer.infectionLevel = 0
             eventPlayer.startHealingOverTime(eventPlayer, 5, 20)
             smallMessage(eventPlayer, "You are cured!")
-            playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.AQUA, eventPlayer.getPosition(), 50)
+            playAquaPowerUpSound()
             break
         #Instant Revive
         case 2:
@@ -491,7 +493,7 @@ def powerUpUsage():
         #Vaccine
         case 7:
             playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.GREEN, eventPlayer, 6)
-            playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.AQUA, eventPlayer.getPosition(), 50)
+            playAquaPowerUpSound()
             smallMessage(eventPlayer, "Your infection is reduced!")
             getPlayersInRadius(eventPlayer, 3, Team.1, LosCheck.SURFACES).infectionLevel -= 1.5
             break
@@ -525,3 +527,9 @@ def powerUpUsage():
                 return
             break
     eventPlayer.powerUpItemId = 0
+
+
+def playAquaPowerUpSound():
+    @Name "playAquaPowerUpSound"
+
+    playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.AQUA, eventPlayer.getPosition(), 50)
