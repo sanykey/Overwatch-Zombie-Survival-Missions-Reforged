@@ -50,21 +50,25 @@ rule "EFFECT/TEXT (PERMANENT)":
                 "Stun"
             ][evalOnce(powerUpHudItemIndex)],
             "Hold [{0}] to drop your power up".format(inputBindingString(Button.RELOAD)),
-            [
-                "Hold [{0}] to stop all damage over time and cure yourself".format(inputBindingString(Button.INTERACT)),
-                "Look at a teammate and hold [{0}] to revive them".format(inputBindingString(Button.INTERACT)),
-                "Hold [{0}] to place a force field".format(inputBindingString(Button.INTERACT)),
-                "Hold [{0}] to get fast cooldowns".format(inputBindingString(Button.INTERACT)),
-                "Hold [{0}] to call in an air strike".format(inputBindingString(Button.INTERACT)),
-                "Hold [{0}] to place a healing beacon and gain bonus healing".format(inputBindingString(Button.INTERACT)),
-                "Hold [{0}] to increase your resistance to infection".format(inputBindingString(Button.INTERACT)),
-                "Hold [{0}] to place a sentry turret".format(inputBindingString(Button.INTERACT)),
-                "Hold [{0}] to become invisible to enemies".format(inputBindingString(Button.INTERACT)),
-                "Hold [{0}] to increase your damage and speed".format(inputBindingString(Button.INTERACT)),
-                "Hold [{0}] to place a bounce pad".format(inputBindingString(Button.INTERACT)),
-                "Hold [{0}] to rapidly charge your ultimate".format(inputBindingString(Button.INTERACT)),
-                "Hold [{0}] to stun nearby enemies".format(inputBindingString(Button.INTERACT))
-            ][evalOnce(powerUpHudItemIndex)],
+            "{0} [{1}] {2}".format(
+                "Look at a teammate and hold" if evalOnce(powerUpHudItemIndex) == 1 else "Hold",
+                inputBindingString(Button.INTERACT),
+                [
+                    "to stop all damage over time and cure yourself",
+                    "to revive them",
+                    "to place a force field",
+                    "to get fast cooldowns",
+                    "to call in an air strike",
+                    "to place a healing beacon and gain bonus healing",
+                    "to increase your resistance to infection",
+                    "to place a sentry turret",
+                    "to become invisible to enemies",
+                    "to increase your damage and speed",
+                    "to place a bounce pad",
+                    "to rapidly charge your ultimate",
+                    "to stun nearby enemies"
+                ][evalOnce(powerUpHudItemIndex)]
+            ),
             HudPosition.LEFT,
             100,
             evalOnce(powerUpColorListConst[powerUpHudItemIndex]),

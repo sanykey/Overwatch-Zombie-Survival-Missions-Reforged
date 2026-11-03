@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **26,628 elements**, freeing up **5,636** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **82/128**.
+The current OverPy 9.7.20 build uses **26,579 elements**, freeing up **5,685** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **82/128**.
+
+- The 13 consumable instructions now use one `"{0} [{1}] {2}"` format with a shared opening and the original special opening for Revive: **26,628 → 26,579 (−49 elements)**, without new variables. Item names, all 13 HUD objects, the Interact binding, the Reload instruction, captured item indices, colors and reevaluation flags are preserved. All 13 rendered instructions were compared for three binding names (39 comparisons); only `EFFECT/TEXT (PERMANENT)` changed among 237 compiled rules, with no emitted warnings. In-game display has not been checked.
 
 - Two Laser Barricade collision checks now use a dot product instead of a trigonometric projection onto the saved unit edge direction: **26,662 → 26,628 (−34 elements)**, without new variables. The original absolute value, barricade-width clamp, horizontal point projection, four independent rule conditions and target filter remain. The isolated build changes only `LASER BARRICADE BLOCKS ZOMBIES` and emits no warnings. Numerical checks found differences only at the exact 1.5 m boundary due to floating-point operation order; in-game behavior and runtime load have not been measured.
 
