@@ -143,9 +143,9 @@ def playerForceField():
     @Name "playerForceField (10-19)"
     
     eventPlayer.powerUpForceFieldPosition = eventPlayer.getPosition()
-    if not entityExists(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.FORCE_FIELD_SPHERE]):
+    if not entityExists(eventPlayer.powerUpForceFieldSphereId):
         createEffect(getAllPlayers(), Effect.SPHERE, Color.BLUE, eventPlayer.powerUpForceFieldPosition, 7.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.FORCE_FIELD_SPHERE] = getLastCreatedEntity()
+        eventPlayer.powerUpForceFieldSphereId = getLastCreatedEntity()
         hudHeader(eventPlayer, "Force Field: {0}s".format(ceil(eventPlayer.powerUpForceFieldTimeRemaining)), HudPosition.RIGHT, 0.2, Color.BLUE, HudReeval.VISIBILITY_AND_STRING)
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.FORCE_FIELD_HUD] = getLastCreatedText()
     playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.BLUE, eventPlayer.powerUpForceFieldPosition, 3)
@@ -158,7 +158,7 @@ def playerForceField():
             if distance(getLivingPlayers(Team.2)[forceFieldZombieIndex], eventPlayer.powerUpForceFieldPosition) <= 7.5:
                 getLivingPlayers(Team.2)[forceFieldZombieIndex].applyImpulse(directionTowards(eventPlayer.powerUpForceFieldPosition, getLivingPlayers(Team.2)[forceFieldZombieIndex].getPosition()), 6, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
         wait(0.032)
-    destroyEffect(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.FORCE_FIELD_SPHERE])
+    destroyEffect(eventPlayer.powerUpForceFieldSphereId)
     destroyHudText(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.FORCE_FIELD_HUD])
     eventPlayer.powerUpForceFieldPosition = 0
 
@@ -234,9 +234,9 @@ def healBeacon():
     @Name "beaconofHealing (40-49)"
     
     eventPlayer.powerUpHealBeaconPosition = eventPlayer.getPosition()
-    if not entityExists(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_LIGHT_SHAFT]):
+    if not entityExists(eventPlayer.powerUpHealBeaconLightShaftId):
         createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition + -2 * Vector.UP, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_LIGHT_SHAFT] = getLastCreatedEntity()
+        eventPlayer.powerUpHealBeaconLightShaftId = getLastCreatedEntity()
         createEffect(getAllPlayers(), Effect.RING, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition, 10, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_RING] = getLastCreatedEntity()
         hudHeader(eventPlayer, "Beacon of Healing: {0}s".format(ceil(eventPlayer.powerUpHealBeaconTimeRemaining)), HudPosition.RIGHT, 0.2, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)
@@ -251,7 +251,7 @@ def healBeacon():
         wait(1)
         playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition + Vector.UP, 0.1)
         getPlayersInRadius(eventPlayer.powerUpHealBeaconPosition, 10, eventPlayer.getTeam()).startHealingOverTime(eventPlayer, 2, 30)
-    destroyEffect(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_LIGHT_SHAFT])
+    destroyEffect(eventPlayer.powerUpHealBeaconLightShaftId)
     destroyEffect(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_RING])
     destroyHudText(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_HUD])
     destroyEffect(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_AURA])

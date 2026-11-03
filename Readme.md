@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **26,579 elements**, freeing up **5,685** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **82/128**.
+The current OverPy 9.7.20 build uses **26,565 elements**, freeing up **5,699** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+
+- The Force Field sphere and Heal Beacon light shaft IDs now use dedicated player variables instead of `powerUpEntityIdList`: **26,579 → 26,565 (−14 elements)** for 2 player slots. All three references to each ID were replaced: the existence check, assignment after creation and effect destruction. Only the two corresponding subroutines changed among 237 compiled rules; the real include build matched the in-memory build and emitted no warnings. In-game validation and runtime benchmarks have not been performed.
 
 - The 13 consumable instructions now use one `"{0} [{1}] {2}"` format with a shared opening and the original special opening for Revive: **26,628 → 26,579 (−49 elements)**, without new variables. Item names, all 13 HUD objects, the Interact binding, the Reload instruction, captured item indices, colors and reevaluation flags are preserved. All 13 rendered instructions were compared for three binding names (39 comparisons); only `EFFECT/TEXT (PERMANENT)` changed among 237 compiled rules, with no emitted warnings. In-game display has not been checked.
 

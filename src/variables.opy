@@ -73,10 +73,8 @@ enum ReconnectStatus:
 # Remaining sparse indices in powerUpEntityIdList; frequently used IDs have dedicated player variables below.
 # Turret effect slots 50..54 stay contiguous for creation and cleanup loops.
 enum PowerUpEntitySlot:
-    FORCE_FIELD_SPHERE = 10,
     FORCE_FIELD_HUD = 11,
     AIR_STRIKE_CLOUD = 31,
-    HEAL_BEACON_LIGHT_SHAFT = 40,
     HEAL_BEACON_RING = 41,
     HEAL_BEACON_HUD = 42,
     HEAL_BEACON_AURA = 43,
@@ -557,6 +555,8 @@ playervar actorTeamSlot4  # Team 2: botLoopIndexSlot; Team 1: powerUpEntityIdLis
 #!define powerUpEntityIdList actorTeamSlot4
 
 # Frequently accessed item handles are kept directly on the owning player.
+playervar powerUpForceFieldSphereId
+playervar powerUpHealBeaconLightShaftId
 playervar powerUpNoCooldownsHudId
 playervar powerUpAirStrikeRingId
 playervar powerUpCloakingDeviceSphereId
