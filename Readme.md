@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **25,504 elements**, freeing up **6,760** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+The current OverPy 9.7.20 build uses **25,441 elements**, freeing up **6,823** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+
+- Another 63 explicit `getPosition()` wrappers were removed from `distance` and `directionTowards`: 18 second-argument distances, 12 first-argument distances, 12 first-argument directions, 5 second-argument directions, and 16 distances inside player lambdas. This reduces the build from **25,504 to 25,441 elements** without new variables. The verification compares all 268 compiled rules, finds 40 affected rules, checks the direct include build, and reports no warnings. Player-as-position behavior still needs in-game validation. Recheck: `node analysis/verify-position-optimizations-2026-11-03.cjs`.
 
 - Position-valued `distance` and `directionTowards` calls now pass players directly where the source previously wrapped them in `getPosition()`: 72 two-player distances, 51 other distances with a player first, and 18 two-player directions. The supply pickup visibility check uses `.any()`, and Daytaker's two identical abort resets share one subroutine. Together these changes reduce the build from **25,738 to 25,504 (−234 elements)** without new variables. Validation compared all 267 preceding rules: 69 changed, none were removed, and only the Daytaker helper was added. The direct include build matches the in-memory build and emits no warnings. The player-as-position equivalence follows existing uses in this project but has not been validated in-game, including for dead or absent targets and exact distance boundaries. Recheck: `node analysis/verify-position-optimizations-2026-11-03.cjs`.
 

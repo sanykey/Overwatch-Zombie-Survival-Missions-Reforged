@@ -114,7 +114,7 @@ rule "BIOWASTE IS PICKED UP":
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isAlive() == true
     @Condition len(biomorphingResourcePositionList) > 0
-    @Condition (biomorphingResourcePositionList.any(lambda x: distance(x, eventPlayer.getPosition()) < 2 or distance(x, eventPlayer.getEyePosition()) < 2)) == true
+    @Condition (biomorphingResourcePositionList.any(lambda x: distance(x, eventPlayer) < 2 or distance(x, eventPlayer.getEyePosition()) < 2)) == true
     @Condition (not eventPlayer.isDummy() or eventPlayer.getTeam() == Team.2) == true
     
     wait(0.1, Wait.ABORT_WHEN_FALSE)
@@ -144,7 +144,7 @@ rule "PLAYER DELIVERS RESOURCE VALUE":
     @Condition eventPlayer.invisibilityCount != true
     @Condition eventPlayer.biomorphingResourceAmount > 0
     @Condition eventPlayer.isAlive() == true
-    @Condition distance(currentObjectivePosition, eventPlayer.getPosition()) < objectiveRad
+    @Condition distance(currentObjectivePosition, eventPlayer) < objectiveRad
     @Condition eventPlayer.isAfk != true
     
     eventPlayer.clearStatusEffect(Status.PHASED_OUT)

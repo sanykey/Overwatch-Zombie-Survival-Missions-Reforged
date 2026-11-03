@@ -6,6 +6,7 @@ const {execFileSync} = require('node:child_process');
 const {files, compile, compiler, src} = require('./measure-further-optimizations.cjs');
 const {rules} = require('./verify-player-variables.cjs');
 const {variants} = require('./probe-after-25738-2026-11-03.cjs');
+const {variants: nextVariants} = require('./probe-next-positions-2026-11-03.cjs');
 
 const baselineRef = 'a4bc82b';
 const selected = ['supply_pickup_any', 'daytaker_shared_abort',
@@ -28,17 +29,25 @@ async function main() {
             .replace(/\r\n/g, '\n')]));
     const expected = {...baseline};
     for (const name of selected) variants[name](expected);
-    assert.deepEqual(files, expected, 'Sources differ from the measured variant');
+    const latestExpected = {...expected};
+    const nextCounts = Object.fromEntries(Object.entries(nextVariants).map(([name, transform]) =>
+        [name, transform(latestExpected).length]));
+    assert.deepEqual(files, latestExpected, 'Sources differ from the measured variants');
 
     const before = await compile(baseline);
-    const after = await compile(files);
+    const after = await compile(expected);
+    const latest = await compile(files);
     assert.equal(before.elements, 25738);
     assert.equal(after.elements, 25504);
+    assert.equal(latest.elements, 25441);
     assert.deepEqual(before.warnings, []);
     assert.deepEqual(after.warnings, []);
+    assert.deepEqual(latest.warnings, []);
     const oldRules = rules(before.result), newRules = rules(after.result);
+    const latestRules = rules(latest.result);
     assert.equal(oldRules.length, 267);
     assert.equal(newRules.length, 268);
+    assert.equal(latestRules.length, 268);
     const oldByKey = keyedRules(oldRules), newByKey = keyedRules(newRules);
     const removedRules = [...oldByKey.keys()].filter(key => !newByKey.has(key));
     const addedRules = [...newByKey.keys()].filter(key => !oldByKey.has(key));
@@ -52,6 +61,14 @@ async function main() {
     assert.equal((before.result.match(/Position Of\(/g) || []).length -
         (after.result.match(/Position Of\(/g) || []).length, 231,
         'Expected 231 explicit position wrappers to be removed');
+    const previousByKey = keyedRules(newRules), latestByKey = keyedRules(latestRules);
+    assert.deepEqual([...previousByKey.keys()], [...latestByKey.keys()]);
+    const latestChangedRules = [...previousByKey].filter(([key, body]) =>
+        latestByKey.get(key) !== body).map(([key]) => key);
+    assert.equal(latestChangedRules.length, 40);
+    assert.equal((after.result.match(/Position Of\(/g) || []).length -
+        (latest.result.match(/Position Of\(/g) || []).length, 63,
+        'Expected 63 further position wrappers to be removed');
 
     const savedLog = console.log;
     let included;
@@ -60,18 +77,20 @@ async function main() {
         included = await compiler.compile(files['main.opy'].replace(/^#!writeToOutputFile.*\n/gm, ''),
             'en-US', src.replace(/\\/g, '/') + '/', 'main.opy');
     } finally {console.log = savedLog;}
-    assert.equal(included.nbElements, after.elements);
+    assert.equal(included.nbElements, latest.elements);
     assert.deepEqual(included.encounteredWarnings, []);
-    assert.deepEqual(rules(included.result), newRules);
+    assert.deepEqual(rules(included.result), latestRules);
     for (const [file, contents] of Object.entries(files))
         assert.equal(fs.readFileSync(path.join(src, file), 'utf8').replace(/\r\n/g, '\n'), contents,
             `Source changed during verification: ${file}`);
     fs.writeFileSync(path.join(src, 'main.ws.txt'), included.result);
-    console.log(JSON.stringify({baselineRef, before: before.elements, after: after.elements,
-        saved: before.elements - after.elements, oldRules: oldRules.length,
-        newRules: newRules.length, changedRules: changedRules.length,
+    console.log(JSON.stringify({baselineRef, before: before.elements, previous: after.elements,
+        after: latest.elements, saved: after.elements - latest.elements, counts: nextCounts,
+        oldRules: oldRules.length, newRules: latestRules.length,
+        previousChangedRules: changedRules.length, latestChangedRules: latestChangedRules.length,
         newHelper: addedRules[0], removedPositionWrappers: 231,
-        warnings: after.warnings.length, directIncludeBuild: true,
+        furtherRemovedPositionWrappers: 63,
+        warnings: latest.warnings.length, directIncludeBuild: true,
         inGameValidated: false}));
 }
 main().catch(error => {console.error(error); process.exitCode = 1;});

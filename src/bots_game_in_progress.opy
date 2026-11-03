@@ -28,7 +28,7 @@ macro botTeleportCenterMacro():
     #Killzone
     elif currentObjectiveType == ObjectiveType.KILL_ZONE:
         #If players are in the killzone
-        if playerTargetList.any(lambda x: distance(x.getPosition(), killZoneCenter) < objectiveRad):
+        if playerTargetList.any(lambda x: distance(x, killZoneCenter) < objectiveRad):
             #Player closeset to the center of the killzone
             botTeleportPivot = killZoneCenter
             setClosestPlayerTeleportCenter()
@@ -273,7 +273,7 @@ rule "DESELECT BOT TARGET":
     
     eventPlayer.botTarget = null
     if not eventPlayer.botIsThrottleOverridden:
-        eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botLastTarget.getPosition() + normalize(worldVector(eventPlayer.botLastTarget.getThrottle(), eventPlayer.botLastTarget, Transform.ROTATION)) * -2), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
+        eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.botLastTarget.getPosition() + normalize(worldVector(eventPlayer.botLastTarget.getThrottle(), eventPlayer.botLastTarget, Transform.ROTATION)) * -2), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
     if not eventPlayer.botIsFacingOverridden:
         eventPlayer.startFacing(eventPlayer.getThrottle(), 0 if eventPlayer.isCrowdControlled else 100, Relativity.TO_PLAYER)
     wait(0.125, Wait.RESTART_WHEN_TRUE)
@@ -435,9 +435,9 @@ def enterExitTeleport():
         eventPlayer.setGravity(100)
         if eventPlayer.botTarget == null:
             if eventPlayer.botTeleportPosition in botSpawnPointList:
-                eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), botSpawnWaypointList[botSpawnPointList.index(eventPlayer.botTeleportPosition)]), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
+                eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, botSpawnWaypointList[botSpawnPointList.index(eventPlayer.botTeleportPosition)]), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
             else:
-                eventPlayer.startThrottleInDirection(directionFromAngles(random.randint(-90, 90) + horizontalAngleOfDirection(directionTowards(eventPlayer.getPosition(), sorted(getLivingPlayers(Team.1).filter(lambda player: player.hasSpawned()), lambda x: distance(eventPlayer, x))[0].getPosition())), 0), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
+                eventPlayer.startThrottleInDirection(directionFromAngles(random.randint(-90, 90) + horizontalAngleOfDirection(directionTowards(eventPlayer, sorted(getLivingPlayers(Team.1).filter(lambda player: player.hasSpawned()), lambda x: distance(eventPlayer, x))[0].getPosition())), 0), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
         elif eventPlayer.botTarget != null:
             startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
 
@@ -461,7 +461,7 @@ def teleportBots():
             wait()
             eventPlayer.botTeleportPosition = 0
             #Teleport with max distance constraint no view angle constraint
-            while eventPlayer.botTeleportPosition == 0 or playerTargetList.any(lambda x: distance(eventPlayer.botTeleportPosition, x.getPosition()) < 15) or playerTargetList.all(lambda x: distance(eventPlayer.botTeleportPosition, x.getPosition()) > BOT_MAX_TELEPORT_RANGE):
+            while eventPlayer.botTeleportPosition == 0 or playerTargetList.any(lambda x: distance(eventPlayer.botTeleportPosition, x) < 15) or playerTargetList.all(lambda x: distance(eventPlayer.botTeleportPosition, x) > BOT_MAX_TELEPORT_RANGE):
                 # teleportCandidateSpawnPointList: saved spawn points within teleport range, to choose a nearby destination.
                 #!define teleportCandidateSpawnPointList tmp0
                 teleportCandidateSpawnPointList = botSpawnPointList.filter(lambda x: distance(x, eventPlayer.botTeleportCenter) < BOT_MAX_TELEPORT_RANGE)
@@ -476,7 +476,7 @@ def teleportBots():
                 else:
                     eventPlayer.botTeleportPosition = nearestWalkablePosition(eventPlayer.botTeleportCenter + directionFromAngles(random.uniform(0, 360), random.uniform(-20, 10)) * random.uniform(0, BOT_MAX_TELEPORT_RANGE))
                 wait(0.25)
-            if playerTargetList.all(lambda x: distance(eventPlayer.botTeleportPosition, x.getPosition()) > 10) and playerTargetList.filter(lambda x: x.isInViewAngle(eventPlayer.botTeleportPosition, 55)).all(lambda x: not isInLoS(x.getEyePosition(), eventPlayer.botTeleportPosition + losOffsetConst)):
+            if playerTargetList.all(lambda x: distance(eventPlayer.botTeleportPosition, x) > 10) and playerTargetList.filter(lambda x: x.isInViewAngle(eventPlayer.botTeleportPosition, 55)).all(lambda x: not isInLoS(x.getEyePosition(), eventPlayer.botTeleportPosition + losOffsetConst)):
                 eventPlayer.teleport(eventPlayer.botTeleportPosition)
                 eventPlayer.botIsTeleporting = false
             #Teleport was unsuccessful due to line of sight and view angle
@@ -513,7 +513,7 @@ def setClosestPlayerTeleportCenter():
     @Name "setClosestPlayerTeleportCenter"
 
     # Synchronous input handoff: callers assign botTeleportPivot immediately before this call.
-    eventPlayer.botTeleportCenter = sorted(playerTargetList, lambda x: distance(x.getPosition(), botTeleportPivot))[0].getPosition()
+    eventPlayer.botTeleportCenter = sorted(playerTargetList, lambda x: distance(x, botTeleportPivot))[0].getPosition()
 
 
 def successfulTeleportStatus():

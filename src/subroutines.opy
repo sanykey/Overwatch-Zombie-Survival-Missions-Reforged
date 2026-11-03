@@ -306,7 +306,7 @@ macro globalObjectiveEntityManagementMacro():
         createIcon(getAllPlayers(), bossesStateList[0].getEyePosition() + Vector.UP if len(bossesStateList) > 0 else currentObjectivePosition, Icon.SKULL, IconReeval.VISIBILITY_AND_POSITION, Color.RED)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Boss Distance
-        createInWorldText(getAllPlayers().filter(lambda player: len(bossesStateList) == 0 or not player in bossesStateList[0].botPotentialTargetList), "Distance: {0}m".format(distance(localPlayer, bossesStateList[0].getPosition()) if len(bossesStateList) > 0 else distance(localPlayer, currentObjectivePosition)), bossesStateList[0].getPosition() if len(bossesStateList) > 0 else currentObjectivePosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.RED, SpecVisibility.NEVER)
+        createInWorldText(getAllPlayers().filter(lambda player: len(bossesStateList) == 0 or not player in bossesStateList[0].botPotentialTargetList), "Distance: {0}m".format(distance(localPlayer, bossesStateList[0]) if len(bossesStateList) > 0 else distance(localPlayer, currentObjectivePosition)), bossesStateList[0].getPosition() if len(bossesStateList) > 0 else currentObjectivePosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.RED, SpecVisibility.NEVER)
         objectiveEntityIdList.append(getLastCreatedText())
     #Biomoprhing
     elif objectiveValue == ObjectiveType.BIOMORPHING:
@@ -682,7 +682,7 @@ def selectTarget():
     #For projectile firing heroes
     if not eventPlayer in bossStateList and eventPlayer.getHero() == Hero.PHARAH:
         #Players in Air
-        botSelectionCandidateList.append(playerTargetList.filter(lambda x: distance(x.getPosition(), nearestWalkablePosition(x.getPosition())) > 5))
+        botSelectionCandidateList.append(playerTargetList.filter(lambda x: distance(x, nearestWalkablePosition(x.getPosition())) > 5))
     #Add players who are below bot to target list
     botSelectionCandidateList.append(sorted(playerTargetList.exclude(botSelectionCandidateList).filter(lambda x: x.getPosition().y - eventPlayer.getPosition().y < 2.5), lambda x: distance(eventPlayer, x)))
     #Add remaining players

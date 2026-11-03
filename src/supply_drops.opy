@@ -35,11 +35,11 @@ rule "GENERATE SUPPLY DROPS":
         #Find the closest player to the objective
         # supplyDropClosestPlayer: player closest to the objective, used as the center for choosing a supply-drop location.
         #!define supplyDropClosestPlayer tmp0
-        supplyDropClosestPlayer = sorted(playerTargetList, lambda x: distance(x.getPosition(), currentObjectivePosition))[0]
+        supplyDropClosestPlayer = sorted(playerTargetList, lambda x: distance(x, currentObjectivePosition))[0]
         # supplyDropCandidatePosition: candidate drop position 20-35m from supplyDropClosestPlayer, to check clearance from all players.
         #!define supplyDropCandidatePosition tmp1
-        supplyDropCandidatePosition = random.choice(mapGridList.filter(lambda x: distance(supplyDropClosestPlayer.getPosition(), x) < 35 and distance(supplyDropClosestPlayer.getPosition(), x) > 20))
-        if playerTargetList.all(lambda x: distance(supplyDropCandidatePosition, x.getPosition()) > 20):
+        supplyDropCandidatePosition = random.choice(mapGridList.filter(lambda x: distance(supplyDropClosestPlayer, x) < 35 and distance(supplyDropClosestPlayer, x) > 20))
+        if playerTargetList.all(lambda x: distance(supplyDropCandidatePosition, x) > 20):
             #Sets supply drop location
             supplyDropLandingPosition = supplyDropCandidatePosition
             #Sets supply drop location to be placed on ground (in the case that a walkable position is underground for some reason)
@@ -100,7 +100,7 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         # supplyDropItemAngleOffset: item angle offset in degrees, to spread the opened supply drop's items toward the player.
         #!define supplyDropItemAngleOffset tmp0
         for supplyDropItemAngleOffset in range(-60, 61, 120 / (supplyDropPowerUpCount - 1)):
-            supplyPowerUpPositionList.append(supplyDropLandingPosition + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(supplyDropLandingPosition, eventPlayer.getPosition())) + supplyDropItemAngleOffset, 0)) * 2))
+            supplyPowerUpPositionList.append(supplyDropLandingPosition + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(supplyDropLandingPosition, eventPlayer)) + supplyDropItemAngleOffset, 0)) * 2))
     elif supplyPowerUpPositionList.any(lambda x: distance(x, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), x)) < 0.5 and distance(eventPlayer, x) <= 6):
         #Power up effect position
         eventPlayer.powerUpTradePosition = (sorted(supplyPowerUpPositionList.filter(lambda x: distance(x, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), x)) < 0.5 and distance(eventPlayer, x) <= 6), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x))))[0]
@@ -243,7 +243,7 @@ def healBeacon():
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_RING] = getLastCreatedEntity()
         hudHeader(eventPlayer, "Beacon of Healing: {0}s".format(ceil(eventPlayer.powerUpHealBeaconTimeRemaining)), HudPosition.RIGHT, 0.2, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_HUD] = getLastCreatedText()
-        createEffect(getAllPlayers(), Effect.GOOD_AURA, Color.YELLOW, eventPlayer, distance(eventPlayer.getEyePosition(), eventPlayer.getPosition()) * 0.9, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createEffect(getAllPlayers(), Effect.GOOD_AURA, Color.YELLOW, eventPlayer, distance(eventPlayer.getEyePosition(), eventPlayer) * 0.9, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_AURA] = getLastCreatedEntity()
     playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition, 10)
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.powerUpHealBeaconPosition, 50)
@@ -305,14 +305,14 @@ def cloakingDevice():
     if eventPlayer.powerUpCloakingDeviceSphereId == 0:
         eventPlayer.movementSpeedScale *= 1.5
         applyScaledMoveSpeed()
-        createEffect(getAllPlayers(), Effect.SPHERE, Color.BLUE, eventPlayer, distance(eventPlayer.getEyePosition(), eventPlayer.getPosition()) * 0.95, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createEffect(getAllPlayers(), Effect.SPHERE, Color.BLUE, eventPlayer, distance(eventPlayer.getEyePosition(), eventPlayer) * 0.95, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.powerUpCloakingDeviceSphereId = getLastCreatedEntity()
         hudText(eventPlayer, "Cloaking Device: {0}s".format(ceil(eventPlayer.powerUpCloakTimeRemaining)), null, "Cancel (Press [{0}] + [{1}])".format(inputBindingString(Button.CROUCH), inputBindingString(Button.INTERACT)) if eventPlayer.powerUpCloakTimeRemaining < 23 else [], HudPosition.RIGHT, 0.2, Color.BLUE, null, Color.BLUE, HudReeval.VISIBILITY_AND_STRING)
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.CLOAKING_DEVICE_HUD] = getLastCreatedText()
         eventPlayer.invisibilityCount++
     if not eventPlayer.invisibilityCount:
         smallMessage(eventPlayer, "Cloaking activated. You are now invisible.")
-    playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.BLUE, eventPlayer.getPosition(), distance(eventPlayer.getEyePosition(), eventPlayer.getPosition()) * 0.95)
+    playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.BLUE, eventPlayer.getPosition(), distance(eventPlayer.getEyePosition(), eventPlayer) * 0.95)
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.getPosition(), 50)
     #Cloaking Duration
     for eventPlayer.powerUpCloakTimeRemaining in range(25, 0, -1):
@@ -338,7 +338,7 @@ def superNano():
     if eventPlayer.powerUpSuperNanoGoodAuraId == 0:
         eventPlayer.movementSpeedScale *= 1.5
         applyScaledMoveSpeed()
-        createEffect(getAllPlayers(), Effect.GOOD_AURA, Color.RED, eventPlayer, distance(eventPlayer.getEyePosition(), eventPlayer.getPosition()) * 0.95, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createEffect(getAllPlayers(), Effect.GOOD_AURA, Color.RED, eventPlayer, distance(eventPlayer.getEyePosition(), eventPlayer) * 0.95, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.powerUpSuperNanoGoodAuraId = getLastCreatedEntity()
         hudHeader(eventPlayer, "Super Nano: {0}s".format(ceil(eventPlayer.powerUpSuperNanoTimeRemaining)), HudPosition.RIGHT, 0.2, Color.RED, HudReeval.VISIBILITY_AND_STRING)
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SUPER_NANO_HUD] = getLastCreatedText()
@@ -350,7 +350,7 @@ def superNano():
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SUPER_NANO_DAMAGE_RECEIVED_MODIFICATION] = getLastDamageModification()
     heal(eventPlayer, null, 100)
     eventPlayer.setDamageReceived(50)
-    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.RED, eventPlayer.getPosition(), distance(eventPlayer.getEyePosition(), eventPlayer.getPosition()) * 0.95)
+    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.RED, eventPlayer.getPosition(), distance(eventPlayer.getEyePosition(), eventPlayer) * 0.95)
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.RED, eventPlayer.getPosition(), 50)
     for eventPlayer.powerUpSuperNanoTimeRemaining in range(20, 0, -1):
         if eventPlayer.isDead():
@@ -388,7 +388,7 @@ def bouncePad():
         #Determine which players are on the bounce pad
         # bouncePadSurvivorList: grounded survivors on this pad, to apply the bounce and play feedback for this tick.
         #!define bouncePadSurvivorList tmp0
-        bouncePadSurvivorList = getLivingPlayers(Team.1).filter(lambda player: distance(eventPlayer.powerUpBouncePadPosition, player.getPosition()) < 2 and player.isOnGround())
+        bouncePadSurvivorList = getLivingPlayers(Team.1).filter(lambda player: distance(eventPlayer.powerUpBouncePadPosition, player) < 2 and player.isOnGround())
         if len(bouncePadSurvivorList) > 0:
             bouncePadSurvivorList.applyImpulse(Vector.UP, 22, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
             playEffect(bouncePadSurvivorList, DynamicEffect.RING_EXPLOSION_SOUND, Color.WHITE, eventPlayer.powerUpBouncePadPosition, 50)

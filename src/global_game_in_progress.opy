@@ -22,11 +22,11 @@ rule "ATTACK SPAWN ROOM CONTROL":
     @Condition isPregameSetup != true
     #Does not apply if game mode is special mode
     @Condition isSpecialGameMode != true
-    @Condition playerTargetList.any(lambda x: distance(x.getPosition(), activeAttackSpawnRoom) < 45) == true
+    @Condition playerTargetList.any(lambda x: distance(x, activeAttackSpawnRoom) < 45) == true
     
     spawnRoomIndex = (spawnRoomIndex + 1) % len(attackSpawnRooms)
     #Make sure players are clear of test spawn room before activating
-    if getPlayers(Team.1).filter(lambda player: player.hasSpawned()).all(lambda x: distance(x.getPosition(), attackSpawnRooms[spawnRoomIndex]) > 45):
+    if getPlayers(Team.1).filter(lambda player: player.hasSpawned()).all(lambda x: distance(x, attackSpawnRooms[spawnRoomIndex]) > 45):
         activeAttackSpawnRoom = attackSpawnRooms[spawnRoomIndex]
         startForcingSpawn(Team.2, spawnRoomIndex)
     wait(1)

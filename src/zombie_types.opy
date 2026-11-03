@@ -424,7 +424,7 @@ rule "ZOMBIES SPAWN AT REIGNITED":
     # reigniteSpawnSource: active Anran used only by the immediate emergence-destination search.
     #!define reigniteSpawnSource tmp0
     reigniteSpawnSource = getPlayersOnHero(Hero.ANRAN, Team.2).filter(lambda player: player.botIsReigniteActive)[0]
-    eventPlayer.botReigniteDestination = random.choice(mapGridList.filter(lambda x: distance(reigniteSpawnSource.getPosition(), x) > 2 and distance(reigniteSpawnSource.getPosition(), x) < 7))
+    eventPlayer.botReigniteDestination = random.choice(mapGridList.filter(lambda x: distance(reigniteSpawnSource, x) > 2 and distance(reigniteSpawnSource, x) < 7))
     eventPlayer.botReigniteRisePosition = eventPlayer.botReigniteDestination - 2 * Vector.UP
     eventPlayer.startForcingPosition(eventPlayer.botReigniteRisePosition)
     chaseOverTime(eventPlayer.botReigniteRisePosition, eventPlayer.botReigniteDestination, 1.5)
@@ -484,7 +484,7 @@ rule "RIDER DETATCH FROM TEAMMATES WHILE ALIVE":
     @Condition eventPlayer.botIsAttached == true
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer.botAbilityTarget.getTeam() == Team.2
-    @Condition (eventPlayer.botIsTeleporting or eventPlayer.botAbilityTarget.botIsTeleporting or distance(eventPlayer.getEyePosition(), eventPlayer.botTarget.getPosition()) < 3 or eventPlayer.botTarget.isOnGround() and eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0 and distance(eventPlayer.getEyePosition(), eventPlayer.botTarget.getPosition()) < 10) == true
+    @Condition (eventPlayer.botIsTeleporting or eventPlayer.botAbilityTarget.botIsTeleporting or distance(eventPlayer.getEyePosition(), eventPlayer.botTarget) < 3 or eventPlayer.botTarget.isOnGround() and eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0 and distance(eventPlayer.getEyePosition(), eventPlayer.botTarget) < 10) == true
     
     eventPlayer.botAbilityTarget = null
     eventPlayer.botIsAttached = false
@@ -500,7 +500,7 @@ rule "RIDER USE GRAPPLING HOOK":
     @Condition eventPlayer.botTarget.isOnGround() == true
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
     @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 20
-    @Condition distance(eventPlayer.getEyePosition(), eventPlayer.botTarget.getPosition()) < 20
+    @Condition distance(eventPlayer.getEyePosition(), eventPlayer.botTarget) < 20
     @Condition distance(eventPlayer, eventPlayer.botTarget) > 5
     
     eventPlayer.botIsFacingOverridden = true
@@ -552,7 +552,7 @@ rule "CHARGER (MAUGA) CHARGE":
             resumeBotFacingAndMovement()
             return
         wait(0.064)
-    eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition() if eventPlayer.botChargerDestination == null else eventPlayer.botChargerDestination), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
+    eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.botTarget.getPosition() if eventPlayer.botChargerDestination == null else eventPlayer.botChargerDestination), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
     eventPlayer.botIsFacingOverridden = true
     faceCurrentThrottle()
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -713,7 +713,7 @@ rule "STRIKER (WRECKING BALL) PILE DRIVER":
             eventPlayer.forceButtonPress(Button.JUMP)
             waitUntil(eventPlayer.isJumping(), 1)
         playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, eventPlayer.getPosition(), 4 * eventPlayer.sizeScale)
-        eventPlayer.applyImpulse(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition() + (10 * eventPlayer.sizeScale) * Vector.UP), 25, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+        eventPlayer.applyImpulse(directionTowards(eventPlayer, eventPlayer.botTarget.getPosition() + (10 * eventPlayer.sizeScale) * Vector.UP), 25, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
         wait(0.25)
         waitUntil(eventPlayer.getVelocity().y <= 0, 3)
     eventPlayer.forceButtonPress(Button.CROUCH)
@@ -1039,7 +1039,7 @@ rule "DAYTAKER (ILLARI) BURST":
         wait(0.2)
         playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer.botAbilityTarget.getPosition(), 1.5 * eventPlayer.botAbilityTarget.sizeScale)
         if eventPlayer.botTarget != null:
-            eventPlayer.botAbilityTarget.applyImpulse(directionTowards(eventPlayer.botAbilityTarget.getPosition(), eventPlayer.botTarget.getEyePosition() + (3 * eventPlayer.botTarget.sizeScale) * Vector.UP), 20 + 9 * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+            eventPlayer.botAbilityTarget.applyImpulse(directionTowards(eventPlayer.botAbilityTarget, eventPlayer.botTarget.getEyePosition() + (3 * eventPlayer.botTarget.sizeScale) * Vector.UP), 20 + 9 * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
         else:
             eventPlayer.botAbilityTarget.applyImpulse(directionFromAngles(eventPlayer.getHorizontalFacingAngle(), -35), 20 + 9 * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     eventPlayer.botAbilityTarget = null
@@ -1137,7 +1137,7 @@ rule "ENSNARER (HAZARD) BLOCKS PLAYERS":
         eventPlayer.botIsEnsnarerBlocking = true
         entityFloat()
         for eventPlayer.botEnsnarerTargetIndex in range(len(eventPlayer.botSpecialTargetList)):
-            eventPlayer.startFacing(directionTowards(eventPlayer.getPosition(), eventPlayer.botSpecialTargetList[eventPlayer.botEnsnarerTargetIndex].getPosition()) + -0.3 * Vector.UP, 10000)
+            eventPlayer.startFacing(directionTowards(eventPlayer, eventPlayer.botSpecialTargetList[eventPlayer.botEnsnarerTargetIndex].getPosition()) + -0.3 * Vector.UP, 10000)
             eventPlayer.cancelPrimaryAction()
             wait(0.1)
             eventPlayer.forceButtonPress(Button.ABILITY_2)

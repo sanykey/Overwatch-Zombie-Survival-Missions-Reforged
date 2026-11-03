@@ -32,7 +32,7 @@ rule "EXTRACTION ZONE INFECTION INCREASE":
     @Condition eventPlayer.isAlive() == true
     @Condition len(objectivePositionList) == 1
     @Condition extractionZoneRad < 200
-    @Condition distance(currentObjectivePosition, eventPlayer.getPosition()) > extractionZoneRad
+    @Condition distance(currentObjectivePosition, eventPlayer) > extractionZoneRad
     @Condition eventPlayer in objectivePlayerList == false
     
     wait(1, Wait.ABORT_WHEN_FALSE)
@@ -41,7 +41,7 @@ rule "EXTRACTION ZONE INFECTION INCREASE":
         eventPlayer.isInfected = true
     #Kick players out of the spawn room if dome is closing in.
     while eventPlayer.isInSpawnRoom():
-        eventPlayer.teleport(nearestWalkablePosition(eventPlayer.getPosition() + directionTowards(eventPlayer.getPosition(), currentObjectivePosition) * 10))
+        eventPlayer.teleport(nearestWalkablePosition(eventPlayer.getPosition() + directionTowards(eventPlayer, currentObjectivePosition) * 10))
         wait(0.125)
     loop()
 

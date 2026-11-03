@@ -135,7 +135,7 @@ rule "BOSS DIES (ALL BOSS OBJECTIVES)":
                     bossReturn()
                 else:
                     #17.532 is acceleration due to gravity constant
-                    eventPlayer.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getPosition(), getClosestPlayer(eventPlayer, Team.1).getPosition())), -75), max(1, sqrt(2 * 17.532 * (eventPlayer.botLastTarget.getPosition().y + 3 - eventPlayer.getPosition().y))), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+                    eventPlayer.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, getClosestPlayer(eventPlayer, Team.1))), -75), max(1, sqrt(2 * 17.532 * (eventPlayer.botLastTarget.getPosition().y + 3 - eventPlayer.getPosition().y))), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
                 wait()
                 eventPlayer.resurrect()
                 waitUntil(eventPlayer.isAlive(), 0.25)
@@ -200,7 +200,7 @@ def bossReturn():
     eventPlayer.botReturnTarget = eventPlayer.botLastTarget if eventPlayer.botLastTarget != null else getClosestPlayer(eventPlayer, Team.1)
     eventPlayer.teleport(nearestWalkablePosition(eventPlayer))
     wait(0.1)
-    eventPlayer.teleport(Vector.UP + (random.choice(mapGridList.filter(lambda x: isInLoS(x, eventPlayer.botTeleportCenter.getEyePosition()) and distance(x, eventPlayer.botReturnTarget.getPosition()) > 5 and distance(x, eventPlayer.botReturnTarget) < 20))))
+    eventPlayer.teleport(Vector.UP + (random.choice(mapGridList.filter(lambda x: isInLoS(x, eventPlayer.botTeleportCenter.getEyePosition()) and distance(x, eventPlayer.botReturnTarget) > 5 and distance(x, eventPlayer.botReturnTarget) < 20))))
     wait()
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.BLACK, eventPlayer, 3)
     eventPlayer.botReturnPosition = 0

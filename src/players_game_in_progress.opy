@@ -173,7 +173,7 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
         else:
             eventPlayer.rescueTimeRemaining += -0.5
         #Player is dead outside of extraction zone
-        if len(objectivePositionList) == 1 and distance(currentObjectivePosition, eventPlayer.getPosition()) > extractionZoneRad:
+        if len(objectivePositionList) == 1 and distance(currentObjectivePosition, eventPlayer) > extractionZoneRad:
             eventPlayer.rescueTimeRemaining = 0
         #Player's body falls off of map
         if eventPlayer.getPosition().y - nearestWalkablePosition(eventPlayer.getPosition()).y < -0.1:
@@ -216,7 +216,7 @@ rule "PLAYER PICKS UP HEALTH PACK":
     eventPlayer.startHealingOverTime(null, 5, 20)
     if difficultySetting < Difficulty.EXPERT or getMatchTime() > matchEndTime:
         #Update known health pack positions
-        if healthpackPositionList.all(lambda x: distance(x, eventPlayer.getPosition()) > 5):
+        if healthpackPositionList.all(lambda x: distance(x, eventPlayer) > 5):
             healthpackPositionList.append(eventPlayer.getPosition())
         eventPlayer.stopAllDamageOverTime()
         eventPlayer.clearStatusEffect(Status.BURNING)
@@ -367,7 +367,7 @@ def teleportDownedPlayerToWalkable():
     @Name "teleportDownedPlayerToWalkable"
 
     # Both downed-player paths use the same synchronous recovery teleport.
-    eventPlayer.teleport(nearestWalkablePosition(nearestWalkablePosition(eventPlayer.getPosition()) + directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getPosition(), nearestWalkablePosition(eventPlayer.getPosition()))), 0) * 2))
+    eventPlayer.teleport(nearestWalkablePosition(nearestWalkablePosition(eventPlayer.getPosition()) + directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, nearestWalkablePosition(eventPlayer.getPosition()))), 0) * 2))
 
 
 def updateUsers():

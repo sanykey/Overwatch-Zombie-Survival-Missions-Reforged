@@ -59,7 +59,7 @@ rule "INITIALIZE SURVIVOR TO BE RESCUED":
         #Path Markers
         createEffect(getAllPlayers().filter(lambda _: len(eventPlayer.rescuePathList) > evalOnce(rescuePathMarkerIndex * 3)), Effect.RING, Color.VIOLET, eventPlayer.rescuePathList[evalOnce(rescuePathMarkerIndex) * 3], 0.2)
     eventPlayer.startFacing(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getEyePosition(), eventPlayer.rescueLeader.getEyePosition())), 80 if eventPlayer.rescueLeader == null else verticalAngleOfDirection(directionTowards(eventPlayer.getEyePosition(), eventPlayer.rescueLeader.getEyePosition()))), 100)
-    eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), (eventPlayer.rescuePathList.filter(lambda x: distance(eventPlayer, x) < 2)).last() if eventPlayer.rescuePathList.any(lambda x: distance(eventPlayer, x) < 2) else eventPlayer.rescueLeader.getPosition()), 0 if eventPlayer.rescueLeader == null or distance(eventPlayer, eventPlayer.rescueLeader) < 1.5 else eventPlayer.rescueThrottleSpeed, Relativity.TO_WORLD)
+    eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, (eventPlayer.rescuePathList.filter(lambda x: distance(eventPlayer, x) < 2)).last() if eventPlayer.rescuePathList.any(lambda x: distance(eventPlayer, x) < 2) else eventPlayer.rescueLeader.getPosition()), 0 if eventPlayer.rescueLeader == null or distance(eventPlayer, eventPlayer.rescueLeader) < 1.5 else eventPlayer.rescueThrottleSpeed, Relativity.TO_WORLD)
 
 
 rule "SURVIVOR TO BE RESCUED DIES":
@@ -81,14 +81,14 @@ rule "SURVIVOR FOLLOW TARGET":
     @Condition rescueSurvivor.hasSpawned() == true
     @Condition rescueSurvivor.getHealth() > 1
     @Condition (playerTargetList.filter(lambda x: x != rescueSurvivor and not x.invisibilityCount).any(lambda x: distance(rescueSurvivor, x) < objectiveRad)) == true
-    @Condition distance(rescueSurvivor.getPosition(), currentObjectivePosition) >= 5
+    @Condition distance(rescueSurvivor, currentObjectivePosition) >= 5
     
     rescueSurvivor.clearStatusEffect(Status.PHASED_OUT)
     rescueSurvivor.rescueMoodIcon = iconString(Icon.SAD)
     rescueSurvivor.rescueThrottleSpeed = rescueSurvivor.getNormalizedHealth() * 0.7
     rescueSurvivor.rescuePotentialLeaderList = playerTargetList.filter(lambda x: x != rescueSurvivor and not x.invisibilityCount and distance(rescueSurvivor, x) < objectiveRad)
     if rescueSurvivor.rescueLeader == null or not rescueSurvivor.rescueLeader in rescueSurvivor.rescuePotentialLeaderList:
-        rescueSurvivor.rescueLeader = (sorted(playerTargetList.filter(lambda x: distance(rescueSurvivor, x) < objectiveRad), lambda x: distance(x.getPosition(), currentObjectivePosition)))[0]
+        rescueSurvivor.rescueLeader = (sorted(playerTargetList.filter(lambda x: distance(rescueSurvivor, x) < objectiveRad), lambda x: distance(x, currentObjectivePosition)))[0]
     if not rescueSurvivor in playerTargetList:
         #Add surivor to player target list
         playerTargetList.append(rescueSurvivor)
@@ -117,7 +117,7 @@ rule "CREATE PATH":
     @Condition rescueSurvivor.rescueLeader != null
     @Condition rescueSurvivor.rescueThrottleSpeed > 0
     @Condition rescueSurvivor.rescueLeader.getAltitude() <= 1.5
-    @Condition (len(rescueSurvivor.rescuePathList) == 0 or distance(rescueSurvivor.rescueLeader.getPosition(), rescueSurvivor.rescuePathList.last()) > 1) == true
+    @Condition (len(rescueSurvivor.rescuePathList) == 0 or distance(rescueSurvivor.rescueLeader, rescueSurvivor.rescuePathList.last()) > 1) == true
     
     rescueSurvivor.rescuePathList.append(rescueSurvivor.rescueLeader.getPosition())
     wait(0.25, Wait.RESTART_WHEN_TRUE)
@@ -127,11 +127,11 @@ rule "CREATE PATH":
 
 rule "DELETE PATH":
     @Condition currentObjectiveType == ObjectiveType.SURVIVOR_RESCUE
-    @Condition (rescueSurvivor.rescuePathList.any(lambda x: distance(rescueSurvivor.getPosition(), vect(x.x, rescueSurvivor.getPosition().y, x.z)) < 0.25 and abs(rescueSurvivor.getPosition().y - x.y) < 2)) == true
+    @Condition (rescueSurvivor.rescuePathList.any(lambda x: distance(rescueSurvivor, vect(x.x, rescueSurvivor.getPosition().y, x.z)) < 0.25 and abs(rescueSurvivor.getPosition().y - x.y) < 2)) == true
     
     # rescueReachedPathIndex: reached path index, consumed by the immediate path trim.
     #!define rescueReachedPathIndex tmp0
-    rescueReachedPathIndex = rescueSurvivor.rescuePathList.index(sorted(rescueSurvivor.rescuePathList, lambda x: distance(rescueSurvivor.getPosition(), x))[0])
+    rescueReachedPathIndex = rescueSurvivor.rescuePathList.index(sorted(rescueSurvivor.rescuePathList, lambda x: distance(rescueSurvivor, x))[0])
     rescueSurvivor.rescuePathList.remove(rescueSurvivor.rescuePathList.filter(lambda _, i: i <= rescueReachedPathIndex))
     wait(0.25, Wait.RESTART_WHEN_TRUE)
     if ruleCondition:
@@ -173,11 +173,11 @@ rule "SURVIVOR REACHES EXTRACTION SITE":
     @Condition currentObjectiveType == ObjectiveType.SURVIVOR_RESCUE
     @Condition isObjectiveComplete == false
     @Condition rescueSurvivor.hasSpawned() == true
-    @Condition distance(rescueSurvivor.getPosition(), currentObjectivePosition) < 5
+    @Condition distance(rescueSurvivor, currentObjectivePosition) < 5
     
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, null, rescueSurvivor, 200)
     rescueSurvivor.rescueMoodIcon = random.choice([iconString(Icon.HAPPY), iconString(Icon.HEART)])
-    rescueSurvivor.startThrottleInDirection(directionTowards(rescueSurvivor.getPosition(), currentObjectivePosition), 0.75 if distance(rescueSurvivor.getPosition(), currentObjectivePosition) > 1 else 0, Relativity.TO_WORLD)
+    rescueSurvivor.startThrottleInDirection(directionTowards(rescueSurvivor, currentObjectivePosition), 0.75 if distance(rescueSurvivor, currentObjectivePosition) > 1 else 0, Relativity.TO_WORLD)
     rescueSurvivor.startFacing(Vector.UP, 100)
     wait(1)
     rescueSurvivor.rescueIsExtracting = true

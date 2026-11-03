@@ -61,7 +61,7 @@ rule "BOTS TELEPORT TO THE EGG":
     @Condition eventPlayer.isAlive() == true
     @Condition entityExists(zombieEggStateList[0]) == true
     @Condition eventPlayer in zombieEggStateList != true
-    @Condition playerTargetList.any(lambda x: distance(currentObjectivePosition, x.getPosition()) < 40) == true
+    @Condition playerTargetList.any(lambda x: distance(currentObjectivePosition, x) < 40) == true
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.botIsTeleportConfirmed = true

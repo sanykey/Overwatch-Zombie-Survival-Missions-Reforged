@@ -24,7 +24,7 @@ macro fireSatelliteMacro():
     createIcon(getAllPlayers(), satelliteLaserPosition + Vector.UP, Icon.WARNING, IconReeval.VISIBILITY_AND_POSITION, Color.SKY_BLUE)
     objectiveEntityIdList.append(getLastCreatedEntity())
     #Laser distance
-    createInWorldText(getAllPlayers(), "Danger: {0}m".format(distance(satelliteLaserPosition, localPlayer.getPosition())), satelliteLaserPosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.SKY_BLUE)
+    createInWorldText(getAllPlayers(), "Danger: {0}m".format(distance(satelliteLaserPosition, localPlayer)), satelliteLaserPosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.SKY_BLUE)
     objectiveEntityIdList.append(getLastCreatedText())
     #Laser center beam
     createBeam(getAllPlayers(), Beam.BAD, satelliteLaserPosition + 700 * Vector.UP + directionFromAngles(getTotalTimeElapsed() * 360, 0) * 1, satelliteLaserPosition + -700 * Vector.UP + directionFromAngles(getTotalTimeElapsed() * 360, 0) * 1, Color.SKY_BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -45,7 +45,7 @@ macro fireSatelliteMacro():
     #Fire satellite
     for satelliteFiringStepsRemaining in range(40, 0, -1):
         stopChasing(satelliteLaserPosition)
-        satelliteLaserTarget = (sorted(getLivingPlayers(Team.2).filter(lambda player: not player.botIsTeleporting), lambda x: distance(x.getPosition(), satelliteLaserPosition)))[0]
+        satelliteLaserTarget = (sorted(getLivingPlayers(Team.2).filter(lambda player: not player.botIsTeleporting), lambda x: distance(x, satelliteLaserPosition)))[0]
         if satelliteLaserTarget != null:
             #Chase closest living zombie
             chaseSatelliteTarget()
@@ -110,7 +110,7 @@ rule "PLAYERS AT TERMINALS CONTROLS":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.invisibilityCount != true
-    @Condition (satelliteTerminalPositionList.filter(lambda _, i: satelliteTerminalProgressList[i] < 100).any(lambda x: distance(x, eventPlayer.getPosition()) < objectiveRad and x.x != null)) == true
+    @Condition (satelliteTerminalPositionList.filter(lambda _, i: satelliteTerminalProgressList[i] < 100).any(lambda x: distance(x, eventPlayer) < objectiveRad and x.x != null)) == true
     
     if not eventPlayer in objectivePlayerList:
         objectivePlayerList.append(eventPlayer)
@@ -132,7 +132,7 @@ rule "PLAYERS REPAIR TERMINALS":
     #!define satelliteRepairPlayerCount tmp1
     for satelliteRepairTerminalIndex in range(len(satelliteTerminalPositionList)):
         if satelliteTerminalProgressList[satelliteRepairTerminalIndex] < 100:
-            satelliteRepairPlayerCount = len(objectivePlayerList.filter(lambda x: distance(satelliteTerminalPositionList[satelliteRepairTerminalIndex], x.getPosition()) < objectiveRad))
+            satelliteRepairPlayerCount = len(objectivePlayerList.filter(lambda x: distance(satelliteTerminalPositionList[satelliteRepairTerminalIndex], x) < objectiveRad))
             if satelliteRepairPlayerCount > 0:
                 if satelliteRepairPlayerCount > 1:
                     #2 or more players on the terminal

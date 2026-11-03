@@ -253,7 +253,7 @@ rule "LASER BARRICADE BLOCKS ZOMBIES":
             damage(barrierCollisionTarget, eventPlayer, 10)
         if barrierCollisionTarget.getThrottle() == vect(0, 0, 0):
             #If bot is not throttling
-            barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(barrierPushReferencePointList, lambda x: distance(barrierCollisionTarget.getPosition(), x)))[0])), (-1 if barrierCollisionTarget.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(barrierCollisionTarget.getPosition(), barrierCollisionTarget.getPosition() + Vector.DOWN, null, getAllPlayers(), false))))), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
+            barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(barrierPushReferencePointList, lambda x: distance(barrierCollisionTarget, x)))[0])), (-1 if barrierCollisionTarget.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(barrierCollisionTarget.getPosition(), barrierCollisionTarget.getPosition() + Vector.DOWN, null, getAllPlayers(), false))))), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
         else:
             #If bot is throttling
             barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(barrierPushReferencePointList, lambda x: angleBetweenVectors(worldVector(barrierCollisionTarget.getThrottle(), barrierCollisionTarget, Transform.ROTATION), directionTowards(eventPlayer.enhancementBarrierPosition, x)))).last())), (-1 if barrierCollisionTarget.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(barrierCollisionTarget.getPosition(), barrierCollisionTarget.getPosition() + Vector.DOWN, null, getAllPlayers(), false))))), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
@@ -422,7 +422,7 @@ rule "CHARGE BATTERY (USAGE AND COOLDOWNS)":
     @Condition isGameplayActive == true
     @Condition eventPlayer.enhancementId == Enhancement.CHARGE_BATTERY
     @Condition eventPlayer.enhancementBatteryPosition != 0
-    @Condition (playerTargetList.any(lambda x: x.getUltCharge() < 100 and distance(x.getPosition(), eventPlayer.enhancementBatteryPosition) < 1.5 * x.sizeScale)) == true
+    @Condition (playerTargetList.any(lambda x: x.getUltCharge() < 100 and distance(x, eventPlayer.enhancementBatteryPosition) < 1.5 * x.sizeScale)) == true
     
     # batteryChargeRecipient: survivor using the battery, to play feedback and grant ultimate charge before cooldown waits.
     #!define batteryChargeRecipient tmp0
@@ -610,7 +610,7 @@ rule "P.U.P. CONTROL":
             #Beam hits P.U.P.'s target
             playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.RED, eventPlayer.enhancementPupTarget, 1)
             eventPlayer.enhancementPupTarget.setStatusEffect(eventPlayer, Status.BURNING, 3)
-            eventPlayer.enhancementPupTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget.getPosition())), min(-20, verticalAngleOfDirection(directionTowards(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget.getPosition())))), min(25, 4200 / eventPlayer.enhancementPupTarget.getMaxHealth()), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+            eventPlayer.enhancementPupTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget)), min(-20, verticalAngleOfDirection(directionTowards(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget)))), min(25, 4200 / eventPlayer.enhancementPupTarget.getMaxHealth()), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
             eventPlayer.enhancementPupTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 1)
             #Laser cooldown
             eventPlayer.enhancementPupCooldown = 1
