@@ -58,15 +58,9 @@ rule "BIOMORPHING GOAL START":
     # The resource-type slot belongs to the Rescue NPC after an objective transition.
     if currentObjectiveType != ObjectiveType.BIOMORPHING:
         return
-    if biomorphingGoalQueueList[0] == 0:
-        biomorphingGoalText = "Deposit a head for extra points"
-        biomorphingGoalColor = Color.BLUE
-    elif biomorphingGoalQueueList[0] == 1:
-        biomorphingGoalText = "Deposit an arm for extra points"
-        biomorphingGoalColor = Color.TURQUOISE
-    elif biomorphingGoalQueueList[0] == 2:
-        biomorphingGoalText = "Deposit a leg for extra points"
-        biomorphingGoalColor = Color.SKY_BLUE
+    if biomorphingGoalQueueList[0] in [0, 1, 2]:
+        biomorphingGoalText = ["Deposit a head for extra points", "Deposit an arm for extra points", "Deposit a leg for extra points"][biomorphingGoalQueueList[0]]
+        biomorphingGoalColor = biomorphingResourceColorList[biomorphingGoalQueueList[0]]
     else:
         biomorphingGoalText = "Hand over your blood."
         playEffect(getAllPlayers(), DynamicEffect.DEBUFF_IMPACT_SOUND, null, currentObjectivePosition, 200)

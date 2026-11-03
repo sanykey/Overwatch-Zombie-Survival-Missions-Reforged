@@ -48,13 +48,10 @@ macro botStatManagementMacro():
     eventPlayer.botBiteDuration = botBiteDurationList[botStatHeroIndex]
     #Range from 0 to 1 in terms of throttle
     eventPlayer.botThrottleSpeed = botThrottleSpeedList[botStatHeroIndex]
-    # botStatDamageScale: normalized damage multiplier; the hero index is no longer needed after this lookup.
-    #!define botStatDamageScale tmp0
-    botStatDamageScale = botDamageDealtList[botStatHeroIndex] / 100
-    eventPlayer.setDamageDealt(botStatDamageScale * 100)
+    eventPlayer.setDamageDealt(botDamageDealtList[botStatHeroIndex] / 100 * 100)
     eventPlayer.setDamageReceived(100)
     eventPlayer.movementSpeedScale = 1
-    eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100 + ((len(getDeadPlayers(Team.1).filter(lambda player: player.rescueTimeRemaining <= 0))) * 3))
+    eventPlayer.setMoveSpeed(100 + ((len(getDeadPlayers(Team.1).filter(lambda player: player.rescueTimeRemaining <= 0))) * 3))
     eventPlayer.setJumpVerticalSpeed(100)
     eventPlayer.setHealingReceived(100)
     eventPlayer.setProjectileSpeed(100)
@@ -752,10 +749,7 @@ def botRespawnInitialization():
     eventPlayer.botBossHealth = -1
     #Chance for a minboss on high difficulties
     if difficultySetting >= Difficulty.EXPERT and eventPlayer in bossStateList == false and not miniBossList.any(lambda x: entityExists(x)):
-        # minibossPromotionRoll: miniboss promotion roll, consumed before the possible initialization wait.
-        #!define minibossPromotionRoll tmp0
-        minibossPromotionRoll = random.randint(1, 27 if currentObjectiveType == ObjectiveType.SHOWDOWN else 189)
-        if minibossPromotionRoll == 1:
+        if random.randint(1, 27 if currentObjectiveType == ObjectiveType.SHOWDOWN else 189) == 1:
             minibossMutationMacro()
             wait(2)
     botStatManagementMacro()

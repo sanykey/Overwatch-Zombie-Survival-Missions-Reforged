@@ -228,16 +228,7 @@ rule "EFFECTS/TEXTS":
 rule "SPECIAL EFFECT CONTROLS":
     @Condition isPregameSetup == true
     
-    if isPregameSetup:
-        # menuGlitchMessageChoice: random message choice 1-3, to select the special-effect text for this flash.
-        #!define menuGlitchMessageChoice tmp0
-        menuGlitchMessageChoice = random.randint(1, 3)
-        if menuGlitchMessageChoice == 1:
-            pregameGlitchText = "alglChene oteV: KaMeNrldEr"
-        elif menuGlitchMessageChoice == 2:
-            pregameGlitchText = "You won't win"
-        elif menuGlitchMessageChoice == 3:
-            pregameGlitchText = "Don't even try it"
+    pregameGlitchText = ["alglChene oteV: KaMeNrldEr", "You won't win", "Don't even try it"][random.randint(1, 3) - 1]
     isPregameGlitchActive = true
     wait(random.uniform(0.063, 0.325), Wait.ABORT_WHEN_FALSE)
     isPregameGlitchActive = false
