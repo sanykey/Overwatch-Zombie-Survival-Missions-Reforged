@@ -91,7 +91,7 @@ rule "PLAYER INITIALIZATION":
                 if playerStatsList[eventPlayer.reconnectUserIndex][ReconnectField.STATUS] == ReconnectStatus.DEAD:
                     eventPlayer.rescueTimeRemaining = 0.5
     else:
-        waitUntil(len(objectivePositionList) >= 1, 5)
+        waitUntil(len(objectivePositionList), 5)
         if isSpecialGameMode:
             wait()
             eventPlayer.teleport(random.choice(mapGridList.filter(lambda x: distance(x, walkCenter) < 15)))

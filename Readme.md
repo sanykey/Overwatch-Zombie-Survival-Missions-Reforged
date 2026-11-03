@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **25,283 elements**, freeing up **6,981** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+The current OverPy 9.7.20 build uses **25,251 elements**, freeing up **7,013** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+
+- Twelve zero-boundary ability-cooldown checks, four hero-count checks, one objective-list length check, and two other nonnegative checks now use the value directly or `not`. These values are unsigned in OverPy or are counts produced from arrays; disabled vote counts can be `-1` and were left unchanged. The changes reduce the build from **25,283 to 25,251 elements** without new variables. Verification compares all 268 compiled rules, finds 16 affected rules, checks the direct include build, and reports no warnings. Reproduce the probe with `node analysis/probe-post-25283-2026-11-03.cjs --baseline-ref 6425032`; recheck current sources with `node analysis/verify-position-optimizations-2026-11-03.cjs`. In-game validation has not been performed.
 
 - Numeric zero checks now use the numeric value directly or `not` where appropriate: 14 state/item-ID checks, nine throttle magnitude checks, five HUD blink-phase checks, and six timer/random/cooldown checks. The item IDs are numeric values 1-13 with 0 meaning no item; effect and text entity IDs are unchanged. Together these changes reduce the build from **25,350 to 25,283 elements** without new variables. Verification compares all 268 compiled rules, finds 24 affected rules, checks the direct include build, and reports no warnings. Reproduce the probe with `node analysis/probe-post-25350-2026-11-03.cjs --baseline-ref 41fd37c`; recheck current sources with `node analysis/verify-position-optimizations-2026-11-03.cjs`. In-game validation has not been performed.
 

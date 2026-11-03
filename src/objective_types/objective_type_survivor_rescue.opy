@@ -15,7 +15,7 @@ rule "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE":
             rescueCandidatePosition = random.choice(mapGridList.filter(lambda x: distance(x, currentObjectivePosition) > rescueMinSpawnDistance and distance(x, currentObjectivePosition) < 120))
             rescueMinSpawnDistance -= 5
             wait()
-        createDummy(random.choice(getAllHeroes().filter(lambda x: getNumberOfHeroes(x, Team.1) <= 0)), Team.1, 20, rescueCandidatePosition)
+        createDummy(random.choice(getAllHeroes().filter(lambda x: not getNumberOfHeroes(x, Team.1))), Team.1, 20, rescueCandidatePosition)
         rescueSurvivor = getLastCreatedEntity()
     else:
         rescueSurvivor = null

@@ -34,7 +34,7 @@ rule "BASIC (REAPER) SHADOW STEP (BOSS)":
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer.isCrowdControlled != true
     @Condition eventPlayer in bossStateList == true
-    @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_2) <= 0
+    @Condition not eventPlayer.getAbilityCooldown(Button.ABILITY_2)
     @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 20
     
     eventPlayer.setPrimaryFireEnabled(false)
@@ -110,7 +110,7 @@ rule "RUSHER MOLTEN CORE (BOSS)":
     @Hero torbjorn
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer.isCrowdControlled != true
-    @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_2) <= 0
+    @Condition not eventPlayer.getAbilityCooldown(Button.ABILITY_2)
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer in bossStateList == true
     @Condition distance(eventPlayer, eventPlayer.botTarget) < 15
@@ -166,16 +166,16 @@ rule "BEHEMOTH (ROAD) TOXIC CLOUD":
     @Hero roadhog
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) <= 0
+    @Condition not eventPlayer.getAbilityCooldown(Button.ABILITY_1)
     @Condition (eventPlayer in bossStateList or eventPlayer.getNormalizedHealth() < 0.5) == true
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.setAbilityResource(Button.ABILITY_2, 100)
     eventPlayer.startForcingButton(Button.ABILITY_2)
     eventPlayer.botGasCloudTimeRemaining = 1.5
-    waitUntil(eventPlayer.getAbilityCooldown(Button.ABILITY_2) > 0, 0.5)
+    waitUntil(eventPlayer.getAbilityCooldown(Button.ABILITY_2), 0.5)
     chaseAtRate(eventPlayer.botGasCloudTimeRemaining, 0, 1, ChaseRateReeval.NONE)
-    while eventPlayer.botGasCloudTimeRemaining > 0 and eventPlayer.getAbilityCooldown(Button.ABILITY_2) <= 0:
+    while eventPlayer.botGasCloudTimeRemaining > 0 and not eventPlayer.getAbilityCooldown(Button.ABILITY_2):
         if eventPlayer in bossStateList:
             #Charge Ultimate For Boss Gas Attack
             eventPlayer.setUltCharge(eventPlayer.getUltCharge() + 10)
@@ -187,7 +187,7 @@ rule "BEHEMOTH (ROAD) TOXIC CLOUD":
             if eventPlayer.damageOverTimeRemaining < 2.5:
                 eventPlayer.damageOverTimeRemaining = 2.5
             eventPlayer.setAbilityCooldown(Button.ABILITY_1, 8)
-        waitUntil(eventPlayer.getAbilityCooldown(Button.ABILITY_2) > 0, 0.25)
+        waitUntil(eventPlayer.getAbilityCooldown(Button.ABILITY_2), 0.25)
     #Cooldown
     eventPlayer.setAbilityCooldown(Button.ABILITY_1, 3 if eventPlayer in bossStateList else 8)
     eventPlayer.botGasCloudTimeRemaining = 0
@@ -469,7 +469,7 @@ rule "RIDER ATTACH TO TEAMMATES":
     @Condition eventPlayer.isAlive() == true
     #If any valid teammates are within range
     @Condition (getLivingPlayers(Team.2).exclude(eventPlayer).any(lambda x: not x.botIsTeleporting and x.getHero() != Hero.WIDOWMAKER and distance(eventPlayer, x) < 4 * eventPlayer.sizeScale)) == true
-    @Condition (eventPlayer.botTarget == null or distance(eventPlayer.getEyePosition(), eventPlayer.botTarget) > 20 or eventPlayer.getAbilityCooldown(Button.ABILITY_1) > 0 and distance(eventPlayer, eventPlayer.botTarget) > 7.5) == true
+    @Condition (eventPlayer.botTarget == null or distance(eventPlayer.getEyePosition(), eventPlayer.botTarget) > 20 or eventPlayer.getAbilityCooldown(Button.ABILITY_1) and distance(eventPlayer, eventPlayer.botTarget) > 7.5) == true
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.botAbilityTarget = (sorted(getLivingPlayers(Team.2).exclude(eventPlayer).filter(lambda x: not x.botIsTeleporting and x.getHero() != eventPlayer.getHero()), lambda x: distance(eventPlayer, x)))[0]
@@ -697,7 +697,7 @@ rule "STRIKER (WRECKING BALL) PILE DRIVER":
     @Condition eventPlayer.isCrowdControlled != true
     @Condition eventPlayer.botIsThrottleOverridden != true
     @Condition eventPlayer.hasStatus(Status.ROOTED) == false
-    @Condition eventPlayer.getAbilityCooldown(Button.CROUCH) <= 0
+    @Condition not eventPlayer.getAbilityCooldown(Button.CROUCH)
     @Condition distance(eventPlayer, eventPlayer.botTarget) < 15 * eventPlayer.sizeScale
     @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 35
     @Condition (eventPlayer.getAltitude() > 3 or eventPlayer.isOnGround() and isInLoS(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + 3 * Vector.UP)) == true
@@ -753,7 +753,7 @@ rule "STALKER (MOIRA) FADE":
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer.isCrowdControlled != true
     @Condition eventPlayer.botIsWallCollisionEnabled == true
-    @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) <= 0
+    @Condition not eventPlayer.getAbilityCooldown(Button.ABILITY_1)
     @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 45
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
@@ -813,7 +813,7 @@ rule "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES":
     @Hero pharah
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer.isCrowdControlled != true
-    @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) <= 0
+    @Condition not eventPlayer.getAbilityCooldown(Button.ABILITY_1)
     
     beginBotOverride()
     startBlasterDaytakerFacing()
@@ -986,7 +986,7 @@ rule "DAYTAKER (ILLARI) BURST":
     @Hero illari
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer.isCrowdControlled != true
-    @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) <= 0
+    @Condition not eventPlayer.getAbilityCooldown(Button.ABILITY_1)
     @Condition getLivingPlayers(Team.2).exclude(eventPlayer).any(lambda x: distance(eventPlayer, x) < 2.5 * eventPlayer.sizeScale) == true
     
     wait(0.1, Wait.ABORT_WHEN_FALSE)

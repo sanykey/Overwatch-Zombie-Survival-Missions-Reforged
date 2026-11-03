@@ -51,7 +51,7 @@ macro enableEnhancementsMacro():
 macro botHeroRandomizationMacro():
     # spawnedBotHeroList: hero types already present among zombies, to check the unique-skin limit.
     #!define spawnedBotHeroList tmp0
-    spawnedBotHeroList = botHeroList.filter(lambda x: getNumberOfHeroes(x, Team.2) > 0)
+    spawnedBotHeroList = botHeroList.filter(lambda x: getNumberOfHeroes(x, Team.2))
     # botSpawnSelectedHero: selected bot hero after the last use of spawnedBotHeroList.
     #!define botSpawnSelectedHero tmp0
     if isSmolderEventActive:

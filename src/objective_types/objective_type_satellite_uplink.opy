@@ -133,7 +133,7 @@ rule "PLAYERS REPAIR TERMINALS":
     for satelliteRepairTerminalIndex in range(len(satelliteTerminalPositionList)):
         if satelliteTerminalProgressList[satelliteRepairTerminalIndex] < 100:
             satelliteRepairPlayerCount = len(objectivePlayerList.filter(lambda x: distance(satelliteTerminalPositionList[satelliteRepairTerminalIndex], x) < objectiveRad))
-            if satelliteRepairPlayerCount > 0:
+            if satelliteRepairPlayerCount:
                 if satelliteRepairPlayerCount > 1:
                     #2 or more players on the terminal
                     satelliteTerminalProgressList[satelliteRepairTerminalIndex] += 0.4

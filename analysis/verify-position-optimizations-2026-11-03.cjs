@@ -12,6 +12,8 @@ const {zeroThrottleMagnitude, radiusBuiltin, departedPlayerCleanup} =
     require('./probe-post-25382-2026-11-03.cjs');
 const {numericStateChecks, throttleTruth, blinkPhaseChecks, otherNumericChecks} =
     require('./probe-post-25350-2026-11-03.cjs');
+const {cooldownZeroChecks, heroCountZeroChecks, nonemptyObjectiveList, otherUnsignedChecks} =
+    require('./probe-post-25283-2026-11-03.cjs');
 
 const baselineRef = 'a4bc82b';
 const selected = ['supply_pickup_any', 'daytaker_shared_abort',
@@ -49,37 +51,47 @@ async function main() {
         throttleTruth: throttleTruth(optimizedExpected),
         blinkPhaseChecks: blinkPhaseChecks(optimizedExpected),
         otherNumericChecks: otherNumericChecks(optimizedExpected)};
-    assert.deepEqual(files, optimizedExpected, 'Sources differ from the measured variants');
+    const postExpected = {...optimizedExpected};
+    const postCounts = {cooldownZeroChecks: cooldownZeroChecks(postExpected).length,
+        heroCountZeroChecks: heroCountZeroChecks(postExpected).length,
+        nonemptyObjectiveList: nonemptyObjectiveList(postExpected).length,
+        otherUnsignedChecks: otherUnsignedChecks(postExpected).length};
+    assert.deepEqual(files, postExpected, 'Sources differ from the measured variants');
 
     const before = await compile(baseline);
     const after = await compile(expected);
     const latest = await compile(latestExpected);
     const current = await compile(currentExpected);
     const final = await compile(finalExpected);
-    const optimized = await compile(files);
+    const optimized = await compile(optimizedExpected);
+    const post = await compile(files);
     assert.equal(before.elements, 25738);
     assert.equal(after.elements, 25504);
     assert.equal(latest.elements, 25441);
     assert.equal(current.elements, 25382);
     assert.equal(final.elements, 25350);
     assert.equal(optimized.elements, 25283);
+    assert.equal(post.elements, 25251);
     assert.deepEqual(before.warnings, []);
     assert.deepEqual(after.warnings, []);
     assert.deepEqual(latest.warnings, []);
     assert.deepEqual(current.warnings, []);
     assert.deepEqual(final.warnings, []);
     assert.deepEqual(optimized.warnings, []);
+    assert.deepEqual(post.warnings, []);
     const oldRules = rules(before.result), newRules = rules(after.result);
     const latestRules = rules(latest.result);
     const currentRules = rules(current.result);
     const finalRules = rules(final.result);
     const optimizedRules = rules(optimized.result);
+    const postRules = rules(post.result);
     assert.equal(oldRules.length, 267);
     assert.equal(newRules.length, 268);
     assert.equal(latestRules.length, 268);
     assert.equal(currentRules.length, 268);
     assert.equal(finalRules.length, 268);
     assert.equal(optimizedRules.length, 268);
+    assert.equal(postRules.length, 268);
     const oldByKey = keyedRules(oldRules), newByKey = keyedRules(newRules);
     const removedRules = [...oldByKey.keys()].filter(key => !newByKey.has(key));
     const addedRules = [...newByKey.keys()].filter(key => !oldByKey.has(key));
@@ -128,6 +140,11 @@ async function main() {
     const optimizedChangedRules = [...finalByKey].filter(([key, body]) =>
         optimizedByKey.get(key) !== body).map(([key]) => key);
     assert.equal(optimizedChangedRules.length, 24);
+    const postByKey = keyedRules(postRules);
+    assert.deepEqual([...optimizedByKey.keys()], [...postByKey.keys()]);
+    const postChangedRules = [...optimizedByKey].filter(([key, body]) =>
+        postByKey.get(key) !== body).map(([key]) => key);
+    assert.equal(postChangedRules.length, 16);
 
     const savedLog = console.log;
     let included;
@@ -136,27 +153,28 @@ async function main() {
         included = await compiler.compile(files['main.opy'].replace(/^#!writeToOutputFile.*\n/gm, ''),
             'en-US', src.replace(/\\/g, '/') + '/', 'main.opy');
     } finally {console.log = savedLog;}
-    assert.equal(included.nbElements, optimized.elements);
+    assert.equal(included.nbElements, post.elements);
     assert.deepEqual(included.encounteredWarnings, []);
-    assert.deepEqual(rules(included.result), optimizedRules);
+    assert.deepEqual(rules(included.result), postRules);
     for (const [file, contents] of Object.entries(files))
         assert.equal(fs.readFileSync(path.join(src, file), 'utf8').replace(/\r\n/g, '\n'), contents,
             `Source changed during verification: ${file}`);
     fs.writeFileSync(path.join(src, 'main.ws.txt'), included.result);
     console.log(JSON.stringify({baselineRef, before: before.elements, previous: after.elements,
         middle: latest.elements, prior: current.elements, penultimate: final.elements,
-        after: optimized.elements, saved: final.elements - optimized.elements,
+        last: optimized.elements, after: post.elements, saved: optimized.elements - post.elements,
         previousCounts: nextCounts, middleCounts: currentCounts,
-        priorCounts: finalCounts, counts: optimizedCounts,
-        oldRules: oldRules.length, newRules: optimizedRules.length,
+        priorCounts: finalCounts, lastCounts: optimizedCounts, counts: postCounts,
+        oldRules: oldRules.length, newRules: postRules.length,
         previousChangedRules: changedRules.length, middleChangedRules: latestChangedRules.length,
         priorChangedRules: currentChangedRules.length,
         penultimateChangedRules: finalChangedRules.length,
-        changedRules: optimizedChangedRules.length,
+        lastChangedRules: optimizedChangedRules.length,
+        changedRules: postChangedRules.length,
         newHelper: addedRules[0], removedPositionWrappers: 231,
         furtherRemovedPositionWrappers: 63, latestRemovedPositionWrappers: 11,
         removedListCounts: 48,
-        warnings: optimized.warnings.length, directIncludeBuild: true,
+        warnings: post.warnings.length, directIncludeBuild: true,
         inGameValidated: false}));
 }
 main().catch(error => {console.error(error); process.exitCode = 1;});

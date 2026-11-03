@@ -362,7 +362,7 @@ rule "BORN TO BATTLE PLAYER USES ABILITY CHARGE":
     eventPlayer.setAbilityCharge(eventPlayer.enhancementBattleAbilityButton, eventPlayer.getAbilityCharge(eventPlayer.enhancementBattleAbilityButton) + 1)
     lbl_0:
     #If the ability charge increased
-    if eventPlayer.getAbilityCharge(eventPlayer.enhancementBattleAbilityButton) > 0:
+    if eventPlayer.getAbilityCharge(eventPlayer.enhancementBattleAbilityButton):
         eventPlayer.enhancementIsBattleResetReady = false
     #Else if ability is on cooldown
     elif eventPlayer.getAbilityCooldown(eventPlayer.enhancementBattleAbilityButton) > 0.5:
