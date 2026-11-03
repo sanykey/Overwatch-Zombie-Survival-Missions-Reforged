@@ -388,15 +388,7 @@ def bouncePad():
         #!define bouncePadSurvivorList tmp0
         bouncePadSurvivorList = getLivingPlayers(Team.1).filter(lambda player: distance(eventPlayer.powerUpBouncePadPosition, player.getPosition()) < 2 and player.isOnGround())
         if len(bouncePadSurvivorList) > 0:
-            #For each bouncer
-            # bouncePadSurvivorIndex: index into the survivor list in bouncePadSurvivorList, to process every player on this pad.
-            #!define bouncePadSurvivorIndex tmp1
-            for bouncePadSurvivorIndex in range(len(bouncePadSurvivorList)):
-                #Current bouncer
-                # bouncePadSurvivor: current survivor from bouncePadSurvivorList, to apply this tick's upward impulse.
-                #!define bouncePadSurvivor tmp2
-                bouncePadSurvivor = bouncePadSurvivorList[bouncePadSurvivorIndex]
-                bouncePadSurvivor.applyImpulse(Vector.UP, 22, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+            bouncePadSurvivorList.applyImpulse(Vector.UP, 22, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
             playEffect(bouncePadSurvivorList, DynamicEffect.RING_EXPLOSION_SOUND, Color.WHITE, eventPlayer.powerUpBouncePadPosition, 50)
         wait(0.125)
     wait(0.25)

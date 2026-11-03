@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **26,728 elements**, freeing up **5,536** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+The current OverPy 9.7.20 build uses **26,718 elements**, freeing up **5,546** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+
+- Bounce Pad applies one impulse to the already filtered player list instead of looping over each player: **26,728 → 26,718 (−10 elements)**, without new variables. Direction, strength, motion mode, sound effect and the 0.125 s interval are preserved. Only `bouncePad` changed among 237 compiled rules; the compiler emitted no warnings. Simultaneous activation for multiple players has not yet been tested in-game.
 
 - Satellite terminal repair counts players within the current terminal's radius once per pass in the existing `tmp1`: **26,736 → 26,728 (−8 elements)**, without new variables. The `> 0` and `> 1` checks use that count before any wait; the 0.4 and 1.1 progress increments, progress cap, messages and 0.5 s interval are preserved. The build emitted no warnings. In-game validation and runtime benchmarks have not been performed.
 
