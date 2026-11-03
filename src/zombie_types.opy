@@ -175,7 +175,7 @@ rule "BEHEMOTH (ROAD) TOXIC CLOUD":
     eventPlayer.botGasCloudTimeRemaining = 1.5
     waitUntil(eventPlayer.getAbilityCooldown(Button.ABILITY_2), 0.5)
     chaseAtRate(eventPlayer.botGasCloudTimeRemaining, 0, 1, ChaseRateReeval.NONE)
-    while eventPlayer.botGasCloudTimeRemaining > 0 and not eventPlayer.getAbilityCooldown(Button.ABILITY_2):
+    while eventPlayer.botGasCloudTimeRemaining and not eventPlayer.getAbilityCooldown(Button.ABILITY_2):
         if eventPlayer in bossStateList:
             #Charge Ultimate For Boss Gas Attack
             eventPlayer.setUltCharge(eventPlayer.getUltCharge() + 10)
@@ -833,7 +833,7 @@ rule "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES":
         #charge up attack
         chaseOverTime(eventPlayer.botBlasterCharge, 0, 0.25, ChaseTimeReeval.NONE)
     eventPlayer.setDamageReceived(100)
-    waitUntil(eventPlayer.isDead() or eventPlayer.botBlasterCharge <= 0, 99999)
+    waitUntil(eventPlayer.isDead() or not eventPlayer.botBlasterCharge, 99999)
     if eventPlayer.isDead():
         eventPlayer.botIsThrottleOverridden = false
         eventPlayer.botIsFacingOverridden = false
@@ -1020,7 +1020,7 @@ rule "DAYTAKER (ILLARI) BURST":
         return
     else:
         chaseOverTime(eventPlayer.botDaytakerCharge, 0, 0.35, ChaseTimeReeval.NONE)
-    waitUntil(eventPlayer.isDead() or eventPlayer.botDaytakerCharge <= 0, 99999)
+    waitUntil(eventPlayer.isDead() or not eventPlayer.botDaytakerCharge, 99999)
     #Abort
     if eventPlayer.isDead():
         daytakerAbortReset()
@@ -1187,7 +1187,7 @@ rule "SMOLDER (WINSTON) SEES PLAYER":
     eventPlayer.botSmolderState = 1
     #Death timer
     chaseOverTime(eventPlayer.botSmolderAnger, 0, 6, ChaseTimeReeval.NONE)
-    waitUntil(eventPlayer.botSmolderState == 2 or eventPlayer.botSmolderAnger <= 0, 99999)
+    waitUntil(eventPlayer.botSmolderState == 2 or not eventPlayer.botSmolderAnger, 99999)
     if eventPlayer.botSmolderState == 2:
         return
     stopChasing(eventPlayer.botSmolderAnger)

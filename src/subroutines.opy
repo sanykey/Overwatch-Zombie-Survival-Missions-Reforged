@@ -163,7 +163,7 @@ macro botEntityManagementMacro():
                     eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
             else:
                 #Roadhog toxic cloud
-                createEffect(getAllPlayers().filter(lambda _: eventPlayer.botGasCloudTimeRemaining > 0), Effect.CLOUD, Color.LIME_GREEN, eventPlayer, 10 * eventPlayer.sizeScale + 2.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                createEffect(getAllPlayers().filter(lambda _: eventPlayer.botGasCloudTimeRemaining), Effect.CLOUD, Color.LIME_GREEN, eventPlayer, 10 * eventPlayer.sizeScale + 2.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
                 eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
         elif eventPlayer.getHero() == Hero.MERCY:
             #Mercy tentacle
@@ -201,14 +201,14 @@ macro botEntityManagementMacro():
                 eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
         elif eventPlayer.getHero() == Hero.PHARAH:
             #Charging attack effect
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botBlasterCharge > 0), Effect.GOOD_AURA, Color.BLUE, eventPlayer, eventPlayer.botBlasterCharge * eventPlayer.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botBlasterCharge), Effect.GOOD_AURA, Color.BLUE, eventPlayer, eventPlayer.botBlasterCharge * eventPlayer.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
         elif eventPlayer.getHero() == Hero.SIGMA:
             createEffect(getAllPlayers().filter(lambda _: eventPlayer.isUsingAbility1()), Effect.CLOUD, Color.TURQUOISE, eventPlayer.botTarget.getEyePosition(), 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
         elif eventPlayer.getHero() == Hero.ILLARI:
             #Charging attack effect
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botDaytakerCharge > 0), Effect.GOOD_AURA, Color.ORANGE, eventPlayer, eventPlayer.botDaytakerCharge * eventPlayer.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botDaytakerCharge), Effect.GOOD_AURA, Color.ORANGE, eventPlayer, eventPlayer.botDaytakerCharge * eventPlayer.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
         elif eventPlayer.getHero() == Hero.WINSTON:
             #Charging attack effect

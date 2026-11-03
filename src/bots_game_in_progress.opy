@@ -151,7 +151,7 @@ rule "BOT DIES":
         eventPlayer.disableNameplatesFor(getAllPlayers())
         #Allow for custom revive times
         waitUntil(eventPlayer.botRespawnDelay > 0, 0.125)
-        if eventPlayer.botRespawnDelay <= 0:
+        if not eventPlayer.botRespawnDelay:
             eventPlayer.botRespawnDelay = 1 + ((getMatchTime() + matchEndTime) / 60)
         if len(botSpawnTimeList) < numberOfBots:
             botSpawnTimeList.append(eventPlayer.botRespawnDelay)

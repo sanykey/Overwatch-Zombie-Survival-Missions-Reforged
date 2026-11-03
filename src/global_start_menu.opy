@@ -284,10 +284,7 @@ def determineZombieMode():
     # zombieModeVoteIndex: zombie-mode vote index, to count active players voting for each enabled mode.
     #!define zombieModeVoteIndex tmp0
     for zombieModeVoteIndex in range(1, len(zombieVoteList)):
-        if zombieVoteList[zombieModeVoteIndex][1]:
-            zombieVoteList[zombieModeVoteIndex] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameZombieVote == zombieModeVoteIndex))
-        else:
-            zombieVoteList[zombieModeVoteIndex] = -1
+        zombieVoteList[zombieModeVoteIndex] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameZombieVote == zombieModeVoteIndex)) if zombieVoteList[zombieModeVoteIndex][1] else -1
     voteWinnerCounts = zombieVoteList
     voteWinnerResult = zombieSetting
     selectVoteWinner()
@@ -326,10 +323,7 @@ def determineChallenge():
     # challengeVoteIndex: challenge vote index, to count active players voting for each enabled difficulty.
     #!define challengeVoteIndex tmp0
     for challengeVoteIndex in range(1, len(challengeVoteList)):
-        if challengeVoteList[challengeVoteIndex][1]:
-            challengeVoteList[challengeVoteIndex] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameChallengeVote == challengeVoteIndex))
-        else:
-            challengeVoteList[challengeVoteIndex] = -1
+        challengeVoteList[challengeVoteIndex] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameChallengeVote == challengeVoteIndex)) if challengeVoteList[challengeVoteIndex][1] else -1
     # challengeWeightedVoteSum: sum of difficulty levels weighted by votes, to calculate the average difficulty vote.
     #!define challengeWeightedVoteSum tmp1
     challengeWeightedVoteSum = 0
@@ -362,10 +356,7 @@ def determineObjectiveType():
     # objectiveTypeVoteIndex: objective-type vote index, to count active players voting for each enabled objective type.
     #!define objectiveTypeVoteIndex tmp0
     for objectiveTypeVoteIndex in range(ObjectiveType.SHOWDOWN, len(objectiveTypeVoteList)):
-        if objectiveTypeVoteList[objectiveTypeVoteIndex][1]:
-            objectiveTypeVoteList[objectiveTypeVoteIndex] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameObjectiveVote == objectiveTypeVoteIndex))
-        else:
-            objectiveTypeVoteList[objectiveTypeVoteIndex] = -1
+        objectiveTypeVoteList[objectiveTypeVoteIndex] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameObjectiveVote == objectiveTypeVoteIndex)) if objectiveTypeVoteList[objectiveTypeVoteIndex][1] else -1
     voteWinnerCounts = objectiveTypeVoteList
     voteWinnerResult = objectiveTypeSetting
     selectVoteWinner()
