@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **26,355 elements**, freeing up **5,909** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+The current OverPy 9.7.20 build uses **26,319 elements**, freeing up **5,945** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+
+- The enhancement HUD now combines the selected name with its icon from the existing pregame enhancement menu list. The No Preference title remains icon-free, and all ten other names keep their original icons. This reduces the build from **26,355 → 26,319 (−36 elements)** without new variables. The real include build matches the in-memory Workshop output and emits no warnings. In-game display has not been checked.
 
 - Eleven existence checks now use `.any()` instead of counting a filtered array; two prematch checks use `.all()` instead of comparing the filtered count with the Team 1 player count. The explosion target filter no longer repeats `isDummy()` inside the branch that already requires a dummy. Together these changes reduce the build from **26,407 → 26,355 (−52 elements)** without new variables. Only the intended checks changed among 237 compiled rules; the real include build matched the in-memory Workshop output and emitted no warnings. In-game validation and runtime benchmarks have not been performed; the `miniBossList` check should be tested before the first miniboss is added, when the variable may still be uninitialized.
 

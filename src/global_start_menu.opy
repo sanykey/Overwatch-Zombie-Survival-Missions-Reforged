@@ -184,19 +184,14 @@ rule "EFFECTS/TEXTS":
     startMenuEnhancementColorList = [Color.AQUA, colorKevlarConst, Color.GRAY, Color.BLUE, Color.RED, Color.ORANGE, Color.GREEN, Color.GRAY, colorChargeBatteryConst, Color.PURPLE, Color.BLUE]
     hudText(
         getPlayers(Team.1),
-        [
-            "Enhancement: No Preference",
-            "Enhancement: Kevlar {0}".format(iconString(Icon.STOP)),
-            "Enhancement: Zombie Hybrid {0}".format(iconString(Icon.POISON)),
-            "Enhancement: Laser Barricade {0}".format(iconString(Icon.DIAMOND)),
-            "Enhancement: Brain Killer {0}".format(iconString(Icon.SKULL)),
-            "Enhancement: Pyrotechnic {0}".format(iconString(Icon.FIRE)),
-            "Enhancement: Plague Doctor {0}".format(iconString(Icon.PLUS)),
-            "Enhancement: Born to Battle {0}".format(iconString(Icon.BOLT)),
-            "Enhancement: Charge Battery {0}".format(iconString(Icon.SPIRAL)),
-            "Enhancement: Hitchhiker {0}".format(iconString(Icon.FLAG)),
-            "Enhancement: P.U.P. {0}".format(iconString(Icon.HAPPY))
-        ][localPlayer.enhancementId],
+        "Enhancement: {0}{1}".format(
+            [
+                "No Preference", "Kevlar ", "Zombie Hybrid ", "Laser Barricade ",
+                "Brain Killer ", "Pyrotechnic ", "Plague Doctor ", "Born to Battle ",
+                "Charge Battery ", "Hitchhiker ", "P.U.P. "
+            ][localPlayer.enhancementId],
+            enhancementOptionList[localPlayer.enhancementId] if localPlayer.enhancementId > Enhancement.NO_PREFERENCE else ""
+        ),
         [
             "",
             "Survivor is equipped with armor that protects against infections",
