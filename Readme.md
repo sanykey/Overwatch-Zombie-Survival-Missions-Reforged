@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **26,718 elements**, freeing up **5,546** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+The current OverPy 9.7.20 build uses **26,662 elements**, freeing up **5,602** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **82/128**.
+
+- Seven frequently used consumable effect and HUD IDs now use dedicated player variables instead of `powerUpEntityIdList`: **26,718 → 26,662 (−56 elements)** for 7 additional player slots. The moved IDs are No Cooldowns HUD, Air Strike Ring, Cloaking Device Sphere, Super Nano Good Aura, Bounce Pad Ring, Ultimate Charger HUD and Stun Beam. All corresponding reads, writes and deletions were replaced; turret IDs with computed indices remain in the array. Replacing the fields with their former indexed expressions restores the original consumable source; only the seven corresponding subroutines changed among 237 compiled rules, with no emitted warnings. In-game validation and runtime benchmarks have not been performed.
 
 - Bounce Pad applies one impulse to the already filtered player list instead of looping over each player: **26,728 → 26,718 (−10 elements)**, without new variables. Direction, strength, motion mode, sound effect and the 0.125 s interval are preserved. Only `bouncePad` changed among 237 compiled rules; the compiler emitted no warnings. Simultaneous activation for multiple players has not yet been tested in-game.
 

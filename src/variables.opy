@@ -70,13 +70,11 @@ enum ReconnectStatus:
     DOWNED = 1,
     DEAD = 2,
 
-# Sparse indices in powerUpEntityIdList; values identify storage slots, not item IDs.
+# Remaining sparse indices in powerUpEntityIdList; frequently used IDs have dedicated player variables below.
 # Turret effect slots 50..54 stay contiguous for creation and cleanup loops.
 enum PowerUpEntitySlot:
     FORCE_FIELD_SPHERE = 10,
     FORCE_FIELD_HUD = 11,
-    NO_COOLDOWNS_HUD = 20,
-    AIR_STRIKE_RING = 30,
     AIR_STRIKE_CLOUD = 31,
     HEAL_BEACON_LIGHT_SHAFT = 40,
     HEAL_BEACON_RING = 41,
@@ -88,17 +86,12 @@ enum PowerUpEntitySlot:
     SENTRY_TURRET_LEG_3 = 53,
     SENTRY_TURRET_BARREL = 54,
     SENTRY_TURRET_HUD = 55,
-    CLOAKING_DEVICE_SPHERE = 60,
     CLOAKING_DEVICE_HUD = 61,
-    SUPER_NANO_GOOD_AURA = 70,
     SUPER_NANO_HUD = 71,
     SUPER_NANO_BAD_AURA = 72,
     SUPER_NANO_DAMAGE_DEALT_MODIFICATION = 73,
     SUPER_NANO_DAMAGE_RECEIVED_MODIFICATION = 74,
-    BOUNCE_PAD_RING = 80,
     BOUNCE_PAD_HUD = 81,
-    ULTIMATE_CHARGER_HUD = 90,
-    STUN_BEAM = 100,
 
 # Global variables
 
@@ -560,8 +553,17 @@ playervar actorTeamSlot4  # Team 2: botLoopIndexSlot; Team 1: powerUpEntityIdLis
 #!define botStalkerFadeIndex actorTeamSlot4
 # Index into Ensnarer affected targets.
 #!define botEnsnarerTargetIndex actorTeamSlot4
-# Sparse effect/HUD/damage-modification IDs owned by active items, indexed by PowerUpEntitySlot.
+# Remaining sparse effect/HUD/damage-modification IDs owned by active items, indexed by PowerUpEntitySlot.
 #!define powerUpEntityIdList actorTeamSlot4
+
+# Frequently accessed item handles are kept directly on the owning player.
+playervar powerUpNoCooldownsHudId
+playervar powerUpAirStrikeRingId
+playervar powerUpCloakingDeviceSphereId
+playervar powerUpSuperNanoGoodAuraId
+playervar powerUpBouncePadRingId
+playervar powerUpUltimateChargerHudId
+playervar powerUpStunBeamId
 
 playervar actorTeamSlot5  # Team 2: botTarget; Team 1: powerUpAirStrikeIndex. Receivers, not rule teams, own the storage.
 # Zombie AI combat target; subroutines, bot abilities and objectives; cleared when its Team 1 target is downed.
