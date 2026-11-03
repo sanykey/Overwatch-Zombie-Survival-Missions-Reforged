@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **26,139 elements**, freeing up **6,125** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+The current OverPy 9.7.20 build uses **25,786 elements**, freeing up **6,478** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+
+- Blaster's rocket hit now shares the burn duration across its effects, and Downfallen's grab uses a vertical offset from the eye position instead of rebuilding the vector from three coordinates. These changes reduce the current build from **25,798 to 25,786 (−12 elements)** without new variables. All 267 compiled rules were compared; only the two intended rules changed. The direct include build matches the in-memory build and emits no warnings. In-game validation has not been performed. Recheck: `node analysis/verify-current-first-two-2026-11-03.cjs`.
 
 - Five game-mode comparisons in map-grid generation now use one membership check; four other hero, challenge, and mode comparisons use membership checks as well. The win/loss test no longer repeats an empty-list check, two mission rollback steps use a loop, and both explosion sounds share one synchronous radius. Together these changes reduce the build from **26,188 → 26,139 (−49 elements)** without new variables. Validation compared all 239 prior compiled rules: only the nine intended rules changed; both rollback steps and the objective-head cache refresh order are preserved. The direct include build matches the in-memory build and emits no warnings. In-game validation and runtime benchmarks, especially for the map-grid loop, have not been performed. Recheck: `node analysis/verify-third-elements-2026-11-03.cjs`.
 

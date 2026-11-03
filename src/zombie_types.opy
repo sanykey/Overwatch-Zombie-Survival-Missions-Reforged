@@ -872,16 +872,12 @@ rule "BLASTER ROCKET HITS TARGET":
     @Hero pharah
     @Condition (eventAbility == Button.PRIMARY_FIRE or eventAbility == Button.ULTIMATE) == true
     
-    if eventAbility == Button.ULTIMATE:
-        victim.startDamageOverTime(eventPlayer, 2, eventPlayer.botBiteDamage * 0.5)
-        victim.setStatusEffect(eventPlayer, Status.BURNING, 2)
-        if eventPlayer.damageOverTimeRemaining < 2:
-            eventPlayer.damageOverTimeRemaining = 2
-    elif eventAbility == Button.PRIMARY_FIRE:
-        victim.startDamageOverTime(eventPlayer, 1, eventPlayer.botBiteDamage)
-        victim.setStatusEffect(eventPlayer, Status.BURNING, 1)
-        if eventPlayer.damageOverTimeRemaining < 1:
-            eventPlayer.damageOverTimeRemaining = 1
+    #!define blasterRocketBurnDuration tmp0
+    blasterRocketBurnDuration = 2 if eventAbility == Button.ULTIMATE else 1
+    victim.startDamageOverTime(eventPlayer, blasterRocketBurnDuration, eventPlayer.botBiteDamage * (0.5 if eventAbility == Button.ULTIMATE else 1))
+    victim.setStatusEffect(eventPlayer, Status.BURNING, blasterRocketBurnDuration)
+    if eventPlayer.damageOverTimeRemaining < blasterRocketBurnDuration:
+        eventPlayer.damageOverTimeRemaining = blasterRocketBurnDuration
 
 
 rule "DOWNFALLEN (SIGMA) FIRES":
@@ -929,7 +925,7 @@ rule "DOWNFALLEN GRABS PLAYER":
     eventPlayer.botAbilityTarget.attachTo(eventPlayer, vect(0, 3 if eventPlayer in bossStateList else 0, 1))
     eventPlayer.botIsWallPhaseAllowed = false
     eventPlayer.forceButtonPress(Button.ULTIMATE)
-    eventPlayer.botAbilityTarget.startFacing(directionTowards(eventPlayer.botAbilityTarget.getEyePosition(), vect(eventPlayer.getEyePosition().x, eventPlayer.getEyePosition().y - 0.2, eventPlayer.getEyePosition().z)), 999)
+    eventPlayer.botAbilityTarget.startFacing(directionTowards(eventPlayer.botAbilityTarget.getEyePosition(), eventPlayer.getEyePosition() - 0.2 * Vector.UP), 999)
     eventPlayer.applyImpulse(vect(0, 5, -3), 5 * eventPlayer.sizeScale, Relativity.TO_PLAYER, Impulse.CANCEL_CONTRARY_MOTION)
     waitUntil(not eventPlayer.isUsingUltimate(), 1.25)
     eventPlayer.cancelPrimaryAction()
