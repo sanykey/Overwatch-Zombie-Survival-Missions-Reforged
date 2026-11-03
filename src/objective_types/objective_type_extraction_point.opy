@@ -1,6 +1,7 @@
 #!mainFile "../main.opy"
 
 subroutine nukeMap
+subroutine startExtractionAscent
 
 
 rule "PLAYERS IN EXTRACTION POINT CONTROL":
@@ -54,12 +55,12 @@ rule "PLAYER EXTRACTION CONTROL":
     @Condition eventPlayer in evacSurvivorList == true
     
     eventPlayer.extractionFlightPosition = eventPlayer.getPosition()
-    chaseAtRate(eventPlayer.extractionFlightPosition, eventPlayer.extractionFlightPosition + 200 * Vector.UP, extractionFlightSpeed)
+    startExtractionAscent()
     eventPlayer.startForcingPosition(eventPlayer.extractionFlightPosition)
     waitUntil(extractionFlightSpeed > 2, 99999)
     chaseOverTime(eventPlayer.extractionFlightPosition, currentObjectivePosition + 50 * Vector.UP + directionFromAngles(360 / len(evacSurvivorList) * evacSurvivorList.index(eventPlayer), 0) * 3, 5)
     waitUntil(extractionFlightSpeed < 10, 99999)
-    chaseAtRate(eventPlayer.extractionFlightPosition, eventPlayer.extractionFlightPosition + 200 * Vector.UP, extractionFlightSpeed)
+    startExtractionAscent()
     eventPlayer.extractionDestination = eventPlayer.extractionFlightPosition + directionTowards(currentObjectivePosition, extractionFlightDestination) * 700
     waitUntil(extractionFlightSpeed > 2, 99999)
     chaseAtRate(eventPlayer.extractionFlightPosition, eventPlayer.extractionDestination, extractionFlightSpeed)
@@ -148,3 +149,9 @@ def nukeMap():
         kill(getPlayers(Team.1).filter(lambda player: not player in evacSurvivorList))
         playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, rgb(255, random.uniform(100, 255), 0), mapGridList + (directionFromAngles(random.uniform(0, 360), 0) * (random.randint(0, (finaleExplosionIndex / 20) ** 2 + 1))), (finaleExplosionIndex / 18) ** 2)
         wait()
+
+
+def startExtractionAscent():
+    @Name "startExtractionAscent"
+
+    chaseAtRate(eventPlayer.extractionFlightPosition, eventPlayer.extractionFlightPosition + 200 * Vector.UP, extractionFlightSpeed)

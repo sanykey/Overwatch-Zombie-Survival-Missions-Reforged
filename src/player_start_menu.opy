@@ -1,6 +1,7 @@
 #!mainFile "main.opy"
 
 subroutine randomActions
+subroutine attachPlayerToPregameAnchor
 
 
 rule "PLAYER MENU INITIALIZATION":
@@ -72,7 +73,7 @@ rule "PLAYER SELECTS/RESELECTS HERO":
     eventPlayer.setStatusEffect(null, Status.ROOTED, 99999)
     #If current game mode is team deathmatch
     if isSpecialGameMode:
-        eventPlayer.attachTo(getPlayers(Team.2)[0], localVector(eventPlayer.pregamePosition, getPlayers(Team.2)[0], Transform.ROTATION_AND_TRANSLATION))
+        attachPlayerToPregameAnchor()
     else:
         eventPlayer.teleport(eventPlayer.pregamePosition)
     wait()
@@ -139,14 +140,11 @@ rule "PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)":
     
     #Update player voting status
     eventPlayer.isPregameVoting = true
-    if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE):
-        eventPlayer.pregameChallengeVote = (eventPlayer.pregameChallengeVote + 1) % len(challengeVoteList)
-        while not challengeVoteList[eventPlayer.pregameChallengeVote][1]:
-            eventPlayer.pregameChallengeVote = (eventPlayer.pregameChallengeVote + 1) % len(challengeVoteList)
-    else:
-        eventPlayer.pregameChallengeVote = (eventPlayer.pregameChallengeVote + len(challengeVoteList) - 1) % len(challengeVoteList)
-        while not challengeVoteList[eventPlayer.pregameChallengeVote][1]:
-            eventPlayer.pregameChallengeVote = (eventPlayer.pregameChallengeVote + len(challengeVoteList) - 1) % len(challengeVoteList)
+    #!define pregameChallengeVoteOffset tmp0
+    pregameChallengeVoteOffset = 1 if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else len(challengeVoteList) - 1
+    eventPlayer.pregameChallengeVote = (eventPlayer.pregameChallengeVote + pregameChallengeVoteOffset) % len(challengeVoteList)
+    while not challengeVoteList[eventPlayer.pregameChallengeVote][1]:
+        eventPlayer.pregameChallengeVote = (eventPlayer.pregameChallengeVote + pregameChallengeVoteOffset) % len(challengeVoteList)
 
 
 rule "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)":
@@ -159,14 +157,11 @@ rule "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)":
     
     #Update player voting status
     eventPlayer.isPregameVoting = true
-    if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE):
-        eventPlayer.pregameZombieVote = (eventPlayer.pregameZombieVote + 1) % len(zombieVoteList)
-        while not zombieVoteList[eventPlayer.pregameZombieVote][1]:
-            eventPlayer.pregameZombieVote = (eventPlayer.pregameZombieVote + 1) % len(zombieVoteList)
-    else:
-        eventPlayer.pregameZombieVote = (eventPlayer.pregameZombieVote + len(zombieVoteList) - 1) % len(zombieVoteList)
-        while not zombieVoteList[eventPlayer.pregameZombieVote][1]:
-            eventPlayer.pregameZombieVote = (eventPlayer.pregameZombieVote + len(zombieVoteList) - 1) % len(zombieVoteList)
+    #!define pregameZombieVoteOffset tmp0
+    pregameZombieVoteOffset = 1 if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else len(zombieVoteList) - 1
+    eventPlayer.pregameZombieVote = (eventPlayer.pregameZombieVote + pregameZombieVoteOffset) % len(zombieVoteList)
+    while not zombieVoteList[eventPlayer.pregameZombieVote][1]:
+        eventPlayer.pregameZombieVote = (eventPlayer.pregameZombieVote + pregameZombieVoteOffset) % len(zombieVoteList)
 
 
 rule "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)":
@@ -179,14 +174,11 @@ rule "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)":
     
     #Update player voting status
     eventPlayer.isPregameVoting = true
-    if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE):
-        eventPlayer.pregameObjectiveVote = (eventPlayer.pregameObjectiveVote + 1) % len(objectiveTypeVoteList)
-        while not objectiveTypeVoteList[eventPlayer.pregameObjectiveVote][1]:
-            eventPlayer.pregameObjectiveVote = (eventPlayer.pregameObjectiveVote + 1) % len(objectiveTypeVoteList)
-    else:
-        eventPlayer.pregameObjectiveVote = (eventPlayer.pregameObjectiveVote + len(objectiveTypeVoteList) - 1) % len(objectiveTypeVoteList)
-        while not objectiveTypeVoteList[eventPlayer.pregameObjectiveVote][1]:
-            eventPlayer.pregameObjectiveVote = (eventPlayer.pregameObjectiveVote + len(objectiveTypeVoteList) - 1) % len(objectiveTypeVoteList)
+    #!define pregameObjectiveVoteOffset tmp0
+    pregameObjectiveVoteOffset = 1 if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else len(objectiveTypeVoteList) - 1
+    eventPlayer.pregameObjectiveVote = (eventPlayer.pregameObjectiveVote + pregameObjectiveVoteOffset) % len(objectiveTypeVoteList)
+    while not objectiveTypeVoteList[eventPlayer.pregameObjectiveVote][1]:
+        eventPlayer.pregameObjectiveVote = (eventPlayer.pregameObjectiveVote + pregameObjectiveVoteOffset) % len(objectiveTypeVoteList)
 
 
 rule "PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)":
@@ -196,14 +188,11 @@ rule "PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)":
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
     
-    if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE):
-        eventPlayer.enhancementId = (eventPlayer.enhancementId + 1) % len(enhancementOptionList)
-        while not enhancementOptionList[eventPlayer.enhancementId]:
-            eventPlayer.enhancementId = (eventPlayer.enhancementId + 1) % len(enhancementOptionList)
-    else:
-        eventPlayer.enhancementId = (eventPlayer.enhancementId + len(enhancementOptionList) - 1) % len(enhancementOptionList)
-        while not enhancementOptionList[eventPlayer.enhancementId]:
-            eventPlayer.enhancementId = (eventPlayer.enhancementId + len(enhancementOptionList) - 1) % len(enhancementOptionList)
+    #!define enhancementIdOffset tmp0
+    enhancementIdOffset = 1 if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else len(enhancementOptionList) - 1
+    eventPlayer.enhancementId = (eventPlayer.enhancementId + enhancementIdOffset) % len(enhancementOptionList)
+    while not enhancementOptionList[eventPlayer.enhancementId]:
+        eventPlayer.enhancementId = (eventPlayer.enhancementId + enhancementIdOffset) % len(enhancementOptionList)
 
 
 rule "UPDATE PREGAME VOTING STATUS":
@@ -233,7 +222,7 @@ rule "PREVENT PLAYERS FROM LEAVING START EARLY":
     if not isSpecialGameMode:
         eventPlayer.teleport(eventPlayer.pregamePosition)
     else:
-        eventPlayer.attachTo(getPlayers(Team.2)[0], localVector(eventPlayer.pregamePosition, getPlayers(Team.2)[0], Transform.ROTATION_AND_TRANSLATION))
+        attachPlayerToPregameAnchor()
     if ruleCondition:
         loop()
 
@@ -266,3 +255,9 @@ def randomActions():
         eventPlayer.communicate(Comms.VOICE_LINE_LEFT)
     else:
         eventPlayer.communicate(Comms.VOICE_LINE_RIGHT)
+
+
+def attachPlayerToPregameAnchor():
+    @Name "attachPlayerToPregameAnchor"
+
+    eventPlayer.attachTo(getPlayers(Team.2)[0], localVector(eventPlayer.pregamePosition, getPlayers(Team.2)[0], Transform.ROTATION_AND_TRANSLATION))

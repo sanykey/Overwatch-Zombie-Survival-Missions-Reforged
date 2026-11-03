@@ -1,6 +1,8 @@
 #!mainFile "main.opy"
 
 subroutine startBlasterDaytakerFacing
+subroutine playReignitedWarningPair
+subroutine startBotThrottleAtTarget
 
 subroutine resumeBotFacingAndMovement
 subroutine resumeBotMovementAndFacing
@@ -382,9 +384,7 @@ rule "REIGNITED ULTIMATE ATTACK COUNTER":
     
     eventPlayer.botIsReigniteAttackUsed = true
     #Pre-explosion sound
-    playEffect(getAllPlayers(), DynamicEffect.DEBUFF_IMPACT_SOUND, Color.ORANGE, eventPlayer, 200)
-    #Scaled
-    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer, 0.5 * eventPlayer.sizeScale)
+    playReignitedWarningPair()
     eventPlayer.setStatusEffect(null, Status.BURNING, 5)
     wait(5)
     eventPlayer.botIsReigniteAttackUsed = false
@@ -871,7 +871,7 @@ rule "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES":
         eventPlayer.forceButtonPress(Button.PRIMARY_FIRE)
     wait(0.5)
     resumeBotMovementAndFacing()
-    eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD)
+    startBotThrottleAtTarget()
 
 
 rule "BLASTER ROCKET HITS TARGET":
@@ -1069,7 +1069,7 @@ rule "DAYTAKER (ILLARI) BURST":
     if eventPlayer in bossStateList:
         eventPlayer.botIsWallPhaseAllowed = true
     resumeBotMovementAndFacing()
-    eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD)
+    startBotThrottleAtTarget()
 
 
 rule "DAYTAKER ATTACKS AT HALF HEALTH (BOSS)":
@@ -1461,9 +1461,7 @@ def explosionWarning():
     @Name "explosionWarning"
     
     #Pre-explosion sound
-    playEffect(getAllPlayers(), DynamicEffect.DEBUFF_IMPACT_SOUND, Color.ORANGE, eventPlayer, 200)
-    #Scaled
-    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer, 0.5 * eventPlayer.sizeScale)
+    playReignitedWarningPair()
     eventPlayer.explosionScale = eventPlayer.sizeScale
     eventPlayer.setStatusEffect(null, Status.BURNING, 0.6)
     eventPlayer.setStatusEffect(null, Status.ROOTED, 0.6)
@@ -1511,3 +1509,17 @@ def startBlasterDaytakerFacing():
     @Name "startBlasterDaytakerFacing"
 
     eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition()), 0 if eventPlayer.isCrowdControlled or eventPlayer.isOnGround() and eventPlayer.botTarget == null else 100)
+
+
+def startBotThrottleAtTarget():
+    @Name "startBotThrottleAtTarget"
+
+    eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD)
+
+
+def playReignitedWarningPair():
+    @Name "playReignitedWarningPair"
+
+    playEffect(getAllPlayers(), DynamicEffect.DEBUFF_IMPACT_SOUND, Color.ORANGE, eventPlayer, 200)
+    #Scaled
+    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer, 0.5 * eventPlayer.sizeScale)
