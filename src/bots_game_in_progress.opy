@@ -80,7 +80,7 @@ rule "BOT INITIALIZATION":
     #Damage over time duration
     chaseAtRate(eventPlayer.damageOverTimeRemaining, -1, 0.95, ChaseRateReeval.NONE)
     #Bot target warning icon (flashing)
-    createIcon(getAllPlayers() if eventPlayer in showdownContestingZombieList else eventPlayer.botTarget.filter(lambda x: eventPlayer.isAlive() and not x.isInViewAngle(eventPlayer.getPosition(), 55)), eventPlayer, Icon.WARNING, IconReeval.VISIBILITY_POSITION_AND_COLOR, Color.RED if (((ceil(getTotalTimeElapsed() * (4 if distance(eventPlayer.getPosition(), localPlayer.getPosition()) > 10 else 8))) % 2) == 0) else Color.YELLOW)
+    createIcon(getAllPlayers() if eventPlayer in showdownContestingZombieList else eventPlayer.botTarget.filter(lambda x: eventPlayer.isAlive() and not x.isInViewAngle(eventPlayer.getPosition(), 55)), eventPlayer, Icon.WARNING, IconReeval.VISIBILITY_POSITION_AND_COLOR, Color.RED if (((ceil(getTotalTimeElapsed() * (4 if distance(eventPlayer, localPlayer) > 10 else 8))) % 2) == 0) else Color.YELLOW)
     waitUntil(eventPlayer.hasSpawned(), 2)
     eventPlayer.setMaxHealth(30 if eventPlayer.getHero() in [Hero.SYMMETRA, Hero.HAZARD, Hero.ILLARI] else 1)
     eventPlayer.initialMaxHealth = eventPlayer.getMaxHealth()
@@ -106,7 +106,7 @@ rule "KILL BOTS THAT ARE STUCK OR ARE NOT MOVING":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer in bossStateList == false
     @Condition (eventPlayer.getThrottle() == vect(0, 0, 0) or eventPlayer.getHorizontalSpeed() < 1 * eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale) == true
-    @Condition playerTargetList.all(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) > 2.1 * eventPlayer.sizeScale) == true
+    @Condition playerTargetList.all(lambda x: distance(eventPlayer, x) > 2.1 * eventPlayer.sizeScale) == true
     
     if eventPlayer.botTarget != null:
         wait(random.uniform(7.5, 12.5), Wait.ABORT_WHEN_FALSE)
@@ -162,7 +162,7 @@ rule "BOT DIES":
         updateBotSpawnPoints()
         destroyDummy(Team.2, eventPlayer.getSlot())
         return
-    elif eventWasEnvironment and distance(eventPlayer.getPosition(), vect(eventPlayer.botTeleportPosition.x, eventPlayer.getPosition().y, eventPlayer.botTeleportPosition.z)) < 10:
+    elif eventWasEnvironment and distance(eventPlayer, vect(eventPlayer.botTeleportPosition.x, eventPlayer.getPosition().y, eventPlayer.botTeleportPosition.z)) < 10:
         eventPlayer.botIsTeleportConfirmed = false
     eventPlayer.botIsTeleporting = true
     eventPlayer.teleport(vect(500, 50, 500))
@@ -198,7 +198,7 @@ rule "TELEPORT BOTS WHEN NOT USED FOR TOO LONG":
         wait(5, Wait.ABORT_WHEN_FALSE)
     else:
         wait(0.5, Wait.ABORT_WHEN_FALSE)
-        wait(max(1, 10 - distance(eventPlayer.getPosition(), eventPlayer.botTeleportCenter) / 8), Wait.ABORT_WHEN_FALSE)
+        wait(max(1, 10 - distance(eventPlayer, eventPlayer.botTeleportCenter) / 8), Wait.ABORT_WHEN_FALSE)
         if eventPlayer.botIsTeleportConfirmed:
             loop()
     teleportBots()
@@ -242,8 +242,8 @@ rule "BOT TARGET VISIBLE":
     @Condition eventPlayer.botIsInitializing != true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.hasSpawned() == true
-    @Condition (eventPlayer.botTarget == null or playerTargetList.exclude(eventPlayer.botTarget).any(lambda x: not x.invisibilityCount and distance(x.getPosition(), eventPlayer.getPosition()) < 7.5)) == true
-    @Condition (playerTargetList.any(lambda x: not x.invisibilityCount and distance(eventPlayer.getPosition(), x.getPosition()) < 150 and isInLoS(x.getEyePosition(), eventPlayer.getPosition() + losOffsetConst))) == true
+    @Condition (eventPlayer.botTarget == null or playerTargetList.exclude(eventPlayer.botTarget).any(lambda x: not x.invisibilityCount and distance(x, eventPlayer) < 7.5)) == true
+    @Condition (playerTargetList.any(lambda x: not x.invisibilityCount and distance(eventPlayer, x) < 150 and isInLoS(x.getEyePosition(), eventPlayer.getPosition() + losOffsetConst))) == true
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
     startRule(selectTarget)
@@ -312,7 +312,7 @@ rule "BOTS JUMP":
     @Condition eventPlayer.isOnGround() == true
     @Condition eventPlayer.hasStatus(Status.ROOTED) == false
     @Condition eventPlayer.isCrouching() == false
-    @Condition (eventPlayer.botTarget == null or distance(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()) > 2) == true
+    @Condition (eventPlayer.botTarget == null or distance(eventPlayer, eventPlayer.botTarget) > 2) == true
     #Allows if bot bumps into something
     @Condition eventPlayer.getHorizontalSpeed() < eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale * 3.5
     
@@ -361,7 +361,7 @@ rule "BOTS MELEE":
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer.isCrowdControlled != true
     @Condition eventPlayer.isMeleeing() != true
-    @Condition distance(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()) < 3 * eventPlayer.sizeScale
+    @Condition distance(eventPlayer, eventPlayer.botTarget) < 3 * eventPlayer.sizeScale
     @Condition eventPlayer.botTarget.getHorizontalSpeed() < 15 * eventPlayer.botTarget.movementSpeedScale
     
     if eventPlayer.getHero() == Hero.HAZARD and not eventPlayer.botIsEnsnarerBlocking and not eventPlayer.botAbilityCooldown and eventPlayer in bossStateList:
@@ -437,7 +437,7 @@ def enterExitTeleport():
             if eventPlayer.botTeleportPosition in botSpawnPointList:
                 eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), botSpawnWaypointList[botSpawnPointList.index(eventPlayer.botTeleportPosition)]), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
             else:
-                eventPlayer.startThrottleInDirection(directionFromAngles(random.randint(-90, 90) + horizontalAngleOfDirection(directionTowards(eventPlayer.getPosition(), sorted(getLivingPlayers(Team.1).filter(lambda player: player.hasSpawned()), lambda x: distance(eventPlayer.getPosition(), x.getPosition()))[0].getPosition())), 0), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
+                eventPlayer.startThrottleInDirection(directionFromAngles(random.randint(-90, 90) + horizontalAngleOfDirection(directionTowards(eventPlayer.getPosition(), sorted(getLivingPlayers(Team.1).filter(lambda player: player.hasSpawned()), lambda x: distance(eventPlayer, x))[0].getPosition())), 0), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
         elif eventPlayer.botTarget != null:
             startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
 

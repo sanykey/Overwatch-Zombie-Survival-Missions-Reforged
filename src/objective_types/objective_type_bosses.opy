@@ -73,12 +73,12 @@ rule "BOT BECOMES BOSS":
     eventPlayer.setKnockbackReceived(50)
     eventPlayer.setHealingReceived(0)
     waitUntil(eventPlayer.isOnGround(), 1)
-    bossesStateList[1] = distance(eventPlayer.getPosition(), eventPlayer.getEyePosition())
+    bossesStateList[1] = distance(eventPlayer, eventPlayer.getEyePosition())
     waitUntil(eventPlayer.botTarget == null, 1)
     wait(0.25)
     waitUntil(eventPlayer.botTarget != null or eventPlayer.getHealth() < eventPlayer.botBaseHealth, 99999)
     eventPlayer.clearStatusEffect(Status.ROOTED)
-    bossesStateList[1] = distance(eventPlayer.getPosition(), eventPlayer.getEyePosition())
+    bossesStateList[1] = distance(eventPlayer, eventPlayer.getEyePosition())
     wait(1)
     eventPlayer.enableEnvironmentCollision()
     eventPlayer.botIsWallCollisionEnabled = true
@@ -93,7 +93,7 @@ rule "BOSS STUCK":
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer.isCrouching() == false
     @Condition eventPlayer in bossesStateList == true
-    @Condition distance(eventPlayer.getPosition(), eventPlayer.getEyePosition()) < bossesStateList[1] - 0.25
+    @Condition distance(eventPlayer, eventPlayer.getEyePosition()) < bossesStateList[1] - 0.25
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.botIsWallCollisionEnabled = false
@@ -141,7 +141,7 @@ rule "BOSS DIES (ALL BOSS OBJECTIVES)":
                 waitUntil(eventPlayer.isAlive(), 0.25)
             applyBotBossHealth()
             if eventPlayer.botTarget == null:
-                eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botLastTarget.getPosition()), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
+                eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.botLastTarget), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
             #Illari punishes with ultimate
             if eventPlayer.getHero() == Hero.ILLARI and attacker.getTeam() == Team.1:
                 illariUlt()

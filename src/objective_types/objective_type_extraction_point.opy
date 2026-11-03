@@ -13,7 +13,7 @@ rule "PLAYERS IN EXTRACTION POINT CONTROL":
     @Condition currentObjectiveType == ObjectiveType.SHOWDOWN
     @Condition len(objectivePositionList) == 1
     @Condition currentObjectivePosition.y - eventPlayer.getEyePosition().y < 2
-    @Condition distance(eventPlayer.getPosition(), vect(currentObjectivePosition.x, eventPlayer.getPosition().y, currentObjectivePosition.z)) < objectiveRad
+    @Condition distance(eventPlayer, vect(currentObjectivePosition.x, eventPlayer.getPosition().y, currentObjectivePosition.z)) < objectiveRad
     
     if not eventPlayer in objectivePlayerList:
         objectivePlayerList.append(eventPlayer)

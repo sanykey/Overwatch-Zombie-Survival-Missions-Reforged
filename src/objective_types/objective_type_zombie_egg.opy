@@ -43,7 +43,7 @@ rule "BOT BECOMES ZOMBIE EGG":
     eventPlayer.disableEnvironmentCollision(true)
     eventPlayer.setHealingReceived(0)
     while not isObjectiveComplete:
-        zombieEggStateList[1] = distance(eventPlayer.getPosition(), eventPlayer.getEyePosition())
+        zombieEggStateList[1] = distance(eventPlayer, eventPlayer.getEyePosition())
         if not eventPlayer.isUsingAbility1() and eventPlayer.isAlive():
             eventPlayer.forceButtonPress(Button.ABILITY_1)
         wait(0.25)

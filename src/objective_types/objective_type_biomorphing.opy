@@ -120,7 +120,7 @@ rule "BIOWASTE IS PICKED UP":
     wait(0.1, Wait.ABORT_WHEN_FALSE)
     # biowastePickupPosition: nearest dropped biowaste position, to identify the resource being picked up.
     #!define biowastePickupPosition tmp0
-    biowastePickupPosition = sorted(biomorphingResourcePositionList, lambda x: distance(eventPlayer.getPosition(), x))[0]
+    biowastePickupPosition = sorted(biomorphingResourcePositionList, lambda x: distance(eventPlayer, x))[0]
     # biowastePickupIndex: resource index shared by position, type and visual arrays, to pick up and remove the same orb.
     #!define biowastePickupIndex tmp1
     biowastePickupIndex = biomorphingResourcePositionList.index(biowastePickupPosition)

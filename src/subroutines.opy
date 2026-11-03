@@ -271,7 +271,7 @@ macro globalObjectiveEntityManagementMacro():
         #Standoff
         else:
             #Objective distance
-            createInWorldText(getAllPlayers().exclude(objectivePlayerList), "Distance: {0}m".format(distance(localPlayer.getPosition(), currentObjectivePosition)), currentObjectivePosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, objectiveColor, SpecVisibility.NEVER)
+            createInWorldText(getAllPlayers().exclude(objectivePlayerList), "Distance: {0}m".format(distance(localPlayer, currentObjectivePosition)), currentObjectivePosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, objectiveColor, SpecVisibility.NEVER)
             objectiveEntityIdList.append(getLastCreatedText())
             #Zone Ring
             createEffect(localPlayer.filter(lambda _: localPlayer.getPosition().y > currentObjectivePosition.y + 4), Effect.RING, objectiveColor, currentObjectivePosition, objectiveRad)
@@ -306,7 +306,7 @@ macro globalObjectiveEntityManagementMacro():
         createIcon(getAllPlayers(), bossesStateList[0].getEyePosition() + Vector.UP if len(bossesStateList) > 0 else currentObjectivePosition, Icon.SKULL, IconReeval.VISIBILITY_AND_POSITION, Color.RED)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Boss Distance
-        createInWorldText(getAllPlayers().filter(lambda player: len(bossesStateList) == 0 or not player in bossesStateList[0].botPotentialTargetList), "Distance: {0}m".format(distance(localPlayer.getPosition(), bossesStateList[0].getPosition()) if len(bossesStateList) > 0 else distance(localPlayer.getPosition(), currentObjectivePosition)), bossesStateList[0].getPosition() if len(bossesStateList) > 0 else currentObjectivePosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.RED, SpecVisibility.NEVER)
+        createInWorldText(getAllPlayers().filter(lambda player: len(bossesStateList) == 0 or not player in bossesStateList[0].botPotentialTargetList), "Distance: {0}m".format(distance(localPlayer, bossesStateList[0].getPosition()) if len(bossesStateList) > 0 else distance(localPlayer, currentObjectivePosition)), bossesStateList[0].getPosition() if len(bossesStateList) > 0 else currentObjectivePosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.RED, SpecVisibility.NEVER)
         objectiveEntityIdList.append(getLastCreatedText())
     #Biomoprhing
     elif objectiveValue == ObjectiveType.BIOMORPHING:
@@ -340,7 +340,7 @@ macro globalObjectiveEntityManagementMacro():
         hudSubheader(getPlayers(Team.1), "Objectives Remaining: {0}".format(len(objectivePositionList) - 1), HudPosition.TOP, 1, Color.VIOLET, HudReeval.VISIBILITY)
         objectiveEntityIdList.append(getLastCreatedText())
         #Objective icon
-        createIcon(getAllPlayers().filter(lambda player: distance(player.getPosition(), rescueSurvivor[0].getPosition()) < objectiveRad and distance(player.getPosition(), currentObjectivePosition) > 5), currentObjectivePosition + Vector.UP, Icon.ARROW_DOWN, IconReeval.VISIBILITY_AND_POSITION, Color.VIOLET)
+        createIcon(getAllPlayers().filter(lambda player: distance(player, rescueSurvivor[0].getPosition()) < objectiveRad and distance(player, currentObjectivePosition) > 5), currentObjectivePosition + Vector.UP, Icon.ARROW_DOWN, IconReeval.VISIBILITY_AND_POSITION, Color.VIOLET)
         objectiveEntityIdList.append(getLastCreatedEntity())
     #Killzone
     elif objectiveValue == ObjectiveType.KILL_ZONE:
@@ -351,19 +351,19 @@ macro globalObjectiveEntityManagementMacro():
         remainingObjectivesHudColor = Color.RED
         createRemainingObjectivesHud()
         #Objective distance
-        createInWorldText(getAllPlayers().filter(lambda player: distance(player.getPosition(), killZoneCenter) > objectiveRad), "Distance: {0}m".format(distance(localPlayer.getPosition(), killZoneCenter) - objectiveRad), killZoneCenter, 1, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.RED, SpecVisibility.NEVER)
+        createInWorldText(getAllPlayers().filter(lambda player: distance(player, killZoneCenter) > objectiveRad), "Distance: {0}m".format(distance(localPlayer, killZoneCenter) - objectiveRad), killZoneCenter, 1, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.RED, SpecVisibility.NEVER)
         objectiveEntityIdList.append(getLastCreatedText())
         #Objective icon
-        createIcon(getAllPlayers().filter(lambda player: distance(player.getPosition(), killZoneCenter) > objectiveRad), killZoneCenter + Vector.UP, Icon.ARROW_DOWN, IconReeval.VISIBILITY, Color.RED)
+        createIcon(getAllPlayers().filter(lambda player: distance(player, killZoneCenter) > objectiveRad), killZoneCenter + Vector.UP, Icon.ARROW_DOWN, IconReeval.VISIBILITY, Color.RED)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Kill Zone Sphere
-        createEffect(getAllPlayers().filter(lambda player: distance(player.getPosition(), killZoneCenter) > objectiveRad), Effect.SPHERE, Color.GRAY, killZoneCenter, objectiveRad, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createEffect(getAllPlayers().filter(lambda player: distance(player, killZoneCenter) > objectiveRad), Effect.SPHERE, Color.GRAY, killZoneCenter, objectiveRad, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Kill Zone Ring
         createEffect(getAllPlayers(), Effect.RING, Color.RED, vect(killZoneCenter.x, localPlayer.getPosition().y, killZoneCenter.z), sqrt(objectiveRad ** 2 - ((abs(localPlayer.getPosition().y - killZoneCenter.y)) ** 2)), EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Kill Zone light shaft
-        createEffect(getAllPlayers().filter(lambda player: distance(player.getPosition(), killZoneCenter) < objectiveRad), Effect.LIGHT_SHAFT, Color.RED, vect(killZoneCenter.x, localPlayer.getPosition().y + -29, killZoneCenter.z), sqrt(objectiveRad ** 2 - ((abs(localPlayer.getPosition().y - killZoneCenter.y)) ** 2)), EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createEffect(getAllPlayers().filter(lambda player: distance(player, killZoneCenter) < objectiveRad), Effect.LIGHT_SHAFT, Color.RED, vect(killZoneCenter.x, localPlayer.getPosition().y + -29, killZoneCenter.z), sqrt(objectiveRad ** 2 - ((abs(localPlayer.getPosition().y - killZoneCenter.y)) ** 2)), EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         objectiveEntityIdList.append(getLastCreatedEntity())
     #Zombie Egg
     elif objectiveValue == ObjectiveType.ZOMBIE_EGG:
@@ -374,7 +374,7 @@ macro globalObjectiveEntityManagementMacro():
         remainingObjectivesHudColor = Color.LIME_GREEN
         createRemainingObjectivesHud()
         #Objective distance
-        createInWorldText(getAllPlayers(), "Destroy: {0}m".format(distance(localPlayer.getPosition(), currentObjectivePosition)), currentObjectivePosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.LIME_GREEN, SpecVisibility.NEVER)
+        createInWorldText(getAllPlayers(), "Destroy: {0}m".format(distance(localPlayer, currentObjectivePosition)), currentObjectivePosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.LIME_GREEN, SpecVisibility.NEVER)
         objectiveEntityIdList.append(getLastCreatedText())
         #Objective icon
         createIcon(getAllPlayers(), currentObjectivePosition + Vector.UP, Icon.RADIOACTIVE, IconReeval.VISIBILITY_AND_POSITION, Color.LIME_GREEN)
@@ -391,17 +391,17 @@ macro globalObjectiveEntityManagementMacro():
         hudText(getAllPlayers(), "{0}% | {1}% | {2}%".format(floor(satelliteTerminalProgressList[0]), floor(satelliteTerminalProgressList[1]), floor(satelliteTerminalProgressList[2])), "Objectives remaining: {0}".format(len(objectivePositionList) - 1), [], HudPosition.TOP, 1, objectiveColor, objectiveColor, objectiveColor, HudReeval.VISIBILITY_AND_STRING)
         objectiveEntityIdList.append(getLastCreatedText())
         #Fixing terminal light shaft
-        createEffect(objectivePlayerList, Effect.LIGHT_SHAFT, objectiveColor, sorted(satelliteTerminalPositionList, lambda x: distance(localPlayer.getPosition(), x))[0] + -2 * Vector.UP, objectiveRad, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createEffect(objectivePlayerList, Effect.LIGHT_SHAFT, objectiveColor, sorted(satelliteTerminalPositionList, lambda x: distance(localPlayer, x))[0] + -2 * Vector.UP, objectiveRad, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Current terminal repair percentage
-        createInWorldText(objectivePlayerList, "{0}%".format(floor(satelliteTerminalProgressList[satelliteTerminalPositionList.index(sorted(satelliteTerminalPositionList, lambda x: distance(localPlayer.getPosition(), x))[0])])), updateEveryFrame(localPlayer.getEyePosition() + ((directionFromAngles(localPlayer.getHorizontalFacingAngle(), localPlayer.getVerticalFacingAngle() + 15)) * 200)), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, objectiveColor)
+        createInWorldText(objectivePlayerList, "{0}%".format(floor(satelliteTerminalProgressList[satelliteTerminalPositionList.index(sorted(satelliteTerminalPositionList, lambda x: distance(localPlayer, x))[0])])), updateEveryFrame(localPlayer.getEyePosition() + ((directionFromAngles(localPlayer.getHorizontalFacingAngle(), localPlayer.getVerticalFacingAngle() + 15)) * 200)), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, objectiveColor)
         objectiveEntityIdList.append(getLastCreatedText())
         #Terminal effects
         # satelliteTerminalVisualIndex: terminal index, to create its icon, repair ring, screen and distance text.
         #!define satelliteTerminalVisualIndex tmp0
         for satelliteTerminalVisualIndex in range(len(satelliteTerminalProgressList)):
             #Terminal icon
-            createIcon(getPlayers(Team.1).filter(lambda player: distance(player.getPosition(), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)]) > objectiveRad and satelliteTerminalProgressList[evalOnce(satelliteTerminalVisualIndex)] < 100), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)] + Vector.UP, Icon.BOLT, IconReeval.VISIBILITY_AND_POSITION, objectiveColor)
+            createIcon(getPlayers(Team.1).filter(lambda player: distance(player, satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)]) > objectiveRad and satelliteTerminalProgressList[evalOnce(satelliteTerminalVisualIndex)] < 100), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)] + Vector.UP, Icon.BOLT, IconReeval.VISIBILITY_AND_POSITION, objectiveColor)
             objectiveEntityIdList.append(getLastCreatedEntity())
             #Terminal repair area ring
             createEffect(getAllPlayers(), Effect.RING, objectiveColor, satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)], objectiveRad, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -410,7 +410,7 @@ macro globalObjectiveEntityManagementMacro():
             createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, objectiveColor, satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)] + directionTowards(satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)], currentObjectivePosition) * objectiveRad * 0.8 + -1.5 * Vector.UP, 0.25, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             objectiveEntityIdList.append(getLastCreatedEntity())
             #Objective distance
-            createInWorldText(getAllPlayers().filter(lambda player: satelliteTerminalProgressList[evalOnce(satelliteTerminalVisualIndex)] < 100 and distance(player.getPosition(), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)]) > objectiveRad), "Distance: {0}m".format(distance(localPlayer.getPosition(), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)])), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, objectiveColor, SpecVisibility.NEVER)
+            createInWorldText(getAllPlayers().filter(lambda player: satelliteTerminalProgressList[evalOnce(satelliteTerminalVisualIndex)] < 100 and distance(player, satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)]) > objectiveRad), "Distance: {0}m".format(distance(localPlayer, satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)])), satelliteTerminalPositionList[evalOnce(satelliteTerminalVisualIndex)], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, objectiveColor, SpecVisibility.NEVER)
             objectiveEntityIdList.append(getLastCreatedText())
 
 
@@ -684,9 +684,9 @@ def selectTarget():
         #Players in Air
         botSelectionCandidateList.append(playerTargetList.filter(lambda x: distance(x.getPosition(), nearestWalkablePosition(x.getPosition())) > 5))
     #Add players who are below bot to target list
-    botSelectionCandidateList.append(sorted(playerTargetList.exclude(botSelectionCandidateList).filter(lambda x: x.getPosition().y - eventPlayer.getPosition().y < 2.5), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))
+    botSelectionCandidateList.append(sorted(playerTargetList.exclude(botSelectionCandidateList).filter(lambda x: x.getPosition().y - eventPlayer.getPosition().y < 2.5), lambda x: distance(eventPlayer, x)))
     #Add remaining players
-    botSelectionCandidateList.append(sorted(playerTargetList.exclude(botSelectionCandidateList), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))
+    botSelectionCandidateList.append(sorted(playerTargetList.exclude(botSelectionCandidateList), lambda x: distance(eventPlayer, x)))
     #Remove invisible players
     botSelectionCandidateList = botSelectionCandidateList.filter(lambda x: not x.invisibilityCount)
     #The reevaluated boss distance-text visibility reads this per-bot snapshot after this call returns.
@@ -712,7 +712,7 @@ def restoreDefaultFacingMovement():
         if not eventPlayer.botIsFacingOverridden:
             eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()), 1500 if eventPlayer.botIsAttached else 0 if eventPlayer.isCrowdControlled else 100)
         if not eventPlayer.botIsThrottleOverridden:
-            eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()), eventPlayer.botThrottleSpeed if distance(eventPlayer.getPosition(), vect(eventPlayer.botTarget.getPosition().x, eventPlayer.getPosition().y, eventPlayer.botTarget.getPosition().z)) > 2 * min(1, eventPlayer.sizeScale) else 0, Relativity.TO_WORLD)
+            eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.botTarget), eventPlayer.botThrottleSpeed if distance(eventPlayer, vect(eventPlayer.botTarget.getPosition().x, eventPlayer.getPosition().y, eventPlayer.botTarget.getPosition().z)) > 2 * min(1, eventPlayer.sizeScale) else 0, Relativity.TO_WORLD)
     else:
         eventPlayer.startThrottleInDirection(eventPlayer.getFacingDirection(), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
         faceCurrentThrottle()
@@ -784,12 +784,12 @@ def abilityPlacement():
 def explosionSequence():
     @Name "explosionSequence"
     
-    eventPlayer.explosionTargetList = getPlayers(Team.2) if not eventPlayer.isDummy() else getAllPlayers().filter(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < eventPlayer.explosionScale * 6 and isInLoS(x.getEyePosition(), eventPlayer.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS))
+    eventPlayer.explosionTargetList = getPlayers(Team.2) if not eventPlayer.isDummy() else getAllPlayers().filter(lambda x: distance(eventPlayer, x) < eventPlayer.explosionScale * 6 and isInLoS(x.getEyePosition(), eventPlayer.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS))
     #Scaled
     damage(eventPlayer.explosionTargetList, eventPlayer, eventPlayer.botBiteDamage * 2.5 if eventPlayer.isDummy() else eventPlayer.infectionLevel * 100)
     if eventPlayer.isDummy():
         #Scaled
-        damage(eventPlayer.explosionTargetList.filter(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < 3 * eventPlayer.sizeScale), eventPlayer, eventPlayer.botBiteDamage * 5)
+        damage(eventPlayer.explosionTargetList.filter(lambda x: distance(eventPlayer, x) < 3 * eventPlayer.sizeScale), eventPlayer, eventPlayer.botBiteDamage * 5)
         #Scaled
         eventPlayer.explosionTargetList.setStatusEffect(eventPlayer, Status.BURNING, 3)
         #Not scaled damage

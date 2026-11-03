@@ -107,9 +107,9 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             #Battery sphere
             createEffect(getAllPlayers().filter(lambda _: eventPlayer.enhancementBatteryPosition != 0 and eventPlayer.enhancementBatteryReuseCooldown <= 0), Effect.ORB, Color.GRAY, eventPlayer.enhancementBatteryPosition + ((0.5 + sin(getTotalTimeElapsed() * 1) * 0.15) * Vector.UP), 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             #Charge battery text
-            createInWorldText(getAllPlayers().filter(lambda player: eventPlayer.enhancementBatteryPosition != 0 and eventPlayer.enhancementBatteryReuseCooldown <= 0 and distance(player.getPosition(), eventPlayer.enhancementBatteryPosition) < 6), "Charge Battery", eventPlayer.enhancementBatteryPosition + ((0.5 + sin(getTotalTimeElapsed() * 1) * 0.15) * Vector.UP), 1, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING)
+            createInWorldText(getAllPlayers().filter(lambda player: eventPlayer.enhancementBatteryPosition != 0 and eventPlayer.enhancementBatteryReuseCooldown <= 0 and distance(player, eventPlayer.enhancementBatteryPosition) < 6), "Charge Battery", eventPlayer.enhancementBatteryPosition + ((0.5 + sin(getTotalTimeElapsed() * 1) * 0.15) * Vector.UP), 1, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING)
             #Charge battery progress bar
-            createProgressBarInWorldText(getAllPlayers().filter(lambda player: eventPlayer.enhancementBatteryPosition != 0 and eventPlayer.enhancementBatteryReuseCooldown > 0 and distance(player.getPosition(), eventPlayer.enhancementBatteryPosition) < 6), 100 - eventPlayer.enhancementBatteryReuseCooldown / eventPlayer.enhancementBatteryReuseDuration * 100, [], eventPlayer.enhancementBatteryPosition + 0.4 * Vector.UP, 0.5, Clip.SURFACES, Color.WHITE, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_POSITION_AND_VALUES)
+            createProgressBarInWorldText(getAllPlayers().filter(lambda player: eventPlayer.enhancementBatteryPosition != 0 and eventPlayer.enhancementBatteryReuseCooldown > 0 and distance(player, eventPlayer.enhancementBatteryPosition) < 6), 100 - eventPlayer.enhancementBatteryReuseCooldown / eventPlayer.enhancementBatteryReuseDuration * 100, [], eventPlayer.enhancementBatteryPosition + 0.4 * Vector.UP, 0.5, Clip.SURFACES, Color.WHITE, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_POSITION_AND_VALUES)
             eventPlayer.enhancementBatteryReuseDuration = 10
             break
         #Hitchhiker
@@ -117,7 +117,7 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             #Enhancement Selection: Hitchhiker
             # enhancementHitchhikerCarrier: carrier player reference, for attachment, shared health, assists and HUD; 0 when detached.
             # enhancementHitchhikerPassengerPoolId: extra health pool ID on this passenger, retained to remove that pool when detaching.
-            hudText(eventPlayer, "Hitchhiker {0}".format(iconString(Icon.FLAG)), null, "Press [{0}] to dismount".format(inputBindingString(Button.CROUCH)) if eventPlayer.enhancementIsHitchhiking else "Press [{0}] to attach".format(inputBindingString(Button.CROUCH)) if playerTargetList.exclude(eventPlayer).any(lambda x: not x.isAttached and distance(eventPlayer.getPosition(), x.getPosition()) < 2 * x.sizeScale) else [], HudPosition.LEFT, 99, Color.PURPLE, Color.PURPLE, Color.RED if eventPlayer.enhancementIsHitchhiking else Color.PURPLE, HudReeval.VISIBILITY_STRING_AND_COLOR)
+            hudText(eventPlayer, "Hitchhiker {0}".format(iconString(Icon.FLAG)), null, "Press [{0}] to dismount".format(inputBindingString(Button.CROUCH)) if eventPlayer.enhancementIsHitchhiking else "Press [{0}] to attach".format(inputBindingString(Button.CROUCH)) if playerTargetList.exclude(eventPlayer).any(lambda x: not x.isAttached and distance(eventPlayer, x) < 2 * x.sizeScale) else [], HudPosition.LEFT, 99, Color.PURPLE, Color.PURPLE, Color.RED if eventPlayer.enhancementIsHitchhiking else Color.PURPLE, HudReeval.VISIBILITY_STRING_AND_COLOR)
             #Shared Health Bar Rider
             hudSubheader(eventPlayer.filter(lambda _: eventPlayer.enhancementIsHitchhiking), "Attached to {0} {1}".format(heroIcon(eventPlayer.enhancementHitchhikerCarrier.getHero()), eventPlayer.enhancementHitchhikerCarrier), HudPosition.LEFT, 100, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING)
             #Shared Health Bar Runner
@@ -289,7 +289,7 @@ rule "PYROTECHNIC SETS ENEMIES ON FIRE":
     @Condition attacker.enhancementId == Enhancement.PYROTECHNIC
     @Condition victim != eventPlayer
     @Condition eventAbility != null
-    @Condition distance(attacker.getPosition(), victim.getPosition()) < 15
+    @Condition distance(attacker, victim) < 15
     
     victim.setStatusEffect(attacker, Status.BURNING, 3)
     attacker.enhancementPyroHitList.append(victim)
@@ -426,7 +426,7 @@ rule "CHARGE BATTERY (USAGE AND COOLDOWNS)":
     
     # batteryChargeRecipient: survivor using the battery, to play feedback and grant ultimate charge before cooldown waits.
     #!define batteryChargeRecipient tmp0
-    batteryChargeRecipient = (getLivingPlayers(Team.1).filter(lambda player: player.hasSpawned() and distance(player.getPosition(), eventPlayer.enhancementBatteryPosition) < 1.5))[0]
+    batteryChargeRecipient = (getLivingPlayers(Team.1).filter(lambda player: player.hasSpawned() and distance(player, eventPlayer.enhancementBatteryPosition) < 1.5))[0]
     playEffect(batteryChargeRecipient, DynamicEffect.BUFF_IMPACT_SOUND, Color.YELLOW, batteryChargeRecipient, 50)
     playEffect(batteryChargeRecipient, DynamicEffect.GOOD_EXPLOSION, Color.GRAY, eventPlayer.enhancementBatteryPosition, 3)
     playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, Color.YELLOW, batteryChargeRecipient, 1)
@@ -450,16 +450,16 @@ rule "HITCHHIKER ATTACH/DETATCH":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.enhancementId == Enhancement.HITCHHIKER
-    @Condition (eventPlayer.isHoldingButton(Button.CROUCH) or (eventPlayer.enhancementIsHitchhiking and (not eventPlayer.hasSpawned() or not eventPlayer.enhancementHitchhikerCarrier.hasSpawned() or eventPlayer.isDead() or eventPlayer.enhancementHitchhikerCarrier.isDead() or not entityExists(eventPlayer.enhancementHitchhikerCarrier) or eventPlayer.hasStatus(Status.KNOCKED_DOWN) or eventPlayer.enhancementHitchhikerCarrier.hasStatus(Status.KNOCKED_DOWN) or distance(eventPlayer.getPosition(), eventPlayer.enhancementHitchhikerCarrier.getPosition()) > 3 * eventPlayer.enhancementHitchhikerCarrier.sizeScale))) == true
+    @Condition (eventPlayer.isHoldingButton(Button.CROUCH) or (eventPlayer.enhancementIsHitchhiking and (not eventPlayer.hasSpawned() or not eventPlayer.enhancementHitchhikerCarrier.hasSpawned() or eventPlayer.isDead() or eventPlayer.enhancementHitchhikerCarrier.isDead() or not entityExists(eventPlayer.enhancementHitchhikerCarrier) or eventPlayer.hasStatus(Status.KNOCKED_DOWN) or eventPlayer.enhancementHitchhikerCarrier.hasStatus(Status.KNOCKED_DOWN) or distance(eventPlayer, eventPlayer.enhancementHitchhikerCarrier) > 3 * eventPlayer.enhancementHitchhikerCarrier.sizeScale))) == true
     @Condition eventPlayer.getHero() != Hero.MEI
     
     if not eventPlayer.enhancementIsHitchhiking and eventPlayer.isAlive():
-        if playerTargetList.exclude(eventPlayer).any(lambda x: not x.isAttached and distance(eventPlayer.getPosition(), x.getPosition()) < 2 * x.sizeScale):
+        if playerTargetList.exclude(eventPlayer).any(lambda x: not x.isAttached and distance(eventPlayer, x) < 2 * x.sizeScale):
             #Select parent
-            eventPlayer.enhancementHitchhikerCarrier = (sorted(playerTargetList.exclude(eventPlayer).filter(lambda x: not x.isCrowdControlled and distance(eventPlayer.getPosition(), x.getPosition()) < x.sizeScale * 2), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition()))))[0]
+            eventPlayer.enhancementHitchhikerCarrier = (sorted(playerTargetList.exclude(eventPlayer).filter(lambda x: not x.isCrowdControlled and distance(eventPlayer, x) < x.sizeScale * 2), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition()))))[0]
             # hitchhikerWorldAttachmentPosition: attachment position in world space, converted and captured before any wait.
             #!define hitchhikerWorldAttachmentPosition tmp0
-            hitchhikerWorldAttachmentPosition = eventPlayer.enhancementHitchhikerCarrier.getPosition() + directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementHitchhikerCarrier.getPosition(), eventPlayer.getPosition())), 0) * eventPlayer.enhancementHitchhikerCarrier.sizeScale + eventPlayer.enhancementHitchhikerCarrier.sizeScale * Vector.UP
+            hitchhikerWorldAttachmentPosition = eventPlayer.enhancementHitchhikerCarrier.getPosition() + directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementHitchhikerCarrier, eventPlayer)), 0) * eventPlayer.enhancementHitchhikerCarrier.sizeScale + eventPlayer.enhancementHitchhikerCarrier.sizeScale * Vector.UP
             # hitchhikerLocalAttachmentOffset: convert the attachment position to the parent's local coordinates.
             #!define hitchhikerLocalAttachmentOffset tmp0
             hitchhikerLocalAttachmentOffset = localVector(hitchhikerWorldAttachmentPosition, eventPlayer.enhancementHitchhikerCarrier, Transform.ROTATION_AND_TRANSLATION)
@@ -476,7 +476,7 @@ rule "HITCHHIKER ATTACH/DETATCH":
             eventPlayer.enhancementHitchhikerPassengerPoolId = getLastCreatedHealthPool()
             eventPlayer.enhancementHitchhikerCarrier.enhancementHitchhikerPassenger = eventPlayer
     else:
-        if entityExists(eventPlayer.enhancementHitchhikerCarrier) and eventPlayer.hasSpawned() and distance(eventPlayer.getPosition(), eventPlayer.enhancementHitchhikerCarrier.getPosition()) < 3 * eventPlayer.enhancementHitchhikerCarrier.sizeScale:
+        if entityExists(eventPlayer.enhancementHitchhikerCarrier) and eventPlayer.hasSpawned() and distance(eventPlayer, eventPlayer.enhancementHitchhikerCarrier) < 3 * eventPlayer.enhancementHitchhikerCarrier.sizeScale:
             eventPlayer.teleport(eventPlayer.enhancementHitchhikerCarrier.getPosition())
         else:
             eventPlayer.detach()
@@ -533,10 +533,10 @@ rule "P.U.P. TARGET":
     @Condition eventPlayer.enhancementPupCooldown <= 0
     #P.U.P. target
     @Condition eventPlayer.enhancementPupTarget == null
-    @Condition (getLivingPlayers(Team.2).any(lambda player: player.botTarget == eventPlayer and distance(eventPlayer.getPosition(), player.getPosition()) < 10)) == true
+    @Condition (getLivingPlayers(Team.2).any(lambda player: player.botTarget == eventPlayer and distance(eventPlayer, player) < 10)) == true
     
     #Set P.U.P. target
-    eventPlayer.enhancementPupTarget = (sorted(getLivingPlayers(Team.2).filter(lambda player: player.botTarget == eventPlayer), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))[0]
+    eventPlayer.enhancementPupTarget = (sorted(getLivingPlayers(Team.2).filter(lambda player: player.botTarget == eventPlayer), lambda x: distance(eventPlayer, x)))[0]
     waitUntil(eventPlayer.enhancementPupTarget.isDead() or not entityExists(eventPlayer.enhancementPupTarget) or eventPlayer.enhancementPupTarget.botIsTeleporting, 99999)
     stopChasing(eventPlayer.enhancementPupPosition)
     eventPlayer.enhancementPupTarget = null
@@ -574,7 +574,7 @@ rule "P.U.P. CONTROL":
     waitUntil(distance(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget.getEyePosition()) < 5 or eventPlayer.enhancementPupTarget == null, 99999)
     #If target still exists
     if eventPlayer.enhancementPupTarget != null:
-        if distance(eventPlayer.getPosition(), eventPlayer.enhancementPupTarget.getPosition()) > 6:
+        if distance(eventPlayer, eventPlayer.enhancementPupTarget) > 6:
             #P.U.P. color
             eventPlayer.enhancementPupColor = Color.WHITE
             #Beam visibility
@@ -592,7 +592,7 @@ rule "P.U.P. CONTROL":
                 eventPlayer.enhancementPupTarget.setStatusEffect(eventPlayer, Status.FROZEN, 1.5)
                 wait(0.25, Wait.ABORT_WHEN_FALSE)
             #Freeze zombies around target for shorter time
-            ((getPlayers(Team.2).filter(lambda player: distance(eventPlayer.enhancementPupTarget.getPosition(), player.getPosition()) < 3)).exclude(eventPlayer.enhancementPupTarget)).setStatusEffect(eventPlayer, Status.FROZEN, 0.75)
+            ((getPlayers(Team.2).filter(lambda player: distance(eventPlayer.enhancementPupTarget, player) < 3)).exclude(eventPlayer.enhancementPupTarget)).setStatusEffect(eventPlayer, Status.FROZEN, 0.75)
             #P.U.P. color
             eventPlayer.enhancementPupColor = Color.SKY_BLUE
             #Beam visibility

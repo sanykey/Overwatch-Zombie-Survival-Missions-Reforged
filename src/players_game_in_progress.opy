@@ -158,8 +158,8 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
     
     # Save row in ReconnectField order.
     playerStatsList[eventPlayer.reconnectUserIndex] = [ReconnectStatus.DOWNED, eventPlayer.rescueTimeRemaining, eventPlayer.reviveTimeRemaining, eventPlayer.reviveDuration, eventPlayer.getPosition()]
-    waitUntil(not eventPlayer.isReviving and playerTargetList.exclude(eventPlayer).filter(lambda x: not x.invisibilityCount).any(lambda x: distance(x.getPosition(), eventPlayer.getPosition()) < REVIVE_RADIUS), 0.5)
-    if playerTargetList.exclude(eventPlayer).filter(lambda x: not x.invisibilityCount).any(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < REVIVE_RADIUS):
+    waitUntil(not eventPlayer.isReviving and playerTargetList.exclude(eventPlayer).filter(lambda x: not x.invisibilityCount).any(lambda x: distance(x, eventPlayer) < REVIVE_RADIUS), 0.5)
+    if playerTargetList.exclude(eventPlayer).filter(lambda x: not x.invisibilityCount).any(lambda x: distance(eventPlayer, x) < REVIVE_RADIUS):
         eventPlayer.isReviving = true
         playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.YELLOW, eventPlayer.getPosition(), REVIVE_RADIUS * 2)
         eventPlayer.reviveTimeRemaining += -0.5
@@ -168,8 +168,8 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
     else:
         eventPlayer.isReviving = false
         #If dome will pass player before their death timer runs out, set the death timer to how long it will take for the dome to reach them
-        if len(objectivePositionList) == 1 and extractionZoneRad - distance(eventPlayer.getPosition(), currentObjectivePosition) < eventPlayer.rescueTimeRemaining:
-            eventPlayer.rescueTimeRemaining = (extractionZoneRad - distance(eventPlayer.getPosition(), currentObjectivePosition)) / 2.5
+        if len(objectivePositionList) == 1 and extractionZoneRad - distance(eventPlayer, currentObjectivePosition) < eventPlayer.rescueTimeRemaining:
+            eventPlayer.rescueTimeRemaining = (extractionZoneRad - distance(eventPlayer, currentObjectivePosition)) / 2.5
         else:
             eventPlayer.rescueTimeRemaining += -0.5
         #Player is dead outside of extraction zone

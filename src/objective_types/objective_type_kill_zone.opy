@@ -6,7 +6,7 @@ rule "MODIFY KILL ZONE SCORE":
     @Condition currentObjectiveType == ObjectiveType.KILL_ZONE
     @Condition playerTargetList.concat(victim).any(lambda x: distance(x.getPosition(), killZoneCenter) < objectiveRad) == true
     
-    if distance(eventPlayer.getPosition(), killZoneCenter) < objectiveRad or distance(victim.getPosition(), killZoneCenter) < objectiveRad:
+    if distance(eventPlayer, killZoneCenter) < objectiveRad or distance(victim.getPosition(), killZoneCenter) < objectiveRad:
         victim.botRespawnDelay = 2
         killZoneEliminationScore += ceil(victim.botBaseHealth / 280)
         if killZoneEliminationScore >= ELIMINATIONS_NEEDED_PER_OBJECTIVE:
