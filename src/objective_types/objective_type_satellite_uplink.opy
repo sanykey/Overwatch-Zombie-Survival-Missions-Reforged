@@ -126,10 +126,13 @@ rule "PLAYERS REPAIR TERMINALS":
     #Check each terminal
     # satelliteRepairTerminalIndex: terminal index, to update its repair progress and announce its completion.
     #!define satelliteRepairTerminalIndex tmp0
+    # satelliteRepairPlayerCount: players within the current terminal's repair radius for this tick.
+    #!define satelliteRepairPlayerCount tmp1
     for satelliteRepairTerminalIndex in range(len(satelliteTerminalPositionList)):
         if satelliteTerminalProgressList[satelliteRepairTerminalIndex] < 100:
-            if objectivePlayerList.any(lambda x: distance(satelliteTerminalPositionList[satelliteRepairTerminalIndex], x.getPosition()) < objectiveRad):
-                if len(objectivePlayerList.filter(lambda x: distance(satelliteTerminalPositionList[satelliteRepairTerminalIndex], x.getPosition()) < objectiveRad)) > 1:
+            satelliteRepairPlayerCount = len(objectivePlayerList.filter(lambda x: distance(satelliteTerminalPositionList[satelliteRepairTerminalIndex], x.getPosition()) < objectiveRad))
+            if satelliteRepairPlayerCount > 0:
+                if satelliteRepairPlayerCount > 1:
                     #2 or more players on the terminal
                     satelliteTerminalProgressList[satelliteRepairTerminalIndex] += 0.4
                 #Base Repair Speed

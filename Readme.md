@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **26,736 elements**, freeing up **5,528** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+The current OverPy 9.7.20 build uses **26,728 elements**, freeing up **5,536** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+
+- Satellite terminal repair counts players within the current terminal's radius once per pass in the existing `tmp1`: **26,736 → 26,728 (−8 elements)**, without new variables. The `> 0` and `> 1` checks use that count before any wait; the 0.4 and 1.1 progress increments, progress cap, messages and 0.5 s interval are preserved. The build emitted no warnings. In-game validation and runtime benchmarks have not been performed.
 
 - Ground item type is read once into the existing `tmp0` before range validation and orb/label creation: **26,746 → 26,736 (−10 elements)**, without new variables. The snapshot is refreshed each pass; color and name are read at creation, while only visibility reevaluates. Separate effect/text position indices, original colors/names and created-handle registration are preserved. `node analysis/verify-ground-powerup-id.cjs` compares all 237 compiled rules after substituting the ID expression back and rejects four unsafe variants, including live color/string reevaluation through scratch. In-game validation and runtime benchmarks have not been performed. [Validation results](analysis/ground-powerup-id-validation-2026-11-03.json).
 
