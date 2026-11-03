@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **26,774 elements**, freeing up **5,490** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+The current OverPy 9.7.20 build uses **26,759 elements**, freeing up **5,505** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+
+- Bot teleport target-position averaging now uses one shared loop and one synchronous snapshot of the selected list: **26,774 → 26,759 (−15 elements)**, without new variables. The selection condition, summation order and original loop-counter divisor are preserved; compiled loop factoring was checked and the other 236 rules match. Comments document existing edge cases: an empty list yields a zero center, and targets can disappear during waits before destination selection; guarding these cases requires a separate fix. In-game validation and runtime benchmarks have not been performed.
 
 - Kill Zone and Zombie Egg now share the synchronous `createRemainingObjectivesHud`: **26,780 → 26,774 (−6 elements)**, without new variables. The red/lime-green initial color is passed through `tmp2` immediately before the call and read only at creation; only visibility reevaluates using the original `getAllPlayers()` expression. Text, position, sort order, HUD count and immediate ID registration for cleanup are preserved. `node analysis/verify-remaining-objectives-hud.cjs` compares all 236 original compiled rules after restoring the two calls and rejects four unsafe changes, including color reevaluation and missing ID registration. In-game validation and runtime benchmarks have not been performed. [Validation results](analysis/remaining-objectives-hud-validation-2026-11-03.json).
 

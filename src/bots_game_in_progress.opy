@@ -452,6 +452,9 @@ def teleportBots():
     if eventPlayer.botCustomTeleportPosition == null:
         while eventPlayer.botIsTeleporting:
             botTeleportCenterMacro()
+            # Pre-existing edge case: targets may disappear during this wait or later search waits.
+            # The search has no empty-target guard and may continue using a stale or zero center.
+            # The shared average loop preserves this behavior; guard the search separately when fixing it.
             wait()
             eventPlayer.botTeleportPosition = 0
             #Teleport with max distance constraint no view angle constraint
@@ -488,15 +491,18 @@ def locateAveragePlayerLocation():
     @Name "locateAveragePlayerLocation"
     
     eventPlayer.botTeleportCenter = vect(0, 0, 0)
+    # Snapshot the selected players once; consume the list synchronously before any wait or call.
+    #!define averageTargetPlayerList tmp1
     if len(objectivePlayerList) == 0 and playerTargetList.any(lambda x: x.getThrottle() != vect(0, 0, 0)):
-        # averageTargetPositionIndex: moving-player index, then their count after the loop, to average their positions.
-        #!define averageTargetPositionIndex tmp0
-        for averageTargetPositionIndex in range(len(playerTargetList.filter(lambda x: x.getThrottle() != vect(0, 0, 0)))):
-            eventPlayer.botTeleportCenter += ((playerTargetList.filter(lambda x: x.getThrottle() != vect(0, 0, 0)))[averageTargetPositionIndex]).getPosition()
+        averageTargetPlayerList = playerTargetList.filter(lambda x: x.getThrottle() != vect(0, 0, 0))
     else:
-        # averageTargetPositionIndex: player index, then the player count after the loop, to average all target positions.
-        for averageTargetPositionIndex in range(len(playerTargetList)):
-            eventPlayer.botTeleportCenter += playerTargetList[averageTargetPositionIndex].getPosition()
+        averageTargetPlayerList = playerTargetList
+    # Preserve player order and the original loop counter as the divisor, including an empty list.
+    #!define averageTargetPositionIndex tmp0
+    for averageTargetPositionIndex in range(len(averageTargetPlayerList)):
+        eventPlayer.botTeleportCenter += averageTargetPlayerList[averageTargetPositionIndex].getPosition()
+    # Pre-existing empty-list behavior: the divisor is 0, and Workshop Divide returns 0, producing a zero center.
+    # An early return here alone would not stop the caller's teleport search; this needs a separate fix.
     eventPlayer.botTeleportCenter /= averageTargetPositionIndex
 
 
