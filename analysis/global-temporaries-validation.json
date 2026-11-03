@@ -1,5 +1,5 @@
 {
-  "elements": 26746,
+  "elements": 26736,
   "globals": 103,
   "playerVariables": 75,
   "warnings": [],
@@ -232,6 +232,12 @@
       "controlFlowNodes": 27,
       "boundaries": 3,
       "visualActions": 0
+    },
+    {
+      "name": "POWER UP EFFECT/TEXT MANAGEMENT",
+      "controlFlowNodes": 8,
+      "boundaries": 0,
+      "visualActions": 2
     },
     {
       "name": "EFFECT/TEXT (PERMANENT)",

@@ -4,9 +4,13 @@
 
 macro powerUpAssignmentMacro():
     #Names/colors follow item IDs 1-13; effect and text positions keep separate indices.
-    if supplyPowerUpIdList[len(supplyPowerUpEffectIdList)] >= 1 and supplyPowerUpIdList[len(supplyPowerUpEffectIdList)] <= 13:
-        createEffect(getAllPlayers(), Effect.ORB, powerUpColorListConst[supplyPowerUpIdList[len(supplyPowerUpEffectIdList)] - 1], supplyPowerUpPositionList[len(supplyPowerUpEffectIdList)], 1, EffectReeval.VISIBILITY)
-        createInWorldText(getAllPlayers(), ["CURE", "Revive", "Force Field", "No Cooldowns", "Air Strike", "Beacon of Healing", "Vaccine", "Sentry Turret", "Cloaking Device", "Super Nano", "Bounce Pad", "Ultimate Charger", "Stun"][supplyPowerUpIdList[len(supplyPowerUpEffectIdList)] - 1], supplyPowerUpPositionList[len(supplyPowerUpTextIdList)], 1, Clip.SURFACES, WorldTextReeval.VISIBILITY)
+    # Item type ID, not an effect/text handle; refresh and consume it synchronously on each pass.
+    # Only visibility reevaluates, so neither the initial color nor the label retains a scratch dependency.
+    #!define groundPowerUpItemId tmp0
+    groundPowerUpItemId = supplyPowerUpIdList[len(supplyPowerUpEffectIdList)]
+    if groundPowerUpItemId >= 1 and groundPowerUpItemId <= 13:
+        createEffect(getAllPlayers(), Effect.ORB, powerUpColorListConst[groundPowerUpItemId - 1], supplyPowerUpPositionList[len(supplyPowerUpEffectIdList)], 1, EffectReeval.VISIBILITY)
+        createInWorldText(getAllPlayers(), ["CURE", "Revive", "Force Field", "No Cooldowns", "Air Strike", "Beacon of Healing", "Vaccine", "Sentry Turret", "Cloaking Device", "Super Nano", "Bounce Pad", "Ultimate Charger", "Stun"][groundPowerUpItemId - 1], supplyPowerUpPositionList[len(supplyPowerUpTextIdList)], 1, Clip.SURFACES, WorldTextReeval.VISIBILITY)
 
 
 rule "POWER UP EFFECT/TEXT MANAGEMENT":

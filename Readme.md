@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **26,746 elements**, freeing up **5,518** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+The current OverPy 9.7.20 build uses **26,736 elements**, freeing up **5,528** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **75/128**.
+
+- Ground item type is read once into the existing `tmp0` before range validation and orb/label creation: **26,746 → 26,736 (−10 elements)**, without new variables. The snapshot is refreshed each pass; color and name are read at creation, while only visibility reevaluates. Separate effect/text position indices, original colors/names and created-handle registration are preserved. `node analysis/verify-ground-powerup-id.cjs` compares all 237 compiled rules after substituting the ID expression back and rejects four unsafe variants, including live color/string reevaluation through scratch. In-game validation and runtime benchmarks have not been performed. [Validation results](analysis/ground-powerup-id-validation-2026-11-03.json).
 
 - Objective cleanup reads each ID once per iteration into the existing `tmp0`, then performs the original six deletions before waiting: **26,759 → 26,746 (−13 elements)**, without new variables. The loop index remains in `phaseSlot0` across `wait()`; the ID is read again after each wait. `node analysis/verify-objective-cleanup-id.cjs` compares all 237 compiled rules after substituting the original ID expression back and rejects three unsafe variants. Deletion order, the wait and list reset are preserved; shared HUD validation also passes. In-game validation and runtime benchmarks have not been performed. [Validation results](analysis/objective-cleanup-id-validation-2026-11-03.json).
 
