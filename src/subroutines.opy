@@ -784,7 +784,8 @@ def abilityPlacement():
 def explosionSequence():
     @Name "explosionSequence"
     
-    eventPlayer.explosionTargetList = getPlayers(Team.2) if not eventPlayer.isDummy() else getAllPlayers().filter(lambda x: distance(eventPlayer, x) < eventPlayer.explosionScale * 6 and isInLoS(x.getEyePosition(), eventPlayer.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS))
+    # Filter the chosen team for both explosion types; dummy bot explosions also require line of sight.
+    eventPlayer.explosionTargetList = (getPlayers(Team.2) if not eventPlayer.isDummy() else getAllPlayers()).filter(lambda x: distance(eventPlayer, x) < eventPlayer.explosionScale * 6 and (isInLoS(x.getEyePosition(), eventPlayer.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) if eventPlayer.isDummy() else true))
     #Scaled
     damage(eventPlayer.explosionTargetList, eventPlayer, eventPlayer.botBiteDamage * 2.5 if eventPlayer.isDummy() else eventPlayer.infectionLevel * 100)
     if eventPlayer.isDummy():

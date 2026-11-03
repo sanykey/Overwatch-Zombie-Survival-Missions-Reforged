@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **25,224 elements**, freeing up **7,040** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+The current OverPy 9.7.20 build uses **25,228 elements**, freeing up **7,036** compared with the original ZSMM's 32,264. Global variables: **103/128**; player variables: **84/128**.
+
+- Zombie Hybrid's melee explosion now damages Team 2 only within its outer visual blast radius (`6 * explosionScale`, currently 7.5 meters). The exported original Workshop code filtered both target branches, but its decompiled `.opy` applied the filter only to dummy bots; recompiling that source made Hybrid damage global. The source now groups the team choice before the shared distance filter, with the original line-of-sight check retained for dummy bots. The fix adds four elements; verification finds only the `explosionSequence` rule changed among 268 rules, matches the direct include build, and reports no warnings. Recheck with `node analysis/verify-zombie-hybrid-radius-2026-11-03.cjs`. In-game validation has not been performed.
 
 - Three vote-counting loops now assign the selected count or `-1` in one expression, preserving disabled choices. Eight nonnegative charge, cloud, anger, and respawn countdown checks now use their value directly or `not`. Together these changes reduce the build from **25,251 to 25,224 elements** without new variables. Verification compares all 268 compiled rules, finds nine affected rules, checks the direct include build, and reports no warnings. Recheck with `node analysis/verify-vote-and-countdown-optimizations-2026-11-03.cjs`. These values are assigned nonnegative values, and the charge, cloud, and anger values are chased toward zero; their behavior has not been validated in-game.
 
