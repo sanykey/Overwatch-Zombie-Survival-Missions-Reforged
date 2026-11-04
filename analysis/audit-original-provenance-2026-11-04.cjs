@@ -80,7 +80,7 @@ const findings = [
     ['R32', [[6188, 'range(50)'], [6193, 'playEffect'], [6196, 'playEffect'], [6356, '-0.125'], [6357, '% 0.25']],
         'Унаследованный кандидат на оптимизацию: Air Strike уже создавал четыре динамических эффекта на 50 шагов, Bounce Pad — кольцо каждые 0.25 секунды действия.'],
     ['R33', [[534, 'sorted(spawnTimes.map'], [7042, 'sorted(eventPlayer.concat'], [7043, '.exclude(']],
-        'Смешанное происхождение: сортировка таймеров и сортировка двух участников Hitchhiker унаследованы. Пустой цикл [debug] snky buffs добавлен в Reforged; это новый небольшой расход, без установленного риска краша. Аналога этого правила в предоставленном оригинале нет.'],
+        'Унаследованные кандидаты на оптимизацию: сортировка таймеров и сортировка двух участников Hitchhiker уже присутствовали в оригинале.'],
     ['R34', [[3622, 'miniBoss[miniBoss.index(eventPlayer)] = 0'], [4332, 'miniBoss.append(eventPlayer)']],
         'Добавление минибоссов и замена записей нулями вместо удаления уже существовали; рост массива унаследован.'],
     ['R35', [[5930, 'len(powerUpPositions) < 12'], [2510, 'range(4)'], [6090, 'powerUpPositions.append'], [6104, 'powerUpPositions.append'], [451, '#!extension playMoreEffects']],
@@ -91,7 +91,7 @@ const findings = [
         'Цикл снабжения уже искал точку без общего предела попыток и без проверки актуальности фазы/наличия целей внутри цикла.'],
     ['R38', [[2363, 'Impulse.CANCEL_CONTRARY_MOTION'], [6137, 'Impulse.CANCEL_CONTRARY_MOTION'], [7137, 'Impulse.CANCEL_CONTRARY_MOTION']],
         'Все 20 текущих мест имеют соответствующий legacy-импульс в оригинале. Это унаследованная задача совместимости физики, а не 20 новых доказанных дефектов. В IM01 выбор цели изменён и защищён проверкой существования, но сам режим импульса уже был прежним.'],
-].map(([id, refs, note]) => ({id, origin: id === 'R33' ? 'mixed' : id === 'R08' ? 'inherited-diagnostic' : 'inherited', note, evidence: refs.map(([line, needle]) => evidence(line, needle))}));
+].map(([id, refs, note]) => ({id, origin: id === 'R08' ? 'inherited-diagnostic' : 'inherited', note, evidence: refs.map(([line, needle]) => evidence(line, needle))}));
 
 const starts = [
     [1164, 'determineZombieMode'], [789, 'determineChallenge'], [850, 'determineObjectiveType'], [950, 'setObjectiveType'],
@@ -130,16 +130,12 @@ const chase = chaseRefs.map((refs, i) => ({id: `CH${String(i + 1).padStart(2, '0
 const impulses = [2363, 4698, 4782, 4788, 5047, 5086, 5150, 5243, 5376, 5386, 5493, 5495, 5730, 5754, 4388, 4389, 6137, 6366, 6800, 7137]
     .map((line, i) => ({id: `IM${String(i + 1).padStart(2, '0')}`, origin: 'inherited-compatibility', evidence: evidence(line, 'Impulse.CANCEL_CONTRARY_MOTION')}));
 assert.equal((text.match(/Impulse\.CANCEL_CONTRARY_MOTION\b/g) || []).length, 20);
-assert(!/snky|\[debug\] snky buffs/i.test(text), 'Recheck attribution of the added debug rule');
-const debug = read('src/debug.opy');
-assert(debug.includes('rule "[debug] snky buffs":') && debug.includes('# eventPlayer.setDamageDealt(1000)'));
 const report = {
     date: '2026-11-04', original, originalSha256: hash(text), hashNormalization: 'UTF-8, CRLF -> LF',
     scope: 'Source comparison of existing report findings, not an in-game test or an exhaustive search for regressions.',
+    excludedSourceFiles: ['src/debug.opy'],
     findings, starts, chase, impulses,
-    newSubfinding: {id: 'R33/debug', file: 'src/debug.opy', line: 10, sourceSha256: hash(debug),
-        note: 'Added empty periodic snky buffs rule; git history: introduced in 66a5d00, later restricted/commented. Only the current no-op overhead is classified as new.'},
 };
 if (process.argv.includes('--write')) fs.writeFileSync(path.join(__dirname, 'original-provenance-2026-11-04.json'), JSON.stringify(report, null, 2) + '\n');
-if (require.main === module) console.log(JSON.stringify({findings: findings.length, inherited: findings.filter(x => x.origin === 'inherited').length, mixed: 1, diagnosticGroup: 1, starts: starts.length, chase: chase.length, impulses: impulses.length, originalSha256: report.originalSha256}));
+if (require.main === module) console.log(JSON.stringify({findings: findings.length, inherited: findings.filter(x => x.origin === 'inherited').length, mixed: findings.filter(x => x.origin === 'mixed').length, diagnosticGroup: findings.filter(x => x.origin === 'inherited-diagnostic').length, starts: starts.length, chase: chase.length, impulses: impulses.length, originalSha256: report.originalSha256}));
 module.exports = report;

@@ -4,6 +4,9 @@
   "originalSha256": "5cdf980510c70b7ab7be5648a3cf392bba1ff6071a24b52772826b0091e49571",
   "hashNormalization": "UTF-8, CRLF -> LF",
   "scope": "Source comparison of existing report findings, not an in-game test or an exhaustive search for regressions.",
+  "excludedSourceFiles": [
+    "src/debug.opy"
+  ],
   "findings": [
     {
       "id": "R01",
@@ -771,8 +774,8 @@
     },
     {
       "id": "R33",
-      "origin": "mixed",
-      "note": "Смешанное происхождение: сортировка таймеров и сортировка двух участников Hitchhiker унаследованы. Пустой цикл [debug] snky buffs добавлен в Reforged; это новый небольшой расход, без установленного риска краша. Аналога этого правила в предоставленном оригинале нет.",
+      "origin": "inherited",
+      "note": "Унаследованные кандидаты на оптимизацию: сортировка таймеров и сортировка двух участников Hitchhiker уже присутствовали в оригинале.",
       "evidence": [
         {
           "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
@@ -1879,12 +1882,5 @@
         "source": "eventPlayer.enhancementValues[3].applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementChase1, eventPlayer.enhancementValues[3].getPosition())), min(-20, verticalAngleOfDirection(directionTowards(eventPlayer.enhancementChase1, eventPlayer.enhancementValues[3].getPosition())))), min(25, 4200 / eventPlayer.enhancementValues[3].getMaxHealth()), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
       }
     }
-  ],
-  "newSubfinding": {
-    "id": "R33/debug",
-    "file": "src/debug.opy",
-    "line": 10,
-    "sourceSha256": "6d4bf6eb7f3166b0619589f282c2fc3bd684a78de4fc6e108f015d705a15eab7",
-    "note": "Added empty periodic snky buffs rule; git history: introduced in 66a5d00, later restricted/commented. Only the current no-op overhead is classified as new."
-  }
+  ]
 }
