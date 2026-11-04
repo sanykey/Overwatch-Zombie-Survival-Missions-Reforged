@@ -76,7 +76,7 @@ rule "SWARM SHOOTOUT":
     @Condition (challengeSetting in [Challenge.SWARM_SHOOTOUT, Challenge.PANDORAS_BOX]) == true
     
     startDamageModification(getPlayers(Team.1), eventPlayer, 72)
-    waitUntil(eventPlayer.botTarget != false, 99999)
+    waitUntil(eventPlayer.botTarget != false, Math.INFINITY)
     if eventPlayer.getHero() in [Hero.REINHARDT, Hero.PHARAH, Hero.SIGMA, Hero.WINSTON]:
     elif eventPlayer.getHero() in [Hero.TORBJORN, Hero.MOIRA, Hero.SYMMETRA, Hero.KIRIKO, Hero.MAUGA, Hero.ANRAN]:
         eventPlayer.allowButton(Button.SECONDARY_FIRE)

@@ -118,7 +118,7 @@ rule "RUSHER MOLTEN CORE (BOSS)":
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.setUltCharge(100)
     while not eventPlayer.isUsingAbility2():
-        waitUntil(not eventPlayer.isMeleeing() and not eventPlayer.isCrowdControlled, 99999)
+        waitUntil(not eventPlayer.isMeleeing() and not eventPlayer.isCrowdControlled, Math.INFINITY)
         eventPlayer.forceButtonPress(Button.ABILITY_2)
         wait(0.25)
         if eventPlayer.isDead():
@@ -131,7 +131,7 @@ rule "RUSHER MOLTEN CORE (BOSS)":
     eventPlayer.botIsFacingOverridden = true
     eventPlayer.startFacing(directionFromAngles(evalOnce(random.uniform(0, 360)), evalOnce(random.uniform(-80, -87))), 0 if eventPlayer.isCrowdControlled else 144, Relativity.TO_PLAYER)
     while not eventPlayer.isUsingUltimate() and eventPlayer.isAlive():
-        waitUntil(not eventPlayer.isMeleeing() and not eventPlayer.isCrowdControlled, 99999)
+        waitUntil(not eventPlayer.isMeleeing() and not eventPlayer.isCrowdControlled, Math.INFINITY)
         eventPlayer.forceButtonPress(Button.ULTIMATE)
         wait(0.25)
     wait(1)
@@ -351,7 +351,7 @@ rule "REIGNITED (ANRAN) ABILITIES":
     eventPlayer.startForcingButton(Button.CROUCH)
     wait(0.5)
     eventPlayer.stopForcingButton(Button.CROUCH)
-    waitUntil(not eventPlayer.isUsingUltimate(), 99999)
+    waitUntil(not eventPlayer.isUsingUltimate(), Math.INFINITY)
     if not eventPlayer.isCrowdControlled:
         eventPlayer.forceButtonPress(Button.ABILITY_1)
         eventPlayer.stopThrottleInDirection()
@@ -401,7 +401,7 @@ rule "REIGNITED USES ULTIMATE NEAR PLAYER":
         eventPlayer.botIsReigniteActive = true
     wait(0.25)
     eventPlayer.botIsReigniteActive = false
-    waitUntil(not eventPlayer.isUsingUltimate(), 99999)
+    waitUntil(not eventPlayer.isUsingUltimate(), Math.INFINITY)
     eventPlayer.addHealthPool(Health.ARMOR, 100, false, false)
 
 
@@ -821,7 +821,7 @@ rule "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES":
     eventPlayer.setDamageReceived(50)
     #charge up attack
     chaseOverTime(eventPlayer.botBlasterCharge, 2, 1 if eventPlayer.botTarget.isInAir() else 2, ChaseTimeReeval.NONE)
-    waitUntil(eventPlayer.isDead() or eventPlayer.botBlasterCharge >= 2, 99999)
+    waitUntil(eventPlayer.isDead() or eventPlayer.botBlasterCharge >= 2, Math.INFINITY)
     stopChasing(eventPlayer.botBlasterCharge)
     if eventPlayer.isDead():
         eventPlayer.setDamageReceived(100)
@@ -833,18 +833,18 @@ rule "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES":
         #charge up attack
         chaseOverTime(eventPlayer.botBlasterCharge, 0, 0.25, ChaseTimeReeval.NONE)
     eventPlayer.setDamageReceived(100)
-    waitUntil(eventPlayer.isDead() or not eventPlayer.botBlasterCharge, 99999)
+    waitUntil(eventPlayer.isDead() or not eventPlayer.botBlasterCharge, Math.INFINITY)
     if eventPlayer.isDead():
         eventPlayer.botIsThrottleOverridden = false
         eventPlayer.botIsFacingOverridden = false
         return
     if isInLoS(eventPlayer.getPosition(), eventPlayer.getEyePosition() + worldVector(vect(0, 11, 5), eventPlayer, Transform.ROTATION)) and isInLoS(eventPlayer.botLastTarget.getEyePosition(), eventPlayer.getEyePosition() + worldVector(vect(0, 11, 5), eventPlayer, Transform.ROTATION)):
-        waitUntil(not eventPlayer.isCrowdControlled, 99999)
+        waitUntil(not eventPlayer.isCrowdControlled, Math.INFINITY)
         eventPlayer.startThrottleInDirection(Vector.FORWARD, 1, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
         eventPlayer.forceButtonPress(Button.ABILITY_1)
         eventPlayer.setAmmo(0, eventPlayer.getMaxAmmo())
         wait()
-        waitUntil(eventPlayer.getVerticalSpeed() <= 0, 99999)
+        waitUntil(eventPlayer.getVerticalSpeed() <= 0, Math.INFINITY)
         eventPlayer.stopThrottleInDirection()
         #Cooldown after flying
         eventPlayer.setAbilityCooldown(Button.ABILITY_1, 2)
@@ -939,7 +939,7 @@ rule "DOWNFALLEN GRABS PLAYER":
         eventPlayer.botAbilityTarget.stopFacing()
         eventPlayer.botAbilityTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, eventPlayer.botAbilityTarget)), 25), 50, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
         eventPlayer.botAbilityTarget.setStatusEffect(null, Status.KNOCKED_DOWN, 1.75)
-    waitUntil(not eventPlayer.isUsingUltimate(), 99999)
+    waitUntil(not eventPlayer.isUsingUltimate(), Math.INFINITY)
     eventPlayer.botAuxiliaryState = null
     restoreBotThrottle()
     eventPlayer.botIsWallPhaseAllowed = true
@@ -1003,7 +1003,7 @@ rule "DAYTAKER (ILLARI) BURST":
     eventPlayer.botAbilityTarget.isAttached = true
     eventPlayer.botAbilityTarget.attachTo(eventPlayer, vect(0, 0.65 * eventPlayer.sizeScale, 0.5 * eventPlayer.sizeScale))
     waitUntil(eventPlayer.isDead() or eventPlayer.botTarget == null or angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 10, 10)
-    waitUntil(eventPlayer.isDead() or eventPlayer.isCrowdControlled == true or eventPlayer.botDaytakerCharge >= 2, 99999)
+    waitUntil(eventPlayer.isDead() or eventPlayer.isCrowdControlled == true or eventPlayer.botDaytakerCharge >= 2, Math.INFINITY)
     #Finish charging
     stopChasing(eventPlayer.botDaytakerCharge)
     if eventPlayer.isCrowdControlled == true:
@@ -1020,12 +1020,12 @@ rule "DAYTAKER (ILLARI) BURST":
         return
     else:
         chaseOverTime(eventPlayer.botDaytakerCharge, 0, 0.35, ChaseTimeReeval.NONE)
-    waitUntil(eventPlayer.isDead() or not eventPlayer.botDaytakerCharge, 99999)
+    waitUntil(eventPlayer.isDead() or not eventPlayer.botDaytakerCharge, Math.INFINITY)
     #Abort
     if eventPlayer.isDead():
         daytakerAbortReset()
         return
-    waitUntil(not eventPlayer.isCrowdControlled, 99999)
+    waitUntil(not eventPlayer.isCrowdControlled, Math.INFINITY)
     eventPlayer.startThrottleInDirection(Vector.FORWARD, 1, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
     #Eject zombies
     if eventPlayer.isAlive() and eventPlayer.botAbilityTarget.isAlive():
@@ -1046,7 +1046,7 @@ rule "DAYTAKER (ILLARI) BURST":
     lbl_1:
     wait(0.1)
     #Cooldown
-    waitUntil(eventPlayer.getVerticalSpeed() <= 0, 99999)
+    waitUntil(eventPlayer.getVerticalSpeed() <= 0, Math.INFINITY)
     eventPlayer.stopThrottleInDirection()
     eventPlayer.setAbilityCooldown(Button.ABILITY_1, 7 if 0 in bossStateList else 1 if eventPlayer.botTarget.isInAir() else 3)
     #Boss Collision
@@ -1110,7 +1110,7 @@ rule "CADAVER (ANA) DETONATION":
     #Scaled
     @Condition distance(eventPlayer, eventPlayer.botTarget) <= 2.75 * eventPlayer.sizeScale
     
-    waitUntil(not eventPlayer.isMeleeing(), 99999)
+    waitUntil(not eventPlayer.isMeleeing(), Math.INFINITY)
     if not ruleCondition:
         return
     #Pre-explosion sound
@@ -1187,7 +1187,7 @@ rule "SMOLDER (WINSTON) SEES PLAYER":
     eventPlayer.botSmolderState = 1
     #Death timer
     chaseOverTime(eventPlayer.botSmolderAnger, 0, 6, ChaseTimeReeval.NONE)
-    waitUntil(eventPlayer.botSmolderState == 2 or not eventPlayer.botSmolderAnger, 99999)
+    waitUntil(eventPlayer.botSmolderState == 2 or not eventPlayer.botSmolderAnger, Math.INFINITY)
     if eventPlayer.botSmolderState == 2:
         return
     stopChasing(eventPlayer.botSmolderAnger)
@@ -1348,7 +1348,7 @@ rule "SUCCESSOR PUNCHES IN RETALIATION":
     @Hero doomfist
     @Condition eventPlayer.isUsingAbility2() == true
     
-    waitUntil(not eventPlayer.isUsingAbility2(), 99999)
+    waitUntil(not eventPlayer.isUsingAbility2(), Math.INFINITY)
     eventPlayer.startForcingButton(Button.SECONDARY_FIRE)
     wait(1)
     eventPlayer.stopForcingButton(Button.SECONDARY_FIRE)
@@ -1404,11 +1404,11 @@ rule "CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)":
         startRule(selectTarget, StartRuleBehavior.NOOP)
         eventPlayer.startForcingButton(Button.SECONDARY_FIRE)
         eventPlayer.setSecondaryFireEnabled(false)
-        waitUntil(not eventPlayer.isUsingUltimate(), 99999)
+        waitUntil(not eventPlayer.isUsingUltimate(), Math.INFINITY)
         eventPlayer.stopForcingButton(Button.SECONDARY_FIRE)
         eventPlayer.setSecondaryFireEnabled(true)
     if eventPlayer.getHero() == Hero.MAUGA:
-        waitUntil(not eventPlayer.isUsingUltimate(), 99999)
+        waitUntil(not eventPlayer.isUsingUltimate(), Math.INFINITY)
         eventPlayer.setMaxHealth(1)
     wait(30)
 

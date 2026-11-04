@@ -40,7 +40,7 @@ rule "INITIALIZE SURVIVOR TO BE RESCUED":
     eventPlayer.enhancementId = Enhancement.HITCHHIKER
     eventPlayer.enhancementHitchhikerCarrier = 0
     eventPlayer.enhancementHitchhikerPassengerPoolId = false
-    rescueSurvivor.setStatusEffect(null, Status.UNKILLABLE, 99999)
+    rescueSurvivor.setStatusEffect(null, Status.UNKILLABLE, Math.INFINITY)
     rescueSurvivor.setHealingReceived(110)
     #Objective/Survivor distance
     createInWorldText(getAllPlayers().filter(lambda _: not eventPlayer.rescueIsExtracting and distance(localPlayer, currentObjectivePosition) > 5), "Distance: {0}m".format(distance(localPlayer, eventPlayer if distance(eventPlayer, localPlayer) > objectiveRad else currentObjectivePosition)), eventPlayer.getPosition() if distance(eventPlayer, localPlayer) > objectiveRad else currentObjectivePosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.VIOLET, SpecVisibility.NEVER)
@@ -104,8 +104,8 @@ rule "SURVIVOR FOLLOW TARGET":
     rescueSurvivor.rescuePotentialLeaderList = []
     if rescueSurvivor.getHealth() <= 1:
         rescueSurvivor.rescueMoodIcon = iconString(Icon.DIZZY)
-        rescueSurvivor.setStatusEffect(null, Status.KNOCKED_DOWN, 99999)
-        rescueSurvivor.setStatusEffect(null, Status.PHASED_OUT, 99999)
+        rescueSurvivor.setStatusEffect(null, Status.KNOCKED_DOWN, Math.INFINITY)
+        rescueSurvivor.setStatusEffect(null, Status.PHASED_OUT, Math.INFINITY)
         waitUntil(rescueSurvivor.getNormalizedHealth() > 0.75, 20)
         rescueSurvivor.clearStatusEffect(Status.KNOCKED_DOWN)
         if ruleCondition:

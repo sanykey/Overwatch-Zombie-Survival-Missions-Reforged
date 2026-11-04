@@ -22,7 +22,7 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
         #Enhancement Selection: Kevlar
         # No enhancement state slots are currently used; the future cleanup ID is documented below.
         hudHeader(eventPlayer, "Kevlar {0}".format(iconString(Icon.STOP)), HudPosition.LEFT, 99, colorKevlarConst, HudReeval.STRING)
-        waitUntil(eventPlayer.initialMaxHealth > 0, 99999)
+        waitUntil(eventPlayer.initialMaxHealth > 0, Math.INFINITY)
         eventPlayer.addHealthPool(Health.ARMOR, 75, true, false)
         # If enhancement switching is added after game start, retain the health pool ID to remove Kevlar armor when switching away.
         # Future Kevlar switching would need to retain getLastCreatedHealthPool().
@@ -194,7 +194,7 @@ rule "LASER BARRICADE (PLACEMENT)":
     wait(0.5, Wait.ABORT_WHEN_FALSE)
     playEffect(eventPlayer, DynamicEffect.GOOD_EXPLOSION, Color.BLUE, eventPlayer.getEyePosition() + ((directionFromAngles(eventPlayer.getHorizontalFacingAngle() + random.uniform(-5, 5), eventPlayer.getVerticalFacingAngle() + random.uniform(-5, 5))) * 1.5), 0.1)
     playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.BLUE, eventPlayer.getPosition(), 75)
-    waitUntil(not eventPlayer.isHoldingButton(Button.MELEE) or eventPlayer.isDead(), 99999)
+    waitUntil(not eventPlayer.isHoldingButton(Button.MELEE) or eventPlayer.isDead(), Math.INFINITY)
     checkEnhancementPlacement()
     if isEnhancementPlacementInvalid:
         return
@@ -401,7 +401,7 @@ rule "CHARGE BATTERY":
     wait(0.5, Wait.ABORT_WHEN_FALSE)
     playEffect(eventPlayer, DynamicEffect.GOOD_EXPLOSION, Color.YELLOW, eventPlayer.getEyePosition() + ((directionFromAngles(eventPlayer.getHorizontalFacingAngle() + random.uniform(-5, 5), eventPlayer.getVerticalFacingAngle() + random.uniform(-5, 5))) * 1.5), 0.1)
     playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.YELLOW, eventPlayer.getPosition(), 75)
-    waitUntil(not eventPlayer.isHoldingButton(Button.MELEE) or eventPlayer.isDead(), 99999)
+    waitUntil(not eventPlayer.isHoldingButton(Button.MELEE) or eventPlayer.isDead(), Math.INFINITY)
     checkEnhancementPlacement()
     if isEnhancementPlacementInvalid:
         return
@@ -496,7 +496,7 @@ rule "HITCHHIKER PARENT RECIEVES HEALTH POOL":
     
     eventPlayer.addHealthPool(Health.NORMAL, eventPlayer.enhancementHitchhikerPassenger.initialMaxHealth, true, false)
     eventPlayer.enhancementHitchhikerCarrierPoolId = getLastCreatedHealthPool()
-    waitUntil(not entityExists(eventPlayer.enhancementHitchhikerPassenger), 99999)
+    waitUntil(not entityExists(eventPlayer.enhancementHitchhikerPassenger), Math.INFINITY)
     removeHealthPool(eventPlayer.enhancementHitchhikerCarrierPoolId)
 
 
@@ -538,7 +538,7 @@ rule "P.U.P. TARGET":
     
     #Set P.U.P. target
     eventPlayer.enhancementPupTarget = (sorted(getLivingPlayers(Team.2).filter(lambda player: player.botTarget == eventPlayer), lambda x: distance(eventPlayer, x)))[0]
-    waitUntil(eventPlayer.enhancementPupTarget.isDead() or not entityExists(eventPlayer.enhancementPupTarget) or eventPlayer.enhancementPupTarget.botIsTeleporting, 99999)
+    waitUntil(eventPlayer.enhancementPupTarget.isDead() or not entityExists(eventPlayer.enhancementPupTarget) or eventPlayer.enhancementPupTarget.botIsTeleporting, Math.INFINITY)
     stopChasing(eventPlayer.enhancementPupPosition)
     eventPlayer.enhancementPupTarget = null
     wait()
@@ -572,7 +572,7 @@ rule "P.U.P. CONTROL":
     eventPlayer.enhancementIsPupBeamActive = false
     #Freeze aura visibility
     eventPlayer.enhancementIsPupFreezeAuraActive = false
-    waitUntil(distance(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget.getEyePosition()) < 5 or eventPlayer.enhancementPupTarget == null, 99999)
+    waitUntil(distance(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget.getEyePosition()) < 5 or eventPlayer.enhancementPupTarget == null, Math.INFINITY)
     #If target still exists
     if eventPlayer.enhancementPupTarget != null:
         if distance(eventPlayer, eventPlayer.enhancementPupTarget) > 6:

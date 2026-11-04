@@ -171,7 +171,7 @@ rule "SKIP ASSEMBLING HEROES":
         setMatchTime(0)
         wait(0.25)
     setMatchTime(3599)
-    waitUntil(getPlayers(Team.1).any(lambda player: player.hasSpawned()) and mapGridList != [], 99999)
+    waitUntil(getPlayers(Team.1).any(lambda player: player.hasSpawned()) and mapGridList != [], Math.INFINITY)
     setMatchTime(60)
     wait()
     pregameCountdown = getMatchTime()

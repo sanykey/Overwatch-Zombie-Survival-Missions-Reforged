@@ -195,10 +195,10 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
         mustReviveTime -= 0 if mustReviveTime <= 30 else 10
         eventPlayer.teleport(offsetDownHundredConst)
         eventPlayer.setInvisibility(Invis.ALL)
-        waitUntil(isObjectiveComplete, 99999)
+        waitUntil(isObjectiveComplete, Math.INFINITY)
         eventPlayer.resurrect()
         teleportToClosestPlayer()
-        waitUntil(eventPlayer.isAlive(), 99999)
+        waitUntil(eventPlayer.isAlive(), Math.INFINITY)
         eventPlayer.setInvisibility(Invis.NONE)
         playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, null, eventPlayer, 100)
     if ruleCondition:
@@ -275,11 +275,11 @@ rule "PLAYER AFK":
     if not eventPlayer.isAfk:
         wait(45, Wait.ABORT_WHEN_FALSE)
         smallMessage(getAllPlayers().filter(lambda _: eventPlayer.isAlive()), "{0} {1} is afk".format(eventPlayer, heroIcon(eventPlayer.getHero())))
-        waitUntil(eventPlayer.isAlive(), 99999)
+        waitUntil(eventPlayer.isAlive(), Math.INFINITY)
         eventPlayer.isAfk = true
         eventPlayer.setInvisibility(Invis.ALL)
         playerTargetList.remove(eventPlayer)
-        eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 99999)
+        eventPlayer.setStatusEffect(null, Status.PHASED_OUT, Math.INFINITY)
     else:
         wait(1)
     if ruleCondition:

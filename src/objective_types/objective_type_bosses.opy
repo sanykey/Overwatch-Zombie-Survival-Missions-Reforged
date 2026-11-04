@@ -65,7 +65,7 @@ rule "BOT BECOMES BOSS":
     eventPlayer.startModifyingVoicelinePitch(0.5 + (1 / (eventPlayer.sizeScale + 1)), false)
     eventPlayer.stopAllDamageOverTime()
     eventPlayer.setHealth(eventPlayer.getMaxHealth())
-    eventPlayer.setStatusEffect(null, Status.ROOTED, 99999)
+    eventPlayer.setStatusEffect(null, Status.ROOTED, Math.INFINITY)
     eventPlayer.disableEnvironmentCollision(false)
     eventPlayer.botIsWallCollisionEnabled = false
     eventPlayer.botPotentialTargetList = []
@@ -76,7 +76,7 @@ rule "BOT BECOMES BOSS":
     bossesStateList[1] = distance(eventPlayer, eventPlayer.getEyePosition())
     waitUntil(eventPlayer.botTarget == null, 1)
     wait(0.25)
-    waitUntil(eventPlayer.botTarget != null or eventPlayer.getHealth() < eventPlayer.botBaseHealth, 99999)
+    waitUntil(eventPlayer.botTarget != null or eventPlayer.getHealth() < eventPlayer.botBaseHealth, Math.INFINITY)
     eventPlayer.clearStatusEffect(Status.ROOTED)
     bossesStateList[1] = distance(eventPlayer, eventPlayer.getEyePosition())
     wait(1)
@@ -185,12 +185,12 @@ rule "BOSS TELEPORT TO TARGET IF NOT USED":
     @Condition eventPlayer.hasStatus(Status.ROOTED) != true
     
     chaseAtRate(eventPlayer.botReturnTime, 15, 1)
-    waitUntil(eventPlayer.botReturnTime >= 14 or eventPlayer.botTarget != null, 99999)
+    waitUntil(eventPlayer.botReturnTime >= 14 or eventPlayer.botTarget != null, Math.INFINITY)
     if eventPlayer.botReturnTime >= 14 and eventPlayer.botTarget == null:
         bossReturn()
     stopChasing(eventPlayer.botReturnTime)
     eventPlayer.botReturnTime = 0
-    waitUntil(eventPlayer.botTarget == null, 99999)
+    waitUntil(eventPlayer.botTarget == null, Math.INFINITY)
     wait(0.16)
     loop()
 

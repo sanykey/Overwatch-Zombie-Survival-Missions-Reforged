@@ -80,7 +80,7 @@ rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS":
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     if biomorphingCapturePercent < 100:
-        waitUntil(isBiomorphingGoalPending == false, 99999)
+        waitUntil(isBiomorphingGoalPending == false, Math.INFINITY)
         # biowasteCarrierIndex: index of a zombie not holding a full resource, to choose the next resource carrier.
         #!define biowasteCarrierIndex tmp0
         biowasteCarrierIndex = getPlayers(Team.2).index((getPlayers(Team.2).filter(lambda player: player.biomorphingResourceAmount != BIOMORPHING_RESOURCE_AMOUNT))[0])

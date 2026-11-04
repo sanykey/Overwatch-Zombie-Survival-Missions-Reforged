@@ -73,8 +73,8 @@ rule "PLAYER SELECTS/RESELECTS HERO":
     eventPlayer.setInvisibility(Invis.ALL)
     eventPlayer.startCamera(startCamPos, startPos + Vector.UP)
     eventPlayer.startHealingOverTime(null, 5, 1000)
-    eventPlayer.setStatusEffect(null, Status.INVINCIBLE, 99999)
-    eventPlayer.setStatusEffect(null, Status.ROOTED, 99999)
+    eventPlayer.setStatusEffect(null, Status.INVINCIBLE, Math.INFINITY)
+    eventPlayer.setStatusEffect(null, Status.ROOTED, Math.INFINITY)
     #If current game mode is team deathmatch
     if isSpecialGameMode:
         attachPlayerToPregameAnchor()

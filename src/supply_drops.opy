@@ -48,7 +48,7 @@ rule "GENERATE SUPPLY DROPS":
     supplyDropPosition = supplyDropLandingPosition + 200 * Vector.UP
     chaseOverTime(supplyDropPosition, supplyDropLandingPosition, 15)
     bigMessage(getPlayers(Team.1), "Supply drop incoming!")
-    waitUntil(supplyDropPosition == supplyDropLandingPosition, 99999)
+    waitUntil(supplyDropPosition == supplyDropLandingPosition, Math.INFINITY)
     stopChasing(supplyDropPosition)
     playEffect(getPlayers(Team.1), DynamicEffect.RING_EXPLOSION, Color.AQUA, supplyDropLandingPosition, 4)
     playEffect(getPlayers(Team.1), DynamicEffect.RING_EXPLOSION_SOUND, Color.WHITE, supplyDropLandingPosition, 50)

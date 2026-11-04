@@ -47,7 +47,7 @@ rule "BOT BECOMES ZOMBIE EGG":
         if not eventPlayer.isUsingAbility1() and eventPlayer.isAlive():
             eventPlayer.forceButtonPress(Button.ABILITY_1)
         wait(0.25)
-        waitUntil(isObjectiveComplete or not eventPlayer.isUsingAbility1(), 99999)
+        waitUntil(isObjectiveComplete or not eventPlayer.isUsingAbility1(), Math.INFINITY)
 
 
 rule "BOTS TELEPORT TO THE EGG":

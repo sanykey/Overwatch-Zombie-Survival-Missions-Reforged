@@ -69,7 +69,7 @@ rule "BOT INITIALIZATION":
     @Condition isPregameSetup != true
     
     wait(1, Wait.ABORT_WHEN_FALSE)
-    eventPlayer.startHealingOverTime(null, 99999, 9999)
+    eventPlayer.startHealingOverTime(null, Math.INFINITY, 9999)
     eventPlayer.botRespawnDelay = 0
     if customTeleportPositionList != []:
         eventPlayer.botCustomTeleportPosition = customTeleportPositionList[0]
@@ -378,7 +378,7 @@ rule "BOTS MELEE":
             wait(0.8)
             if eventPlayer.isCrowdControlled or eventPlayer.hasStatus(Status.HACKED):
                 break
-            waitUntil(not eventPlayer.isUsingUltimate(), 99999)
+            waitUntil(not eventPlayer.isUsingUltimate(), Math.INFINITY)
         eventPlayer.botIsFacingOverridden = false
         restoreDefaultFacingMovement()
         stopChasing(eventPlayer.botEnsnarerMeleeAngle)
@@ -451,7 +451,7 @@ def teleportBots():
     updateBotSpawnPoints()
     enterExitTeleport()
     eventPlayer.botIsTeleportConfirmed = false
-    waitUntil(not eventPlayer.botIsInitializing and eventPlayer.botIsTeleportAllowed, 99999)
+    waitUntil(not eventPlayer.botIsInitializing and eventPlayer.botIsTeleportAllowed, Math.INFINITY)
     if eventPlayer.botCustomTeleportPosition == null:
         while eventPlayer.botIsTeleporting:
             botTeleportCenterMacro()

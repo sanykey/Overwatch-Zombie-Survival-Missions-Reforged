@@ -32,7 +32,7 @@ rule "DOOMFIST INVIS WHILE ULTING":
     @Condition eventPlayer.isUsingUltimate() == true
     
     eventPlayer.invisibilityCount++
-    waitUntil(not eventPlayer.isUsingUltimate(), 99999)
+    waitUntil(not eventPlayer.isUsingUltimate(), Math.INFINITY)
     eventPlayer.invisibilityCount--
 
 
@@ -44,7 +44,7 @@ rule "MOIRA & VENTURE INVIS WHILE USING SKILL":
     @Condition eventPlayer.getHero() in [Hero.MOIRA, Hero.VENTURE] == true
     
     eventPlayer.invisibilityCount++
-    waitUntil(not eventPlayer.isUsingAbility1(), 99999)
+    waitUntil(not eventPlayer.isUsingAbility1(), Math.INFINITY)
     eventPlayer.invisibilityCount--
 
 
@@ -56,7 +56,7 @@ rule "TRACER INVIS WHILE RECALLING":
     @Condition eventPlayer.isUsingAbility2() == true
     
     eventPlayer.invisibilityCount++
-    waitUntil(not eventPlayer.isUsingAbility2(), 99999)
+    waitUntil(not eventPlayer.isUsingAbility2(), Math.INFINITY)
     eventPlayer.invisibilityCount--
 
 

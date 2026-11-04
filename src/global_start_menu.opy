@@ -245,7 +245,7 @@ rule "END VOTING":
     pregameCountdown = VOTING_END_TIME
     startRule(determineZombieMode)
     #Waits until votes have been counted
-    waitUntil(not isVoting or not isPregameSetup, 99999)
+    waitUntil(not isVoting or not isPregameSetup, Math.INFINITY)
     # Votes share runtime trade/path storage; a resumed menu writer must not touch it.
     if not isPregameSetup:
         return
@@ -390,7 +390,7 @@ def setObjectiveType():
     @Name "setObjectiveType"
     
     #Wait until game begins
-    waitUntil(isGameInProgress() and not isPregameSetup, 99999)
+    waitUntil(isGameInProgress() and not isPregameSetup, Math.INFINITY)
     #Create objective positions
     while len(objectiveTypeList) < createWorkshopSettingInt("General", "Number of Objectives", 5, 0, 100) + 1:
         if objectiveTypeSetting != ObjectiveType.MIXED_OBJECTIVES:

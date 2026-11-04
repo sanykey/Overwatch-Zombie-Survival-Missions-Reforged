@@ -57,12 +57,12 @@ rule "PLAYER EXTRACTION CONTROL":
     eventPlayer.extractionFlightPosition = eventPlayer.getPosition()
     startExtractionAscent()
     eventPlayer.startForcingPosition(eventPlayer.extractionFlightPosition)
-    waitUntil(extractionFlightSpeed > 2, 99999)
+    waitUntil(extractionFlightSpeed > 2, Math.INFINITY)
     chaseOverTime(eventPlayer.extractionFlightPosition, currentObjectivePosition + 50 * Vector.UP + directionFromAngles(360 / len(evacSurvivorList) * evacSurvivorList.index(eventPlayer), 0) * 3, 5)
-    waitUntil(extractionFlightSpeed < 10, 99999)
+    waitUntil(extractionFlightSpeed < 10, Math.INFINITY)
     startExtractionAscent()
     eventPlayer.extractionDestination = eventPlayer.extractionFlightPosition + directionTowards(currentObjectivePosition, extractionFlightDestination) * 700
-    waitUntil(extractionFlightSpeed > 2, 99999)
+    waitUntil(extractionFlightSpeed > 2, Math.INFINITY)
     chaseAtRate(eventPlayer.extractionFlightPosition, eventPlayer.extractionDestination, extractionFlightSpeed)
 
 
@@ -88,8 +88,8 @@ rule "WIN/LOSS CONDITIONS":
     destroyAllProgressBarInWorldTexts()
     destroyAllHudTexts()
     bigMessage(getPlayers(Team.1).filter(lambda player: playerTargetList > 0 and not player in objectivePlayerList), "You were left behind!")
-    getPlayers(Team.1).setStatusEffect(null, Status.ROOTED, 99999)
-    getPlayers(Team.1).setStatusEffect(null, Status.PHASED_OUT, 99999)
+    getPlayers(Team.1).setStatusEffect(null, Status.ROOTED, Math.INFINITY)
+    getPlayers(Team.1).setStatusEffect(null, Status.PHASED_OUT, Math.INFINITY)
     if playerTargetList == [] or objectivePlayerList == []:
         getPlayers(Team.1).teleport(500 * Vector.UP)
         getAllPlayers().setInvisibility(Invis.ALL)
