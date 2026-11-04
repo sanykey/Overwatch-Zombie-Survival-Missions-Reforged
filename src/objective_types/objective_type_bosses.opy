@@ -5,8 +5,6 @@ subroutine bossReturn
 
 
 rule "SPAWN BOSS":
-    # botIsInitializing only receives true/false, so its bare waitUntil condition is safe.
-    @SuppressWarnings w_wait_until
     @Condition currentObjectiveType == ObjectiveType.BOSSES
     @Condition isObjectiveComplete == false
     @Condition not bossesStateList.any(lambda x: entityExists(x))

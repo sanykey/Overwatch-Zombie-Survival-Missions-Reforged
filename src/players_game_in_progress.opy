@@ -149,8 +149,6 @@ rule "PLAYER GETS DOWNED":
 
 
 rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
-    # isObjectiveComplete only receives true/false, so its bare waitUntil condition is safe.
-    @SuppressWarnings w_wait_until
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isDead() == true
