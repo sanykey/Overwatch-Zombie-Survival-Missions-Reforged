@@ -1,0 +1,2266 @@
+{
+  "date": "2026-11-04",
+  "extension": "zezombye.overpy-9.7.20",
+  "elements": 25305,
+  "ruleCount": 268,
+  "sourceSha256": {
+    "bots_game_in_progress.opy": "e5be66ba7054a98f1d4e3fa4d0989d6cce914767b76c8dbbb4a9c4ee51bfd557",
+    "compressed numbers.opy": "8b8e5f274a8e4c2017009a378ff11ba6d27a815c7afed623acb92065c0e018bf",
+    "create numbers.js": "e29ee00f1a5af294aa16bebd8bf677ed4369710618a0f4dadc0f5d49e32a7bb8",
+    "debug.opy": "6d4bf6eb7f3166b0619589f282c2fc3bd684a78de4fc6e108f015d705a15eab7",
+    "enhancements.opy": "3e8e3f3599fb315a3942cb1964b22e4a9f2954f39e204e86a1684d846ac11b27",
+    "global_game_in_progress.opy": "565b426cac19e9c1cf37e5ba09eb05037e23efad037e1d5706c739f3bbd2113c",
+    "global_startup.opy": "a8bdb51186945c226549398e228d7e4801f1306cd735a8c4d19374ed34246cd2",
+    "global_start_menu.opy": "15d5192bed6033dec9c766afb0c15c9ed4b1f7afe00bb14e61ad7d6fbc238d27",
+    "hero_tuning.opy": "71a5ae3bd931e6ec7bcb069470a2d99bba61c57ec3413fed9d14faacbed1b2e2",
+    "main.opy": "272e9ec1b9112c4f63e50a14869cd3ff7814bce41434c84aef6176a08c898af0",
+    "objective_types/objective_type_biomorphing.opy": "c3c8d21c91ccc3d790349f2bc46adb6d2683771a74e0d98beea972670fae5017",
+    "objective_types/objective_type_bosses.opy": "cf50449621494ea95fe6a236883f65313b05c28e127d86c123535ea03d2ea44f",
+    "objective_types/objective_type_extraction_point.opy": "a17e3b6d65fcddb01781c605aaaa20a72ccfa6d87deab879c067f67c31127534",
+    "objective_types/objective_type_kill_zone.opy": "0b6e1cab3180030fb292b8866bfef8c8b7f94c91f46a0d897dea7d002eefa8ff",
+    "objective_types/objective_type_satellite_uplink.opy": "def04f5d2a5c810fc2f0005839cd9baa8c5405a11f1544f888e1244cd3910bec",
+    "objective_types/objective_type_showdown.opy": "9c1118f9ba1f7a74edec1741d10aae98fe6a9354f32e7716af08ccfb9c552285",
+    "objective_types/objective_type_survivor_rescue.opy": "25aa52b3b6c22f2b264ab70821d15548b677dea1644df8eaf4ad9ebee82281ac",
+    "objective_types/objective_type_zombie_egg.opy": "298974b545f531ce27a85bbed45a469c3d0788f925c09dc4b27fcdd3771f9462",
+    "players_game_in_progress.opy": "69b01e6d3765aa6e1fea6bfecaba9c32b6e2d9bae186c550656173acb1cec49c",
+    "player_start_menu.opy": "69f8a64ae81730c7498a23ec7bfb2768e2860ddb9249cd394a2b164d95932e27",
+    "power_ups.opy": "a38edae0351f44fe442103730b03a5992eec90ccef49aef468d17d36ba5cbb14",
+    "settings.opy": "bafdf47e377bfce8871f5e6c8a79684934e6c283130151ce2824d8778cc659a7",
+    "subroutines.opy": "f39de63f7baa84074840b5df3a027b7acf0dddde8a15e36de78a89d7f8eb5657",
+    "supply_drops.opy": "db92ddc4faa1c5051ae2e92205e56f09dfd5b6bab654c0667a55e2abbce92c80",
+    "variables.opy": "acdbc321761ac0afaece2533da571deaf0cdf1967f34b45d9f56184063b5f724",
+    "zombie_types.opy": "948b2043062a6970fc52d55c15249a84a00c93c898f7e4bd3383dd906cabafb4"
+  },
+  "counts": {
+    "w_start_rule_crash": 22,
+    "w_ow2_rule_condition_chase": 14,
+    "w_cancel_contrary_motion": 20,
+    "w_closest_player": 0
+  },
+  "suppressedVariant": {
+    "warnings": 0,
+    "sameWorkshop": true
+  },
+  "impulseMigrationProbe": {
+    "replacements": 20,
+    "elements": 25305,
+    "remainingWarnings": 36,
+    "legacyWarnings": 0,
+    "limitation": "Compilation only; XYZ physics is not behaviorally equivalent to the legacy mode."
+  },
+  "diagnostics": [
+    {
+      "id": "CH01",
+      "type": "w_ow2_rule_condition_chase",
+      "file": "objective_types/objective_type_extraction_point.opy",
+      "line": 16,
+      "col": 131,
+      "owner": "rule \"PLAYERS IN EXTRACTION POINT CONTROL\":",
+      "sourceLine": "    @Condition distance(eventPlayer, vect(currentObjectivePosition.x, eventPlayer.getPosition().y, currentObjectivePosition.z)) < objectiveRad",
+      "message": "This rule condition will possibly not trigger properly due to a workshop bug, because the global variable 'objectiveRad' is chased. (w_ow2_rule_condition_chase)\n    | line 16, col 131, at objective_type_extraction_point.opy\n    | line 25, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 25,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "objective_type_extraction_point.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/objective_types/objective_type_extraction_point.opy",
+          "startLine": 16,
+          "startCol": 131,
+          "endLine": 16,
+          "endCol": 143,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "variable": "objectiveRad",
+      "verdict": "Корректно: фиксированный радиус",
+      "reason": "В эвакуации objectiveRad = 10; Showdown останавливает его chase при завершении. Не дефект.",
+      "defectRegistered": false,
+      "severity": "Не дефект",
+      "crashRisk": "Прямой механизм падения не обнаружен"
+    },
+    {
+      "id": "CH02",
+      "type": "w_ow2_rule_condition_chase",
+      "file": "objective_types/objective_type_extraction_point.opy",
+      "line": 34,
+      "col": 16,
+      "owner": "rule \"EXTRACTION ZONE INFECTION INCREASE\":",
+      "sourceLine": "    @Condition extractionZoneRad < 200",
+      "message": "This rule condition will possibly not trigger properly due to a workshop bug, because the global variable 'extractionZoneRad' is chased. (w_ow2_rule_condition_chase)\n    | line 34, col 16, at objective_type_extraction_point.opy\n    | line 25, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 25,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "objective_type_extraction_point.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/objective_types/objective_type_extraction_point.opy",
+          "startLine": 34,
+          "startCol": 16,
+          "endLine": 34,
+          "endCol": 33,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "variable": "extractionZoneRad",
+      "verdict": "Промежуточный порог; проверить",
+      "reason": "300 -> 0 пересекает 200 до конца chase. Возможна задержка включения заражения снаружи.",
+      "defectRegistered": false,
+      "severity": "Под наблюдением; средняя при воспроизведении",
+      "crashRisk": "Прямой механизм падения не обнаружен"
+    },
+    {
+      "id": "CH03",
+      "type": "w_ow2_rule_condition_chase",
+      "file": "objective_types/objective_type_extraction_point.opy",
+      "line": 35,
+      "col": 66,
+      "owner": "rule \"EXTRACTION ZONE INFECTION INCREASE\":",
+      "sourceLine": "    @Condition distance(currentObjectivePosition, eventPlayer) > extractionZoneRad",
+      "message": "This rule condition will possibly not trigger properly due to a workshop bug, because the global variable 'extractionZoneRad' is chased. (w_ow2_rule_condition_chase)\n    | line 35, col 66, at objective_type_extraction_point.opy\n    | line 25, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 25,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "objective_type_extraction_point.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/objective_types/objective_type_extraction_point.opy",
+          "startLine": 35,
+          "startCol": 66,
+          "endLine": 35,
+          "endCol": 83,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "variable": "extractionZoneRad",
+      "verdict": "Промежуточная граница; проверить",
+      "reason": "Радиус пересекает расстояние до неподвижного игрока до нуля. Не объявлять воспроизведённой ошибкой без игры.",
+      "defectRegistered": false,
+      "severity": "Под наблюдением; средняя при воспроизведении",
+      "crashRisk": "Прямой механизм падения не обнаружен"
+    },
+    {
+      "id": "CH04",
+      "type": "w_ow2_rule_condition_chase",
+      "file": "objective_types/objective_type_extraction_point.opy",
+      "line": 72,
+      "col": 238,
+      "owner": "rule \"WIN/LOSS CONDITIONS\":",
+      "sourceLine": "    @Condition (len(objectivePositionList) == 1 and (len(objectivePlayerList) == (len(getPlayers(Team.1).filter(lambda player: player.hasSpawned() and player.rescueTimeRemaining > 0 and not player.isAfk)))) or (playerTargetList == [] or extractionZoneRad <= 0)) == true",
+      "message": "This rule condition will possibly not trigger properly due to a workshop bug, because the global variable 'extractionZoneRad' is chased. (w_ow2_rule_condition_chase)\n    | line 72, col 238, at objective_type_extraction_point.opy\n    | line 25, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 25,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "objective_type_extraction_point.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/objective_types/objective_type_extraction_point.opy",
+          "startLine": 72,
+          "startCol": 238,
+          "endLine": 72,
+          "endCol": 255,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "variable": "extractionZoneRad",
+      "verdict": "Корректно: конечное значение",
+      "reason": "Поражение при extractionZoneRad <= 0 проверяет назначение chase, равное 0. Не дефект.",
+      "defectRegistered": false,
+      "severity": "Не дефект",
+      "crashRisk": "Прямой механизм падения не обнаружен"
+    },
+    {
+      "id": "CH05",
+      "type": "w_ow2_rule_condition_chase",
+      "file": "objective_types/objective_type_showdown.opy",
+      "line": 14,
+      "col": 145,
+      "owner": "rule \"PLAYERS ON OBJECTIVE CONTROL\":",
+      "sourceLine": "    @Condition distance(vect(currentObjectivePosition.x, eventPlayer.getPosition().y, currentObjectivePosition.z), eventPlayer.getPosition()) < objectiveRad",
+      "message": "This rule condition will possibly not trigger properly due to a workshop bug, because the global variable 'objectiveRad' is chased. (w_ow2_rule_condition_chase)\n    | line 14, col 145, at objective_type_showdown.opy\n    | line 26, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 26,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "objective_type_showdown.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/objective_types/objective_type_showdown.opy",
+          "startLine": 14,
+          "startCol": 145,
+          "endLine": 14,
+          "endCol": 157,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "variable": "objectiveRad",
+      "verdict": "Промежуточная граница; проверить",
+      "reason": "Радиус пересекает расстояние до игрока/бота. Конец отдельного шага chase может дать нужную переоценку.",
+      "defectRegistered": false,
+      "severity": "Под наблюдением; средняя при воспроизведении",
+      "crashRisk": "Прямой механизм падения не обнаружен"
+    },
+    {
+      "id": "IM01",
+      "type": "w_cancel_contrary_motion",
+      "file": "objective_types/objective_type_bosses.opy",
+      "line": 142,
+      "col": 227,
+      "owner": "rule \"BOSS DIES (ALL BOSS OBJECTIVES)\":",
+      "sourceLine": "                        eventPlayer.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, bossRecoveryTarget)), -75), max(1, sqrt(2 * 17.532 * (bossRecoveryTarget.getPosition().y + 3 - eventPlayer.getPosition().y))), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)",
+      "message": "Impulse.CANCEL_CONTRARY_MOTION is legacy and should not be used. Use CANCEL_CONTRARY_MOTION_XYZ instead. (w_cancel_contrary_motion)\n    | line 142, col 227, at objective_type_bosses.opy\n    | line 27, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 27,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "objective_type_bosses.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/objective_types/objective_type_bosses.opy",
+          "startLine": 142,
+          "startCol": 227,
+          "endLine": 142,
+          "endCol": 235,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "severity": "Низкая; изменение физики требует проверки",
+      "crashRisk": "Прямой механизм падения не обнаружен",
+      "fix": "Миграция на CANCEL_CONTRARY_MOTION_XYZ после сравнения траекторий; режим XYZ не эквивалентен старому XZ/Y"
+    },
+    {
+      "id": "CH06",
+      "type": "w_ow2_rule_condition_chase",
+      "file": "objective_types/objective_type_biomorphing.opy",
+      "line": 147,
+      "col": 66,
+      "owner": "rule \"PLAYER DELIVERS RESOURCE VALUE\":",
+      "sourceLine": "    @Condition distance(currentObjectivePosition, eventPlayer) < objectiveRad",
+      "message": "This rule condition will possibly not trigger properly due to a workshop bug, because the global variable 'objectiveRad' is chased. (w_ow2_rule_condition_chase)\n    | line 147, col 66, at objective_type_biomorphing.opy\n    | line 28, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 28,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "objective_type_biomorphing.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/objective_types/objective_type_biomorphing.opy",
+          "startLine": 147,
+          "startCol": 66,
+          "endLine": 147,
+          "endCol": 78,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "variable": "objectiveRad",
+      "verdict": "Корректно: другой жизненный цикл",
+      "reason": "Для Biomorphing radius = 3.5, активного Showdown chase нет. Не дефект.",
+      "defectRegistered": false,
+      "severity": "Не дефект",
+      "crashRisk": "Прямой механизм падения не обнаружен"
+    },
+    {
+      "id": "CH07",
+      "type": "w_ow2_rule_condition_chase",
+      "file": "objective_types/objective_type_survivor_rescue.opy",
+      "line": 83,
+      "col": 114,
+      "owner": "rule \"SURVIVOR FOLLOW TARGET\":",
+      "sourceLine": "    @Condition (playerTargetList.filter(lambda x: x != rescueSurvivor and not x.invisibilityCount).any(lambda x: distance(rescueSurvivor, x) < objectiveRad)) == true",
+      "message": "This rule condition will possibly not trigger properly due to a workshop bug, because the global variable 'objectiveRad' is chased. (w_ow2_rule_condition_chase)\n    | line 83, col 114, at objective_type_survivor_rescue.opy\n    | line 29, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 29,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "objective_type_survivor_rescue.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/objective_types/objective_type_survivor_rescue.opy",
+          "startLine": 83,
+          "startCol": 114,
+          "endLine": 83,
+          "endCol": 126,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "variable": "objectiveRad",
+      "verdict": "Корректно: прямые присваивания",
+      "reason": "Rescue использует значения 10/30 и восстановление присваиванием. Не дефект chase.",
+      "defectRegistered": false,
+      "severity": "Не дефект",
+      "crashRisk": "Прямой механизм падения не обнаружен"
+    },
+    {
+      "id": "CH08",
+      "type": "w_ow2_rule_condition_chase",
+      "file": "objective_types/objective_type_kill_zone.opy",
+      "line": 7,
+      "col": 77,
+      "owner": "rule \"MODIFY KILL ZONE SCORE\":",
+      "sourceLine": "    @Condition playerTargetList.concat(victim).any(lambda x: distance(x, killZoneCenter) < objectiveRad) == true",
+      "message": "This rule condition will possibly not trigger properly due to a workshop bug, because the global variable 'objectiveRad' is chased. (w_ow2_rule_condition_chase)\n    | line 7, col 77, at objective_type_kill_zone.opy\n    | line 30, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 30,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "objective_type_kill_zone.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/objective_types/objective_type_kill_zone.opy",
+          "startLine": 7,
+          "startCol": 77,
+          "endLine": 7,
+          "endCol": 89,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "variable": "objectiveRad",
+      "verdict": "Корректно: фиксированное значение и событие",
+      "reason": "Kill Zone использует radius = 20; проверка выполняется при final blow. Не дефект chase.",
+      "defectRegistered": false,
+      "severity": "Не дефект",
+      "crashRisk": "Прямой механизм падения не обнаружен"
+    },
+    {
+      "id": "CH09",
+      "type": "w_ow2_rule_condition_chase",
+      "file": "objective_types/objective_type_satellite_uplink.opy",
+      "line": 113,
+      "col": 88,
+      "owner": "rule \"PLAYERS AT TERMINALS CONTROLS\":",
+      "sourceLine": "    @Condition (satelliteTerminalPositionList.filter(lambda _, i: satelliteTerminalProgressList[i] < 100).any(lambda x: distance(x, eventPlayer) < objectiveRad and x.x != null)) == true",
+      "message": "This rule condition will possibly not trigger properly due to a workshop bug, because the global variable 'objectiveRad' is chased. (w_ow2_rule_condition_chase)\n    | line 113, col 88, at objective_type_satellite_uplink.opy\n    | line 32, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 32,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "objective_type_satellite_uplink.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/objective_types/objective_type_satellite_uplink.opy",
+          "startLine": 113,
+          "startCol": 88,
+          "endLine": 113,
+          "endCol": 100,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "variable": "objectiveRad",
+      "verdict": "Корректно: фиксированный радиус",
+      "reason": "Satellite использует radius = 3. Активный Showdown chase не должен переживать нормальный переход. Не дефект.",
+      "defectRegistered": false,
+      "severity": "Не дефект",
+      "crashRisk": "Прямой механизм падения не обнаружен"
+    },
+    {
+      "id": "IM02",
+      "type": "w_cancel_contrary_motion",
+      "file": "zombie_types.opy",
+      "line": 274,
+      "col": 529,
+      "owner": "rule \"BRUTE (REIN) SUPER SEISMIC SLAM\":",
+      "sourceLine": "    (getLivingPlayers(Team.ALL).filter(lambda x: distance(eventPlayer, x) < 20 * eventPlayer.sizeScale and distance(worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION), x) > 1.5 * eventPlayer.sizeScale and isInLoS(eventPlayer.getEyePosition(), x.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) and x != eventPlayer and abs(eventPlayer.getPosition().y - x.getPosition().y) < 2 * eventPlayer.sizeScale)).applyImpulse(Vector.UP, 15 * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)",
+      "message": "Impulse.CANCEL_CONTRARY_MOTION is legacy and should not be used. Use CANCEL_CONTRARY_MOTION_XYZ instead. (w_cancel_contrary_motion)\n    | line 274, col 529, at zombie_types.opy\n    | line 36, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 36,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "zombie_types.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/zombie_types.opy",
+          "startLine": 274,
+          "startCol": 529,
+          "endLine": 274,
+          "endCol": 537,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "severity": "Низкая; изменение физики требует проверки",
+      "crashRisk": "Прямой механизм падения не обнаружен",
+      "fix": "Миграция на CANCEL_CONTRARY_MOTION_XYZ после сравнения траекторий; режим XYZ не эквивалентен старому XZ/Y"
+    },
+    {
+      "id": "IM03",
+      "type": "w_cancel_contrary_motion",
+      "file": "zombie_types.opy",
+      "line": 358,
+      "col": 60,
+      "owner": "rule \"REIGNITED (ANRAN) ABILITIES\":",
+      "sourceLine": "        eventPlayer.applyImpulse(Vector.UP, 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)",
+      "message": "Impulse.CANCEL_CONTRARY_MOTION is legacy and should not be used. Use CANCEL_CONTRARY_MOTION_XYZ instead. (w_cancel_contrary_motion)\n    | line 358, col 60, at zombie_types.opy\n    | line 36, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 36,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "zombie_types.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/zombie_types.opy",
+          "startLine": 358,
+          "startCol": 60,
+          "endLine": 358,
+          "endCol": 68,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "severity": "Низкая; изменение физики требует проверки",
+      "crashRisk": "Прямой механизм падения не обнаружен",
+      "fix": "Миграция на CANCEL_CONTRARY_MOTION_XYZ после сравнения траекторий; режим XYZ не эквивалентен старому XZ/Y"
+    },
+    {
+      "id": "IM04",
+      "type": "w_cancel_contrary_motion",
+      "file": "zombie_types.opy",
+      "line": 364,
+      "col": 246,
+      "owner": "rule \"REIGNITED (ANRAN) ABILITIES\":",
+      "sourceLine": "            eventPlayer.applyImpulse(normalize(directionTowards(eventPlayer, eventPlayer.botTarget) + offsetUpQuarterConst), eventPlayer.sizeScale * (15 + 25 * abs(cosDeg(verticalAngleOfDirection(directionTowards(eventPlayer, eventPlayer.botTarget))))), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)",
+      "message": "Impulse.CANCEL_CONTRARY_MOTION is legacy and should not be used. Use CANCEL_CONTRARY_MOTION_XYZ instead. (w_cancel_contrary_motion)\n    | line 364, col 246, at zombie_types.opy\n    | line 36, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 36,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "zombie_types.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/zombie_types.opy",
+          "startLine": 364,
+          "startCol": 246,
+          "endLine": 364,
+          "endCol": 254,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "severity": "Низкая; изменение физики требует проверки",
+      "crashRisk": "Прямой механизм падения не обнаружен",
+      "fix": "Миграция на CANCEL_CONTRARY_MOTION_XYZ после сравнения траекторий; режим XYZ не эквивалентен старому XZ/Y"
+    },
+    {
+      "id": "IM05",
+      "type": "w_cancel_contrary_motion",
+      "file": "zombie_types.opy",
+      "line": 619,
+      "col": 197,
+      "owner": "rule \"SLIMER (MERCY) TENTACLE GRAB\":",
+      "sourceLine": "        eventPlayer.botAbilityTarget.applyImpulse(directionTowards(eventPlayer.botAbilityTarget.getEyePosition(), eventPlayer.getEyePosition()), eventPlayer.sizeScale * (15 if eventPlayer.botAbilityTarget.getMaxHealth() < 400 else 10), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)",
+      "message": "Impulse.CANCEL_CONTRARY_MOTION is legacy and should not be used. Use CANCEL_CONTRARY_MOTION_XYZ instead. (w_cancel_contrary_motion)\n    | line 619, col 197, at zombie_types.opy\n    | line 36, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 36,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "zombie_types.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/zombie_types.opy",
+          "startLine": 619,
+          "startCol": 197,
+          "endLine": 619,
+          "endCol": 205,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "severity": "Низкая; изменение физики требует проверки",
+      "crashRisk": "Прямой механизм падения не обнаружен",
+      "fix": "Миграция на CANCEL_CONTRARY_MOTION_XYZ после сравнения траекторий; режим XYZ не эквивалентен старому XZ/Y"
+    },
+    {
+      "id": "IM06",
+      "type": "w_cancel_contrary_motion",
+      "file": "zombie_types.opy",
+      "line": 655,
+      "col": 99,
+      "owner": "rule \"PRIME SLIMER (EMRE) FLIGHT (BOSS)\":",
+      "sourceLine": "    eventPlayer.applyImpulse(Vector.UP, random.uniform(6, 10) * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)",
+      "message": "Impulse.CANCEL_CONTRARY_MOTION is legacy and should not be used. Use CANCEL_CONTRARY_MOTION_XYZ instead. (w_cancel_contrary_motion)\n    | line 655, col 99, at zombie_types.opy\n    | line 36, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 36,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "zombie_types.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/zombie_types.opy",
+          "startLine": 655,
+          "startCol": 99,
+          "endLine": 655,
+          "endCol": 107,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "severity": "Низкая; изменение физики требует проверки",
+      "crashRisk": "Прямой механизм падения не обнаружен",
+      "fix": "Миграция на CANCEL_CONTRARY_MOTION_XYZ после сравнения траекторий; режим XYZ не эквивалентен старому XZ/Y"
+    },
+    {
+      "id": "IM07",
+      "type": "w_cancel_contrary_motion",
+      "file": "zombie_types.opy",
+      "line": 716,
+      "col": 150,
+      "owner": "rule \"STRIKER (WRECKING BALL) PILE DRIVER\":",
+      "sourceLine": "        eventPlayer.applyImpulse(directionTowards(eventPlayer, eventPlayer.botTarget.getPosition() + (10 * eventPlayer.sizeScale) * Vector.UP), 25, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)",
+      "message": "Impulse.CANCEL_CONTRARY_MOTION is legacy and should not be used. Use CANCEL_CONTRARY_MOTION_XYZ instead. (w_cancel_contrary_motion)\n    | line 716, col 150, at zombie_types.opy\n    | line 36, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 36,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "zombie_types.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/zombie_types.opy",
+          "startLine": 716,
+          "startCol": 150,
+          "endLine": 716,
+          "endCol": 158,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "severity": "Низкая; изменение физики требует проверки",
+      "crashRisk": "Прямой механизм падения не обнаружен",
+      "fix": "Миграция на CANCEL_CONTRARY_MOTION_XYZ после сравнения траекторий; режим XYZ не эквивалентен старому XZ/Y"
+    },
+    {
+      "id": "IM08",
+      "type": "w_cancel_contrary_motion",
+      "file": "zombie_types.opy",
+      "line": 805,
+      "col": 151,
+      "owner": "rule \"STALKER KNOCKBACK BLAST (BOSS)\":",
+      "sourceLine": "    victim.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(attacker, victim)), -25), 10 * attacker.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)",
+      "message": "Impulse.CANCEL_CONTRARY_MOTION is legacy and should not be used. Use CANCEL_CONTRARY_MOTION_XYZ instead. (w_cancel_contrary_motion)\n    | line 805, col 151, at zombie_types.opy\n    | line 36, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 36,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "zombie_types.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/zombie_types.opy",
+          "startLine": 805,
+          "startCol": 151,
+          "endLine": 805,
+          "endCol": 159,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "severity": "Низкая; изменение физики требует проверки",
+      "crashRisk": "Прямой механизм падения не обнаружен",
+      "fix": "Миграция на CANCEL_CONTRARY_MOTION_XYZ после сравнения траекторий; режим XYZ не эквивалентен старому XZ/Y"
+    },
+    {
+      "id": "IM09",
+      "type": "w_cancel_contrary_motion",
+      "file": "zombie_types.opy",
+      "line": 930,
+      "col": 84,
+      "owner": "rule \"DOWNFALLEN GRABS PLAYER\":",
+      "sourceLine": "    eventPlayer.applyImpulse(vect(0, 5, -3), 5 * eventPlayer.sizeScale, Relativity.TO_PLAYER, Impulse.CANCEL_CONTRARY_MOTION)",
+      "message": "Impulse.CANCEL_CONTRARY_MOTION is legacy and should not be used. Use CANCEL_CONTRARY_MOTION_XYZ instead. (w_cancel_contrary_motion)\n    | line 930, col 84, at zombie_types.opy\n    | line 36, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 36,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "zombie_types.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/zombie_types.opy",
+          "startLine": 930,
+          "startCol": 84,
+          "endLine": 930,
+          "endCol": 93,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "severity": "Низкая; изменение физики требует проверки",
+      "crashRisk": "Прямой механизм падения не обнаружен",
+      "fix": "Миграция на CANCEL_CONTRARY_MOTION_XYZ после сравнения траекторий; режим XYZ не эквивалентен старому XZ/Y"
+    },
+    {
+      "id": "IM10",
+      "type": "w_cancel_contrary_motion",
+      "file": "zombie_types.opy",
+      "line": 940,
+      "col": 146,
+      "owner": "rule \"DOWNFALLEN GRABS PLAYER\":",
+      "sourceLine": "        eventPlayer.botAbilityTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, eventPlayer.botAbilityTarget)), 25), 50, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)",
+      "message": "Impulse.CANCEL_CONTRARY_MOTION is legacy and should not be used. Use CANCEL_CONTRARY_MOTION_XYZ instead. (w_cancel_contrary_motion)\n    | line 940, col 146, at zombie_types.opy\n    | line 36, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 36,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "zombie_types.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/zombie_types.opy",
+          "startLine": 940,
+          "startCol": 146,
+          "endLine": 940,
+          "endCol": 154,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "severity": "Низкая; изменение физики требует проверки",
+      "crashRisk": "Прямой механизм падения не обнаружен",
+      "fix": "Миграция на CANCEL_CONTRARY_MOTION_XYZ после сравнения траекторий; режим XYZ не эквивалентен старому XZ/Y"
+    },
+    {
+      "id": "IM11",
+      "type": "w_cancel_contrary_motion",
+      "file": "zombie_types.opy",
+      "line": 1042,
+      "col": 184,
+      "owner": "rule \"DAYTAKER (ILLARI) BURST\":",
+      "sourceLine": "            eventPlayer.botAbilityTarget.applyImpulse(directionTowards(eventPlayer.botAbilityTarget, eventPlayer.botTarget.getEyePosition() + (3 * eventPlayer.botTarget.sizeScale) * Vector.UP), 20 + 9 * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)",
+      "message": "Impulse.CANCEL_CONTRARY_MOTION is legacy and should not be used. Use CANCEL_CONTRARY_MOTION_XYZ instead. (w_cancel_contrary_motion)\n    | line 1042, col 184, at zombie_types.opy\n    | line 36, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 36,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "zombie_types.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/zombie_types.opy",
+          "startLine": 1042,
+          "startCol": 184,
+          "endLine": 1042,
+          "endCol": 192,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "severity": "Низкая; изменение физики требует проверки",
+      "crashRisk": "Прямой механизм падения не обнаружен",
+      "fix": "Миграция на CANCEL_CONTRARY_MOTION_XYZ после сравнения траекторий; режим XYZ не эквивалентен старому XZ/Y"
+    },
+    {
+      "id": "IM12",
+      "type": "w_cancel_contrary_motion",
+      "file": "zombie_types.opy",
+      "line": 1044,
+      "col": 147,
+      "owner": "rule \"DAYTAKER (ILLARI) BURST\":",
+      "sourceLine": "            eventPlayer.botAbilityTarget.applyImpulse(directionFromAngles(eventPlayer.getHorizontalFacingAngle(), -35), 20 + 9 * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)",
+      "message": "Impulse.CANCEL_CONTRARY_MOTION is legacy and should not be used. Use CANCEL_CONTRARY_MOTION_XYZ instead. (w_cancel_contrary_motion)\n    | line 1044, col 147, at zombie_types.opy\n    | line 36, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 36,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "zombie_types.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/zombie_types.opy",
+          "startLine": 1044,
+          "startCol": 147,
+          "endLine": 1044,
+          "endCol": 155,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "severity": "Низкая; изменение физики требует проверки",
+      "crashRisk": "Прямой механизм падения не обнаружен",
+      "fix": "Миграция на CANCEL_CONTRARY_MOTION_XYZ после сравнения траекторий; режим XYZ не эквивалентен старому XZ/Y"
+    },
+    {
+      "id": "CH10",
+      "type": "w_ow2_rule_condition_chase",
+      "file": "zombie_types.opy",
+      "line": 1129,
+      "col": 53,
+      "owner": "rule \"ENSNARER (HAZARD) BLOCKS PLAYERS\":",
+      "sourceLine": "    @Condition (eventPlayer in bossStateList or not eventPlayer.botAbilityCooldown) == true",
+      "message": "This rule condition will possibly not trigger properly due to a workshop bug, because the player variable 'botAbilityCooldown' is chased. (w_ow2_rule_condition_chase)\n    | line 1129, col 53, at zombie_types.opy\n    | line 36, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 36,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "zombie_types.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/zombie_types.opy",
+          "startLine": 1129,
+          "startCol": 53,
+          "endLine": 1129,
+          "endCol": 83,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "variable": "botAbilityCooldown",
+      "verdict": "Корректно: конечное значение",
+      "reason": "Hazard ждёт botAbilityCooldown == 0, назначение chase тоже 0. У босса дополнительная ветка разрешает действие независимо.",
+      "defectRegistered": false,
+      "severity": "Не дефект",
+      "crashRisk": "Прямой механизм падения не обнаружен"
+    },
+    {
+      "id": "IM13",
+      "type": "w_cancel_contrary_motion",
+      "file": "zombie_types.opy",
+      "line": 1245,
+      "col": 65,
+      "owner": "rule \"SMOLDER BOSS SLAM\":",
+      "sourceLine": "            eventPlayer.applyImpulse(Vector.DOWN, 4, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)",
+      "message": "Impulse.CANCEL_CONTRARY_MOTION is legacy and should not be used. Use CANCEL_CONTRARY_MOTION_XYZ instead. (w_cancel_contrary_motion)\n    | line 1245, col 65, at zombie_types.opy\n    | line 36, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 36,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "zombie_types.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/zombie_types.opy",
+          "startLine": 1245,
+          "startCol": 65,
+          "endLine": 1245,
+          "endCol": 73,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "severity": "Низкая; изменение физики требует проверки",
+      "crashRisk": "Прямой механизм падения не обнаружен",
+      "fix": "Миграция на CANCEL_CONTRARY_MOTION_XYZ после сравнения траекторий; режим XYZ не эквивалентен старому XZ/Y"
+    },
+    {
+      "id": "IM14",
+      "type": "w_cancel_contrary_motion",
+      "file": "zombie_types.opy",
+      "line": 1271,
+      "col": 248,
+      "owner": "rule \"SMOLDER SUPER SLAM\":",
+      "sourceLine": "        eventPlayer.botAbilityTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, eventPlayer.botAbilityTarget)), -25), (15 if distance(eventPlayer, eventPlayer.botAbilityTarget) < 5 * eventPlayer.sizeScale else 7.5) * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)",
+      "message": "Impulse.CANCEL_CONTRARY_MOTION is legacy and should not be used. Use CANCEL_CONTRARY_MOTION_XYZ instead. (w_cancel_contrary_motion)\n    | line 1271, col 248, at zombie_types.opy\n    | line 36, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 36,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "zombie_types.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/zombie_types.opy",
+          "startLine": 1271,
+          "startCol": 248,
+          "endLine": 1271,
+          "endCol": 256,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "severity": "Низкая; изменение физики требует проверки",
+      "crashRisk": "Прямой механизм падения не обнаружен",
+      "fix": "Миграция на CANCEL_CONTRARY_MOTION_XYZ после сравнения траекторий; режим XYZ не эквивалентен старому XZ/Y"
+    },
+    {
+      "id": "CH11",
+      "type": "w_ow2_rule_condition_chase",
+      "file": "zombie_types.opy",
+      "line": 1390,
+      "col": 68,
+      "owner": "rule \"CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)\":",
+      "sourceLine": "    @Condition (distance(eventPlayer, currentObjectivePosition) <= objectiveRad or len(objectivePositionList) == 1 and eventPlayer.isOnObjective()) == true",
+      "message": "This rule condition will possibly not trigger properly due to a workshop bug, because the global variable 'objectiveRad' is chased. (w_ow2_rule_condition_chase)\n    | line 1390, col 68, at zombie_types.opy\n    | line 36, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 36,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "zombie_types.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/zombie_types.opy",
+          "startLine": 1390,
+          "startCol": 68,
+          "endLine": 1390,
+          "endCol": 80,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "variable": "objectiveRad",
+      "verdict": "Промежуточная граница только на Showdown; проверить",
+      "reason": "Для остальных типов радиус фиксирован; на Showdown достижение конца шага может устранить задержку.",
+      "defectRegistered": false,
+      "severity": "Под наблюдением; средняя при воспроизведении",
+      "crashRisk": "Прямой механизм падения не обнаружен"
+    },
+    {
+      "id": "IM15",
+      "type": "w_cancel_contrary_motion",
+      "file": "zombie_types.opy",
+      "line": 1431,
+      "col": 156,
+      "owner": "def abilityThrowdown():",
+      "sourceLine": "        (getPlayersInRadius(eventPlayer, 2, Team.2, LosCheck.SURFACES).filter(lambda player: player != eventPlayer)).applyImpulse(Vector.UP, 3, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)",
+      "message": "Impulse.CANCEL_CONTRARY_MOTION is legacy and should not be used. Use CANCEL_CONTRARY_MOTION_XYZ instead. (w_cancel_contrary_motion)\n    | line 1431, col 156, at zombie_types.opy\n    | line 36, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 36,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "zombie_types.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/zombie_types.opy",
+          "startLine": 1431,
+          "startCol": 156,
+          "endLine": 1431,
+          "endCol": 164,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "severity": "Низкая; изменение физики требует проверки",
+      "crashRisk": "Прямой механизм падения не обнаружен",
+      "fix": "Миграция на CANCEL_CONTRARY_MOTION_XYZ после сравнения траекторий; режим XYZ не эквивалентен старому XZ/Y"
+    },
+    {
+      "id": "IM16",
+      "type": "w_cancel_contrary_motion",
+      "file": "zombie_types.opy",
+      "line": 1432,
+      "col": 122,
+      "owner": "def abilityThrowdown():",
+      "sourceLine": "        eventPlayer.applyImpulse(Vector.UP, distance(eventPlayer.botTarget, eventPlayer) * (2 / eventPlayer.sizeScale), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)",
+      "message": "Impulse.CANCEL_CONTRARY_MOTION is legacy and should not be used. Use CANCEL_CONTRARY_MOTION_XYZ instead. (w_cancel_contrary_motion)\n    | line 1432, col 122, at zombie_types.opy\n    | line 36, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 36,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "zombie_types.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/zombie_types.opy",
+          "startLine": 1432,
+          "startCol": 122,
+          "endLine": 1432,
+          "endCol": 130,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "severity": "Низкая; изменение физики требует проверки",
+      "crashRisk": "Прямой механизм падения не обнаружен",
+      "fix": "Миграция на CANCEL_CONTRARY_MOTION_XYZ после сравнения траекторий; режим XYZ не эквивалентен старому XZ/Y"
+    },
+    {
+      "id": "IM17",
+      "type": "w_cancel_contrary_motion",
+      "file": "supply_drops.opy",
+      "line": 161,
+      "col": 128,
+      "owner": "def playerForceField():",
+      "sourceLine": "                getLivingPlayers(Team.2)[forceFieldZombieIndex].applyImpulse(directionTowards(eventPlayer.powerUpForceFieldPosition, getLivingPlayers(Team.2)[forceFieldZombieIndex]), 6, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)",
+      "message": "Impulse.CANCEL_CONTRARY_MOTION is legacy and should not be used. Use CANCEL_CONTRARY_MOTION_XYZ instead. (w_cancel_contrary_motion)\n    | line 161, col 128, at supply_drops.opy\n    | line 37, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 37,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "supply_drops.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/supply_drops.opy",
+          "startLine": 161,
+          "startCol": 128,
+          "endLine": 161,
+          "endCol": 136,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "severity": "Низкая; изменение физики требует проверки",
+      "crashRisk": "Прямой механизм падения не обнаружен",
+      "fix": "Миграция на CANCEL_CONTRARY_MOTION_XYZ после сравнения траекторий; режим XYZ не эквивалентен старому XZ/Y"
+    },
+    {
+      "id": "IM18",
+      "type": "w_cancel_contrary_motion",
+      "file": "supply_drops.opy",
+      "line": 393,
+      "col": 52,
+      "owner": "def bouncePad():",
+      "sourceLine": "            bouncePadSurvivorList.applyImpulse(Vector.UP, 22, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)",
+      "message": "Impulse.CANCEL_CONTRARY_MOTION is legacy and should not be used. Use CANCEL_CONTRARY_MOTION_XYZ instead. (w_cancel_contrary_motion)\n    | line 393, col 52, at supply_drops.opy\n    | line 37, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 37,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "supply_drops.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/supply_drops.opy",
+          "startLine": 393,
+          "startCol": 52,
+          "endLine": 393,
+          "endCol": 60,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "severity": "Низкая; изменение физики требует проверки",
+      "crashRisk": "Прямой механизм падения не обнаружен",
+      "fix": "Миграция на CANCEL_CONTRARY_MOTION_XYZ после сравнения траекторий; режим XYZ не эквивалентен старому XZ/Y"
+    },
+    {
+      "id": "CH12",
+      "type": "w_ow2_rule_condition_chase",
+      "file": "enhancements.opy",
+      "line": 171,
+      "col": 16,
+      "owner": "rule \"ZOMBIE HYBRID\":",
+      "sourceLine": "    @Condition eventPlayer.infectionLevel >= 1",
+      "message": "This rule condition will possibly not trigger properly due to a workshop bug, because the player variable 'infectionLevel' is chased. (w_ow2_rule_condition_chase)\n    | line 171, col 16, at enhancements.opy\n    | line 39, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 39,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "enhancements.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/enhancements.opy",
+          "startLine": 171,
+          "startCol": 16,
+          "endLine": 171,
+          "endCol": 42,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "variable": "infectionLevel",
+      "verdict": "Корректно: исключающиеся роли",
+      "reason": "Условие относится к Zombie Hybrid; chase infectionLevel запущен в ветке else для остальных улучшений. Не дефект.",
+      "defectRegistered": false,
+      "severity": "Не дефект",
+      "crashRisk": "Прямой механизм падения не обнаружен"
+    },
+    {
+      "id": "IM19",
+      "type": "w_cancel_contrary_motion",
+      "file": "enhancements.opy",
+      "line": 260,
+      "col": 429,
+      "owner": "rule \"LASER BARRICADE BLOCKS ZOMBIES\":",
+      "sourceLine": "            barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(barrierPushReferencePointList, lambda x: angleBetweenVectors(worldVector(barrierCollisionTarget.getThrottle(), barrierCollisionTarget, Transform.ROTATION), directionTowards(eventPlayer.enhancementBarrierPosition, x)))).last())), (-1 if barrierCollisionTarget.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(barrierCollisionTarget.getPosition(), barrierCollisionTarget.getPosition() + Vector.DOWN, null, getAllPlayers(), false))))), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)",
+      "message": "Impulse.CANCEL_CONTRARY_MOTION is legacy and should not be used. Use CANCEL_CONTRARY_MOTION_XYZ instead. (w_cancel_contrary_motion)\n    | line 260, col 429, at enhancements.opy\n    | line 39, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 39,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "enhancements.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/enhancements.opy",
+          "startLine": 260,
+          "startCol": 429,
+          "endLine": 260,
+          "endCol": 437,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "severity": "Низкая; изменение физики требует проверки",
+      "crashRisk": "Прямой механизм падения не обнаружен",
+      "fix": "Миграция на CANCEL_CONTRARY_MOTION_XYZ после сравнения траекторий; режим XYZ не эквивалентен старому XZ/Y"
+    },
+    {
+      "id": "CH13",
+      "type": "w_ow2_rule_condition_chase",
+      "file": "enhancements.opy",
+      "line": 271,
+      "col": 17,
+      "owner": "rule \"LASER BARRICADE BLOCKS ZOMBIES\":",
+      "sourceLine": "    chaseAtRate(eventPlayer.enhancementBarrierHealth, 10000, 500, ChaseRateReeval.NONE)",
+      "message": "The player variable 'enhancementBarrierHealth' is chased, but also used in a rule condition, making the rule condition possibly not trigger properly due to a workshop bug. (w_ow2_rule_condition_chase)\n    | line 271, col 17, at enhancements.opy\n    | line 39, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 39,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "enhancements.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/enhancements.opy",
+          "startLine": 271,
+          "startCol": 17,
+          "endLine": 271,
+          "endCol": 53,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "variable": "enhancementBarrierHealth",
+      "verdict": "Корректно: порог обеспечен присваиванием",
+      "reason": "Перед регенерацией из 0 устанавливается HP = 1; > 0 уже истинно. При контакте chase останавливается. Дожидаться 10000 для входа не требуется.",
+      "defectRegistered": false,
+      "severity": "Не дефект",
+      "crashRisk": "Прямой механизм падения не обнаружен"
+    },
+    {
+      "id": "CH14",
+      "type": "w_ow2_rule_condition_chase",
+      "file": "enhancements.opy",
+      "line": 534,
+      "col": 16,
+      "owner": "rule \"P.U.P. TARGET\":",
+      "sourceLine": "    @Condition eventPlayer.enhancementPupCooldown <= 0",
+      "message": "This rule condition will possibly not trigger properly due to a workshop bug, because the player variable 'enhancementPupCooldown' is chased. (w_ow2_rule_condition_chase)\n    | line 534, col 16, at enhancements.opy\n    | line 39, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 39,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "enhancements.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/enhancements.opy",
+          "startLine": 534,
+          "startCol": 16,
+          "endLine": 534,
+          "endCol": 50,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "variable": "enhancementPupCooldown",
+      "verdict": "Корректно: конечное значение",
+      "reason": "P.U.P. проверяет cooldown <= 0 при назначении 0. Временная скорость 0 при луче намеренна. Не дефект.",
+      "defectRegistered": false,
+      "severity": "Не дефект",
+      "crashRisk": "Прямой механизм падения не обнаружен"
+    },
+    {
+      "id": "IM20",
+      "type": "w_cancel_contrary_motion",
+      "file": "enhancements.opy",
+      "line": 614,
+      "col": 312,
+      "owner": "rule \"P.U.P. CONTROL\":",
+      "sourceLine": "            eventPlayer.enhancementPupTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget)), min(-20, verticalAngleOfDirection(directionTowards(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget)))), min(25, 4200 / eventPlayer.enhancementPupTarget.getMaxHealth()), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)",
+      "message": "Impulse.CANCEL_CONTRARY_MOTION is legacy and should not be used. Use CANCEL_CONTRARY_MOTION_XYZ instead. (w_cancel_contrary_motion)\n    | line 614, col 312, at enhancements.opy\n    | line 39, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 39,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "enhancements.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/enhancements.opy",
+          "startLine": 614,
+          "startCol": 312,
+          "endLine": 614,
+          "endCol": 320,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "severity": "Низкая; изменение физики требует проверки",
+      "crashRisk": "Прямой механизм падения не обнаружен",
+      "fix": "Миграция на CANCEL_CONTRARY_MOTION_XYZ после сравнения траекторий; режим XYZ не эквивалентен старому XZ/Y"
+    },
+    {
+      "id": "SR01",
+      "type": "w_start_rule_crash",
+      "file": "global_start_menu.opy",
+      "line": 246,
+      "col": 5,
+      "owner": "rule \"END VOTING\":",
+      "sourceLine": "    startRule(determineZombieMode)",
+      "message": "The subroutine determineZombieMode uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 246, col 5, at global_start_menu.opy\n    | line 22, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 22,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "global_start_menu.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/global_start_menu.opy",
+          "startLine": 246,
+          "startCol": 5,
+          "endLine": 246,
+          "endCol": 35,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "determineZombieMode",
+      "targetRule": "determineZombieMode",
+      "directWaitActions": [],
+      "severity": "Низкая",
+      "crashRisk": "Прямой риск не установлен: собственных ожиданий нет; диагностика транзитивна"
+    },
+    {
+      "id": "SR02",
+      "type": "w_start_rule_crash",
+      "file": "global_start_menu.opy",
+      "line": 297,
+      "col": 5,
+      "owner": "def determineZombieMode():",
+      "sourceLine": "    startRule(determineChallenge)",
+      "message": "The subroutine determineChallenge uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 297, col 5, at global_start_menu.opy\n    | line 22, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 22,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "global_start_menu.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/global_start_menu.opy",
+          "startLine": 297,
+          "startCol": 5,
+          "endLine": 297,
+          "endCol": 34,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "determineChallenge",
+      "targetRule": "determineChallenge",
+      "directWaitActions": [],
+      "severity": "Низкая",
+      "crashRisk": "Прямой риск не установлен: собственных ожиданий нет; диагностика транзитивна"
+    },
+    {
+      "id": "SR03",
+      "type": "w_start_rule_crash",
+      "file": "global_start_menu.opy",
+      "line": 351,
+      "col": 5,
+      "owner": "def determineChallenge():",
+      "sourceLine": "    startRule(determineObjectiveType)",
+      "message": "The subroutine determineObjectiveType uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 351, col 5, at global_start_menu.opy\n    | line 22, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 22,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "global_start_menu.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/global_start_menu.opy",
+          "startLine": 351,
+          "startCol": 5,
+          "endLine": 351,
+          "endCol": 38,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "determineObjectiveType",
+      "targetRule": "determineObjectiveType",
+      "directWaitActions": [],
+      "severity": "Низкая",
+      "crashRisk": "Прямой риск не установлен: собственных ожиданий нет; диагностика транзитивна"
+    },
+    {
+      "id": "SR04",
+      "type": "w_start_rule_crash",
+      "file": "global_start_menu.opy",
+      "line": 374,
+      "col": 5,
+      "owner": "def determineObjectiveType():",
+      "sourceLine": "    startRule(setObjectiveType)",
+      "message": "The subroutine setObjectiveType uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 374, col 5, at global_start_menu.opy\n    | line 22, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 22,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "global_start_menu.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/global_start_menu.opy",
+          "startLine": 374,
+          "startCol": 5,
+          "endLine": 374,
+          "endCol": 32,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "setObjectiveType",
+      "targetRule": "setObjectiveType",
+      "directWaitActions": [
+        "Wait Until(And(Is Game In Progress, Not(Global.isPregameSetup)), 999999999999); // 6 elements",
+        "Wait(False, Ignore Condition); // 1 element"
+      ],
+      "severity": "Средняя",
+      "crashRisk": "Условный: повтор предматчевой инициализации при ожидающем глобальном исполнителе"
+    },
+    {
+      "id": "SR05",
+      "type": "w_start_rule_crash",
+      "file": "player_start_menu.opy",
+      "line": 72,
+      "col": 5,
+      "owner": "rule \"PLAYER SELECTS/RESELECTS HERO\":",
+      "sourceLine": "    startRule(setPrematchTimer)",
+      "message": "The subroutine setPrematchTimer uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 72, col 5, at player_start_menu.opy\n    | line 23, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 23,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "player_start_menu.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/player_start_menu.opy",
+          "startLine": 72,
+          "startCol": 5,
+          "endLine": 72,
+          "endCol": 32,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "setPrematchTimer",
+      "targetRule": "setPrematchTimer",
+      "directWaitActions": [
+        "Wait(False, Ignore Condition); // 1 element"
+      ],
+      "severity": "Низкая",
+      "crashRisk": "Новый путь обычно без ожидания; возможен перезапуск старого короткого ожидания"
+    },
+    {
+      "id": "SR06",
+      "type": "w_start_rule_crash",
+      "file": "player_start_menu.opy",
+      "line": 119,
+      "col": 17,
+      "owner": "rule \"PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY)\":",
+      "sourceLine": "                startRule(setPrematchTimer)",
+      "message": "The subroutine setPrematchTimer uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 119, col 17, at player_start_menu.opy\n    | line 23, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 23,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "player_start_menu.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/player_start_menu.opy",
+          "startLine": 119,
+          "startCol": 17,
+          "endLine": 119,
+          "endCol": 44,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "setPrematchTimer",
+      "targetRule": "setPrematchTimer",
+      "directWaitActions": [
+        "Wait(False, Ignore Condition); // 1 element"
+      ],
+      "severity": "Средняя",
+      "crashRisk": "Условный, короткое окно: wait() в переходе таймера 15 -> 10"
+    },
+    {
+      "id": "SR07",
+      "type": "w_start_rule_crash",
+      "file": "player_start_menu.opy",
+      "line": 120,
+      "col": 17,
+      "owner": "rule \"PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY)\":",
+      "sourceLine": "                startRule(randomActions)",
+      "message": "The subroutine randomActions uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 120, col 17, at player_start_menu.opy\n    | line 23, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 23,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "player_start_menu.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/player_start_menu.opy",
+          "startLine": 120,
+          "startCol": 17,
+          "endLine": 120,
+          "endCol": 41,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "randomActions",
+      "targetRule": "randomActions",
+      "directWaitActions": [
+        "Wait(True, Ignore Condition); // 1 element"
+      ],
+      "severity": "Высокая",
+      "crashRisk": "Доступный повтор в wait(1); накопительный риск при серии перезапусков"
+    },
+    {
+      "id": "SR08",
+      "type": "w_start_rule_crash",
+      "file": "player_start_menu.opy",
+      "line": 127,
+      "col": 13,
+      "owner": "rule \"PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY)\":",
+      "sourceLine": "            startRule(setPrematchTimer)",
+      "message": "The subroutine setPrematchTimer uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 127, col 13, at player_start_menu.opy\n    | line 23, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 23,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "player_start_menu.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/player_start_menu.opy",
+          "startLine": 127,
+          "startCol": 13,
+          "endLine": 127,
+          "endCol": 40,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "setPrematchTimer",
+      "targetRule": "setPrematchTimer",
+      "directWaitActions": [
+        "Wait(False, Ignore Condition); // 1 element"
+      ],
+      "severity": "Средняя",
+      "crashRisk": "Условный: отмена может прервать короткий wait предыдущей готовности"
+    },
+    {
+      "id": "SR09",
+      "type": "w_start_rule_crash",
+      "file": "player_start_menu.opy",
+      "line": 211,
+      "col": 5,
+      "owner": "rule \"UPDATE PREGAME VOTING STATUS\":",
+      "sourceLine": "    startRule(setPrematchTimer)",
+      "message": "The subroutine setPrematchTimer uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 211, col 5, at player_start_menu.opy\n    | line 23, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 23,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "player_start_menu.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/player_start_menu.opy",
+          "startLine": 211,
+          "startCol": 5,
+          "endLine": 211,
+          "endCol": 32,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "setPrematchTimer",
+      "targetRule": "setPrematchTimer",
+      "directWaitActions": [
+        "Wait(False, Ignore Condition); // 1 element"
+      ],
+      "severity": "Средняя",
+      "crashRisk": "На границе конца голосования; в обычной ветке собственного ожидания нет"
+    },
+    {
+      "id": "SR10",
+      "type": "w_start_rule_crash",
+      "file": "player_start_menu.opy",
+      "line": 214,
+      "col": 5,
+      "owner": "rule \"UPDATE PREGAME VOTING STATUS\":",
+      "sourceLine": "    startRule(setPrematchTimer)",
+      "message": "The subroutine setPrematchTimer uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 214, col 5, at player_start_menu.opy\n    | line 23, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 23,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "player_start_menu.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/player_start_menu.opy",
+          "startLine": 214,
+          "startCol": 5,
+          "endLine": 214,
+          "endCol": 32,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "setPrematchTimer",
+      "targetRule": "setPrematchTimer",
+      "directWaitActions": [
+        "Wait(False, Ignore Condition); // 1 element"
+      ],
+      "severity": "Средняя",
+      "crashRisk": "Короткий wait цели при готовности; пауза 2 с принадлежит вызывающему правилу"
+    },
+    {
+      "id": "SR11",
+      "type": "w_start_rule_crash",
+      "file": "global_game_in_progress.opy",
+      "line": 127,
+      "col": 5,
+      "owner": "rule \"OBJECTIVE COMPLETE\":",
+      "sourceLine": "    startRule(objectivesManagement)",
+      "message": "The subroutine objectivesManagement uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 127, col 5, at global_game_in_progress.opy\n    | line 24, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 24,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "global_game_in_progress.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/global_game_in_progress.opy",
+          "startLine": 127,
+          "startCol": 5,
+          "endLine": 127,
+          "endCol": 36,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "objectivesManagement",
+      "targetRule": "objectivesManagement",
+      "directWaitActions": [
+        "Wait(False, Ignore Condition); // 1 element",
+        "Wait(0.25, Ignore Condition); // 2 elements",
+        "Wait(False, Ignore Condition); // 1 element"
+      ],
+      "severity": "Низкая при штатной работе",
+      "crashRisk": "Штатный повтор не найден; нужен дополнительный повторный вход в переход"
+    },
+    {
+      "id": "SR12",
+      "type": "w_start_rule_crash",
+      "file": "supply_drops.opy",
+      "line": 472,
+      "col": 13,
+      "owner": "def powerUpUsage():",
+      "sourceLine": "            startRule(instantRevive)",
+      "message": "The subroutine instantRevive uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 472, col 13, at supply_drops.opy\n    | line 37, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 37,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "supply_drops.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/supply_drops.opy",
+          "startLine": 472,
+          "startCol": 13,
+          "endLine": 472,
+          "endCol": 37,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "instantRevive",
+      "targetRule": "instantRevive (0-9)",
+      "directWaitActions": [
+        "Wait(False, Ignore Condition); // 1 element",
+        "Wait Until(Is Alive((Event Player).actorTeamSlot1), 3); // 5 elements"
+      ],
+      "severity": "Средняя",
+      "crashRisk": "Есть при перекрытии операции воскрешения; окно обычно короче таймаута 3 с"
+    },
+    {
+      "id": "SR13",
+      "type": "w_start_rule_crash",
+      "file": "supply_drops.opy",
+      "line": 476,
+      "col": 13,
+      "owner": "def powerUpUsage():",
+      "sourceLine": "            startRule(playerForceField)",
+      "message": "The subroutine playerForceField uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 476, col 13, at supply_drops.opy\n    | line 37, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 37,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "supply_drops.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/supply_drops.opy",
+          "startLine": 476,
+          "startCol": 13,
+          "endLine": 476,
+          "endCol": 40,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "playerForceField",
+      "targetRule": "playerForceField (10-19)",
+      "directWaitActions": [
+        "Wait(0.032, Ignore Condition); // 2 elements"
+      ],
+      "severity": "Высокая",
+      "crashRisk": "Доступен повтор тем же игроком в длительном ожидании; накопительный риск"
+    },
+    {
+      "id": "SR14",
+      "type": "w_start_rule_crash",
+      "file": "supply_drops.opy",
+      "line": 480,
+      "col": 13,
+      "owner": "def powerUpUsage():",
+      "sourceLine": "            startRule(noCooldowns)",
+      "message": "The subroutine noCooldowns uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 480, col 13, at supply_drops.opy\n    | line 37, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 37,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "supply_drops.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/supply_drops.opy",
+          "startLine": 480,
+          "startCol": 13,
+          "endLine": 480,
+          "endCol": 35,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "noCooldowns",
+      "targetRule": "noCooldowns (20-29)",
+      "directWaitActions": [
+        "Wait(0.032, Ignore Condition); // 2 elements"
+      ],
+      "severity": "Высокая",
+      "crashRisk": "Доступен повтор тем же игроком в длительном ожидании; накопительный риск"
+    },
+    {
+      "id": "SR15",
+      "type": "w_start_rule_crash",
+      "file": "supply_drops.opy",
+      "line": 487,
+      "col": 13,
+      "owner": "def powerUpUsage():",
+      "sourceLine": "            startRule(airStrike)",
+      "message": "The subroutine airStrike uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 487, col 13, at supply_drops.opy\n    | line 37, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 37,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "supply_drops.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/supply_drops.opy",
+          "startLine": 487,
+          "startCol": 13,
+          "endLine": 487,
+          "endCol": 33,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "airStrike",
+      "targetRule": "airStrike (30-39)",
+      "directWaitActions": [
+        "Wait(False, Ignore Condition); // 1 element",
+        "Wait(2, Ignore Condition); // 2 elements",
+        "Wait(0.125, Ignore Condition); // 2 elements"
+      ],
+      "severity": "Высокая",
+      "crashRisk": "Доступен повтор тем же игроком в длительном ожидании; накопительный риск"
+    },
+    {
+      "id": "SR16",
+      "type": "w_start_rule_crash",
+      "file": "supply_drops.opy",
+      "line": 491,
+      "col": 13,
+      "owner": "def powerUpUsage():",
+      "sourceLine": "            startRule(healBeacon)",
+      "message": "The subroutine healBeacon uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 491, col 13, at supply_drops.opy\n    | line 37, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 37,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "supply_drops.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/supply_drops.opy",
+          "startLine": 491,
+          "startCol": 13,
+          "endLine": 491,
+          "endCol": 34,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "healBeacon",
+      "targetRule": "beaconofHealing (40-49)",
+      "directWaitActions": [
+        "Wait(True, Ignore Condition); // 1 element"
+      ],
+      "severity": "Высокая",
+      "crashRisk": "Доступен повтор тем же игроком в длительном ожидании; накопительный риск"
+    },
+    {
+      "id": "SR17",
+      "type": "w_start_rule_crash",
+      "file": "supply_drops.opy",
+      "line": 502,
+      "col": 13,
+      "owner": "def powerUpUsage():",
+      "sourceLine": "            startRule(sentryTurret)",
+      "message": "The subroutine sentryTurret uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 502, col 13, at supply_drops.opy\n    | line 37, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 37,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "supply_drops.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/supply_drops.opy",
+          "startLine": 502,
+          "startCol": 13,
+          "endLine": 502,
+          "endCol": 36,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "sentryTurret",
+      "targetRule": "sentryTurret (50-59)",
+      "directWaitActions": [
+        "Wait(0.125, Ignore Condition); // 2 elements"
+      ],
+      "severity": "Высокая",
+      "crashRisk": "Доступен повтор тем же игроком в длительном ожидании; накопительный риск"
+    },
+    {
+      "id": "SR18",
+      "type": "w_start_rule_crash",
+      "file": "supply_drops.opy",
+      "line": 506,
+      "col": 13,
+      "owner": "def powerUpUsage():",
+      "sourceLine": "            startRule(cloakingDevice)",
+      "message": "The subroutine cloakingDevice uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 506, col 13, at supply_drops.opy\n    | line 37, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 37,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "supply_drops.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/supply_drops.opy",
+          "startLine": 506,
+          "startCol": 13,
+          "endLine": 506,
+          "endCol": 38,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "cloakingDevice",
+      "targetRule": "cloakingDevice (60-69)",
+      "directWaitActions": [
+        "Wait Until(And(And(Compare((Event Player).actorTeamSlot8, <, 23), Is Button Held(Event Player, Button(Crouch))), Is Button Held(Event Player, Button(Interact))), 1); // 18 elements"
+      ],
+      "severity": "Высокая",
+      "crashRisk": "Доступен повтор тем же игроком в длительном ожидании; накопительный риск"
+    },
+    {
+      "id": "SR19",
+      "type": "w_start_rule_crash",
+      "file": "supply_drops.opy",
+      "line": 510,
+      "col": 13,
+      "owner": "def powerUpUsage():",
+      "sourceLine": "            startRule(superNano)",
+      "message": "The subroutine superNano uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 510, col 13, at supply_drops.opy\n    | line 37, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 37,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "supply_drops.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/supply_drops.opy",
+          "startLine": 510,
+          "startCol": 13,
+          "endLine": 510,
+          "endCol": 33,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "superNano",
+      "targetRule": "superNano (70-79)",
+      "directWaitActions": [
+        "Wait(True, Ignore Condition); // 1 element",
+        "Wait(0.25, Ignore Condition); // 2 elements"
+      ],
+      "severity": "Высокая",
+      "crashRisk": "Доступен повтор тем же игроком в длительном ожидании; накопительный риск"
+    },
+    {
+      "id": "SR20",
+      "type": "w_start_rule_crash",
+      "file": "supply_drops.opy",
+      "line": 514,
+      "col": 13,
+      "owner": "def powerUpUsage():",
+      "sourceLine": "            startRule(bouncePad)",
+      "message": "The subroutine bouncePad uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 514, col 13, at supply_drops.opy\n    | line 37, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 37,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "supply_drops.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/supply_drops.opy",
+          "startLine": 514,
+          "startCol": 13,
+          "endLine": 514,
+          "endCol": 33,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "bouncePad",
+      "targetRule": "bouncePad (80-89)",
+      "directWaitActions": [
+        "Wait(True, Ignore Condition); // 1 element",
+        "Wait(0.125, Ignore Condition); // 2 elements",
+        "Wait(0.25, Ignore Condition); // 2 elements"
+      ],
+      "severity": "Высокая",
+      "crashRisk": "Доступен повтор тем же игроком в длительном ожидании; накопительный риск"
+    },
+    {
+      "id": "SR21",
+      "type": "w_start_rule_crash",
+      "file": "supply_drops.opy",
+      "line": 518,
+      "col": 13,
+      "owner": "def powerUpUsage():",
+      "sourceLine": "            startRule(ultimateCharger)",
+      "message": "The subroutine ultimateCharger uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 518, col 13, at supply_drops.opy\n    | line 37, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 37,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "supply_drops.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/supply_drops.opy",
+          "startLine": 518,
+          "startCol": 13,
+          "endLine": 518,
+          "endCol": 39,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "ultimateCharger",
+      "targetRule": "ultimateCharger (90-99)",
+      "directWaitActions": [
+        "Wait(0.125, Ignore Condition); // 2 elements",
+        "Wait(0.25, Ignore Condition); // 2 elements"
+      ],
+      "severity": "Высокая",
+      "crashRisk": "Доступен повтор тем же игроком в длительном ожидании; накопительный риск"
+    },
+    {
+      "id": "SR22",
+      "type": "w_start_rule_crash",
+      "file": "supply_drops.opy",
+      "line": 524,
+      "col": 17,
+      "owner": "def powerUpUsage():",
+      "sourceLine": "                startRule(stun)",
+      "message": "The subroutine stun uses wait functions, which can cause crashes when repeatedly called with startRule(..., StartRuleBehavior.RESTART). (w_start_rule_crash)\n    | line 524, col 17, at supply_drops.opy\n    | line 37, col 1, at main.opy",
+      "fileStack": [
+        {
+          "name": "main.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/main.opy",
+          "startLine": 37,
+          "startCol": 1,
+          "endCol": null,
+          "endLine": null,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        },
+        {
+          "name": "supply_drops.opy",
+          "path": "D:/projects/Overwatch-Zombie-Survival-Missions-Reforged/src/supply_drops.opy",
+          "startLine": 524,
+          "startCol": 17,
+          "endLine": 524,
+          "endCol": 32,
+          "remainingChars": 99999999999,
+          "staticMember": true,
+          "fileStackMemberType": "normal"
+        }
+      ],
+      "target": "stun",
+      "targetRule": "stun (100-109)",
+      "directWaitActions": [
+        "Wait Until(Compare(Distance Between((Event Player).actorTeamSlot12, Add(Position Of((Event Player).actorTeamSlot14), Global.losOffsetConst)), <, 0.1), 3); // 16 elements",
+        "Wait(False, Ignore Condition); // 1 element"
+      ],
+      "severity": "Высокая",
+      "crashRisk": "Доступен повтор тем же игроком в длительном ожидании; накопительный риск"
+    }
+  ],
+  "chaseSummary": {
+    "accepted": 10,
+    "monitoringOnly": 4,
+    "inGameFailuresReproduced": 0
+  },
+  "limitation": "Original-include compilation and static reachability audit only. No in-game crash, chase failure, or impulse migration was reproduced."
+}
