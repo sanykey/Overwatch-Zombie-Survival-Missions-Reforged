@@ -5,7 +5,7 @@
 #!optimizeForSizeAggressive
 #!debugElementCount
 #!writeToOutputFile
-#!suppressWarnings w_cancel_contrary_motion w_closest_player w_dark_color w_ow2_rule_condition_chase w_start_rule_crash
+#!suppressWarnings w_cancel_contrary_motion w_dark_color w_ow2_rule_condition_chase w_start_rule_crash
 # w_wait_until is safe for the bare boolean conditions in these rules:
 # "SPAWN BOSS": botIsInitializing only receives true/false.
 # "REVIVE PLAYER OR ADVANCE DEATH TIMER": isObjectiveComplete only receives true/false.

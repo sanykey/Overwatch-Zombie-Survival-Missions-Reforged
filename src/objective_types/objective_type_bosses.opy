@@ -134,13 +134,17 @@ rule "BOSS DIES (ALL BOSS OBJECTIVES)":
                     #Teleport boss if they fall very far below the map
                     bossReturn()
                 else:
-                    #17.532 is acceleration due to gravity constant
-                    eventPlayer.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, getClosestPlayer(eventPlayer, Team.1))), -75), max(1, sqrt(2 * 17.532 * (eventPlayer.botLastTarget.getPosition().y + 3 - eventPlayer.getPosition().y))), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+                    # Synchronous scratch: consume the living target before the next wait or subroutine call.
+                    #!define bossRecoveryTarget tmp0
+                    bossRecoveryTarget = getRealClosestPlayer(eventPlayer, Team.1)
+                    if entityExists(bossRecoveryTarget):
+                        # Use the same valid target for direction and height; 17.532 is gravity acceleration.
+                        eventPlayer.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, bossRecoveryTarget)), -75), max(1, sqrt(2 * 17.532 * (bossRecoveryTarget.getPosition().y + 3 - eventPlayer.getPosition().y))), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
                 wait()
                 eventPlayer.resurrect()
                 waitUntil(eventPlayer.isAlive(), 0.25)
             applyBotBossHealth()
-            if eventPlayer.botTarget == null:
+            if eventPlayer.botTarget == null and entityExists(eventPlayer.botLastTarget) and eventPlayer.botLastTarget.isAlive() and eventPlayer.botLastTarget.hasSpawned():
                 eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.botLastTarget), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
             #Illari punishes with ultimate
             if eventPlayer.getHero() == Hero.ILLARI and attacker.getTeam() == Team.1:
@@ -197,10 +201,17 @@ def bossReturn():
     stopChasing(eventPlayer.botReturnTime)
     eventPlayer.enableEnvironmentCollision()
     eventPlayer.botReturnPosition = eventPlayer.getEyePosition()
-    eventPlayer.botReturnTarget = eventPlayer.botLastTarget if eventPlayer.botLastTarget != null else getClosestPlayer(eventPlayer, Team.1)
     eventPlayer.teleport(nearestWalkablePosition(eventPlayer))
     wait(0.1)
-    eventPlayer.teleport(Vector.UP + (random.choice(mapGridList.filter(lambda x: isInLoS(x, eventPlayer.botTeleportCenter.getEyePosition()) and distance(x, eventPlayer.botReturnTarget) > 5 and distance(x, eventPlayer.botReturnTarget) < 20))))
+    # Select after the wait so a dead, despawned or departed previous target is replaced.
+    eventPlayer.botReturnTarget = eventPlayer.botLastTarget if entityExists(eventPlayer.botLastTarget) and eventPlayer.botLastTarget.isAlive() and eventPlayer.botLastTarget.hasSpawned() and eventPlayer.botLastTarget.getTeam() == Team.1 else getRealClosestPlayer(eventPlayer, Team.1)
+    if entityExists(eventPlayer.botReturnTarget):
+        # Synchronous scratch: candidate positions are consumed before the next wait.
+        #!define bossReturnCandidateList tmp0
+        bossReturnCandidateList = mapGridList.filter(lambda x: isInLoS(x, eventPlayer.botReturnTarget.getEyePosition()) and distance(x, eventPlayer.botReturnTarget) > 5 and distance(x, eventPlayer.botReturnTarget) < 20)
+        # Keep the walkable recovery position if no valid destination exists.
+        if bossReturnCandidateList != []:
+            eventPlayer.teleport(Vector.UP + random.choice(bossReturnCandidateList))
     wait()
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.BLACK, eventPlayer, 3)
     eventPlayer.botReturnPosition = 0
