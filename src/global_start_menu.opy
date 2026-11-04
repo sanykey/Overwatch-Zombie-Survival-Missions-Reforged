@@ -116,7 +116,7 @@ rule "EFFECTS/TEXTS":
             "Faster, stronger, and deadlier",
             "All challenges at Once!"
         ][localPlayer.pregameChallengeVote],
-        "Change Vote (Press [{0}])".format(inputBindingString(Button.ULTIMATE)) if isVoting or localPlayer.pregameChallengeVote == 0 else [],
+        "Change Vote (Press [{0}])".format(inputBindingString(Button.ULTIMATE)) if isVoting or localPlayer.pregameChallengeVote == Challenge.NO_PREFERENCE else [],
         HudPosition.LEFT,
         0,
         [Color.AQUA, Color.YELLOW, Color.LIME_GREEN, Color.ORANGE, Color.WHITE if isPregameGlitchActive else Color.TURQUOISE, Color.GRAY if isPregameGlitchActive else Color.PURPLE][localPlayer.pregameChallengeVote],
@@ -321,33 +321,33 @@ def setZombieMode():
 def determineChallenge():
     @Name "determineChallenge"
     
-    challengeSetting = 0
-    # challengeVoteIndex: challenge vote index, to count active players voting for each enabled difficulty.
+    challengeSetting = Challenge.NO_PREFERENCE
+    # challengeVoteIndex: challenge vote index, to count active players voting for each enabled challenge.
     #!define challengeVoteIndex tmp0
-    for challengeVoteIndex in range(1, len(challengeVoteList)):
+    for challengeVoteIndex in range(Challenge.NONE, len(challengeVoteList)):
         challengeVoteList[challengeVoteIndex] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameChallengeVote == challengeVoteIndex)) if challengeVoteList[challengeVoteIndex][1] else -1
-    # challengeWeightedVoteSum: sum of difficulty levels weighted by votes, to calculate the average difficulty vote.
+    # challengeWeightedVoteSum: sum of challenge IDs weighted by votes, to calculate the average challenge vote.
     #!define challengeWeightedVoteSum tmp1
     challengeWeightedVoteSum = 0
-    # challengeVoteIndex: difficulty index, to include each difficulty's weighted votes in challengeWeightedVoteSum.
-    for challengeVoteIndex in range(1, len(challengeVoteList)):
-        # challengeWeightedVoteSum: running weighted sum including this difficulty, for the average used to break ties.
+    # challengeVoteIndex: challenge index, to include each challenge's weighted votes in challengeWeightedVoteSum.
+    for challengeVoteIndex in range(Challenge.NONE, len(challengeVoteList)):
+        # challengeWeightedVoteSum: running weighted sum including this challenge, for the average used to break ties.
         challengeWeightedVoteSum += challengeVoteList[challengeVoteIndex] * challengeVoteIndex
-    # challengeAverageVote: average difficulty vote, to choose the closer difficulty when vote counts tie.
+    # challengeAverageVote: average challenge vote, to choose the closer challenge when vote counts tie.
     #!define challengeAverageVote tmp1
-    challengeAverageVote /= len(getPlayers(Team.1).filter(lambda player: player.pregameChallengeVote > 0))
-    # challengeVoteIndex: candidate difficulty index, to choose the winner using votes and distance from challengeAverageVote.
-    for challengeVoteIndex in range(1, len(challengeVoteList)):
-        #If difficulty being compared has more votes than current difficulty
+    challengeAverageVote /= len(getPlayers(Team.1).filter(lambda player: player.pregameChallengeVote > Challenge.NO_PREFERENCE))
+    # challengeVoteIndex: candidate challenge index, to choose the winner using votes and distance from challengeAverageVote.
+    for challengeVoteIndex in range(Challenge.NONE, len(challengeVoteList)):
+        #If challenge being compared has more votes than current challenge
         if challengeVoteList[challengeSetting] < challengeVoteList[challengeVoteIndex]:
             challengeSetting = challengeVoteIndex
         elif challengeVoteList[challengeVoteIndex] > 0 and challengeVoteList[challengeSetting] == challengeVoteList[challengeVoteIndex]:
-            #Pick difficulty closest to the average difficulty vote
+            #Pick challenge closest to the average challenge vote
             if abs(challengeSetting - challengeAverageVote) > abs(challengeVoteIndex - challengeAverageVote):
                 challengeSetting = challengeVoteIndex
-    #Default difficulty
+    #Default challenge
     if not challengeSetting:
-        challengeSetting = 1
+        challengeSetting = Challenge.NONE
     startRule(determineObjectiveType)
 
 

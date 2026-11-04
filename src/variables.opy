@@ -20,6 +20,16 @@ enum Difficulty:
     EXPERT = 3,
     LEGENDARY = 5,
 
+# Challenge IDs also index challengeVoteList and the pregame menu tables.
+# Insanity and Pandora's Box share the Insanity stat tables (IDs >= INSANITY).
+enum Challenge:
+    NO_PREFERENCE = 0,
+    NONE = 1,
+    SWARM_SHOOTOUT = 2,
+    RANDOM_ABILITIES = 3,
+    INSANITY = 4,
+    PANDORAS_BOX = 5,
+
 # Enhancement IDs also index enhancementOptionList and the default-setting choices.
 # Zero means no preference in the menu; initialization resolves the configured default.
 # If that setting is "No Enhancement", zero leaves the player without an enhancement.
@@ -189,7 +199,7 @@ globalvar isGameplayActive      # Objectives are generated and combat is active;
 globalvar isOvertimeActive      # Prevents repeated overtime activation and zombie relocation on standard modes.
 globalvar isVoting              # Global pregame vote is open; separate from each player's isPregameVoting field.
 globalvar difficultySetting     # Cached player count; compared with Difficulty thresholds and used directly for scaling.
-globalvar challengeSetting      # Selected Challenge option, retained after pregame voting.
+globalvar challengeSetting      # Challenge ID, retained after pregame voting.
 globalvar zombieSetting         # Selected zombie roster/spawn-rate mode, retained after pregame voting.
 globalvar objectiveTypeSetting  # Selected objective mode or Mixed setting; differs from the current objective type.
 globalvar matchEndTime          # Native-gamemode timer offset: zero or 0.1, used as the match-time floor.

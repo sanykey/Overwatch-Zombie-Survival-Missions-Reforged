@@ -84,7 +84,7 @@ macro botStatManagementMacro():
 
 macro mutationsMacro():
     #Zombies have a chance to mutate. Bosses cannot mutate
-    if availableMutationList != [] and not eventPlayer in bossStateList and (random.uniform(0, 100) < (100 if challengeSetting in [3, 5] else createWorkshopSettingFloat("Mutations", "Chance to mutate percentage", 25, 0, 100))):
+    if availableMutationList != [] and not eventPlayer in bossStateList and (random.uniform(0, 100) < (100 if challengeSetting in [Challenge.RANDOM_ABILITIES, Challenge.PANDORAS_BOX] else createWorkshopSettingFloat("Mutations", "Chance to mutate percentage", 25, 0, 100))):
         eventPlayer.botMutationId = random.choice(availableMutationList)
         # botMutationOutlineColor: outline color; every enabled mutation assigns it before the capture below.
         #Speed
@@ -426,7 +426,7 @@ def setDifficulty():
 
     difficultySetting = len(getPlayers(Team.1).filter(lambda player: player.hasSpawned()))
     #Difficulty: Insanity
-    if challengeSetting >= 4:
+    if challengeSetting >= Challenge.INSANITY:
         #Bot Health Values
         botHealthList = numbersList.slice(NL_BOT_HEALTH_INSANITY_OFFSET, NL_BOT_HEALTH_INSANITY_LEN)
         #Bot bite damage

@@ -135,7 +135,7 @@ rule "PLAYER GETS DOWNED":
     @Condition eventPlayer.isDummy() == false
     
     wait(0.16)
-    eventPlayer.reviveTimeRemaining = eventPlayer.reviveDuration / (2 if challengeSetting == 2 else 1)
+    eventPlayer.reviveTimeRemaining = eventPlayer.reviveDuration / (2 if challengeSetting == Challenge.SWARM_SHOOTOUT else 1)
     eventPlayer.stopAllDamageOverTime()
     eventPlayer.infectionLevel = 0
     eventPlayer.isInfected = false

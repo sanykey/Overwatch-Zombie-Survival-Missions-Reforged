@@ -15,7 +15,7 @@ rule "EFFECTS/TEXTS":
     #Nearest health pack icon
     createIcon(getPlayers(Team.1).filter(lambda player: player.enhancementId != Enhancement.ZOMBIE_HYBRID and healthpackPositionList != [] and player.isInfected and getMatchTime() > matchEndTime), sorted(healthpackPositionList, lambda x: angleBetweenVectors(localPlayer.getFacingDirection(), directionTowards(localPlayer.getEyePosition(), x)))[0] + offsetUpThreeQuartersConst + offsetUpHalfConst, Icon.POISON, IconReeval.VISIBILITY_AND_POSITION, Color.GREEN)
     hudSubtext(getAllPlayers(), "Modified version. workshop.codes/786tw", HudPosition.RIGHT, 0.1, Color.TEAM_1, HudReeval.VISIBILITY_AND_STRING)
-    hudSubtext(getAllPlayers().filter(lambda _: challengeSetting >= 2), "Challenge round!", HudPosition.RIGHT, 0.2, Color.TEAM_1, HudReeval.VISIBILITY_AND_STRING)
+    hudSubtext(getAllPlayers().filter(lambda _: challengeSetting >= Challenge.SWARM_SHOOTOUT), "Challenge round!", HudPosition.RIGHT, 0.2, Color.TEAM_1, HudReeval.VISIBILITY_AND_STRING)
 
 
 rule "ATTACK SPAWN ROOM CONTROL":
@@ -73,7 +73,7 @@ rule "ZOMBIE SHUFFLE":
 rule "SWARM SHOOTOUT":
     @Event eachPlayer
     @Team 2
-    @Condition (challengeSetting in [2, 5]) == true
+    @Condition (challengeSetting in [Challenge.SWARM_SHOOTOUT, Challenge.PANDORAS_BOX]) == true
     
     startDamageModification(getPlayers(Team.1), eventPlayer, 72)
     waitUntil(eventPlayer.botTarget != false, 99999)
@@ -89,7 +89,7 @@ rule "SWARM SHOOTOUT":
 rule "RANDOM ABILITIES":
     @Event eachPlayer
     @Team 2
-    @Condition (challengeSetting in [3, 5] or isSmolderEventActive) == true
+    @Condition (challengeSetting in [Challenge.RANDOM_ABILITIES, Challenge.PANDORAS_BOX] or isSmolderEventActive) == true
     @Condition eventPlayer in bossStateList != true
     @Condition isPregameSetup == false
     

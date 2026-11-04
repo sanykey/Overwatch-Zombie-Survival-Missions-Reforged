@@ -20,7 +20,7 @@ rule "PLAYER MENU INITIALIZATION":
     eventPlayer.enhancementId = Enhancement.NO_PREFERENCE
     if isVoting:
         # Reset each vote before any menu reader; these slots have distinct gameplay owners.
-        eventPlayer.pregameChallengeVote = 0
+        eventPlayer.pregameChallengeVote = Challenge.NO_PREFERENCE
         eventPlayer.pregameZombieVote = 0
         eventPlayer.pregameObjectiveVote = 0
         eventPlayer.pregameState = PregameState.SELECTING_HERO
