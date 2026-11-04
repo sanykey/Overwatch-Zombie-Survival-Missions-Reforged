@@ -8,7 +8,9 @@ The project aims to reduce the script's element count as much as possible and re
 
 ### Technical Optimization
 
-The current OverPy 9.7.20 build uses **25,229 elements**, freeing up **7,035** compared with the original ZSMM's 32,264. Global variables: **105/128**; player variables: **84/128**.
+The current OverPy 9.7.20 build uses **25,241 elements**, freeing up **7,023** compared with the original ZSMM's 32,264. Global variables: **104/128**; player variables: **90/128**.
+
+- Isolated seven chased values from shared storage: the Satellite laser position, boss return timer, Hazard ability cooldown, P.U.P. position and cooldown, Anran emergence position, and barricade health. Their former non-chased roles retain separate storage. This adds one global and six player variables without changing the element count. With chase warnings enabled, diagnostics fall from 34 to 14; warnings about values directly used in both chase actions and rule conditions remain visible. `node analysis/verify-chase-storage-isolation.cjs` compares all 268 compiled rules after name normalization, checks storage isolation and limits, and rebuilds the Workshop export through direct includes. In-game validation is pending. [Report](analysis/chase-storage-isolation-validation.json).
 
 - Fixed the `Default Enhancement` setting's nonzero default index (`w_workshop_setting_enum_default`): the default is now `No Enhancement` (index 0). All 11 choices retain their original order and Enhancement IDs. The build remains at 25,229 elements; compilation emits no warnings with the existing suppressions, and only the default assignment changes among 268 compiled rules. The Workshop export was rebuilt; in-game UI validation is pending.
 

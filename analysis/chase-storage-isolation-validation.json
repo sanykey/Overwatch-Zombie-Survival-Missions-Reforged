@@ -1,0 +1,62 @@
+{
+  "date": "2026-11-04",
+  "baselineRef": "dbeb3d6",
+  "isolated": {
+    "satelliteLaserPosition": [
+      "globalvar",
+      "objectiveMotionSlot"
+    ],
+    "botReturnTime": [
+      "playervar",
+      "actorTeamSlot2"
+    ],
+    "botAbilityCooldown": [
+      "playervar",
+      "actorTeamSlot22"
+    ],
+    "enhancementPupPosition": [
+      "playervar",
+      "actorTeamSlot26"
+    ],
+    "botReigniteRisePosition": [
+      "playervar",
+      "actorTeamSlot27"
+    ],
+    "enhancementPupCooldown": [
+      "playervar",
+      "actorTeamSlot27"
+    ],
+    "enhancementBarrierHealth": [
+      "playervar",
+      "actorTeamSlot28"
+    ]
+  },
+  "before": {
+    "elements": 25241,
+    "variables": {
+      "globalvar": 103,
+      "playervar": 84
+    },
+    "warnings": 34
+  },
+  "after": {
+    "elements": 25241,
+    "variables": {
+      "globalvar": 104,
+      "playervar": 90
+    },
+    "warnings": 14
+  },
+  "remainingWarnings": {
+    "objectiveRad": 7,
+    "extractionZoneRad": 3,
+    "botAbilityCooldown": 1,
+    "infectionLevel": 1,
+    "enhancementBarrierHealth": 1,
+    "enhancementPupCooldown": 1
+  },
+  "compiledRulesCompared": 268,
+  "directIncludeBuild": true,
+  "workshopExportRebuilt": true,
+  "inGameValidated": false
+}

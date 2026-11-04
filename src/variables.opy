@@ -229,7 +229,6 @@ globalvar objectiveProgressSlot          # Shared progress storage; generic rese
 #!define biomorphingCapturePercent objectiveProgressSlot
 #!define killZoneEliminationScore objectiveProgressSlot
 #!define satelliteTerminalProgressList objectiveProgressSlot
-globalvar objectiveRad                   # Current objective radius; also chased or temporarily expanded by some objective types.
 globalvar objectiveDescription           # Current task description displayed by the global match HUD.
 globalvar objectiveColor                 # Shared objective visual color, including Showdown progress-loss flashes.
 globalvar isObjectiveComplete            # Requests objective advancement and coordinates objective/player recovery rules.
@@ -244,10 +243,9 @@ globalvar objectivePlacementSlot         # Candidate vector held across waits: m
 #!define missionCandidatePosition objectivePlacementSlot
 #!define rescueCandidatePosition objectivePlacementSlot
 
-globalvar objectiveMotionSlot            # Rescue saved radius, Kill Zone center, or chased Satellite laser position; subroutines/objectives/bots.
+globalvar objectiveMotionSlot            # Rescue saved radius or Kill Zone center; subroutines/objectives/bots.
 #!define rescueSavedRadius objectiveMotionSlot
 #!define killZoneCenter objectiveMotionSlot
-#!define satelliteLaserPosition objectiveMotionSlot
 
 globalvar objectiveCheckpointSlot        # Generic reset, then next 25-percent checkpoint in Showdown or Biomorphing (subroutines/objectives).
 #!define objectiveNextCheckpoint objectiveCheckpointSlot
@@ -272,17 +270,11 @@ globalvar biomorphingResourceTextIdList    # World-text IDs for dropped resource
 globalvar biomorphingResourceEffectIdList  # Effect IDs for dropped resource orbs, retained until pickup or goal cleanup.
 
 # Extraction and shared match-ending visuals.
-globalvar extractionZoneRad            # Shrinking extraction-dome radius; initialized to 300 and also checked by defeat rules.
 globalvar extractionSpeedUp            # Dome shrink speed (startup -> subroutines/extraction), starts at 2.5; separate from the late-written menu angle.
 globalvar evacSurvivorList             # Snapshot of extracted players, also used to exclude survivors from finale kills.
-globalvar menuFinaleMotionSlot         # Global hidden countdown (startup/menu/setPrematchTimer), then nukeMap projectile position.
-# nukeMap stops the countdown chase before assigning a vector; the separate actorMotionSlot1 player storage has its own role aliases.
-#!define pregameCountdown menuFinaleMotionSlot
-#!define nukeProjectilePosition menuFinaleMotionSlot
 
 # Supply drops and ground power-ups.
 globalvar supplyDropLandingPosition  # Target ground position where the current supply drop will land.
-globalvar supplyDropPosition         # Current supply-drop position, animated while it falls.
 globalvar isSupplyDropOpen           # Drop is open, or no drop has spawned yet; allows generation of the next drop.
 globalvar supplyDropPowerUpCount     # Configured number of power-ups spawned when a supply drop is opened.
 globalvar supplyPowerUpIdList        # Item type IDs of ground power-ups from supplies, player drops and Biomorphing rewards.
@@ -341,8 +333,6 @@ playervar reviveDuration  # Required revive duration; restored from reconnect da
 playervar isInfected  # Player infection has activated; infection rules, cures and Zombie Hybrid read this flag.
 
 playervar rescueTimeRemaining  # Time left to rescue a downed player; reconnect cache and extraction dome may adjust it.
-
-playervar infectionLevel  # Player infection/vaccine level; negative values represent vaccination.
 
 playervar invisibilityCount  # Stacking invisibility/untargetability counter; hero abilities and Cloaking Device increment/decrement it. Not a boolean.
 
@@ -407,28 +397,6 @@ playervar controlStateSlot  # Player crowd-control immunity flag or zombie boss 
 #!define isCrowdControlCooldownActive controlStateSlot
 # Boss return target retained across the return animation.
 #!define botReturnTarget controlStateSlot
-
-playervar actorMotionSlot1  # Existing per-hero numeric/vector chase or Rescue extraction position; no change to chase lifetime.
-# Behemoth traveling gas projectile position.
-#!define botGasProjectilePosition actorMotionSlot1
-# Slimer chased tentacle endpoint.
-#!define botTentaclePosition actorMotionSlot1
-# Pharah rocket charging progression.
-#!define botBlasterCharge actorMotionSlot1
-# Illari burst charging progression.
-#!define botDaytakerCharge actorMotionSlot1
-# Winston anger/enrage progression; initialized to 2.
-#!define botSmolderAnger actorMotionSlot1
-# Hazard boss melee aiming offset, chased from -20 to 25.
-#!define botEnsnarerMeleeAngle actorMotionSlot1
-# Rescue NPC flight position chased upward after reaching extraction.
-#!define rescueExtractionPosition actorMotionSlot1
-
-playervar actorMotionSlot2  # Team 2 toxic-cloud duration or Team 1 extraction flight position.
-# Normal Behemoth toxic-cloud duration.
-#!define botGasCloudTimeRemaining actorMotionSlot2
-# Player position chased through the extraction flight stages.
-#!define extractionFlightPosition actorMotionSlot2
 
 playervar actorAbilitySlot2  # Existing zombie secondary state or temporary Rescue follow message.
 # Common reset/secondary zombie state.
@@ -510,8 +478,6 @@ playervar abilityTargetList  # Zombie special-ability targets or common zombie/H
 
 playervar movementSpeedScale  # Movement-speed multiplier used by zombie AI, players/Rescue, crowd control and supply items.
 
-playervar damageOverTimeRemaining  # Tracked DoT duration, normally chased on zombies; one Rusher rule writes it on the victim. Preserve that receiver.
-
 playervar actorTeamSlot0  # Team 2: botTeleportCenter; Team 1: powerUpForceFieldTimeRemaining. Receivers, not rule teams, own the storage.
 # Zombie teleport/search center; bot teleport rules, Egg and boss return.
 #!define botTeleportCenter actorTeamSlot0
@@ -524,9 +490,7 @@ playervar actorTeamSlot1  # Team 2: botIsSelectingTarget; Team 1: powerUpReviveT
 # Dead Team 1 target retained across instantRevive waits.
 #!define powerUpReviveTarget actorTeamSlot1
 
-playervar actorTeamSlot2  # Team 2: botReturnMotionSlot; Team 1: powerUpItemId. Receivers, not rule teams, own the storage.
-# Seconds without a target before boss return (chased to 15).
-#!define botReturnTime actorTeamSlot2
+playervar actorTeamSlot2  # Boss return snapshot on Team 2 or carried item ID on Team 1.
 # Boss eye-position snapshot written and cleared during return; currently not read.
 #!define botReturnPosition actorTeamSlot2
 # Currently carried supply item ID; zero means no item.
@@ -603,12 +567,6 @@ playervar actorTeamSlot11  # Team 2: botTeleportPosition; Team 1: powerUpStunBou
 # Remaining stun-chain steps, also scaling the terminal stun duration.
 #!define powerUpStunBouncesRemaining actorTeamSlot11
 
-playervar actorTeamSlot12  # Team 2: botBossHealth; Team 1: powerUpStunBeamPosition. Receivers, not rule teams, own the storage.
-# Virtual boss/egg health adjusted by damage events; -1 when not a boss.
-#!define botBossHealth actorTeamSlot12
-# Chased stun-chain beam endpoint retained across bounces/waits.
-#!define powerUpStunBeamPosition actorTeamSlot12
-
 playervar actorTeamSlot13  # Team 2: botIsWallCollisionEnabled; Team 1: powerUpTurretPosition. Receivers, not rule teams, own the storage.
 # Cached zombie environment-collision state, restored by abilities and spawn-door handling.
 #!define botIsWallCollisionEnabled actorTeamSlot13
@@ -665,9 +623,7 @@ playervar actorTeamSlot21  # Team 2: botLastTarget; Team 1: objective vote -> tr
 # Human objective vote during pregame only; distinct from the selected global objective mode.
 #!define pregameObjectiveVote actorTeamSlot21
 
-playervar actorTeamSlot22  # Team 2: botAbilityStateSlot; Team 1: enhancementStateSlot1. Receivers, not rule teams, own the storage.
-# Remaining shared zombie special-ability cooldown.
-#!define botAbilityCooldown actorTeamSlot22
+playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state on Team 1.
 # Boss Behemoth active gas-cloud positions.
 #!define botGasPositionList actorTeamSlot22
 # Zombie Hybrid explosion cooldown in seconds.
@@ -721,27 +677,19 @@ playervar actorTeamSlot25  # Team 2: botCandidateTarget; Team 1: enhancementStat
 # P.U.P. freezing aura is visible.
 #!define enhancementIsPupFreezeAuraActive actorTeamSlot25
 
-playervar actorTeamSlot26  # Team 2: botIsTeleportAllowed; Team 1: enhancementPositionSlot. Receivers, not rule teams, own the storage.
+playervar actorTeamSlot26  # Teleport permission on Team 2 or first barrier corner on Team 1.
 # Zombie initialization has enabled teleport processing.
 #!define botIsTeleportAllowed actorTeamSlot26
 # Barrier first lower corner.
 #!define enhancementBarrierCorner1 actorTeamSlot26
-# Chased P.U.P. world position.
-#!define enhancementPupPosition actorTeamSlot26
 
-playervar actorTeamSlot27  # Team 2: botReigniteRisePosition; Team 1: enhancementStateSlot6. Receivers, not rule teams, own the storage.
-# Zombie emergence position chased upward near Anran; zombie_types forces this position across the rise wait.
-#!define botReigniteRisePosition actorTeamSlot27
+playervar actorTeamSlot27  # Second barrier corner.
 # Barrier second lower corner.
 #!define enhancementBarrierCorner2 actorTeamSlot27
-# P.U.P. remaining ability cooldown (1 or 2 seconds).
-#!define enhancementPupCooldown actorTeamSlot27
 
-playervar actorTeamSlot28  # Team 2: botResourceIconIdList; Team 1: enhancementBarrierHealth. Receivers, not rule teams, own the storage.
+playervar actorTeamSlot28  # Zombie Biomorphing resource icon IDs.
 # Zombie Biomorphing resource icon IDs; separate from the zombie visual-effect list.
 #!define botResourceIconIdList actorTeamSlot28
-# Laser Barricade health; placement, collision damage, regeneration and HUD.
-#!define enhancementBarrierHealth actorTeamSlot28
 
 playervar team1PositionSlot  # Pregame position -> final extraction destination on humans; Rescue NPC path origin on its own actor. No chase owns this slot.
 # Per-player position in the pregame hero-selection scene.
@@ -760,3 +708,66 @@ playervar objectiveActorKindSlot  # Biomorphing resource type on both teams, or 
 playervar menuTradeItemSlot  # Human zombie vote -> previous carried item ID. No chase owns this slot; exchange assigns it before its first wait/read.
 #!define pregameZombieVote menuTradeItemSlot
 #!define powerUpTradePreviousItemId menuTradeItemSlot
+
+# Chased variables
+
+# Global chase storage.
+
+globalvar objectiveRad                   # Current objective radius; also chased or temporarily expanded by some objective types.
+
+globalvar satelliteLaserPosition         # Chased Satellite laser position; isolated from objective storage.
+
+globalvar extractionZoneRad            # Shrinking extraction-dome radius; initialized to 300 and also checked by defeat rules.
+
+globalvar menuFinaleMotionSlot         # Global hidden countdown (startup/menu/setPrematchTimer), then nukeMap projectile position.
+# nukeMap stops the countdown chase before assigning a vector; the separate actorMotionSlot1 player storage has its own role aliases.
+#!define pregameCountdown menuFinaleMotionSlot
+#!define nukeProjectilePosition menuFinaleMotionSlot
+
+globalvar supplyDropPosition         # Current supply-drop position, animated while it falls.
+
+# Player chase storage.
+
+playervar infectionLevel  # Player infection/vaccine level; negative values represent vaccination.
+
+playervar actorMotionSlot1  # Existing per-hero numeric/vector chase or Rescue extraction position; no change to chase lifetime.
+# Behemoth traveling gas projectile position.
+#!define botGasProjectilePosition actorMotionSlot1
+# Slimer chased tentacle endpoint.
+#!define botTentaclePosition actorMotionSlot1
+# Pharah rocket charging progression.
+#!define botBlasterCharge actorMotionSlot1
+# Illari burst charging progression.
+#!define botDaytakerCharge actorMotionSlot1
+# Winston anger/enrage progression; initialized to 2.
+#!define botSmolderAnger actorMotionSlot1
+# Hazard boss melee aiming offset, chased from -20 to 25.
+#!define botEnsnarerMeleeAngle actorMotionSlot1
+# Rescue NPC flight position chased upward after reaching extraction.
+#!define rescueExtractionPosition actorMotionSlot1
+
+playervar actorMotionSlot2  # Team 2 toxic-cloud duration or Team 1 extraction flight position.
+# Normal Behemoth toxic-cloud duration.
+#!define botGasCloudTimeRemaining actorMotionSlot2
+# Player position chased through the extraction flight stages.
+#!define extractionFlightPosition actorMotionSlot2
+
+playervar damageOverTimeRemaining  # Tracked DoT duration, normally chased on zombies; one Rusher rule writes it on the victim. Preserve that receiver.
+
+playervar botReturnTime  # Seconds without a boss target, chased to 15; isolated from snapshots and item IDs.
+
+playervar actorTeamSlot12  # Team 2: botBossHealth; Team 1: powerUpStunBeamPosition. Receivers, not rule teams, own the storage.
+# Virtual boss/egg health adjusted by damage events; -1 when not a boss.
+#!define botBossHealth actorTeamSlot12
+# Chased stun-chain beam endpoint retained across bounces/waits.
+#!define powerUpStunBeamPosition actorTeamSlot12
+
+playervar botAbilityCooldown  # Chased Hazard special-ability cooldown; isolated from gas lists and enhancement state.
+
+playervar enhancementPupPosition  # Chased P.U.P. world position; isolated from teleport flags and barrier corners.
+
+playervar botReigniteRisePosition  # Chased Anran emergence position, forced across the rise wait; independent of P.U.P. and barriers.
+
+playervar enhancementPupCooldown  # Chased P.U.P. ability cooldown (1 or 2 seconds); independent of positions.
+
+playervar enhancementBarrierHealth  # Chased Laser Barricade health; placement, damage, regeneration and HUD; independent of icon IDs.
