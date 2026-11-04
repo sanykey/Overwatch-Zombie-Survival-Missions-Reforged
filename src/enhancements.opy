@@ -22,7 +22,7 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
         #Enhancement Selection: Kevlar
         # No enhancement state slots are currently used; the future cleanup ID is documented below.
         hudHeader(eventPlayer, "Kevlar {0}".format(iconString(Icon.STOP)), HudPosition.LEFT, 99, colorKevlarConst, HudReeval.STRING)
-        waitUntil(eventPlayer.initialMaxHealth, 99999)
+        waitUntil(eventPlayer.initialMaxHealth > 0, 99999)
         eventPlayer.addHealthPool(Health.ARMOR, 75, true, false)
         # If enhancement switching is added after game start, retain the health pool ID to remove Kevlar armor when switching away.
         # Future Kevlar switching would need to retain getLastCreatedHealthPool().

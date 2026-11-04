@@ -5,7 +5,7 @@
 #!optimizeForSizeAggressive
 #!debugElementCount
 #!writeToOutputFile
-#!suppressWarnings w_cancel_contrary_motion w_closest_player w_dark_color w_ow2_rule_condition_chase w_start_rule_crash w_type_check w_wait_until
+#!suppressWarnings w_cancel_contrary_motion w_closest_player w_dark_color w_ow2_rule_condition_chase w_start_rule_crash
 
 #!include "settings.opy"
 #!include "variables.opy"

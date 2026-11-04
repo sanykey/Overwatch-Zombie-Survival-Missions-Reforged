@@ -173,7 +173,7 @@ rule "BEHEMOTH (ROAD) TOXIC CLOUD":
     eventPlayer.setAbilityResource(Button.ABILITY_2, 100)
     eventPlayer.startForcingButton(Button.ABILITY_2)
     eventPlayer.botGasCloudTimeRemaining = 1.5
-    waitUntil(eventPlayer.getAbilityCooldown(Button.ABILITY_2), 0.5)
+    waitUntil(eventPlayer.getAbilityCooldown(Button.ABILITY_2) > 0, 0.5)
     chaseAtRate(eventPlayer.botGasCloudTimeRemaining, 0, 1, ChaseRateReeval.NONE)
     while eventPlayer.botGasCloudTimeRemaining and not eventPlayer.getAbilityCooldown(Button.ABILITY_2):
         if eventPlayer in bossStateList:
@@ -187,7 +187,7 @@ rule "BEHEMOTH (ROAD) TOXIC CLOUD":
             if eventPlayer.damageOverTimeRemaining < 2.5:
                 eventPlayer.damageOverTimeRemaining = 2.5
             eventPlayer.setAbilityCooldown(Button.ABILITY_1, 8)
-        waitUntil(eventPlayer.getAbilityCooldown(Button.ABILITY_2), 0.25)
+        waitUntil(eventPlayer.getAbilityCooldown(Button.ABILITY_2) > 0, 0.25)
     #Cooldown
     eventPlayer.setAbilityCooldown(Button.ABILITY_1, 3 if eventPlayer in bossStateList else 8)
     eventPlayer.botGasCloudTimeRemaining = 0
