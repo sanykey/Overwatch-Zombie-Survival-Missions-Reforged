@@ -27,6 +27,10 @@ Compile the source into Workshop code using [OverPy](https://github.com/Zezombye
 
 After changing the source, save the root `main.opy` again to compile the updated mod.
 
+### Passive regeneration issue
+
+Passive health regeneration for the zombie team is disabled under **Settings → Heroes → General → Team 2**. However, importing the source code into Workshop resets this setting, apparently due to a Workshop bug. **Manually disable passive regeneration for Team 2 after every code import**, before sharing the mod's short code.
+
 ## Optimization results
 
 Measured on November 4, 2026 for the Reforged working tree based on commit `d8efbdc`.
