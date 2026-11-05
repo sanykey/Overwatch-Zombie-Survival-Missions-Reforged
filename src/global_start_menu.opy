@@ -253,9 +253,10 @@ rule "END VOTING":
     getPlayers(Team.1).pregameZombieVote = zombieSetting
     getPlayers(Team.1).pregameObjectiveVote = objectiveTypeSetting
     bigMessage(getAllPlayers(), "Voting has ended!")
-    # Global rule: reset the timer without reading event-player readiness.
+    # Reset the timer, then apply readiness even if nobody changes state after voting.
     if pregameCountdown:
         setMatchTime(pregameCountdown)
+        shortenPrematchTimer()
 
 
 rule "MUSIC/ANNOUNCER CONTROL":

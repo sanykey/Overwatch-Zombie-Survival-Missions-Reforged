@@ -1,4 +1,4 @@
-/* Element count: (total 25303)
+/* Element count: (total 25306)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
@@ -47,7 +47,6 @@
   149: rule "CHARGER (MAUGA) CHARGE" (src/zombie_types.opy)
   147: rule "BIOMORPHING GOAL START" (src/objective_types/objective_type_biomorphing.opy)
   145: rule "airStrike (30-39)" (src/supply_drops.opy)
-  144: rule "setPrematchTimer" (src/subroutines.opy)
   144: rule "SMOLDER SUPER SLAM" (src/zombie_types.opy)
   142: rule "LASER BARRICADE (PLACEMENT)" (src/enhancements.opy)
   140: rule "generateMapGrid" (src/global_startup.opy)
@@ -85,6 +84,7 @@
    97: rule "ZOMBIES SPAWN AT REIGNITED" (src/zombie_types.opy)
    94: rule "SURVIVOR REACHES EXTRACTION SITE" (src/objective_types/objective_type_survivor_rescue.opy)
    94: rule "playerForceField (10-19)" (src/supply_drops.opy)
+   92: rule "setPrematchTimer" (src/subroutines.opy)
    89: rule "PLAYER AFK" (src/players_game_in_progress.opy)
    89: rule "CHARGE BATTERY (USAGE AND COOLDOWNS)" (src/enhancements.opy)
    87: rule "BOT BECOMES ZOMBIE EGG" (src/objective_types/objective_type_zombie_egg.opy)
@@ -126,8 +126,9 @@
    56: rule "PYROTECHNIC APPLIES DAMAGE" (src/enhancements.opy)
    55: rule "BOTS JUMP" (src/bots_game_in_progress.opy)
    55: rule "abilityThrowdown" (src/zombie_types.opy)
+   54: rule "shortenPrematchTimer" (src/subroutines.opy)
+   54: rule "END VOTING" (src/global_start_menu.opy)
    54: rule "EXTRACTION ZONE INFECTION INCREASE" (src/objective_types/objective_type_extraction_point.opy)
-   53: rule "END VOTING" (src/global_start_menu.opy)
    53: rule "ATTACK SPAWN ROOM CONTROL" (src/global_game_in_progress.opy)
    53: rule "BOSS TELEPORT TO TARGET IF NOT USED" (src/objective_types/objective_type_bosses.opy)
    52: rule "START GAME" (src/global_startup.opy)
@@ -652,71 +653,72 @@ subroutines {
     13: selectTarget
     14: restoreDefaultFacingMovement
     15: setPrematchTimer
-    16: explosionSequence
-    17: illariUlt
-    18: abilityPlacement
-    19: createRemainingObjectivesHud
-    20: generateMapGrid
-    21: determineChallenge
-    22: determineZombieMode
-    23: setZombieMode
-    24: determineObjectiveType
-    25: setObjectiveType
-    26: selectVoteWinner
-    27: advanceChallengeVote
-    28: advanceZombieVote
-    29: advanceObjectiveVote
-    30: advanceEnhancementChoice
-    31: randomActions
-    32: attachPlayerToPregameAnchor
-    33: nukeMap
-    34: startExtractionAscent
-    35: completeBossObjective
-    36: bossReturn
-    37: chaseSatelliteTarget
-    38: teleportToClosestPlayer
-    39: teleportDownedPlayerToWalkable
-    40: updateUsers
-    41: saveAlivePlayerState
-    42: removeBotSpawnPoint
-    43: enterExitTeleport
-    44: teleportBots
-    45: successfulTeleportStatus
-    46: updateBotSpawnPoints
-    47: locateAveragePlayerLocation
-    48: setClosestPlayerTeleportCenter
-    49: daytakerAbortReset
-    50: applyBriefBurnAndRoot
-    51: reenableBotWallAndJump
-    52: restoreBotThrottle
-    53: beginBotOverride
-    54: startBlasterDaytakerFacing
-    55: playReignitedWarningPair
-    56: startBotThrottleAtTarget
-    57: resumeBotFacingAndMovement
-    58: resumeBotMovementAndFacing
-    59: smolderBoost
-    60: spawnGasCloud
-    61: abilityThrowdown
-    62: entityFloat
-    63: explosionWarning
-    64: playAquaPowerUpSound
-    65: powerUpUsage
-    66: playerForceField
-    67: noCooldowns
-    68: airStrike
-    69: instantRevive
-    70: healBeacon
-    71: sentryTurret
-    72: cloakingDevice
-    73: superNano
-    74: bouncePad
-    75: ultimateCharger
-    76: stun
-    77: finishPowerUpDrop
-    78: resetBattleAbilityCharge
-    79: checkEnhancementPlacement
-    80: startPupDefaultChase
+    16: shortenPrematchTimer
+    17: explosionSequence
+    18: illariUlt
+    19: abilityPlacement
+    20: createRemainingObjectivesHud
+    21: generateMapGrid
+    22: determineChallenge
+    23: determineZombieMode
+    24: setZombieMode
+    25: determineObjectiveType
+    26: setObjectiveType
+    27: selectVoteWinner
+    28: advanceChallengeVote
+    29: advanceZombieVote
+    30: advanceObjectiveVote
+    31: advanceEnhancementChoice
+    32: randomActions
+    33: attachPlayerToPregameAnchor
+    34: nukeMap
+    35: startExtractionAscent
+    36: completeBossObjective
+    37: bossReturn
+    38: chaseSatelliteTarget
+    39: teleportToClosestPlayer
+    40: teleportDownedPlayerToWalkable
+    41: updateUsers
+    42: saveAlivePlayerState
+    43: removeBotSpawnPoint
+    44: enterExitTeleport
+    45: teleportBots
+    46: successfulTeleportStatus
+    47: updateBotSpawnPoints
+    48: locateAveragePlayerLocation
+    49: setClosestPlayerTeleportCenter
+    50: daytakerAbortReset
+    51: applyBriefBurnAndRoot
+    52: reenableBotWallAndJump
+    53: restoreBotThrottle
+    54: beginBotOverride
+    55: startBlasterDaytakerFacing
+    56: playReignitedWarningPair
+    57: startBotThrottleAtTarget
+    58: resumeBotFacingAndMovement
+    59: resumeBotMovementAndFacing
+    60: smolderBoost
+    61: spawnGasCloud
+    62: abilityThrowdown
+    63: entityFloat
+    64: explosionWarning
+    65: playAquaPowerUpSound
+    66: powerUpUsage
+    67: playerForceField
+    68: noCooldowns
+    69: airStrike
+    70: instantRevive
+    71: healBeacon
+    72: sentryTurret
+    73: cloakingDevice
+    74: superNano
+    75: bouncePad
+    76: ultimateCharger
+    77: stun
+    78: finishPowerUpDrop
+    79: resetBattleAbilityCharge
+    80: checkEnhancementPlacement
+    81: startPupDefaultChase
 }
 
 //190 elements
@@ -832,7 +834,7 @@ rule ("setDifficulty") {
     }
 }
 
-//144 elements
+//92 elements
 rule ("setPrematchTimer") {
     event {
         Subroutine;
@@ -862,14 +864,26 @@ rule ("setPrematchTimer") {
             If(Compare((Event Player).pregameState, <, 2)); // 7 elements
                 Set Match Time(Global.menuFinaleMotionSlot); // 2 elements
             Else; // 1 element
-                If(And(Compare(Match Time, >, 10), Is True For All(All Players(Team 1), Compare((Current Array Element).pregameState, ==, 2)))); // 17 elements
-                    Set Match Time(15); // 2 elements
-                    Wait(False, Ignore Condition); // 1 element
-                    Set Match Time(10); // 2 elements
-                Else If(And(Compare(Match Time, >, 20), Compare(Count Of(Filtered Array(All Players(Team 1), Compare((Current Array Element).pregameState, ==, 2))), ==, Count Of(Filtered Array(All Players(Team 1), (Current Array Element).isPlayerActive))))); // 28 elements
-                    Set Match Time(20); // 2 elements
-                End; // 1 element
+                Call Subroutine(shortenPrematchTimer); // 1 element
             End; // 1 element
+        End; // 1 element
+    }
+}
+
+//54 elements
+rule ("shortenPrematchTimer") {
+    event {
+        Subroutine;
+        shortenPrematchTimer;
+    }
+    actions {
+        "Shared by END VOTING and player menu updates; no event-player context is required."
+        If(And(Compare(Match Time, >, 10), Is True For All(All Players(Team 1), Compare((Current Array Element).pregameState, ==, 2)))); // 17 elements
+            Set Match Time(15); // 2 elements
+            Wait(False, Ignore Condition); // 1 element
+            Set Match Time(10); // 2 elements
+        Else If(And(Compare(Match Time, >, 20), Compare(Count Of(Filtered Array(All Players(Team 1), Compare((Current Array Element).pregameState, ==, 2))), ==, Count Of(Filtered Array(All Players(Team 1), (Current Array Element).isPlayerActive))))); // 28 elements
+            Set Match Time(20); // 2 elements
         End; // 1 element
     }
 }
@@ -2168,7 +2182,7 @@ rule ("SPECIAL EFFECT CONTROLS") {
     }
 }
 
-//53 elements
+//54 elements
 rule ("END VOTING") {
     event {
         Ongoing - Global;
@@ -2190,9 +2204,10 @@ rule ("END VOTING") {
         Set Player Variable(All Players(Team 1), menuTradeItemSlot, Global.zombieSetting); // 4 elements
         Set Player Variable(All Players(Team 1), actorTeamSlot21, Global.objectiveTypeSetting); // 4 elements
         Big Message(All Players(All Teams), Custom String("Voting has ended!")); // 7 elements
-        "Global rule: reset the timer without reading event-player readiness."
+        "Reset the timer, then apply readiness even if nobody changes state after voting."
         If(Global.menuFinaleMotionSlot); // 2 elements
             Set Match Time(Global.menuFinaleMotionSlot); // 2 elements
+            Call Subroutine(shortenPrematchTimer); // 1 element
     }
 }
 
