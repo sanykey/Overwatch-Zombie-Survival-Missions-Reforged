@@ -12,7 +12,7 @@ BattleTag автора Reforged: **snky#21990**.
 
 ## Версионирование
 
-В ветке `zsmm-classic` будут публиковаться только оптимизации и исправления классического [Zombie Survival Missions (786TW)](https://workshop.codes/786TW) с сохранением исходных игровых механик. Код импорта этой версии в Overwatch Workshop — **87EJP**.
+В ветке [zsmm-classic](https://github.com/sanykey/Overwatch-Zombie-Survival-Missions-Reforged/tree/zsmm-classic) будут публиковаться только оптимизации и исправления классического [Zombie Survival Missions (786TW)](https://workshop.codes/786TW) с сохранением исходных игровых механик. Код импорта этой версии в Overwatch Workshop — **87EJP**.
 
 Ветка `main` предназначена для дальнейшего развития Reforged, включая добавление нового функционала.
 
