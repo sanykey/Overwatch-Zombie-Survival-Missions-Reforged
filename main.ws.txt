@@ -1,4 +1,4 @@
-/* Element count: (total 25250)
+/* Element count: (total 25303)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
@@ -36,6 +36,7 @@
   178: rule "BOSS DIES (ALL BOSS OBJECTIVES)" (src/objective_types/objective_type_bosses.opy)
   174: rule "BOT BECOMES BOSS" (src/objective_types/objective_type_bosses.opy)
   173: rule "REIGNITED (ANRAN) ABILITIES" (src/zombie_types.opy)
+  170: rule "selectTarget" (src/subroutines.opy)
   169: rule "PLAYER INITIALIZATION" (src/players_game_in_progress.opy)
   166: rule "DOWNFALLEN GRABS PLAYER" (src/zombie_types.opy)
   163: rule "SURVIVOR FOLLOW TARGET" (src/objective_types/objective_type_survivor_rescue.opy)
@@ -65,7 +66,6 @@
   119: rule "BOTS MELEE" (src/bots_game_in_progress.opy)
   119: rule "bouncePad (80-89)" (src/supply_drops.opy)
   118: rule "BOT INITIALIZATION" (src/bots_game_in_progress.opy)
-  117: rule "selectTarget" (src/subroutines.opy)
   117: rule "BOTS MOVE THROUGH SPAWN DOORS" (src/bots_game_in_progress.opy)
   116: rule "BEHEMOTH GAS STREAM (BOSS)" (src/zombie_types.opy)
   115: rule "BASIC (REAPER) SHADOW STEP (BOSS)" (src/zombie_types.opy)
@@ -1204,7 +1204,7 @@ rule ("objectivesManagement") {
     }
 }
 
-//117 elements
+//170 elements
 rule ("selectTarget") {
     event {
         Subroutine;
@@ -1232,17 +1232,28 @@ rule ("selectTarget") {
         Set Global Variable(tmp1, Filtered Array(Global.tmp1, Not((Current Array Element).invisibilityCount))); // 7 elements
         "The reevaluated boss distance-text visibility reads this per-bot snapshot after this call returns."
         Set Player Variable(Event Player, candidateTargetList, Global.tmp1); // 2 elements
-        "botSelectionCandidateIndex: candidate-target index, to select the first target visible to this bot."
+        "botSelectionCandidateIndex: candidate-target index, to select the first target visible to this bot.\nOnly a candidate that passed line of sight may become the search result."
+        Set Player Variable(Event Player, actorTeamSlot25, Null); // 1 element
         For Global Variable(tmp0, 0, Count Of(Global.tmp1), True); // 4 elements
-            Set Player Variable(Event Player, actorTeamSlot25, Value In Array(Global.tmp1, Global.tmp0)); // 5 elements
-            If(Is In Line of Sight(Eye Position((Event Player).actorTeamSlot25), Add(Position Of(Event Player), Global.losOffsetConst), Barriers Do Not Block LOS)); // 11 elements
+            If(Is In Line of Sight(Eye Position(Value In Array(Global.tmp1, Global.tmp0)), Add(Position Of(Event Player), Global.losOffsetConst), Barriers Do Not Block LOS)); // 13 elements
+                Set Player Variable(Event Player, actorTeamSlot25, Value In Array(Global.tmp1, Global.tmp0)); // 5 elements
                 Break; // 1 element
             End; // 1 element
         End; // 1 element
         If(Is Alive(Event Player)); // 2 elements
-            Set Player Variable(Event Player, actorTeamSlot5, (Event Player).actorTeamSlot25); // 3 elements
-            Set Player Variable(Event Player, actorTeamSlot21, (Event Player).actorTeamSlot5); // 3 elements
-            Start Rule(restoreDefaultFacingMovement, Restart Rule); // 1 element
+            If(Compare((Event Player).actorTeamSlot25, !=, Null)); // 6 elements
+                Set Player Variable(Event Player, actorTeamSlot5, (Event Player).actorTeamSlot25); // 3 elements
+                Set Player Variable(Event Player, actorTeamSlot21, (Event Player).actorTeamSlot5); // 3 elements
+                Start Rule(restoreDefaultFacingMovement, Restart Rule); // 1 element
+            Else If(Compare((Event Player).actorTeamSlot5, !=, Null)); // 6 elements
+                Set Player Variable(Event Player, actorTeamSlot5, Null); // 1 element
+                Skip If((Event Player).actorTeamSlot15, True); // 3 elements
+                Start Throttle In Direction(Event Player, Direction Towards(Event Player, Add(Position Of((Event Player).actorTeamSlot21), Multiply(Normalize(World Vector Of(Throttle Of((Event Player).actorTeamSlot21), (Event Player).actorTeamSlot21, Rotation)), -2))), (Event Player).aiThrottleSpeedSlot, To World, Replace existing throttle, None); // 22 elements
+                //__label_if_4__:
+                Skip If((Event Player).actorTeamSlot14, True); // 3 elements
+                Start Facing(Event Player, Throttle Of(Event Player), If-Then-Else((Event Player).isCrowdControlled, Null, 100), To Player, Direction and Turn Rate); // 8 elements
+                //__label_if_5__:
+            End; // 1 element
         End; // 1 element
         Set Player Variable(Event Player, actorTeamSlot1, False); // 1 element
     }
@@ -1258,10 +1269,10 @@ rule ("restoreDefaultFacingMovement") {
         If(Compare((Event Player).actorTeamSlot5, !=, Null)); // 6 elements
             Skip If((Event Player).actorTeamSlot14, True); // 3 elements
             Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position((Event Player).actorTeamSlot5)), If-Then-Else((Event Player).isAttached, 1500, If-Then-Else((Event Player).isCrowdControlled, Null, 100)), To World, Direction and Turn Rate); // 19 elements
-            //__label_if_4__:
+            //__label_if_6__:
             Skip If((Event Player).actorTeamSlot15, True); // 3 elements
             Start Throttle In Direction(Event Player, Direction Towards(Event Player, (Event Player).actorTeamSlot5), If-Then-Else(Compare(Distance Between(Event Player, Vector(X Component Of(Position Of((Event Player).actorTeamSlot5)), Y Component Of(Position Of(Event Player)), Z Component Of(Position Of((Event Player).actorTeamSlot5)))), >, Multiply(2, Min(True, (Event Player).sizeScale))), (Event Player).aiThrottleSpeedSlot, Null), To World, Replace existing throttle, Direction and Magnitude); // 35 elements
-            //__label_if_5__:
+            //__label_if_7__:
         Else; // 1 element
             Start Throttle In Direction(Event Player, Facing Direction Of(Event Player), (Event Player).aiThrottleSpeedSlot, To World, Replace existing throttle, None); // 4 elements
             Call Subroutine(faceCurrentThrottle); // 1 element
@@ -1310,7 +1321,7 @@ rule ("botRespawnInitialization") {
                 Start Forcing Player To Be Hero(Event Player, Random Value In Array(Array(Hero(Reinhardt), Hero(Wrecking Ball), Hero(Junker Queen), Hero(Doomfist), Hero(Kiriko), Hero(Mauga), Hero(Hazard), Hero(Reaper)))); // 23 elements
                 Skip If(Compare(Global.zombieSetting, !=, 6), True); // 6 elements
                 Start Forcing Player To Be Hero(Event Player, Random Value In Array(Array(Hero(Reinhardt), Hero(Wrecking Ball)))); // 8 elements
-                //__label_if_6__:
+                //__label_if_8__:
                 Set Player Variable(Event Player, botBaseHealth, 2500); // 2 elements
                 Modify Player Variable(Event Player, sizeScale, Multiply, 1.55); // 2 elements
                 Start Forcing Player Outlines(Event Player, All Players(All Teams), True, Color(Orange), Default); // 4 elements
@@ -1553,7 +1564,7 @@ rule ("explosionSequence") {
             Start Damage Over Time((Event Player).abilityTargetList, Event Player, 3, Multiply((Event Player).botBiteDamage, 2)); // 9 elements
             Skip If(Compare((Event Player).damageOverTimeRemaining, >=, 3), True); // 7 elements
             Set Player Variable(Event Player, damageOverTimeRemaining, 3); // 2 elements
-            //__label_if_7__:
+            //__label_if_9__:
         End; // 1 element
         Play Effect(All Players(All Teams), Bad Explosion, (Event Player).explosionOuterColor, Position Of(Event Player), Multiply(6, (Event Player).explosionScale)); // 11 elements
         Play Effect(All Players(All Teams), Bad Explosion, (Event Player).explosionInnerColor, Position Of(Event Player), Multiply(3, (Event Player).explosionScale)); // 11 elements
@@ -1751,7 +1762,7 @@ rule ("SPAWN BOTS") {
         "Reset spawn times array if conditions are not met"
         Skip If(Compare(Global.botSpawnTimeList, ==, Empty Array), True); // 5 elements
         Set Global Variable At Index(botSpawnTimeList, False, Null); // 1 element
-        //__label_if_8__:
+        //__label_if_10__:
         Loop If Condition Is True; // 1 element
     }
 }
@@ -1767,10 +1778,10 @@ rule ("SPAWN TIME CONTROL") {
     actions {
         Skip If(Compare(Global.botSpawnTimeList, ==, Empty Array), True); // 5 elements
         Set Global Variable(botSpawnTimeList, Sorted Array(Mapped Array(Global.botSpawnTimeList, Subtract(Current Array Element, True)), Current Array Element)); // 8 elements
-        //__label_if_9__:
+        //__label_if_11__:
         Skip If(Compare(Global.botSpawnPointTimerList, ==, Empty Array), True); // 5 elements
         Set Global Variable(botSpawnPointTimerList, Mapped Array(Global.botSpawnPointTimerList, Max(False, Subtract(Current Array Element, True)))); // 8 elements
-        //__label_if_10__:
+        //__label_if_12__:
         Wait(True, Ignore Condition); // 1 element
         Loop If Condition Is True; // 1 element
     }
@@ -1914,7 +1925,7 @@ rule ("VARIABLE ASSIGNMENT") {
         End; // 1 element
         Skip If(Compare(Current Game Mode, !=, Game Mode(Control)), True); // 5 elements
         Set Global Variable(walkCenter, Objective Position(Objective Index)); // 2 elements
-        //__label_if_11__:
+        //__label_if_13__:
         Start Rule(generateMapGrid, Do Nothing); // 1 element
         "objectiveValue = ObjectiveType.NO_PREFERENCE  #Uninitialized Workshop variables already compare equal to 0 at match start."
         Set Global Variable(objectiveEntityIdList, Empty Array); // 1 element
@@ -2087,7 +2098,7 @@ rule ("GLOBAL MENU INITIALIZATION") {
                     Skip If(And(Is In Line of Sight(Global.startCamPos, Global.tmp1, Barriers Do Not Block LOS), Is In Line of Sight(Global.tmp1, Global.startCamPos, Barriers Do Not Block LOS)), 2); // 14 elements
                     Set Global Variable(startPos, Null); // 1 element
                     Break; // 1 element
-                    //__label_if_12__:
+                    //__label_if_14__:
                 End; // 1 element
                 Wait(False, Ignore Condition); // 1 element
                 Abort If(Not(Global.isPregameSetup)); // 3 elements
@@ -2227,7 +2238,7 @@ rule ("determineZombieMode") {
         "If all players choose no preference, randomize"
         Skip If(Global.zombieSetting, True); // 2 elements
         Set Global Variable(zombieSetting, 1); // 2 elements
-        //__label_if_13__:
+        //__label_if_15__:
         Start Rule(determineChallenge, Restart Rule); // 1 element
         Start Rule(setZombieMode, Restart Rule); // 1 element
     }
@@ -2287,13 +2298,13 @@ rule ("determineChallenge") {
             Else If(And(Compare(Value In Array(Global.phaseSlot3, Global.tmp0), >, Null), Compare(Value In Array(Global.phaseSlot3, Global.challengeSetting), ==, Value In Array(Global.phaseSlot3, Global.tmp0)))); // 21 elements
                 Skip If(Compare(Absolute Value(Subtract(Global.challengeSetting, Global.tmp1)), <=, Absolute Value(Subtract(Global.tmp0, Global.tmp1))), True); // 14 elements
                 Set Global Variable(challengeSetting, Global.tmp0); // 2 elements
-                //__label_if_14__:
+                //__label_if_16__:
             End; // 1 element
         End; // 1 element
         "Default challenge"
         Skip If(Global.challengeSetting, True); // 2 elements
         Set Global Variable(challengeSetting, 1); // 2 elements
-        //__label_if_15__:
+        //__label_if_17__:
         Start Rule(determineObjectiveType, Restart Rule); // 1 element
     }
 }
@@ -2433,7 +2444,7 @@ rule ("PLAYER MENU INITIALIZATION") {
         Set Player Variable(Event Player, team1PositionSlot, Add(Add(Global.startCamPos, Multiply(-1.5, Up)), Multiply(Direction From Angles(Add(Add(Horizontal Angle From Direction(Direction Towards(Global.startCamPos, Global.startPos)), Global.phaseSlot10), Multiply(Slot Of(Event Player), Divide(Multiply(Global.phaseSlot10, -2), Max(Subtract(Number Of Slots(Team 1), True), True)))), 0), 6.5))); // 40 elements
         Skip If(Global.isSpecialGameMode, True); // 2 elements
         Set Player Variable(Event Player, team1PositionSlot, Ray Cast Hit Position(Add((Event Player).team1PositionSlot, Multiply(3, Up)), (Event Player).team1PositionSlot, All Players(All Teams), All Players(All Teams), False)); // 19 elements
-        //__label_if_16__:
+        //__label_if_18__:
         Call Subroutine(enableDisableAbilities); // 1 element
     }
 }
@@ -2514,7 +2525,7 @@ rule ("PLAYER SELECTS/RESELECTS HERO") {
         If(Or(And(Global.isVoting, And(Not(Or(Or((Event Player).actorTeamSlot3, (Event Player).menuTradeItemSlot), (Event Player).actorTeamSlot21)), Compare((Event Player).enhancementId, ==, Null))), And(Not(Global.isVoting), Compare((Event Player).enhancementId, ==, Null)))); // 33 elements
             Press Button(Event Player, Button(Jump)); // 2 elements
         End; // 1 element
-        //__label_if_17__:
+        //__label_if_19__:
         Loop If Condition Is True; // 1 element
     }
 }
@@ -2868,7 +2879,7 @@ rule ("TRI­GGER OVERTIME MUSIC") {
         Skip If(Global.isSpecialGameMode, 2); // 3 elements
         Set Global Variable(isOvertimeActive, True); // 1 element
         Teleport(First Of(Filtered Array(All Living Players(Team 2), And(Compare((Current Array Element).actorTeamSlot5, ==, Null), Not(Array Contains(Global.bossStateList, Current Array Element))))), If-Then-Else(Compare(Current Game Mode, ==, Game Mode(Escort)), Payload Position, Objective Position(False))); // 25 elements
-        //__label_if_18__:
+        //__label_if_20__:
     }
 }
 
@@ -2996,7 +3007,7 @@ rule ("PLAYERS IN EXTRACTION POINT CONTROL") {
     actions {
         Skip If(Array Contains(Global.objectivePlayerList, Event Player), True); // 4 elements
         Modify Global Variable(objectivePlayerList, Append To Array, Event Player); // 1 element
-        //__label_if_19__:
+        //__label_if_21__:
         Modify Global Variable(extractionSpeedUp, Add, Divide(0.2, Count Of(Global.playerTargetList))); // 6 elements
         Wait(0.5, Ignore Condition); // 2 elements
         Loop If Condition Is True; // 1 element
@@ -3191,11 +3202,11 @@ rule ("PLAYERS ON OBJECTIVE CONTROL") {
         If(Is Dummy Bot(Event Player)); // 2 elements
             Skip If(Array Contains(Global.objectiveQueueSlot, Event Player), True); // 4 elements
             Modify Global Variable(objectiveQueueSlot, Append To Array, Event Player); // 1 element
-            //__label_if_20__:
+            //__label_if_22__:
         Else; // 1 element
             Skip If(Array Contains(Global.objectivePlayerList, Event Player), True); // 4 elements
             Modify Global Variable(objectivePlayerList, Append To Array, Event Player); // 1 element
-            //__label_if_21__:
+            //__label_if_23__:
         End; // 1 element
         Wait(0.5, Ignore Condition); // 2 elements
         Loop If Condition Is True; // 1 element
@@ -3323,7 +3334,7 @@ rule ("BOT BECOMES BOSS") {
             End; // 1 element
             Skip If(Compare(Count Of(Global.bossesAvailableHeroList), <=, Count Of(Global.bossesExcludedHeroList)), True); // 8 elements
             Modify Global Variable(bossesAvailableHeroList, Remove From Array By Value, Global.bossesExcludedHeroList); // 2 elements
-            //__label_if_22__:
+            //__label_if_24__:
         End; // 1 element
         Disable Nameplates(Event Player, All Players(All Teams)); // 3 elements
         Stop Forcing Dummy Bot Name(Event Player); // 1 element
@@ -3534,7 +3545,7 @@ rule ("bossReturn") {
             Set Global Variable(tmp0, Filtered Array(Global.mapGridList, And(And(Is In Line of Sight(Current Array Element, Eye Position((Event Player).controlStateSlot), Barriers Do Not Block LOS), Compare(Distance Between(Current Array Element, (Event Player).controlStateSlot), >, 5)), Compare(Distance Between(Current Array Element, (Event Player).controlStateSlot), <, 20)))); // 30 elements
             Skip If(Compare(Global.tmp0, ==, Empty Array), True); // 5 elements
             Teleport(Event Player, Add(Up, Random Value In Array(Global.tmp0))); // 5 elements
-            //__label_if_23__:
+            //__label_if_25__:
         End; // 1 element
         Wait(False, Ignore Condition); // 1 element
         Play Effect(All Players(All Teams), Bad Explosion, Color(Black), Event Player, 3); // 5 elements
@@ -3640,7 +3651,7 @@ rule ("ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS") {
             Modify Global Variable(phaseSlot5, Remove From Array By Index, False); // 1 element
             Skip If(Compare(Global.phaseSlot5, !=, Empty Array), True); // 5 elements
             Set Global Variable(phaseSlot5, Randomized Array(Array(Null, 1, 2))); // 8 elements
-            //__label_if_24__:
+            //__label_if_26__:
             Set Player Variable(Global.tmp1, objectiveActorKindSlot, Global.tmp0); // 3 elements
         Else; // 1 element
             "biomorphingRewardItemIndex: reward-item index, to place four power-ups at 90-degree intervals around the objective."
@@ -3711,7 +3722,7 @@ rule ("PLAYER DELIVERS RESOURCE VALUE") {
         Clear Status(Event Player, Phased Out); // 1 element
         Skip If(Array Contains(Global.objectivePlayerList, Event Player), True); // 4 elements
         Modify Global Variable(objectivePlayerList, Append To Array, Event Player); // 1 element
-        //__label_if_25__:
+        //__label_if_27__:
         Wait(0.125, Ignore Condition); // 2 elements
         "biowasteDepositTimeDivisor: deposit-time divisor for ordinary biowaste, used to calculate this tick's progress."
         Set Global Variable(tmp0, 8.9); // 2 elements
@@ -3719,7 +3730,7 @@ rule ("PLAYER DELIVERS RESOURCE VALUE") {
         Skip If(Compare(First Of(Global.objectiveQueueSlot), !=, (Event Player).objectiveActorKindSlot), True); // 8 elements
         "biowasteDepositTimeDivisor: shorter deposit-time divisor for the requested resource, to award faster progress."
         Set Global Variable(tmp0, 2.9); // 2 elements
-        //__label_if_26__:
+        //__label_if_28__:
         "Damage player if resource is blood, damage more if above health."
         Damage(Event Player, Event Player, If-Then-Else(Compare(First Of(Global.objectiveQueueSlot), ==, 3), If-Then-Else(Compare(Health(Event Player), >, 200), 50.33, 10.33), Null)); // 20 elements
         "(Amount per resource / dump time) x tick speed"
@@ -3908,7 +3919,7 @@ rule ("SURVIVOR FOLLOW TARGET") {
         Skip If(Array Contains(Global.playerTargetList, Global.objectiveActorSlot), 2); // 6 elements
         Modify Global Variable(playerTargetList, Append To Array, Global.objectiveActorSlot); // 2 elements
         Set Global Variable(objectiveRad, 30); // 2 elements
-        //__label_if_27__:
+        //__label_if_29__:
         Wait(0.25, Ignore Condition); // 2 elements
         Loop If Condition Is True; // 1 element
         "Remove survivor from player target list"
@@ -4243,7 +4254,7 @@ rule ("PLAYERS AT TERMINALS CONTROLS") {
     actions {
         Skip If(Array Contains(Global.objectivePlayerList, Event Player), True); // 4 elements
         Modify Global Variable(objectivePlayerList, Append To Array, Event Player); // 1 element
-        //__label_if_28__:
+        //__label_if_30__:
         Wait(0.5, Ignore Condition); // 2 elements
         Loop If Condition Is True; // 1 element
         Modify Global Variable(objectivePlayerList, Remove From Array By Value, Event Player); // 1 element
@@ -4268,7 +4279,7 @@ rule ("PLAYERS REPAIR TERMINALS") {
                 If(Global.tmp1); // 2 elements
                     Skip If(Compare(Global.tmp1, <=, 1), True); // 6 elements
                     Modify Global Variable At Index(objectiveProgressSlot, Global.tmp0, Add, 0.4); // 3 elements
-                    //__label_if_29__:
+                    //__label_if_31__:
                     Modify Global Variable At Index(objectiveProgressSlot, Global.tmp0, Add, 1.1); // 3 elements
                     "If terminal is repaired"
                     If(Compare(Value In Array(Global.objectiveProgressSlot, Global.tmp0), >=, 100)); // 9 elements
@@ -4327,7 +4338,7 @@ rule ("PLAYERS REPAIR TERMINALS") {
                 Skip If(Compare(Global.objectiveActorSlot, ==, Null), True); // 5 elements
                 "Chase closest living zombie"
                 Call Subroutine(chaseSatelliteTarget); // 1 element
-                //__label_if_30__:
+                //__label_if_32__:
                 Wait(0.5, Ignore Condition); // 2 elements
                 "satelliteLaserImpactPosition: laser impact position on the ground, shared by explosion visuals and both damage checks."
                 Set Global Variable(tmp0, Add(Ray Cast Hit Position(Add(Global.satelliteLaserPosition, Multiply(2, Up)), Add(Global.satelliteLaserPosition, Global.offsetDownHundredConst), All Players(All Teams), Filtered Array(All Players(All Teams), Is On Ground(Current Array Element)), False), Multiply(0.1, Up))); // 28 elements
@@ -4429,7 +4440,7 @@ rule ("PLAYER INITIALIZATION") {
                     Set Player Variable(Event Player, isPlayerActive, True); // 1 element
                     Skip If(Compare(First Of(Value In Array(Global.playerStatsList, (Event Player).reconnectUserIndex)), !=, 2), True); // 11 elements
                     Set Player Variable(Event Player, rescueTimeRemaining, 0.5); // 2 elements
-                    //__label_if_31__:
+                    //__label_if_33__:
                 End; // 1 element
             End; // 1 element
         Else; // 1 element
@@ -4531,7 +4542,7 @@ rule ("REVIVE PLAYER OR ADVANCE DEATH TIMER") {
             Modify Player Variable(Event Player, recoveryTimeSlot, Add, -0.5); // 2 elements
             Skip If(Compare((Event Player).rescueTimeRemaining, >=, 70), True); // 7 elements
             Modify Player Variable(Event Player, rescueTimeRemaining, Add, 0.5); // 2 elements
-            //__label_if_32__:
+            //__label_if_34__:
         Else; // 1 element
             Set Player Variable(Event Player, isReviving, False); // 1 element
             "If dome will pass player before their death timer runs out, set the death timer to how long it will take for the dome to reach them"
@@ -4546,7 +4557,7 @@ rule ("REVIVE PLAYER OR ADVANCE DEATH TIMER") {
             End; // 1 element
             Skip If(Compare(Subtract(Y Component Of(Position Of(Event Player)), Y Component Of(Nearest Walkable Position(Position Of(Event Player)))), >=, -0.1), True); // 12 elements
             Call Subroutine(teleportDownedPlayerToWalkable); // 1 element
-            //__label_if_33__:
+            //__label_if_35__:
         End; // 1 element
         If(Compare((Event Player).recoveryTimeSlot, <=, Null)); // 6 elements
             Modify Player Variable(Event Player, reviveDuration, Add, True); // 1 element
@@ -4641,11 +4652,11 @@ rule ("PLAYER INFECTION DAMAGE MANAGEMENT") {
     actions {
         Skip If(Compare((Event Player).infectionLevel, >=, 1), True); // 7 elements
         Set Player Variable(Event Player, isInfected, False); // 1 element
-        //__label_if_34__:
+        //__label_if_36__:
         Start Damage Over Time(Event Player, Null, 1, Raise To Power(If-Then-Else(Compare((Event Player).enhancementId, !=, 2), Round To Integer((Event Player).infectionLevel, Down), Divide((Event Player).infectionLevel, 2)), 2)); // 23 elements
         Skip If(Compare((Event Player).enhancementId, !=, 2), True); // 7 elements
         Set Player Variable(Event Player, infectionDamageOverTimeId, Last Damage Over Time ID); // 1 element
-        //__label_if_35__:
+        //__label_if_37__:
         Wait(True, Ignore Condition); // 1 element
         Loop If Condition Is True; // 1 element
     }
@@ -4851,7 +4862,7 @@ rule ("updateUsers") {
         "Index of user in user array"
         Call Subroutine(resolveReconnectUserIndex); // 1 element
         Call Subroutine(saveAlivePlayerState); // 1 element
-        //__label_if_36__:
+        //__label_if_38__:
     }
 }
 
@@ -5032,7 +5043,7 @@ rule ("BOT INITIALIZATION") {
         Set Respawn Max Time(Event Player, 30); // 2 elements
         Skip If(Array Contains(Global.bossStateList, Event Player), True); // 4 elements
         Call Subroutine(botRespawnInitialization); // 1 element
-        //__label_if_37__:
+        //__label_if_39__:
         Set Player Variable(Event Player, actorTeamSlot26, True); // 1 element
     }
 }
@@ -5112,10 +5123,10 @@ rule ("BOT DIES") {
             Wait Until(Compare((Event Player).recoveryTimeSlot, >, Null), 0.125); // 7 elements
             Skip If((Event Player).recoveryTimeSlot, True); // 3 elements
             Set Player Variable(Event Player, recoveryTimeSlot, Add(True, Divide(Add(Match Time, Global.matchEndTime), 60))); // 9 elements
-            //__label_if_38__:
+            //__label_if_40__:
             Skip If(Compare(Count Of(Global.botSpawnTimeList), >=, Global.numberOfBots), True); // 7 elements
             Modify Global Variable(botSpawnTimeList, Append To Array, (Event Player).recoveryTimeSlot); // 3 elements
-            //__label_if_39__:
+            //__label_if_41__:
             If((Event Player).actorTeamSlot20); // 3 elements
                 Modify Global Variable(customTeleportPositionList, Append To Array, (Event Player).actorTeamSlot20); // 3 elements
             End; // 1 element
@@ -5219,7 +5230,7 @@ rule ("UPDATE SUCCESSFUL TELEPORT STATUS") {
         Wait(0.5, Abort When False); // 2 elements
         Skip If((Event Player).actorTeamSlot7, True); // 3 elements
         Set Player Variable(Event Player, actorTeamSlot7, True); // 1 element
-        //__label_if_40__:
+        //__label_if_42__:
         If(Compare(Distance Between((Event Player).actorTeamSlot11, (Event Player).actorTeamSlot0), <, 40)); // 11 elements
             Set Player Variable(Event Player, actorTeamSlot24, Position Of(Event Player)); // 2 elements
             Call Subroutine(updateBotSpawnPoints); // 1 element
@@ -5285,10 +5296,10 @@ rule ("DESELECT BOT TARGET") {
         Set Player Variable(Event Player, actorTeamSlot5, Null); // 1 element
         Skip If((Event Player).actorTeamSlot15, True); // 3 elements
         Start Throttle In Direction(Event Player, Direction Towards(Event Player, Add(Position Of((Event Player).actorTeamSlot21), Multiply(Normalize(World Vector Of(Throttle Of((Event Player).actorTeamSlot21), (Event Player).actorTeamSlot21, Rotation)), -2))), (Event Player).aiThrottleSpeedSlot, To World, Replace existing throttle, None); // 22 elements
-        //__label_if_41__:
+        //__label_if_43__:
         Skip If((Event Player).actorTeamSlot14, True); // 3 elements
         Start Facing(Event Player, Throttle Of(Event Player), If-Then-Else((Event Player).isCrowdControlled, Null, 100), To Player, Direction and Turn Rate); // 8 elements
-        //__label_if_42__:
+        //__label_if_44__:
         Wait(0.125, Restart When True); // 2 elements
         Loop If Condition Is True; // 1 element
     }
@@ -5384,7 +5395,7 @@ rule ("BOTS MOVE THROUGH SPAWN DOORS") {
         Set Player Variable(Event Player, actorTeamSlot13, True); // 1 element
         Skip If(Array Contains(Global.bossStateList, Event Player), True); // 4 elements
         Wait(5, Ignore Condition); // 2 elements
-        //__label_if_43__:
+        //__label_if_45__:
     }
 }
 
@@ -5447,7 +5458,7 @@ rule ("BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)") {
         Start Damage Over Time(Victim, Event Player, (Event Player).actorTeamSlot6, (Event Player).botBiteDamage); // 5 elements
         Skip If(Compare((Event Player).damageOverTimeRemaining, >=, (Event Player).actorTeamSlot6), True); // 8 elements
         Set Player Variable(Event Player, damageOverTimeRemaining, (Event Player).actorTeamSlot6); // 3 elements
-        //__label_if_44__:
+        //__label_if_46__:
         If(And(And(And(Workshop Setting Toggle(Custom String("Infection"), Custom String("Melee Infection Enabled"), True, 0), Not(Has Status(Event Player, Hacked))), Not(Is Dummy Bot(Victim))), Compare(Health(Victim), <=, If-Then-Else(Compare((Victim).enhancementHitchhikerPassenger, !=, Null), Max Health(Victim), (Victim).initialMaxHealth)))); // 40 elements
             Modify Player Variable(Victim, infectionLevel, Add, Divide(If-Then-Else(Or(Or(Array Contains(Global.bossStateList, Event Player), Array Contains(Global.miniBossList, Event Player)), Compare((Event Player).actorTeamSlot17, ==, 4)), 2, 1), If-Then-Else(Compare((Victim).enhancementId, !=, 2), If-Then-Else(And(Not((Victim).isInfected), Array Contains(Array(Hero(Reinhardt), Hero(Hazard), Hero(Vendetta), Hero(D.Mon)), Hero Of(Victim))), 3, 2), 1))); // 58 elements
             If(And(Not((Victim).isInfected), Compare((Victim).infectionLevel, >=, 1))); // 12 elements
@@ -5646,7 +5657,7 @@ rule ("successfulTeleportStatus") {
         "Max teleport distance adjustment"
         Skip If((Event Player).actorTeamSlot7, True); // 3 elements
         Set Player Variable(Event Player, actorTeamSlot7, True); // 1 element
-        //__label_if_45__:
+        //__label_if_47__:
     }
 }
 
@@ -5898,7 +5909,7 @@ rule ("BEHEMOTH (ROAD) TOXIC CLOUD") {
                 Start Damage Over Time(Filtered Array(Global.playerTargetList, And(And(And(Is In Line of Sight(Eye Position(Event Player), Eye Position(Current Array Element), Enemy Barriers Block LOS), Compare(Distance Between(Event Player, Current Array Element), <, Multiply(10, (Event Player).sizeScale))), Compare(Subtract(Y Component Of(Eye Position(Current Array Element)), Y Component Of(Position Of(Event Player))), >, Null)), Compare(Subtract(Y Component Of(Position Of(Current Array Element)), Y Component Of(Position Of(Event Player))), <, Multiply(2, (Event Player).sizeScale)))), Event Player, 2.5, Multiply((Event Player).botBiteDamage, 0.231)); // 54 elements
                 Skip If(Compare((Event Player).damageOverTimeRemaining, >=, 2.5), True); // 7 elements
                 Set Player Variable(Event Player, damageOverTimeRemaining, 2.5); // 2 elements
-                //__label_if_46__:
+                //__label_if_48__:
                 Set Ability Cooldown(Event Player, Button(Ability 1), 8); // 3 elements
             End; // 1 element
             Wait Until(Compare(Ability Cooldown(Event Player, Button(Ability 2)), >, Null), 0.25); // 8 elements
@@ -5932,7 +5943,7 @@ rule ("BEHEMOTH (ROAD) TOXIC CLOUD") {
             End; // 1 element
             Skip If(Compare(Count Of((Event Player).actorTeamSlot22), >=, 3), True); // 8 elements
             Call Subroutine(spawnGasCloud); // 1 element
-            //__label_if_47__:
+            //__label_if_49__:
             Stop Chasing Player Variable(Event Player, actorMotionSlot1); // 1 element
             Set Player Variable(Event Player, actorMotionSlot1, Null); // 1 element
             Wait Until(Is Dead(Event Player), 3); // 3 elements
@@ -5960,7 +5971,7 @@ rule ("BEHEMOTH GAS STREAM (BOSS)") {
         For Global Variable(tmp0, 0, Count Of((Event Player).actorTeamSlot22), True); // 5 elements
             Skip If(Compare(Value In Array((Event Player).actorTeamSlot23, Global.tmp0), >=, Multiply(6, (Event Player).sizeScale)), True); // 14 elements
             Modify Player Variable At Index(Event Player, actorTeamSlot23, Global.tmp0, Add, Multiply(0.2, (Event Player).sizeScale)); // 7 elements
-            //__label_if_48__:
+            //__label_if_50__:
             "Capture this cloud's position and post-growth radius; consume both before the tick wait.\nVisual effects keep reading the original arrays so they continue to reevaluate normally."
             Set Global Variable(tmp1, Value In Array((Event Player).actorTeamSlot22, Global.tmp0)); // 6 elements
             Set Global Variable(tmp2, Value In Array((Event Player).actorTeamSlot23, Global.tmp0)); // 6 elements
@@ -6021,7 +6032,7 @@ rule ("BRUTE, GLADIATOR, AND SMOLDER ALTERNATE ATTACK CONTROL") {
         Wait(0.25, Ignore Condition); // 2 elements
         Skip If(Compare(Hero Of(Event Player), !=, Hero(Junker Queen)), True); // 6 elements
         Wait(7.75, Ignore Condition); // 2 elements
-        //__label_if_49__:
+        //__label_if_51__:
         Set Primary Fire Enabled(Event Player, False); // 1 element
         Loop If Condition Is True; // 1 element
         Stop Holding Button(Event Player, If-Then-Else(Compare(Hero Of(Event Player), ==, Hero(Junker Queen)), Button(Ability 2), Button(Primary Fire))); // 11 elements
@@ -6115,7 +6126,7 @@ rule ("REIGNITED (ANRAN) ABILITIES") {
             Start Rule(restoreDefaultFacingMovement, Do Nothing); // 1 element
             Press Button(Event Player, Button(Ability 1)); // 2 elements
         End; // 1 element
-        //__label_if_50__:
+        //__label_if_52__:
         "wait(0.5)"
         Wait Until(Is On Ground(Event Player), 1); // 3 elements
         Cancel Primary Action(Event Player); // 1 element
@@ -6434,7 +6445,7 @@ rule ("SLIMER (MERCY) TENTACLE GRAB") {
         If(And(And(Is Alive(Event Player), Not((Event Player).isCrowdControlled)), Compare((Event Player).actorTeamSlot10, !=, Null))); // 14 elements
             Skip If(Compare(Absolute Value(Angle Difference(Horizontal Facing Angle Of((Event Player).actorTeamSlot10), Horizontal Angle From Direction(Direction Towards(Event Player, (Event Player).actorTeamSlot10)))), >=, 75), True); // 16 elements
             Set Status((Event Player).actorTeamSlot10, Null, Knocked Down, 0.35); // 4 elements
-            //__label_if_51__:
+            //__label_if_53__:
             Set Gravity((Event Player).actorTeamSlot10, False); // 3 elements
             Apply Impulse((Event Player).actorTeamSlot10, Direction Towards(Eye Position((Event Player).actorTeamSlot10), Eye Position(Event Player)), Multiply((Event Player).sizeScale, If-Then-Else(Compare(Max Health((Event Player).actorTeamSlot10), <, 400), 15, 10)), To World, Cancel Contrary Motion); // 25 elements
             Wait(0.35, Ignore Condition); // 2 elements
@@ -6496,7 +6507,7 @@ rule ("PRIME SLIMER (EMRE) FLIGHT (BOSS)") {
                 Press Button(Event Player, Button(Secondary Fire)); // 2 elements
                 Skip If(Compare(Altitude Of(Event Player), >=, 3), True); // 6 elements
                 Call Subroutine(reenableBotWallAndJump); // 1 element
-                //__label_if_52__:
+                //__label_if_54__:
                 "Entities that will be floated"
                 Call Subroutine(entityFloat); // 1 element
                 "slimerFlightTargetIndex: floated-player index, to lift low targets and push higher targets away during flight."
@@ -6671,7 +6682,7 @@ rule ("STALKER KNOCKBACK BLAST (BOSS)") {
         Apply Impulse(Victim, Direction From Angles(Horizontal Angle From Direction(Direction Towards(Attacker, Victim)), -25), Multiply(10, (Attacker).sizeScale), To World, Cancel Contrary Motion); // 12 elements
         Skip If(Has Status(Victim, Knocked Down), True); // 3 elements
         Set Status(Victim, Null, Knocked Down, 0.5); // 2 elements
-        //__label_if_53__:
+        //__label_if_55__:
     }
 }
 
@@ -6784,7 +6795,7 @@ rule ("DOWNFALLEN (SIGMA) FIRES") {
     actions {
         Skip If(Or(Array Contains(Global.bossStateList, Event Player), Is In View Angle((Event Player).actorTeamSlot5, Position Of(Event Player), 55)), True); // 13 elements
         Press Button(Event Player, Button(Ability 1)); // 2 elements
-        //__label_if_54__:
+        //__label_if_56__:
         If(And(Compare(Distance Between(Event Player, (Event Player).actorTeamSlot5), <, Multiply(11, (Event Player).sizeScale)), Not(Is Button Held(Event Player, Button(Primary Fire))))); // 19 elements
             Press Button(Event Player, Button(Primary Fire)); // 2 elements
             Wait(0.1, Ignore Condition); // 2 elements
@@ -7219,7 +7230,7 @@ rule ("SMOLDER BOSS SLAM") {
             Skip If(Or((Event Player).isCrowdControlled, Has Status(Event Player, Hacked)), 2); // 8 elements
             Apply Impulse(Event Player, Down, 4, To World, Cancel Contrary Motion); // 2 elements
             Wait Until(Is On Ground(Event Player), 2); // 3 elements
-            //__label_if_55__:
+            //__label_if_57__:
         End; // 1 element
         Wait(0.25, Ignore Condition); // 2 elements
         Set Player Variable(Event Player, actorAbilitySlot1, Null); // 1 element
@@ -7828,7 +7839,7 @@ rule ("playerForceField (10-19)") {
         Set Player Variable(Event Player, powerUpForceFieldSphereId, Last Created Entity); // 1 element
         Create HUD Text(Event Player, Custom String("Force Field: {0}s", Round To Integer((Event Player).actorTeamSlot0, Up)), Null, Null, Right, 0.2, Color(Blue), Null, Null, Visible To and String, Default Visibility); // 11 elements
         Set Player Variable At Index(Event Player, actorTeamSlot4, 11, Last Text ID); // 2 elements
-        //__label_if_56__:
+        //__label_if_58__:
         Play Effect(All Players(All Teams), Good Explosion, Color(Blue), (Event Player).actorTeamSlot16, 3); // 7 elements
         Play Effect(All Players(All Teams), Buff Impact Sound, Color(Blue), (Event Player).actorTeamSlot16, 50); // 7 elements
         "Force field duration"
@@ -7837,7 +7848,7 @@ rule ("playerForceField (10-19)") {
             For Global Variable(tmp0, 0, Number Of Living Players(Team 2), True); // 4 elements
                 Skip If(Compare(Distance Between(Value In Array(All Living Players(Team 2), Global.tmp0), (Event Player).actorTeamSlot16), >, 7.5), True); // 14 elements
                 Apply Impulse(Value In Array(All Living Players(Team 2), Global.tmp0), Direction Towards((Event Player).actorTeamSlot16, Value In Array(All Living Players(Team 2), Global.tmp0)), 6, To World, Cancel Contrary Motion); // 16 elements
-                //__label_if_57__:
+                //__label_if_59__:
             End; // 1 element
             Wait(0.032, Ignore Condition); // 2 elements
         End; // 1 element
@@ -7939,7 +7950,7 @@ rule ("beaconofHealing (40-49)") {
         Set Player Variable At Index(Event Player, actorTeamSlot4, 42, Last Text ID); // 2 elements
         Create Effect(All Players(All Teams), Good Aura, Color(Yellow), Event Player, Multiply(Distance Between(Eye Position(Event Player), Event Player), 0.9), Visible To Position and Radius); // 10 elements
         Set Player Variable At Index(Event Player, actorTeamSlot4, 43, Last Created Entity); // 2 elements
-        //__label_if_58__:
+        //__label_if_60__:
         Play Effect(All Players(All Teams), Good Explosion, Color(Yellow), (Event Player).actorTeamSlot15, 10); // 7 elements
         Play Effect(All Players(All Teams), Buff Impact Sound, Color(Blue), (Event Player).actorTeamSlot15, 50); // 7 elements
         Set Healing Dealt(Event Player, 150); // 2 elements
@@ -7978,7 +7989,7 @@ rule ("sentryTurret (50-59)") {
         Set Player Variable At Index(Event Player, actorTeamSlot4, 54, Last Created Entity); // 2 elements
         Create HUD Text(Event Player, Custom String("Sentry Turret: {0}s", Round To Integer((Event Player).actorTeamSlot7, Up)), Null, Null, Right, 0.2, Color(Orange), Null, Null, Visible To and String, Default Visibility); // 11 elements
         Set Player Variable At Index(Event Player, actorTeamSlot4, 55, Last Text ID); // 2 elements
-        //__label_if_59__:
+        //__label_if_61__:
         Play Effect(All Players(All Teams), Good Explosion, Color(Orange), (Event Player).actorTeamSlot13, 5); // 7 elements
         Play Effect(All Players(All Teams), Debuff Impact Sound, Color(Blue), (Event Player).actorTeamSlot13, 50); // 7 elements
         "Sentry Gun Duration"
@@ -8021,7 +8032,7 @@ rule ("cloakingDevice (60-69)") {
         End; // 1 element
         Skip If((Event Player).invisibilityCount, True); // 3 elements
         Small Message(Event Player, Custom String("Cloaking activated. You are now invisible.")); // 5 elements
-        //__label_if_60__:
+        //__label_if_62__:
         Play Effect(All Players(All Teams), Good Explosion, Color(Blue), Position Of(Event Player), Multiply(Distance Between(Eye Position(Event Player), Event Player), 0.95)); // 11 elements
         Play Effect(All Players(All Teams), Buff Impact Sound, Color(Blue), Position Of(Event Player), 50); // 6 elements
         "Cloaking Duration"
@@ -8041,7 +8052,7 @@ rule ("cloakingDevice (60-69)") {
         Set Player Variable(Event Player, powerUpCloakingDeviceSphereId, Null); // 1 element
         Skip If((Event Player).invisibilityCount, True); // 3 elements
         Small Message(Event Player, Custom String("You are now visible")); // 5 elements
-        //__label_if_61__:
+        //__label_if_63__:
         Modify Player Variable(Event Player, movementSpeedScale, Divide, 1.5); // 2 elements
         Call Subroutine(applyScaledMoveSpeed); // 1 element
     }
@@ -8113,7 +8124,7 @@ rule ("bouncePad (80-89)") {
         For Player Variable(Event Player, actorLoopSlot, 60, False, -0.125); // 3 elements
             Skip If(Modulo((Event Player).actorLoopSlot, 0.25), True); // 6 elements
             Play Effect(All Players(All Teams), Ring Explosion, Color(Purple), Add((Event Player).actorTeamSlot17, Multiply(0.125, Up)), 4); // 12 elements
-            //__label_if_62__:
+            //__label_if_64__:
             "Determine which players are on the bounce pad\nbouncePadSurvivorList: grounded survivors on this pad, to apply the bounce and play feedback for this tick."
             Set Global Variable(tmp0, Filtered Array(All Living Players(Team 1), And(Compare(Distance Between((Event Player).actorTeamSlot17, Current Array Element), <, 2), Is On Ground(Current Array Element)))); // 16 elements
             If(Compare(Global.tmp0, !=, Empty Array)); // 5 elements
@@ -8205,7 +8216,7 @@ rule ("powerUpUsage") {
     actions {
         If(True); // 1 element
             Skip(Value In Array(Array(47, Null, 10, 13, 15, 17, 23, 25, 30, 32, 34, 36, 38, 40), Add(True, Index Of Array Value(Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), (Event Player).actorTeamSlot2)))); // 64 elements
-        //__label_switch_63_0__:
+        //__label_switch_65_0__:
         Play Effect(All Players(All Teams), Good Pickup Effect, Color(Green), Event Player, 1); // 5 elements
         Set Status(Event Player, Null, Phased Out, True); // 1 element
         If(Compare((Event Player).infectionLevel, >, Null)); // 6 elements
@@ -8216,48 +8227,48 @@ rule ("powerUpUsage") {
         Small Message(Event Player, Custom String("You are cured!")); // 5 elements
         Call Subroutine(playAquaPowerUpSound); // 1 element
         Else; // 1 element
-        //__label_switch_63_1__:
+        //__label_switch_65_1__:
         Abort If(Not(Is True For Any(All Dead Players(Team 1), Compare(Distance Between(Event Player, Current Array Element), <=, 5)))); // 12 elements
         Start Rule(instantRevive, Restart Rule); // 1 element
         Else; // 1 element
-        //__label_switch_63_2__:
+        //__label_switch_65_2__:
         Start Rule(playerForceField, Restart Rule); // 1 element
         Else; // 1 element
-        //__label_switch_63_3__:
+        //__label_switch_65_3__:
         Start Rule(noCooldowns, Restart Rule); // 1 element
         Else; // 1 element
-        //__label_switch_63_4__:
+        //__label_switch_65_4__:
         If(Compare(Distance Between(Eye Position(Event Player), Ray Cast Hit Position(Eye Position(Event Player), Add(Eye Position(Event Player), Multiply(Facing Direction Of(Event Player), 41)), Null, All Players(All Teams), False)), >, 40)); // 23 elements
             Small Message(Event Player, Custom String("Aim at a surface to call in an aistrike")); // 5 elements
             Abort; // 1 element
         End; // 1 element
         Start Rule(airStrike, Restart Rule); // 1 element
         Else; // 1 element
-        //__label_switch_63_5__:
+        //__label_switch_65_5__:
         Start Rule(healBeacon, Restart Rule); // 1 element
         Else; // 1 element
-        //__label_switch_63_6__:
+        //__label_switch_65_6__:
         Play Effect(All Players(All Teams), Ring Explosion, Color(Green), Event Player, 6); // 5 elements
         Call Subroutine(playAquaPowerUpSound); // 1 element
         Small Message(Event Player, Custom String("Your infection is reduced!")); // 5 elements
         Modify Player Variable(Players Within Radius(Event Player, 3, Team 1, Surfaces), infectionLevel, Subtract, 1.5); // 8 elements
         Else; // 1 element
-        //__label_switch_63_7__:
+        //__label_switch_65_7__:
         Start Rule(sentryTurret, Restart Rule); // 1 element
         Else; // 1 element
-        //__label_switch_63_8__:
+        //__label_switch_65_8__:
         Start Rule(cloakingDevice, Restart Rule); // 1 element
         Else; // 1 element
-        //__label_switch_63_9__:
+        //__label_switch_65_9__:
         Start Rule(superNano, Restart Rule); // 1 element
         Else; // 1 element
-        //__label_switch_63_10__:
+        //__label_switch_65_10__:
         Start Rule(bouncePad, Restart Rule); // 1 element
         Else; // 1 element
-        //__label_switch_63_11__:
+        //__label_switch_65_11__:
         Start Rule(ultimateCharger, Restart Rule); // 1 element
         Else; // 1 element
-        //__label_switch_63_12__:
+        //__label_switch_65_12__:
         "Check if their are targets nearby and in view angle"
         If(Is True For Any(All Living Players(Opposite Team Of(Team Of(Event Player))), And(Compare(Distance Between(Event Player, Current Array Element), <, Multiply(15, (Event Player).sizeScale)), Compare(Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position(Current Array Element))), <, 45)))); // 29 elements
             Start Rule(stun, Restart Rule); // 1 element
@@ -8266,7 +8277,7 @@ rule ("powerUpUsage") {
             Abort; // 1 element
         End; // 1 element
         Else; // 1 element
-        //__label_switch_63_default__:
+        //__label_switch_65_default__:
         End; // 1 element
         Set Player Variable(Event Player, actorTeamSlot2, Null); // 1 element
     }
@@ -8392,7 +8403,7 @@ rule ("PLAYER ENHANCEMENT INITIALIZATION") {
         Skip If(Compare((Event Player).enhancementId, !=, Null), True); // 6 elements
         "Default Enhancement: Workshop Setting\nNo enhancement state slots: resolve the default enhancement before initializing its state.\nWorkshop requires default index 0 so the first option remains selectable."
         Set Player Variable(Event Player, enhancementId, Workshop Setting Combo(Custom String("Enhancements"), Custom String("Default Enhancement"), 0, Array(Custom String("No Enhancement"), Custom String("Kevlar"), Custom String("Zombie Hybrid"), Custom String("Laser Barricade"), Custom String("Brain Killer"), Custom String("Pyrotechnic"), Custom String("Plague Doctor"), Custom String("Born to Battle"), Custom String("Charge Battery"), Custom String("Hitchhiker"), Custom String("P.U.P.")), 0)); // 70 elements
-        //__label_if_64__:
+        //__label_if_66__:
         "Kevlar"
         If(Compare((Event Player).enhancementId, ==, 1)); // 7 elements
             Create HUD Text(Event Player, Custom String("Kevlar {0}", Icon String(Stop)), Null, Null, Left, 99, Global.colorKevlarConst, Null, Null, String, Default Visibility); // 8 elements
@@ -8414,7 +8425,7 @@ rule ("PLAYER ENHANCEMENT INITIALIZATION") {
         "Laser Barricade"
         If(True); // 1 element
             Skip(Value In Array(Array(47, Null, 8, 10, 13, 17, 20, 28, 34), Add(True, Index Of Array Value(Array(3, 4, 5, 6, 7, 8, 9, 10), (Event Player).enhancementId)))); // 44 elements
-        //__label_switch_65_0__:
+        //__label_switch_67_0__:
         "enhancementBarrierCorner2: second lower corner in world coordinates, for beams and the along-barrier direction.\nenhancementBarrierHealth: current barrier health (10000 on placement), for blocking, damage, regeneration and HUD."
         Create HUD Text(Event Player, Custom String("Laser Barricade {0}{1}", Icon String(Diamond), If-Then-Else(Compare((Event Player).actorTeamSlot24, >, Null), Custom String(" {0}s", (Event Player).actorTeamSlot24), Empty Array)), If-Then-Else(Compare((Event Player).enhancementBarrierHealth, >, Null), Custom String(" {0}HP", Round To Integer((Event Player).enhancementBarrierHealth, Up)), Empty Array), If-Then-Else(Compare((Event Player).actorTeamSlot24, <=, Null), Custom String("Hold [{0}] to place a barricade", Input Binding String(Button(Melee))), Empty Array), Left, 99, If-Then-Else(Compare((Event Player).actorTeamSlot24, >, Null), Color(Red), Color(Blue)), Color(Blue), Color(Blue), Visible To String and Color, Default Visibility); // 63 elements
         "Barricade placement visual"
@@ -8430,27 +8441,27 @@ rule ("PLAYER ENHANCEMENT INITIALIZATION") {
         "Barricade health"
         Create In-World Text(If-Then-Else(Compare((Event Player).enhancementBarrierHealth, >, Null), All Players(All Teams), Null), Custom String("{0}HP", Round To Integer((Event Player).enhancementBarrierHealth, Up)), Add((Event Player).actorTeamSlot25, Up), 1.5, Clip Against Surfaces, Visible To Position and String, Color(Blue), Default Visibility); // 25 elements
         Else; // 1 element
-        //__label_switch_65_1__:
+        //__label_switch_67_1__:
         Create HUD Text(Event Player, Custom String("Brain Killer {0}", Icon String(Skull)), Null, Null, Left, 99, Color(Red), Null, Null, String, Default Visibility); // 8 elements
         Else; // 1 element
-        //__label_switch_65_2__:
+        //__label_switch_67_2__:
         Create HUD Text(Event Player, Custom String("Pyrotechnic {0}", Icon String(Fire)), Null, Null, Left, 99, Color(Orange), Null, Null, String, Default Visibility); // 8 elements
         "enhancementPyroHitList: hit queue; repeated targets determine their damage per second when the queue is processed."
         Set Player Variable(Event Player, actorTeamSlot22, Empty Array); // 1 element
         Else; // 1 element
-        //__label_switch_65_3__:
+        //__label_switch_67_3__:
         "Enhancement: Plague Doctor\nenhancementPlagueCureTotal: accumulated infection levels removed, including cure bonuses, displayed in the HUD."
         Create HUD Text(Event Player, Custom String("Plague Doctor {0}", Icon String(Plus)), Null, Custom String("Infection Reduced: {0} lvls", (Event Player).actorTeamSlot22), Left, 99, Color(Green), Null, Color(Green), String, Default Visibility); // 15 elements
         "Plague doctor does 100 + x% more healing to infected players"
         Start Healing Modification(Filtered Array(All Players(Team 1), (Current Array Element).isInfected), Event Player, 150, Receivers and Healers); // 8 elements
         Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
         Else; // 1 element
-        //__label_switch_65_4__:
+        //__label_switch_67_4__:
         "enhancementIsBattleResetReady: whether an earned ability reset is still available; cleared when the reset is consumed.\nenhancementBattleAbilityButton: selected ability button, retained through waits to reset its charge or cooldown."
         Create HUD Text(Event Player, Custom String("Born to Battle {0}", Icon String(Bolt)), Null, If-Then-Else((Event Player).actorTeamSlot22, Icon String(Checkmark), Empty Array), Left, 99, Color(Gray), Null, Color(Gray), String, Default Visibility); // 15 elements
         Set Player Variable(Event Player, actorTeamSlot22, False); // 1 element
         Else; // 1 element
-        //__label_switch_65_5__:
+        //__label_switch_67_5__:
         "enhancementBatteryReuseDuration: full battery reuse cooldown in seconds (10), used to start the timer and scale progress.\nenhancementBatteryPlacementCooldown: remaining placement cooldown in seconds (20 on placement), for placement checks and HUD."
         Create HUD Text(Event Player, Custom String("Charge Battery {0}", If-Then-Else(Compare((Event Player).actorTeamSlot25, <=, Null), Icon String(Spiral), Custom String("{0}s", Round To Integer((Event Player).actorTeamSlot25, Up)))), Null, If-Then-Else(Compare((Event Player).actorTeamSlot25, <=, Null), Custom String("Hold [{0}]", Input Binding String(Button(Melee))), Empty Array), Left, 99, If-Then-Else(Compare((Event Player).actorTeamSlot25, <=, Null), Global.colorChargeBatteryConst, Color(Red)), Null, If-Then-Else(Compare((Event Player).actorTeamSlot25, <=, Null), Global.colorChargeBatteryConst, Color(Red)), String and Color, Default Visibility); // 57 elements
         "Battery placement visual"
@@ -8465,7 +8476,7 @@ rule ("PLAYER ENHANCEMENT INITIALIZATION") {
         Create Progress Bar In-World Text(Filtered Array(All Players(All Teams), And(And(Compare((Event Player).actorTeamSlot22, !=, Null), Compare((Event Player).actorTeamSlot23, >, Null)), Compare(Distance Between(Current Array Element, (Event Player).actorTeamSlot22), <, 6))), Subtract(100, Multiply(Divide((Event Player).actorTeamSlot23, (Event Player).actorTeamSlot24), 100)), Empty Array, Add((Event Player).actorTeamSlot22, Multiply(0.4, Up)), 0.5, Clip Against Surfaces, Color(White), Null, Visible To Position and Values, Default Visibility); // 48 elements
         Set Player Variable(Event Player, actorTeamSlot24, 10); // 2 elements
         Else; // 1 element
-        //__label_switch_65_6__:
+        //__label_switch_67_6__:
         "enhancementHitchhikerCarrier: carrier player reference, for attachment, shared health, assists and HUD; 0 when detached.\nenhancementHitchhikerPassengerPoolId: extra health pool ID on this passenger, retained to remove that pool when detaching."
         Create HUD Text(Event Player, Custom String("Hitchhiker {0}", Icon String(Flag)), Null, If-Then-Else((Event Player).isAttached, Custom String("Press [{0}] to dismount", Input Binding String(Button(Crouch))), If-Then-Else(Is True For Any(Remove From Array(Global.playerTargetList, Event Player), And(Not((Current Array Element).isAttached), Compare(Distance Between(Event Player, Current Array Element), <, Multiply(2, (Current Array Element).sizeScale)))), Custom String("Press [{0}] to attach", Input Binding String(Button(Crouch))), Empty Array)), Left, 99, Color(Purple), Null, If-Then-Else((Event Player).isAttached, Color(Red), Color(Purple)), Visible To String and Color, Default Visibility); // 55 elements
         Create HUD Text(Filtered Array(Event Player, (Event Player).isAttached), Null, Custom String("Attached to {0} {1}", Hero Icon String(Hero Of((Event Player).actorTeamSlot22)), (Event Player).actorTeamSlot22), Null, Left, 100, Null, Color(Purple), Null, Visible To and String, Default Visibility); // 17 elements
@@ -8473,7 +8484,7 @@ rule ("PLAYER ENHANCEMENT INITIALIZATION") {
         Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
         Start Assist((Event Player).actorTeamSlot22, Event Player, Assisters and Targets); // 3 elements
         Else; // 1 element
-        //__label_switch_65_7__:
+        //__label_switch_67_7__:
         Create HUD Text(Event Player, Custom String("P.U.P. {0}", Icon String(Happy)), Null, Null, Left, 99, If-Then-Else(And(Compare((Event Player).actorTeamSlot22, ==, Color(Sky Blue)), Compare((Event Player).enhancementPupCooldown, >, Null)), Color(Blue), (Event Player).actorTeamSlot22), Null, Null, Visible To String and Color, Default Visibility); // 26 elements
         "Postion of P.U.P."
         Set Player Variable(Event Player, enhancementPupPosition, Add(Position Of(Event Player), Multiply(200, Up))); // 7 elements
@@ -8498,7 +8509,7 @@ rule ("PLAYER ENHANCEMENT INITIALIZATION") {
         Set Player Variable(Event Player, actorTeamSlot24, Null); // 1 element
         "Freeze aura visibility"
         Set Player Variable(Event Player, actorTeamSlot25, False); // 1 element
-        //__label_switch_65_default__:
+        //__label_switch_67_default__:
         End; // 1 element
     }
 }
@@ -8608,7 +8619,7 @@ rule ("LASER BARRICADE BLOCKS ZOMBIES") {
             Modify Player Variable(Event Player, enhancementBarrierHealth, Subtract, Multiply(Max Health(Global.tmp2), 2.5)); // 6 elements
             Set Status(Global.tmp2, Event Player, Rooted, 0.5); // 3 elements
             Damage(Global.tmp2, Event Player, 10); // 3 elements
-            //__label_if_66__:
+            //__label_if_68__:
             If(Not(Magnitude Of(Throttle Of(Global.tmp2)))); // 5 elements
                 "If bot is not throttling"
                 Apply Impulse(Global.tmp2, Direction From Angles(Horizontal Angle From Direction(Direction Towards((Event Player).actorTeamSlot25, First Of(Sorted Array(Global.tmp1, Distance Between(Global.tmp2, Current Array Element))))), Multiply(If-Then-Else(Compare(Y Component Of(Position Of(Global.tmp2)), >, Y Component Of((Event Player).actorTeamSlot25)), -1, 1), Add(90, Vertical Angle From Direction(Ray Cast Hit Normal(Position Of(Global.tmp2), Add(Position Of(Global.tmp2), Down), Null, All Players(All Teams), False))))), 1, To World, Incorporate Contrary Motion); // 50 elements
@@ -8625,7 +8636,7 @@ rule ("LASER BARRICADE BLOCKS ZOMBIES") {
             Wait(6, Restart When True); // 2 elements
             Skip If(Compare((Event Player).enhancementBarrierHealth, >, Null), True); // 6 elements
             Set Player Variable(Event Player, enhancementBarrierHealth, 1); // 2 elements
-            //__label_if_67__:
+            //__label_if_69__:
         End; // 1 element
         Chase Player Variable At Rate(Event Player, enhancementBarrierHealth, 10000, 500, None); // 3 elements
         Loop If Condition Is True; // 1 element
@@ -8744,7 +8755,7 @@ rule ("BORN TO BATTLE PLAYER USES ABILITY CHARGE") {
             Wait Until(Is Using Ability 2(Event Player), 0.016); // 3 elements
             Skip If(Is Using Ability 2(Event Player), True); // 2 elements
             Call Subroutine(resetBattleAbilityCharge); // 1 element
-            //__label_if_68__:
+            //__label_if_70__:
             Abort; // 1 element
         End; // 1 element
         "Temp zarya fix ability 1"
@@ -8752,7 +8763,7 @@ rule ("BORN TO BATTLE PLAYER USES ABILITY CHARGE") {
             Wait Until(Is Using Ability 1(Event Player), 0.016); // 3 elements
             Skip If(Is Using Ability 1(Event Player), True); // 2 elements
             Call Subroutine(resetBattleAbilityCharge); // 1 element
-            //__label_if_69__:
+            //__label_if_71__:
             Abort; // 1 element
         End; // 1 element
         Skip If(Compare(Hero Of(Event Player), ==, Hero(Reaper)), True); // 6 elements
@@ -8893,7 +8904,7 @@ rule ("HITCHHIKER ATTACH/DETATCH") {
                 Set Global Variable(tmp0, Local Vector Of(Global.tmp0, (Event Player).actorTeamSlot22, Rotation And Translation)); // 7 elements
                 Skip If(Compare(Z Component Of(Global.tmp0), <=, Null), True); // 6 elements
                 Modify Global Variable(tmp0, Multiply, Vector(True, True, -1)); // 5 elements
-                //__label_if_70__:
+                //__label_if_72__:
                 Modify Global Variable(tmp0, Add, Up); // 1 element
                 Set Player Variable(Event Player, isAttached, True); // 1 element
                 Attach Players(Event Player, (Event Player).actorTeamSlot22, Evaluate Once(Global.tmp0)); // 6 elements

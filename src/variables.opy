@@ -678,7 +678,7 @@ playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateS
 #!define enhancementPupTarget actorTeamSlot24
 
 playervar actorTeamSlot25  # Team 2: botCandidateTarget; Team 1: enhancementStateSlot4. Receivers, not rule teams, own the storage.
-# Candidate zombie target under line-of-sight testing in selectTarget.
+# First candidate that passed line of sight in selectTarget; null when none passed.
 #!define botCandidateTarget actorTeamSlot25
 # Placed barrier center.
 #!define enhancementBarrierPosition actorTeamSlot25
