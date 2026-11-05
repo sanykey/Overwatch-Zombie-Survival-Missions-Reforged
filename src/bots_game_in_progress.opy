@@ -271,11 +271,7 @@ rule "DESELECT BOT TARGET":
     @Condition eventPlayer.botTarget != null
     @Condition (eventPlayer.botTarget.invisibilityCount or not eventPlayer.botTarget in playerTargetList or not isInLoS(eventPlayer.botTarget.getEyePosition(), eventPlayer.getPosition() + losOffsetConst)) == true
     
-    eventPlayer.botTarget = null
-    if not eventPlayer.botIsThrottleOverridden:
-        eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.botLastTarget.getPosition() + normalize(worldVector(eventPlayer.botLastTarget.getThrottle(), eventPlayer.botLastTarget, Transform.ROTATION)) * -2), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
-    if not eventPlayer.botIsFacingOverridden:
-        eventPlayer.startFacing(eventPlayer.getThrottle(), 0 if eventPlayer.isCrowdControlled else 100, Relativity.TO_PLAYER)
+    deselectBotTargetMacro()
     wait(0.125, Wait.RESTART_WHEN_TRUE)
     if ruleCondition:
         loop()

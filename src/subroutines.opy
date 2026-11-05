@@ -667,6 +667,14 @@ def objectivesManagement():
     isObjectiveComplete = false
 
 
+macro deselectBotTargetMacro():
+    eventPlayer.botTarget = null
+    if not eventPlayer.botIsThrottleOverridden:
+        eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.botLastTarget.getPosition() + normalize(worldVector(eventPlayer.botLastTarget.getThrottle(), eventPlayer.botLastTarget, Transform.ROTATION)) * -2), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
+    if not eventPlayer.botIsFacingOverridden:
+        eventPlayer.startFacing(eventPlayer.getThrottle(), 0 if eventPlayer.isCrowdControlled else 100, Relativity.TO_PLAYER)
+
+
 def selectTarget():
     @Name "selectTarget"
     
@@ -693,15 +701,20 @@ def selectTarget():
     eventPlayer.botPotentialTargetList = botSelectionCandidateList
     # botSelectionCandidateIndex: candidate-target index, to select the first target visible to this bot.
     #!define botSelectionCandidateIndex tmp0
+    # Only a candidate that passed line of sight may become the search result.
+    eventPlayer.botCandidateTarget = null
     for botSelectionCandidateIndex in range(len(botSelectionCandidateList)):
-        eventPlayer.botCandidateTarget = botSelectionCandidateList[botSelectionCandidateIndex]
-        if isInLoS(eventPlayer.botCandidateTarget.getEyePosition(), eventPlayer.getPosition() + losOffsetConst):
+        if isInLoS(botSelectionCandidateList[botSelectionCandidateIndex].getEyePosition(), eventPlayer.getPosition() + losOffsetConst):
+            eventPlayer.botCandidateTarget = botSelectionCandidateList[botSelectionCandidateIndex]
             break
-        #wait()
     if eventPlayer.isAlive():
-        eventPlayer.botTarget = eventPlayer.botCandidateTarget
-        eventPlayer.botLastTarget = eventPlayer.botTarget
-        startRule(restoreDefaultFacingMovement)
+        if eventPlayer.botCandidateTarget != null:
+            eventPlayer.botTarget = eventPlayer.botCandidateTarget
+            eventPlayer.botLastTarget = eventPlayer.botTarget
+            startRule(restoreDefaultFacingMovement)
+        elif eventPlayer.botTarget != null:
+            # No visible target: follow the last known target without replacing its history.
+            deselectBotTargetMacro()
     eventPlayer.botIsSelectingTarget = false
 
 

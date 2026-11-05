@@ -11,7 +11,7 @@ The register contains **38 finding groups, R01–R38**. A group may contain seve
 
 **All defects, risks, and optimization candidates described here are inherited from the original ZSMM (786TW).**
 
-Defects and proposed changes have status **“not fixed / not implemented.”** R08 is now a diagnostic analysis: valid terminal and inactive chase checks are not treated as defects. Game code and the Workshop export were not changed during this review. Prototypes were compiled in memory. The main audit covers active source under `src/`. The original ZSMM specified by the user was additionally checked to establish provenance; results appear below and with each finding.
+By default, defects and proposed changes have status **“not fixed / not implemented”**; subsequent fixes are marked in the register and detailed findings. R08 is now a diagnostic analysis: valid terminal and inactive chase checks are not treated as defects. Game code and the Workshop export were not changed during the original audit. Prototypes were compiled in memory. The main audit covers active source under `src/`. The original ZSMM specified by the user was additionally checked to establish provenance; results appear below and with each finding.
 
 <a id="original-provenance"></a>
 
@@ -69,6 +69,8 @@ For the one-item setting, the diagnostic substitution in R03 preserved a zero-st
 
 ## Register and priorities
 
+Fixed defects are struck through and marked with the fix date. Verification results and in-game verification status are recorded in the detailed finding linked by its ID.
+
 | ID | Finding | Category | Priority | Evidence |
 |---|---|---|---|---|
 | [R01](#r01) | Restarting a waiting subroutine | Stability, lifecycle | High | C + R |
@@ -86,7 +88,7 @@ For the one-item setting, the diagnostic substitution in R03 preserved a zero-st
 | [R13](#r13) | Incorrect Illari hack check and speed restoration | Logic, lifecycle | Medium/high | C + M; scheduling: R |
 | [R14](#r14) | Mercy tentacle uses inconsistent visibility checks | Logic, target selection | Medium | C + M |
 | [R15](#r15) | Inconsistent units and speed in the dome rescue timer | Logic, timers | Medium | C + M |
-| [R16](#r16) | Bot selects a target behind a wall or a stale target | Logic, target selection | High | C + M |
+| ~~[R16](#r16)~~ | ~~Bot selects a target behind a wall or a stale target~~ — **fixed 2026-11-05** | Logic, target selection | ~~High~~ | C + M |
 | [R17](#r17) | Escorted NPC selects itself | Logic, escort | High | C + M |
 | [R18](#r18) | Charge Battery selects an ineligible recipient | Logic, recipient selection | High | C + M |
 | [R19](#r19) | Biomorphing selects a resource outside the allowed radius | Logic, pickup | Medium | C + M |
@@ -409,6 +411,8 @@ Fix direction: convert distance to seconds using the current positive speed, com
 ### R16. Bot selects a target behind a wall or a stale target
 
 **Category:** Logic, target selection. **Priority:** High. **Evidence:** C + M.
+
+**Fixed November 5, 2026:** `selectTarget` initializes its search result to `null` and stores a candidate only after a successful line-of-sight check. An unsuccessful search clears the current target through the shared `DESELECT BOT TARGET` logic, preserving the last known target and respecting movement/facing overrides. [Verification](analysis/verify-bot-target-selection.cjs) executes the compiled logic in 36 scenarios with controlled visibility; the OverPy build has no warnings. In-game verification is still pending. The original finding is retained below.
 
 The former testTarget was already assigned before visibility validation and published after the loop without a success flag/candidate reset. This is the same defect despite the new botCandidateTarget name. Source: [original:3761](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3761>), [original:3762](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3762>), [original:3766](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3766>).
 
