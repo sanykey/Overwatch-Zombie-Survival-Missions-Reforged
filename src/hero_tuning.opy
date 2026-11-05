@@ -1,4 +1,4 @@
-#!mainFile "main.opy"
+#!mainFile "../main.opy"
 
 
 rule "CC COOLDOWN FROM DOWNFALLEN/BRUTE":

@@ -27,7 +27,7 @@ async function compile(main) {
     const saved = {log: console.log, warn: console.warn, error: console.error};
     try {
         console.log = console.warn = console.error = () => {};
-        return await compiler.compile(main.replace(/^#!writeToOutputFile.*$/gm, ''), 'en-US', src.replace(/\\/g, '/') + '/', 'main.opy');
+        return await compiler.compile(main.replace(/^#!writeToOutputFile.*$/gm, ''), 'en-US', src.replace(/\\/g, '/') + '/', 'includes.opy');
     } finally { Object.assign(console, saved); }
 }
 
@@ -81,7 +81,7 @@ const chaseRatings = {
 
 async function main() {
     await compiler.readyPromise;
-    const originalMain = read('main.opy');
+    const originalMain = read('includes.opy');
     const baseline = await compile(originalMain);
     const counters = {w_start_rule_crash: 0, w_ow2_rule_condition_chase: 0, w_cancel_contrary_motion: 0, w_closest_player: 0};
     const ids = {w_start_rule_crash: 'SR', w_ow2_rule_condition_chase: 'CH', w_cancel_contrary_motion: 'IM', w_closest_player: 'CL'};

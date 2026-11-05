@@ -1,2 +1,3 @@
-src/main.ws.txt
 experiments/
+# Regenerated reference inventory; keep the audit script instead of a stale dump.
+/analysis/player-variable-usage-2026-11-02.json

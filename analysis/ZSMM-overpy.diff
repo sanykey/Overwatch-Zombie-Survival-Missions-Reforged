@@ -1,7 +1,7 @@
-diff --git a/ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy b/ZSM examples/ZSMM-remixed (QZD5F)/2026-10-30 ZSMM-remixed (QZD5F).opy
+diff --git a/workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy b/workshop-snapshots/ZSMM-remixed (QZD5F)/2026-10-30 ZSMM-remixed (QZD5F).opy
 index c92179c..16f6c20 100644
---- a/ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy	
-+++ b/ZSM examples/ZSMM-remixed (QZD5F)/2026-10-30 ZSMM-remixed (QZD5F).opy	
+--- a/workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy
++++ b/workshop-snapshots/ZSMM-remixed (QZD5F)/2026-10-30 ZSMM-remixed (QZD5F).opy
 @@ -1,6 +1,6 @@
  settings {
      "main": {

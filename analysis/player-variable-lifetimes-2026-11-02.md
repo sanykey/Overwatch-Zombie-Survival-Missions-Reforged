@@ -189,7 +189,7 @@ evalOnce([null, Color.PURPLE, Color.VIOLET, Color.ROSE, Color.LIME_GREEN, Color.
 
 - [Скрипт проб](probe-player-temporaries-2026-11-02.cjs): `node analysis/probe-player-temporaries-2026-11-02.cjs`.
 - [JSON с чтениями полей исходной ревизии, результатами проб и SHA-256 базы](player-variable-lifetimes-2026-11-02.json).
-- [Проверка внедрённой версии и SHA-256 текущих исходников](player-variable-validation-2026-11-02.json).
+- [Проверка внедрённой версии и SHA-256 текущих исходников](player-slot-sharing-validation.json).
 - [Полный индекс обращений](player-variable-references-2026-11-02.md).
 
 Скрипт проб воспроизводит исходную ревизию из Git, компилирует копии строк, отдельно проверяет

@@ -2,7 +2,7 @@
 
 Дата: 4 ноября 2026 года. Компилятор: установленный OverPy **9.7.20**. База исходников: `ee36766ffa6c8ba5d49ab1c1fd2980e3bdea7e42` и текущее рабочее дерево.
 
-В рабочем `src/main.opy` уже убрано подавление `w_start_rule_crash`. Прямая компиляция `src/main.opy` с исходными `#!include` воспроизводит **22 предупреждения**. Ниже разобрано каждое место вызова, включая пять отдельных вызовов одной `setPrematchTimer`.
+В рабочем `src/includes.opy` уже убрано подавление `w_start_rule_crash`. Прямая компиляция `src/includes.opy` с исходными `#!include` воспроизводит **22 предупреждения**. Ниже разобрано каждое место вызова, включая пять отдельных вызовов одной `setPrematchTimer`.
 
 Это статический аудит исходников и результата компиляции. Падение сервера в игре не воспроизводилось; оценки достижимости и последствий отделены от подтверждённого поведения кода. При подготовке отчёта игровой код и Workshop-экспорт не изменялись. Ссылки на строки относятся к состоянию файлов на дату отчёта.
 
@@ -556,7 +556,7 @@ setMatchTime(10)
 
 ## 8. Воспроизведение диагностики и выполненная проверка
 
-Команда ниже компилирует текущий `src/main.opy` в памяти с исходными включениями. `#!writeToOutputFile` исключается только из строки в памяти; исходник и экспорт не перезаписываются. Запуск из корня проекта, PowerShell, Node.js и установленное VS Code-расширение OverPy:
+Команда ниже компилирует текущий `src/includes.opy` в памяти с исходными включениями. `#!writeToOutputFile` исключается только из строки в памяти; исходник и экспорт не перезаписываются. Запуск из корня проекта, PowerShell, Node.js и установленное VS Code-расширение OverPy:
 
 ```powershell
 @'
@@ -571,7 +571,7 @@ const path = require('node:path');
     if (!extension) throw new Error('VS Code extension OverPy was not found');
     const overpy = require(path.join(extensions, extension, 'npm', 'overpy.js'));
     await overpy.readyPromise;
-    const source = fs.readFileSync('src/main.opy', 'utf8')
+    const source = fs.readFileSync('src/includes.opy', 'utf8')
         .replace(/^#!writeToOutputFile.*$/gm, '');
     const compiled = await overpy.compile(
         source, 'en-US', path.resolve('src').replace(/\\/g, '/') + '/', 'main.opy'

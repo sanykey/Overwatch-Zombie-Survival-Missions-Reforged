@@ -1,4 +1,4 @@
-#!mainFile "main.opy"
+#!mainFile "../main.opy"
 
 #!define BOT_MAX_TELEPORT_RANGE 40
 #!define BIOMORPHING_RESOURCE_AMOUNT 25

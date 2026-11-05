@@ -20,7 +20,7 @@ async function main() {
     assert.equal(baseline[file].split(oldLine).length - 1, 1);
     assert.equal(files[file], baseline[file].replace(oldLine, newLine),
         'Only the Hybrid target selection should change');
-    const original = path.resolve(src, '..', 'ZSM examples', 'ZSMM (786TW)');
+    const original = path.resolve(src, '..', 'workshop-snapshots', 'ZSMM (786TW)');
     const originalWorkshop = fs.readFileSync(path.join(original,
         '2026-10-30 ZSMM (786TW).ow'), 'utf8');
     const originalDecompiled = fs.readFileSync(path.join(original,

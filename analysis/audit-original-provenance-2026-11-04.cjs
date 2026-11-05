@@ -5,7 +5,7 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const assert = require('node:assert/strict');
 const root = path.resolve(__dirname, '..');
-const original = 'ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy';
+const original = 'workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy';
 const read = file => fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n/g, '\n');
 const text = read(original);
 const lines = text.split('\n');

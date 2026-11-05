@@ -11,12 +11,16 @@ const args = process.argv.slice(2);
 const refIndex = args.indexOf('--baseline-ref');
 const baselineRef = refIndex < 0 ? null : args.splice(refIndex, 2)[1];
 if (refIndex >= 0 && !baselineRef) throw new Error('--baseline-ref requires a Git revision');
+// Dated checks use the logical key main.opy and Git revisions containing that name.
+// Resolve it to the current include manifest only for reads of the working tree.
+const sourcePath = name => path.join(src, name === 'main.opy' ? 'includes.opy' : name);
 const readSource = name => baselineRef
     ? execFileSync('git', ['show', `${baselineRef}:src/${name}`], {cwd: root})
-    : fs.readFileSync(path.join(src, name));
+    : fs.readFileSync(sourcePath(name));
 function readTree(dir, prefix = '') {
     return Object.fromEntries(fs.readdirSync(dir, {withFileTypes: true}).flatMap(e => {
-        const name = prefix + e.name;
+        const diskName = prefix + e.name;
+        const name = diskName === 'includes.opy' ? 'main.opy' : diskName;
         return e.isDirectory() ? Object.entries(readTree(path.join(dir,e.name),name+'/')) :
             e.name.endsWith('.opy') ? [[name, readSource(name).toString('utf8').replace(/\r\n/g,'\n')]] : [];
     }));
@@ -132,7 +136,7 @@ async function main() {
     assert(!files['main.opy'].includes('#!optimizeForSizeAggressive'), 'These probes need the pre-implementation source: use --baseline-ref cf699010');
     // The embedded JavaScript include resolves from disk; it must match the historical baseline.
     for(const name of ['vas/create numbers.js','vas/compressed numbers.opy']) {
-        assert.equal(fs.readFileSync(path.join(src,name),'utf8').replace(/\r\n/g,'\n'),readSource(name).toString('utf8').replace(/\r\n/g,'\n'),'Historical include differs from disk: '+name);
+        assert.equal(fs.readFileSync(sourcePath(name),'utf8').replace(/\r\n/g,'\n'),readSource(name).toString('utf8').replace(/\r\n/g,'\n'),'Historical include differs from disk: '+name);
     }
     const baseline=await compile(files);
     // Generated .ws.txt files are ignored by Git; reconstruct historical output from source.

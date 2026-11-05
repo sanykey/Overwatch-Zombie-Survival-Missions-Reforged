@@ -139,7 +139,6 @@ async function main() {
             [file,crypto.createHash('sha256').update(source).digest('hex')])),
         limitations: 'Static source ownership review, call graph, compiled rule equivalence and scratch lifetime checks. No in-game scheduler/renderer test. Import the complete script, not isolated rules.'};
     fs.writeFileSync(path.join(__dirname,'player-slot-sharing-validation.json'), JSON.stringify(report,null,2)+'\n');
-    fs.writeFileSync(path.join(__dirname,'player-variable-validation-2026-11-02.json'), JSON.stringify(report,null,2)+'\n');
     console.log(JSON.stringify({before:report.before,after:report.after,savedPlayerSlots:33,
         aliases:report.aliases,compiledRulesCompared:report.compiledRulesCompared,scratchRulesChecked:scratch.length,warnings:[]}));
     return report;

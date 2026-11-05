@@ -6,8 +6,8 @@
 
 Исходники:
 
-- [786TW, overPy](<D:/projects/overwatch_ZSMT/ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy>)
-- [QZD5F, overPy](<D:/projects/overwatch_ZSMT/ZSM examples/ZSMM-remixed (QZD5F)/2026-10-30 ZSMM-remixed (QZD5F).opy>)
+- [786TW, overPy](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy>)
+- [QZD5F, overPy](<../workshop-snapshots/ZSMM-remixed (QZD5F)/2026-10-30 ZSMM-remixed (QZD5F).opy>)
 - [Полный diff overPy](./ZSMM-overpy.diff), [diff Workshop](./ZSMM-workshop.diff), [перечень изменённых блоков](./ZSMM-changed-blocks.md).
 
 В overPy: 552 добавленные и 592 удалённые строки. Из 263 блоков `rule`/`def` исходника 185 совпадают, 62 изменены, 16 исчезли; в Remix добавлен 21 блок. Переименования учитываются как удаление и добавление; разделители и перемещённый код тоже входят в статистику. Поэтому она не равна количеству новых механик.

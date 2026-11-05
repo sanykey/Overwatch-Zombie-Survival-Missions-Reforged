@@ -1,7 +1,7 @@
-diff --git a/ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy b/ZSM examples/Lordy's ZSM (KT6ZY)/2026-10-30 Lordy's ZSM (KT6ZY).opy
+diff --git a/workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy b/workshop-snapshots/Lordy's ZSM (KT6ZY)/2026-10-30 Lordy's ZSM (KT6ZY).opy
 index c92179c..2284d9c 100644
---- a/ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy	
-+++ b/ZSM examples/Lordy's ZSM (KT6ZY)/2026-10-30 Lordy's ZSM (KT6ZY).opy	
+--- a/workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy
++++ b/workshop-snapshots/Lordy's ZSM (KT6ZY)/2026-10-30 Lordy's ZSM (KT6ZY).opy
 @@ -1,10 +1,11 @@
  settings {
      "main": {

@@ -75,7 +75,7 @@ function convert(snapshot, name) {
 }
 
 function source(snapshot) {
-    return snapshot['main.opy'].replace(/^#!include "([^"]+)".*$/gm, (line, name) =>
+    return snapshot['includes.opy'].replace(/^#!include "([^"]+)".*$/gm, (line, name) =>
         snapshot[name] === undefined ? line : snapshot[name].replace(/^#!mainFile .*\n/gm, ''))
         .replace(/^#!writeToOutputFile.*\n/gm, '');
 }
@@ -90,7 +90,7 @@ async function main() {
         const saved = { log: console.log, warn: console.warn, error: console.error };
         try {
             console.log = console.warn = console.error = () => {};
-            const result = await compiler.compile(source(snapshot), 'en-US', src.replace(/\\/g, '/') + '/', 'main.opy');
+            const result = await compiler.compile(source(snapshot), 'en-US', src.replace(/\\/g, '/') + '/', 'includes.opy');
             return { elements: result.nbElements, warnings: result.encounteredWarnings, result: result.result };
         } finally { Object.assign(console, saved); }
     }
@@ -132,8 +132,8 @@ async function main() {
             fs.writeFileSync(path.join(src, file), original.includes('\r\n') ? clean.replace(/\n/g, '\r\n') : clean);
         }
         // Compile real includes for the output so debug comments retain the source filenames.
-        const diskResult = await compiler.compile(fs.readFileSync(path.join(src, 'main.opy'), 'utf8')
-            .replace(/^#!writeToOutputFile.*\r?\n/gm, ''), 'en-US', src.replace(/\\/g, '/') + '/', 'main.opy');
+        const diskResult = await compiler.compile(fs.readFileSync(path.join(src, 'includes.opy'), 'utf8')
+            .replace(/^#!writeToOutputFile.*\r?\n/gm, ''), 'en-US', src.replace(/\\/g, '/') + '/', 'includes.opy');
         assert.equal(diskResult.nbElements, report.after);
         assert.deepEqual(diskResult.encounteredWarnings, result.warnings);
         fs.writeFileSync(path.join(src, 'main.ws.txt'), diskResult.result);

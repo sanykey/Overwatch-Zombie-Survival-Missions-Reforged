@@ -5,7 +5,7 @@
   "versions": [
     {
       "id": "786TW",
-      "relativePath": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+      "relativePath": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
       "sourceSha256": "bcc6c75299d5aabdfcc702fb37be540f553f33f0ac7c888984f51178220c954a",
       "directives": [
         "#!extension playMoreEffects",
@@ -992,7 +992,7 @@
     },
     {
       "id": "A3YV07",
-      "relativePath": "ZSM examples/ZSM Chaos (A3YV07)/2026-10-30 ZSM Chaos (A3YV07).opy",
+      "relativePath": "workshop-snapshots/ZSM Chaos (A3YV07)/2026-10-30 ZSM Chaos (A3YV07).opy",
       "sourceSha256": "6260a5a45ef732e81c9fdd16c865d6d0101ec04d760fd7fa24c4a117b956d69b",
       "directives": [
         "#!extension beamEffects",

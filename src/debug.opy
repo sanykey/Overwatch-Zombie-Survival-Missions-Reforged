@@ -1,4 +1,4 @@
-#!mainFile "main.opy"
+#!mainFile "../main.opy"
 
 # Remove the debug.opy include from main.opy to disable all debug rules.
 # main.opy enables playMoreEffects, raising the shared effect/beam/icon limit to 256.

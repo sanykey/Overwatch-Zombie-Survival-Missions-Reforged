@@ -1,0 +1,2924 @@
+{
+  "schemaVersion": 1,
+  "compiler": {
+    "version": "9.7.20",
+    "language": "en-US",
+    "sha256": "73be5be9a65cbc95b8188e2e549d526dbea8a206000af618260a4a10f4792248"
+  },
+  "limits": {
+    "elements": 32768,
+    "globalvar": 128,
+    "playervar": 128,
+    "subroutine": 128
+  },
+  "method": "Actual entry points and includes; original optimization directives retained. Source counts are distinct physical declarations in included OPY files (def/subroutine names counted once; macros/aliases excluded). Compiled counts come from emitted named slot tables, including disabled code; index gaps are not declarations. Elements exist only after compilation. Hashes normalize CRLF to LF. No in-game validation or runtime profiling.",
+  "reforged": {
+    "entry": "main.opy",
+    "source": {
+      "counts": {
+        "elements": null,
+        "globalvar": 105,
+        "playervar": 90,
+        "subroutine": 81
+      },
+      "declarations": {
+        "globalvar": [
+          "activeAttackSpawnRoom",
+          "attackSpawnRooms",
+          "availableMutationList",
+          "biomorphingDeferredPositionList",
+          "biomorphingDeferredTypeList",
+          "biomorphingGoalColor",
+          "biomorphingResourceEffectIdList",
+          "biomorphingResourceTextIdList",
+          "biomorphingResourceTypeList",
+          "bossStateList",
+          "bossesAvailableHeroList",
+          "bossesExcludedHeroList",
+          "botBiteDamageList",
+          "botBiteDurationList",
+          "botDamageDealtList",
+          "botHealthList",
+          "botHeroList",
+          "botSpawnPointList",
+          "botSpawnPointTimerList",
+          "botSpawnRateList",
+          "botSpawnTimeList",
+          "botSpawnWaypointList",
+          "botThrottleSpeedList",
+          "challengeSetting",
+          "colorChargeBatteryConst",
+          "colorKevlarConst",
+          "currentObjectivePosition",
+          "customTeleportPositionList",
+          "difficultySetting",
+          "dummyHoldingPositionConst",
+          "evacSurvivorList",
+          "extractionSpeedUp",
+          "extractionZoneRad",
+          "healthpackPositionList",
+          "isBiomorphingGoalPending",
+          "isGameplayActive",
+          "isObjectiveComplete",
+          "isOvertimeActive",
+          "isPregameSetup",
+          "isSmolderEventActive",
+          "isSpecialGameMode",
+          "isSupplyDropOpen",
+          "isVoting",
+          "losOffsetConst",
+          "mapGridList",
+          "matchEndTime",
+          "menuFinaleMotionSlot",
+          "miniBossList",
+          "mustReviveTime",
+          "numberOfBots",
+          "numbersList",
+          "objectiveActorSlot",
+          "objectiveCheckpointSlot",
+          "objectiveColor",
+          "objectiveDescription",
+          "objectiveEntityIdList",
+          "objectiveMotionSlot",
+          "objectivePlacementSlot",
+          "objectivePlayerList",
+          "objectivePositionList",
+          "objectivePositionsSlot",
+          "objectiveProgressSlot",
+          "objectiveQueueSlot",
+          "objectiveRad",
+          "objectiveSpacingList",
+          "objectiveTypeList",
+          "objectiveTypeSetting",
+          "objectiveValue",
+          "offsetDownHundredConst",
+          "offsetUpHalfConst",
+          "offsetUpOneAndHalfConst",
+          "offsetUpQuarterConst",
+          "offsetUpThreeQuartersConst",
+          "phaseSlot0",
+          "phaseSlot1",
+          "phaseSlot10",
+          "phaseSlot2",
+          "phaseSlot3",
+          "phaseSlot4",
+          "phaseSlot5",
+          "phaseSlot6",
+          "phaseSlot7",
+          "phaseSlot8",
+          "phaseSlot9",
+          "playerStatsList",
+          "playerTargetList",
+          "powerUpColorListConst",
+          "satelliteLaserPosition",
+          "spawnRoomIndex",
+          "startCamPos",
+          "startPos",
+          "supplyDropLandingPosition",
+          "supplyDropPosition",
+          "supplyDropPowerUpCount",
+          "supplyPowerUpEffectIdList",
+          "supplyPowerUpIdList",
+          "supplyPowerUpPositionList",
+          "supplyPowerUpTextIdList",
+          "tmp0",
+          "tmp1",
+          "tmp2",
+          "uniqueSkinCap",
+          "userNameList",
+          "walkCenter",
+          "zombieSetting"
+        ],
+        "playervar": [
+          "abilityTargetList",
+          "actorAbilitySlot1",
+          "actorAbilitySlot2",
+          "actorCountdownSlot",
+          "actorLoopSlot",
+          "actorMotionSlot1",
+          "actorMotionSlot2",
+          "actorTeamSlot0",
+          "actorTeamSlot1",
+          "actorTeamSlot10",
+          "actorTeamSlot11",
+          "actorTeamSlot12",
+          "actorTeamSlot13",
+          "actorTeamSlot14",
+          "actorTeamSlot15",
+          "actorTeamSlot16",
+          "actorTeamSlot17",
+          "actorTeamSlot18",
+          "actorTeamSlot19",
+          "actorTeamSlot2",
+          "actorTeamSlot20",
+          "actorTeamSlot21",
+          "actorTeamSlot22",
+          "actorTeamSlot23",
+          "actorTeamSlot24",
+          "actorTeamSlot25",
+          "actorTeamSlot26",
+          "actorTeamSlot27",
+          "actorTeamSlot28",
+          "actorTeamSlot3",
+          "actorTeamSlot4",
+          "actorTeamSlot5",
+          "actorTeamSlot6",
+          "actorTeamSlot7",
+          "actorTeamSlot8",
+          "actorTeamSlot9",
+          "aiThrottleSpeedSlot",
+          "biomorphingResourceAmount",
+          "botAbilityCooldown",
+          "botBaseHealth",
+          "botBiteDamage",
+          "botReigniteRisePosition",
+          "botReturnTime",
+          "candidateTargetList",
+          "controlStateSlot",
+          "damageOverTimeRemaining",
+          "enhancementBarrierHealth",
+          "enhancementCarrierPoolId",
+          "enhancementHitchhikerPassenger",
+          "enhancementId",
+          "enhancementPupCooldown",
+          "enhancementPupPosition",
+          "explosionInnerColor",
+          "explosionOuterColor",
+          "explosionScale",
+          "infectionDamageOverTimeId",
+          "infectionLevel",
+          "initialMaxHealth",
+          "invisibilityCount",
+          "isAfk",
+          "isAttached",
+          "isCrowdControlled",
+          "isHeroSwitchRespawn",
+          "isInfected",
+          "isPlayerActive",
+          "isPregameVoting",
+          "isReviving",
+          "menuTradeItemSlot",
+          "movementSpeedScale",
+          "objectiveActorKindSlot",
+          "objectiveTypeSnapshot",
+          "powerUpAirStrikeRingId",
+          "powerUpBouncePadRingId",
+          "powerUpCloakingDeviceSphereId",
+          "powerUpForceFieldSphereId",
+          "powerUpHealBeaconLightShaftId",
+          "powerUpNoCooldownsHudId",
+          "powerUpStunBeamId",
+          "powerUpSuperNanoGoodAuraId",
+          "powerUpUltimateChargerHudId",
+          "pregameState",
+          "reconnectUserIndex",
+          "recoveryTimeSlot",
+          "rescueLeader",
+          "rescueTimeRemaining",
+          "reviveDuration",
+          "sizeScale",
+          "team1PositionSlot",
+          "visualCleanupIndex",
+          "visualEntityIdList"
+        ],
+        "subroutine": [
+          "abilityPlacement",
+          "abilityThrowdown",
+          "advanceChallengeVote",
+          "advanceEnhancementChoice",
+          "advanceObjectiveVote",
+          "advanceZombieVote",
+          "airStrike",
+          "applyBotBossHealth",
+          "applyBotKnockbackScale",
+          "applyBriefBurnAndRoot",
+          "applyCurrentSizeScale",
+          "applyScaledMoveSpeed",
+          "attachPlayerToPregameAnchor",
+          "beginBotOverride",
+          "bossReturn",
+          "botRespawnInitialization",
+          "bouncePad",
+          "chaseSatelliteTarget",
+          "checkEnhancementPlacement",
+          "cloakingDevice",
+          "completeBossObjective",
+          "createRemainingObjectivesHud",
+          "daytakerAbortReset",
+          "determineChallenge",
+          "determineObjectiveType",
+          "determineZombieMode",
+          "enableDisableAbilities",
+          "enterExitTeleport",
+          "entityFloat",
+          "excludeCurrentHeroFromSelection",
+          "explosionSequence",
+          "explosionWarning",
+          "faceCurrentThrottle",
+          "finishPowerUpDrop",
+          "generateMapGrid",
+          "healBeacon",
+          "illariUlt",
+          "instantRevive",
+          "locateAveragePlayerLocation",
+          "noCooldowns",
+          "nukeMap",
+          "objectivesManagement",
+          "playAquaPowerUpSound",
+          "playReignitedWarningPair",
+          "playerForceField",
+          "powerUpUsage",
+          "randomActions",
+          "reenableBotWallAndJump",
+          "refreshCurrentObjectivePosition",
+          "refreshCurrentObjectiveType",
+          "removeBotSpawnPoint",
+          "resetBattleAbilityCharge",
+          "resolveReconnectUserIndex",
+          "restoreBotThrottle",
+          "restoreDefaultFacingMovement",
+          "resumeBotFacingAndMovement",
+          "resumeBotMovementAndFacing",
+          "saveAlivePlayerState",
+          "selectTarget",
+          "selectVoteWinner",
+          "sentryTurret",
+          "setClosestPlayerTeleportCenter",
+          "setDifficulty",
+          "setObjectiveType",
+          "setPrematchTimer",
+          "setZombieMode",
+          "smolderBoost",
+          "spawnGasCloud",
+          "startBlasterDaytakerFacing",
+          "startBotThrottleAtTarget",
+          "startExtractionAscent",
+          "startPupDefaultChase",
+          "stun",
+          "successfulTeleportStatus",
+          "superNano",
+          "teleportBots",
+          "teleportDownedPlayerToWalkable",
+          "teleportToClosestPlayer",
+          "ultimateCharger",
+          "updateBotSpawnPoints",
+          "updateUsers"
+        ]
+      },
+      "macroDefinitions": 16,
+      "files": {
+        "main.opy": "2106d104ba3d43a7ae43031d648d6eaa75027bf9bf284147f223e5d742be7d05",
+        "src/bots_game_in_progress.opy": "c2b7aa8ad13d0fedef0839c3d9285bca5fadcf53385d5e92c90323d5357fd352",
+        "src/compressed numbers.opy": "8b8e5f274a8e4c2017009a378ff11ba6d27a815c7afed623acb92065c0e018bf",
+        "src/create numbers.js": "e29ee00f1a5af294aa16bebd8bf677ed4369710618a0f4dadc0f5d49e32a7bb8",
+        "src/enhancements.opy": "0396a418c6201e6b2cb21e677b8508f3016ba5ac7370ff40f3f60116454d3ddd",
+        "src/global_game_in_progress.opy": "bb242bf26fc4d46b99834629822e4e1a66ef03964e52c8baeee692d93c6eaccb",
+        "src/global_start_menu.opy": "4cb8fced0eecb22dac564a1beaab76b92b5fb29d1e74be7246215991b97442e3",
+        "src/global_startup.opy": "bae2d599e3a0446c0faeb94a1356a1dc5a52b9ef424947d8c2d7e4513b9307f4",
+        "src/hero_tuning.opy": "4d27c820e126060d7faa85cdfc98962bcce73be5be3dd13bf90ce405e4b7f671",
+        "src/includes.opy": "2f7733ebbc317fb15bc3065006b47aa774f217322bb541cff6e7067756345885",
+        "src/objective_types/objective_type_biomorphing.opy": "253ee3275aaf3d48541370d608f2f38a04a7cd6cb94dacda0db11c1392536a60",
+        "src/objective_types/objective_type_bosses.opy": "00c95f5b4519d5386758fa74e55a6d6f77b39913e1ea30b2dfd840944c8529f3",
+        "src/objective_types/objective_type_extraction_point.opy": "f564d0d09c70f56fd95072e081eb76c238a0bc29aecd98a03dbace821cad1932",
+        "src/objective_types/objective_type_kill_zone.opy": "646ba09f2d56c40d8af3e38fe246db9025e887162fffb3ee14638fe9a4ff0b7c",
+        "src/objective_types/objective_type_satellite_uplink.opy": "9f82acc574893272483184441ecd05e8ed8c3f24c0ffba3ec0dfeda23f888363",
+        "src/objective_types/objective_type_showdown.opy": "ed11fd889703df42c62108045c99ca27167049becb6b7495c1d64c33efbd367e",
+        "src/objective_types/objective_type_survivor_rescue.opy": "6ce31bd7e7f3fbe62bf45992a648fb25cf3c407fe6f80971f2d9f630ba83b9e2",
+        "src/objective_types/objective_type_zombie_egg.opy": "e2f36ba6eeaeb1230c6364744011c0126e6c5d494f980ba7eff7269fc5f14485",
+        "src/player_start_menu.opy": "8201f6f5caac6d3f1dc583b694b99caa9ee8a2c822e135a0cd77871d52b9df69",
+        "src/players_game_in_progress.opy": "f6aadb77def41bf05cf9b0f28ecb325fce61dbcfcdf5f60b10d05cb567560abb",
+        "src/power_ups.opy": "bfe7f3bc573d521754edfb6033c0d6f578a1e2b8f1f02152b22f1d4ec7133575",
+        "src/settings.opy": "9f36826223ad8abfdbf891af7f43e864c87228ba948fca5cdf64845a43b2887b",
+        "src/subroutines.opy": "579d32a2ecc04d5604ad58097f3515cba2faf407e9804e1752a82415e2adcee7",
+        "src/supply_drops.opy": "42d07283592d215f62d2b9e5716b16edbd77b0441799730ec7b7497edaef94b6",
+        "src/variables.opy": "b889371b0f2ebd12da437816b3de69dcc497b9693809ccb8ceb1734c40b42d00",
+        "src/zombie_types.opy": "450253f69df8c860fd9e27d0c19162c8071f011af52ae543b9be319df3e89ac7"
+      }
+    },
+    "compiled": {
+      "counts": {
+        "elements": 25250,
+        "globalvar": 105,
+        "playervar": 90,
+        "subroutine": 81
+      },
+      "declarations": {
+        "globalvar": [
+          {
+            "index": 0,
+            "name": "tmp0"
+          },
+          {
+            "index": 1,
+            "name": "tmp1"
+          },
+          {
+            "index": 2,
+            "name": "tmp2"
+          },
+          {
+            "index": 3,
+            "name": "phaseSlot0"
+          },
+          {
+            "index": 4,
+            "name": "phaseSlot1"
+          },
+          {
+            "index": 5,
+            "name": "phaseSlot2"
+          },
+          {
+            "index": 6,
+            "name": "phaseSlot3"
+          },
+          {
+            "index": 7,
+            "name": "phaseSlot4"
+          },
+          {
+            "index": 8,
+            "name": "phaseSlot5"
+          },
+          {
+            "index": 9,
+            "name": "phaseSlot6"
+          },
+          {
+            "index": 10,
+            "name": "phaseSlot7"
+          },
+          {
+            "index": 11,
+            "name": "phaseSlot8"
+          },
+          {
+            "index": 12,
+            "name": "phaseSlot9"
+          },
+          {
+            "index": 13,
+            "name": "phaseSlot10"
+          },
+          {
+            "index": 14,
+            "name": "biomorphingGoalColor"
+          },
+          {
+            "index": 15,
+            "name": "currentObjectivePosition"
+          },
+          {
+            "index": 16,
+            "name": "offsetUpThreeQuartersConst"
+          },
+          {
+            "index": 17,
+            "name": "offsetUpHalfConst"
+          },
+          {
+            "index": 18,
+            "name": "losOffsetConst"
+          },
+          {
+            "index": 19,
+            "name": "colorChargeBatteryConst"
+          },
+          {
+            "index": 20,
+            "name": "dummyHoldingPositionConst"
+          },
+          {
+            "index": 21,
+            "name": "colorKevlarConst"
+          },
+          {
+            "index": 22,
+            "name": "offsetDownHundredConst"
+          },
+          {
+            "index": 23,
+            "name": "offsetUpOneAndHalfConst"
+          },
+          {
+            "index": 24,
+            "name": "offsetUpQuarterConst"
+          },
+          {
+            "index": 25,
+            "name": "powerUpColorListConst"
+          },
+          {
+            "index": 26,
+            "name": "isPregameSetup"
+          },
+          {
+            "index": 27,
+            "name": "isSpecialGameMode"
+          },
+          {
+            "index": 28,
+            "name": "isGameplayActive"
+          },
+          {
+            "index": 29,
+            "name": "isOvertimeActive"
+          },
+          {
+            "index": 30,
+            "name": "isVoting"
+          },
+          {
+            "index": 31,
+            "name": "difficultySetting"
+          },
+          {
+            "index": 32,
+            "name": "challengeSetting"
+          },
+          {
+            "index": 33,
+            "name": "zombieSetting"
+          },
+          {
+            "index": 34,
+            "name": "objectiveTypeSetting"
+          },
+          {
+            "index": 35,
+            "name": "matchEndTime"
+          },
+          {
+            "index": 36,
+            "name": "uniqueSkinCap"
+          },
+          {
+            "index": 37,
+            "name": "numberOfBots"
+          },
+          {
+            "index": 38,
+            "name": "walkCenter"
+          },
+          {
+            "index": 39,
+            "name": "mapGridList"
+          },
+          {
+            "index": 40,
+            "name": "attackSpawnRooms"
+          },
+          {
+            "index": 41,
+            "name": "activeAttackSpawnRoom"
+          },
+          {
+            "index": 42,
+            "name": "spawnRoomIndex"
+          },
+          {
+            "index": 43,
+            "name": "botSpawnPointList"
+          },
+          {
+            "index": 44,
+            "name": "botSpawnPointTimerList"
+          },
+          {
+            "index": 45,
+            "name": "botSpawnWaypointList"
+          },
+          {
+            "index": 46,
+            "name": "customTeleportPositionList"
+          },
+          {
+            "index": 47,
+            "name": "botSpawnTimeList"
+          },
+          {
+            "index": 48,
+            "name": "startPos"
+          },
+          {
+            "index": 49,
+            "name": "startCamPos"
+          },
+          {
+            "index": 50,
+            "name": "objectivePositionList"
+          },
+          {
+            "index": 51,
+            "name": "objectiveTypeList"
+          },
+          {
+            "index": 52,
+            "name": "objectiveSpacingList"
+          },
+          {
+            "index": 53,
+            "name": "objectiveValue"
+          },
+          {
+            "index": 54,
+            "name": "objectiveProgressSlot"
+          },
+          {
+            "index": 55,
+            "name": "objectiveDescription"
+          },
+          {
+            "index": 56,
+            "name": "objectiveColor"
+          },
+          {
+            "index": 57,
+            "name": "isObjectiveComplete"
+          },
+          {
+            "index": 58,
+            "name": "objectivePlayerList"
+          },
+          {
+            "index": 59,
+            "name": "objectiveEntityIdList"
+          },
+          {
+            "index": 60,
+            "name": "objectivePositionsSlot"
+          },
+          {
+            "index": 61,
+            "name": "objectivePlacementSlot"
+          },
+          {
+            "index": 62,
+            "name": "objectiveMotionSlot"
+          },
+          {
+            "index": 63,
+            "name": "objectiveCheckpointSlot"
+          },
+          {
+            "index": 64,
+            "name": "objectiveQueueSlot"
+          },
+          {
+            "index": 65,
+            "name": "objectiveActorSlot"
+          },
+          {
+            "index": 66,
+            "name": "isBiomorphingGoalPending"
+          },
+          {
+            "index": 67,
+            "name": "biomorphingResourceTypeList"
+          },
+          {
+            "index": 68,
+            "name": "biomorphingDeferredTypeList"
+          },
+          {
+            "index": 69,
+            "name": "biomorphingDeferredPositionList"
+          },
+          {
+            "index": 70,
+            "name": "biomorphingResourceTextIdList"
+          },
+          {
+            "index": 71,
+            "name": "biomorphingResourceEffectIdList"
+          },
+          {
+            "index": 72,
+            "name": "extractionSpeedUp"
+          },
+          {
+            "index": 73,
+            "name": "evacSurvivorList"
+          },
+          {
+            "index": 74,
+            "name": "supplyDropLandingPosition"
+          },
+          {
+            "index": 75,
+            "name": "isSupplyDropOpen"
+          },
+          {
+            "index": 76,
+            "name": "supplyDropPowerUpCount"
+          },
+          {
+            "index": 77,
+            "name": "supplyPowerUpIdList"
+          },
+          {
+            "index": 78,
+            "name": "supplyPowerUpPositionList"
+          },
+          {
+            "index": 79,
+            "name": "supplyPowerUpTextIdList"
+          },
+          {
+            "index": 80,
+            "name": "supplyPowerUpEffectIdList"
+          },
+          {
+            "index": 81,
+            "name": "playerTargetList"
+          },
+          {
+            "index": 82,
+            "name": "userNameList"
+          },
+          {
+            "index": 83,
+            "name": "playerStatsList"
+          },
+          {
+            "index": 84,
+            "name": "healthpackPositionList"
+          },
+          {
+            "index": 85,
+            "name": "mustReviveTime"
+          },
+          {
+            "index": 86,
+            "name": "botHeroList"
+          },
+          {
+            "index": 87,
+            "name": "botSpawnRateList"
+          },
+          {
+            "index": 88,
+            "name": "botBiteDamageList"
+          },
+          {
+            "index": 89,
+            "name": "botBiteDurationList"
+          },
+          {
+            "index": 90,
+            "name": "botDamageDealtList"
+          },
+          {
+            "index": 91,
+            "name": "botHealthList"
+          },
+          {
+            "index": 92,
+            "name": "botThrottleSpeedList"
+          },
+          {
+            "index": 93,
+            "name": "availableMutationList"
+          },
+          {
+            "index": 94,
+            "name": "miniBossList"
+          },
+          {
+            "index": 95,
+            "name": "bossStateList"
+          },
+          {
+            "index": 96,
+            "name": "isSmolderEventActive"
+          },
+          {
+            "index": 97,
+            "name": "bossesAvailableHeroList"
+          },
+          {
+            "index": 98,
+            "name": "bossesExcludedHeroList"
+          },
+          {
+            "index": 99,
+            "name": "objectiveRad"
+          },
+          {
+            "index": 100,
+            "name": "satelliteLaserPosition"
+          },
+          {
+            "index": 101,
+            "name": "extractionZoneRad"
+          },
+          {
+            "index": 102,
+            "name": "menuFinaleMotionSlot"
+          },
+          {
+            "index": 103,
+            "name": "supplyDropPosition"
+          },
+          {
+            "index": 104,
+            "name": "numbersList"
+          }
+        ],
+        "playervar": [
+          {
+            "index": 0,
+            "name": "botBiteDamage"
+          },
+          {
+            "index": 1,
+            "name": "botBaseHealth"
+          },
+          {
+            "index": 2,
+            "name": "isPlayerActive"
+          },
+          {
+            "index": 3,
+            "name": "isReviving"
+          },
+          {
+            "index": 4,
+            "name": "reviveDuration"
+          },
+          {
+            "index": 5,
+            "name": "isInfected"
+          },
+          {
+            "index": 6,
+            "name": "rescueTimeRemaining"
+          },
+          {
+            "index": 7,
+            "name": "invisibilityCount"
+          },
+          {
+            "index": 8,
+            "name": "infectionDamageOverTimeId"
+          },
+          {
+            "index": 9,
+            "name": "reconnectUserIndex"
+          },
+          {
+            "index": 10,
+            "name": "isAfk"
+          },
+          {
+            "index": 11,
+            "name": "isHeroSwitchRespawn"
+          },
+          {
+            "index": 12,
+            "name": "enhancementId"
+          },
+          {
+            "index": 13,
+            "name": "enhancementHitchhikerPassenger"
+          },
+          {
+            "index": 14,
+            "name": "enhancementCarrierPoolId"
+          },
+          {
+            "index": 15,
+            "name": "pregameState"
+          },
+          {
+            "index": 16,
+            "name": "isPregameVoting"
+          },
+          {
+            "index": 17,
+            "name": "rescueLeader"
+          },
+          {
+            "index": 18,
+            "name": "biomorphingResourceAmount"
+          },
+          {
+            "index": 19,
+            "name": "explosionInnerColor"
+          },
+          {
+            "index": 20,
+            "name": "explosionOuterColor"
+          },
+          {
+            "index": 21,
+            "name": "explosionScale"
+          },
+          {
+            "index": 22,
+            "name": "aiThrottleSpeedSlot"
+          },
+          {
+            "index": 23,
+            "name": "recoveryTimeSlot"
+          },
+          {
+            "index": 24,
+            "name": "isCrowdControlled"
+          },
+          {
+            "index": 25,
+            "name": "actorCountdownSlot"
+          },
+          {
+            "index": 26,
+            "name": "controlStateSlot"
+          },
+          {
+            "index": 27,
+            "name": "actorAbilitySlot2"
+          },
+          {
+            "index": 28,
+            "name": "initialMaxHealth"
+          },
+          {
+            "index": 29,
+            "name": "isAttached"
+          },
+          {
+            "index": 30,
+            "name": "candidateTargetList"
+          },
+          {
+            "index": 31,
+            "name": "sizeScale"
+          },
+          {
+            "index": 32,
+            "name": "actorAbilitySlot1"
+          },
+          {
+            "index": 33,
+            "name": "objectiveTypeSnapshot"
+          },
+          {
+            "index": 34,
+            "name": "visualEntityIdList"
+          },
+          {
+            "index": 35,
+            "name": "visualCleanupIndex"
+          },
+          {
+            "index": 36,
+            "name": "actorLoopSlot"
+          },
+          {
+            "index": 37,
+            "name": "abilityTargetList"
+          },
+          {
+            "index": 38,
+            "name": "movementSpeedScale"
+          },
+          {
+            "index": 39,
+            "name": "actorTeamSlot0"
+          },
+          {
+            "index": 40,
+            "name": "actorTeamSlot1"
+          },
+          {
+            "index": 41,
+            "name": "actorTeamSlot2"
+          },
+          {
+            "index": 42,
+            "name": "actorTeamSlot3"
+          },
+          {
+            "index": 43,
+            "name": "actorTeamSlot4"
+          },
+          {
+            "index": 44,
+            "name": "powerUpForceFieldSphereId"
+          },
+          {
+            "index": 45,
+            "name": "powerUpHealBeaconLightShaftId"
+          },
+          {
+            "index": 46,
+            "name": "powerUpNoCooldownsHudId"
+          },
+          {
+            "index": 47,
+            "name": "powerUpAirStrikeRingId"
+          },
+          {
+            "index": 48,
+            "name": "powerUpCloakingDeviceSphereId"
+          },
+          {
+            "index": 49,
+            "name": "powerUpSuperNanoGoodAuraId"
+          },
+          {
+            "index": 50,
+            "name": "powerUpBouncePadRingId"
+          },
+          {
+            "index": 51,
+            "name": "powerUpUltimateChargerHudId"
+          },
+          {
+            "index": 52,
+            "name": "powerUpStunBeamId"
+          },
+          {
+            "index": 53,
+            "name": "actorTeamSlot5"
+          },
+          {
+            "index": 54,
+            "name": "actorTeamSlot6"
+          },
+          {
+            "index": 55,
+            "name": "actorTeamSlot7"
+          },
+          {
+            "index": 56,
+            "name": "actorTeamSlot8"
+          },
+          {
+            "index": 57,
+            "name": "actorTeamSlot9"
+          },
+          {
+            "index": 58,
+            "name": "actorTeamSlot10"
+          },
+          {
+            "index": 59,
+            "name": "actorTeamSlot11"
+          },
+          {
+            "index": 60,
+            "name": "actorTeamSlot13"
+          },
+          {
+            "index": 61,
+            "name": "actorTeamSlot14"
+          },
+          {
+            "index": 62,
+            "name": "actorTeamSlot15"
+          },
+          {
+            "index": 63,
+            "name": "actorTeamSlot16"
+          },
+          {
+            "index": 64,
+            "name": "actorTeamSlot17"
+          },
+          {
+            "index": 65,
+            "name": "actorTeamSlot18"
+          },
+          {
+            "index": 66,
+            "name": "actorTeamSlot19"
+          },
+          {
+            "index": 67,
+            "name": "actorTeamSlot20"
+          },
+          {
+            "index": 68,
+            "name": "actorTeamSlot21"
+          },
+          {
+            "index": 69,
+            "name": "actorTeamSlot22"
+          },
+          {
+            "index": 70,
+            "name": "actorTeamSlot23"
+          },
+          {
+            "index": 71,
+            "name": "actorTeamSlot24"
+          },
+          {
+            "index": 72,
+            "name": "actorTeamSlot25"
+          },
+          {
+            "index": 73,
+            "name": "actorTeamSlot26"
+          },
+          {
+            "index": 74,
+            "name": "actorTeamSlot27"
+          },
+          {
+            "index": 75,
+            "name": "actorTeamSlot28"
+          },
+          {
+            "index": 76,
+            "name": "team1PositionSlot"
+          },
+          {
+            "index": 77,
+            "name": "objectiveActorKindSlot"
+          },
+          {
+            "index": 78,
+            "name": "menuTradeItemSlot"
+          },
+          {
+            "index": 79,
+            "name": "infectionLevel"
+          },
+          {
+            "index": 80,
+            "name": "actorMotionSlot1"
+          },
+          {
+            "index": 81,
+            "name": "actorMotionSlot2"
+          },
+          {
+            "index": 82,
+            "name": "damageOverTimeRemaining"
+          },
+          {
+            "index": 83,
+            "name": "botReturnTime"
+          },
+          {
+            "index": 84,
+            "name": "actorTeamSlot12"
+          },
+          {
+            "index": 85,
+            "name": "botAbilityCooldown"
+          },
+          {
+            "index": 86,
+            "name": "enhancementPupPosition"
+          },
+          {
+            "index": 87,
+            "name": "botReigniteRisePosition"
+          },
+          {
+            "index": 88,
+            "name": "enhancementPupCooldown"
+          },
+          {
+            "index": 89,
+            "name": "enhancementBarrierHealth"
+          }
+        ],
+        "subroutine": [
+          {
+            "index": 0,
+            "name": "applyScaledMoveSpeed"
+          },
+          {
+            "index": 1,
+            "name": "refreshCurrentObjectivePosition"
+          },
+          {
+            "index": 2,
+            "name": "refreshCurrentObjectiveType"
+          },
+          {
+            "index": 3,
+            "name": "faceCurrentThrottle"
+          },
+          {
+            "index": 4,
+            "name": "excludeCurrentHeroFromSelection"
+          },
+          {
+            "index": 5,
+            "name": "applyBotKnockbackScale"
+          },
+          {
+            "index": 6,
+            "name": "applyCurrentSizeScale"
+          },
+          {
+            "index": 7,
+            "name": "applyBotBossHealth"
+          },
+          {
+            "index": 8,
+            "name": "resolveReconnectUserIndex"
+          },
+          {
+            "index": 9,
+            "name": "enableDisableAbilities"
+          },
+          {
+            "index": 10,
+            "name": "setDifficulty"
+          },
+          {
+            "index": 11,
+            "name": "botRespawnInitialization"
+          },
+          {
+            "index": 12,
+            "name": "objectivesManagement"
+          },
+          {
+            "index": 13,
+            "name": "selectTarget"
+          },
+          {
+            "index": 14,
+            "name": "restoreDefaultFacingMovement"
+          },
+          {
+            "index": 15,
+            "name": "setPrematchTimer"
+          },
+          {
+            "index": 16,
+            "name": "explosionSequence"
+          },
+          {
+            "index": 17,
+            "name": "illariUlt"
+          },
+          {
+            "index": 18,
+            "name": "abilityPlacement"
+          },
+          {
+            "index": 19,
+            "name": "createRemainingObjectivesHud"
+          },
+          {
+            "index": 20,
+            "name": "generateMapGrid"
+          },
+          {
+            "index": 21,
+            "name": "determineChallenge"
+          },
+          {
+            "index": 22,
+            "name": "determineZombieMode"
+          },
+          {
+            "index": 23,
+            "name": "setZombieMode"
+          },
+          {
+            "index": 24,
+            "name": "determineObjectiveType"
+          },
+          {
+            "index": 25,
+            "name": "setObjectiveType"
+          },
+          {
+            "index": 26,
+            "name": "selectVoteWinner"
+          },
+          {
+            "index": 27,
+            "name": "advanceChallengeVote"
+          },
+          {
+            "index": 28,
+            "name": "advanceZombieVote"
+          },
+          {
+            "index": 29,
+            "name": "advanceObjectiveVote"
+          },
+          {
+            "index": 30,
+            "name": "advanceEnhancementChoice"
+          },
+          {
+            "index": 31,
+            "name": "randomActions"
+          },
+          {
+            "index": 32,
+            "name": "attachPlayerToPregameAnchor"
+          },
+          {
+            "index": 33,
+            "name": "nukeMap"
+          },
+          {
+            "index": 34,
+            "name": "startExtractionAscent"
+          },
+          {
+            "index": 35,
+            "name": "completeBossObjective"
+          },
+          {
+            "index": 36,
+            "name": "bossReturn"
+          },
+          {
+            "index": 37,
+            "name": "chaseSatelliteTarget"
+          },
+          {
+            "index": 38,
+            "name": "teleportToClosestPlayer"
+          },
+          {
+            "index": 39,
+            "name": "teleportDownedPlayerToWalkable"
+          },
+          {
+            "index": 40,
+            "name": "updateUsers"
+          },
+          {
+            "index": 41,
+            "name": "saveAlivePlayerState"
+          },
+          {
+            "index": 42,
+            "name": "removeBotSpawnPoint"
+          },
+          {
+            "index": 43,
+            "name": "enterExitTeleport"
+          },
+          {
+            "index": 44,
+            "name": "teleportBots"
+          },
+          {
+            "index": 45,
+            "name": "successfulTeleportStatus"
+          },
+          {
+            "index": 46,
+            "name": "updateBotSpawnPoints"
+          },
+          {
+            "index": 47,
+            "name": "locateAveragePlayerLocation"
+          },
+          {
+            "index": 48,
+            "name": "setClosestPlayerTeleportCenter"
+          },
+          {
+            "index": 49,
+            "name": "daytakerAbortReset"
+          },
+          {
+            "index": 50,
+            "name": "applyBriefBurnAndRoot"
+          },
+          {
+            "index": 51,
+            "name": "reenableBotWallAndJump"
+          },
+          {
+            "index": 52,
+            "name": "restoreBotThrottle"
+          },
+          {
+            "index": 53,
+            "name": "beginBotOverride"
+          },
+          {
+            "index": 54,
+            "name": "startBlasterDaytakerFacing"
+          },
+          {
+            "index": 55,
+            "name": "playReignitedWarningPair"
+          },
+          {
+            "index": 56,
+            "name": "startBotThrottleAtTarget"
+          },
+          {
+            "index": 57,
+            "name": "resumeBotFacingAndMovement"
+          },
+          {
+            "index": 58,
+            "name": "resumeBotMovementAndFacing"
+          },
+          {
+            "index": 59,
+            "name": "smolderBoost"
+          },
+          {
+            "index": 60,
+            "name": "spawnGasCloud"
+          },
+          {
+            "index": 61,
+            "name": "abilityThrowdown"
+          },
+          {
+            "index": 62,
+            "name": "entityFloat"
+          },
+          {
+            "index": 63,
+            "name": "explosionWarning"
+          },
+          {
+            "index": 64,
+            "name": "playAquaPowerUpSound"
+          },
+          {
+            "index": 65,
+            "name": "powerUpUsage"
+          },
+          {
+            "index": 66,
+            "name": "playerForceField"
+          },
+          {
+            "index": 67,
+            "name": "noCooldowns"
+          },
+          {
+            "index": 68,
+            "name": "airStrike"
+          },
+          {
+            "index": 69,
+            "name": "instantRevive"
+          },
+          {
+            "index": 70,
+            "name": "healBeacon"
+          },
+          {
+            "index": 71,
+            "name": "sentryTurret"
+          },
+          {
+            "index": 72,
+            "name": "cloakingDevice"
+          },
+          {
+            "index": 73,
+            "name": "superNano"
+          },
+          {
+            "index": 74,
+            "name": "bouncePad"
+          },
+          {
+            "index": 75,
+            "name": "ultimateCharger"
+          },
+          {
+            "index": 76,
+            "name": "stun"
+          },
+          {
+            "index": 77,
+            "name": "finishPowerUpDrop"
+          },
+          {
+            "index": 78,
+            "name": "resetBattleAbilityCharge"
+          },
+          {
+            "index": 79,
+            "name": "checkEnhancementPlacement"
+          },
+          {
+            "index": 80,
+            "name": "startPupDefaultChase"
+          }
+        ]
+      },
+      "rules": 267,
+      "sha256": "a74fb925b7fa4f246c2d572780773daec158ff46d25c7909ff2669a166a8c65f",
+      "warnings": {}
+    }
+  },
+  "original": {
+    "entry": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+    "source": {
+      "counts": {
+        "elements": null,
+        "globalvar": 120,
+        "playervar": 100,
+        "subroutine": 58
+      },
+      "declarations": {
+        "globalvar": [
+          "activeAttackSpawnRoom",
+          "amountPerResource",
+          "attackSpawnRooms",
+          "availableBosses",
+          "availableMutations",
+          "availablePowerups",
+          "averageChalllenge",
+          "biowasteColorLookUp",
+          "biowasteCount",
+          "biowasteEffects",
+          "biowasteInput0",
+          "biowasteInput1",
+          "biowasteLocal0",
+          "biowasteLocal1",
+          "biowasteOutput0",
+          "biowasteString",
+          "biowasteTextLookUp",
+          "biowasteTypes",
+          "biteDamages",
+          "biteDurations",
+          "bosses",
+          "botCurrentSpawnRate",
+          "botHealthValues",
+          "botHeros",
+          "botMaxTeleportRange",
+          "botRespawnCount",
+          "botSpawnPointTimers",
+          "botSpawnPoints",
+          "botSpawnRates",
+          "challengeSetting",
+          "challengeVotes",
+          "chase1",
+          "closestPlayerToObjective",
+          "count1",
+          "count2",
+          "currentBotHeroList",
+          "customTelePositions",
+          "damageDealt",
+          "deferredPositions",
+          "deferredType",
+          "difficultySetting",
+          "eliminationsNeededPerObjective",
+          "enhancementOptions",
+          "evacDestination",
+          "evacRate",
+          "evacuatingSurvivorList",
+          "extractionSpeedUp",
+          "extractionZoneRad",
+          "gameSmolderEvent",
+          "gameStatus",
+          "globalPlayerStats",
+          "goalCheck",
+          "goalColor",
+          "goalPost",
+          "goalText",
+          "healthpackPositions",
+          "losHeightCheck",
+          "losList",
+          "mapGrid",
+          "matchEndTime",
+          "miniBoss",
+          "mixedObjectivesPool",
+          "mustReviveTime",
+          "nonBossZombies",
+          "numberOfBots",
+          "numberOfPowerUpsPerSupplyDrop",
+          "objectiveCaptureValue",
+          "objectiveChase1",
+          "objectiveColor",
+          "objectiveComplete",
+          "objectiveCount1",
+          "objectiveDescription",
+          "objectiveEntities",
+          "objectiveEntityCount",
+          "objectivePositions",
+          "objectiveRad",
+          "objectiveResourcePositions",
+          "objectiveSpacing",
+          "objectiveTypeSetting",
+          "objectiveTypeVotes",
+          "objectiveTypes",
+          "objectiveValue",
+          "overtime",
+          "playerTargetList",
+          "playersOnObjective",
+          "powerUpEffect",
+          "powerUpIDs",
+          "powerUpPositions",
+          "powerUpText",
+          "queuedBioType",
+          "queuedGoalType",
+          "randVal",
+          "resourcePowerUpDropCount",
+          "reviveRadius",
+          "spawnRoomIndex",
+          "spawnTimes",
+          "specialEffectsStrings",
+          "specialEffectsTiming",
+          "specialGameMode",
+          "specialGameModeSetup",
+          "startCamDistance",
+          "startCamPos",
+          "startMenuSpacingAngle",
+          "startPos",
+          "startTime",
+          "supplyDropLanding",
+          "supplyDropPosition",
+          "supplyDropStatus",
+          "survivorToRescue",
+          "testPos",
+          "testPos2",
+          "throttleSpeeds",
+          "uniqueSkinCap",
+          "users",
+          "voting",
+          "votingEndTime",
+          "walkCenter",
+          "waypoints",
+          "zombieSetting",
+          "zombieVotes"
+        ],
+        "playervar": [
+          "abilityArray1",
+          "abilityArray2",
+          "afk",
+          "anranPortal",
+          "anranPortalRise",
+          "attached",
+          "averagePlayersPos",
+          "biowasteType",
+          "biteDamage",
+          "biteDuration",
+          "bossHealth",
+          "botFollowTarget",
+          "botHero",
+          "botResourceEntity",
+          "botSpecialPotentialTargets",
+          "botSpecialTarget",
+          "botTarget",
+          "botTempValue",
+          "botTempvalue2",
+          "botThrottleSpeed",
+          "bouncePadBouncer",
+          "canTeleport",
+          "canWallPhase",
+          "chase1",
+          "chase2",
+          "crowdControlled",
+          "currentPowerUp",
+          "customTelePos",
+          "damageDealt",
+          "damageOverTimeDuration",
+          "deathTimer",
+          "defaultOutlineColor",
+          "detectionRadius1",
+          "enhancementChase1",
+          "enhancementChase2",
+          "enhancementCount1",
+          "enhancementValues",
+          "entityCount",
+          "evacPos",
+          "explosionColor1",
+          "explosionColor2",
+          "explosionSize",
+          "filteredBotSpawnPointGrid",
+          "generalPlayerBotEntities",
+          "health",
+          "infected",
+          "infectionDamage",
+          "infectionLvl",
+          "initialMaxHealth",
+          "initializing",
+          "interactEntity",
+          "invisible",
+          "knockbackRecieved",
+          "lastTarget",
+          "movementSpeed",
+          "mutationChase",
+          "mutationValue",
+          "objectiveValue",
+          "pAirStrikeCount",
+          "pBouncePadCount1",
+          "pBouncePadCount2",
+          "pCloakingDeviceCount",
+          "pForceFieldCount1",
+          "pForceFieldCount2_bCount1",
+          "pHealBeaconCount",
+          "pNoCooldownsCount_bCount2",
+          "pPowerUpCount_bTeleCount",
+          "pSentryTurretCount",
+          "pStunChase1",
+          "pStunCount",
+          "pSuperNanoCount",
+          "pUltimateChargerCount",
+          "path",
+          "playerActiveStatus",
+          "playerCollisionEnabled",
+          "playerMenuStatus",
+          "playerObjectiveResourceValue",
+          "playerWasteValue",
+          "potentialTargets",
+          "powerUpEffects",
+          "powerUpTradeValues",
+          "powerUpUsePositionsAndInfo",
+          "randVal",
+          "reviveStartTime",
+          "reviveTimer",
+          "reviving",
+          "size",
+          "specialCooldown",
+          "specialFacing",
+          "specialThrottling",
+          "startPos",
+          "successfullyTeleported",
+          "switchedHeroes",
+          "targeting",
+          "telePos",
+          "teleporting",
+          "testTarget",
+          "userIndex",
+          "wallCollisionEnabled",
+          "waypoint"
+        ],
+        "subroutine": [
+          "abilityPlacement",
+          "abilityThrowdown",
+          "airStrike",
+          "biowasteAssignment",
+          "biowasteOutput",
+          "bossReturn",
+          "botEntityManagement",
+          "botHeroRandomization",
+          "botRespawnInitialization",
+          "botStatManagement",
+          "botTeleportCenter",
+          "bouncePad",
+          "cloakingDevice",
+          "determineChallenge",
+          "determineObjectiveType",
+          "determineZombieMode",
+          "enableDisableAbilities",
+          "enableEnhancements",
+          "enableMutations",
+          "enablePowerups",
+          "enterExitTeleport",
+          "entityFloat",
+          "explosionSequence",
+          "explosionWarning",
+          "fireSatellite",
+          "generateMapGrid",
+          "globalObjectiveEntityManagement",
+          "healBeacon",
+          "illariUlt",
+          "instantRevive",
+          "locateAveragePlayerLocation",
+          "minibossMutation",
+          "mutations",
+          "noCooldowns",
+          "nukeMap",
+          "objectivesManagement",
+          "playerForceField",
+          "playerObjectiveEntityManagement",
+          "powerUpAssignment",
+          "powerUpUsage",
+          "randomActions",
+          "restoreDefaultFacingMovement",
+          "selectTarget",
+          "sentryTurret",
+          "setAvailableObjectives",
+          "setDifficulty",
+          "setObjectiveType",
+          "setPrematchTimer",
+          "setZombieMode",
+          "smolderEnraged",
+          "stun",
+          "successfulTeleportStatus",
+          "superNano",
+          "teleportBots",
+          "teleportToClosestPlayer",
+          "ultimateCharger",
+          "updateBotSpawnPoints",
+          "updateUsers"
+        ]
+      },
+      "macroDefinitions": 0,
+      "files": {
+        "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy": "5cdf980510c70b7ab7be5648a3cf392bba1ff6071a24b52772826b0091e49571"
+      }
+    },
+    "compiled": {
+      "counts": {
+        "elements": 32264,
+        "globalvar": 120,
+        "playervar": 100,
+        "subroutine": 58
+      },
+      "declarations": {
+        "globalvar": [
+          {
+            "index": 0,
+            "name": "objectivePositions"
+          },
+          {
+            "index": 1,
+            "name": "walkCenter"
+          },
+          {
+            "index": 2,
+            "name": "objectiveCaptureValue"
+          },
+          {
+            "index": 3,
+            "name": "startPos"
+          },
+          {
+            "index": 4,
+            "name": "count1"
+          },
+          {
+            "index": 5,
+            "name": "count2"
+          },
+          {
+            "index": 6,
+            "name": "specialEffectsStrings"
+          },
+          {
+            "index": 7,
+            "name": "playersOnObjective"
+          },
+          {
+            "index": 8,
+            "name": "testPos"
+          },
+          {
+            "index": 9,
+            "name": "testPos2"
+          },
+          {
+            "index": 10,
+            "name": "objectiveTypes"
+          },
+          {
+            "index": 11,
+            "name": "objectiveRad"
+          },
+          {
+            "index": 12,
+            "name": "losList"
+          },
+          {
+            "index": 13,
+            "name": "reviveRadius"
+          },
+          {
+            "index": 14,
+            "name": "botHeros"
+          },
+          {
+            "index": 15,
+            "name": "chase1"
+          },
+          {
+            "index": 16,
+            "name": "gameSmolderEvent"
+          },
+          {
+            "index": 18,
+            "name": "gameStatus"
+          },
+          {
+            "index": 19,
+            "name": "startTime"
+          },
+          {
+            "index": 20,
+            "name": "mustReviveTime"
+          },
+          {
+            "index": 21,
+            "name": "supplyDropLanding"
+          },
+          {
+            "index": 22,
+            "name": "supplyDropPosition"
+          },
+          {
+            "index": 23,
+            "name": "powerUpIDs"
+          },
+          {
+            "index": 24,
+            "name": "powerUpPositions"
+          },
+          {
+            "index": 25,
+            "name": "supplyDropStatus"
+          },
+          {
+            "index": 26,
+            "name": "powerUpText"
+          },
+          {
+            "index": 27,
+            "name": "powerUpEffect"
+          },
+          {
+            "index": 28,
+            "name": "startCamPos"
+          },
+          {
+            "index": 29,
+            "name": "botSpawnRates"
+          },
+          {
+            "index": 30,
+            "name": "startMenuSpacingAngle"
+          },
+          {
+            "index": 31,
+            "name": "startCamDistance"
+          },
+          {
+            "index": 32,
+            "name": "overtime"
+          },
+          {
+            "index": 33,
+            "name": "challengeVotes"
+          },
+          {
+            "index": 34,
+            "name": "botMaxTeleportRange"
+          },
+          {
+            "index": 35,
+            "name": "difficultySetting"
+          },
+          {
+            "index": 36,
+            "name": "biteDamages"
+          },
+          {
+            "index": 37,
+            "name": "biteDurations"
+          },
+          {
+            "index": 38,
+            "name": "damageDealt"
+          },
+          {
+            "index": 39,
+            "name": "botHealthValues"
+          },
+          {
+            "index": 40,
+            "name": "throttleSpeeds"
+          },
+          {
+            "index": 41,
+            "name": "randVal"
+          },
+          {
+            "index": 42,
+            "name": "specialEffectsTiming"
+          },
+          {
+            "index": 43,
+            "name": "evacRate"
+          },
+          {
+            "index": 44,
+            "name": "evacuatingSurvivorList"
+          },
+          {
+            "index": 45,
+            "name": "evacDestination"
+          },
+          {
+            "index": 46,
+            "name": "zombieSetting"
+          },
+          {
+            "index": 47,
+            "name": "bosses"
+          },
+          {
+            "index": 48,
+            "name": "zombieVotes"
+          },
+          {
+            "index": 49,
+            "name": "globalPlayerStats"
+          },
+          {
+            "index": 50,
+            "name": "objectiveTypeVotes"
+          },
+          {
+            "index": 51,
+            "name": "objectiveTypeSetting"
+          },
+          {
+            "index": 52,
+            "name": "eliminationsNeededPerObjective"
+          },
+          {
+            "index": 54,
+            "name": "healthpackPositions"
+          },
+          {
+            "index": 55,
+            "name": "miniBoss"
+          },
+          {
+            "index": 56,
+            "name": "mapGrid"
+          },
+          {
+            "index": 57,
+            "name": "challengeSetting"
+          },
+          {
+            "index": 58,
+            "name": "attackSpawnRooms"
+          },
+          {
+            "index": 59,
+            "name": "activeAttackSpawnRoom"
+          },
+          {
+            "index": 60,
+            "name": "closestPlayerToObjective"
+          },
+          {
+            "index": 61,
+            "name": "botSpawnPoints"
+          },
+          {
+            "index": 62,
+            "name": "objectiveValue"
+          },
+          {
+            "index": 63,
+            "name": "objectiveEntities"
+          },
+          {
+            "index": 64,
+            "name": "objectiveEntityCount"
+          },
+          {
+            "index": 65,
+            "name": "voting"
+          },
+          {
+            "index": 66,
+            "name": "votingEndTime"
+          },
+          {
+            "index": 67,
+            "name": "objectiveResourcePositions"
+          },
+          {
+            "index": 68,
+            "name": "amountPerResource"
+          },
+          {
+            "index": 69,
+            "name": "extractionZoneRad"
+          },
+          {
+            "index": 70,
+            "name": "specialGameModeSetup"
+          },
+          {
+            "index": 71,
+            "name": "resourcePowerUpDropCount"
+          },
+          {
+            "index": 72,
+            "name": "availablePowerups"
+          },
+          {
+            "index": 73,
+            "name": "specialGameMode"
+          },
+          {
+            "index": 74,
+            "name": "objectiveSpacing"
+          },
+          {
+            "index": 75,
+            "name": "enhancementOptions"
+          },
+          {
+            "index": 76,
+            "name": "playerTargetList"
+          },
+          {
+            "index": 77,
+            "name": "losHeightCheck"
+          },
+          {
+            "index": 78,
+            "name": "survivorToRescue"
+          },
+          {
+            "index": 79,
+            "name": "nonBossZombies"
+          },
+          {
+            "index": 80,
+            "name": "availableMutations"
+          },
+          {
+            "index": 81,
+            "name": "numberOfPowerUpsPerSupplyDrop"
+          },
+          {
+            "index": 82,
+            "name": "objectiveDescription"
+          },
+          {
+            "index": 83,
+            "name": "mixedObjectivesPool"
+          },
+          {
+            "index": 84,
+            "name": "uniqueSkinCap"
+          },
+          {
+            "index": 85,
+            "name": "users"
+          },
+          {
+            "index": 86,
+            "name": "objectiveComplete"
+          },
+          {
+            "index": 87,
+            "name": "objectiveColor"
+          },
+          {
+            "index": 88,
+            "name": "objectiveCount1"
+          },
+          {
+            "index": 89,
+            "name": "objectiveChase1"
+          },
+          {
+            "index": 90,
+            "name": "spawnRoomIndex"
+          },
+          {
+            "index": 91,
+            "name": "averageChalllenge"
+          },
+          {
+            "index": 92,
+            "name": "matchEndTime"
+          },
+          {
+            "index": 93,
+            "name": "waypoints"
+          },
+          {
+            "index": 94,
+            "name": "availableBosses"
+          },
+          {
+            "index": 95,
+            "name": "spawnTimes"
+          },
+          {
+            "index": 96,
+            "name": "numberOfBots"
+          },
+          {
+            "index": 97,
+            "name": "customTelePositions"
+          },
+          {
+            "index": 98,
+            "name": "currentBotHeroList"
+          },
+          {
+            "index": 99,
+            "name": "botCurrentSpawnRate"
+          },
+          {
+            "index": 100,
+            "name": "botRespawnCount"
+          },
+          {
+            "index": 101,
+            "name": "botSpawnPointTimers"
+          },
+          {
+            "index": 102,
+            "name": "extractionSpeedUp"
+          },
+          {
+            "index": 103,
+            "name": "queuedBioType"
+          },
+          {
+            "index": 104,
+            "name": "goalText"
+          },
+          {
+            "index": 105,
+            "name": "goalColor"
+          },
+          {
+            "index": 106,
+            "name": "goalPost"
+          },
+          {
+            "index": 109,
+            "name": "biowasteTypes"
+          },
+          {
+            "index": 110,
+            "name": "deferredType"
+          },
+          {
+            "index": 111,
+            "name": "goalCheck"
+          },
+          {
+            "index": 112,
+            "name": "queuedGoalType"
+          },
+          {
+            "index": 113,
+            "name": "deferredPositions"
+          },
+          {
+            "index": 114,
+            "name": "biowasteString"
+          },
+          {
+            "index": 115,
+            "name": "biowasteEffects"
+          },
+          {
+            "index": 116,
+            "name": "biowasteOutput0"
+          },
+          {
+            "index": 117,
+            "name": "biowasteCount"
+          },
+          {
+            "index": 118,
+            "name": "biowasteColorLookUp"
+          },
+          {
+            "index": 119,
+            "name": "biowasteTextLookUp"
+          },
+          {
+            "index": 120,
+            "name": "biowasteLocal0"
+          },
+          {
+            "index": 121,
+            "name": "biowasteLocal1"
+          },
+          {
+            "index": 122,
+            "name": "biowasteInput0"
+          },
+          {
+            "index": 123,
+            "name": "biowasteInput1"
+          }
+        ],
+        "playervar": [
+          {
+            "index": 0,
+            "name": "averagePlayersPos"
+          },
+          {
+            "index": 1,
+            "name": "targeting"
+          },
+          {
+            "index": 3,
+            "name": "mutationChase"
+          },
+          {
+            "index": 4,
+            "name": "teleporting"
+          },
+          {
+            "index": 5,
+            "name": "pPowerUpCount_bTeleCount"
+          },
+          {
+            "index": 6,
+            "name": "pForceFieldCount1"
+          },
+          {
+            "index": 7,
+            "name": "pForceFieldCount2_bCount1"
+          },
+          {
+            "index": 9,
+            "name": "botTarget"
+          },
+          {
+            "index": 10,
+            "name": "botThrottleSpeed"
+          },
+          {
+            "index": 11,
+            "name": "playerActiveStatus"
+          },
+          {
+            "index": 12,
+            "name": "reviving"
+          },
+          {
+            "index": 13,
+            "name": "reviveStartTime"
+          },
+          {
+            "index": 14,
+            "name": "reviveTimer"
+          },
+          {
+            "index": 15,
+            "name": "interactEntity"
+          },
+          {
+            "index": 16,
+            "name": "infected"
+          },
+          {
+            "index": 17,
+            "name": "biteDamage"
+          },
+          {
+            "index": 18,
+            "name": "biteDuration"
+          },
+          {
+            "index": 19,
+            "name": "randVal"
+          },
+          {
+            "index": 20,
+            "name": "crowdControlled"
+          },
+          {
+            "index": 21,
+            "name": "deathTimer"
+          },
+          {
+            "index": 22,
+            "name": "infectionLvl"
+          },
+          {
+            "index": 23,
+            "name": "currentPowerUp"
+          },
+          {
+            "index": 24,
+            "name": "powerUpTradeValues"
+          },
+          {
+            "index": 25,
+            "name": "powerUpEffects"
+          },
+          {
+            "index": 26,
+            "name": "powerUpUsePositionsAndInfo"
+          },
+          {
+            "index": 27,
+            "name": "pNoCooldownsCount_bCount2"
+          },
+          {
+            "index": 28,
+            "name": "pAirStrikeCount"
+          },
+          {
+            "index": 29,
+            "name": "specialCooldown"
+          },
+          {
+            "index": 30,
+            "name": "chase1"
+          },
+          {
+            "index": 31,
+            "name": "chase2"
+          },
+          {
+            "index": 32,
+            "name": "botFollowTarget"
+          },
+          {
+            "index": 33,
+            "name": "botTempvalue2"
+          },
+          {
+            "index": 34,
+            "name": "playerMenuStatus"
+          },
+          {
+            "index": 35,
+            "name": "startPos"
+          },
+          {
+            "index": 36,
+            "name": "successfullyTeleported"
+          },
+          {
+            "index": 37,
+            "name": "biowasteType"
+          },
+          {
+            "index": 38,
+            "name": "anranPortal"
+          },
+          {
+            "index": 39,
+            "name": "evacPos"
+          },
+          {
+            "index": 40,
+            "name": "canWallPhase"
+          },
+          {
+            "index": 41,
+            "name": "pHealBeaconCount"
+          },
+          {
+            "index": 42,
+            "name": "pSentryTurretCount"
+          },
+          {
+            "index": 43,
+            "name": "initialMaxHealth"
+          },
+          {
+            "index": 44,
+            "name": "botSpecialTarget"
+          },
+          {
+            "index": 45,
+            "name": "attached"
+          },
+          {
+            "index": 46,
+            "name": "telePos"
+          },
+          {
+            "index": 47,
+            "name": "invisible"
+          },
+          {
+            "index": 48,
+            "name": "pCloakingDeviceCount"
+          },
+          {
+            "index": 49,
+            "name": "path"
+          },
+          {
+            "index": 50,
+            "name": "potentialTargets"
+          },
+          {
+            "index": 51,
+            "name": "pSuperNanoCount"
+          },
+          {
+            "index": 52,
+            "name": "size"
+          },
+          {
+            "index": 53,
+            "name": "bossHealth"
+          },
+          {
+            "index": 54,
+            "name": "wallCollisionEnabled"
+          },
+          {
+            "index": 55,
+            "name": "specialFacing"
+          },
+          {
+            "index": 56,
+            "name": "specialThrottling"
+          },
+          {
+            "index": 57,
+            "name": "filteredBotSpawnPointGrid"
+          },
+          {
+            "index": 58,
+            "name": "botTempValue"
+          },
+          {
+            "index": 59,
+            "name": "objectiveValue"
+          },
+          {
+            "index": 60,
+            "name": "generalPlayerBotEntities"
+          },
+          {
+            "index": 61,
+            "name": "entityCount"
+          },
+          {
+            "index": 62,
+            "name": "botHero"
+          },
+          {
+            "index": 63,
+            "name": "playerObjectiveResourceValue"
+          },
+          {
+            "index": 64,
+            "name": "pBouncePadCount1"
+          },
+          {
+            "index": 65,
+            "name": "infectionDamage"
+          },
+          {
+            "index": 66,
+            "name": "enhancementValues"
+          },
+          {
+            "index": 67,
+            "name": "botSpecialPotentialTargets"
+          },
+          {
+            "index": 68,
+            "name": "movementSpeed"
+          },
+          {
+            "index": 69,
+            "name": "mutationValue"
+          },
+          {
+            "index": 70,
+            "name": "health"
+          },
+          {
+            "index": 71,
+            "name": "damageOverTimeDuration"
+          },
+          {
+            "index": 72,
+            "name": "pUltimateChargerCount"
+          },
+          {
+            "index": 73,
+            "name": "enhancementChase1"
+          },
+          {
+            "index": 74,
+            "name": "playerCollisionEnabled"
+          },
+          {
+            "index": 75,
+            "name": "pStunCount"
+          },
+          {
+            "index": 76,
+            "name": "enhancementChase2"
+          },
+          {
+            "index": 77,
+            "name": "initializing"
+          },
+          {
+            "index": 78,
+            "name": "userIndex"
+          },
+          {
+            "index": 79,
+            "name": "knockbackRecieved"
+          },
+          {
+            "index": 80,
+            "name": "detectionRadius1"
+          },
+          {
+            "index": 81,
+            "name": "pBouncePadCount2"
+          },
+          {
+            "index": 82,
+            "name": "bouncePadBouncer"
+          },
+          {
+            "index": 83,
+            "name": "pStunChase1"
+          },
+          {
+            "index": 84,
+            "name": "enhancementCount1"
+          },
+          {
+            "index": 85,
+            "name": "customTelePos"
+          },
+          {
+            "index": 86,
+            "name": "damageDealt"
+          },
+          {
+            "index": 87,
+            "name": "lastTarget"
+          },
+          {
+            "index": 88,
+            "name": "abilityArray1"
+          },
+          {
+            "index": 89,
+            "name": "abilityArray2"
+          },
+          {
+            "index": 90,
+            "name": "waypoint"
+          },
+          {
+            "index": 91,
+            "name": "testTarget"
+          },
+          {
+            "index": 92,
+            "name": "canTeleport"
+          },
+          {
+            "index": 93,
+            "name": "defaultOutlineColor"
+          },
+          {
+            "index": 94,
+            "name": "playerWasteValue"
+          },
+          {
+            "index": 95,
+            "name": "explosionColor1"
+          },
+          {
+            "index": 96,
+            "name": "explosionColor2"
+          },
+          {
+            "index": 97,
+            "name": "afk"
+          },
+          {
+            "index": 98,
+            "name": "explosionSize"
+          },
+          {
+            "index": 99,
+            "name": "switchedHeroes"
+          },
+          {
+            "index": 100,
+            "name": "anranPortalRise"
+          },
+          {
+            "index": 101,
+            "name": "botResourceEntity"
+          }
+        ],
+        "subroutine": [
+          {
+            "index": 0,
+            "name": "enterExitTeleport"
+          },
+          {
+            "index": 1,
+            "name": "teleportBots"
+          },
+          {
+            "index": 2,
+            "name": "nukeMap"
+          },
+          {
+            "index": 3,
+            "name": "powerUpAssignment"
+          },
+          {
+            "index": 4,
+            "name": "powerUpUsage"
+          },
+          {
+            "index": 5,
+            "name": "playerForceField"
+          },
+          {
+            "index": 6,
+            "name": "noCooldowns"
+          },
+          {
+            "index": 7,
+            "name": "airStrike"
+          },
+          {
+            "index": 8,
+            "name": "instantRevive"
+          },
+          {
+            "index": 9,
+            "name": "randomActions"
+          },
+          {
+            "index": 10,
+            "name": "enableDisableAbilities"
+          },
+          {
+            "index": 11,
+            "name": "determineChallenge"
+          },
+          {
+            "index": 12,
+            "name": "setDifficulty"
+          },
+          {
+            "index": 13,
+            "name": "botRespawnInitialization"
+          },
+          {
+            "index": 14,
+            "name": "determineZombieMode"
+          },
+          {
+            "index": 15,
+            "name": "setZombieMode"
+          },
+          {
+            "index": 16,
+            "name": "healBeacon"
+          },
+          {
+            "index": 17,
+            "name": "sentryTurret"
+          },
+          {
+            "index": 18,
+            "name": "bossReturn"
+          },
+          {
+            "index": 19,
+            "name": "cloakingDevice"
+          },
+          {
+            "index": 20,
+            "name": "determineObjectiveType"
+          },
+          {
+            "index": 21,
+            "name": "setObjectiveType"
+          },
+          {
+            "index": 22,
+            "name": "objectivesManagement"
+          },
+          {
+            "index": 23,
+            "name": "superNano"
+          },
+          {
+            "index": 24,
+            "name": "generateMapGrid"
+          },
+          {
+            "index": 25,
+            "name": "successfulTeleportStatus"
+          },
+          {
+            "index": 26,
+            "name": "updateBotSpawnPoints"
+          },
+          {
+            "index": 27,
+            "name": "globalObjectiveEntityManagement"
+          },
+          {
+            "index": 28,
+            "name": "playerObjectiveEntityManagement"
+          },
+          {
+            "index": 29,
+            "name": "botEntityManagement"
+          },
+          {
+            "index": 30,
+            "name": "bouncePad"
+          },
+          {
+            "index": 31,
+            "name": "botTeleportCenter"
+          },
+          {
+            "index": 32,
+            "name": "locateAveragePlayerLocation"
+          },
+          {
+            "index": 33,
+            "name": "enablePowerups"
+          },
+          {
+            "index": 34,
+            "name": "mutations"
+          },
+          {
+            "index": 35,
+            "name": "enableMutations"
+          },
+          {
+            "index": 36,
+            "name": "ultimateCharger"
+          },
+          {
+            "index": 37,
+            "name": "botHeroRandomization"
+          },
+          {
+            "index": 38,
+            "name": "enableEnhancements"
+          },
+          {
+            "index": 39,
+            "name": "teleportToClosestPlayer"
+          },
+          {
+            "index": 40,
+            "name": "setAvailableObjectives"
+          },
+          {
+            "index": 41,
+            "name": "stun"
+          },
+          {
+            "index": 42,
+            "name": "updateUsers"
+          },
+          {
+            "index": 43,
+            "name": "botStatManagement"
+          },
+          {
+            "index": 44,
+            "name": "fireSatellite"
+          },
+          {
+            "index": 45,
+            "name": "selectTarget"
+          },
+          {
+            "index": 46,
+            "name": "restoreDefaultFacingMovement"
+          },
+          {
+            "index": 47,
+            "name": "setPrematchTimer"
+          },
+          {
+            "index": 48,
+            "name": "explosionSequence"
+          },
+          {
+            "index": 49,
+            "name": "minibossMutation"
+          },
+          {
+            "index": 50,
+            "name": "abilityThrowdown"
+          },
+          {
+            "index": 51,
+            "name": "illariUlt"
+          },
+          {
+            "index": 52,
+            "name": "entityFloat"
+          },
+          {
+            "index": 53,
+            "name": "biowasteAssignment"
+          },
+          {
+            "index": 54,
+            "name": "biowasteOutput"
+          },
+          {
+            "index": 55,
+            "name": "abilityPlacement"
+          },
+          {
+            "index": 56,
+            "name": "explosionWarning"
+          },
+          {
+            "index": 57,
+            "name": "smolderEnraged"
+          }
+        ]
+      },
+      "rules": 263,
+      "sha256": "cf2df78b8c56eec961fd5772b7a545f23d8849e8eb8fef2069b2f7526f93e5e0",
+      "warnings": {}
+    }
+  },
+  "savings": {
+    "elements": {
+      "original": 32264,
+      "reforged": 25250,
+      "saved": 7014,
+      "percent": 21.74,
+      "free": 7518
+    },
+    "globalvar": {
+      "original": 120,
+      "reforged": 105,
+      "saved": 15,
+      "percent": 12.5,
+      "free": 23
+    },
+    "playervar": {
+      "original": 100,
+      "reforged": 90,
+      "saved": 10,
+      "percent": 10,
+      "free": 38
+    },
+    "subroutine": {
+      "original": 58,
+      "reforged": 81,
+      "saved": -23,
+      "percent": -39.66,
+      "free": 47
+    }
+  }
+}

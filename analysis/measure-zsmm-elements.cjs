@@ -1,5 +1,5 @@
 // Run: node analysis/measure-zsmm-elements.cjs [--lordy | --chaos] [path/to/overpy.js]
-// Compiles the two example files in memory; never modifies their source.
+// Compiles two decompiled Workshop snapshots in memory; never modifies their source.
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
@@ -27,12 +27,12 @@ async function main() {
     await compiler.readyPromise;
     const workspace = path.resolve(__dirname, '..');
     const inputs = [
-        ['786TW', 'ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy'],
+        ['786TW', 'workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy'],
         compareChaos
-            ? ['A3YV07', 'ZSM examples/ZSM Chaos (A3YV07)/2026-10-30 ZSM Chaos (A3YV07).opy']
+            ? ['A3YV07', 'workshop-snapshots/ZSM Chaos (A3YV07)/2026-10-30 ZSM Chaos (A3YV07).opy']
             : compareLordy
-                ? ['KT6ZY', "ZSM examples/Lordy's ZSM (KT6ZY)/2026-10-30 Lordy's ZSM (KT6ZY).opy"]
-                : ['QZD5F', 'ZSM examples/ZSMM-remixed (QZD5F)/2026-10-30 ZSMM-remixed (QZD5F).opy'],
+                ? ['KT6ZY', "workshop-snapshots/Lordy's ZSM (KT6ZY)/2026-10-30 Lordy's ZSM (KT6ZY).opy"]
+                : ['QZD5F', 'workshop-snapshots/ZSMM-remixed (QZD5F)/2026-10-30 ZSMM-remixed (QZD5F).opy'],
     ];
     const output = { compilerVersion, compilerPath, method: 'Compile OPY with original directives plus debugElementCount; counts include disabled rules.', versions: [] };
     const savedConsole = { log: console.log, warn: console.warn, error: console.error };

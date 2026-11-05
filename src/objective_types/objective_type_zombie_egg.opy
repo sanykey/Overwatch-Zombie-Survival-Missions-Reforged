@@ -1,4 +1,4 @@
-#!mainFile "../main.opy"
+#!mainFile "../../main.opy"
 
 
 rule "ASSIGN ZOMBIE TO BECOME EGG":

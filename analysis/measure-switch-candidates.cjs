@@ -80,7 +80,7 @@ function findCandidates(file, text) {
 }
 
 function source(snapshot) {
-    return snapshot['main.opy'].replace(/^#!include "([^"]+)".*$/gm, (line, name) =>
+    return snapshot['includes.opy'].replace(/^#!include "([^"]+)".*$/gm, (line, name) =>
         snapshot[name] === undefined ? line : snapshot[name].replace(/^#!mainFile .*\n/gm, ''))
         .replace(/^#!writeToOutputFile.*\n/gm, '');
 }
@@ -96,7 +96,7 @@ async function main() {
         let r;
         try {
             console.log = console.warn = console.error = () => {};
-            r = await compiler.compile(source(snapshot), 'en-US', src.replace(/\\/g, '/') + '/', 'main.opy');
+            r = await compiler.compile(source(snapshot), 'en-US', src.replace(/\\/g, '/') + '/', 'includes.opy');
         } finally { Object.assign(console, saved); }
         const rules = Object.fromEntries([...r.result.slice(0, r.result.indexOf('*/'))
             .matchAll(/^\s*(\d+): rule "(.*)" \(/gm)].map(m => [m[2], +m[1]]));

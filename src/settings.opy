@@ -1,8 +1,8 @@
-#!mainFile "main.opy"
+#!mainFile "../main.opy"
 
 settings {
     "main": {
-        "description": "[Original Creator: Mazattack#1183]\r\n[Original Game Code: MPJFR]\r\n[Modified by: Kamenrider#11346]\r\nworkshop.codes/786TW\r\n\r\nFight against an endless horde of zombies while completing various objectives. \r\nUse power-ups found in supply drops while you fight off the horde. \r\nGet to the extraction point and watch the map get nuked. Don't leave anyone behind! \r\n\r\nCommunity ZSM Discord: https://discord.gg/3BhYtNfwMj",
+        "description": "[Original Creator: Mazattack#1183]\r\n[Original Game Code: MPJFR]\r\n[Modified by: Kamenrider#11346]\r\nworkshop.codes/786TW\r\n\r\nFight against an endless horde of zombies while completing various objectives. \r\nUse power-ups found in supply drops while you fight off the horde. \r\nGet to the extraction point and watch the map get nuked. Don't leave anyone behind! \r\n\r\nCommunity ZSM Discord: https://discord.gg/3BhYtNfwMj\r\n\r\nOptimized version 87EJP (d8efbdc) by snky#21990",
         "modeName": "Zombie Survival Missions Modded"
     },
     "lobby": {

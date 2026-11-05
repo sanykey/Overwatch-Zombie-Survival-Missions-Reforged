@@ -1,7 +1,7 @@
-diff --git a/ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy b/ZSM examples/ZSM Chaos (A3YV07)/2026-10-30 ZSM Chaos (A3YV07).opy
+diff --git a/workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy b/workshop-snapshots/ZSM Chaos (A3YV07)/2026-10-30 ZSM Chaos (A3YV07).opy
 index c92179c..225bfe8 100644
---- a/ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy	
-+++ b/ZSM examples/ZSM Chaos (A3YV07)/2026-10-30 ZSM Chaos (A3YV07).opy	
+--- a/workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy
++++ b/workshop-snapshots/ZSM Chaos (A3YV07)/2026-10-30 ZSM Chaos (A3YV07).opy
 @@ -1,30 +1,33 @@
  settings {
      "main": {

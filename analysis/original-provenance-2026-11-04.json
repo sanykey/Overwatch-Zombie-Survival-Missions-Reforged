@@ -1,6 +1,6 @@
 {
   "date": "2026-11-04",
-  "original": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+  "original": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
   "originalSha256": "5cdf980510c70b7ab7be5648a3cf392bba1ff6071a24b52772826b0091e49571",
   "hashNormalization": "UTF-8, CRLF -> LF",
   "scope": "Source comparison of existing report findings, not an in-game test or an exhaustive search for regressions.",
@@ -14,22 +14,22 @@
       "note": "Повторный startRule с поведением RESTART по умолчанию и ожидающие цели уже присутствовали. Все 22 текущих случая сопоставлены ниже отдельно; извлечение powerUpUsage в другой файл не создало этот механизм риска.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1329,
           "source": "startRule(randomActions)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1516,
           "source": "wait(1)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6503,
           "source": "startRule(playerForceField)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6138,
           "source": "wait(0.032)"
         }
@@ -41,17 +41,17 @@
       "note": "В оригинале уже были те же 19 весов по 5.263, выбор из 0–100 и цикл накопления без ограничения индекса. Сумма 99.997 и опасный хвост диапазона унаследованы.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 518,
           "source": "randVal = random.uniform(0, 100)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 521,
           "source": "while randVal > botCurrentSpawnRate or botRespawnCount < 0:"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 811,
           "source": "botSpawnRates = [5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263, 5.263]"
         }
@@ -63,12 +63,12 @@
       "note": "Настройка уже разрешала один предмет, а размещение уже делило 120 на count − 1. Опасное значение шага не появилось при оптимизации.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 714,
           "source": "numberOfPowerUpsPerSupplyDrop = createWorkshopSettingInt(\"Power Ups\", \"Number of Powerups Per Supply Drop\", 5, 1, 10, -1)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6000,
           "source": "for eventPlayer.pPowerUpCount_bTeleCount in range(-60, 61, 120 / (numberOfPowerUpsPerSupplyDrop - 1)):"
         }
@@ -80,12 +80,12 @@
       "note": "Неограниченный выбор разрешённого задания и выбор из Mixed Pool без проверки непустоты уже были в оригинале.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 947,
           "source": "while objectiveTypeSetting == 0 or objectiveTypeVotes[objectiveTypeSetting] == -1:"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 964,
           "source": "objectiveTypes.append(random.choice(mixedObjectivesPool.exclude(objectiveTypes.filter(lambda _, i: i > len(objectiveTypes) - 1 - (len(mixedObjectivesPool) - 1)))))"
         }
@@ -97,27 +97,27 @@
       "note": "Подбор уже разделял выбор позиции, поиск индекса, выдачу и удаление общих массивов ожиданиями. Межигроковая гонка унаследована.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6004,
           "source": "eventPlayer.powerUpTradeValues[0] = (sorted(powerUpPositions.filter(lambda x: distance(x, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), x)) < 0.5 and distance(eventPlayer.getPosition(), x) <= 6), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x))))[0]"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6007,
           "source": "wait()"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6009,
           "source": "eventPlayer.powerUpTradeValues[1] = powerUpPositions.index(eventPlayer.powerUpTradeValues[0])"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6015,
           "source": "wait()"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6016,
           "source": "del powerUpIDs[eventPlayer.powerUpTradeValues[1]]"
         }
@@ -129,27 +129,27 @@
       "note": "Инициализация уже обнуляла невидимость/скорость, а старые Cloaking Device и Super Nano затем уменьшали счётчик/делили скорость. Переименование переменных не является источником конфликта жизненных циклов.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 3095,
           "source": "eventPlayer.invisible = false"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 3096,
           "source": "eventPlayer.movementSpeed = 1"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6296,
           "source": "eventPlayer.invisible--"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6302,
           "source": "eventPlayer.movementSpeed /= 1.5"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6339,
           "source": "eventPlayer.movementSpeed /= 1.5"
         }
@@ -161,27 +161,27 @@
       "note": "Даже общий список ресурсов Biomorphing и терминалов Satellite существовал в оригинале: это objectiveResourcePositions. Старый обработчик очереди также не отменялся при смене задания. Новые имена алиасов objectivePositionsSlot не создали описанный риск; достижимость поздней записи по-прежнему требует проверки в игре.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 229,
           "source": "globalvar objectiveResourcePositions 67"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2588,
           "source": "objectiveResourcePositions.append(biowasteInput1)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2619,
           "source": "while len(deferredType) > 0:"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2625,
           "source": "wait(0.15)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2957,
           "source": "objectiveResourcePositions.append(random.choice(testPos))"
         }
@@ -193,22 +193,22 @@
       "note": "Разобранные конструкции chase и условия имеют аналоги в оригинале. Это происхождение кода, а не признание его ошибочным: 10 корректных случаев не являются дефектами, четыре остаются под наблюдением.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1784,
           "source": "chaseAtRate(extractionZoneRad, 0, extractionSpeedUp)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1791,
           "source": "chaseAtRate(objectiveRad, max(5, objectiveCaptureValue / 4), 1)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 4263,
           "source": "chaseAtRate(eventPlayer.abilityArray1, 0, 1)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6684,
           "source": "chaseAtRate(eventPlayer.enhancementChase2, 0, 0 if eventPlayer.enhancementValues[2] else 1)"
         }
@@ -220,32 +220,32 @@
       "note": "Повторные воскрешения босса/NPC и ожидание приземления при сбросе предмета уже не имели общего срока завершения. Замена отдельных длительностей на Math.INFINITY не является первопричиной внешнего повтора.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2246,
           "source": "while bosses.any(lambda x: x.isDead()):"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2248,
           "source": "waitUntil(bosses[0].isAlive(), 0.25)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2357,
           "source": "while eventPlayer.isDead():"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2366,
           "source": "waitUntil(eventPlayer.isAlive(), 0.25)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2703,
           "source": "if eventPlayer.isDead():"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6101,
           "source": "while not eventPlayer.isOnGround():"
         }
@@ -257,22 +257,22 @@
       "note": "В оригинале уже расходились фильтры допуска/выбора переносчика; запись единственного пассажира и безусловная очистка могли перезаписать связь другого игрока.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6990,
           "source": "if playerTargetList.exclude(eventPlayer).any(lambda x: not x.attached and distance(eventPlayer.getPosition(), x.getPosition()) < 2 * x.size):"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6992,
           "source": "eventPlayer.enhancementValues[1] = (sorted(playerTargetList.exclude(eventPlayer).filter(lambda x: not x.crowdControlled and distance(eventPlayer.getPosition(), x.getPosition()) < x.size * 2), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition()))))[0]"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 7006,
           "source": "eventPlayer.enhancementValues[1].enhancementValues[13] = eventPlayer"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 7013,
           "source": "eventPlayer.enhancementValues[1].enhancementValues[13] = null"
         }
@@ -284,12 +284,12 @@
       "note": "Удержание блока Doomfist без парного прекращения уже было в исходном правиле.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5842,
           "source": "eventPlayer.startForcingButton(Button.ABILITY_2)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5843,
           "source": "wait(10)"
         }
@@ -301,27 +301,27 @@
       "note": "Обе аварийные ветки уже сбрасывали флаг attached и выходили без detach. Текущий daytakerAbortReset извлекает прежние присваивания; отсутствие detach не возникло при извлечении помощника.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5451,
           "source": "eventPlayer.botSpecialTarget.attachTo(eventPlayer, vect(0, 0.65 * eventPlayer.size, 0.5 * eventPlayer.size))"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5468,
           "source": "eventPlayer.botSpecialTarget.attached = false"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5469,
           "source": "return"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5477,
           "source": "eventPlayer.botSpecialTarget.attached = false"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5478,
           "source": "return"
         }
@@ -333,27 +333,27 @@
       "note": "И сравнение сущности с булевым результатом hasStatus, и выход после смерти до восстановления скорости уже присутствовали.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5537,
           "source": "eventPlayer.movementSpeed /= 3"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5539,
           "source": "wait(1.5)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5541,
           "source": "return"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5542,
           "source": "if eventPlayer == eventPlayer.hasStatus(Status.HACKED):"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5547,
           "source": "eventPlayer.movementSpeed *= 3"
         }
@@ -365,12 +365,12 @@
       "note": "Проверка видимости кандидата и фактический фильтр щупальца Mercy уже использовали разные конечные точки луча.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5034,
           "source": "if playerTargetList.any(lambda x: not x.hasStatus(Status.PHASED_OUT) and distance(eventPlayer.chase1, x.getEyePosition()) < 1 and isInLoS(eventPlayer.chase1, x.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS)):"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5035,
           "source": "eventPlayer.botSpecialTarget = (playerTargetList.filter(lambda x: not x.hasStatus(Status.PHASED_OUT) and distance(eventPlayer.chase1, x.getEyePosition()) < 1 and isInLoS(eventPlayer.chase1, eventPlayer.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS)))[0]"
         }
@@ -382,17 +382,17 @@
       "note": "Сравнение метров с секундами, деление на фиксированные 2.5 и ускорение купола уже сосуществовали в оригинале.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2045,
           "source": "extractionSpeedUp += 0.2 / len(playerTargetList)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 3220,
           "source": "if len(objectivePositions) == 1 and extractionZoneRad - distance(eventPlayer.getPosition(), objectivePositions[0]) < eventPlayer.deathTimer:"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 3221,
           "source": "eventPlayer.deathTimer = (extractionZoneRad - distance(eventPlayer.getPosition(), objectivePositions[0])) / 2.5"
         }
@@ -404,17 +404,17 @@
       "note": "Прежний testTarget уже назначался до проверки видимости и публиковался после цикла без признака успешного поиска/сброса кандидата. Это тот же дефект, несмотря на новое имя botCandidateTarget.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 3761,
           "source": "eventPlayer.testTarget = eventPlayer.potentialTargets[eventPlayer.pPowerUpCount_bTeleCount]"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 3762,
           "source": "if isInLoS(eventPlayer.testTarget.getEyePosition(), eventPlayer.getPosition() + vect(0, losHeightCheck, 0)):"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 3766,
           "source": "eventPlayer.botTarget = eventPlayer.testTarget"
         }
@@ -426,17 +426,17 @@
       "note": "NPC уже готовил правильный список кандидатов, но выбирал лидера из другого списка, в который добавлялся сам.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2718,
           "source": "survivorToRescue.potentialTargets = playerTargetList.filter(lambda x: x != survivorToRescue and not x.invisible and distance(survivorToRescue.getPosition(), x.getPosition()) < objectiveRad)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2720,
           "source": "survivorToRescue.botFollowTarget = (sorted(playerTargetList.filter(lambda x: distance(survivorToRescue.getPosition(), x.getPosition()) < objectiveRad), lambda x: distance(x.getPosition(), objectivePositions[0])))[0]"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2723,
           "source": "playerTargetList.append(survivorToRescue)"
         }
@@ -448,12 +448,12 @@
       "note": "Допуск батареи уже учитывал заряд и масштаб, а выбор получателя их терял и использовал другой источник игроков.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6967,
           "source": "@Condition (playerTargetList.any(lambda x: x.getUltCharge() < 100 and distance(x.getPosition(), eventPlayer.enhancementValues[1]) < 1.5 * x.size)) == true"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6969,
           "source": "eventPlayer.interactEntity = (getLivingPlayers(Team.1).filter(lambda player: player.hasSpawned() and distance(player.getPosition(), eventPlayer.enhancementValues[1]) < 1.5))[0]"
         }
@@ -465,12 +465,12 @@
       "note": "Условие близости к ногам или глазам и последующая сортировка всего списка только по ногам уже расходились.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2527,
           "source": "@Condition (objectiveResourcePositions.any(lambda x: distance(x, eventPlayer.getPosition()) < 2 or distance(x, eventPlayer.getEyePosition()) < 2)) == true"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2531,
           "source": "biowasteLocal0 = sorted(objectiveResourcePositions, lambda x: distance(eventPlayer.getPosition(), x))[0]"
         }
@@ -482,12 +482,12 @@
       "note": "Индексирование списков сущностью игрока уже было в обоих фильтрах. Для эвакуации старое имя списка — evacuatingSurvivorList, текущее — evacSurvivorList.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2241,
           "source": "bosses[0] = (getLivingPlayers(Team.2).filter(lambda player: player.hasSpawned() and not miniBoss[player] and not player.teleporting and player.botTarget == null))[0]"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2120,
           "source": "(getPlayers(Team.1).filter(lambda player: not evacuatingSurvivorList[player])).clearStatusEffect(Status.ROOTED)"
         }
@@ -499,22 +499,22 @@
       "note": "Унаследованный кандидат на оптимизацию: дорогие условия видимости и повторный обход/сортировки в selectTarget уже были. Текущие оценки нагрузки не являются замером оригинала.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 3718,
           "source": "@Condition (playerTargetList.any(lambda x: not x.invisible and distance(eventPlayer.getPosition(), x.getPosition()) < 150 and isInLoS(x.getEyePosition(), eventPlayer.getPosition() + vect(0, losHeightCheck, 0)))) == true"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 3755,
           "source": "eventPlayer.potentialTargets.append(sorted(playerTargetList.exclude(eventPlayer.potentialTargets).filter(lambda x: x.getPosition().y - eventPlayer.getPosition().y < 2.5), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 3757,
           "source": "eventPlayer.potentialTargets.append(sorted(playerTargetList.exclude(eventPlayer.potentialTargets), lambda x: distance(eventPlayer.getPosition(), x.getPosition())))"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 3762,
           "source": "if isInLoS(eventPlayer.testTarget.getEyePosition(), eventPlayer.getPosition() + vect(0, losHeightCheck, 0)):"
         }
@@ -526,22 +526,22 @@
       "note": "Унаследованный кандидат на оптимизацию: турель уже повторяла проверки видимости в визуальном выражении, проверке наличия цели и сортировке цели.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6248,
           "source": "createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.powerUpUsePositionsAndInfo[50], eventPlayer.powerUpUsePositionsAndInfo[50] + (eventPlayer.powerUpUsePositionsAndInfo[51] * 0.5 if len(getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.powerUpUsePositionsAndInfo[50], player) and not player.teleporting)) else eventPlayer.getFacingDirection() * 0.5), Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6255,
           "source": "for eventPlayer.pSentryTurretCount in range(30, 0, -0.125):"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6256,
           "source": "if (len(getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.powerUpUsePositionsAndInfo[50], player) and not player.teleporting))) > 0:"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6257,
           "source": "eventPlayer.powerUpUsePositionsAndInfo[51] = directionTowards(eventPlayer.powerUpUsePositionsAndInfo[50], sorted(getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.powerUpUsePositionsAndInfo[50], player)), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition())))[0].getPosition() + vect(0, 1, 0))"
         }
@@ -553,7 +553,7 @@
       "note": "Унаследованный кандидат на оптимизацию: LoS уже стоял перед пространственным отбором в bossReturn. Исправление другого getClosestPlayer в этой механике не устранило описанные расходы.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2432,
           "source": "eventPlayer.teleport(Vector.UP + (random.choice(mapGrid.filter(lambda x: isInLoS(x, eventPlayer.averagePlayersPos.getEyePosition()) and distance(x, eventPlayer.specialCooldown.getPosition()) > 5 and distance(x, eventPlayer.specialCooldown) < 20))))"
         }
@@ -565,22 +565,22 @@
       "note": "Унаследованный кандидат на оптимизацию: многократные геометрические проходы баррикады, повторные сортировки и raycast уже были.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6771,
           "source": "@Condition getLivingPlayers(Team.2).any(lambda player: distance(eventPlayer.enhancementValues[4], vect(player.getPosition().x, eventPlayer.enhancementValues[4].getPosition().y, player.getPosition().z)) < 0.5 * eventPlayer.enhancementValues[2]) == true"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6777,
           "source": "@Condition getLivingPlayers(Team.2).any(lambda player: distance(vect(player.getPosition().x, eventPlayer.enhancementValues[5].y, player.getPosition().z), eventPlayer.enhancementValues[5] + eventPlayer.enhancementValues[9] * (min(eventPlayer.enhancementValues[2], abs(cosDeg(angleBetweenVectors(eventPlayer.enhancementValues[9], directionTowards(eventPlayer.enhancementValues[5], vect(player.getPosition().x, eventPlayer.enhancementValues[5].y, player.getPosition().z)))) * distance(eventPlayer.enhancementValues[5], vect(player.getPosition().x, eventPlayer.enhancementValues[5].y, player.getPosition().z)))))) < 1.5) == true"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6781,
           "source": "eventPlayer.potentialTargets = getLivingPlayers(Team.2).filter(lambda player: distance(eventPlayer.enhancementValues[4], vect(player.getPosition().x, eventPlayer.enhancementValues[4].getPosition().y, player.getPosition().z)) < 0.5 * eventPlayer.enhancementValues[2])"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6800,
           "source": "eventPlayer.botTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementValues[4], (sorted(eventPlayer.enhancementValues.filter(lambda _, i: i >= 7 and i <= 8), lambda x: angleBetweenVectors(worldVector(eventPlayer.botTarget.getThrottle(), eventPlayer.botTarget, Transform.ROTATION), directionTowards(eventPlayer.enhancementValues[4], x)))).last())), (-1 if eventPlayer.botTarget.getPosition().y > eventPlayer.enhancementValues[4].y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(eventPlayer.botTarget.getPosition(), eventPlayer.botTarget.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
         }
@@ -592,17 +592,17 @@
       "note": "Унаследованный кандидат на оптимизацию: повторные сортировки HUD по направлению взгляда и лучи предпросмотра баррикады присутствовали в оригинале.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1566,
           "source": "createInWorldText(getPlayers(Team.1).filter(lambda player: player.enhancementValues[0] != 2 and len(healthpackPositions) > 0 and player.infected and getMatchTime() > matchEndTime), \"Cure: {0}m\".format(distance(localPlayer.getPosition(), sorted(healthpackPositions, lambda x: angleBetweenVectors(localPlayer.getFacingDirection(), directionTowards(localPlayer.getEyePosition(), x)))[0])), sorted(healthpackPositions, lambda x: angleBetweenVectors(localPlayer.getFacingDirection(), directionTowards(localPlayer.getEyePosition(), x)))[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.GREEN, SpecVisibility.NEVER)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1943,
           "source": "createInWorldText(localPlayer.filter(lambda x: not x in playersOnObjective and (localPlayer.playerObjectiveResourceValue > 0 or len(objectiveResourcePositions) > 0)), \"Distance: {0}m\".format(distance(objectivePositions[0] if localPlayer.playerObjectiveResourceValue > 0 else sorted(objectiveResourcePositions, lambda x: angleBetweenVectors(directionTowards(localPlayer.getEyePosition(), x), localPlayer.getFacingDirection()))[0], localPlayer.getPosition())), objectivePositions[0] if localPlayer.playerObjectiveResourceValue > 0 else sorted(objectiveResourcePositions, lambda x: angleBetweenVectors(directionTowards(localPlayer.getEyePosition(), x), localPlayer.getFacingDirection()))[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.NEVER)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6606,
           "source": "createBeam(eventPlayer.filter(lambda _: eventPlayer.isHoldingButton(Button.MELEE) and eventPlayer.enhancementValues[3] <= 0 and distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) <= 30), Beam.BAD, worldVector(vect(-0.5 * eventPlayer.enhancementValues[2], 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), worldVector(vect(0.5 * eventPlayer.enhancementValues[2], 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), Color.GREEN, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)"
         }
@@ -614,17 +614,17 @@
       "note": "Повторные index по точкам и цикл поиска телепорта без явной отмены при отсутствии целей уже были.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 3979,
           "source": "while eventPlayer.telePos == 0 or playerTargetList.any(lambda x: distance(eventPlayer.telePos, x.getPosition()) < 15) or playerTargetList.all(lambda x: distance(eventPlayer.telePos, x.getPosition()) > botMaxTeleportRange[1]):"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 3982,
           "source": "eventPlayer.filteredBotSpawnPointGrid = eventPlayer.filteredBotSpawnPointGrid.filter(lambda x: botSpawnPointTimers[botSpawnPoints.index(x)] < 15)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 3986,
           "source": "botSpawnPointTimers[botSpawnPoints.index(eventPlayer.telePos)] += 5"
         }
@@ -636,17 +636,17 @@
       "note": "Унаследованный кандидат на оптимизацию: генерация сетки с проверками по накопленному массиву и повторная базовая фильтрация терминалов уже присутствовали.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 757,
           "source": "while len(mapGrid) < 900:"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 761,
           "source": "if len(mapGrid) == 0 or mapGrid.all(lambda x: distance(x, testPos) > 2.5):"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2948,
           "source": "testPos = mapGrid.filter(lambda x: distance(x, objectivePositions[0]) > 10 and distance(x, objectivePositions[0]) < 50)"
         }
@@ -658,17 +658,17 @@
       "note": "Унаследованный кандидат на оптимизацию: силовое поле уже повторяло получение списка живых ботов внутри каждого короткого шага.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6134,
           "source": "for eventPlayer.pForceFieldCount1 in range(10, 0, -0.032):"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6136,
           "source": "if distance(getLivingPlayers(Team.2)[eventPlayer.pForceFieldCount2_bCount1], eventPlayer.powerUpUsePositionsAndInfo[10]) <= 7.5:"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6137,
           "source": "getLivingPlayers(Team.2)[eventPlayer.pForceFieldCount2_bCount1].applyImpulse(directionTowards(eventPlayer.powerUpUsePositionsAndInfo[10], getLivingPlayers(Team.2)[eventPlayer.pForceFieldCount2_bCount1].getPosition()), 6, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
         }
@@ -680,17 +680,17 @@
       "note": "Унаследованный кандидат на оптимизацию: очередь Pyrotechnic уже хранила повторные ссылки и заново фильтровалась по каждой жертве.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6837,
           "source": "attacker.enhancementChase2.append(victim)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6851,
           "source": "eventPlayer.enhancementValues[4] = min(4 * (len(eventPlayer.enhancementChase2.filter(lambda x: x == eventPlayer.enhancementValues[3]))), 30)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6855,
           "source": "eventPlayer.enhancementChase2.remove(eventPlayer.enhancementValues[3])"
         }
@@ -702,17 +702,17 @@
       "note": "Унаследованный кандидат на оптимизацию: те же частые сбросы кулдаунов и зарядов уже выполнялись в оригинале.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6153,
           "source": "for eventPlayer.pNoCooldownsCount_bCount2 in range(15, 0, -0.032):"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6154,
           "source": "eventPlayer.setAbilityCooldown(Button.ABILITY_1, 0)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6167,
           "source": "eventPlayer.setAbilityCooldown(Button.RELOAD, 0)"
         }
@@ -724,17 +724,17 @@
       "note": "Путь NPC уже пополнялся без явного ограничения, повторно обходился в движении и сортировался ради ближайшей точки.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2691,
           "source": "eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), (eventPlayer.path.filter(lambda x: distance(eventPlayer.getPosition(), x) < 2)).last() if eventPlayer.path.any(lambda x: distance(eventPlayer.getPosition(), x) < 2) else eventPlayer.botFollowTarget.getPosition()), 0 if eventPlayer.botFollowTarget == null or distance(eventPlayer.getPosition(), eventPlayer.botFollowTarget.getPosition()) < 1.5 else eventPlayer.botThrottleSpeed, Relativity.TO_WORLD)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2751,
           "source": "survivorToRescue.path.append(survivorToRescue.botFollowTarget.getPosition())"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2761,
           "source": "survivorToRescue.telePos = survivorToRescue.path.index(sorted(survivorToRescue.path, lambda x: distance(survivorToRescue.getPosition(), x))[0])"
         }
@@ -746,27 +746,27 @@
       "note": "Унаследованный кандидат на оптимизацию: Air Strike уже создавал четыре динамических эффекта на 50 шагов, Bounce Pad — кольцо каждые 0.25 секунды действия.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6188,
           "source": "for eventPlayer.pAirStrikeCount in range(50):"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6193,
           "source": "playEffect(getAllPlayers(), DynamicEffect.BAD_PICKUP_EFFECT, Color.ORANGE, eventPlayer.powerUpUsePositionsAndInfo[31], 2.5)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6196,
           "source": "playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, Color.ORANGE, eventPlayer.powerUpUsePositionsAndInfo[31], 100)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6356,
           "source": "for eventPlayer.pBouncePadCount1 in range(60, 0, -0.125):"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6357,
           "source": "if eventPlayer.pBouncePadCount1 % 0.25 == 0:"
         }
@@ -778,17 +778,17 @@
       "note": "Унаследованные кандидаты на оптимизацию: сортировка таймеров и сортировка двух участников Hitchhiker уже присутствовали в оригинале.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 534,
           "source": "spawnTimes = sorted(spawnTimes.map(lambda x: x - 1))"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 7042,
           "source": "eventPlayer.enhancementValues[4] = sorted(eventPlayer.concat(eventPlayer.enhancementValues[1]), lambda x: x.getNormalizedHealth())[0]"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 7043,
           "source": "eventPlayer.enhancementValues[5] = eventPlayer.concat(eventPlayer.enhancementValues[1]).exclude(eventPlayer.enhancementValues[4])"
         }
@@ -800,12 +800,12 @@
       "note": "Добавление минибоссов и замена записей нулями вместо удаления уже существовали; рост массива унаследован.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 3622,
           "source": "miniBoss[miniBoss.index(eventPlayer)] = 0"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 4332,
           "source": "miniBoss.append(eventPlayer)"
         }
@@ -817,27 +817,27 @@
       "note": "Предел 12 уже относился лишь к генератору, а награды Biomorphing и сбросы добавляли предметы вне него. Расширение playMoreEffects также было включено в оригинале: увеличенный бюджет визуальных объектов не является новым отличием Reforged и не обеспечивает общего лимита предметов.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5930,
           "source": "@Condition len(powerUpPositions) < 12"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2510,
           "source": "for resourcePowerUpDropCount in range(4):"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6090,
           "source": "powerUpPositions.append(eventPlayer.getPosition() + vect(0, 0.25, 0) if eventPlayer.isOnGround() else nearestWalkablePosition(eventPlayer.getPosition()))"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6104,
           "source": "powerUpPositions.append(eventPlayer.getPosition() + vect(0, 0.25, 0))"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 451,
           "source": "#!extension playMoreEffects"
         }
@@ -849,17 +849,17 @@
       "note": "Унаследованный кандидат на оптимизацию: фильтры зрителей с условием, не зависящим от параметра lambda, уже использовались. Число 50 относится к текущему дереву, а не к пересчёту исторического файла.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5966,
           "source": "createEffect(getAllPlayers().filter(lambda _: supplyDropLanding != null and not supplyDropStatus), Effect.ORB, Color.AQUA, supplyDropPosition, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6593,
           "source": "hudText(eventPlayer, \"Zombie Hybrid {0}\".format(iconString(Icon.POISON) if eventPlayer.enhancementValues[4] <= 0 else \"{0}s\".format(ceil(eventPlayer.enhancementValues[4]))), null, \"Press [{0}] to deal {1}00 damage\".format(inputBindingString(Button.MELEE), floor(eventPlayer.infectionLvl)) if eventPlayer.infectionLvl >= 1 and eventPlayer.enhancementValues[4] <= 0 else [], HudPosition.LEFT, 99, Color.GRAY if eventPlayer.enhancementValues[4] <= 0 else Color.RED, Color.GRAY, Color.GRAY if eventPlayer.enhancementValues[4] <= 0 else Color.RED, HudReeval.STRING_AND_COLOR)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6600,
           "source": "chaseAtRate(eventPlayer.infectionLvl, 0, 0.015 if eventPlayer.infectionLvl > 0 else 0)"
         }
@@ -871,17 +871,17 @@
       "note": "Цикл снабжения уже искал точку без общего предела попыток и без проверки актуальности фазы/наличия целей внутри цикла.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5939,
           "source": "while supplyDropLanding == null:"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5941,
           "source": "closestPlayerToObjective = sorted(playerTargetList, lambda x: distance(x.getPosition(), objectivePositions[0]))[0]"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5948,
           "source": "wait(0.25)"
         }
@@ -893,17 +893,17 @@
       "note": "Все 20 текущих мест имеют соответствующий legacy-импульс в оригинале. Это унаследованная задача совместимости физики, а не 20 новых доказанных дефектов. В IM01 выбор цели изменён и защищён проверкой существования, но сам режим импульса уже был прежним.",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2363,
           "source": "eventPlayer.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getPosition(), getClosestPlayer(eventPlayer, Team.1).getPosition())), -75), max(1, sqrt(2 * 17.532 * (eventPlayer.lastTarget.getPosition().y + 3 - eventPlayer.getPosition().y))), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6137,
           "source": "getLivingPlayers(Team.2)[eventPlayer.pForceFieldCount2_bCount1].applyImpulse(directionTowards(eventPlayer.powerUpUsePositionsAndInfo[10], getLivingPlayers(Team.2)[eventPlayer.pForceFieldCount2_bCount1].getPosition()), 6, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 7137,
           "source": "eventPlayer.enhancementValues[3].applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementChase1, eventPlayer.enhancementValues[3].getPosition())), min(-20, verticalAngleOfDirection(directionTowards(eventPlayer.enhancementChase1, eventPlayer.enhancementValues[3].getPosition())))), min(25, 4200 / eventPlayer.enhancementValues[3].getMaxHealth()), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
         }
@@ -916,12 +916,12 @@
       "origin": "inherited-construction",
       "target": "determineZombieMode",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 1164,
         "source": "startRule(determineZombieMode)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 770,
         "source": "def determineZombieMode():"
       },
@@ -933,12 +933,12 @@
       "origin": "inherited-construction",
       "target": "determineChallenge",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 789,
         "source": "startRule(determineChallenge)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 826,
         "source": "def determineChallenge():"
       },
@@ -950,12 +950,12 @@
       "origin": "inherited-construction",
       "target": "determineObjectiveType",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 850,
         "source": "startRule(determineObjectiveType)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 926,
         "source": "def determineObjectiveType():"
       },
@@ -967,23 +967,23 @@
       "origin": "inherited-construction",
       "target": "setObjectiveType",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 950,
         "source": "startRule(setObjectiveType)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 953,
         "source": "def setObjectiveType():"
       },
       "waits": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 957,
           "source": "waitUntil(isGameInProgress() and not specialGameModeSetup, 99999)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 970,
           "source": "wait()"
         }
@@ -995,18 +995,18 @@
       "origin": "inherited-construction",
       "target": "setPrematchTimer",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 1286,
         "source": "startRule(setPrematchTimer)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 1174,
         "source": "def setPrematchTimer():"
       },
       "waits": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1201,
           "source": "wait()"
         }
@@ -1018,18 +1018,18 @@
       "origin": "inherited-construction",
       "target": "setPrematchTimer",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 1328,
         "source": "startRule(setPrematchTimer)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 1174,
         "source": "def setPrematchTimer():"
       },
       "waits": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1201,
           "source": "wait()"
         }
@@ -1041,18 +1041,18 @@
       "origin": "inherited-construction",
       "target": "randomActions",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 1329,
         "source": "startRule(randomActions)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 1503,
         "source": "def randomActions():"
       },
       "waits": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1516,
           "source": "wait(1)"
         }
@@ -1064,18 +1064,18 @@
       "origin": "inherited-construction",
       "target": "setPrematchTimer",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 1336,
         "source": "startRule(setPrematchTimer)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 1174,
         "source": "def setPrematchTimer():"
       },
       "waits": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1201,
           "source": "wait()"
         }
@@ -1087,18 +1087,18 @@
       "origin": "inherited-construction",
       "target": "setPrematchTimer",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 1480,
         "source": "startRule(setPrematchTimer)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 1174,
         "source": "def setPrematchTimer():"
       },
       "waits": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1201,
           "source": "wait()"
         }
@@ -1110,18 +1110,18 @@
       "origin": "inherited-construction",
       "target": "setPrematchTimer",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 1483,
         "source": "startRule(setPrematchTimer)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 1174,
         "source": "def setPrematchTimer():"
       },
       "waits": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1201,
           "source": "wait()"
         }
@@ -1133,30 +1133,30 @@
       "origin": "inherited-construction",
       "target": "objectivesManagement",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 1710,
         "source": "startRule(objectivesManagement)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 1732,
         "source": "def objectivesManagement():"
       },
       "waits": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1774,
           "source": "wait()"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1779,
           "source": "wait(0.25)"
         }
       ],
       "inlinedHistoricalWaits": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1855,
           "source": "wait()"
         }
@@ -1167,23 +1167,23 @@
       "origin": "inherited-construction",
       "target": "instantRevive",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6500,
         "source": "startRule(instantRevive)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6110,
         "source": "def instantRevive():"
       },
       "waits": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6114,
           "source": "wait()"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6117,
           "source": "waitUntil(eventPlayer.interactEntity.isAlive(), 3)"
         }
@@ -1195,18 +1195,18 @@
       "origin": "inherited-construction",
       "target": "playerForceField",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6503,
         "source": "startRule(playerForceField)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6122,
         "source": "def playerForceField():"
       },
       "waits": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6138,
           "source": "wait(0.032)"
         }
@@ -1218,18 +1218,18 @@
       "origin": "inherited-construction",
       "target": "noCooldowns",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6506,
         "source": "startRule(noCooldowns)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6144,
         "source": "def noCooldowns():"
       },
       "waits": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6168,
           "source": "wait(0.032)"
         }
@@ -1241,28 +1241,28 @@
       "origin": "inherited-construction",
       "target": "airStrike",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6512,
         "source": "startRule(airStrike)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6173,
         "source": "def airStrike():"
       },
       "waits": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6176,
           "source": "wait()"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6186,
           "source": "wait(2)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6200,
           "source": "wait(0.125)"
         }
@@ -1274,18 +1274,18 @@
       "origin": "inherited-construction",
       "target": "healBeacon",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6515,
         "source": "startRule(healBeacon)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6206,
         "source": "def healBeacon():"
       },
       "waits": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6224,
           "source": "wait(1)"
         }
@@ -1297,18 +1297,18 @@
       "origin": "inherited-construction",
       "target": "sentryTurret",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6524,
         "source": "startRule(sentryTurret)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6235,
         "source": "def sentryTurret():"
       },
       "waits": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6263,
           "source": "wait(0.125)"
         }
@@ -1320,18 +1320,18 @@
       "origin": "inherited-construction",
       "target": "cloakingDevice",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6527,
         "source": "startRule(cloakingDevice)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6273,
         "source": "def cloakingDevice():"
       },
       "waits": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6295,
           "source": "waitUntil(eventPlayer.pCloakingDeviceCount < 23 and eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.isHoldingButton(Button.INTERACT), 1)"
         }
@@ -1343,23 +1343,23 @@
       "origin": "inherited-construction",
       "target": "superNano",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6530,
         "source": "startRule(superNano)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6306,
         "source": "def superNano():"
       },
       "waits": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6329,
           "source": "wait(1)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6330,
           "source": "wait(0.25)"
         }
@@ -1371,28 +1371,28 @@
       "origin": "inherited-construction",
       "target": "bouncePad",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6533,
         "source": "startRule(bouncePad)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6343,
         "source": "def bouncePad():"
       },
       "waits": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6354,
           "source": "wait(1)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6368,
           "source": "wait(0.125)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6369,
           "source": "wait(0.25)"
         }
@@ -1404,23 +1404,23 @@
       "origin": "inherited-construction",
       "target": "ultimateCharger",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6536,
         "source": "startRule(ultimateCharger)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6375,
         "source": "def ultimateCharger():"
       },
       "waits": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6385,
           "source": "wait(0.125)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6386,
           "source": "wait(0.25)"
         }
@@ -1432,23 +1432,23 @@
       "origin": "inherited-construction",
       "target": "stun",
       "call": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6541,
         "source": "startRule(stun)"
       },
       "definition": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6391,
         "source": "def stun():"
       },
       "waits": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6412,
           "source": "waitUntil(distance(eventPlayer.pStunChase1, eventPlayer.powerUpUsePositionsAndInfo[101].getPosition() + vect(0, losHeightCheck, 0)) < 0.1, 3)"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6416,
           "source": "wait()"
         }
@@ -1463,12 +1463,12 @@
       "status": "not-a-defect",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2041,
           "source": "@Condition distance(eventPlayer.getPosition(), vect(objectivePositions[0].x, eventPlayer.getPosition().y, objectivePositions[0].z)) < objectiveRad"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1785,
           "source": "objectiveRad = 10"
         }
@@ -1480,12 +1480,12 @@
       "status": "monitoring",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2059,
           "source": "@Condition extractionZoneRad < 200"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1784,
           "source": "chaseAtRate(extractionZoneRad, 0, extractionSpeedUp)"
         }
@@ -1497,12 +1497,12 @@
       "status": "monitoring",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2060,
           "source": "@Condition distance(objectivePositions[0], eventPlayer.getPosition()) > extractionZoneRad"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1784,
           "source": "chaseAtRate(extractionZoneRad, 0, extractionSpeedUp)"
         }
@@ -1514,12 +1514,12 @@
       "status": "not-a-defect",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2077,
           "source": "@Condition (len(objectivePositions) == 1 and (len(playersOnObjective) == (len(getPlayers(Team.1).filter(lambda player: player.hasSpawned() and player.deathTimer > 0 and not player.afk)))) or (len(playerTargetList) == 0 or extractionZoneRad <= 0)) == true"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1784,
           "source": "chaseAtRate(extractionZoneRad, 0, extractionSpeedUp)"
         }
@@ -1531,12 +1531,12 @@
       "status": "monitoring",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2156,
           "source": "@Condition distance(vect(objectivePositions[0].x, eventPlayer.getPosition().y, objectivePositions[0].z), eventPlayer.getPosition()) < objectiveRad"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1791,
           "source": "chaseAtRate(objectiveRad, max(5, objectiveCaptureValue / 4), 1)"
         }
@@ -1548,12 +1548,12 @@
       "status": "not-a-defect",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2553,
           "source": "@Condition distance(objectivePositions[0], eventPlayer.getPosition()) < objectiveRad"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1805,
           "source": "objectiveRad = 3.5"
         }
@@ -1565,12 +1565,12 @@
       "status": "not-a-defect",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2712,
           "source": "@Condition (playerTargetList.filter(lambda x: x != survivorToRescue and not x.invisible).any(lambda x: distance(survivorToRescue.getPosition(), x.getPosition()) < objectiveRad)) == true"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2724,
           "source": "objectiveRad = 30"
         }
@@ -1582,12 +1582,12 @@
       "status": "not-a-defect",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2832,
           "source": "@Condition playerTargetList.concat(victim).any(lambda x: distance(x.getPosition(), objectiveChase1) < objectiveRad) == true"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1820,
           "source": "objectiveRad = 20"
         }
@@ -1599,12 +1599,12 @@
       "status": "not-a-defect",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 2977,
           "source": "@Condition (objectiveResourcePositions.filter(lambda _, i: objectiveCaptureValue[i] < 100).any(lambda x: distance(x, eventPlayer.getPosition()) < objectiveRad and x.x != null)) == true"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1831,
           "source": "objectiveRad = 3"
         }
@@ -1616,12 +1616,12 @@
       "status": "not-a-defect",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5607,
           "source": "@Condition (eventPlayer in bosses or not eventPlayer.abilityArray1) == true"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 4263,
           "source": "chaseAtRate(eventPlayer.abilityArray1, 0, 1)"
         }
@@ -1633,12 +1633,12 @@
       "status": "monitoring",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 5891,
           "source": "@Condition (distance(eventPlayer, objectivePositions[0]) <= objectiveRad or len(objectivePositions) == 1 and eventPlayer.isOnObjective()) == true"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 1791,
           "source": "chaseAtRate(objectiveRad, max(5, objectiveCaptureValue / 4), 1)"
         }
@@ -1650,12 +1650,12 @@
       "status": "not-a-defect",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6712,
           "source": "@Condition eventPlayer.infectionLvl >= 1"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6600,
           "source": "chaseAtRate(eventPlayer.infectionLvl, 0, 0.015 if eventPlayer.infectionLvl > 0 else 0)"
         }
@@ -1667,17 +1667,17 @@
       "status": "not-a-defect",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6769,
           "source": "@Condition eventPlayer.enhancementChase1 > 0"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6810,
           "source": "eventPlayer.enhancementChase1 = 1"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6811,
           "source": "chaseAtRate(eventPlayer.enhancementChase1, 10000, 500, ChaseRateReeval.NONE)"
         }
@@ -1689,12 +1689,12 @@
       "status": "not-a-defect",
       "evidence": [
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 7057,
           "source": "@Condition eventPlayer.enhancementChase2 <= 0"
         },
         {
-          "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+          "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
           "line": 6684,
           "source": "chaseAtRate(eventPlayer.enhancementChase2, 0, 0 if eventPlayer.enhancementValues[2] else 1)"
         }
@@ -1706,7 +1706,7 @@
       "id": "IM01",
       "origin": "inherited-compatibility",
       "evidence": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 2363,
         "source": "eventPlayer.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getPosition(), getClosestPlayer(eventPlayer, Team.1).getPosition())), -75), max(1, sqrt(2 * 17.532 * (eventPlayer.lastTarget.getPosition().y + 3 - eventPlayer.getPosition().y))), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
       }
@@ -1715,7 +1715,7 @@
       "id": "IM02",
       "origin": "inherited-compatibility",
       "evidence": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 4698,
         "source": "(getLivingPlayers(Team.ALL).exclude(eventPlayer).filter(lambda x: distance(eventPlayer.getPosition(), x.getPosition()) < 20 * eventPlayer.size and distance(worldVector(vect(0, 0, 3 * eventPlayer.size), eventPlayer, Transform.ROTATION_AND_TRANSLATION), x.getPosition()) > 1.5 * eventPlayer.size and isInLoS(eventPlayer.getEyePosition(), x.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) and x != eventPlayer and abs(eventPlayer.getPosition().y - x.getPosition().y) < 2 * eventPlayer.size)).applyImpulse(vect(0, 1, 0), 15 * eventPlayer.size, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
       }
@@ -1724,7 +1724,7 @@
       "id": "IM03",
       "origin": "inherited-compatibility",
       "evidence": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 4782,
         "source": "eventPlayer.applyImpulse(Vector.UP, 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
       }
@@ -1733,7 +1733,7 @@
       "id": "IM04",
       "origin": "inherited-compatibility",
       "evidence": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 4788,
         "source": "eventPlayer.applyImpulse(normalize(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()) + vect(0, 0.25, 0)), eventPlayer.size * (15 + 25 * abs(cosDeg(verticalAngleOfDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition()))))), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
       }
@@ -1742,7 +1742,7 @@
       "id": "IM05",
       "origin": "inherited-compatibility",
       "evidence": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 5047,
         "source": "eventPlayer.botSpecialTarget.applyImpulse(directionTowards(eventPlayer.botSpecialTarget.getEyePosition(), eventPlayer.getEyePosition()), eventPlayer.size * (15 if eventPlayer.botSpecialTarget.getMaxHealth() < 400 else 10), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
       }
@@ -1751,7 +1751,7 @@
       "id": "IM06",
       "origin": "inherited-compatibility",
       "evidence": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 5086,
         "source": "eventPlayer.applyImpulse(vect(0, 1, 0), random.uniform(6, 10) * eventPlayer.size, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
       }
@@ -1760,7 +1760,7 @@
       "id": "IM07",
       "origin": "inherited-compatibility",
       "evidence": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 5150,
         "source": "eventPlayer.applyImpulse(directionTowards(eventPlayer.getPosition(), eventPlayer.botTarget.getPosition() + vect(0, 10 * eventPlayer.size, 0)), 25, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
       }
@@ -1769,7 +1769,7 @@
       "id": "IM08",
       "origin": "inherited-compatibility",
       "evidence": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 5243,
         "source": "victim.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(attacker.getPosition(), victim.getPosition())), -25), 10 * attacker.size, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
       }
@@ -1778,7 +1778,7 @@
       "id": "IM09",
       "origin": "inherited-compatibility",
       "evidence": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 5376,
         "source": "eventPlayer.applyImpulse(vect(0, 5, -3), 5 * eventPlayer.size, Relativity.TO_PLAYER, Impulse.CANCEL_CONTRARY_MOTION)"
       }
@@ -1787,7 +1787,7 @@
       "id": "IM10",
       "origin": "inherited-compatibility",
       "evidence": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 5386,
         "source": "eventPlayer.botSpecialTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botSpecialTarget.getPosition())), 25), 50, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
       }
@@ -1796,7 +1796,7 @@
       "id": "IM11",
       "origin": "inherited-compatibility",
       "evidence": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 5493,
         "source": "eventPlayer.botSpecialTarget.applyImpulse(directionTowards(eventPlayer.botSpecialTarget.getPosition(), eventPlayer.botTarget.getEyePosition() + vect(0, 3 * eventPlayer.botTarget.size, 0)), 20 + 9 * eventPlayer.size, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
       }
@@ -1805,7 +1805,7 @@
       "id": "IM12",
       "origin": "inherited-compatibility",
       "evidence": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 5495,
         "source": "eventPlayer.botSpecialTarget.applyImpulse(directionFromAngles(eventPlayer.getHorizontalFacingAngle(), -35), 20 + 9 * eventPlayer.size, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
       }
@@ -1814,7 +1814,7 @@
       "id": "IM13",
       "origin": "inherited-compatibility",
       "evidence": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 5730,
         "source": "eventPlayer.applyImpulse(Vector.DOWN, 4, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
       }
@@ -1823,7 +1823,7 @@
       "id": "IM14",
       "origin": "inherited-compatibility",
       "evidence": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 5754,
         "source": "eventPlayer.botSpecialTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getPosition(), eventPlayer.botSpecialTarget.getPosition())), -25), (15 if distance(eventPlayer.getPosition(), eventPlayer.botSpecialTarget.getPosition()) < 5 * eventPlayer.size else 7.5) * eventPlayer.size, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
       }
@@ -1832,7 +1832,7 @@
       "id": "IM15",
       "origin": "inherited-compatibility",
       "evidence": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 4388,
         "source": "(getPlayersInRadius(eventPlayer, 2, Team.2, LosCheck.SURFACES).filter(lambda player: player != eventPlayer)).applyImpulse(Vector.UP, 3, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
       }
@@ -1841,7 +1841,7 @@
       "id": "IM16",
       "origin": "inherited-compatibility",
       "evidence": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 4389,
         "source": "eventPlayer.applyImpulse(Vector.UP, distance(eventPlayer.botTarget, eventPlayer) * (2 / eventPlayer.size), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
       }
@@ -1850,7 +1850,7 @@
       "id": "IM17",
       "origin": "inherited-compatibility",
       "evidence": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6137,
         "source": "getLivingPlayers(Team.2)[eventPlayer.pForceFieldCount2_bCount1].applyImpulse(directionTowards(eventPlayer.powerUpUsePositionsAndInfo[10], getLivingPlayers(Team.2)[eventPlayer.pForceFieldCount2_bCount1].getPosition()), 6, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
       }
@@ -1859,7 +1859,7 @@
       "id": "IM18",
       "origin": "inherited-compatibility",
       "evidence": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6366,
         "source": "eventPlayer.bouncePadBouncer.applyImpulse(vect(0, 1, 0), 22, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
       }
@@ -1868,7 +1868,7 @@
       "id": "IM19",
       "origin": "inherited-compatibility",
       "evidence": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 6800,
         "source": "eventPlayer.botTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementValues[4], (sorted(eventPlayer.enhancementValues.filter(lambda _, i: i >= 7 and i <= 8), lambda x: angleBetweenVectors(worldVector(eventPlayer.botTarget.getThrottle(), eventPlayer.botTarget, Transform.ROTATION), directionTowards(eventPlayer.enhancementValues[4], x)))).last())), (-1 if eventPlayer.botTarget.getPosition().y > eventPlayer.enhancementValues[4].y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(eventPlayer.botTarget.getPosition(), eventPlayer.botTarget.getPosition() + vect(0, -1, 0), null, getAllPlayers(), false))))), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
       }
@@ -1877,7 +1877,7 @@
       "id": "IM20",
       "origin": "inherited-compatibility",
       "evidence": {
-        "file": "ZSM examples/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
+        "file": "workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy",
         "line": 7137,
         "source": "eventPlayer.enhancementValues[3].applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementChase1, eventPlayer.enhancementValues[3].getPosition())), min(-20, verticalAngleOfDirection(directionTowards(eventPlayer.enhancementChase1, eventPlayer.enhancementValues[3].getPosition())))), min(25, 4200 / eventPlayer.enhancementValues[3].getMaxHealth()), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
       }
