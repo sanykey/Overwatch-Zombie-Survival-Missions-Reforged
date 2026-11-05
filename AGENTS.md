@@ -1,11 +1,33 @@
-# Инструкции для работы с проектом
+# Project Instructions
 
-При реализации любого функционала и при заимствовании или адаптации кода из других модов необходимо стремиться к следующему:
+## Implementation and Optimization Priorities
 
-- **Сокращать количество элементов Workshop.** Выбирать решения с меньшим числом элементов, устранять дублирование и избыточные действия и условия.
-- **Оптимизировать производительность.** Избегать лишних вычислений, частых проверок и тяжёлых операций в циклах; выполнять работу только тогда, когда она необходима.
-- **Экономно использовать переменные.** Не создавать лишние глобальные и игроковые переменные, использовать существующие там, где это безопасно, и не хранить значения, которые не нужны.
+Preserve correctness and existing gameplay behavior except where the task explicitly calls for changes. When implementing features or adapting code from other mods, choose solutions according to these priorities, in descending order:
 
-Заимствованный код следует адаптировать к архитектуре проекта и пересматривать на предмет этих оптимизаций, а не просто переносить без изменений.
+1. Reduce the element count of the compiled Workshop code; eliminate duplication and redundant actions and conditions.
+2. Avoid unnecessary calculations, needlessly frequent checks, and expensive operations in loops; perform work only when needed.
+3. Avoid unnecessary global and player variables; reuse existing variables where safe, and do not store values that are not needed.
 
-Оптимизации не должны нарушать корректность функционала или приводить к конфликтам переменных и состояния. После изменений проверяйте, что поведение сохраняется.
+Measure element savings in the compiled output rather than by counting OverPy source lines. A lower element count alone does not prove faster execution; explain significant tradeoffs between these priorities in your final report.
+
+Adapt borrowed code to the project's architecture and review it for these optimizations instead of copying it unchanged.
+
+## Overwatch Workshop / OverPy Specifics
+
+- Comparing a value with zero is not equivalent to checking its truthiness. In Workshop, an empty array and a zero vector are not equal to `0` or `Null`, but are equal to `False`. Therefore, `X != 0` is true for these values, while `X != False` is false. In OverPy, these values are written as `[]`, `vect(0, 0, 0)`, `null`, and `false`. See the [Workshop comparison tables](https://workshop.codes/wiki/articles/comparisons-and-truth).
+- In OverPy 9.7.20, `@Condition X` for an untyped variable compiles to a comparison against `False` using the not-equal operator. When changing conditions, inspect the generated Workshop code; do not replace an explicit comparison with a shorthand check without verifying equivalence for all valid types and values.
+- When reusing variables, account for value lifetimes, which player owns each player variable, waits, asynchronous calls, `chase`, and HUD/effect reevaluation. Follow the contracts and comments in `src/variables.opy`; use meaningful `#!define` aliases for shared temporary slots and document their purpose near each use.
+
+## Commit Messages
+
+If the task includes creating a commit, choose a prefix based on the purpose of the change:
+
+- `fix: ` — a bug fix.
+- `perf: ` — a reduction in element count, game resource usage, or execution time.
+- `refactor: ` — refactoring unrelated to bug fixes or the optimizations listed above.
+- `feat: ` — new functionality.
+- `docs: ` — documentation changes.
+- `test: ` — added or updated checks.
+- `chore: ` — other project maintenance changes.
+
+For other cases, choose an appropriate prefix yourself, using the repository's history as a guide.
