@@ -50,6 +50,7 @@ BattleTag автора Reforged: **snky#21990**.
 
 ### Исправлено:
 
+- [R11 — "Doomfist не прекращает виртуальное удержание блока"](CODE_REVIEW_REPORT.ru.md#r11).
 - [R16 — "Бот выбирает цель за стеной или устаревшую цель"](CODE_REVIEW_REPORT.ru.md#r16).
 - [R18 — "Charge Battery выбирает неподходящего получателя"](CODE_REVIEW_REPORT.ru.md#r18).
 

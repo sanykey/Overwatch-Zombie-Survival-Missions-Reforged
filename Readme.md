@@ -50,6 +50,7 @@ The [code review report](CODE_REVIEW_REPORT.md) provides supporting evidence, va
 
 ### Fixed:
 
+- [R11 — "Doomfist never releases the simulated block button"](CODE_REVIEW_REPORT.md#r11).
 - [R16 — "Bot selects a target behind a wall or a stale target"](CODE_REVIEW_REPORT.md#r16).
 - [R18 — "Charge Battery selects an ineligible recipient"](CODE_REVIEW_REPORT.md#r18).
 
