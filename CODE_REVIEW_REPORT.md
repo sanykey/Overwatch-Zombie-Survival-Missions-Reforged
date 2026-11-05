@@ -83,7 +83,7 @@ Fixed defects are struck through and marked with the fix date. Verification resu
 | [R08](#r08) | Chase audit: valid checks excluded from defects | Diagnostics | 10 valid; 4 under observation | C; no in-game failures reproduced |
 | [R09](#r09) | Outer loop not bounded by an individual wait's timeout | Lifecycle, waits | Medium | C + R |
 | [R10](#r10) | Hitchhiker: passenger ownership and carrier selection | Logic, attachment | High | C + M; physics: R |
-| [R11](#r11) | Doomfist never releases the simulated block button | Lifecycle, controls | Medium | C |
+| ~~[R11](#r11)~~ | ~~Doomfist never releases the simulated block button~~ — **fixed 2026-11-05** | Lifecycle, controls | ~~Medium~~ | C |
 | [R12](#r12) | Illari abort path does not detach | Lifecycle, attachment | High | C; physics: R |
 | [R13](#r13) | Incorrect Illari hack check and speed restoration | Logic, lifecycle | Medium/high | C + M; scheduling: R |
 | [R14](#r14) | Mercy tentacle uses inconsistent visibility checks | Logic, target selection | Medium | C + M |
@@ -315,6 +315,8 @@ Fix direction: one carrier list checking availability, occupancy, and absence of
 ### R11. Doomfist never releases the simulated block button
 
 **Category:** Lifecycle, controls. **Priority:** Medium. **Evidence:** C.
+
+**Fixed November 5, 2026:** Ability 2 is explicitly released with `stopForcingButton(Button.ABILITY_2)` after `waitUntil(eventPlayer.isDead(), 10)`. Additional target/hero checks, the target snapshot and its alias were removed. OverPy 9.7.20 compiles without warnings; `main.ws.txt` is updated. In-game verification remains pending. The original finding is preserved below.
 
 Holding Doomfist's block without a paired release already existed in the original rule. Source: [original:5842](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5842>), [original:5843](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5843>).
 

@@ -1,4 +1,4 @@
-/* Element count: (total 25330)
+/* Element count: (total 25335)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
@@ -216,6 +216,7 @@
    17: rule "PLAYER TARGET (REMOVE)" (src/players_game_in_progress.opy)
    17: rule "updateUsers" (src/players_game_in_progress.opy)
    17: rule "Subroutine saveAlivePlayerState" (src/players_game_in_progress.opy)
+   17: rule "SUCCESSOR (DOOMFIST) HOLDS BLOCK IF TARGET USE ULTIMATE" (src/zombie_types.opy)
    16: rule "SURVIVOR FOLLOW TARGET LETS GO" (src/objective_types/objective_type_survivor_rescue.opy)
    15: rule "chaseSatelliteTarget" (src/objective_types/objective_type_satellite_uplink.opy)
    15: rule "playReignitedWarningPair" (src/zombie_types.opy)
@@ -230,7 +231,6 @@
    13: rule "teleportToClosestPlayer" (src/players_game_in_progress.opy)
    13: rule "REIGNITED ULTIMATE ATTACK COUNTER" (src/zombie_types.opy)
    13: rule "explosionWarning" (src/zombie_types.opy)
-   12: rule "SUCCESSOR (DOOMFIST) HOLDS BLOCK IF TARGET USE ULTIMATE" (src/zombie_types.opy)
    12: rule "SUCCESSOR PUNCHES IN RETALIATION" (src/zombie_types.opy)
    11: rule "advanceChallengeVote" (src/player_start_menu.opy)
    11: rule "advanceZombieVote" (src/player_start_menu.opy)
@@ -7371,7 +7371,7 @@ rule ("PROTECTOR (KIRIKO) USES CLEANSE") {
     }
 }
 
-//12 elements
+//17 elements
 rule ("SUCCESSOR (DOOMFIST) HOLDS BLOCK IF TARGET USE ULTIMATE") {
     event {
         Ongoing - Each Player;
@@ -7379,12 +7379,14 @@ rule ("SUCCESSOR (DOOMFIST) HOLDS BLOCK IF TARGET USE ULTIMATE") {
         Doomfist;
     }
     conditions {
+        Is Alive(Event Player) == True; // 2 elements
         (Event Player).actorTeamSlot5 != Null; // 3 elements
         Is Using Ultimate((Event Player).actorTeamSlot5) == True; // 4 elements
     }
     actions {
         Start Holding Button(Event Player, Button(Ability 2)); // 2 elements
-        Wait(10, Ignore Condition); // 2 elements
+        Wait Until(Is Dead(Event Player), 10); // 3 elements
+        Stop Holding Button(Event Player, Button(Ability 2)); // 2 elements
     }
 }
 
