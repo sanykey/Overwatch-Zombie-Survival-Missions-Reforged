@@ -417,17 +417,23 @@ rule "CHARGE BATTERY":
         eventPlayer.enhancementBatteryPlacementCooldown += -1
 
 
+# Share eligibility between activation and selection; playerTargetList can briefly retain dead/unspawned players.
+#!define isBatteryChargeEligible(player) player.hasSpawned() and player.isAlive() and player.getUltCharge() < 100 and distance(player, eventPlayer.enhancementBatteryPosition) < 1.5 * player.sizeScale
+
 rule "CHARGE BATTERY (USAGE AND COOLDOWNS)":
     @Event eachPlayer
     @Team 1
     @Condition isGameplayActive == true
     @Condition eventPlayer.enhancementId == Enhancement.CHARGE_BATTERY
-    @Condition eventPlayer.enhancementBatteryPosition != 0
-    @Condition (playerTargetList.any(lambda x: x.getUltCharge() < 100 and distance(x, eventPlayer.enhancementBatteryPosition) < 1.5 * x.sizeScale)) == true
+    @Condition eventPlayer.enhancementBatteryPosition
+    @Condition playerTargetList.any(lambda player: isBatteryChargeEligible(player)) == true
     
     # batteryChargeRecipient: survivor using the battery, to play feedback and grant ultimate charge before cooldown waits.
     #!define batteryChargeRecipient tmp0
-    batteryChargeRecipient = (getLivingPlayers(Team.1).filter(lambda player: player.hasSpawned() and distance(player, eventPlayer.enhancementBatteryPosition) < 1.5))[0]
+    batteryChargeRecipient = (playerTargetList.filter(lambda player: isBatteryChargeEligible(player)))[0]
+    # Recheck at action time: no feedback, charge or cooldown if eligibility changed since activation.
+    if batteryChargeRecipient == null:
+        return
     playEffect(batteryChargeRecipient, DynamicEffect.BUFF_IMPACT_SOUND, Color.YELLOW, batteryChargeRecipient, 50)
     playEffect(batteryChargeRecipient, DynamicEffect.GOOD_EXPLOSION, Color.GRAY, eventPlayer.enhancementBatteryPosition, 3)
     playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, Color.YELLOW, batteryChargeRecipient, 1)

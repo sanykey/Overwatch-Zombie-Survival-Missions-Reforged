@@ -83,14 +83,14 @@ Fixed defects are struck through and marked with the fix date. Verification resu
 | [R08](#r08) | Chase audit: valid checks excluded from defects | Diagnostics | 10 valid; 4 under observation | C; no in-game failures reproduced |
 | [R09](#r09) | Outer loop not bounded by an individual wait's timeout | Lifecycle, waits | Medium | C + R |
 | [R10](#r10) | Hitchhiker: passenger ownership and carrier selection | Logic, attachment | High | C + M; physics: R |
-| [R11](#r11) | Doomfist never releases the simulated block button | Lifecycle, controls | Medium | C |
+| ~~[R11](#r11)~~ | ~~Doomfist never releases the simulated block button~~ — **fixed 2026-11-05** | Lifecycle, controls | ~~Medium~~ | C |
 | [R12](#r12) | Illari abort path does not detach | Lifecycle, attachment | High | C; physics: R |
 | [R13](#r13) | Incorrect Illari hack check and speed restoration | Logic, lifecycle | Medium/high | C + M; scheduling: R |
 | [R14](#r14) | Mercy tentacle uses inconsistent visibility checks | Logic, target selection | Medium | C + M |
 | [R15](#r15) | Inconsistent units and speed in the dome rescue timer | Logic, timers | Medium | C + M |
 | ~~[R16](#r16)~~ | ~~Bot selects a target behind a wall or a stale target~~ — **fixed 2026-11-05** | Logic, target selection | ~~High~~ | C + M |
 | [R17](#r17) | Escorted NPC selects itself | Logic, escort | High | C + M |
-| [R18](#r18) | Charge Battery selects an ineligible recipient | Logic, recipient selection | High | C + M |
+| ~~[R18](#r18)~~ | ~~Charge Battery selects an ineligible recipient~~ — **fixed 2026-11-05** | Logic, recipient selection | ~~High~~ | C + M |
 | [R19](#r19) | Biomorphing selects a resource outside the allowed radius | Logic, pickup | Medium | C + M |
 | [R20](#r20) | Player used as an index instead of a membership test | Logic, value types | High | C; coercion: R |
 | [R21](#r21) | Repeated bot target-search and visibility calculations | Performance, bots | High | O |
@@ -316,6 +316,8 @@ Fix direction: one carrier list checking availability, occupancy, and absence of
 
 **Category:** Lifecycle, controls. **Priority:** Medium. **Evidence:** C.
 
+**Fixed November 5, 2026:** Ability 2 is explicitly released with `stopForcingButton(Button.ABILITY_2)` after `waitUntil(eventPlayer.isDead(), 10)`. Additional target/hero checks, the target snapshot and its alias were removed. OverPy 9.7.20 compiles without warnings; `main.ws.txt` is updated. In-game verification remains pending. The original finding is preserved below.
+
 Holding Doomfist's block without a paired release already existed in the original rule. Source: [original:5842](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5842>), [original:5843](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5843>).
 
 Location: [zombie_types.opy:1334](src/zombie_types.opy#L1334).
@@ -454,6 +456,8 @@ Fix direction: select the leader from `rescuePotentialLeaderList`, preserving th
 ### R18. Charge Battery selects an ineligible recipient
 
 **Category:** Logic, recipient selection. **Priority:** High. **Evidence:** C + M.
+
+**Fixed November 5, 2026:** activation and first-recipient selection use `playerTargetList` and the shared `isBatteryChargeEligible` predicate: the player is alive, has spawned, has less than 100% ultimate charge, and is strictly inside radius `1.5 * sizeScale`. If no eligible player remains when actions execute, the rule aborts before feedback, charge, or cooldown. The existing `tmp0` is used only before the first wait; no variables were added. The [check](analysis/verify-charge-battery.cjs) executes compiled logic in 16 scenarios, reproduces both original counterexamples, and verifies that the other 267 rules are unchanged. OverPy 9.7.20 compiles without warnings; `main.ws.txt` is updated: **25,306 → 25,330 elements (+24)** for consistent eligibility checks and the empty-result guard. The activation condition retains `Is True For Any` without building an intermediate filtered array; runtime speed was not measured. In-game verification remains pending. The original finding is preserved below.
 
 Battery eligibility already checked ultimate charge and scale, while recipient selection lost those restrictions and used a different player source. Source: [original:6967](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6967>), [original:6969](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6969>).
 

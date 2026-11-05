@@ -18,6 +18,7 @@ subroutine objectivesManagement
 subroutine selectTarget
 subroutine restoreDefaultFacingMovement
 subroutine setPrematchTimer
+subroutine shortenPrematchTimer
 subroutine explosionSequence
 subroutine illariUlt
 subroutine abilityPlacement
@@ -520,12 +521,19 @@ def setPrematchTimer():
         if eventPlayer.pregameState < PregameState.READY:
             setMatchTime(pregameCountdown)
         else:
-            if getMatchTime() > 10 and getPlayers(Team.1).all(lambda player: player.pregameState == PregameState.READY):
-                setMatchTime(15)
-                wait()
-                setMatchTime(10)
-            elif getMatchTime() > 20 and len(getPlayers(Team.1).filter(lambda player: player.pregameState == PregameState.READY)) == len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive)):
-                setMatchTime(20)
+            shortenPrematchTimer()
+
+
+def shortenPrematchTimer():
+    @Name "shortenPrematchTimer"
+
+    # Shared by END VOTING and player menu updates; no event-player context is required.
+    if getMatchTime() > 10 and getPlayers(Team.1).all(lambda player: player.pregameState == PregameState.READY):
+        setMatchTime(15)
+        wait()
+        setMatchTime(10)
+    elif getMatchTime() > 20 and len(getPlayers(Team.1).filter(lambda player: player.pregameState == PregameState.READY)) == len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive)):
+        setMatchTime(20)
 
 
 def enableDisableAbilities():

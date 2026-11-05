@@ -1335,11 +1335,13 @@ rule "SUCCESSOR (DOOMFIST) HOLDS BLOCK IF TARGET USE ULTIMATE":
     @Event eachPlayer
     @Team 2
     @Hero doomfist
+    @Condition eventPlayer.isAlive()
     @Condition eventPlayer.botTarget != null
-    @Condition eventPlayer.botTarget.isUsingUltimate() == true
+    @Condition eventPlayer.botTarget.isUsingUltimate()
     
     eventPlayer.startForcingButton(Button.ABILITY_2)
-    wait(10)
+    waitUntil(eventPlayer.isDead(), 10)
+    eventPlayer.stopForcingButton(Button.ABILITY_2)
 
 
 rule "SUCCESSOR PUNCHES IN RETALIATION":
