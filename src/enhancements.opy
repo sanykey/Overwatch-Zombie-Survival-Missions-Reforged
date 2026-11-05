@@ -422,7 +422,7 @@ rule "CHARGE BATTERY (USAGE AND COOLDOWNS)":
     @Team 1
     @Condition isGameplayActive == true
     @Condition eventPlayer.enhancementId == Enhancement.CHARGE_BATTERY
-    @Condition eventPlayer.enhancementBatteryPosition != 0
+    @Condition eventPlayer.enhancementBatteryPosition
     @Condition (playerTargetList.any(lambda x: x.getUltCharge() < 100 and distance(x, eventPlayer.enhancementBatteryPosition) < 1.5 * x.sizeScale)) == true
     
     # batteryChargeRecipient: survivor using the battery, to play feedback and grant ultimate charge before cooldown waits.

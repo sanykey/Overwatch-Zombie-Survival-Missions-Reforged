@@ -8850,7 +8850,7 @@ rule ("CHARGE BATTERY (USAGE AND COOLDOWNS)") {
     conditions {
         Global.isGameplayActive == True; // 2 elements
         (Event Player).enhancementId == 8; // 4 elements
-        (Event Player).actorTeamSlot22 != Null; // 3 elements
+        (Event Player).actorTeamSlot22 != False; // 3 elements
         Is True For Any(Global.playerTargetList, And(Compare(Ultimate Charge Percent(Current Array Element), <, 100), Compare(Distance Between(Current Array Element, (Event Player).actorTeamSlot22), <, Multiply(1.5, (Current Array Element).sizeScale)))) == True; // 23 elements
     }
     actions {
