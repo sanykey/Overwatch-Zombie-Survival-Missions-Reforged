@@ -90,7 +90,7 @@ Fixed defects are struck through and marked with the fix date. Verification resu
 | [R15](#r15) | Inconsistent units and speed in the dome rescue timer | Logic, timers | Medium | C + M |
 | ~~[R16](#r16)~~ | ~~Bot selects a target behind a wall or a stale target~~ — **fixed 2026-11-05** | Logic, target selection | ~~High~~ | C + M |
 | [R17](#r17) | Escorted NPC selects itself | Logic, escort | High | C + M |
-| [R18](#r18) | Charge Battery selects an ineligible recipient | Logic, recipient selection | High | C + M |
+| ~~[R18](#r18)~~ | ~~Charge Battery selects an ineligible recipient~~ — **fixed 2026-11-05** | Logic, recipient selection | ~~High~~ | C + M |
 | [R19](#r19) | Biomorphing selects a resource outside the allowed radius | Logic, pickup | Medium | C + M |
 | [R20](#r20) | Player used as an index instead of a membership test | Logic, value types | High | C; coercion: R |
 | [R21](#r21) | Repeated bot target-search and visibility calculations | Performance, bots | High | O |
@@ -454,6 +454,8 @@ Fix direction: select the leader from `rescuePotentialLeaderList`, preserving th
 ### R18. Charge Battery selects an ineligible recipient
 
 **Category:** Logic, recipient selection. **Priority:** High. **Evidence:** C + M.
+
+**Fixed November 5, 2026:** activation and first-recipient selection use `playerTargetList` and the shared `isBatteryChargeEligible` predicate: the player is alive, has spawned, has less than 100% ultimate charge, and is strictly inside radius `1.5 * sizeScale`. If no eligible player remains when actions execute, the rule aborts before feedback, charge, or cooldown. The existing `tmp0` is used only before the first wait; no variables were added. The [check](analysis/verify-charge-battery.cjs) executes compiled logic in 16 scenarios, reproduces both original counterexamples, and verifies that the other 267 rules are unchanged. OverPy 9.7.20 compiles without warnings; `main.ws.txt` is updated: **25,306 → 25,330 elements (+24)** for consistent eligibility checks and the empty-result guard. The activation condition retains `Is True For Any` without building an intermediate filtered array; runtime speed was not measured. In-game verification remains pending. The original finding is preserved below.
 
 Battery eligibility already checked ultimate charge and scale, while recipient selection lost those restrictions and used a different player source. Source: [original:6967](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6967>), [original:6969](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6969>).
 

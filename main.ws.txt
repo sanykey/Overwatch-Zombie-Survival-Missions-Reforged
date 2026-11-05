@@ -1,4 +1,4 @@
-/* Element count: (total 25306)
+/* Element count: (total 25330)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
@@ -70,6 +70,7 @@
   115: rule "BASIC (REAPER) SHADOW STEP (BOSS)" (src/zombie_types.opy)
   114: rule "RUSHER MOLTEN CORE (BOSS)" (src/zombie_types.opy)
   113: rule "RIDER ATTACH TO TEAMMATES" (src/zombie_types.opy)
+  113: rule "CHARGE BATTERY (USAGE AND COOLDOWNS)" (src/enhancements.opy)
   111: rule "SPAWN BOSS" (src/objective_types/objective_type_bosses.opy)
   111: rule "EFFECT/TEXT (PERMANENT)" (src/power_ups.opy)
   110: rule "PLAYER SELECTS/RESELECTS HERO" (src/player_start_menu.opy)
@@ -86,7 +87,6 @@
    94: rule "playerForceField (10-19)" (src/supply_drops.opy)
    92: rule "setPrematchTimer" (src/subroutines.opy)
    89: rule "PLAYER AFK" (src/players_game_in_progress.opy)
-   89: rule "CHARGE BATTERY (USAGE AND COOLDOWNS)" (src/enhancements.opy)
    87: rule "BOT BECOMES ZOMBIE EGG" (src/objective_types/objective_type_zombie_egg.opy)
    86: rule "PLAYER MENU INITIALIZATION" (src/player_start_menu.opy)
    86: rule "INCREASE OBJECTIVE CAPTURE PERCENTAGE" (src/objective_types/objective_type_showdown.opy)
@@ -8855,7 +8855,7 @@ rule ("CHARGE BATTERY") {
     }
 }
 
-//89 elements
+//113 elements
 rule ("CHARGE BATTERY (USAGE AND COOLDOWNS)") {
     event {
         Ongoing - Each Player;
@@ -8866,11 +8866,13 @@ rule ("CHARGE BATTERY (USAGE AND COOLDOWNS)") {
         Global.isGameplayActive == True; // 2 elements
         (Event Player).enhancementId == 8; // 4 elements
         (Event Player).actorTeamSlot22 != False; // 3 elements
-        Is True For Any(Global.playerTargetList, And(Compare(Ultimate Charge Percent(Current Array Element), <, 100), Compare(Distance Between(Current Array Element, (Event Player).actorTeamSlot22), <, Multiply(1.5, (Current Array Element).sizeScale)))) == True; // 23 elements
+        Is True For Any(Global.playerTargetList, And(And(And(Has Spawned(Current Array Element), Is Alive(Current Array Element)), Compare(Ultimate Charge Percent(Current Array Element), <, 100)), Compare(Distance Between(Current Array Element, (Event Player).actorTeamSlot22), <, Multiply(1.5, (Current Array Element).sizeScale)))) == True; // 29 elements
     }
     actions {
         "batteryChargeRecipient: survivor using the battery, to play feedback and grant ultimate charge before cooldown waits."
-        Set Global Variable(tmp0, First Of(Filtered Array(All Living Players(Team 1), And(Has Spawned(Current Array Element), Compare(Distance Between(Current Array Element, (Event Player).actorTeamSlot22), <, 1.5))))); // 17 elements
+        Set Global Variable(tmp0, First Of(Filtered Array(Global.playerTargetList, And(And(And(Has Spawned(Current Array Element), Is Alive(Current Array Element)), Compare(Ultimate Charge Percent(Current Array Element), <, 100)), Compare(Distance Between(Current Array Element, (Event Player).actorTeamSlot22), <, Multiply(1.5, (Current Array Element).sizeScale)))))); // 30 elements
+        "Recheck at action time: no feedback, charge or cooldown if eligibility changed since activation."
+        Abort If(Compare(Global.tmp0, ==, Null)); // 5 elements
         Play Effect(Global.tmp0, Buff Impact Sound, Color(Yellow), Global.tmp0, 50); // 5 elements
         Play Effect(Global.tmp0, Good Explosion, Color(Gray), (Event Player).actorTeamSlot22, 3); // 6 elements
         Play Effect(All Players(All Teams), Good Pickup Effect, Color(Yellow), Global.tmp0, 1); // 6 elements
