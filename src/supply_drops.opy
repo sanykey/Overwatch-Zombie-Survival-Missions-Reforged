@@ -249,7 +249,8 @@ def healBeacon():
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_AURA] = getLastCreatedEntity()
     playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition, 10)
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.powerUpHealBeaconPosition, 50)
-    eventPlayer.setHealingDealt(150)
+    # Beacon adds 50 percentage points without replacing Plague Doctor's permanent +30%.
+    eventPlayer.setHealingDealt(180 if eventPlayer.enhancementId == Enhancement.PLAGUE_DOCTOR else 150)
     #Heal Beacon duration
     for eventPlayer.powerUpHealBeaconTimeRemaining in range(30, 0, -1):
         wait(1)
@@ -259,7 +260,7 @@ def healBeacon():
     destroyEffect(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_RING])
     destroyHudText(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_HUD])
     destroyEffect(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_AURA])
-    eventPlayer.setHealingDealt(100)
+    eventPlayer.setHealingDealt(130 if eventPlayer.enhancementId == Enhancement.PLAGUE_DOCTOR else 100)
     eventPlayer.powerUpHealBeaconPosition = 0
 
 

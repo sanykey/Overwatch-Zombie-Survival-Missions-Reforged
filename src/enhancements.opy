@@ -71,8 +71,9 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
                 "Plague Doctor",
                 HudPosition.ACTUALLY_LEFT, 99, Color.GREEN, Color.GREEN, Color.GREEN, HudReeval.STRING
             )
-            #Plague doctor does 100 + x% more healing to infected players
-            startHealingModification(getPlayers(Team.1).filter(lambda player: player.isInfected), eventPlayer, 150, HealingReeval.RECEIVERS_AND_HEALERS)
+            # Permanent +30% healing; infected targets receive another x1.25 (x1.625 total).
+            eventPlayer.setHealingDealt(130)
+            startHealingModification(getPlayers(Team.1).filter(lambda player: player.isInfected), eventPlayer, 125, HealingReeval.RECEIVERS_AND_HEALERS)
             eventPlayer.enhancementPlagueCureTotal = 0
             break
         #Born to Battle

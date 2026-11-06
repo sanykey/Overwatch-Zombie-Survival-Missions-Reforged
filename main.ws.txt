@@ -1,8 +1,8 @@
-/* Element count: (total 28197)
+/* Element count: (total 28219)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
-  827: rule "PLAYER ENHANCEMENT INITIALIZATION" (src/enhancements.opy)
+  829: rule "PLAYER ENHANCEMENT INITIALIZATION" (src/enhancements.opy)
   800: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
   472: rule "PLAYER AUGMENT INITIALIZATION" (src/augments.opy)
   471: rule "GRAPNEL LAUNCHER" (src/augments.opy)
@@ -57,6 +57,7 @@
   145: rule "airStrike (30-39)" (src/supply_drops.opy)
   144: rule "SMOLDER SUPER SLAM" (src/zombie_types.opy)
   140: rule "generateMapGrid" (src/global_startup.opy)
+  140: rule "beaconofHealing (40-49)" (src/supply_drops.opy)
   137: rule "explosionSequence" (src/subroutines.opy)
   137: rule "BORN TO BATTLE PLAYER USES ABILITY CHARGE" (src/enhancements.opy)
   136: rule "GENERATE SUPPLY DROPS" (src/supply_drops.opy)
@@ -69,7 +70,6 @@
   123: rule "OBJECTIVE CHANGES AND PLAYER ENTITIES UPDATE" (src/players_game_in_progress.opy)
   121: rule "determineChallenge" (src/global_start_menu.opy)
   121: rule "superNano (70-79)" (src/supply_drops.opy)
-  120: rule "beaconofHealing (40-49)" (src/supply_drops.opy)
   119: rule "BOTS MELEE" (src/bots_game_in_progress.opy)
   119: rule "bouncePad (80-89)" (src/supply_drops.opy)
   118: rule "BOT INITIALIZATION" (src/bots_game_in_progress.opy)
@@ -2208,7 +2208,7 @@ rule ("EFFECTS/TEXTS") {
         Create HUD Text(All Players(Team 1), Value In Array(Array(Custom String("Objective Type: No Preference"), Custom String("Objective Type: Showdown {0}", Ability Icon String(Hero(Brigitte), Button(Ultimate))), Custom String("Objective Type: Bosses {0}", Icon String(Warning)), Null, Null, Custom String("Objective Type: Kill Zone {0}", If-Then-Else(Modulo(Round To Integer(Multiply(Total Time Elapsed, 1.25), Up), 2), Icon String(Ring Thin), Icon String(Ring Thick))), Custom String("Objective Type: Zombie Egg {0}", Icon String(Radioactive)), Custom String("Objective Type: Satellite Uplink {0}", Icon String(Moon)), Null, Custom String("Objective Type: Mixed Objectives {0}", Icon String(Spiral))), (Local Player).actorTeamSlot21), Value In Array(Array(Char In String(Empty Array, False), Custom String("Players must contest a point against zombies"), Custom String("Spawns giant versions of zombies"), Null, Null, Custom String("Clear zombies from a designated area"), Custom String("Survivors must destroy an object that is spawning zombies"), Custom String("Survivors must repair terminals to communicate with a satellite"), Null, Custom String("Randomly assigns all types of objectives")), (Local Player).actorTeamSlot21), If-Then-Else(Or(Global.isVoting, Compare((Local Player).actorTeamSlot21, ==, Null)), Custom String("Change Vote (Press [{0}])", Input Binding String(Button(Ability 2))), Empty Array), Left, 2, Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Visible To String and Color, Default Visibility); // 141 elements
         "Enhancement"
         Set Global Variable(phaseSlot2, Array(Color(Aqua), Color(Red), Color(Gray), Color(Orange), Color(Green), Color(Gray), Global.colorChargeBatteryConst, Color(Purple), Color(Blue))); // 20 elements
-        Create HUD Text(All Players(Team 1), Custom String("Enhancement: {0}{1}", Value In Array(String Split(Custom String("No Preference0Brain Killer 0Zombie Hybrid 0Pyrotechnic 0Plague Doctor 0Born to Battle 0Charge Battery 0Hitchhiker 0P.U.P. "), First Of(Null)), (Local Player).enhancementId), If-Then-Else(Compare((Local Player).enhancementId, >, Null), Value In Array(Global.phaseSlot9, (Local Player).enhancementId), Char In String(Empty Array, False))), Value In Array(Array(Char In String(Empty Array, False), Custom String("Critical hits do more damage"), Custom String("Get infected faster, and convert it to explosive damage"), Custom String("Dealing damage, within 15 meters, sets enemies on fire"), Custom String("Deal more healing to infected players while reducing their infection level"), Custom String("Final blows grant a cooldown reset on the next ability use, storing up to 2 charges"), Custom String("Survivor can place a battery that gives ultimate charge"), Custom String("Survivor can attach to a teammate and fuse their health."), Custom String("Survivor is equipped with an autonomous friendly droid")), (Local Player).enhancementId), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Melee))), Left, 3, Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Visible To String and Color, Default Visibility); // 103 elements
+        Create HUD Text(All Players(Team 1), Custom String("Enhancement: {0}{1}", Value In Array(String Split(Custom String("No Preference0Brain Killer 0Zombie Hybrid 0Pyrotechnic 0Plague Doctor 0Born to Battle 0Charge Battery 0Hitchhiker 0P.U.P. "), First Of(Null)), (Local Player).enhancementId), If-Then-Else(Compare((Local Player).enhancementId, >, Null), Value In Array(Global.phaseSlot9, (Local Player).enhancementId), Char In String(Empty Array, False))), Value In Array(Array(Char In String(Empty Array, False), Custom String("Critical hits do more damage"), Custom String("Get infected faster, and convert it to explosive damage"), Custom String("Dealing damage, within 15 meters, sets enemies on fire"), Custom String("Deal 30% more healing, plus another 25% to infected players while reducing their infection level"), Custom String("Final blows grant a cooldown reset on the next ability use, storing up to 2 charges"), Custom String("Survivor can place a battery that gives ultimate charge"), Custom String("Survivor can attach to a teammate and fuse their health."), Custom String("Survivor is equipped with an autonomous friendly droid")), (Local Player).enhancementId), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Melee))), Left, 3, Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Visible To String and Color, Default Visibility); // 103 elements
     }
 }
 
@@ -8001,7 +8001,7 @@ rule ("airStrike (30-39)") {
     }
 }
 
-//120 elements
+//140 elements
 rule ("beaconofHealing (40-49)") {
     event {
         Subroutine;
@@ -8021,7 +8021,8 @@ rule ("beaconofHealing (40-49)") {
         //__label_if_60__:
         Play Effect(All Players(All Teams), Good Explosion, Color(Yellow), (Event Player).actorTeamSlot15, 10); // 7 elements
         Play Effect(All Players(All Teams), Buff Impact Sound, Color(Blue), (Event Player).actorTeamSlot15, 50); // 7 elements
-        Set Healing Dealt(Event Player, 150); // 2 elements
+        "Beacon adds 50 percentage points without replacing Plague Doctor's permanent +30%."
+        Set Healing Dealt(Event Player, If-Then-Else(Compare((Event Player).enhancementId, ==, 4), 180, 150)); // 12 elements
         "Heal Beacon duration"
         For Player Variable(Event Player, actorTeamSlot6, 30, False, -1); // 3 elements
             Wait(True, Ignore Condition); // 1 element
@@ -8032,7 +8033,7 @@ rule ("beaconofHealing (40-49)") {
         Destroy Effect(Value In Array((Event Player).actorTeamSlot4, 41)); // 6 elements
         Destroy HUD Text(Value In Array((Event Player).actorTeamSlot4, 42)); // 6 elements
         Destroy Effect(Value In Array((Event Player).actorTeamSlot4, 43)); // 6 elements
-        Set Healing Dealt(Event Player, 100); // 2 elements
+        Set Healing Dealt(Event Player, If-Then-Else(Compare((Event Player).enhancementId, ==, 4), 130, 100)); // 12 elements
         Set Player Variable(Event Player, actorTeamSlot15, Null); // 1 element
     }
 }
@@ -8454,7 +8455,7 @@ rule ("finishPowerUpDrop") {
     }
 }
 
-//827 elements
+//829 elements
 rule ("PLAYER ENHANCEMENT INITIALIZATION") {
     event {
         Ongoing - Each Player;
@@ -8485,7 +8486,7 @@ rule ("PLAYER ENHANCEMENT INITIALIZATION") {
             Chase Player Variable At Rate(Event Player, infectionLevel, False, If-Then-Else(Compare((Event Player).infectionLevel, >, Null), 0.015, Null), Destination and Rate); // 10 elements
         End; // 1 element
         If(True); // 1 element
-            Skip(Value In Array(Array(39, Null, 2, 5, 9, 12, 20, 26), Add(True, Index Of Array Value(Array(1, 3, 4, 5, 6, 7, 8), (Event Player).enhancementId)))); // 40 elements
+            Skip(Value In Array(Array(40, Null, 2, 5, 10, 13, 21, 27), Add(True, Index Of Array Value(Array(1, 3, 4, 5, 6, 7, 8), (Event Player).enhancementId)))); // 40 elements
         //__label_switch_67_0__:
         "Enhancement: Brain Killer\nNo enhancement state slots: bonus damage is calculated directly from the damage event."
         Create HUD Text(Event Player, Icon String(Skull), Custom String("Bonus critical damage                                                                                                        {0}", Custom String("                                                                  ")), Custom String("Brain Killer"), Left, 99, Color(Red), Color(Red), Color(Red), String, Default Visibility); // 18 elements
@@ -8499,8 +8500,9 @@ rule ("PLAYER ENHANCEMENT INITIALIZATION") {
         //__label_switch_67_2__:
         "Enhancement: Plague Doctor\nenhancementPlagueCureTotal: accumulated infection levels removed, including cure bonuses, displayed in the HUD."
         Create HUD Text(Event Player, Icon String(Plus), Custom String("Infection Reduced: {0} lvls                                                                                                  {1}", (Event Player).actorTeamSlot22, Custom String("                                                                        ")), Custom String("Plague Doctor"), Left, 99, Color(Green), Color(Green), Color(Green), String, Default Visibility); // 20 elements
-        "Plague doctor does 100 + x% more healing to infected players"
-        Start Healing Modification(Filtered Array(All Players(Team 1), (Current Array Element).isInfected), Event Player, 150, Receivers and Healers); // 8 elements
+        "Permanent +30% healing; infected targets receive another x1.25 (x1.625 total)."
+        Set Healing Dealt(Event Player, 130); // 2 elements
+        Start Healing Modification(Filtered Array(All Players(Team 1), (Current Array Element).isInfected), Event Player, 125, Receivers and Healers); // 8 elements
         Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
         Else; // 1 element
         //__label_switch_67_3__:

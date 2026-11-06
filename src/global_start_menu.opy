@@ -207,7 +207,7 @@ rule "EFFECTS/TEXTS":
             "Critical hits do more damage",
             "Get infected faster, and convert it to explosive damage",
             "Dealing damage, within 15 meters, sets enemies on fire",
-            "Deal more healing to infected players while reducing their infection level",
+            "Deal 30% more healing, plus another 25% to infected players while reducing their infection level",
             "Final blows grant a cooldown reset on the next ability use, storing up to 2 charges",
             "Survivor can place a battery that gives ultimate charge",
             "Survivor can attach to a teammate and fuse their health.",
