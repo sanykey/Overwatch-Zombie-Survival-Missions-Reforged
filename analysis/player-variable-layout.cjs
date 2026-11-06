@@ -133,7 +133,7 @@ const variables = [
     F('enhancementValue1','enhancementStateSlot1','enhancements','mixed','Primary enhancement state; each enhancement owns a distinct role alias.',[
         A('enhancementHybridCooldown','number','Zombie Hybrid explosion cooldown in seconds.'), A('enhancementBarrierFacing','vector','Barrier placement facing direction.'),
         A('enhancementPyroHitList','array','Pyrotechnic hit queue; repeated targets determine fire damage.'), A('enhancementPlagueCureTotal','number','Total infection levels cured by Plague Doctor.'),
-        A('enhancementIsBattleResetReady','bool','Born to Battle has an unspent ability reset.'), A('enhancementBatteryPosition','vector','Placed Charge Battery position; zero clears it.'),
+        A('enhancementBattleResetCharges','number','Born to Battle unspent ability resets (0-2).'), A('enhancementBatteryPosition','vector','Placed Charge Battery position; zero clears it.'),
         A('enhancementHitchhikerCarrier','player','Hitchhiker carrier; zero when detached.'), A('enhancementPupColor','color','P.U.P. mode color.')]),
     F('enhancementValue2','enhancementStateSlot2','enhancements','mixed','Secondary enhancement state shared by mutually selected enhancements.',[
         A('enhancementBarrierEdgeDirection','vector','Direction from the first barrier corner toward the second.'), A('enhancementBattleAbilityButton','button','Born to Battle button whose charge/cooldown is reset.'),

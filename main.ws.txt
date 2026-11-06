@@ -1,12 +1,14 @@
-/* Element count: (total 25335)
+/* Element count: (total 27834)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
- 1029: rule "PLAYER ENHANCEMENT INITIALIZATION" (src/enhancements.opy)
-  818: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
-  456: rule "SKIP ASSEMBLING HEROES" (src/global_startup.opy)
+  948: rule "PLAYER ENHANCEMENT INITIALIZATION" (src/enhancements.opy)
+  811: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
+  471: rule "GRAPNEL LAUNCHER" (src/augments.opy)
+  454: rule "SKIP ASSEMBLING HEROES" (src/global_startup.opy)
   412: rule "PLAYERS REPAIR TERMINALS" (src/objective_types/objective_type_satellite_uplink.opy)
   398: rule "LASER BARRICADE BLOCKS ZOMBIES" (src/enhancements.opy)
+  369: rule "LONG REACH MELEE WEAPONS" (src/augments.opy)
   327: rule "GLOBAL MENU INITIALIZATION" (src/global_start_menu.opy)
   321: rule "DAYTAKER (ILLARI) BURST" (src/zombie_types.opy)
   314: rule "BEHEMOTH (ROAD) TOXIC CLOUD" (src/zombie_types.opy)
@@ -19,6 +21,7 @@
   272: rule "EFFECTS/TEXTS" (src/global_game_in_progress.opy)
   265: rule "REVIVE PLAYER OR ADVANCE DEATH TIMER" (src/players_game_in_progress.opy)
   259: rule "EFFECT/TEXT (GLOBAL)" (src/supply_drops.opy)
+  249: rule "AMMO PACK REFILL FALLBACK" (src/augments.opy)
   247: rule "VARIABLE ASSIGNMENT" (src/global_startup.opy)
   239: rule "HITCHHIKER ATTACH/DETATCH" (src/enhancements.opy)
   228: rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)" (src/supply_drops.opy)
@@ -26,12 +29,15 @@
   214: rule "powerUpUsage" (src/supply_drops.opy)
   211: rule "P.U.P. CONTROL" (src/enhancements.opy)
   208: rule "setDifficulty" (src/subroutines.opy)
+  203: rule "AMMO PACK MAGAZINES" (src/augments.opy)
+  202: rule "extendAugmentMelee" (src/augments.opy)
   200: rule "stun (100-109)" (src/supply_drops.opy)
   195: rule "setObjectiveType" (src/global_start_menu.opy)
-  190: rule "Initialize global variables"
   189: rule "PRIME SLIMER (EMRE) FLIGHT (BOSS)" (src/zombie_types.opy)
   188: rule "EFFECTS/TEXT" (src/player_start_menu.opy)
   183: rule "BRUTE (REIN) SUPER SEISMIC SLAM" (src/zombie_types.opy)
+  183: rule "PHASE DASH LANDING WAVE" (src/augments.opy)
+  181: rule "Initialize global variables"
   179: rule "STALKER (MOIRA) FADE" (src/zombie_types.opy)
   178: rule "BOSS DIES (ALL BOSS OBJECTIVES)" (src/objective_types/objective_type_bosses.opy)
   174: rule "BOT BECOMES BOSS" (src/objective_types/objective_type_bosses.opy)
@@ -56,6 +62,7 @@
   133: rule "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)" (src/bots_game_in_progress.opy)
   132: rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS" (src/objective_types/objective_type_biomorphing.opy)
   132: rule "STRIKER (WRECKING BALL) PILE DRIVER" (src/zombie_types.opy)
+  132: rule "useAugmentAirAction" (src/augments.opy)
   129: rule "BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)" (src/zombie_types.opy)
   126: rule "PLAYER DELIVERS RESOURCE VALUE" (src/objective_types/objective_type_biomorphing.opy)
   123: rule "OBJECTIVE CHANGES AND PLAYER ENTITIES UPDATE" (src/players_game_in_progress.opy)
@@ -65,6 +72,7 @@
   119: rule "BOTS MELEE" (src/bots_game_in_progress.opy)
   119: rule "bouncePad (80-89)" (src/supply_drops.opy)
   118: rule "BOT INITIALIZATION" (src/bots_game_in_progress.opy)
+  117: rule "PLAYER SELECTS/RESELECTS HERO" (src/player_start_menu.opy)
   117: rule "BOTS MOVE THROUGH SPAWN DOORS" (src/bots_game_in_progress.opy)
   116: rule "BEHEMOTH GAS STREAM (BOSS)" (src/zombie_types.opy)
   115: rule "BASIC (REAPER) SHADOW STEP (BOSS)" (src/zombie_types.opy)
@@ -73,22 +81,24 @@
   113: rule "CHARGE BATTERY (USAGE AND COOLDOWNS)" (src/enhancements.opy)
   111: rule "SPAWN BOSS" (src/objective_types/objective_type_bosses.opy)
   111: rule "EFFECT/TEXT (PERMANENT)" (src/power_ups.opy)
-  110: rule "PLAYER SELECTS/RESELECTS HERO" (src/player_start_menu.opy)
   110: rule "RIDER USE GRAPPLING HOOK" (src/zombie_types.opy)
   108: rule "ENSNARER (HAZARD) BLOCKS PLAYERS" (src/zombie_types.opy)
   107: rule "SET UP TERMINAL POSITIONS" (src/objective_types/objective_type_satellite_uplink.opy)
   107: rule "CHARGE BATTERY" (src/enhancements.opy)
+  107: rule "PLAYER AUGMENT INITIALIZATION" (src/augments.opy)
   100: rule "nukeMap" (src/objective_types/objective_type_extraction_point.opy)
   100: rule "bossReturn" (src/objective_types/objective_type_bosses.opy)
   100: rule "BIOWASTE IS PICKED UP" (src/objective_types/objective_type_biomorphing.opy)
+  100: rule "LONG REACH QUICK MELEE" (src/augments.opy)
    99: rule "CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)" (src/zombie_types.opy)
    97: rule "ZOMBIES SPAWN AT REIGNITED" (src/zombie_types.opy)
    94: rule "SURVIVOR REACHES EXTRACTION SITE" (src/objective_types/objective_type_survivor_rescue.opy)
    94: rule "playerForceField (10-19)" (src/supply_drops.opy)
    92: rule "setPrematchTimer" (src/subroutines.opy)
+   90: rule "AUGMENT MENU" (src/augments.opy)
    89: rule "PLAYER AFK" (src/players_game_in_progress.opy)
+   87: rule "PLAYER MENU INITIALIZATION" (src/player_start_menu.opy)
    87: rule "BOT BECOMES ZOMBIE EGG" (src/objective_types/objective_type_zombie_egg.opy)
-   86: rule "PLAYER MENU INITIALIZATION" (src/player_start_menu.opy)
    86: rule "INCREASE OBJECTIVE CAPTURE PERCENTAGE" (src/objective_types/objective_type_showdown.opy)
    85: rule "PREGAME SPAWN ROOM ROTATION" (src/global_startup.opy)
    85: rule "determineObjectiveType" (src/global_start_menu.opy)
@@ -108,6 +118,7 @@
    71: rule "KILL BOTS THAT ARE STUCK OR ARE NOT MOVING" (src/bots_game_in_progress.opy)
    71: rule "PLAGUE DOCTOR REDUCES PLAYERS' INFECTION LEVELS" (src/enhancements.opy)
    70: rule "POWER UP EFFECT/TEXT MANAGEMENT" (src/power_ups.opy)
+   70: rule "LONG REACH NATIVE QUICK MELEE KNOCKBACK" (src/augments.opy)
    69: rule "PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY)" (src/player_start_menu.opy)
    69: rule "MODIFY KILL ZONE SCORE" (src/objective_types/objective_type_kill_zone.opy)
    68: rule "BOT TARGET VISIBLE" (src/bots_game_in_progress.opy)
@@ -117,6 +128,7 @@
    65: rule "ASSIGN ZOMBIE TO BECOME EGG" (src/objective_types/objective_type_zombie_egg.opy)
    65: rule "TELEPORT BOTS WHEN NOT USED FOR TOO LONG" (src/bots_game_in_progress.opy)
    65: rule "noCooldowns (20-29)" (src/supply_drops.opy)
+   63: rule "LONG REACH VENDETTA SWORD" (src/augments.opy)
    61: rule "PLAYER GETS DOWNED" (src/players_game_in_progress.opy)
    58: rule "randomActions" (src/player_start_menu.opy)
    57: rule "PLAYERS ON OBJECTIVE CONTROL" (src/objective_types/objective_type_showdown.opy)
@@ -141,6 +153,7 @@
    48: rule "TUNNELER (SYMMETRA) BUILDS PORTAL" (src/zombie_types.opy)
    48: rule "SMOLDER BOSS EVENT STARTS" (src/zombie_types.opy)
    48: rule "instantRevive (0-9)" (src/supply_drops.opy)
+   48: rule "AUGMENT AIR ACTION RECHARGE" (src/augments.opy)
    47: rule "determineZombieMode" (src/global_start_menu.opy)
    47: rule "PLAYERS AT TERMINALS CONTROLS" (src/objective_types/objective_type_satellite_uplink.opy)
    46: rule "DOWNFALLEN PULLS PLAYERS" (src/zombie_types.opy)
@@ -152,7 +165,9 @@
    44: rule "BRUTE FIRE STRIKE (BOSS)" (src/zombie_types.opy)
    43: rule "Subroutine selectVoteWinner" (src/global_start_menu.opy)
    42: rule "BRAIN KILLER EXTRA DAMAGE" (src/enhancements.opy)
+   42: rule "DOUBLE JUMP DOUBLE TAP" (src/augments.opy)
    41: rule "ultimateCharger (90-99)" (src/supply_drops.opy)
+   41: rule "LONG REACH CARNAGE" (src/augments.opy)
    40: rule "SPAWN TIME CONTROL" (src/global_startup.opy)
    39: rule "PREGAME QUICK TIPS FOR PLAYERS" (src/global_startup.opy)
    39: rule "locateAveragePlayerLocation" (src/bots_game_in_progress.opy)
@@ -162,6 +177,7 @@
    38: rule "RUSHER (TORB) SPEED MECHANICS" (src/zombie_types.opy)
    38: rule "ENSNARER LUNGE" (src/zombie_types.opy)
    37: rule "MUSIC/ANNOUNCER CONTROL" (src/global_start_menu.opy)
+   37: rule "AUGMENT PREGAME ICON" (src/augments.opy)
    36: rule "DAYTAKER'S REVENGE (BOSS)" (src/subroutines.opy)
    36: rule "PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)" (src/player_start_menu.opy)
    36: rule "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)" (src/player_start_menu.opy)
@@ -171,17 +187,21 @@
    35: rule "ZOMBIE HYBRID" (src/enhancements.opy)
    34: rule "abilityPlacement" (src/subroutines.opy)
    34: rule "entityFloat" (src/zombie_types.opy)
+   34: rule "DOUBLE JUMP BONUS EXPIRES" (src/augments.opy)
    33: rule "SMOLDER ACTIVATES FROM DAMAGE" (src/zombie_types.opy)
    33: rule "PROTECTOR (KIRIKO) USES CLEANSE" (src/zombie_types.opy)
+   33: rule "DOUBLE JUMP FIRST HIT BONUS" (src/augments.opy)
    31: rule "SPECIAL EFFECT CONTROLS" (src/global_start_menu.opy)
    31: rule "PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)" (src/player_start_menu.opy)
    30: rule "PLAYER DROPS POWER UP (MANUAL)" (src/power_ups.opy)
    28: rule "SOMBRA USES TRANSLOCATOR" (src/hero_tuning.opy)
    28: rule "REIGNITED USES ULTIMATE NEAR PLAYER" (src/zombie_types.opy)
    27: rule "PLAYER LEAVES THE GAME" (src/global_game_in_progress.opy)
+   27: rule "AUGMENT AIR ACTION INPUT" (src/augments.opy)
    26: rule "SURVIVOR JUMP" (src/objective_types/objective_type_survivor_rescue.opy)
    25: rule "Fix bot health" (src/bots_game_in_progress.opy)
    25: rule "Subroutine checkEnhancementPlacement" (src/enhancements.opy)
+   25: rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)" (src/augments.opy)
    24: rule "BOMBER (JUNKRAT) SELF DESTRUCT" (src/zombie_types.opy)
    24: rule "RIDER (WIDOWMAKER) ATTACH TO PLAYERS" (src/zombie_types.opy)
    24: rule "TUNNELER PORTAL LETS ZOMBIES THROUGH" (src/zombie_types.opy)
@@ -193,11 +213,13 @@
    22: rule "PLAYER AUTOMATIC RELOAD" (src/players_game_in_progress.opy)
    22: rule "MINIBOSS MESSAGE" (src/bots_game_in_progress.opy)
    22: rule "Subroutine smolderBoost" (src/zombie_types.opy)
+   22: rule "DOUBLE JUMP BONUS LANDING WINDOW" (src/augments.opy)
    21: rule "EGG SWITCHES THE POSITION FOR YOU" (src/objective_types/objective_type_zombie_egg.opy)
    21: rule "MOIRA & VENTURE INVIS WHILE USING SKILL" (src/hero_tuning.opy)
    21: rule "BOT STUN MANAGEMENT" (src/bots_game_in_progress.opy)
    21: rule "RUSHER MOLTEN CORE BURNS PLAYERS (BOSS)" (src/zombie_types.opy)
    21: rule "SMOLDER ACTIVATED FROM BOSS EVENT" (src/zombie_types.opy)
+   21: rule "DOUBLE JUMP BONUS ENTER FLIGHT" (src/augments.opy)
    20: rule "PLAYER SWITCHES HERO" (src/players_game_in_progress.opy)
    20: rule "PLAYER TARGET (ADD)" (src/players_game_in_progress.opy)
    20: rule "STALKER KNOCKBACK BLAST (BOSS)" (src/zombie_types.opy)
@@ -231,6 +253,7 @@
    13: rule "teleportToClosestPlayer" (src/players_game_in_progress.opy)
    13: rule "REIGNITED ULTIMATE ATTACK COUNTER" (src/zombie_types.opy)
    13: rule "explosionWarning" (src/zombie_types.opy)
+   13: rule "GRAPNEL LAUNCHER DISCONNECT CLEANUP" (src/augments.opy)
    12: rule "SUCCESSOR PUNCHES IN RETALIATION" (src/zombie_types.opy)
    11: rule "advanceChallengeVote" (src/player_start_menu.opy)
    11: rule "advanceZombieVote" (src/player_start_menu.opy)
@@ -242,15 +265,16 @@
    10: rule "PREVENT MATCH TIME FROM UNPAUSING" (src/global_game_in_progress.opy)
    10: rule "startExtractionAscent" (src/objective_types/objective_type_extraction_point.opy)
    10: rule "setClosestPlayerTeleportCenter" (src/bots_game_in_progress.opy)
+   10: rule "BORN TO BATTLE PLAYER EARNS ELIMINATION" (src/enhancements.opy)
     9: rule "resolveReconnectUserIndex" (src/subroutines.opy)
     9: rule "CC COOLDOWN FROM DOWNFALLEN/BRUTE" (src/hero_tuning.opy)
-    9: rule "BORN TO BATTLE PLAYER EARNS ELIMINATION" (src/enhancements.opy)
     8: rule "START GAME IF WAITING FOR PLAYERS" (src/global_startup.opy)
     8: rule "completeBossObjective" (src/objective_types/objective_type_bosses.opy)
     8: rule "CASSIDY GRENADE HACK" (src/hero_tuning.opy)
     8: rule "startBotThrottleAtTarget" (src/zombie_types.opy)
     7: rule "applyScaledMoveSpeed" (src/subroutines.opy)
     7: rule "applyBotKnockbackScale" (src/subroutines.opy)
+    7: rule "DOUBLE JUMP RESET TAP ON DEATH" (src/augments.opy)
     6: rule "daytakerAbortReset" (src/zombie_types.opy)
     6: rule "finishPowerUpDrop" (src/power_ups.opy)
     5: rule "excludeCurrentHeroFromSelection" (src/subroutines.opy)
@@ -275,8 +299,8 @@ settings
 {
 	main
 	{
-		Description: "[Original Creator: Mazattack#1183]\r\n[Original Game Code: MPJFR]\r\n[Modified by: Kamenrider#11346]\r\nworkshop.codes/786TW\r\n\r\nFight against an endless horde of zombies while completing various objectives. \r\nUse power-ups found in supply drops while you fight off the horde. \r\nGet to the extraction point and watch the map get nuked. Don't leave anyone behind! \r\n\r\nCommunity ZSM Discord: https://discord.gg/3BhYtNfwMj\r\n\r\nOptimized version 87EJP (d8efbdc) by snky#21990"
-		Mode Name: "Zombie Survival Missions Modded"
+		Description: "Community ZSM Discord: https://discord.gg/3BhYtNfwMj\r\n\r\nCreated by snky#21990"
+		Mode Name: "Zombie Survival Missions Experiments"
 	}
 	lobby
 	{
@@ -426,8 +450,8 @@ settings
 	{
 		Boss Size: 2.5
 		Chance to mutate percentage: 25
-		Default Enhancement: [1]
 		Zombie Size: 1
+		Number of Objectives: 3
 	}
 	extensions
 	{
@@ -459,90 +483,89 @@ variables {
         18: losOffsetConst
         19: colorChargeBatteryConst
         20: dummyHoldingPositionConst
-        21: colorKevlarConst
-        22: offsetDownHundredConst
-        23: offsetUpOneAndHalfConst
-        24: offsetUpQuarterConst
-        25: powerUpColorListConst
-        26: isPregameSetup
-        27: isSpecialGameMode
-        28: isGameplayActive
-        29: isOvertimeActive
-        30: isVoting
-        31: difficultySetting
-        32: challengeSetting
-        33: zombieSetting
-        34: objectiveTypeSetting
-        35: matchEndTime
-        36: uniqueSkinCap
-        37: numberOfBots
-        38: walkCenter
-        39: mapGridList
-        40: attackSpawnRooms
-        41: activeAttackSpawnRoom
-        42: spawnRoomIndex
-        43: botSpawnPointList
-        44: botSpawnPointTimerList
-        45: botSpawnWaypointList
-        46: customTeleportPositionList
-        47: botSpawnTimeList
-        48: startPos
-        49: startCamPos
-        50: objectivePositionList
-        51: objectiveTypeList
-        52: objectiveSpacingList
-        53: objectiveValue
-        54: objectiveProgressSlot
-        55: objectiveDescription
-        56: objectiveColor
-        57: isObjectiveComplete
-        58: objectivePlayerList
-        59: objectiveEntityIdList
-        60: objectivePositionsSlot
-        61: objectivePlacementSlot
-        62: objectiveMotionSlot
-        63: objectiveCheckpointSlot
-        64: objectiveQueueSlot
-        65: objectiveActorSlot
-        66: isBiomorphingGoalPending
-        67: biomorphingResourceTypeList
-        68: biomorphingDeferredTypeList
-        69: biomorphingDeferredPositionList
-        70: biomorphingResourceTextIdList
-        71: biomorphingResourceEffectIdList
-        72: extractionSpeedUp
-        73: evacSurvivorList
-        74: supplyDropLandingPosition
-        75: isSupplyDropOpen
-        76: supplyDropPowerUpCount
-        77: supplyPowerUpIdList
-        78: supplyPowerUpPositionList
-        79: supplyPowerUpTextIdList
-        80: supplyPowerUpEffectIdList
-        81: playerTargetList
-        82: userNameList
-        83: playerStatsList
-        84: healthpackPositionList
-        85: mustReviveTime
-        86: botHeroList
-        87: botSpawnRateList
-        88: botBiteDamageList
-        89: botBiteDurationList
-        90: botDamageDealtList
-        91: botHealthList
-        92: botThrottleSpeedList
-        93: availableMutationList
-        94: miniBossList
-        95: bossStateList
-        96: isSmolderEventActive
-        97: bossesAvailableHeroList
-        98: bossesExcludedHeroList
-        99: objectiveRad
-        100: satelliteLaserPosition
-        101: extractionZoneRad
-        102: menuFinaleMotionSlot
-        103: supplyDropPosition
-        104: numbersList
+        21: offsetDownHundredConst
+        22: offsetUpOneAndHalfConst
+        23: offsetUpQuarterConst
+        24: powerUpColorListConst
+        25: isPregameSetup
+        26: isSpecialGameMode
+        27: isGameplayActive
+        28: isOvertimeActive
+        29: isVoting
+        30: difficultySetting
+        31: challengeSetting
+        32: zombieSetting
+        33: objectiveTypeSetting
+        34: matchEndTime
+        35: uniqueSkinCap
+        36: numberOfBots
+        37: walkCenter
+        38: mapGridList
+        39: attackSpawnRooms
+        40: activeAttackSpawnRoom
+        41: spawnRoomIndex
+        42: botSpawnPointList
+        43: botSpawnPointTimerList
+        44: botSpawnWaypointList
+        45: customTeleportPositionList
+        46: botSpawnTimeList
+        47: startPos
+        48: startCamPos
+        49: objectivePositionList
+        50: objectiveTypeList
+        51: objectiveSpacingList
+        52: objectiveValue
+        53: objectiveProgressSlot
+        54: objectiveDescription
+        55: objectiveColor
+        56: isObjectiveComplete
+        57: objectivePlayerList
+        58: objectiveEntityIdList
+        59: objectivePositionsSlot
+        60: objectivePlacementSlot
+        61: objectiveMotionSlot
+        62: objectiveCheckpointSlot
+        63: objectiveQueueSlot
+        64: objectiveActorSlot
+        65: isBiomorphingGoalPending
+        66: biomorphingResourceTypeList
+        67: biomorphingDeferredTypeList
+        68: biomorphingDeferredPositionList
+        69: biomorphingResourceTextIdList
+        70: biomorphingResourceEffectIdList
+        71: extractionSpeedUp
+        72: evacSurvivorList
+        73: supplyDropLandingPosition
+        74: isSupplyDropOpen
+        75: supplyDropPowerUpCount
+        76: supplyPowerUpIdList
+        77: supplyPowerUpPositionList
+        78: supplyPowerUpTextIdList
+        79: supplyPowerUpEffectIdList
+        80: playerTargetList
+        81: userNameList
+        82: playerStatsList
+        83: healthpackPositionList
+        84: mustReviveTime
+        85: botHeroList
+        86: botSpawnRateList
+        87: botBiteDamageList
+        88: botBiteDurationList
+        89: botDamageDealtList
+        90: botHealthList
+        91: botThrottleSpeedList
+        92: availableMutationList
+        93: miniBossList
+        94: bossStateList
+        95: isSmolderEventActive
+        96: bossesAvailableHeroList
+        97: bossesExcludedHeroList
+        98: objectiveRad
+        99: satelliteLaserPosition
+        100: extractionZoneRad
+        101: menuFinaleMotionSlot
+        102: supplyDropPosition
+        103: numbersList
     player:
         0: botBiteDamage
         1: botBaseHealth
@@ -557,83 +580,88 @@ variables {
         10: isAfk
         11: isHeroSwitchRespawn
         12: enhancementId
-        13: enhancementHitchhikerPassenger
-        14: enhancementCarrierPoolId
-        15: pregameState
-        16: isPregameVoting
-        17: rescueLeader
-        18: biomorphingResourceAmount
-        19: explosionInnerColor
-        20: explosionOuterColor
-        21: explosionScale
-        22: aiThrottleSpeedSlot
-        23: recoveryTimeSlot
-        24: isCrowdControlled
-        25: actorCountdownSlot
-        26: controlStateSlot
-        27: actorAbilitySlot2
-        28: initialMaxHealth
-        29: isAttached
-        30: candidateTargetList
-        31: sizeScale
-        32: actorAbilitySlot1
-        33: objectiveTypeSnapshot
-        34: visualEntityIdList
-        35: visualCleanupIndex
-        36: actorLoopSlot
-        37: abilityTargetList
-        38: movementSpeedScale
-        39: actorTeamSlot0
-        40: actorTeamSlot1
-        41: actorTeamSlot2
-        42: actorTeamSlot3
-        43: actorTeamSlot4
-        44: powerUpForceFieldSphereId
-        45: powerUpHealBeaconLightShaftId
-        46: powerUpNoCooldownsHudId
-        47: powerUpAirStrikeRingId
-        48: powerUpCloakingDeviceSphereId
-        49: powerUpSuperNanoGoodAuraId
-        50: powerUpBouncePadRingId
-        51: powerUpUltimateChargerHudId
-        52: powerUpStunBeamId
-        53: actorTeamSlot5
-        54: actorTeamSlot6
-        55: actorTeamSlot7
-        56: actorTeamSlot8
-        57: actorTeamSlot9
-        58: actorTeamSlot10
-        59: actorTeamSlot11
-        60: actorTeamSlot13
-        61: actorTeamSlot14
-        62: actorTeamSlot15
-        63: actorTeamSlot16
-        64: actorTeamSlot17
-        65: actorTeamSlot18
-        66: actorTeamSlot19
-        67: actorTeamSlot20
-        68: actorTeamSlot21
-        69: actorTeamSlot22
-        70: actorTeamSlot23
-        71: actorTeamSlot24
-        72: actorTeamSlot25
-        73: actorTeamSlot26
-        74: actorTeamSlot27
-        75: actorTeamSlot28
-        76: team1PositionSlot
-        77: objectiveActorKindSlot
-        78: menuTradeItemSlot
-        79: infectionLevel
-        80: actorMotionSlot1
-        81: actorMotionSlot2
-        82: damageOverTimeRemaining
-        83: botReturnTime
-        84: actorTeamSlot12
-        85: botAbilityCooldown
-        86: enhancementPupPosition
-        87: botReigniteRisePosition
-        88: enhancementPupCooldown
-        89: enhancementBarrierHealth
+        13: augmentId
+        14: augmentState0
+        15: augmentState1
+        16: augmentState2
+        17: augmentState3
+        18: enhancementHitchhikerPassenger
+        19: enhancementCarrierPoolId
+        20: pregameState
+        21: isPregameVoting
+        22: rescueLeader
+        23: biomorphingResourceAmount
+        24: explosionInnerColor
+        25: explosionOuterColor
+        26: explosionScale
+        27: aiThrottleSpeedSlot
+        28: recoveryTimeSlot
+        29: isCrowdControlled
+        30: actorCountdownSlot
+        31: controlStateSlot
+        32: actorAbilitySlot2
+        33: initialMaxHealth
+        34: isAttached
+        35: candidateTargetList
+        36: sizeScale
+        37: actorAbilitySlot1
+        38: objectiveTypeSnapshot
+        39: visualEntityIdList
+        40: visualCleanupIndex
+        41: actorLoopSlot
+        42: abilityTargetList
+        43: movementSpeedScale
+        44: actorTeamSlot0
+        45: actorTeamSlot1
+        46: actorTeamSlot2
+        47: actorTeamSlot3
+        48: actorTeamSlot4
+        49: powerUpForceFieldSphereId
+        50: powerUpHealBeaconLightShaftId
+        51: powerUpNoCooldownsHudId
+        52: powerUpAirStrikeRingId
+        53: powerUpCloakingDeviceSphereId
+        54: powerUpSuperNanoGoodAuraId
+        55: powerUpBouncePadRingId
+        56: powerUpUltimateChargerHudId
+        57: powerUpStunBeamId
+        58: actorTeamSlot5
+        59: actorTeamSlot6
+        60: actorTeamSlot7
+        61: actorTeamSlot8
+        62: actorTeamSlot9
+        63: actorTeamSlot10
+        64: actorTeamSlot11
+        65: actorTeamSlot13
+        66: actorTeamSlot14
+        67: actorTeamSlot15
+        68: actorTeamSlot16
+        69: actorTeamSlot17
+        70: actorTeamSlot18
+        71: actorTeamSlot19
+        72: actorTeamSlot20
+        73: actorTeamSlot21
+        74: actorTeamSlot22
+        75: actorTeamSlot23
+        76: actorTeamSlot24
+        77: actorTeamSlot25
+        78: actorTeamSlot26
+        79: actorTeamSlot27
+        80: actorTeamSlot28
+        81: team1PositionSlot
+        82: objectiveActorKindSlot
+        83: menuTradeItemSlot
+        84: infectionLevel
+        85: actorMotionSlot1
+        86: actorMotionSlot2
+        87: damageOverTimeRemaining
+        88: botReturnTime
+        89: actorTeamSlot12
+        90: botAbilityCooldown
+        91: enhancementPupPosition
+        92: botReigniteRisePosition
+        93: enhancementPupCooldown
+        94: enhancementBarrierHealth
 }
 
 subroutines {
@@ -719,9 +747,11 @@ subroutines {
     79: resetBattleAbilityCharge
     80: checkEnhancementPlacement
     81: startPupDefaultChase
+    82: extendAugmentMelee
+    83: useAugmentAirAction
 }
 
-//190 elements
+//181 elements
 rule ("Initialize global variables") {
     event {
         Ongoing - Global;
@@ -732,7 +762,6 @@ rule ("Initialize global variables") {
         Set Global Variable(losOffsetConst, Vector(0, 1.2, 0)); // 7 elements
         Set Global Variable(colorChargeBatteryConst, Custom Color(236, 206, 44, 255)); // 9 elements
         Set Global Variable(dummyHoldingPositionConst, Vector(500, 500, 500)); // 7 elements
-        Set Global Variable(colorKevlarConst, Custom Color(240, 129, 26, 255)); // 9 elements
         Set Global Variable(offsetDownHundredConst, Vector(0, -100, 0)); // 7 elements
         Set Global Variable(offsetUpOneAndHalfConst, Vector(0, 1.5, 0)); // 7 elements
         Set Global Variable(offsetUpQuarterConst, Vector(0, 0.25, 0)); // 7 elements
@@ -1819,7 +1848,7 @@ rule ("START GAME IF WAITING FOR PLAYERS") {
     }
 }
 
-//456 elements
+//454 elements
 rule ("SKIP ASSEMBLING HEROES") {
     event {
         Ongoing - Global;
@@ -1830,7 +1859,7 @@ rule ("SKIP ASSEMBLING HEROES") {
     actions {
         Wait(False, Abort When False); // 1 element
         Set Global Variable(isVoting, True); // 1 element
-        Set Global Variable(phaseSlot9, Array(Icon String(Question Mark), Icon String(Stop), Icon String(Poison), Icon String(Diamond), Icon String(Skull), Icon String(Fire), Icon String(Plus), Icon String(Bolt), Icon String(Spiral), Icon String(Flag), Icon String(Happy))); // 24 elements
+        Set Global Variable(phaseSlot9, Array(Icon String(Question Mark), Icon String(Skull), Icon String(Poison), Icon String(Diamond), Icon String(Fire), Icon String(Plus), Icon String(Bolt), Icon String(Spiral), Icon String(Flag), Icon String(Happy))); // 22 elements
         "Set difficulty votes empty"
         Set Global Variable(phaseSlot3, Mapped Array(Array(True, True, Workshop Setting Toggle(Custom String("Challenge Toggle"), Custom String("Swarm Shootout"), True, 1), Workshop Setting Toggle(Custom String("Challenge Toggle"), Custom String("Random Abilities"), True, 2), Workshop Setting Toggle(Custom String("Challenge Toggle"), Custom String("Insanity"), True, 3), Workshop Setting Toggle(Custom String("Challenge Toggle"), Custom String("Pandora's Box"), True, 4)), Array(Null, Current Array Element))); // 65 elements
         "Set zombie modes empty"
@@ -2128,7 +2157,7 @@ rule ("GLOBAL MENU INITIALIZATION") {
     }
 }
 
-//818 elements
+//811 elements
 rule ("EFFECTS/TEXTS") {
     event {
         Ongoing - Global;
@@ -2159,8 +2188,8 @@ rule ("EFFECTS/TEXTS") {
         Set Global Variable(phaseSlot1, Array(Color(Aqua), Color(Orange), Color(Red), Null, Null, Color(Red), Color(Lime Green), Custom Color(12, 129, 132, 255), Null, Color(Purple))); // 26 elements
         Create HUD Text(All Players(Team 1), Value In Array(Array(Custom String("Objective Type: No Preference"), Custom String("Objective Type: Showdown {0}", Ability Icon String(Hero(Brigitte), Button(Ultimate))), Custom String("Objective Type: Bosses {0}", Icon String(Warning)), Null, Null, Custom String("Objective Type: Kill Zone {0}", If-Then-Else(Modulo(Round To Integer(Multiply(Total Time Elapsed, 1.25), Up), 2), Icon String(Ring Thin), Icon String(Ring Thick))), Custom String("Objective Type: Zombie Egg {0}", Icon String(Radioactive)), Custom String("Objective Type: Satellite Uplink {0}", Icon String(Moon)), Null, Custom String("Objective Type: Mixed Objectives {0}", Icon String(Spiral))), (Local Player).actorTeamSlot21), Value In Array(Array(Char In String(Empty Array, False), Custom String("Players must contest a point against zombies"), Custom String("Spawns giant versions of zombies"), Null, Null, Custom String("Clear zombies from a designated area"), Custom String("Survivors must destroy an object that is spawning zombies"), Custom String("Survivors must repair terminals to communicate with a satellite"), Null, Custom String("Randomly assigns all types of objectives")), (Local Player).actorTeamSlot21), If-Then-Else(Or(Global.isVoting, Compare((Local Player).actorTeamSlot21, ==, Null)), Custom String("Change Vote (Press [{0}])", Input Binding String(Button(Ability 2))), Empty Array), Left, 2, Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Visible To String and Color, Default Visibility); // 141 elements
         "Enhancement"
-        Set Global Variable(phaseSlot2, Array(Color(Aqua), Global.colorKevlarConst, Color(Gray), Color(Blue), Color(Red), Color(Orange), Color(Green), Color(Gray), Global.colorChargeBatteryConst, Color(Purple), Color(Blue))); // 24 elements
-        Create HUD Text(All Players(Team 1), Custom String("Enhancement: {0}{1}", Value In Array(String Split(Custom String("No Preference0Kevlar 0Zombie Hybrid 0Laser Barricade 0Brain Killer 0Pyrotechnic 0Plague Doctor 0Born to Battle 0Charge Batter{0}", Custom String("y 0Hitchhiker 0P.U.P. ")), First Of(Null)), (Local Player).enhancementId), If-Then-Else(Compare((Local Player).enhancementId, >, Null), Value In Array(Global.phaseSlot9, (Local Player).enhancementId), Char In String(Empty Array, False))), Value In Array(Array(Char In String(Empty Array, False), Custom String("Survivor is equipped with armor that protects against infections"), Custom String("Get infected faster, and convert it to explosive damage"), Custom String("Player can place a wall that blocks zombies"), Custom String("Critical hits do more damage"), Custom String("Dealing damage, within 15 meters, sets enemies on fire"), Custom String("Deal more healing to infected players while reducing their infection level"), Custom String("Dealing a final blow will give the player a cooldown reset on the next ability they use"), Custom String("Survivor can place a battery that gives ultimate charge"), Custom String("Survivor can attach to a teammate and fuse their health."), Custom String("Survivor is equipped with an autonomous friendly droid")), (Local Player).enhancementId), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Melee))), Left, 3, Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Visible To String and Color, Default Visibility); // 117 elements
+        Set Global Variable(phaseSlot2, Array(Color(Aqua), Color(Red), Color(Gray), Color(Blue), Color(Orange), Color(Green), Color(Gray), Global.colorChargeBatteryConst, Color(Purple), Color(Blue))); // 22 elements
+        Create HUD Text(All Players(Team 1), Custom String("Enhancement: {0}{1}", Value In Array(String Split(Custom String("No Preference0Brain Killer 0Zombie Hybrid 0Laser Barricade 0Pyrotechnic 0Plague Doctor 0Born to Battle 0Charge Battery 0Hitch{0}", Custom String("hiker 0P.U.P. ")), First Of(Null)), (Local Player).enhancementId), If-Then-Else(Compare((Local Player).enhancementId, >, Null), Value In Array(Global.phaseSlot9, (Local Player).enhancementId), Char In String(Empty Array, False))), Value In Array(Array(Char In String(Empty Array, False), Custom String("Critical hits do more damage"), Custom String("Get infected faster, and convert it to explosive damage"), Custom String("Player can place a wall that blocks zombies"), Custom String("Dealing damage, within 15 meters, sets enemies on fire"), Custom String("Deal more healing to infected players while reducing their infection level"), Custom String("Final blows grant a cooldown reset on the next ability use, storing up to 2 charges"), Custom String("Survivor can place a battery that gives ultimate charge"), Custom String("Survivor can attach to a teammate and fuse their health."), Custom String("Survivor is equipped with an autonomous friendly droid")), (Local Player).enhancementId), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Melee))), Left, 3, Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Visible To String and Color, Default Visibility); // 112 elements
     }
 }
 
@@ -2427,7 +2456,7 @@ rule ("setObjectiveType") {
     }
 }
 
-//86 elements
+//87 elements
 rule ("PLAYER MENU INITIALIZATION") {
     event {
         Ongoing - Each Player;
@@ -2443,6 +2472,7 @@ rule ("PLAYER MENU INITIALIZATION") {
         Disable Game Mode In-World UI(Event Player); // 1 element
         Disable Game Mode HUD(Event Player); // 1 element
         Set Player Variable(Event Player, enhancementId, Null); // 1 element
+        Set Player Variable(Event Player, augmentId, Null); // 1 element
         If(Global.isVoting); // 2 elements
             "Reset each vote before any menu reader; these slots have distinct gameplay owners."
             Set Player Variable(Event Player, actorTeamSlot3, Null); // 1 element
@@ -2496,7 +2526,7 @@ rule ("EFFECTS/TEXT") {
     }
 }
 
-//110 elements
+//117 elements
 rule ("PLAYER SELECTS/RESELECTS HERO") {
     event {
         Ongoing - Each Player;
@@ -2537,7 +2567,7 @@ rule ("PLAYER SELECTS/RESELECTS HERO") {
         Set Player Variable(Event Player, isPlayerActive, True); // 1 element
         Wait(5, Restart When True); // 2 elements
         Abort If(Not(Global.isPregameSetup)); // 3 elements
-        If(Or(And(Global.isVoting, And(Not(Or(Or((Event Player).actorTeamSlot3, (Event Player).menuTradeItemSlot), (Event Player).actorTeamSlot21)), Compare((Event Player).enhancementId, ==, Null))), And(Not(Global.isVoting), Compare((Event Player).enhancementId, ==, Null)))); // 33 elements
+        If(And(Compare((Event Player).augmentId, ==, Null), Or(And(Global.isVoting, And(Not(Or(Or((Event Player).actorTeamSlot3, (Event Player).menuTradeItemSlot), (Event Player).actorTeamSlot21)), Compare((Event Player).enhancementId, ==, Null))), And(Not(Global.isVoting), Compare((Event Player).enhancementId, ==, Null))))); // 40 elements
             Press Button(Event Player, Button(Jump)); // 2 elements
         End; // 1 element
         //__label_if_19__:
@@ -3865,7 +3895,7 @@ rule ("INITIALIZE SURVIVOR TO BE RESCUED") {
         Set Player Variable(Global.objectiveActorSlot, actorAbilitySlot1, False); // 2 elements
         Set Player Variable(Event Player, rescueLeader, Null); // 1 element
         Set Player Variable(Event Player, movementSpeedScale, 1); // 2 elements
-        Set Player Variable(Event Player, enhancementId, 9); // 2 elements
+        Set Player Variable(Event Player, enhancementId, 8); // 2 elements
         Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
         Set Player Variable(Event Player, actorTeamSlot23, False); // 1 element
         Set Status(Global.objectiveActorSlot, Null, Unkillable, 999999999999); // 3 elements
@@ -4501,7 +4531,7 @@ rule ("EFFECTS/TEXTS") {
         Create In-World Text(Filtered Array(All Players(All Teams), And(Is Dead(Event Player), Compare((Event Player).rescueTimeRemaining, >, Null))), If-Then-Else((Event Player).isReviving, Custom String("Reviving: {0}s", Round To Integer((Event Player).recoveryTimeSlot, Up)), Custom String("Revive: {0}s", Round To Integer((Event Player).rescueTimeRemaining, Up))), Add(Position Of(Event Player), Global.offsetUpOneAndHalfConst), 1.5, Do Not Clip, Visible To Position String and Color, If-Then-Else((Event Player).isReviving, Color(Yellow), Color(Red)), Default Visibility); // 46 elements
         "Reviving ring"
         Create Effect(Filtered Array(All Players(All Teams), (Event Player).isReviving), Ring, Color(Yellow), Position Of(Event Player), 5, Visible To Position and Radius); // 10 elements
-        "Health Hud text"
+        "Player health and infection/revival status."
         Create HUD Text(Filtered Array(All Players(All Teams), And(Compare((Event Player).rescueTimeRemaining, >, Null), Not((Event Player).isAfk))), Custom String("{0}{1}: {2}", If-Then-Else(Global.isSmolderEventActive, Custom String("Winston"), Event Player), If-Then-Else(Global.isSmolderEventActive, Hero Icon String(Hero(Winston)), Hero Icon String(Hero Of(Event Player))), If-Then-Else(Is Alive(Event Player), Custom String("{0}%", Round To Integer(Multiply(Normalized Health(Event Player), 100), Up)), Custom String("DOWN"))), If-Then-Else(And(Is Dead(Event Player), Not((Event Player).isReviving)), Custom String("Revive: {0}s", Round To Integer((Event Player).rescueTimeRemaining, Up)), Empty Array), If-Then-Else(Compare((Event Player).infectionLevel, >=, 1), Custom String("{0}Infection Level: {1}", If-Then-Else(Compare((Event Player).enhancementId, ==, 2), Icon String(Poison), Empty Array), Round To Integer((Event Player).infectionLevel, Down)), If-Then-Else(Compare((Event Player).infectionLevel, <, Null), Custom String("Vaccine Level: {0}", Absolute Value(Round To Integer((Event Player).infectionLevel, Down))), If-Then-Else((Event Player).isReviving, Custom String("Reviving: {0}s", Round To Integer((Event Player).recoveryTimeSlot, Up)), Empty Array))), Left, If-Then-Else(Compare(Normalized Health(Event Player), >, 0.97), Null, Divide(True, Add(Normalized Health(Event Player), True))), If-Then-Else(Compare(Normalized Health(Event Player), >, 0.97), Color(Blue), If-Then-Else(Compare(Normalized Health(Event Player), >, 0.66), Color(Green), If-Then-Else(Compare(Normalized Health(Event Player), >, 0.33), Color(Yellow), If-Then-Else(Compare(Normalized Health(Event Player), >, Null), Color(Orange), Color(Red))))), Color(Red), If-Then-Else(Compare((Event Player).infectionLevel, >=, 1), Color(Lime Green), If-Then-Else(Compare((Event Player).infectionLevel, <, Null), Color(Blue), Color(Yellow))), Visible To Sort Order String and Color, Default Visibility); // 197 elements
     }
 }
@@ -8403,7 +8433,7 @@ rule ("finishPowerUpDrop") {
     }
 }
 
-//1029 elements
+//948 elements
 rule ("PLAYER ENHANCEMENT INITIALIZATION") {
     event {
         Ongoing - Each Player;
@@ -8418,15 +8448,9 @@ rule ("PLAYER ENHANCEMENT INITIALIZATION") {
     }
     actions {
         Skip If(Compare((Event Player).enhancementId, !=, Null), True); // 6 elements
-        "Default Enhancement: Workshop Setting\nNo enhancement state slots: resolve the default enhancement before initializing its state.\nWorkshop requires default index 0 so the first option remains selectable."
-        Set Player Variable(Event Player, enhancementId, Workshop Setting Combo(Custom String("Enhancements"), Custom String("Default Enhancement"), 0, Array(Custom String("No Enhancement"), Custom String("Kevlar"), Custom String("Zombie Hybrid"), Custom String("Laser Barricade"), Custom String("Brain Killer"), Custom String("Pyrotechnic"), Custom String("Plague Doctor"), Custom String("Born to Battle"), Custom String("Charge Battery"), Custom String("Hitchhiker"), Custom String("P.U.P.")), 0)); // 70 elements
+        "No preference and late-join zero state receive one real choice before\nits state is initialized. Retain the selected ID across later spawns."
+        Set Player Variable(Event Player, enhancementId, Random Integer(True, 9)); // 4 elements
         //__label_if_66__:
-        "Kevlar"
-        If(Compare((Event Player).enhancementId, ==, 1)); // 7 elements
-            Create HUD Text(Event Player, Custom String("Kevlar {0}", Icon String(Stop)), Null, Null, Left, 99, Global.colorKevlarConst, Null, Null, String, Default Visibility); // 8 elements
-            Wait Until(Compare((Event Player).initialMaxHealth, >, Null), 999999999999); // 7 elements
-            Add Health Pool To Player(Event Player, Armor, 75, True, False); // 2 elements
-        End; // 1 element
         "Zombie Hybrid"
         If(Compare((Event Player).enhancementId, ==, 2)); // 7 elements
             "Enhancement: Zombie Hyrbid\nenhancementHybridCooldown: remaining explosion cooldown in seconds (20 on use), for activation checks and HUD."
@@ -8441,7 +8465,7 @@ rule ("PLAYER ENHANCEMENT INITIALIZATION") {
         End; // 1 element
         "Laser Barricade"
         If(True); // 1 element
-            Skip(Value In Array(Array(47, Null, 8, 10, 13, 17, 20, 28, 34), Add(True, Index Of Array Value(Array(3, 4, 5, 6, 7, 8, 9, 10), (Event Player).enhancementId)))); // 44 elements
+            Skip(Value In Array(Array(47, Null, 8, 10, 13, 17, 20, 28, 34), Add(True, Index Of Array Value(Array(3, 1, 4, 5, 6, 7, 8, 9), (Event Player).enhancementId)))); // 44 elements
         //__label_switch_67_0__:
         "enhancementBarrierCorner2: second lower corner in world coordinates, for beams and the along-barrier direction.\nenhancementBarrierHealth: current barrier health (10000 on placement), for blocking, damage, regeneration and HUD."
         Create HUD Text(Event Player, Custom String("Laser Barricade {0}{1}", Icon String(Diamond), If-Then-Else(Compare((Event Player).actorTeamSlot24, >, Null), Custom String(" {0}s", (Event Player).actorTeamSlot24), Empty Array)), If-Then-Else(Compare((Event Player).enhancementBarrierHealth, >, Null), Custom String(" {0}HP", Round To Integer((Event Player).enhancementBarrierHealth, Up)), Empty Array), If-Then-Else(Compare((Event Player).actorTeamSlot24, <=, Null), Custom String("Hold [{0}] to place a barricade", Input Binding String(Button(Melee))), Empty Array), Left, 99, If-Then-Else(Compare((Event Player).actorTeamSlot24, >, Null), Color(Red), Color(Blue)), Color(Blue), Color(Blue), Visible To String and Color, Default Visibility); // 63 elements
@@ -8474,9 +8498,9 @@ rule ("PLAYER ENHANCEMENT INITIALIZATION") {
         Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
         Else; // 1 element
         //__label_switch_67_4__:
-        "enhancementIsBattleResetReady: whether an earned ability reset is still available; cleared when the reset is consumed.\nenhancementBattleAbilityButton: selected ability button, retained through waits to reset its charge or cooldown."
-        Create HUD Text(Event Player, Custom String("Born to Battle {0}", Icon String(Bolt)), Null, If-Then-Else((Event Player).actorTeamSlot22, Icon String(Checkmark), Empty Array), Left, 99, Color(Gray), Null, Color(Gray), String, Default Visibility); // 15 elements
-        Set Player Variable(Event Player, actorTeamSlot22, False); // 1 element
+        "Enhancement: Born to Battle\nenhancementBattleResetCharges: 0-2 earned ability resets; final blows add one and each reset consumes one.\nenhancementBattleAbilityButton: selected ability button, retained through waits to reset its charge or cooldown."
+        Create HUD Text(Event Player, Custom String("Born to Battle {0}", Icon String(Bolt)), Null, Value In Array(Array(Char In String(Empty Array, False), Icon String(Checkmark), Custom String("{0} {0}", Icon String(Checkmark))), (Event Player).actorTeamSlot22), Left, 99, Color(Gray), Null, Color(Gray), String, Default Visibility); // 25 elements
+        Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
         Else; // 1 element
         //__label_switch_67_5__:
         "enhancementBatteryReuseDuration: full battery reuse cooldown in seconds (10), used to start the timer and scale progress.\nenhancementBatteryPlacementCooldown: remaining placement cooldown in seconds (20 on placement), for placement checks and HUD."
@@ -8668,7 +8692,7 @@ rule ("BRAIN KILLER EXTRA DAMAGE") {
         All;
     }
     conditions {
-        (Event Player).enhancementId == 4; // 4 elements
+        (Event Player).enhancementId == 1; // 4 elements
         Event Was Critical Hit == True; // 1 element
     }
     actions {
@@ -8686,7 +8710,7 @@ rule ("PYROTECHNIC SETS ENEMIES ON FIRE") {
         All;
     }
     conditions {
-        (Attacker).enhancementId == 5; // 4 elements
+        (Attacker).enhancementId == 4; // 4 elements
         Victim != Event Player; // 1 element
         Event Ability != Null; // 1 element
         Distance Between(Attacker, Victim) < 15; // 4 elements
@@ -8705,7 +8729,7 @@ rule ("PYROTECHNIC APPLIES DAMAGE") {
         All;
     }
     conditions {
-        (Event Player).enhancementId == 5; // 4 elements
+        (Event Player).enhancementId == 4; // 4 elements
         (Event Player).actorTeamSlot22 != Empty Array; // 3 elements
     }
     actions {
@@ -8727,7 +8751,7 @@ rule ("PYROTECHNIC APPLIES DAMAGE") {
     }
 }
 
-//9 elements
+//10 elements
 rule ("BORN TO BATTLE PLAYER EARNS ELIMINATION") {
     event {
         Player Dealt Final Blow;
@@ -8735,11 +8759,11 @@ rule ("BORN TO BATTLE PLAYER EARNS ELIMINATION") {
         All;
     }
     conditions {
-        (Event Player).enhancementId == 7; // 4 elements
-        (Event Player).actorTeamSlot22 != True; // 3 elements
+        (Event Player).enhancementId == 6; // 4 elements
+        (Event Player).actorTeamSlot22 < 2; // 4 elements
     }
     actions {
-        Set Player Variable(Event Player, actorTeamSlot22, True); // 1 element
+        Modify Player Variable(Event Player, actorTeamSlot22, Add, True); // 1 element
     }
 }
 
@@ -8751,8 +8775,8 @@ rule ("BORN TO BATTLE PLAYER USES ABILITY CHARGE") {
         All;
     }
     conditions {
-        (Event Player).enhancementId == 7; // 4 elements
-        (Event Player).actorTeamSlot22 == True; // 3 elements
+        (Event Player).enhancementId == 6; // 4 elements
+        (Event Player).actorTeamSlot22 > Null; // 3 elements
         Is True For Any(Array(Button(Secondary Fire), Button(Ability 1), Button(Ability 2), Button(Crouch), Button(Jump)), Is Button Held(Event Player, Current Array Element)) == True; // 16 elements
     }
     actions {
@@ -8788,11 +8812,11 @@ rule ("BORN TO BATTLE PLAYER USES ABILITY CHARGE") {
         //lbl_0:
         "If the ability charge increased"
         If(Ability Charge(Event Player, (Event Player).actorTeamSlot23)); // 5 elements
-            Set Player Variable(Event Player, actorTeamSlot22, False); // 1 element
+            Modify Player Variable(Event Player, actorTeamSlot22, Subtract, True); // 1 element
         "Else if ability is on cooldown"
         Else If(Compare(Ability Cooldown(Event Player, (Event Player).actorTeamSlot23), >, 0.5)); // 9 elements
             Set Ability Cooldown(Event Player, (Event Player).actorTeamSlot23, False); // 3 elements
-            Set Player Variable(Event Player, actorTeamSlot22, False); // 1 element
+            Modify Player Variable(Event Player, actorTeamSlot22, Subtract, True); // 1 element
     }
 }
 
@@ -8804,7 +8828,7 @@ rule ("PLAGUE DOCTOR REDUCES PLAYERS' INFECTION LEVELS") {
         All;
     }
     conditions {
-        (Event Player).enhancementId == 6; // 4 elements
+        (Event Player).enhancementId == 5; // 4 elements
     }
     actions {
         If((Event Player).isInfected); // 3 elements
@@ -8831,7 +8855,7 @@ rule ("CHARGE BATTERY") {
     }
     conditions {
         Is Button Held(Event Player, Button(Melee)) == True; // 4 elements
-        (Event Player).enhancementId == 8; // 4 elements
+        (Event Player).enhancementId == 7; // 4 elements
         Global.isGameplayActive == True; // 2 elements
         Is Alive(Event Player) == True; // 2 elements
         (Event Player).actorTeamSlot25 <= Null; // 3 elements
@@ -8866,7 +8890,7 @@ rule ("CHARGE BATTERY (USAGE AND COOLDOWNS)") {
     }
     conditions {
         Global.isGameplayActive == True; // 2 elements
-        (Event Player).enhancementId == 8; // 4 elements
+        (Event Player).enhancementId == 7; // 4 elements
         (Event Player).actorTeamSlot22 != False; // 3 elements
         Is True For Any(Global.playerTargetList, And(And(And(Has Spawned(Current Array Element), Is Alive(Current Array Element)), Compare(Ultimate Charge Percent(Current Array Element), <, 100)), Compare(Distance Between(Current Array Element, (Event Player).actorTeamSlot22), <, Multiply(1.5, (Current Array Element).sizeScale)))) == True; // 29 elements
     }
@@ -8908,7 +8932,7 @@ rule ("HITCHHIKER ATTACH/DETATCH") {
         All;
     }
     conditions {
-        (Event Player).enhancementId == 9; // 4 elements
+        (Event Player).enhancementId == 8; // 4 elements
         Or(Is Button Held(Event Player, Button(Crouch)), And((Event Player).isAttached, Or(Or(Or(Or(Or(Or(Not(And(Has Spawned(Event Player), Has Spawned((Event Player).actorTeamSlot22))), Is Dead(Event Player)), Is Dead((Event Player).actorTeamSlot22)), Not(Entity Exists((Event Player).actorTeamSlot22))), Has Status(Event Player, Knocked Down)), Has Status((Event Player).actorTeamSlot22, Knocked Down)), Compare(Distance Between(Event Player, (Event Player).actorTeamSlot22), >, Multiply(3, ((Event Player).actorTeamSlot22).sizeScale))))) == True; // 57 elements
         Hero Of(Event Player) != Hero(Mei); // 3 elements
     }
@@ -8973,7 +8997,7 @@ rule ("HITCHHIKER LIFEBONDS") {
         All;
     }
     conditions {
-        (Event Player).enhancementId == 9; // 4 elements
+        (Event Player).enhancementId == 8; // 4 elements
         (Event Player).isAttached == True; // 3 elements
         Is Alive(Event Player) == True; // 2 elements
         Is Alive((Event Player).actorTeamSlot22) == True; // 4 elements
@@ -9002,7 +9026,7 @@ rule ("P.U.P. TARGET") {
         All;
     }
     conditions {
-        (Event Player).enhancementId == 10; // 4 elements
+        (Event Player).enhancementId == 9; // 4 elements
         "Cooldown is at 0s"
         (Event Player).enhancementPupCooldown <= Null; // 3 elements
         "P.U.P. target"
@@ -9040,7 +9064,7 @@ rule ("P.U.P. CONTROL") {
         All;
     }
     conditions {
-        (Event Player).enhancementId == 10; // 4 elements
+        (Event Player).enhancementId == 9; // 4 elements
         (Event Player).actorTeamSlot24 != Null; // 3 elements
     }
     actions {
@@ -9130,7 +9154,674 @@ rule ("resetBattleAbilityCharge") {
     }
     actions {
         Set Ability Charge(Event Player, (Event Player).actorTeamSlot23, True); // 3 elements
-        Set Player Variable(Event Player, actorTeamSlot22, False); // 1 element
+        Modify Player Variable(Event Player, actorTeamSlot22, Subtract, True); // 1 element
+    }
+}
+
+//90 elements
+rule ("AUGMENT MENU") {
+    event {
+        Ongoing - Global;
+    }
+    actions {
+        "Like the primary enhancement HUD, this is created once and reevaluates per viewer."
+        Create HUD Text(All Players(Team 1), Custom String("Augment: {0} {1}", Value In Array(String Split(Custom String("No Preference0Kevlar0Shock Landing0Double Jump0Long Reach0Ammo Pack0Grapnel Launcher"), First Of(Null)), (Local Player).augmentId), Value In Array(Array(Icon String(Question Mark), Icon String(Stop), Icon String(Arrow: Right), Icon String(Arrow: Up), Icon String(X), Icon String(Plus), Icon String(Arrow: Down)), (Local Player).augmentId)), Value In Array(Array(Char In String(Empty Array, False), Custom String("Gain 75 armor that helps protect against infection"), Custom String("Press Jump again in midair: landing shockwave deals 40 damage and pushes nearby zombies; movement input adds a dash. Phased a{0}", Custom String("nd invulnerable for 0.5s. Cooldown: 13s")), Custom String("Jump in midair or double-tap Jump. First hit of 30+ damage in flight or within 0.5s after landing deals +50%. Cooldown: 16s"), Custom String("Quadruple Quick Melee reach with a small push; triple melee weapon, Dragonblade and Carnage reach"), Custom String("Carry twice the ammo per full magazine; full reloads restore the bonus"), Custom String("Crouch + Jump: grapple 7-40m; hit for 35 damage and stun for 0.5s. Cooldown: 16s")), (Local Player).augmentId), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Interact))), Left, 4, Color(Aqua), Color(Aqua), Color(Aqua), Visible To and String, Default Visibility); // 89 elements
+    }
+}
+
+//37 elements
+rule ("AUGMENT PREGAME ICON") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        All;
+    }
+    conditions {
+        Global.isPregameSetup == True; // 2 elements
+        (Event Player).isPlayerActive == True; // 3 elements
+    }
+    actions {
+        Create In-World Text(All Players(All Teams), Value In Array(Array(Icon String(Question Mark), Icon String(Stop), Icon String(Arrow: Right), Icon String(Arrow: Up), Icon String(X), Icon String(Plus), Icon String(Arrow: Down)), (Event Player).augmentId), Add((Event Player).team1PositionSlot, Multiply(2.75, Up)), 1.5, Do Not Clip, Visible To Position and String, Color(White), Default Visibility); // 31 elements
+    }
+}
+
+//25 elements
+rule ("PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        All;
+    }
+    conditions {
+        Global.isPregameSetup == True; // 2 elements
+        Has Spawned(Event Player) == True; // 2 elements
+        Is Button Held(Event Player, Button(Interact)) == True; // 4 elements
+    }
+    actions {
+        Set Player Variable(Event Player, augmentId, Modulo(Add((Event Player).augmentId, If-Then-Else(Is Button Held(Event Player, Button(Secondary Fire)), 6, 1)), 7)); // 16 elements
+    }
+}
+
+//107 elements
+rule ("PLAYER AUGMENT INITIALIZATION") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        All;
+    }
+    conditions {
+        Has Spawned(Event Player) == True; // 2 elements
+        Global.isGameplayActive == True; // 2 elements
+        Is Dummy Bot(Event Player) == False; // 2 elements
+        (Event Player).isHeroSwitchRespawn == False; // 3 elements
+    }
+    actions {
+        Skip If(Compare((Event Player).augmentId, !=, Null), True); // 6 elements
+        "Menu non-selection and late-join zero state each receive one real\nrandom choice. A nonzero ID preserves explicit and previously rolled choices."
+        Set Player Variable(Event Player, augmentId, Random Integer(True, 6)); // 4 elements
+        //__label_if_73__:
+        Create HUD Text(Event Player, Custom String("{0} {1}", Value In Array(String Split(Custom String("No Preference0Kevlar0Shock Landing0Double Jump0Long Reach0Ammo Pack0Grapnel Launcher"), First Of(Null)), (Event Player).augmentId), Value In Array(Array(Icon String(Question Mark), Icon String(Stop), Icon String(Arrow: Right), Icon String(Arrow: Up), Icon String(X), Icon String(Plus), Icon String(Arrow: Down)), (Event Player).augmentId)), Null, If-Then-Else(Array Contains(Array(2, 3, 6), (Event Player).augmentId), If-Then-Else(Compare(Total Time Elapsed, >=, (Event Player).augmentState0), Icon String(Checkmark), Custom String("{0}s", Round To Integer(Subtract((Event Player).augmentState0, Total Time Elapsed), Up))), Empty Array), Left, 100, Color(Aqua), Null, Color(Aqua), String, Default Visibility); // 71 elements
+        If(Compare((Event Player).augmentId, ==, 1)); // 7 elements
+            "Preserve the original enhancement's 75 armor and readiness gate."
+            Wait Until(Compare((Event Player).initialMaxHealth, >, Null), 999999999999); // 7 elements
+            Add Health Pool To Player(Event Player, Armor, 75, True, False); // 2 elements
+    }
+}
+
+//48 elements
+rule ("AUGMENT AIR ACTION RECHARGE") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        All;
+    }
+    conditions {
+        Global.isGameplayActive == True; // 2 elements
+        Array Contains(Array(2, 3), (Event Player).augmentId) == True; // 10 elements
+        Is Alive(Event Player) == True; // 2 elements
+        Is Dummy Bot(Event Player) == False; // 2 elements
+        Is On Ground(Event Player) == False; // 2 elements
+    }
+    actions {
+        "Arm once per airborne interval, only after the takeoff button is released.\nThis avoids spending the extra jump on the game's first airborne input tick."
+        Set Player Variable(Event Player, augmentState1, False); // 1 element
+        Wait Until(Or(Or(Not(Is Button Held(Event Player, Button(Jump))), Is On Ground(Event Player)), Is Dead(Event Player)), 999999999999); // 12 elements
+        If(And(Is Alive(Event Player), Not(Is On Ground(Event Player)))); // 6 elements
+            Set Player Variable(Event Player, augmentState1, True); // 1 element
+        End; // 1 element
+        Wait Until(Or(Is On Ground(Event Player), Is Dead(Event Player)), 999999999999); // 6 elements
+        Set Player Variable(Event Player, augmentState1, False); // 1 element
+        Loop If Condition Is True; // 1 element
+    }
+}
+
+//27 elements
+rule ("AUGMENT AIR ACTION INPUT") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        All;
+    }
+    conditions {
+        Global.isGameplayActive == True; // 2 elements
+        Array Contains(Array(2, 3), (Event Player).augmentId) == True; // 10 elements
+        Is Alive(Event Player) == True; // 2 elements
+        Is Dummy Bot(Event Player) == False; // 2 elements
+        (Event Player).augmentState1 == True; // 3 elements
+        Is On Ground(Event Player) == False; // 2 elements
+        Is Button Held(Event Player, Button(Jump)) == True; // 4 elements
+    }
+    actions {
+        Call Subroutine(useAugmentAirAction); // 1 element
+    }
+}
+
+//42 elements
+rule ("DOUBLE JUMP DOUBLE TAP") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        All;
+    }
+    conditions {
+        Global.isGameplayActive == True; // 2 elements
+        (Event Player).augmentId == 3; // 4 elements
+        Is Alive(Event Player) == True; // 2 elements
+        Is Dummy Bot(Event Player) == False; // 2 elements
+        Is Button Held(Event Player, Button(Jump)) == True; // 4 elements
+    }
+    actions {
+        "Only press edges update the timestamp. A blocked native jump can leave the\nplayer grounded; its second press still launches without cancelling abilities."
+        If(And(Compare((Event Player).augmentState2, >, Null), Compare(Subtract(Total Time Elapsed, (Event Player).augmentState2), <=, 0.3))); // 16 elements
+            Set Player Variable(Event Player, augmentState2, Null); // 1 element
+            If(Or(Is On Ground(Event Player), (Event Player).augmentState1)); // 6 elements
+                Call Subroutine(useAugmentAirAction); // 1 element
+            End; // 1 element
+        Else; // 1 element
+            Set Player Variable(Event Player, augmentState2, Total Time Elapsed); // 1 element
+    }
+}
+
+//7 elements
+rule ("DOUBLE JUMP RESET TAP ON DEATH") {
+    event {
+        Player Died;
+        Team 1;
+        All;
+    }
+    conditions {
+        (Event Player).augmentId == 3; // 4 elements
+    }
+    actions {
+        Set Player Variable(Event Player, augmentState2, Null); // 1 element
+        Set Player Variable(Event Player, augmentState3, Null); // 1 element
+    }
+}
+
+//21 elements
+rule ("DOUBLE JUMP BONUS ENTER FLIGHT") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        All;
+    }
+    conditions {
+        (Event Player).augmentId == 3; // 4 elements
+        (Event Player).augmentState3 != Null; // 3 elements
+        First Of((Event Player).augmentState3) > Null; // 4 elements
+        First Of((Event Player).augmentState3) != 999999999999; // 5 elements
+        Is On Ground(Event Player) == False; // 2 elements
+    }
+    actions {
+        "Positive deadline is the initial launch grace; only the first flight may\nextend it indefinitely. Negative deadlines mean the landing window began."
+        Set Player Variable At Index(Event Player, augmentState3, False, 999999999999); // 2 elements
+    }
+}
+
+//22 elements
+rule ("DOUBLE JUMP BONUS LANDING WINDOW") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        All;
+    }
+    conditions {
+        (Event Player).augmentId == 3; // 4 elements
+        (Event Player).augmentState3 != Null; // 3 elements
+        First Of((Event Player).augmentState3) == 999999999999; // 5 elements
+        Is On Ground(Event Player) == True; // 2 elements
+    }
+    actions {
+        Set Player Variable At Index(Event Player, augmentState3, False, Multiply(-1, Add(Total Time Elapsed, 0.5))); // 7 elements
+    }
+}
+
+//34 elements
+rule ("DOUBLE JUMP BONUS EXPIRES") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        All;
+    }
+    conditions {
+        (Event Player).augmentId == 3; // 4 elements
+        (Event Player).augmentState3 != Null; // 3 elements
+        Or(Or(Or(Not(Global.isGameplayActive), Is Dead(Event Player)), Compare(Hero Of(Event Player), !=, Value In Array((Event Player).augmentState3, True))), Compare(Total Time Elapsed, >=, Absolute Value(First Of((Event Player).augmentState3)))) == True; // 25 elements
+    }
+    actions {
+        Set Player Variable(Event Player, augmentState3, Null); // 1 element
+    }
+}
+
+//33 elements
+rule ("DOUBLE JUMP FIRST HIT BONUS") {
+    event {
+        Player Dealt Damage;
+        Team 1;
+        All;
+    }
+    conditions {
+        Global.isGameplayActive == True; // 2 elements
+        (Event Player).augmentId == 3; // 4 elements
+        Is Alive(Event Player) == True; // 2 elements
+        (Event Player).augmentState3 != Null; // 3 elements
+        Hero Of(Event Player) == Value In Array((Event Player).augmentState3, True); // 6 elements
+        Total Time Elapsed < Absolute Value(First Of((Event Player).augmentState3)); // 5 elements
+        Event Damage >= 30; // 2 elements
+        Team Of(Victim) == Team 2; // 3 elements
+    }
+    actions {
+        "Match Brain Killer's event-damage bonus pattern. Only hits of 30+ spend it;\nconsume before Damage so supplemental damage cannot recurse."
+        Set Player Variable(Event Player, augmentState3, Null); // 1 element
+        Damage(Victim, Event Player, Multiply(Event Damage, 0.5)); // 4 elements
+    }
+}
+
+//132 elements
+rule ("useAugmentAirAction") {
+    event {
+        Subroutine;
+        useAugmentAirAction;
+    }
+    actions {
+        "Check the timestamp on this press; expiry alone must not trigger a held Jump.\nDouble Jump has no waits, so competing airborne / double-tap handlers share\none atomic cooldown gate and cannot produce two impulses for the same press."
+        If(And(And(Compare(Total Time Elapsed, >=, (Event Player).augmentState0), Not(Or(Or(Or(Or(Has Status(Event Player, Rooted), Has Status(Event Player, Stunned)), Has Status(Event Player, Asleep)), Has Status(Event Player, Frozen)), Has Status(Event Player, Knocked Down)))), Not((Event Player).isAttached))); // 32 elements
+            Set Player Variable(Event Player, augmentState1, False); // 1 element
+            If(Compare((Event Player).augmentId, ==, 2)); // 7 elements
+                Set Player Variable(Event Player, augmentState0, Add(Total Time Elapsed, 13)); // 4 elements
+                "Pending landing hero survives the phase and subsequent flight;\nscratch direction is consumed before the phase-cleanup wait."
+                Set Player Variable(Event Player, augmentState2, Hero Of(Event Player)); // 2 elements
+                Set Global Variable(tmp0, Throttle Of(Event Player)); // 2 elements
+                "Reduce each axis to -1/0/1: adjacent inputs always make a 45-degree\ndiagonal, independent of their relative strength. Opposite inputs\ncancel in Workshop's movement vector; zero input arms only the wave."
+                Set Global Variable(tmp0, Vector(If-Then-Else(Compare(X Component Of(Global.tmp0), >, Null), 1, If-Then-Else(Compare(X Component Of(Global.tmp0), <, Null), -1, Null)), False, If-Then-Else(Compare(Z Component Of(Global.tmp0), >, Null), 1, If-Then-Else(Compare(Z Component Of(Global.tmp0), <, Null), -1, Null)))); // 40 elements
+                Skip If(Has Status(Event Player, Invincible), True); // 3 elements
+                Set Status(Event Player, Null, Invincible, 0.5); // 2 elements
+                //__label_if_74__:
+                Disable Movement Collision With Players(Event Player); // 1 element
+                Skip If(Compare(Global.tmp0, ==, Add(Left, Right)), True); // 7 elements
+                Apply Impulse(Event Player, Direction From Angles(Add(Horizontal Facing Angle Of(Event Player), Horizontal Angle From Direction(Global.tmp0)), -15), 25, To World, Cancel Contrary Motion XYZ); // 10 elements
+                //__label_if_75__:
+                "Readiness is already spent; cleanup must also survive landing/death/hero changes."
+                Wait(0.5, Ignore Condition); // 2 elements
+                Enable Movement Collision With Players(Event Player); // 1 element
+            Else; // 1 element
+                Set Player Variable(Event Player, augmentState0, Add(Total Time Elapsed, 16)); // 4 elements
+                Apply Impulse(Event Player, Up, 14.4, To World, Cancel Contrary Motion XYZ); // 2 elements
+                "Initial grace also expires if a native ability prevents liftoff.\nOnce airborne, its first landing starts the final 0.5-second window."
+                Set Player Variable(Event Player, augmentState3, Array(Add(Total Time Elapsed, 0.5), Hero Of(Event Player))); // 8 elements
+            End; // 1 element
+        End; // 1 element
+    }
+}
+
+//183 elements
+rule ("PHASE DASH LANDING WAVE") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        All;
+    }
+    conditions {
+        (Event Player).augmentId == 2; // 4 elements
+        (Event Player).augmentState2 != Null; // 3 elements
+        Or(Or(Or(Is On Ground(Event Player), Not(Global.isGameplayActive)), Is Dead(Event Player)), Compare(Hero Of(Event Player), !=, (Event Player).augmentState2)) == True; // 17 elements
+    }
+    actions {
+        "First landing consumes the wave independently of the phase-cleanup timer.\nDeath, hero change and game end clear it without emitting a wave."
+        If(And(And(Global.isGameplayActive, Is Alive(Event Player)), Compare(Hero Of(Event Player), ==, (Event Player).augmentState2))); // 13 elements
+            "Query once at the landing position. All scratch slots are synchronous;\nno target list, index or health snapshot survives another wait.\nActual health loss gates Pyrotechnic, as in the other scripted attacks."
+            Set Global Variable(tmp0, Filtered Array(Players Within Radius(Eye Position(Event Player), Add(Multiply(6, (Event Player).sizeScale), 2), Team 2, Surfaces), And(And(Is Alive(Current Array Element), Not((Current Array Element).actorTeamSlot3)), Compare(Distance Between(Event Player, Current Array Element), <=, Multiply(6, (Event Player).sizeScale))))); // 35 elements
+            "Keep the 32-strength push, halving the former 13-degree upward angle."
+            For Global Variable(tmp1, 0, Count Of(Global.tmp0), True); // 4 elements
+                If(And(Not((Value In Array(Global.tmp0, Global.tmp1)).isAttached), Compare((Value In Array(Global.tmp0, Global.tmp1)).actorTeamSlot19, >, Null))); // 19 elements
+                    Apply Impulse(Value In Array(Global.tmp0, Global.tmp1), Direction From Angles(Horizontal Angle From Direction(Direction Towards(Event Player, Value In Array(Global.tmp0, Global.tmp1))), -6.5), Multiply(32, (Value In Array(Global.tmp0, Global.tmp1)).actorTeamSlot19), To World, Incorporate Contrary Motion); // 24 elements
+                    Set Environment Credit Player(Value In Array(Global.tmp0, Global.tmp1), Event Player); // 5 elements
+                End; // 1 element
+                "Push before damage so lethal hits keep the existing impulse/kill credit."
+                Set Global Variable(tmp2, Health(Value In Array(Global.tmp0, Global.tmp1))); // 6 elements
+                Damage(Value In Array(Global.tmp0, Global.tmp1), Event Player, 40); // 6 elements
+                "Script damage has no Event Ability: enqueue only real hits, keeping\nthe existing burn stacking/cap and preventing periodic-damage recursion."
+                If(And(And(Compare((Event Player).enhancementId, ==, 4), Compare(Health(Value In Array(Global.tmp0, Global.tmp1)), <, Global.tmp2)), Compare(Distance Between(Event Player, Value In Array(Global.tmp0, Global.tmp1)), <, 15))); // 30 elements
+                    Set Status(Value In Array(Global.tmp0, Global.tmp1), Event Player, Burning, 3); // 6 elements
+                    Modify Player Variable(Event Player, actorTeamSlot22, Append To Array, Value In Array(Global.tmp0, Global.tmp1)); // 5 elements
+                End; // 1 element
+            End; // 1 element
+        End; // 1 element
+        Set Player Variable(Event Player, augmentState2, Null); // 1 element
+    }
+}
+
+//471 elements
+rule ("GRAPNEL LAUNCHER") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        All;
+    }
+    conditions {
+        Global.isGameplayActive == True; // 2 elements
+        (Event Player).augmentId == 6; // 4 elements
+        Has Spawned(Event Player) == True; // 2 elements
+        Is Alive(Event Player) == True; // 2 elements
+        Is Dummy Bot(Event Player) == False; // 2 elements
+        Is Button Held(Event Player, Button(Crouch)) == True; // 4 elements
+        Is Button Held(Event Player, Button(Jump)) == True; // 4 elements
+    }
+    actions {
+        "Cooldown is checked on the input edge; holding the chord through expiry\ncannot auto-launch. A miss does not consume the cooldown."
+        Abort If(Or(Compare(Total Time Elapsed, <, (Event Player).augmentState0), Or(Or(Or(Or(Or((Event Player).isAttached, Has Status(Event Player, Rooted)), Has Status(Event Player, Stunned)), Has Status(Event Player, Asleep)), Has Status(Event Player, Frozen)), Has Status(Event Player, Knocked Down)))); // 30 elements
+        Set Player Variable(Event Player, augmentState1, First Of(Sorted Array(Filtered Array(Players Within Radius(Eye Position(Event Player), 42, Team 2, Surfaces), And(And(And(And(And(Is Alive(Current Array Element), Not((Current Array Element).actorTeamSlot3)), Compare(Distance Between(Multiply(Add(Position Of(Event Player), Eye Position(Event Player)), 0.5), Multiply(Add(Position Of(Current Array Element), Eye Position(Current Array Element)), 0.5)), >=, 7)), Compare(Distance Between(Multiply(Add(Position Of(Event Player), Eye Position(Event Player)), 0.5), Multiply(Add(Position Of(Current Array Element), Eye Position(Current Array Element)), 0.5)), <=, 40)), Is In View Angle(Event Player, Multiply(Add(Position Of(Current Array Element), Eye Position(Current Array Element)), 0.5), 8)), Is In Line of Sight(Multiply(Add(Position Of(Event Player), Eye Position(Event Player)), 0.5), Multiply(Add(Position Of(Current Array Element), Eye Position(Current Array Element)), 0.5), Barriers Do Not Block LOS))), Distance Between(Event Player, Current Array Element)))); // 97 elements
+        Abort If(Compare((Event Player).augmentState1, ==, Null)); // 6 elements
+        Set Player Variable(Event Player, augmentState0, Add(Total Time Elapsed, 16)); // 4 elements
+        Set Player Variable(Event Player, augmentState2, Array(Hero Of(Event Player), Null)); // 5 elements
+        "Same white Grapple beam as the sentry turret. Its two endpoints reevaluate\nbody centers, retaining only this augment's player slots across the pull."
+        Create Beam Effect(All Players(All Teams), Grapple Beam, Multiply(Add(Position Of(Event Player), Eye Position(Event Player)), 0.5), Multiply(Add(Position Of((Event Player).augmentState1), Eye Position((Event Player).augmentState1)), 0.5), Null, Visible To Position and Radius); // 21 elements
+        Set Player Variable At Index(Event Player, augmentState2, True, Last Created Entity); // 1 element
+        Play Effect(All Players(All Teams), Debuff Impact Sound, Color(White), Position Of(Event Player), 25); // 6 elements
+        "Keep world/player collisions and attack inputs intact. Only an active pull\nupdates movement; every exit reaches cleanup, even after releasing the chord."
+        While(And(And(And(And(And(And(And(Global.isGameplayActive, And(And(Has Spawned(Event Player), Is Alive(Event Player)), Not(Or(Or(Or(Or(Or((Event Player).isAttached, Has Status(Event Player, Rooted)), Has Status(Event Player, Stunned)), Has Status(Event Player, Asleep)), Has Status(Event Player, Frozen)), Has Status(Event Player, Knocked Down))))), Compare(Hero Of(Event Player), ==, First Of((Event Player).augmentState2))), Is Alive((Event Player).augmentState1)), Compare(Team Of((Event Player).augmentState1), ==, Team 2)), Not(((Event Player).augmentState1).actorTeamSlot3)), Is In Line of Sight(Multiply(Add(Position Of(Event Player), Eye Position(Event Player)), 0.5), Multiply(Add(Position Of((Event Player).augmentState1), Eye Position((Event Player).augmentState1)), 0.5), Barriers Do Not Block LOS)), Compare(Total Time Elapsed, <, Subtract((Event Player).augmentState0, 14.5)))); // 96 elements
+            If(Compare(Distance Between(Multiply(Add(Position Of(Event Player), Eye Position(Event Player)), 0.5), Multiply(Add(Position Of((Event Player).augmentState1), Eye Position((Event Player).augmentState1)), 0.5)), <=, Add(Multiply(1.5, (Event Player).sizeScale), Multiply(0.5, ((Event Player).augmentState1).sizeScale)))); // 38 elements
+                "Pull velocity scratch is dead on contact. Read health synchronously;\nno scratch value survives a wait or is captured by the cable."
+                Set Global Variable(tmp0, Health((Event Player).augmentState1)); // 4 elements
+                Damage((Event Player).augmentState1, Event Player, 35); // 4 elements
+                "Script hits have no Event Ability. Like Long Reach, feed actual\nPyrotechnic hits to the existing burn worker without enabling DoT recursion."
+                If(And(And(Compare((Event Player).enhancementId, ==, 4), Compare(Health((Event Player).augmentState1), <, Global.tmp0)), Compare(Distance Between(Event Player, (Event Player).augmentState1), <, 15))); // 26 elements
+                    Set Status((Event Player).augmentState1, Event Player, Burning, 3); // 4 elements
+                    Modify Player Variable(Event Player, actorTeamSlot22, Append To Array, (Event Player).augmentState1); // 3 elements
+                End; // 1 element
+                Set Status((Event Player).augmentState1, Event Player, Stunned, 0.5); // 4 elements
+                Play Effect(All Players(All Teams), Bad Explosion, Color(Orange), Add(Position Of((Event Player).augmentState1), Up), 0.4); // 10 elements
+                Break; // 1 element
+            End; // 1 element
+            "Synchronous scratch: correct current velocity to the desired velocity,\nrather than stacking 40-speed impulses every frame. Consumed before wait."
+            Set Global Variable(tmp0, Subtract(Multiply(Direction Towards(Multiply(Add(Position Of(Event Player), Eye Position(Event Player)), 0.5), Multiply(Add(Position Of((Event Player).augmentState1), Eye Position((Event Player).augmentState1)), 0.5)), 40), Velocity Of(Event Player))); // 27 elements
+            Apply Impulse(Event Player, Global.tmp0, Magnitude Of(Global.tmp0), To World, Incorporate Contrary Motion); // 4 elements
+            Wait(0.05, Ignore Condition); // 2 elements
+        End; // 1 element
+        Destroy Effect(Value In Array((Event Player).augmentState2, True)); // 5 elements
+        "Stop the pull on arrival/wall/timeout, but preserve a new hero's movement,\nnative crowd-control knockback, and movement controlled by a carrier."
+        If(And(And(And(Has Spawned(Event Player), Is Alive(Event Player)), Not(Or(Or(Or(Or(Or((Event Player).isAttached, Has Status(Event Player, Rooted)), Has Status(Event Player, Stunned)), Has Status(Event Player, Asleep)), Has Status(Event Player, Frozen)), Has Status(Event Player, Knocked Down)))), Compare(Hero Of(Event Player), ==, First Of((Event Player).augmentState2)))); // 39 elements
+            Apply Impulse(Event Player, Multiply(Velocity Of(Event Player), -1), Magnitude Of(Velocity Of(Event Player)), To World, Incorporate Contrary Motion); // 7 elements
+        End; // 1 element
+        Set Player Variable(Event Player, augmentState1, Null); // 1 element
+        Set Player Variable(Event Player, augmentState2, Null); // 1 element
+    }
+}
+
+//13 elements
+rule ("GRAPNEL LAUNCHER DISCONNECT CLEANUP") {
+    event {
+        Player Left Match;
+        Team 1;
+        All;
+    }
+    conditions {
+        (Event Player).augmentId == 6; // 4 elements
+        (Event Player).augmentState2 != Null; // 3 elements
+    }
+    actions {
+        "Follow the project's supplied playerLeft cleanup pattern: consume the\ndeparting player's effect ID synchronously in the departure event."
+        Destroy Effect(Value In Array((Event Player).augmentState2, True)); // 5 elements
+    }
+}
+
+//100 elements
+rule ("LONG REACH QUICK MELEE") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        All;
+    }
+    conditions {
+        Global.isGameplayActive == True; // 2 elements
+        (Event Player).augmentId == 4; // 4 elements
+        Is Alive(Event Player) == True; // 2 elements
+        Is Dummy Bot(Event Player) == False; // 2 elements
+        Is Meleeing(Event Player) == True; // 2 elements
+        Array Contains(Array(Hero(Reinhardt), Hero(Brigitte)), Hero Of(Event Player)) == False; // 10 elements
+        Or(Compare(Hero Of(Event Player), !=, Hero(Torbjörn)), Compare(Weapon(Event Player), !=, 2)) == True; // 13 elements
+        Or(Compare(Hero Of(Event Player), !=, Hero(Vendetta)), Not(Is Firing Primary(Event Player))) == True; // 10 elements
+        Or(Compare(Hero Of(Event Player), !=, Hero(Junker Queen)), Not(Is Using Ability 2(Event Player))) == True; // 10 elements
+        Is Using Ultimate(Event Player) == False; // 2 elements
+    }
+    actions {
+        Set Player Variable(Event Player, augmentState1, Hero Of(Event Player)); // 2 elements
+        Wait(0.15, Abort When False); // 2 elements
+        Abort If(Compare(Hero Of(Event Player), !=, (Event Player).augmentState1)); // 7 elements
+        Set Global Variable(tmp0, Array(2.5, 10, 30, True)); // 9 elements
+        Set Global Variable(tmp1, If-Then-Else(Compare(Hero Of(Event Player), ==, Hero(Zenyatta)), 60, If-Then-Else(Compare(Hero Of(Event Player), ==, Hero(Venture)), 70, 40))); // 21 elements
+        Call Subroutine(extendAugmentMelee); // 1 element
+    }
+}
+
+//70 elements
+rule ("LONG REACH NATIVE QUICK MELEE KNOCKBACK") {
+    event {
+        Player Dealt Damage;
+        Team 1;
+        All;
+    }
+    conditions {
+        Global.isGameplayActive == True; // 2 elements
+        (Event Player).augmentId == 4; // 4 elements
+        Event Ability == Button(Melee); // 2 elements
+        Event Damage > Null; // 1 element
+        Team Of(Victim) == Team 2; // 3 elements
+        Array Contains(Array(Hero(Reinhardt), Hero(Brigitte)), Hero Of(Event Player)) == False; // 10 elements
+        Or(Compare(Hero Of(Event Player), !=, Hero(Torbjörn)), Compare(Weapon(Event Player), !=, 2)) == True; // 13 elements
+        Or(Compare(Hero Of(Event Player), !=, Hero(Vendetta)), Not(Is Firing Primary(Event Player))) == True; // 10 elements
+        Is Using Ultimate(Event Player) == False; // 2 elements
+    }
+    actions {
+        "Native inner-range damage is untouched; add the same push/credit as the\nscripted outer zone. Script Damage has no Event Ability and cannot enter here."
+        If(And(Is Alive(Victim), Compare((Victim).actorTeamSlot19, >, Null))); // 9 elements
+            "A small upward component lifts grounded targets; retain the mod's\nknockback resistance. Native attribution lasts until their next landing."
+            Apply Impulse(Victim, Direction From Angles(Horizontal Angle From Direction(Direction Towards(Event Player, Victim)), -10), Multiply(10, (Victim).actorTeamSlot19), To World, Incorporate Contrary Motion); // 12 elements
+            Set Environment Credit Player(Victim, Event Player); // 1 element
+    }
+}
+
+//63 elements
+rule ("LONG REACH VENDETTA SWORD") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        Vendetta;
+    }
+    conditions {
+        "These conditions cancel a committed swing; releasing primary fire does not."
+        Hero Of(Event Player) == Hero(Vendetta); // 3 elements
+        Global.isGameplayActive == True; // 2 elements
+        (Event Player).augmentId == 4; // 4 elements
+        Is Alive(Event Player) == True; // 2 elements
+        Is Dummy Bot(Event Player) == False; // 2 elements
+        Is Firing Secondary(Event Player) == False; // 2 elements
+        Is Using Ability 1(Event Player) == False; // 2 elements
+        Is Using Ability 2(Event Player) == False; // 2 elements
+        Is Using Ultimate(Event Player) == False; // 2 elements
+        Has Status(Event Player, Stunned) == False; // 3 elements
+        Has Status(Event Player, Asleep) == False; // 3 elements
+        Has Status(Event Player, Frozen) == False; // 3 elements
+        Has Status(Event Player, Knocked Down) == False; // 3 elements
+    }
+    actions {
+        "Trigger and windup have separate lifetimes: a short click commits one hit,\nwhile held input keeps using the configured repeat timer.\nThe idle wait only watches input; validate the actor before committing a hit."
+        Wait Until(And(Is Button Held(Event Player, Button(Primary Fire)), Is Firing Primary(Event Player)), 999999999999); // 8 elements
+        Abort If Condition Is False; // 1 element
+        "Adapted from the supplied Vendetta implementation: extend only the outer\nannulus, retain windup/LoS/cone checks, and leave energy/other abilities alone."
+        Wait(0.15, Abort When False); // 2 elements
+        Set Global Variable(tmp0, Array(4.3, 12.899999999999999, 30)); // 8 elements
+        Set Global Variable(tmp1, 45); // 2 elements
+        Call Subroutine(extendAugmentMelee); // 1 element
+        "Native primary-fire state can remain true through a held attack series.\nRelease rearms the next click; after recovery, the loop gate rechecks the actor.\nScratch query values are consumed before this wait and rebuilt on every hit."
+        Wait Until(Not(Is Button Held(Event Player, Button(Primary Fire))), 0.449999999999999); // 6 elements
+        Loop If Condition Is True; // 1 element
+    }
+}
+
+//369 elements
+rule ("LONG REACH MELEE WEAPONS") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        All;
+    }
+    conditions {
+        Global.isGameplayActive == True; // 2 elements
+        (Event Player).augmentId == 4; // 4 elements
+        Is Alive(Event Player) == True; // 2 elements
+        Is Dummy Bot(Event Player) == False; // 2 elements
+        Array Contains(Array(Hero(Reinhardt), Hero(Brigitte), Hero(D.Mon), Hero(Genji), Hero(Ramattra), Hero(Torbjörn)), Hero Of(Event Player)) == True; // 20 elements
+        Or(Compare(Hero Of(Event Player), !=, Hero(Genji)), Is Using Ultimate(Event Player)) == True; // 9 elements
+        Or(Compare(Hero Of(Event Player), !=, Hero(D.Mon)), Not(Is In Alternate Form(Event Player))) == True; // 10 elements
+        And(Array Contains(Array(Hero(D.Mon), Hero(Ramattra)), Hero Of(Event Player)), Is Meleeing(Event Player)) == False; // 13 elements
+        Or(Compare(Hero Of(Event Player), !=, Hero(Torbjörn)), Compare(Weapon(Event Player), ==, 2)) == True; // 13 elements
+        "Its extra armor exceeds 40% of the spawn health in all standard queues.\nUse the spawn snapshot so health scaling works and Hitchhiker's live health\npools cannot turn an active Nemesis back into a staff attack here."
+        Or(Compare(Hero Of(Event Player), !=, Hero(Ramattra)), Compare(Max Health Of Type(Event Player, Armor), >, Multiply((Event Player).initialMaxHealth, 0.4))) == True; // 18 elements
+        Is Firing Secondary(Event Player) == False; // 2 elements
+        Or(Compare(Hero Of(Event Player), ==, Hero(Ramattra)), Not(Is Using Ability 1(Event Player))) == True; // 10 elements
+        Or(Compare(Hero Of(Event Player), ==, Hero(Torbjörn)), Not(Is Using Ability 2(Event Player))) == True; // 10 elements
+        Or(Not(Is Using Ultimate(Event Player)), Array Contains(Array(Hero(Genji), Hero(Brigitte), Hero(Ramattra)), Hero Of(Event Player))) == True; // 16 elements
+        Has Status(Event Player, Stunned) == False; // 3 elements
+        Has Status(Event Player, Asleep) == False; // 3 elements
+        Has Status(Event Player, Frozen) == False; // 3 elements
+        Has Status(Event Player, Knocked Down) == False; // 3 elements
+    }
+    actions {
+        Wait Until(And(Or(Is Button Held(Event Player, Button(Primary Fire)), And(Array Contains(Array(Hero(Reinhardt), Hero(Brigitte), Hero(Torbjörn)), Hero Of(Event Player)), Is Button Held(Event Player, Button(Melee)))), Or(Is Firing Primary(Event Player), And(Array Contains(Array(Hero(Reinhardt), Hero(Brigitte), Hero(Torbjörn)), Hero Of(Event Player)), Is Meleeing(Event Player)))), 999999999999); // 43 elements
+        Abort If Condition Is False; // 1 element
+        "approximate cadence rather than polling or depending on a native hit target.\nGenji's blade cadence includes the October swing-speed increase.\nTimers do not copy native combo/perk effects."
+        Set Player Variable(Event Player, augmentState2, Value In Array(Array(Array(Hero(Reinhardt), 4, 100, 0.4, 0.56, 90), Array(Hero(Brigitte), 6, 45, 0.2, 0.4, 60), Array(Hero(D.Mon), 4, 60, 0.2, 0.456, 60), Array(Hero(Genji), 5, 100, 0.15, 0.458695652173913, 90), Array(Hero(Ramattra), 10, 65, 0.15, 0.45, 6), Array(Hero(Torbjörn), 2.5, 70, 0.35, 0.35, 30)), Index Of Array Value(Array(Hero(Reinhardt), Hero(Brigitte), Hero(D.Mon), Hero(Genji), Hero(Ramattra), Hero(Torbjörn)), Hero Of(Event Player)))); // 110 elements
+        Wait(Value In Array((Event Player).augmentState2, 3), Abort When False); // 6 elements
+        Abort If(Compare(Hero Of(Event Player), !=, First Of((Event Player).augmentState2))); // 8 elements
+        Set Global Variable(tmp0, Array(Value In Array((Event Player).augmentState2, True), Multiply(Value In Array((Event Player).augmentState2, True), 3), Value In Array((Event Player).augmentState2, 5))); // 21 elements
+        Set Global Variable(tmp1, Value In Array((Event Player).augmentState2, 2)); // 6 elements
+        Call Subroutine(extendAugmentMelee); // 1 element
+        Wait Until(Not(Or(Is Button Held(Event Player, Button(Primary Fire)), And(Array Contains(Array(Hero(Reinhardt), Hero(Brigitte), Hero(Torbjörn)), Hero Of(Event Player)), Is Button Held(Event Player, Button(Melee))))), Value In Array((Event Player).augmentState2, 4)); // 28 elements
+        Loop If Condition Is True; // 1 element
+    }
+}
+
+//41 elements
+rule ("LONG REACH CARNAGE") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        Junker Queen;
+    }
+    conditions {
+        Hero Of(Event Player) == Hero(Junker Queen); // 3 elements
+        Global.isGameplayActive == True; // 2 elements
+        (Event Player).augmentId == 4; // 4 elements
+        Is Alive(Event Player) == True; // 2 elements
+        Is Dummy Bot(Event Player) == False; // 2 elements
+        Is Using Ability 2(Event Player) == True; // 2 elements
+        Has Status(Event Player, Stunned) == False; // 3 elements
+        Has Status(Event Player, Asleep) == False; // 3 elements
+        Has Status(Event Player, Frozen) == False; // 3 elements
+        Has Status(Event Player, Knocked Down) == False; // 3 elements
+    }
+    actions {
+        "Carnage is a committed ability, not a repeating primary-fire timer."
+        Wait(0.75, Abort When False); // 2 elements
+        Set Global Variable(tmp0, Array(5, 15, 90)); // 8 elements
+        Set Global Variable(tmp1, 90); // 2 elements
+        Call Subroutine(extendAugmentMelee); // 1 element
+    }
+}
+
+//202 elements
+rule ("extendAugmentMelee") {
+    event {
+        Subroutine;
+        extendAugmentMelee;
+    }
+    actions {
+        Set Global Variable(tmp2, Filtered Array(Players Within Radius(Eye Position(Event Player), Add(Multiply(Value In Array(Global.tmp0, True), (Event Player).sizeScale), 2), Team 2, Surfaces), And(And(And(Is Alive(Current Array Element), Compare(Distance Between(Event Player, Current Array Element), >, Multiply(First Of(Global.tmp0), (Event Player).sizeScale))), Compare(Distance Between(Event Player, Current Array Element), <=, Multiply(Value In Array(Global.tmp0, True), (Event Player).sizeScale))), Is In View Angle(Event Player, Eye Position(Current Array Element), Value In Array(Global.tmp0, 2))))); // 57 elements
+        "The caller's hero snapshot is no longer read after the windup; reuse its\nowner-only slot as a synchronous index. Each Damage receives one player."
+        For Player Variable(Event Player, augmentState1, 0, Count Of(Global.tmp2), True); // 4 elements
+            "Reuse the dead native-radius entry, preserving the other query metadata."
+            Set Global Variable At Index(tmp0, False, Health(Value In Array(Global.tmp2, (Event Player).augmentState1))); // 7 elements
+            Damage(Value In Array(Global.tmp2, (Event Player).augmentState1), Event Player, Global.tmp1); // 7 elements
+            "Script Damage has no Event Ability, so the native-hit Pyrotechnic rule\ndeliberately ignores it. Queue only hits which actually removed health;\nthe existing burn worker keeps its stacking/cap/boss behavior and cannot recurse."
+            If(Compare(Health(Value In Array(Global.tmp2, (Event Player).augmentState1)), <, First Of(Global.tmp0))); // 12 elements
+                If(And(Compare((Event Player).enhancementId, ==, 4), Compare(Distance Between(Event Player, Value In Array(Global.tmp2, (Event Player).augmentState1)), <, 15))); // 20 elements
+                    Set Status(Value In Array(Global.tmp2, (Event Player).augmentState1), Event Player, Burning, 3); // 7 elements
+                    Modify Player Variable(Event Player, actorTeamSlot22, Append To Array, Value In Array(Global.tmp2, (Event Player).augmentState1)); // 6 elements
+                End; // 1 element
+                If(Value In Array(Global.tmp0, 3)); // 5 elements
+                    If(And(Is Alive(Value In Array(Global.tmp2, (Event Player).augmentState1)), Compare((Value In Array(Global.tmp2, (Event Player).augmentState1)).actorTeamSlot19, >, Null))); // 19 elements
+                        "A small upward component lifts grounded targets; retain the mod's\nknockback resistance. Native attribution lasts until their next landing."
+                        Apply Impulse(Value In Array(Global.tmp2, (Event Player).augmentState1), Direction From Angles(Horizontal Angle From Direction(Direction Towards(Event Player, Value In Array(Global.tmp2, (Event Player).augmentState1))), -10), Multiply(10, (Value In Array(Global.tmp2, (Event Player).augmentState1)).actorTeamSlot19), To World, Incorporate Contrary Motion); // 27 elements
+                        Set Environment Credit Player(Value In Array(Global.tmp2, (Event Player).augmentState1), Event Player); // 6 elements
+                    End; // 1 element
+                End; // 1 element
+            End; // 1 element
+        End; // 1 element
+        Skip If(Compare(Global.tmp2, ==, Empty Array), True); // 5 elements
+        "One impact per swing, on the nearest hit target. Rounded from 0.3 to 0.4\n(about one third larger); Grapnel Launcher uses the same impact size."
+        Play Effect(All Players(All Teams), Bad Explosion, Color(Orange), Add(Position Of(First Of(Sorted Array(Global.tmp2, Distance Between(Event Player, Current Array Element)))), Up), 0.4); // 14 elements
+        //__label_if_76__:
+    }
+}
+
+//203 elements
+rule ("AMMO PACK MAGAZINES") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        All;
+    }
+    conditions {
+        Global.isGameplayActive == True; // 2 elements
+        (Event Player).augmentId == 5; // 4 elements
+        Has Spawned(Event Player) == True; // 2 elements
+        Is Alive(Event Player) == True; // 2 elements
+        Is Dummy Bot(Event Player) == False; // 2 elements
+    }
+    actions {
+        "Cache once per hero/weapon, so respawns and returning to an earlier loadout\ncannot repeatedly double an already enlarged magazine. No polling loop.\nDisarm the previous loadout's refill snapshot during the initialization wait."
+        Set Player Variable(Event Player, augmentState2, Null); // 1 element
+        Skip If((Event Player).augmentState0, True); // 3 elements
+        Set Player Variable(Event Player, augmentState0, Empty Array); // 1 element
+        //__label_if_77__:
+        Set Player Variable(Event Player, augmentState1, First Of(Filtered Array((Event Player).augmentState0, And(Compare(First Of(Current Array Element), ==, Hero Of(Event Player)), Compare(Value In Array(Current Array Element, True), ==, Weapon(Event Player)))))); // 19 elements
+        If(Compare((Event Player).augmentState1, ==, Null)); // 6 elements
+            Set Player Variable(Event Player, augmentState1, Array(Hero Of(Event Player), Weapon(Event Player), Multiply(Max Ammo(Event Player, False), 2), Multiply(Max Ammo(Event Player, True), 2))); // 18 elements
+            Modify Player Variable(Event Player, augmentState0, Append To Array, Array((Event Player).augmentState1)); // 5 elements
+        End; // 1 element
+        "Only write real magazines with a readable, positive capacity. In particular,\na single-magazine weapon must not receive a zero write to the unused clip 1.\nScratch inputs live only through this synchronous loop, not the wait below."
+        For Global Variable(tmp0, 0, 2, True); // 3 elements
+            Set Global Variable(tmp1, Value In Array((Event Player).augmentState1, Add(Global.tmp0, 2))); // 9 elements
+            If(Compare(Global.tmp1, >, Null)); // 5 elements
+                "Preserve spent ammo when revisiting a loadout; no free reload on weapon swaps."
+                Set Global Variable(tmp2, Add(Ammo(Event Player, Global.tmp0), Max(False, Subtract(Global.tmp1, Max Ammo(Event Player, Global.tmp0))))); // 14 elements
+                "Freeze the persistent capacity action's inputs before the loop or\nother rules reuse these global scratch slots (including after reloads)."
+                Set Max Ammo(Event Player, Evaluate Once(Global.tmp0), Evaluate Once(Global.tmp1)); // 7 elements
+                Set Ammo(Event Player, Global.tmp0, Global.tmp2); // 3 elements
+            End; // 1 element
+        End; // 1 element
+        "Give the engine a frame before priming the refill fallback. Cached player\nstate survives this wait; no global scratch value is retained across it."
+        Wait(False, Abort When False); // 1 element
+        Set Player Variable(Event Player, augmentState2, If-Then-Else(Or(And(Compare(Value In Array((Event Player).augmentState1, 2), >, Max Ammo(Event Player, False)), Compare(Max Ammo(Event Player, False), >, Null)), And(Compare(Value In Array((Event Player).augmentState1, 3), >, Max Ammo(Event Player, True)), Compare(Max Ammo(Event Player, True), >, Null))), Array(Compare(Ammo(Event Player, False), <, Max Ammo(Event Player, False)), Compare(Ammo(Event Player, True), <, Max Ammo(Event Player, True)), Is Reloading(Event Player), Ammo(Event Player, False), Ammo(Event Player, True)), Null)); // 65 elements
+        Wait Until(Or(Or(Or(Compare(Hero Of(Event Player), !=, First Of((Event Player).augmentState1)), Compare(Weapon(Event Player), !=, Value In Array((Event Player).augmentState1, True))), Not(Has Spawned(Event Player))), Is Dead(Event Player)), 999999999999); // 26 elements
+        Loop If Condition Is True; // 1 element
+    }
+}
+
+//249 elements
+rule ("AMMO PACK REFILL FALLBACK") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        All;
+    }
+    conditions {
+        Global.isGameplayActive == True; // 2 elements
+        (Event Player).augmentId == 5; // 4 elements
+        Has Spawned(Event Player) == True; // 2 elements
+        Is Alive(Event Player) == True; // 2 elements
+        Is Dummy Bot(Event Player) == False; // 2 elements
+        Hero Of(Event Player) == First Of((Event Player).augmentState1); // 5 elements
+        Weapon(Event Player) == Value In Array((Event Player).augmentState1, True); // 6 elements
+        (Event Player).augmentState2 != Null; // 3 elements
+        Or(Or(Compare(Compare(Ammo(Event Player, False), <, Max Ammo(Event Player, False)), !=, First Of((Event Player).augmentState2)), Compare(Compare(Ammo(Event Player, True), <, Max Ammo(Event Player, True)), !=, Value In Array((Event Player).augmentState2, True))), Compare(Is Reloading(Event Player), !=, Value In Array((Event Player).augmentState2, 2))) == True; // 41 elements
+    }
+    actions {
+        "Some heroes (including Widowmaker) accept Set Ammo but ignore Set Max Ammo.\nWatch only the native-full boundary and reload edges, not every fired round."
+        If(And(Is Reloading(Event Player), Not(Value In Array((Event Player).augmentState2, 2)))); // 10 elements
+            Set Player Variable At Index(Event Player, augmentState2, 3, Ammo(Event Player, False)); // 4 elements
+            Set Player Variable At Index(Event Player, augmentState2, 4, Ammo(Event Player, True)); // 4 elements
+        End; // 1 element
+        "These temporary inputs are synchronous; the handler has no waits/captures."
+        For Global Variable(tmp0, 0, 2, True); // 3 elements
+            Set Global Variable(tmp1, Max Ammo(Event Player, Global.tmp0)); // 4 elements
+            If(And(And(Compare(Global.tmp1, >, Null), Compare(Value In Array((Event Player).augmentState1, Add(Global.tmp0, 2)), >, Global.tmp1)), Or(And(Compare(Ammo(Event Player, Global.tmp0), ==, Global.tmp1), Or(Value In Array((Event Player).augmentState2, Global.tmp0), And(Value In Array((Event Player).augmentState2, 2), Not(Is Reloading(Event Player))))), And(And(And(And(Compare(Hero Of(Event Player), ==, Hero(Widowmaker)), Value In Array((Event Player).augmentState2, 2)), Not(Is Reloading(Event Player))), Compare(Ammo(Event Player, Global.tmp0), <, Global.tmp1)), Or(Compare(Ammo(Event Player, Global.tmp0), >, Value In Array((Event Player).augmentState2, Add(Global.tmp0, 3))), Compare(Value In Array((Event Player).augmentState2, Add(Global.tmp0, 3)), >, Global.tmp1)))))); // 103 elements
+                "while firing, and cancelled/partial reloads, must not grant ammo.\nWidow can fire on the frame her reload finishes. Restore the bonus\nwhile preserving those spent rounds (34/35 becomes 69/35)."
+                Set Ammo(Event Player, Global.tmp0, Subtract(Add(Ammo(Event Player, Global.tmp0), Value In Array((Event Player).augmentState1, Add(Global.tmp0, 2))), Global.tmp1)); // 18 elements
+            End; // 1 element
+        End; // 1 element
+        Set Player Variable(Event Player, augmentState2, Array(Compare(Ammo(Event Player, False), <, Max Ammo(Event Player, False)), Compare(Ammo(Event Player, True), <, Max Ammo(Event Player, True)), Is Reloading(Event Player), Value In Array((Event Player).augmentState2, 3), Value In Array((Event Player).augmentState2, 4))); // 32 elements
     }
 }
 

@@ -13,19 +13,9 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
     @Condition eventPlayer.isHeroSwitchRespawn == false
     
     if eventPlayer.enhancementId == Enhancement.NO_PREFERENCE:
-        #Default Enhancement: Workshop Setting
-        # No enhancement state slots: resolve the default enhancement before initializing its state.
-        # Workshop requires default index 0 so the first option remains selectable.
-        eventPlayer.enhancementId = createWorkshopSettingEnum("Enhancements", "Default Enhancement", Enhancement.NO_PREFERENCE, ["No Enhancement", "Kevlar", "Zombie Hybrid", "Laser Barricade", "Brain Killer", "Pyrotechnic", "Plague Doctor", "Born to Battle", "Charge Battery", "Hitchhiker", "P.U.P."])
-    #Kevlar
-    if eventPlayer.enhancementId == Enhancement.KEVLAR:
-        #Enhancement Selection: Kevlar
-        # No enhancement state slots are currently used; the future cleanup ID is documented below.
-        hudHeader(eventPlayer, "Kevlar {0}".format(iconString(Icon.STOP)), HudPosition.LEFT, 99, colorKevlarConst, HudReeval.STRING)
-        waitUntil(eventPlayer.initialMaxHealth > 0, Math.INFINITY)
-        eventPlayer.addHealthPool(Health.ARMOR, 75, true, false)
-        # If enhancement switching is added after game start, retain the health pool ID to remove Kevlar armor when switching away.
-        # Future Kevlar switching would need to retain getLastCreatedHealthPool().
+        # No preference and late-join zero state receive one real choice before
+        # its state is initialized. Retain the selected ID across later spawns.
+        eventPlayer.enhancementId = random.randint(Enhancement.BRAIN_KILLER, Enhancement.PUP)
     #Zombie Hybrid
     if eventPlayer.enhancementId == Enhancement.ZOMBIE_HYBRID:
         #Enhancement: Zombie Hyrbid
@@ -88,10 +78,10 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
         #Born to Battle
         case Enhancement.BORN_TO_BATTLE:
             #Enhancement: Born to Battle
-            # enhancementIsBattleResetReady: whether an earned ability reset is still available; cleared when the reset is consumed.
+            # enhancementBattleResetCharges: 0-2 earned ability resets; final blows add one and each reset consumes one.
             # enhancementBattleAbilityButton: selected ability button, retained through waits to reset its charge or cooldown.
-            hudText(eventPlayer, "Born to Battle {0}".format(iconString(Icon.BOLT)), null, iconString(Icon.CHECKMARK) if eventPlayer.enhancementIsBattleResetReady else [], HudPosition.LEFT, 99, Color.GRAY, Color.GRAY, Color.GRAY, HudReeval.STRING)
-            eventPlayer.enhancementIsBattleResetReady = false
+            hudText(eventPlayer, "Born to Battle {0}".format(iconString(Icon.BOLT)), null, ["", iconString(Icon.CHECKMARK), "{0} {0}".format(iconString(Icon.CHECKMARK))][eventPlayer.enhancementBattleResetCharges], HudPosition.LEFT, 99, Color.GRAY, Color.GRAY, Color.GRAY, HudReeval.STRING)
+            eventPlayer.enhancementBattleResetCharges = 0
             break
         #Charge Battery
         case Enhancement.CHARGE_BATTERY:
@@ -324,16 +314,16 @@ rule "BORN TO BATTLE PLAYER EARNS ELIMINATION":
     @Event playerDealtFinalBlow
     @Team 1
     @Condition eventPlayer.enhancementId == Enhancement.BORN_TO_BATTLE
-    @Condition eventPlayer.enhancementIsBattleResetReady != true
+    @Condition eventPlayer.enhancementBattleResetCharges < 2
     
-    eventPlayer.enhancementIsBattleResetReady = true
+    eventPlayer.enhancementBattleResetCharges += 1
 
 
 rule "BORN TO BATTLE PLAYER USES ABILITY CHARGE":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.enhancementId == Enhancement.BORN_TO_BATTLE
-    @Condition eventPlayer.enhancementIsBattleResetReady == true
+    @Condition eventPlayer.enhancementBattleResetCharges > 0
     @Condition [Button.SECONDARY_FIRE, Button.ABILITY_1, Button.ABILITY_2, Button.CROUCH, Button.JUMP].any(lambda x: eventPlayer.isHoldingButton(x)) == true
     
     if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE):
@@ -364,11 +354,11 @@ rule "BORN TO BATTLE PLAYER USES ABILITY CHARGE":
     lbl_0:
     #If the ability charge increased
     if eventPlayer.getAbilityCharge(eventPlayer.enhancementBattleAbilityButton):
-        eventPlayer.enhancementIsBattleResetReady = false
+        eventPlayer.enhancementBattleResetCharges -= 1
     #Else if ability is on cooldown
     elif eventPlayer.getAbilityCooldown(eventPlayer.enhancementBattleAbilityButton) > 0.5:
         eventPlayer.setAbilityCooldown(eventPlayer.enhancementBattleAbilityButton, 0)
-        eventPlayer.enhancementIsBattleResetReady = false
+        eventPlayer.enhancementBattleResetCharges -= 1
 
 
 rule "PLAGUE DOCTOR REDUCES PLAYERS' INFECTION LEVELS":
@@ -644,4 +634,4 @@ def resetBattleAbilityCharge():
     @Name "resetBattleAbilityCharge"
 
     eventPlayer.setAbilityCharge(eventPlayer.enhancementBattleAbilityButton, 1)
-    eventPlayer.enhancementIsBattleResetReady = false
+    eventPlayer.enhancementBattleResetCharges -= 1

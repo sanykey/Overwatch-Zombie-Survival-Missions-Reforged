@@ -124,8 +124,18 @@ rule "EFFECTS/TEXTS":
     createInWorldText(getAllPlayers().filter(lambda _: eventPlayer.isDead() and eventPlayer.rescueTimeRemaining > 0), "Reviving: {0}s".format(ceil(eventPlayer.reviveTimeRemaining)) if eventPlayer.isReviving else "Revive: {0}s".format(ceil(eventPlayer.rescueTimeRemaining)), eventPlayer.getPosition() + offsetUpOneAndHalfConst, 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.YELLOW if eventPlayer.isReviving else Color.RED)
     #Reviving ring
     createEffect(getAllPlayers().filter(lambda _: eventPlayer.isReviving), Effect.RING, Color.YELLOW, eventPlayer.getPosition(), REVIVE_RADIUS, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    #Health Hud text
-    hudText(getAllPlayers().filter(lambda _: eventPlayer.rescueTimeRemaining > 0 and not eventPlayer.isAfk), "{0}{1}: {2}".format("Winston" if isSmolderEventActive else eventPlayer, heroIcon(Hero.WINSTON) if isSmolderEventActive else heroIcon(eventPlayer.getHero()), "{0}%".format(ceil(eventPlayer.getNormalizedHealth() * 100)) if eventPlayer.isAlive() else "DOWN"), "Revive: {0}s".format(ceil(eventPlayer.rescueTimeRemaining)) if eventPlayer.isDead() and not eventPlayer.isReviving else [], ("{1}Infection Level: {0}".format(floor(eventPlayer.infectionLevel), iconString(Icon.POISON) if eventPlayer.enhancementId == Enhancement.ZOMBIE_HYBRID else [])) if eventPlayer.infectionLevel >= 1 else "Vaccine Level: {0}".format(abs(floor(eventPlayer.infectionLevel))) if eventPlayer.infectionLevel < 0 else "Reviving: {0}s".format(ceil(eventPlayer.reviveTimeRemaining)) if eventPlayer.isReviving else [], HudPosition.LEFT, 0 if eventPlayer.getNormalizedHealth() > 0.97 else 1 / (eventPlayer.getNormalizedHealth() + 1), Color.BLUE if eventPlayer.getNormalizedHealth() > 0.97 else Color.GREEN if eventPlayer.getNormalizedHealth() > 0.66 else Color.YELLOW if eventPlayer.getNormalizedHealth() > 0.33 else Color.ORANGE if eventPlayer.getNormalizedHealth() > 0 else Color.RED, Color.RED, Color.LIME_GREEN if eventPlayer.infectionLevel >= 1 else Color.BLUE if eventPlayer.infectionLevel < 0 else Color.YELLOW)
+    # Player health and infection/revival status.
+    hudText(
+        getAllPlayers().filter(lambda _: eventPlayer.rescueTimeRemaining > 0 and not eventPlayer.isAfk),
+        "{0}{1}: {2}".format("Winston" if isSmolderEventActive else eventPlayer, heroIcon(Hero.WINSTON) if isSmolderEventActive else heroIcon(eventPlayer.getHero()), "{0}%".format(ceil(eventPlayer.getNormalizedHealth() * 100)) if eventPlayer.isAlive() else "DOWN"),
+        "Revive: {0}s".format(ceil(eventPlayer.rescueTimeRemaining)) if eventPlayer.isDead() and not eventPlayer.isReviving else [],
+        ("{1}Infection Level: {0}".format(floor(eventPlayer.infectionLevel), iconString(Icon.POISON) if eventPlayer.enhancementId == Enhancement.ZOMBIE_HYBRID else [])) if eventPlayer.infectionLevel >= 1 else "Vaccine Level: {0}".format(abs(floor(eventPlayer.infectionLevel))) if eventPlayer.infectionLevel < 0 else "Reviving: {0}s".format(ceil(eventPlayer.reviveTimeRemaining)) if eventPlayer.isReviving else [],
+        HudPosition.LEFT,
+        0 if eventPlayer.getNormalizedHealth() > 0.97 else 1 / (eventPlayer.getNormalizedHealth() + 1),
+        Color.BLUE if eventPlayer.getNormalizedHealth() > 0.97 else Color.GREEN if eventPlayer.getNormalizedHealth() > 0.66 else Color.YELLOW if eventPlayer.getNormalizedHealth() > 0.33 else Color.ORANGE if eventPlayer.getNormalizedHealth() > 0 else Color.RED,
+        Color.RED,
+        Color.LIME_GREEN if eventPlayer.infectionLevel >= 1 else Color.BLUE if eventPlayer.infectionLevel < 0 else Color.YELLOW
+    )
 
 
 rule "PLAYER GETS DOWNED":

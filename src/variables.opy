@@ -30,21 +30,34 @@ enum Challenge:
     INSANITY = 4,
     PANDORAS_BOX = 5,
 
-# Enhancement IDs also index enhancementOptionList and the default-setting choices.
-# Zero means no preference in the menu; initialization resolves the configured default.
-# If that setting is "No Enhancement", zero leaves the player without an enhancement.
+# Enhancement IDs index enhancementOptionList and the start-menu tables.
+# Zero means no preference; initialization randomly selects a real ID 1-9.
+# Brain Killer remains the first explicit menu choice.
 enum Enhancement:
     NO_PREFERENCE = 0,
-    KEVLAR = 1,
+    BRAIN_KILLER = 1,
     ZOMBIE_HYBRID = 2,
     LASER_BARRICADE = 3,
-    BRAIN_KILLER = 4,
-    PYROTECHNIC = 5,
-    PLAGUE_DOCTOR = 6,
-    BORN_TO_BATTLE = 7,
-    CHARGE_BATTERY = 8,
-    HITCHHIKER = 9,
-    PUP = 10,
+    PYROTECHNIC = 4,
+    PLAGUE_DOCTOR = 5,
+    BORN_TO_BATTLE = 6,
+    CHARGE_BATTERY = 7,
+    HITCHHIKER = 8,
+    PUP = 9,
+
+# Independent secondary enhancement slot. IDs index the names/icons in augments.opy.
+enum Augment:
+    NO_PREFERENCE = 0,
+    KEVLAR = 1,
+    PHASE_DASH = 2,
+    DOUBLE_JUMP = 3,
+    LONG_REACH = 4,
+    AMMO_PACK = 5,
+    GRAPNEL_LAUNCHER = 6,
+
+# Compile-time icon tables, indexed by their corresponding selection ID.
+#!define ENHANCEMENT_ICONS [iconString(Icon.QUESTION_MARK), iconString(Icon.SKULL), iconString(Icon.POISON), iconString(Icon.DIAMOND), iconString(Icon.FIRE), iconString(Icon.PLUS), iconString(Icon.BOLT), iconString(Icon.SPIRAL), iconString(Icon.FLAG), iconString(Icon.HAPPY)]
+#!define AUGMENT_ICONS [iconString(Icon.QUESTION_MARK), iconString(Icon.STOP), iconString(Icon.ARROW_RIGHT), iconString(Icon.ARROW_UP), iconString(Icon.CROSS), iconString(Icon.PLUS), iconString(Icon.ARROW_DOWN)]
 
 # Objective IDs also index objectiveTypeVoteList and identify entries in objectiveTypeList.
 # Biomorphing and Survivor Rescue are only selectable through the mixed pool.
@@ -184,7 +197,6 @@ globalvar offsetUpHalfConst = 0.5 * Vector.UP              # Vertical offset of 
 globalvar losOffsetConst = 1.2 * Vector.UP                 # Vertical offset of 1.2 m used by line-of-sight checks. Source uses: 16 (excluding declaration).
 globalvar colorChargeBatteryConst = rgb(236, 206, 44)    # Shared Charge Battery color used by the menu and enhancement visuals. Source uses: 4 (excluding declaration).
 globalvar dummyHoldingPositionConst = vect(500, 500, 500)  # Off-map holding position for newly created or reconfigured dummy bots. Source uses: 6 (excluding declaration).
-globalvar colorKevlarConst = rgb(240, 129, 26)           # Shared Kevlar color used by the menu and enhancement visuals. Source uses: 2 (excluding declaration).
 globalvar offsetDownHundredConst = -100 * Vector.UP       # Downward offset of 100 m for raycasts, hidden effects and dead-player storage. Source uses: 7 (excluding declaration).
 globalvar offsetUpOneAndHalfConst = 1.5 * Vector.UP       # Vertical offset of 1.5 m for the pregame camera and player labels. Source uses: 6 (excluding declaration).
 globalvar offsetUpQuarterConst = 0.25 * Vector.UP         # Vertical offset of 0.25 m for impulses, power-up drops and effects. Source uses: 5 (excluding declaration).
@@ -356,6 +368,58 @@ playervar isHeroSwitchRespawn  # Player has switched heroes; prevents repeating 
 
 # Enhancements only (enhancement prefix; includes the Rescue Hitchhiker setup).
 playervar enhancementId  # Selected Enhancement enum; pregame selection, runtime behavior and Rescue Hitchhiker initialization.
+
+# Augments have their own storage, independent of enhancements, power-ups and bot slots.
+# Only the selected augment owns these slots; selection is fixed once gameplay begins.
+playervar augmentId  # Selected Augment enum; pregame Interact selection and gameplay effects.
+playervar augmentState0
+# Shock Landing / Double Jump / Grapnel Launcher next allowed activation time; persists across landing and death, read by the HUD.
+#!define augmentMovementReadyAt augmentState0
+# Shock Landing next allowed activation time; only written on a successful dash, read by input/HUD.
+#!define augmentDashReadyAt augmentState0
+# Double Jump next allowed activation time; only written on a successful extra jump.
+#!define augmentJumpReadyAt augmentState0
+# Ammo Pack cached [hero, weapon, doubled clip 0, doubled clip 1] entries; persists across respawns.
+#!define augmentAmmoLoadoutList augmentState0
+
+playervar augmentState1
+# Shock Landing / Double Jump is armed after releasing Jump in midair; consumed once, cleared on landing/death.
+#!define augmentIsAirActionReady augmentState1
+# Ammo Pack current cached entry, retained through the hero/weapon/respawn wait.
+#!define augmentAmmoLoadout augmentState1
+# Long Reach hero snapshot; an interrupted attack cannot resume for a different hero.
+#!define augmentMeleeHero augmentState1
+# Long Reach target-loop index, after the windup's hero snapshot has been consumed; no waits or live captures.
+#!define augmentMeleeTargetIndex augmentState1
+
+playervar augmentState2
+# Ammo Pack refill snapshot [clip 0 below native max, clip 1 below native max,
+# was reloading, clip 0 ammo at reload start, clip 1 ammo at reload start].
+# Null for supported native capacities. Otherwise initialized after loadout writes,
+# updated only on native-full boundary / reload edges, and owned by this augment.
+#!define augmentAmmoFallbackState augmentState2
+# Long Reach's additional primary-weapon controller owns this profile across waits.
+# D.Mon / Ramattra quick melee cancels the primary windup; other quick-melee users do not
+# enter that controller. The helper does not modify this retained profile.
+#!define augmentWeaponProfile augmentState2
+# Shock Landing's launch hero while its first landing wave is pending. Landing
+# consumes it; death/hero change/game end cancel it. Independent of phase cleanup.
+#!define augmentDashHero augmentState2
+# Double Jump's last first-tap timestamp; zero means no pending tap. Only its
+# Jump-press handler writes it; death clears it. The cooldown remains in state0.
+#!define augmentJumpLastPressedAt augmentState2
+# Grapnel Launcher alone owns a locked target and [launch hero, beam entity ID]
+# across its pull waits. The live beam reads the target until it is destroyed;
+# cleanup then clears both slots. Movement cooldown remains in augmentState0.
+#!define augmentGrapnelTarget augmentState1
+#!define augmentGrapnelState augmentState2
+
+playervar augmentState3
+# Double Jump only: [signed bonus deadline, launch hero], null when spent/expired.
+# Positive deadline: launch grace before first liftoff; infinity: first flight;
+# negative deadline: final landing grace. Read by damage-hit and lifecycle rules;
+# the first hit of 30+/death/hero change/game end/expiry clears it. No waits or HUD captures.
+#!define augmentJumpBonusState augmentState3
 
 playervar enhancementHitchhikerPassenger  # Passenger attached to this carrier; null when absent. Infection rules also query it.
 
@@ -644,8 +708,8 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 #!define enhancementPyroHitList actorTeamSlot22
 # Total infection levels cured by Plague Doctor.
 #!define enhancementPlagueCureTotal actorTeamSlot22
-# Born to Battle has an unspent ability reset.
-#!define enhancementIsBattleResetReady actorTeamSlot22
+# Born to Battle unspent ability resets (0-2); retained through ability waits and reevaluated by its HUD.
+#!define enhancementBattleResetCharges actorTeamSlot22
 # Placed Charge Battery position; zero clears it.
 #!define enhancementBatteryPosition actorTeamSlot22
 # Hitchhiker carrier; zero when detached.

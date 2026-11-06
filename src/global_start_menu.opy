@@ -191,26 +191,25 @@ rule "EFFECTS/TEXTS":
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Enhancement
-    startMenuEnhancementColorList = [Color.AQUA, colorKevlarConst, Color.GRAY, Color.BLUE, Color.RED, Color.ORANGE, Color.GREEN, Color.GRAY, colorChargeBatteryConst, Color.PURPLE, Color.BLUE]
+    startMenuEnhancementColorList = [Color.AQUA, Color.RED, Color.GRAY, Color.BLUE, Color.ORANGE, Color.GREEN, Color.GRAY, colorChargeBatteryConst, Color.PURPLE, Color.BLUE]
     hudText(
         getPlayers(Team.1),
         "Enhancement: {0}{1}".format(
             [
-                "No Preference", "Kevlar ", "Zombie Hybrid ", "Laser Barricade ",
-                "Brain Killer ", "Pyrotechnic ", "Plague Doctor ", "Born to Battle ",
+                "No Preference", "Brain Killer ", "Zombie Hybrid ", "Laser Barricade ",
+                "Pyrotechnic ", "Plague Doctor ", "Born to Battle ",
                 "Charge Battery ", "Hitchhiker ", "P.U.P. "
             ][localPlayer.enhancementId],
             enhancementOptionList[localPlayer.enhancementId] if localPlayer.enhancementId > Enhancement.NO_PREFERENCE else ""
         ),
         [
             "",
-            "Survivor is equipped with armor that protects against infections",
+            "Critical hits do more damage",
             "Get infected faster, and convert it to explosive damage",
             "Player can place a wall that blocks zombies",
-            "Critical hits do more damage",
             "Dealing damage, within 15 meters, sets enemies on fire",
             "Deal more healing to infected players while reducing their infection level",
-            "Dealing a final blow will give the player a cooldown reset on the next ability they use",
+            "Final blows grant a cooldown reset on the next ability use, storing up to 2 charges",
             "Survivor can place a battery that gives ultimate charge",
             "Survivor can attach to a teammate and fuse their health.",
             "Survivor is equipped with an autonomous friendly droid"

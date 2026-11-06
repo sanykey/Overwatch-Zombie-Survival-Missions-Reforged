@@ -33,19 +33,7 @@ macro setAvailableObjectivesMacro():
 
 
 macro enableEnhancementsMacro():
-    enhancementOptionList = [
-        iconString(Icon.QUESTION_MARK),
-        iconString(Icon.STOP),
-        iconString(Icon.POISON),
-        iconString(Icon.DIAMOND),
-        iconString(Icon.SKULL),
-        iconString(Icon.FIRE),
-        iconString(Icon.PLUS),
-        iconString(Icon.BOLT),
-        iconString(Icon.SPIRAL),
-        iconString(Icon.FLAG),
-        iconString(Icon.HAPPY),
-    ]
+    enhancementOptionList = ENHANCEMENT_ICONS
 
 
 macro botHeroRandomizationMacro():
