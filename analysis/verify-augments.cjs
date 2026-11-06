@@ -328,6 +328,7 @@ function* execute(rule, state, compiled) {
                     assert.equal(a[0], 'All Players(All Teams)');
                     state.effects.push({effect: a[1], color: a[2], position: v(3), size: v(4)});
                     break;
+                case 'Create In-World Text': break;
                 case 'Create HUD Text': state.huds++; break;
                 case 'Small Message': state.messages.push(v(1)); break;
                 case 'Add Health Pool To Player': state.armor += v(2); break;
@@ -378,10 +379,10 @@ async function main() {
     const jumpReadyAt = slot('augmentJumpReadyAt');
     assert.notEqual(jumpReady, jumpReadyAt, 'Landing/death must not overwrite the cooldown timestamp');
     const menu = 'PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)';
-    for (const backwards of [false, true]) for (let id = 0; id <= 6; id++) {
+    for (const backwards of [false, true]) for (let id = 0; id <= 7; id++) {
         const state = scenario(id, {globals: {isPregameSetup: true}, buttons: new Set(['Interact', ...(backwards ? ['Secondary Fire'] : [])])});
         run(menu, state);
-        assert.equal(state.player.augmentId, (id + (backwards ? 6 : 1)) % 7);
+        assert.equal(state.player.augmentId, (id + (backwards ? 7 : 1)) % 8);
         state.globals.isPregameSetup = false;
         assert(!applies(compiled.get(menu), state));
     }
@@ -526,7 +527,7 @@ async function main() {
     assert.equal(lethalWave.targets[0].health, 0); assert.equal(lethalWave.targets[1].health, 100);
     assert.deepEqual(lethalWave.environmentCredits, ['lethal', 'invincible']);
     assert.equal(lethalWave.damage.length, 2, 'Both targets receive one wave hit');
-    for (const enhancement of [1, 4]) {
+    for (const enhancement of [1, 3]) {
         const {state: pyroWave} = prepareDash({throttle: [0, 0, 0]});
         pyroWave.player.enhancementId = enhancement;
         pyroWave.player[slot('enhancementPyroHitList')] = [];
@@ -540,7 +541,7 @@ async function main() {
             waveZombie('teleporting', [0, 0, 2], {[slot('botIsTeleporting')]: true})];
         run(landingWave, pyroWave);
         assert.equal(pyroWave.damage.length, 5); assert(pyroWave.damage.every(hit => hit.amount === 40));
-        const expected = enhancement === 4 ? ['front', 'back', 'attached', 'unpushable'] : [];
+        const expected = enhancement === 3 ? ['front', 'back', 'attached', 'unpushable'] : [];
         assert.deepEqual(array(pyroWave.player[slot('enhancementPyroHitList')]).map(target => target.id), expected,
             'Only actual damaging hits with Pyrotechnic enter its burn queue, including unpushable zombies');
         const burns = pyroWave.statusWrites.filter(write => write.status === 'Burning');
@@ -549,7 +550,7 @@ async function main() {
         assert(!applies(compiled.get(landingWave), pyroWave), 'A spent wave cannot add repeated burns');
     }
     const {state: scaledWave} = prepareDash();
-    scaledWave.player.enhancementId = 4; scaledWave.player.sizeScale = 3;
+    scaledWave.player.enhancementId = 3; scaledWave.player.sizeScale = 3;
     pressDash(scaledWave); scaledWave.ground = true;
     scaledWave.targets = [waveZombie('inside pyro range', [0, 0, 14.99]), waveZombie('at pyro limit', [0, 0, 15]),
         waveZombie('outside pyro range', [0, 0, 17])];
@@ -733,8 +734,9 @@ async function main() {
     noLiftoff.player[tapAt] = 99.8; dispatchJump(noLiftoff); updateBonus(noLiftoff);
     noLiftoff.time = 100.5; updateBonus(noLiftoff);
     assert.equal(noLiftoff.player[bonusSlot], 0, 'A prevented liftoff cannot leave a permanent damage bonus');
-    const movementHud = args(actions(compiled.get('PLAYER AUGMENT INITIALIZATION'))
-        .find(line => line.startsWith('Create HUD Text(')))[3];
+    const movementCard = actions(compiled.get('PLAYER AUGMENT INITIALIZATION'))
+        .filter(line => line.startsWith('Create HUD Text(')).at(-1);
+    const movementHud = args(args(args(args(movementCard)[2])[1])[1])[2];
     for (const augmentId of [2, 3, 6]) {
         const state = scenario(augmentId); state.player[slot('augmentMovementReadyAt')] = 110;
         assert.equal(value(movementHud, state), '10s');
@@ -853,24 +855,24 @@ async function main() {
     const large = grapnelState({targets: [zombie('large', [0, 0, 10], {sizeScale: 3})]});
     const largePull = run(grapnel, large); finishPull(large, largePull);
     assert.equal(large.damage.length, 1, 'Body-sized contact distance also reaches large zombies');
-    for (const enhancement of [0, 4]) for (const invincible of [false, true]) {
+    for (const enhancement of [0, 3]) for (const invincible of [false, true]) {
         const state = grapnelState({targets: [zombie('pyro hook', [0, 0, 20], {invincible})]});
         state.player.enhancementId = enhancement;
         const task = run(grapnel, state);
         assert.deepEqual(array(state.player[slot('enhancementPyroHitList')]), [], 'Hook launch does not ignite a distant target');
         finishPull(state, task);
-        const expected = enhancement === 4 && !invincible ? ['pyro hook'] : [];
+        const expected = enhancement === 3 && !invincible ? ['pyro hook'] : [];
         assert.deepEqual(array(state.player[slot('enhancementPyroHitList')]).map(target => target.id), expected,
             'Grapnel queues exactly one Pyrotechnic burn only after an actual damaging impact');
         assert.deepEqual(state.statusWrites.filter(write => write.status === 'Burning').map(write => write.target), expected);
         assert(state.statusWrites.filter(write => write.status === 'Burning').every(write => write.duration === 3));
         assert.deepEqual(state.statusWrites.filter(write => write.status === 'Stunned'), [{status: 'Stunned', duration: 0.5, target: 'pyro hook'}]);
     }
-    const pyroMiss = grapnelState(); pyroMiss.player.enhancementId = 4;
+    const pyroMiss = grapnelState(); pyroMiss.player.enhancementId = 3;
     finishPull(pyroMiss, run(grapnel, pyroMiss), false);
     assert.deepEqual(array(pyroMiss.player[slot('enhancementPyroHitList')]), [], 'An unreachable hook must not ignite its target');
     const distantImpact = grapnelState({targets: [zombie('huge', [0, 0, 20], {sizeScale: 50})]});
-    distantImpact.player.enhancementId = 4;
+    distantImpact.player.enhancementId = 3;
     finishPull(distantImpact, run(grapnel, distantImpact));
     assert.deepEqual(array(distantImpact.player[slot('enhancementPyroHitList')]), [], 'Grapnel retains Pyrotechnic\'s native 15-meter burn limit');
     const leaving = grapnelState(); run(grapnel, leaving);
@@ -1070,14 +1072,14 @@ async function main() {
         switched.hero = 'Ana'; switched.time += 0.15; previousHeroAttack.resume();
         assert.equal(switched.damage.length, 0, 'Hero switching cancels a pending hit');
     }
-    for (const enhancement of [0, 4]) for (const invincible of [false, true]) {
+    for (const enhancement of [0, 3]) for (const invincible of [false, true]) {
         const state = scenario(4, {meleeing: true, targets: [
             {id: 'a', position: [0, 0, 5.5], alive: true, visible: true, invincible},
             {id: 'b', position: [0, 0, 7], alive: true, visible: true, invincible}
         ]});
         state.player.enhancementId = enhancement;
         const task = run(quick, state); state.time += 0.15; task.resume();
-        const expected = enhancement === 4 && !invincible ? ['a', 'b'] : [];
+        const expected = enhancement === 3 && !invincible ? ['a', 'b'] : [];
         assert.deepEqual(array(state.player[slot('enhancementPyroHitList')]).map(target => target.id), expected,
             'Pyrotechnic queues each actual extended hit once, without igniting invulnerable targets');
         assert.deepEqual(state.statusWrites.map(write => write.target), expected);
@@ -1120,7 +1122,7 @@ async function main() {
             targets: [base - 0.1, base, base + 0.1, base * 3, base * 3 + 0.1].map((distance, id) =>
                 ({id, position: [0, 0, distance], alive: true, visible: true})), ...overrides});
         state.player.initialMaxHealth = 525;
-        state.player.enhancementId = 4;
+        state.player.enhancementId = 3;
         return state;
     };
     for (const [hero, base, amount, windup, interval, overrides] of weaponCases) {
@@ -1267,19 +1269,19 @@ async function main() {
     }
     const kevlar = scenario(1); kevlar.player.initialMaxHealth = 250;
     run('PLAYER AUGMENT INITIALIZATION', kevlar); assert.equal(kevlar.armor, 75);
-    for (const picked of [1, 2, 3, 4, 5, 6]) for (const missing of [false, true]) {
+    for (const picked of [1, 2, 3, 4, 5, 6, 7]) for (const missing of [false, true]) {
         const state = scenario(0, {randomRoll: picked}); state.player.initialMaxHealth = 250;
         if (missing) delete state.player.augmentId;
         run('PLAYER AUGMENT INITIALIZATION', state);
         assert.equal(state.player.augmentId, picked, 'Unselected and late-join players can receive every real Augment');
         assert.equal(state.armor, picked === 1 ? 75 : 0);
-        assert.deepEqual(state.randomCalls, [[1, 6]], 'No Preference is excluded from the random range');
+        assert.deepEqual(state.randomCalls, [[1, 7]], 'No Preference is excluded from the random range');
         state.randomRoll = picked === 6 ? 1 : 6;
         run('PLAYER AUGMENT INITIALIZATION', state);
         assert.equal(state.player.augmentId, picked, 'Respawn/reinitialization retains the previously rolled ID');
         assert.equal(state.randomCalls.length, 1);
     }
-    for (const selected of [2, 3, 4, 5, 6]) {
+    for (const selected of [2, 3, 4, 5, 6, 7]) {
         const chosen = scenario(selected); chosen.player.initialMaxHealth = 250;
         run('PLAYER AUGMENT INITIALIZATION', chosen);
         assert.equal(chosen.player.augmentId, selected, 'Keep an explicit Augment selection');
@@ -1294,13 +1296,13 @@ async function main() {
     assert(selectionActions[1].startsWith('Set Player Variable(Event Player, enhancementId, Random Integer('));
     const enhancementSelection = {...enhancementInit,
         body: enhancementInit.body.split('actions {\n')[0] + 'actions {\n' + selectionActions.join('\n') + '\n}'};
-    for (let picked = 1; picked <= 9; picked++) for (const missing of [false, true]) {
+    for (let picked = 1; picked <= 8; picked++) for (const missing of [false, true]) {
         const state = scenario(1, {randomRoll: picked});
         if (!missing) state.player.enhancementId = 0;
         start(enhancementSelection, state, compiled);
-        assert.equal(state.player.enhancementId, picked, 'All nine enhancements are eligible for unselected / late-join players');
-        assert.deepEqual(state.randomCalls, [[1, 9]]);
-        state.randomRoll = picked === 9 ? 1 : 9;
+        assert.equal(state.player.enhancementId, picked, 'All eight enhancements are eligible for unselected / late-join players');
+        assert.deepEqual(state.randomCalls, [[1, 8]]);
+        state.randomRoll = picked === 8 ? 1 : 8;
         start(enhancementSelection, state, compiled);
         assert.equal(state.player.enhancementId, picked, 'An already resolved enhancement is retained');
         assert.equal(state.randomCalls.length, 1);
@@ -1313,6 +1315,114 @@ async function main() {
     }
     assert(!files['variables.opy'].includes('augmentSwordRecovery'), 'Fixed timing needs no cached player variable alias');
     assert(!files['enhancements.opy'].includes('Enhancement.KEVLAR'));
+    // Barrier geometry and cooldown remain live across waits and effect reevaluation.
+    // They must never alias an enhancement that can now be selected alongside it.
+    const enhancementSlots = new Set([...files['variables.opy'].matchAll(/^#!define enhancement\w+ (\w+)$/gm)].map(m => m[1]));
+    for (const field of ['Facing', 'EdgeDirection', 'PlacementCooldown', 'Position', 'Corner1', 'Corner2', 'TargetList']) {
+        assert(!enhancementSlots.has(slot('augmentBarrier' + field)), 'Barrier conflicts with enhancement storage: ' + field);
+    }
+    assert(!files['enhancements.opy'].includes('LASER_BARRICADE'));
+    for (const name of ['LASER BARRICADE (PLACEMENT)', 'LASER BARRICADE BLOCKS ZOMBIES']) {
+        const body = compiled.get(name).body;
+        assert(body.includes('(Event Player).augmentId == 7;'));
+        assert(!body.includes('(Event Player).enhancementId'));
+    }
+    const placement = compiled.get('LASER BARRICADE (PLACEMENT)').body;
+    assert(placement.includes('Button(Interact)'));
+    assert(!placement.includes('Button(Melee)'));
+    const interactRule = compiled.get('PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)');
+    for (const crouch of [false, true]) for (const interact of [false, true]) {
+        const state = scenario(7, {buttons: new Set([...(crouch ? ['Crouch'] : []), ...(interact ? ['Interact'] : [])])});
+        assert.equal(applies(compiled.get('LASER BARRICADE (PLACEMENT)'), state), crouch && interact,
+            'Barricade placement requires both buttons');
+        assert.equal(applies(interactRule, state), interact && !crouch,
+            'Barricade input must not also use or pick up a power up');
+        state.player.augmentId = 1;
+        assert.equal(applies(interactRule, state), interact, 'Other augments preserve crouched interaction');
+    }
+
+    // Execute the emitted use delay with the real interaction conditions. Stub only
+    // the item-specific effects, recording whether powerUpUsage was reached.
+    const interactActions = actions(interactRule);
+    const useIndex = interactActions.indexOf('Call Subroutine(powerUpUsage);');
+    assert(useIndex > 0);
+    assert.equal(interactActions[useIndex - 1], 'Wait(0.25, Abort When False);');
+    const useOnly = {...interactRule, body: interactRule.body.split('actions {\n')[0]
+        + 'actions {\n' + interactActions.slice(useIndex - 1, useIndex + 1).join('\n') + '\n}'};
+    const useCompiled = new Map(compiled);
+    useCompiled.set('powerUpUsage', {name: 'powerUpUsage',
+        body: 'actions {\nSet Player Variable(Event Player, powerUpItemId, 0);\n}'});
+    for (let item = 1; item <= 13; item++) {
+        const held = scenario(7, {buttons: new Set(['Crouch', 'Interact'])});
+        held.player.powerUpItemId = item;
+        for (const seconds of [0, 0.25, 0.5, 1, 5, 30]) {
+            held.time = 100 + seconds;
+            assert(!applies(interactRule, held), 'Holding the combo must never start power-up use');
+            assert.equal(held.player.powerUpItemId, item);
+        }
+        for (const pressAt of [0.01, 0.125, 0.249]) {
+            const state = scenario(7, {buttons: new Set(['Interact'])});
+            state.player.powerUpItemId = item;
+            const task = start(useOnly, state, useCompiled);
+            state.time += pressAt; state.buttons.add('Crouch'); task.resume();
+            assert(task.done(), 'Adding Crouch must abort pending power-up activation');
+            state.time = 101; task.resume();
+            assert.equal(state.player.powerUpItemId, item, 'An aborted hold must not consume the item');
+        }
+        for (const [augment, crouch] of [[7, false], [1, true]]) {
+            const state = scenario(augment, {buttons: new Set(['Interact', ...(crouch ? ['Crouch'] : [])])});
+            state.player.powerUpItemId = item;
+            const task = start(useOnly, state, useCompiled);
+            state.time += 0.25; task.resume();
+            assert(task.done());
+            assert.equal(state.player.powerUpItemId, 0, 'Ordinary interaction must still reach power-up use');
+        }
+    }
+
+    // Run the actual aiming controller, omitting only cosmetic feedback and stopping
+    // before the placement raycast. Preview input is evaluated from the emitted beam.
+    const placementRule = compiled.get('LASER BARRICADE (PLACEMENT)');
+    const placementActions = actions(placementRule);
+    const placementCheck = placementActions.indexOf('Call Subroutine(checkEnhancementPlacement);');
+    assert(placementCheck > 0);
+    const aimRule = {...placementRule, body: placementRule.body.split('actions {\n')[0]
+        + 'actions {\n' + placementActions.slice(0, placementCheck)
+            .filter(line => !line.startsWith('Play Effect(')).join('\n') + '\n}'};
+    const preview = actions(compiled.get('PLAYER AUGMENT INITIALIZATION')).find(line => line.startsWith('Create Beam Effect('));
+    const previewPredicate = args(args(preview)[0])[1];
+    assert(!previewPredicate.includes('Button(Crouch)'), 'Preview must not require Crouch after aiming begins');
+    const previewInput = args(previewPredicate)[0];
+    assert(previewInput.includes('Compare((Event Player).augmentState2, <, Null)'));
+    const barrierCooldown = slot('augmentBarrierPlacementCooldown');
+    for (const crouchReleasedAt of [0.1, 0.6]) {
+        const state = scenario(7, {buttons: new Set(['Crouch', 'Interact'])});
+        const task = start(aimRule, state, compiled);
+        assert.equal(state.player[barrierCooldown], -1);
+        state.time += crouchReleasedAt; state.buttons.delete('Crouch'); task.resume();
+        assert(!task.done(), 'Releasing Crouch must keep aiming active, including during the windup');
+        state.time = 101; task.resume();
+        assert(!task.done());
+        assert(truth(value(previewInput, state)), 'Preview stays visible while Interact is held');
+        assert(!applies(interactRule, state), 'Releasing Crouch while aiming must not activate a power up');
+        state.buttons.delete('Interact'); task.resume();
+        assert(task.done(), 'Releasing Interact completes aiming');
+        assert.equal(state.player[barrierCooldown], 0);
+        assert(!truth(value(previewInput, state)), 'Preview stops on release');
+    }
+    for (const cancelAt of [0.1, 0.6]) for (const death of [false, true]) {
+        const state = scenario(7, {buttons: new Set(['Crouch', 'Interact'])});
+        const task = start(aimRule, state, compiled);
+        state.time += cancelAt; task.resume();
+        if (death) state.alive = false; else state.buttons.delete('Interact');
+        task.resume();
+        assert(task.done(), 'Early release or death must end aiming');
+        assert.equal(state.player[barrierCooldown], 0, 'Cancellation must clear the aiming latch');
+    }
+    assert(compiled.get('LASER BARRICADE BLOCKS ZOMBIES').body.includes(
+        'Chase Player Variable At Rate(Event Player, augmentBarrierHealth, 10000, 500, None)'));
+
+    assert(placement.includes('Set Player Variable(Event Player, augmentBarrierHealth, 10000)'));
+    assert(placement.includes('Set Player Variable(Event Player, augmentState2, 30)'));
     const declarations = Object.values(files).join('\n');
     const variableBlocks = build.result.match(/variables \{\n    global:\n([\s\S]*?)\n    player:\n([\s\S]*?)\n\}/);
     assert(variableBlocks);
@@ -1320,7 +1430,7 @@ async function main() {
     const playerCount = [...variableBlocks[2].matchAll(/^\s+\d+: /gm)].length;
     assert(playerCount <= 128 && globalCount <= 128);
     assert.deepEqual([...declarations.matchAll(/^playervar (augment\w+)/gm)].map(m => m[1]),
-        ['augmentId', 'augmentState0', 'augmentState1', 'augmentState2', 'augmentState3']);
+        ['augmentId', 'augmentState0', 'augmentState1', 'augmentState2', 'augmentState3', 'augmentBarrierHealth']);
     if (process.argv.includes('--export')) {
         const exported = await compiler.compile(fs.readFileSync(path.join(root, 'main.opy'), 'utf8'),
             'en-US', root.replace(/\\/g, '/') + '/', 'main.opy');
@@ -1331,7 +1441,7 @@ async function main() {
     }
     console.log(JSON.stringify({elements: build.elements, warnings: build.warnings.length,
         playerVariables: playerCount, globalVariables: globalCount, compiledRules: parsed.length,
-        checked: ['menu forward/reverse', 'Shock Landing name / second-jump/eight directions/45-degree diagonals/no direction means wave only/death/CC/cooldown/collision cleanup',
+        checked: ['menu forward/reverse', 'Laser Barricade augment selection / independent storage / Crouch + Interact placement / release Crouch during windup and aiming / cancel and death cleanup / power up input exclusion / 10000 HP / 30s cooldown', 'Shock Landing name / second-jump/eight directions/45-degree diagonals/no direction means wave only/death/CC/cooldown/collision cleanup',
             'dash 13s cooldown / 0.5s phase / first landing wave / 40 damage to all targets including unpushable / Pyrotechnic actual-hit burns and 15m limit / lethal and invulnerable targets / 32 impulse at 6.5 degrees / early and late landing / radius / all directions / resistance / attribution / interrupts',
             'double jump airborne + grounded double-tap / ability-active launch / 14.4 impulse / 16s cooldown / shared gate / tap timeout / CC / landing / death',
             'double jump first-hit +50% / minimum damage 30 inclusive / smaller hits preserve bonus / native and script damage / flight / 0.5s landing window / expiry / no recursion / no rearm / death / hero switch', 'movement cooldown HUD',

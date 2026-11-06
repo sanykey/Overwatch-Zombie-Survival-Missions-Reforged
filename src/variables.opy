@@ -31,19 +31,18 @@ enum Challenge:
     PANDORAS_BOX = 5,
 
 # Enhancement IDs index enhancementOptionList and the start-menu tables.
-# Zero means no preference; initialization randomly selects a real ID 1-9.
+# Zero means no preference; initialization randomly selects a real ID 1-8.
 # Brain Killer remains the first explicit menu choice.
 enum Enhancement:
     NO_PREFERENCE = 0,
     BRAIN_KILLER = 1,
     ZOMBIE_HYBRID = 2,
-    LASER_BARRICADE = 3,
-    PYROTECHNIC = 4,
-    PLAGUE_DOCTOR = 5,
-    BORN_TO_BATTLE = 6,
-    CHARGE_BATTERY = 7,
-    HITCHHIKER = 8,
-    PUP = 9,
+    PYROTECHNIC = 3,
+    PLAGUE_DOCTOR = 4,
+    BORN_TO_BATTLE = 5,
+    CHARGE_BATTERY = 6,
+    HITCHHIKER = 7,
+    PUP = 8,
 
 # Independent secondary enhancement slot. IDs index the names/icons in augments.opy.
 enum Augment:
@@ -54,10 +53,11 @@ enum Augment:
     LONG_REACH = 4,
     AMMO_PACK = 5,
     GRAPNEL_LAUNCHER = 6,
+    LASER_BARRICADE = 7,
 
 # Compile-time icon tables, indexed by their corresponding selection ID.
-#!define ENHANCEMENT_ICONS [iconString(Icon.QUESTION_MARK), iconString(Icon.SKULL), iconString(Icon.POISON), iconString(Icon.DIAMOND), iconString(Icon.FIRE), iconString(Icon.PLUS), iconString(Icon.BOLT), iconString(Icon.SPIRAL), iconString(Icon.FLAG), iconString(Icon.HAPPY)]
-#!define AUGMENT_ICONS [iconString(Icon.QUESTION_MARK), iconString(Icon.STOP), iconString(Icon.ARROW_RIGHT), iconString(Icon.ARROW_UP), iconString(Icon.CROSS), iconString(Icon.PLUS), iconString(Icon.ARROW_DOWN)]
+#!define ENHANCEMENT_ICONS [iconString(Icon.QUESTION_MARK), iconString(Icon.SKULL), iconString(Icon.POISON), iconString(Icon.FIRE), iconString(Icon.PLUS), iconString(Icon.BOLT), iconString(Icon.SPIRAL), iconString(Icon.FLAG), iconString(Icon.HAPPY)]
+#!define AUGMENT_ICONS [iconString(Icon.QUESTION_MARK), iconString(Icon.STOP), iconString(Icon.ARROW_RIGHT), iconString(Icon.ARROW_UP), iconString(Icon.CROSS), iconString(Icon.PLUS), iconString(Icon.ARROW_DOWN), iconString(Icon.DIAMOND)]
 
 # Objective IDs also index objectiveTypeVoteList and identify entries in objectiveTypeList.
 # Biomorphing and Survivor Rescue are only selectable through the mixed pool.
@@ -373,6 +373,8 @@ playervar enhancementId  # Selected Enhancement enum; pregame selection, runtime
 # Only the selected augment owns these slots; selection is fixed once gameplay begins.
 playervar augmentId  # Selected Augment enum; pregame Interact selection and gameplay effects.
 playervar augmentState0
+# Laser Barricade placement facing direction; persists for collision checks.
+#!define augmentBarrierFacing augmentState0
 # Shock Landing / Double Jump / Grapnel Launcher next allowed activation time; persists across landing and death, read by the HUD.
 #!define augmentMovementReadyAt augmentState0
 # Shock Landing next allowed activation time; only written on a successful dash, read by input/HUD.
@@ -383,6 +385,8 @@ playervar augmentState0
 #!define augmentAmmoLoadoutList augmentState0
 
 playervar augmentState1
+# Laser Barricade unit edge direction; persists for collision checks.
+#!define augmentBarrierEdgeDirection augmentState1
 # Shock Landing / Double Jump is armed after releasing Jump in midair; consumed once, cleared on landing/death.
 #!define augmentIsAirActionReady augmentState1
 # Ammo Pack current cached entry, retained through the hero/weapon/respawn wait.
@@ -393,6 +397,10 @@ playervar augmentState1
 #!define augmentMeleeTargetIndex augmentState1
 
 playervar augmentState2
+# Laser Barricade: -1 latches aiming until Interact release/death/cancel; 0 is ready,
+# positive values are cooldown seconds. Owned by placement across waits; read by
+# preview, HUD and power-up input exclusion. Clear the latch before every abort.
+#!define augmentBarrierPlacementCooldown augmentState2
 # Ammo Pack refill snapshot [clip 0 below native max, clip 1 below native max,
 # was reloading, clip 0 ammo at reload start, clip 1 ammo at reload start].
 # Null for supported native capacities. Otherwise initialized after loadout writes,
@@ -415,6 +423,8 @@ playervar augmentState2
 #!define augmentGrapnelState augmentState2
 
 playervar augmentState3
+# Laser Barricade center; retained across waits and reevaluated by live effects.
+#!define augmentBarrierPosition augmentState3
 # Double Jump only: [signed bonus deadline, launch hero], null when spent/expired.
 # Positive deadline: launch grace before first liftoff; infinity: first flight;
 # negative deadline: final landing grace. Read by damage-hit and lifecycle rules;
@@ -496,7 +506,7 @@ playervar candidateTargetList  # Boss target-visibility snapshot, Rescue leader 
 # Team 1 Rescue NPC leader candidates, retained for GROUP UP handling.
 #!define rescuePotentialLeaderList candidateTargetList
 # Zombies crossing the player's barricade, processed synchronously.
-#!define enhancementBarrierTargetList candidateTargetList
+#!define augmentBarrierTargetList candidateTargetList
 
 playervar sizeScale  # Actor size multiplier; shared by players, zombies, Rescue, item ranges and enhancements.
 
@@ -702,8 +712,6 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 #!define botGasPositionList actorTeamSlot22
 # Zombie Hybrid explosion cooldown in seconds.
 #!define enhancementHybridCooldown actorTeamSlot22
-# Barrier placement facing direction.
-#!define enhancementBarrierFacing actorTeamSlot22
 # Pyrotechnic hit queue; repeated targets determine fire damage.
 #!define enhancementPyroHitList actorTeamSlot22
 # Total infection levels cured by Plague Doctor.
@@ -720,8 +728,6 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateSlot2. Receivers, not rule teams, own the storage.
 # Boss Behemoth gas-cloud radii, aligned with botGasPositionList.
 #!define botGasRadiusList actorTeamSlot23
-# Direction from the first barrier corner toward the second.
-#!define enhancementBarrierEdgeDirection actorTeamSlot23
 # Born to Battle button whose charge/cooldown is reset.
 #!define enhancementBattleAbilityButton actorTeamSlot23
 # Battery remaining reuse cooldown.
@@ -734,8 +740,6 @@ playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateS
 playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateSlot3. Receivers, not rule teams, own the storage.
 # Movement waypoint associated with the accepted zombie spawn point.
 #!define botSpawnWaypoint actorTeamSlot24
-# Barrier remaining placement cooldown.
-#!define enhancementBarrierPlacementCooldown actorTeamSlot24
 # Full battery reuse cooldown used for progress scaling (10 seconds).
 #!define enhancementBatteryReuseDuration actorTeamSlot24
 # Current P.U.P. enemy target; null while idle.
@@ -744,8 +748,6 @@ playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateS
 playervar actorTeamSlot25  # Team 2: botCandidateTarget; Team 1: enhancementStateSlot4. Receivers, not rule teams, own the storage.
 # First candidate that passed line of sight in selectTarget; null when none passed.
 #!define botCandidateTarget actorTeamSlot25
-# Placed barrier center.
-#!define enhancementBarrierPosition actorTeamSlot25
 # Battery remaining placement cooldown.
 #!define enhancementBatteryPlacementCooldown actorTeamSlot25
 # P.U.P. freezing aura is visible.
@@ -755,11 +757,11 @@ playervar actorTeamSlot26  # Teleport permission on Team 2 or first barrier corn
 # Zombie initialization has enabled teleport processing.
 #!define botIsTeleportAllowed actorTeamSlot26
 # Barrier first lower corner.
-#!define enhancementBarrierCorner1 actorTeamSlot26
+#!define augmentBarrierCorner1 actorTeamSlot26
 
 playervar actorTeamSlot27  # Second barrier corner.
 # Barrier second lower corner.
-#!define enhancementBarrierCorner2 actorTeamSlot27
+#!define augmentBarrierCorner2 actorTeamSlot27
 
 playervar actorTeamSlot28  # Zombie Biomorphing resource icon IDs.
 # Zombie Biomorphing resource icon IDs; separate from the zombie visual-effect list.
@@ -844,4 +846,4 @@ playervar botReigniteRisePosition  # Chased Anran emergence position, forced acr
 
 playervar enhancementPupCooldown  # Chased P.U.P. ability cooldown (1 or 2 seconds); independent of positions.
 
-playervar enhancementBarrierHealth  # Chased Laser Barricade health; placement, damage, regeneration and HUD; independent of icon IDs.
+playervar augmentBarrierHealth  # Chased Laser Barricade health; placement, damage, regeneration and HUD; independent of icon IDs.

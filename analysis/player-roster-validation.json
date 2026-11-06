@@ -1,0 +1,22 @@
+{
+  "before": 27838,
+  "after": 28144,
+  "delta": 306,
+  "unchangedRules": 289,
+  "rosterHudActionsPerPlayer": 1,
+  "warnings": [],
+  "tagBootstrapElements": 43,
+  "rosterAlignmentSpacer": true,
+  "abilityAlignmentSpacer": true,
+  "abilityGameplayUnchanged": true,
+  "enhancementCards": 9,
+  "augmentCardsPerPlayer": 1,
+  "healthColorThresholds": [
+    0.97,
+    0.66,
+    0.33,
+    0
+  ],
+  "deadColor": "Red",
+  "inGameVisualCheck": "pending"
+}

@@ -191,12 +191,12 @@ rule "EFFECTS/TEXTS":
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Enhancement
-    startMenuEnhancementColorList = [Color.AQUA, Color.RED, Color.GRAY, Color.BLUE, Color.ORANGE, Color.GREEN, Color.GRAY, colorChargeBatteryConst, Color.PURPLE, Color.BLUE]
+    startMenuEnhancementColorList = [Color.AQUA, Color.RED, Color.GRAY, Color.ORANGE, Color.GREEN, Color.GRAY, colorChargeBatteryConst, Color.PURPLE, Color.BLUE]
     hudText(
         getPlayers(Team.1),
         "Enhancement: {0}{1}".format(
             [
-                "No Preference", "Brain Killer ", "Zombie Hybrid ", "Laser Barricade ",
+                "No Preference", "Brain Killer ", "Zombie Hybrid ",
                 "Pyrotechnic ", "Plague Doctor ", "Born to Battle ",
                 "Charge Battery ", "Hitchhiker ", "P.U.P. "
             ][localPlayer.enhancementId],
@@ -206,7 +206,6 @@ rule "EFFECTS/TEXTS":
             "",
             "Critical hits do more damage",
             "Get infected faster, and convert it to explosive damage",
-            "Player can place a wall that blocks zombies",
             "Dealing damage, within 15 meters, sets enemies on fire",
             "Deal more healing to infected players while reducing their infection level",
             "Final blows grant a cooldown reset on the next ability use, storing up to 2 charges",

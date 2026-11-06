@@ -3,7 +3,7 @@
 subroutine extendAugmentMelee
 subroutine useAugmentAirAction
 
-#!define AUGMENT_NAMES ["No Preference", "Kevlar", "Shock Landing", "Double Jump", "Long Reach", "Ammo Pack", "Grapnel Launcher"]
+#!define AUGMENT_NAMES ["No Preference", "Kevlar", "Shock Landing", "Double Jump", "Long Reach", "Ammo Pack", "Grapnel Launcher", "Laser Barricade"]
 #!define AUGMENT_DASH_PHASE_DURATION 0.5
 #!define AUGMENT_DASH_COOLDOWN 13
 #!define AUGMENT_DASH_WAVE_RADIUS 6
@@ -55,7 +55,8 @@ rule "AUGMENT MENU":
             "Jump in midair or double-tap Jump. First hit of 30+ damage in flight or within 0.5s after landing deals +50%. Cooldown: 16s",
             "Quadruple Quick Melee reach with a small push; triple melee weapon, Dragonblade and Carnage reach",
             "Carry twice the ammo per full magazine; full reloads restore the bonus",
-            "Crouch + Jump: grapple 7-40m; hit for 35 damage and stun for 0.5s. Cooldown: 16s"
+            "Crouch + Jump: grapple 7-40m; hit for 35 damage and stun for 0.5s. Cooldown: 16s",
+            "Hold Crouch + Interact to place a wall that blocks zombies; release Interact to deploy; Crouch may be released while aiming. Cooldown: 30s"
         ][localPlayer.augmentId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.INTERACT)),
         HudPosition.LEFT, 4, Color.AQUA, Color.AQUA, Color.AQUA,
@@ -79,7 +80,7 @@ rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)":
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
 
-    eventPlayer.augmentId = (eventPlayer.augmentId + (Augment.GRAPNEL_LAUNCHER if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else 1)) % (Augment.GRAPNEL_LAUNCHER + 1)
+    eventPlayer.augmentId = (eventPlayer.augmentId + (Augment.LASER_BARRICADE if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else 1)) % (Augment.LASER_BARRICADE + 1)
 
 
 rule "PLAYER AUGMENT INITIALIZATION":
@@ -93,8 +94,48 @@ rule "PLAYER AUGMENT INITIALIZATION":
     if eventPlayer.augmentId == Augment.NO_PREFERENCE:
         # Menu non-selection and late-join zero state each receive one real
         # random choice. A nonzero ID preserves explicit and previously rolled choices.
-        eventPlayer.augmentId = random.randint(Augment.KEVLAR, Augment.GRAPNEL_LAUNCHER)
-    hudText(eventPlayer, "{0} {1}".format(AUGMENT_NAMES[eventPlayer.augmentId], AUGMENT_ICONS[eventPlayer.augmentId]), null, (iconString(Icon.CHECKMARK) if getTotalTimeElapsed() >= eventPlayer.augmentMovementReadyAt else "{0}s".format(ceil(eventPlayer.augmentMovementReadyAt - getTotalTimeElapsed()))) if eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP, Augment.GRAPNEL_LAUNCHER] else [], HudPosition.LEFT, 100, Color.AQUA, Color.AQUA, Color.AQUA, HudReeval.STRING)
+        eventPlayer.augmentId = random.randint(Augment.KEVLAR, Augment.LASER_BARRICADE)
+    if eventPlayer.augmentId == Augment.LASER_BARRICADE:
+        #Augment: Laser Barricade
+        # augmentBarrierFacing: horizontal unit direction saved at placement, to reconstruct both push reference points.
+        # augmentBarrierEdgeDirection: unit direction from corner 1 to corner 2, cached for zombie collision checks.
+        # augmentBarrierPlacementCooldown: -1 while aiming; otherwise remaining placement cooldown in seconds (30 on placement), for checks and HUD.
+        # augmentBarrierPosition: placed barrier center in world coordinates, for collision checks, push points and HP text.
+        # augmentBarrierCorner1: first lower corner in world coordinates, for beams and collision geometry.
+        # augmentBarrierCorner2: second lower corner in world coordinates, for beams and the along-barrier direction.
+        # augmentBarrierHealth: current barrier health (10000 on placement), for blocking, damage, regeneration and HUD.
+        hudText(
+            eventPlayer,
+            iconString(Icon.DIAMOND),
+            "{2} {1} {0}".format(f"{eventPlayer.augmentBarrierPlacementCooldown}s" if eventPlayer.augmentBarrierPlacementCooldown > 0 else iconString(Icon.CHECKMARK), " {0}HP".format(ceil(eventPlayer.augmentBarrierHealth)) if eventPlayer.augmentBarrierHealth > 0 else [], f"Hold [{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.INTERACT)}] to place a barricade" if eventPlayer.augmentBarrierPlacementCooldown <= 0 else []),
+            "Laser Barricade",
+            HudPosition.ACTUALLY_LEFT, 100, Color.RED if eventPlayer.augmentBarrierPlacementCooldown > 0 else Color.BLUE, Color.BLUE, Color.RED if eventPlayer.augmentBarrierPlacementCooldown > 0 else Color.BLUE, HudReeval.VISIBILITY_STRING_AND_COLOR
+        )
+        #Barricade placement visual
+        createBeam(eventPlayer.filter(lambda _: eventPlayer.augmentBarrierPlacementCooldown < 0 and eventPlayer.isHoldingButton(Button.INTERACT) and distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) <= 30), Beam.BAD, worldVector(vect(-0.5 * LASER_BARRICADE_WIDTH, 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), worldVector(vect(0.5 * LASER_BARRICADE_WIDTH, 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), Color.GREEN, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        #Barricade bottom
+        createBeam(getAllPlayers().filter(lambda _: eventPlayer.augmentBarrierPosition != null), Beam.BAD, eventPlayer.augmentBarrierCorner1, eventPlayer.augmentBarrierCorner2, Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        #Barricade side 1
+        createBeam(getAllPlayers().filter(lambda _: eventPlayer.augmentBarrierHealth > 0), Beam.BAD, eventPlayer.augmentBarrierCorner1 + LASER_BARRICADE_HEIGHT * Vector.UP, eventPlayer.augmentBarrierCorner1, Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        #Barricade side 2
+        createBeam(getAllPlayers().filter(lambda _: eventPlayer.augmentBarrierHealth > 0), Beam.BAD, eventPlayer.augmentBarrierCorner2, eventPlayer.augmentBarrierCorner2 + LASER_BARRICADE_HEIGHT * Vector.UP, Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        #Barricade top
+        createBeam(getAllPlayers().filter(lambda _: eventPlayer.augmentBarrierHealth > 0), Beam.BAD, eventPlayer.augmentBarrierCorner2 + LASER_BARRICADE_HEIGHT * Vector.UP, eventPlayer.augmentBarrierCorner1 + LASER_BARRICADE_HEIGHT * Vector.UP, Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        #Barricade health
+        createInWorldText(getAllPlayers() if eventPlayer.augmentBarrierHealth > 0 else null, "{0}HP".format(ceil(eventPlayer.augmentBarrierHealth)), eventPlayer.augmentBarrierPosition + Vector.UP, 1.5, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.BLUE)
+    else:
+        # Match the roster: icon, small status/instructions, then the ability name.
+        hudText(
+            eventPlayer,
+            AUGMENT_ICONS[eventPlayer.augmentId],
+            "{1} | {0}".format(
+                iconString(Icon.CHECKMARK) if getTotalTimeElapsed() >= eventPlayer.augmentMovementReadyAt else f"{ceil(eventPlayer.augmentMovementReadyAt - getTotalTimeElapsed())}s",
+                f"[{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.JUMP)}]" if eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER else f"[{inputBindingString(Button.JUMP)}] in midair / double-tap" if eventPlayer.augmentId == Augment.DOUBLE_JUMP else f"[{inputBindingString(Button.JUMP)}] in midair"
+            ) if eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP, Augment.GRAPNEL_LAUNCHER] else ["", "+75 armor", "", "", "Extended melee reach", "Double magazine capacity"][eventPlayer.augmentId],
+            AUGMENT_NAMES[eventPlayer.augmentId],
+            HudPosition.ACTUALLY_LEFT, 100, Color.AQUA, Color.AQUA, Color.AQUA,
+            HudReeval.STRING
+        )
     if eventPlayer.augmentId == Augment.KEVLAR:
         # Preserve the original enhancement's 75 armor and readiness gate.
         waitUntil(eventPlayer.initialMaxHealth > 0, Math.INFINITY)
@@ -618,3 +659,102 @@ rule "AMMO PACK REFILL FALLBACK":
             # while preserving those spent rounds (34/35 becomes 69/35).
             eventPlayer.setAmmo(augmentAmmoFallbackClipIndex, eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) + eventPlayer.augmentAmmoLoadout[augmentAmmoFallbackClipIndex + 2] - augmentAmmoNativeCapacity)
     eventPlayer.augmentAmmoFallbackState = [eventPlayer.getAmmo(0) < eventPlayer.getMaxAmmo(0), eventPlayer.getAmmo(1) < eventPlayer.getMaxAmmo(1), eventPlayer.isReloading(), eventPlayer.augmentAmmoFallbackState[3], eventPlayer.augmentAmmoFallbackState[4]]
+
+
+rule "LASER BARRICADE (PLACEMENT)":
+    @Event eachPlayer
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.augmentId == Augment.LASER_BARRICADE
+    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
+    @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.augmentBarrierPlacementCooldown <= 0
+
+    # Negative cooldown latches aiming without another player variable. Only this
+    # rule owns it; clear it on every exit before starting the normal cooldown.
+    eventPlayer.augmentBarrierPlacementCooldown = -1
+    waitUntil(not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead(), 0.5)
+    if not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead():
+        eventPlayer.augmentBarrierPlacementCooldown = 0
+        return
+    playEffect(eventPlayer, DynamicEffect.GOOD_EXPLOSION, Color.BLUE, eventPlayer.getEyePosition() + ((directionFromAngles(eventPlayer.getHorizontalFacingAngle() + random.uniform(-5, 5), eventPlayer.getVerticalFacingAngle() + random.uniform(-5, 5))) * 1.5), 0.1)
+    playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.BLUE, eventPlayer.getPosition(), 75)
+    waitUntil(not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead(), Math.INFINITY)
+    eventPlayer.augmentBarrierPlacementCooldown = 0
+    checkEnhancementPlacement()
+    if isEnhancementPlacementInvalid:
+        return
+    #Laser Barrier health
+    eventPlayer.augmentBarrierHealth = 10000
+    #Barrier center point
+    eventPlayer.augmentBarrierPosition = raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)
+    #Barrier corner 1
+    eventPlayer.augmentBarrierCorner1 = eventPlayer.augmentBarrierPosition + worldVector((-0.5 * LASER_BARRICADE_WIDTH) * Vector.LEFT, eventPlayer, Transform.ROTATION)
+    #Barrier Corner 2
+    eventPlayer.augmentBarrierCorner2 = eventPlayer.augmentBarrierPosition + worldVector((0.5 * LASER_BARRICADE_WIDTH) * Vector.LEFT, eventPlayer, Transform.ROTATION)
+    # Horizontal push direction captured at placement; reference points are center +/- this vector.
+    eventPlayer.augmentBarrierFacing = directionFromAngles(eventPlayer.getHorizontalFacingAngle(), 0)
+    # Along-barrier direction, reused by collision checks.
+    eventPlayer.augmentBarrierEdgeDirection = directionTowards(eventPlayer.augmentBarrierCorner1, eventPlayer.augmentBarrierCorner2)
+    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.BLUE, eventPlayer.augmentBarrierPosition, 2)
+    playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, Color.BLUE, eventPlayer.augmentBarrierPosition, 50)
+    smallMessage(eventPlayer, "  Barricade placed!")
+    #Laser Barrier cooldown
+    eventPlayer.augmentBarrierPlacementCooldown = 30
+    while eventPlayer.augmentBarrierPlacementCooldown > 0:
+        wait(1)
+        eventPlayer.augmentBarrierPlacementCooldown += -1
+
+
+rule "LASER BARRICADE BLOCKS ZOMBIES":
+    @Event eachPlayer
+    @Team 1
+    @Condition eventPlayer.augmentId == Augment.LASER_BARRICADE
+    #Barrier health is greater than 0
+    @Condition eventPlayer.augmentBarrierHealth > 0
+    #Horizontal distance check
+    @Condition getLivingPlayers(Team.2).any(lambda player: distance(eventPlayer.augmentBarrierPosition, vect(player.getPosition().x, eventPlayer.augmentBarrierPosition.getPosition().y, player.getPosition().z)) < 0.5 * LASER_BARRICADE_WIDTH) == true
+    #If feet are below highest point of wall
+    @Condition getLivingPlayers(Team.2).any(lambda player: player.getPosition().y < eventPlayer.augmentBarrierPosition.y + LASER_BARRICADE_HEIGHT) == true
+    #If eyes are above lowest point of wall
+    @Condition getLivingPlayers(Team.2).any(lambda player: player.getEyePosition().y > eventPlayer.augmentBarrierPosition.y) == true
+    #Distance from wall
+    @Condition getLivingPlayers(Team.2).any(lambda player: distance(vect(player.getPosition().x, eventPlayer.augmentBarrierCorner1.y, player.getPosition().z), eventPlayer.augmentBarrierCorner1 + eventPlayer.augmentBarrierEdgeDirection * (min(LASER_BARRICADE_WIDTH, abs(dotProduct(eventPlayer.augmentBarrierEdgeDirection, vect(player.getPosition().x, eventPlayer.augmentBarrierCorner1.y, player.getPosition().z) - eventPlayer.augmentBarrierCorner1))))) < 1.5) == true
+
+    stopChasing(eventPlayer.augmentBarrierHealth)
+    #Filter horizontal distance, feet height, eye height and distance from wall together.
+    eventPlayer.augmentBarrierTargetList = getLivingPlayers(Team.2).filter(lambda target: (distance(eventPlayer.augmentBarrierPosition, vect(target.getPosition().x, eventPlayer.augmentBarrierPosition.getPosition().y, target.getPosition().z)) < 0.5 * LASER_BARRICADE_WIDTH) and (target.getPosition().y < eventPlayer.augmentBarrierPosition.y + LASER_BARRICADE_HEIGHT) and (target.getEyePosition().y > eventPlayer.augmentBarrierPosition.y) and (distance(vect(target.getPosition().x, eventPlayer.augmentBarrierCorner1.y, target.getPosition().z), eventPlayer.augmentBarrierCorner1 + eventPlayer.augmentBarrierEdgeDirection * (min(LASER_BARRICADE_WIDTH, abs(dotProduct(eventPlayer.augmentBarrierEdgeDirection, vect(target.getPosition().x, eventPlayer.augmentBarrierCorner1.y, target.getPosition().z) - eventPlayer.augmentBarrierCorner1))))) < 1.5))
+    # barrierPushReferencePointList: both push reference points, reconstructed from saved geometry and consumed before wait.
+    #!define barrierPushReferencePointList tmp1
+    barrierPushReferencePointList = [eventPlayer.augmentBarrierPosition + eventPlayer.augmentBarrierFacing, eventPlayer.augmentBarrierPosition + eventPlayer.augmentBarrierFacing * -1]
+    # barrierCollisionTargetIndex: barricade target index, to damage and push each zombie crossing the barrier.
+    #!define barrierCollisionTargetIndex tmp0
+    for barrierCollisionTargetIndex in range(len(eventPlayer.augmentBarrierTargetList)):
+        # barrierCollisionTarget: current zombie, consumed by this iteration's damage/push actions before wait.
+        #!define barrierCollisionTarget tmp2
+        barrierCollisionTarget = eventPlayer.augmentBarrierTargetList[barrierCollisionTargetIndex]
+        if not barrierCollisionTarget.hasStatus(Status.ROOTED):
+            #Damage the barricade
+            eventPlayer.augmentBarrierHealth -= barrierCollisionTarget.getMaxHealth() * 2.5
+            barrierCollisionTarget.setStatusEffect(eventPlayer, Status.ROOTED, 0.5)
+            damage(barrierCollisionTarget, eventPlayer, 10)
+        if not magnitude(barrierCollisionTarget.getThrottle()):
+            #If bot is not throttling
+            barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.augmentBarrierPosition, (sorted(barrierPushReferencePointList, lambda x: distance(barrierCollisionTarget, x)))[0])), (-1 if barrierCollisionTarget.getPosition().y > eventPlayer.augmentBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(barrierCollisionTarget.getPosition(), barrierCollisionTarget.getPosition() + Vector.DOWN, null, getAllPlayers(), false))))), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
+        else:
+            #If bot is throttling
+            barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.augmentBarrierPosition, (sorted(barrierPushReferencePointList, lambda x: angleBetweenVectors(worldVector(barrierCollisionTarget.getThrottle(), barrierCollisionTarget, Transform.ROTATION), directionTowards(eventPlayer.augmentBarrierPosition, x)))).last())), (-1 if barrierCollisionTarget.getPosition().y > eventPlayer.augmentBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(barrierCollisionTarget.getPosition(), barrierCollisionTarget.getPosition() + Vector.DOWN, null, getAllPlayers(), false))))), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+    wait()
+    if ruleCondition:
+        loop()
+    if eventPlayer.augmentBarrierHealth > 0:
+        wait(3, Wait.RESTART_WHEN_TRUE)
+    else:
+        wait(6, Wait.RESTART_WHEN_TRUE)
+        #If shield is regenerating from 0HP
+        if eventPlayer.augmentBarrierHealth <= 0:
+            eventPlayer.augmentBarrierHealth = 1
+    chaseAtRate(eventPlayer.augmentBarrierHealth, 10000, 500, ChaseRateReeval.NONE)
+    if ruleCondition:
+        loop()

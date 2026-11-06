@@ -20,7 +20,13 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
     if eventPlayer.enhancementId == Enhancement.ZOMBIE_HYBRID:
         #Enhancement: Zombie Hyrbid
         # enhancementHybridCooldown: remaining explosion cooldown in seconds (20 on use), for activation checks and HUD.
-        hudText(eventPlayer, "Zombie Hybrid {0}".format(iconString(Icon.POISON) if eventPlayer.enhancementHybridCooldown <= 0 else "{0}s".format(ceil(eventPlayer.enhancementHybridCooldown))), null, "Press [{0}] to deal {1}00 damage".format(inputBindingString(Button.MELEE), floor(eventPlayer.infectionLevel)) if eventPlayer.infectionLevel >= 1 and eventPlayer.enhancementHybridCooldown <= 0 else [], HudPosition.LEFT, 99, Color.GRAY if eventPlayer.enhancementHybridCooldown <= 0 else Color.RED, Color.GRAY, Color.GRAY if eventPlayer.enhancementHybridCooldown <= 0 else Color.RED, HudReeval.STRING_AND_COLOR)
+        hudText(
+            eventPlayer,
+            iconString(Icon.POISON),
+            "{1} {0}".format(f"{ceil(eventPlayer.enhancementHybridCooldown)}s" if eventPlayer.enhancementHybridCooldown > 0 else iconString(Icon.CHECKMARK), "Press [{0}] to deal {1}00 damage".format(inputBindingString(Button.MELEE), floor(eventPlayer.infectionLevel)) if eventPlayer.infectionLevel >= 1 and eventPlayer.enhancementHybridCooldown <= 0 else []),
+            "Zombie Hybrid",
+            HudPosition.ACTUALLY_LEFT, 99, Color.GRAY if eventPlayer.enhancementHybridCooldown <= 0 else Color.RED, Color.GRAY if eventPlayer.enhancementHybridCooldown <= 0 else Color.RED, Color.GRAY if eventPlayer.enhancementHybridCooldown <= 0 else Color.RED, HudReeval.STRING_AND_COLOR
+        )
         startDamageModification(eventPlayer, getPlayers(Team.2), 90)
         eventPlayer.explosionScale = 1.25
         eventPlayer.explosionInnerColor = Color.GRAY
@@ -28,41 +34,29 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
     #Infection reduced if not selected
     else:
         chaseAtRate(eventPlayer.infectionLevel, 0, 0.015 if eventPlayer.infectionLevel > 0 else 0)
-    #Laser Barricade
     switch eventPlayer.enhancementId:
-        case Enhancement.LASER_BARRICADE:
-            #Enhancement: Laser Barricade
-            # enhancementBarrierFacing: horizontal unit direction saved at placement, to reconstruct both push reference points.
-            # enhancementBarrierEdgeDirection: unit direction from corner 1 to corner 2, cached for zombie collision checks.
-            # enhancementBarrierPlacementCooldown: remaining placement cooldown in seconds (30 on placement), for placement checks and HUD.
-            # enhancementBarrierPosition: placed barrier center in world coordinates, for collision checks, push points and HP text.
-            # enhancementBarrierCorner1: first lower corner in world coordinates, for beams and collision geometry.
-            # enhancementBarrierCorner2: second lower corner in world coordinates, for beams and the along-barrier direction.
-            # enhancementBarrierHealth: current barrier health (10000 on placement), for blocking, damage, regeneration and HUD.
-            hudText(eventPlayer, "Laser Barricade {0}{1}".format(iconString(Icon.DIAMOND), " {0}s".format(eventPlayer.enhancementBarrierPlacementCooldown) if eventPlayer.enhancementBarrierPlacementCooldown > 0 else []), " {0}HP".format(ceil(eventPlayer.enhancementBarrierHealth)) if eventPlayer.enhancementBarrierHealth > 0 else [], "Hold [{0}] to place a barricade".format(inputBindingString(Button.MELEE)) if eventPlayer.enhancementBarrierPlacementCooldown <= 0 else [], HudPosition.LEFT, 99, Color.RED if eventPlayer.enhancementBarrierPlacementCooldown > 0 else Color.BLUE, Color.BLUE, Color.BLUE, HudReeval.VISIBILITY_STRING_AND_COLOR)
-            #Barricade placement visual
-            createBeam(eventPlayer.filter(lambda _: eventPlayer.isHoldingButton(Button.MELEE) and eventPlayer.enhancementBarrierPlacementCooldown <= 0 and distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) <= 30), Beam.BAD, worldVector(vect(-0.5 * LASER_BARRICADE_WIDTH, 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), worldVector(vect(0.5 * LASER_BARRICADE_WIDTH, 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), Color.GREEN, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            #Barricade bottom
-            createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementBarrierPosition != null), Beam.BAD, eventPlayer.enhancementBarrierCorner1, eventPlayer.enhancementBarrierCorner2, Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            #Barricade side 1
-            createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementBarrierHealth > 0), Beam.BAD, eventPlayer.enhancementBarrierCorner1 + LASER_BARRICADE_HEIGHT * Vector.UP, eventPlayer.enhancementBarrierCorner1, Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            #Barricade side 2
-            createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementBarrierHealth > 0), Beam.BAD, eventPlayer.enhancementBarrierCorner2, eventPlayer.enhancementBarrierCorner2 + LASER_BARRICADE_HEIGHT * Vector.UP, Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            #Barricade top
-            createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementBarrierHealth > 0), Beam.BAD, eventPlayer.enhancementBarrierCorner2 + LASER_BARRICADE_HEIGHT * Vector.UP, eventPlayer.enhancementBarrierCorner1 + LASER_BARRICADE_HEIGHT * Vector.UP, Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            #Barricade health
-            createInWorldText(getAllPlayers() if eventPlayer.enhancementBarrierHealth > 0 else null, "{0}HP".format(ceil(eventPlayer.enhancementBarrierHealth)), eventPlayer.enhancementBarrierPosition + Vector.UP, 1.5, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.BLUE)
-            break
         #Brain Killer
         case Enhancement.BRAIN_KILLER:
             #Enhancement: Brain Killer
             # No enhancement state slots: bonus damage is calculated directly from the damage event.
-            hudHeader(eventPlayer, "Brain Killer {0}".format(iconString(Icon.SKULL)), HudPosition.LEFT, 99, Color.RED, HudReeval.STRING)
+            hudText(
+                eventPlayer,
+                iconString(Icon.SKULL),
+                "Bonus critical damage",
+                "Brain Killer",
+                HudPosition.ACTUALLY_LEFT, 99, Color.RED, Color.RED, Color.RED, HudReeval.STRING
+            )
             break
         #Pyrotechnic
         case Enhancement.PYROTECHNIC:
             #Enhancement: Pyrotechnic
-            hudHeader(eventPlayer, "Pyrotechnic {0}".format(iconString(Icon.FIRE)), HudPosition.LEFT, 99, Color.ORANGE, HudReeval.STRING)
+            hudText(
+                eventPlayer,
+                iconString(Icon.FIRE),
+                "Ignites nearby targets",
+                "Pyrotechnic",
+                HudPosition.ACTUALLY_LEFT, 99, Color.ORANGE, Color.ORANGE, Color.ORANGE, HudReeval.STRING
+            )
             # enhancementPyroHitList: hit queue; repeated targets determine their damage per second when the queue is processed.
             eventPlayer.enhancementPyroHitList = []
             break
@@ -70,7 +64,13 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
         case Enhancement.PLAGUE_DOCTOR:
             #Enhancement: Plague Doctor
             # enhancementPlagueCureTotal: accumulated infection levels removed, including cure bonuses, displayed in the HUD.
-            hudText(eventPlayer, "Plague Doctor {0}".format(iconString(Icon.PLUS)), null, "Infection Reduced: {0} lvls".format(eventPlayer.enhancementPlagueCureTotal), HudPosition.LEFT, 99, Color.GREEN, Color.GREEN, Color.GREEN, HudReeval.STRING)
+            hudText(
+                eventPlayer,
+                iconString(Icon.PLUS),
+                "Infection Reduced: {0} lvls".format(eventPlayer.enhancementPlagueCureTotal),
+                "Plague Doctor",
+                HudPosition.ACTUALLY_LEFT, 99, Color.GREEN, Color.GREEN, Color.GREEN, HudReeval.STRING
+            )
             #Plague doctor does 100 + x% more healing to infected players
             startHealingModification(getPlayers(Team.1).filter(lambda player: player.isInfected), eventPlayer, 150, HealingReeval.RECEIVERS_AND_HEALERS)
             eventPlayer.enhancementPlagueCureTotal = 0
@@ -80,7 +80,13 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             #Enhancement: Born to Battle
             # enhancementBattleResetCharges: 0-2 earned ability resets; final blows add one and each reset consumes one.
             # enhancementBattleAbilityButton: selected ability button, retained through waits to reset its charge or cooldown.
-            hudText(eventPlayer, "Born to Battle {0}".format(iconString(Icon.BOLT)), null, ["", iconString(Icon.CHECKMARK), "{0} {0}".format(iconString(Icon.CHECKMARK))][eventPlayer.enhancementBattleResetCharges], HudPosition.LEFT, 99, Color.GRAY, Color.GRAY, Color.GRAY, HudReeval.STRING)
+            hudText(
+                eventPlayer,
+                iconString(Icon.BOLT),
+                f"{eventPlayer.enhancementBattleResetCharges}/2 resets",
+                "Born to Battle",
+                HudPosition.ACTUALLY_LEFT, 99, Color.GRAY, Color.GRAY, Color.GRAY, HudReeval.STRING
+            )
             eventPlayer.enhancementBattleResetCharges = 0
             break
         #Charge Battery
@@ -90,7 +96,13 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             # enhancementBatteryReuseCooldown: remaining battery reuse cooldown in seconds, for the progress bar and availability visuals.
             # enhancementBatteryReuseDuration: full battery reuse cooldown in seconds (10), used to start the timer and scale progress.
             # enhancementBatteryPlacementCooldown: remaining placement cooldown in seconds (20 on placement), for placement checks and HUD.
-            hudText(eventPlayer, "Charge Battery {0}".format(iconString(Icon.SPIRAL) if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else "{0}s".format(ceil(eventPlayer.enhancementBatteryPlacementCooldown))), null, "Hold [{0}]".format(inputBindingString(Button.MELEE)) if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else [], HudPosition.LEFT, 99, colorChargeBatteryConst if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else Color.RED, colorChargeBatteryConst, colorChargeBatteryConst if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else Color.RED, HudReeval.STRING_AND_COLOR)
+            hudText(
+                eventPlayer,
+                iconString(Icon.SPIRAL),
+                "{1} {0}".format(f"{ceil(eventPlayer.enhancementBatteryPlacementCooldown)}s" if eventPlayer.enhancementBatteryPlacementCooldown > 0 else iconString(Icon.CHECKMARK), "Hold [{0}]".format(inputBindingString(Button.MELEE)) if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else []),
+                "Charge Battery",
+                HudPosition.ACTUALLY_LEFT, 99, colorChargeBatteryConst if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else Color.RED, colorChargeBatteryConst if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else Color.RED, colorChargeBatteryConst if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else Color.RED, HudReeval.STRING_AND_COLOR
+            )
             #Battery placement visual
             createEffect(eventPlayer.filter(lambda _: eventPlayer.isHoldingButton(Button.MELEE) and eventPlayer.enhancementBatteryPlacementCooldown <= 0 and distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) <= 30), Effect.RING, rgb(0, 255, 0, 204), worldVector(0.1 * Vector.UP, eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), 0.45, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             #Battery ring
@@ -108,11 +120,17 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             #Enhancement Selection: Hitchhiker
             # enhancementHitchhikerCarrier: carrier player reference, for attachment, shared health, assists and HUD; 0 when detached.
             # enhancementHitchhikerPassengerPoolId: extra health pool ID on this passenger, retained to remove that pool when detaching.
-            hudText(eventPlayer, "Hitchhiker {0}".format(iconString(Icon.FLAG)), null, "Press [{0}] to dismount".format(inputBindingString(Button.CROUCH)) if eventPlayer.enhancementIsHitchhiking else "Press [{0}] to attach".format(inputBindingString(Button.CROUCH)) if playerTargetList.exclude(eventPlayer).any(lambda x: not x.isAttached and distance(eventPlayer, x) < 2 * x.sizeScale) else [], HudPosition.LEFT, 99, Color.PURPLE, Color.PURPLE, Color.RED if eventPlayer.enhancementIsHitchhiking else Color.PURPLE, HudReeval.VISIBILITY_STRING_AND_COLOR)
+            hudText(
+                eventPlayer,
+                iconString(Icon.FLAG),
+                "Press [{0}] to dismount".format(inputBindingString(Button.CROUCH)) if eventPlayer.enhancementIsHitchhiking else "Press [{0}] to attach".format(inputBindingString(Button.CROUCH)) if playerTargetList.exclude(eventPlayer).any(lambda x: not x.isAttached and distance(eventPlayer, x) < 2 * x.sizeScale) else [],
+                "Hitchhiker",
+                HudPosition.ACTUALLY_LEFT, 99, Color.PURPLE, Color.RED if eventPlayer.enhancementIsHitchhiking else Color.PURPLE, Color.PURPLE, HudReeval.VISIBILITY_STRING_AND_COLOR
+            )
             #Shared Health Bar Rider
-            hudSubheader(eventPlayer.filter(lambda _: eventPlayer.enhancementIsHitchhiking), "Attached to {0} {1}".format(heroIcon(eventPlayer.enhancementHitchhikerCarrier.getHero()), eventPlayer.enhancementHitchhikerCarrier), HudPosition.LEFT, 100, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING)
+            hudSubheader(eventPlayer.filter(lambda _: eventPlayer.enhancementIsHitchhiking), "Attached to {0} {1}".format(heroIcon(eventPlayer.enhancementHitchhikerCarrier.getHero()), eventPlayer.enhancementHitchhikerCarrier), HudPosition.ACTUALLY_LEFT, 100, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING)
             #Shared Health Bar Runner
-            hudSubheader(eventPlayer.enhancementHitchhikerCarrier.filter(lambda _: eventPlayer.enhancementIsHitchhiking), "{0} {1} is attached".format(heroIcon(eventPlayer.getHero()), eventPlayer), HudPosition.LEFT, 100, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING)
+            hudSubheader(eventPlayer.enhancementHitchhikerCarrier.filter(lambda _: eventPlayer.enhancementIsHitchhiking), "{0} {1} is attached".format(heroIcon(eventPlayer.getHero()), eventPlayer), HudPosition.ACTUALLY_LEFT, 100, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING)
             eventPlayer.enhancementHitchhikerCarrier = 0
             eventPlayer.enhancementHitchhikerCarrier.startGrantingAssistFor(eventPlayer)
             break
@@ -125,7 +143,13 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             # enhancementIsPupFreezeAuraActive: whether the freezing aura effect is visible around the target.
             # enhancementPupPosition: chased drone position in world coordinates, for movement, effects and attack direction.
             # enhancementPupCooldown: remaining ability cooldown in seconds (2 after freezing, 1 after laser), gating target selection.
-            hudHeader(eventPlayer, "P.U.P. {0}".format(iconString(Icon.HAPPY)), HudPosition.LEFT, 99, Color.BLUE if eventPlayer.enhancementPupColor == Color.SKY_BLUE and eventPlayer.enhancementPupCooldown > 0 else eventPlayer.enhancementPupColor, HudReeval.VISIBILITY_STRING_AND_COLOR)
+            hudText(
+                eventPlayer,
+                iconString(Icon.HAPPY),
+                f"{ceil(eventPlayer.enhancementPupCooldown)}s" if eventPlayer.enhancementPupCooldown > 0 else iconString(Icon.CHECKMARK),
+                "P.U.P.",
+                HudPosition.ACTUALLY_LEFT, 99, Color.BLUE if eventPlayer.enhancementPupColor == Color.SKY_BLUE and eventPlayer.enhancementPupCooldown > 0 else eventPlayer.enhancementPupColor, Color.BLUE if eventPlayer.enhancementPupColor == Color.SKY_BLUE and eventPlayer.enhancementPupCooldown > 0 else eventPlayer.enhancementPupColor, Color.BLUE if eventPlayer.enhancementPupColor == Color.SKY_BLUE and eventPlayer.enhancementPupCooldown > 0 else eventPlayer.enhancementPupColor, HudReeval.VISIBILITY_STRING_AND_COLOR
+            )
             #Postion of P.U.P.
             eventPlayer.enhancementPupPosition = eventPlayer.getPosition() + 200 * Vector.UP
             #P.U.P. Default movment
@@ -171,97 +195,6 @@ rule "ZOMBIE HYBRID":
 
 # Synchronous helper output; consume immediately before any wait or asynchronous work.
 #!define isEnhancementPlacementInvalid tmp0
-
-rule "LASER BARRICADE (PLACEMENT)":
-    @Event eachPlayer
-    @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.enhancementId == Enhancement.LASER_BARRICADE
-    @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.enhancementBarrierPlacementCooldown <= 0
-    
-    wait(0.5, Wait.ABORT_WHEN_FALSE)
-    playEffect(eventPlayer, DynamicEffect.GOOD_EXPLOSION, Color.BLUE, eventPlayer.getEyePosition() + ((directionFromAngles(eventPlayer.getHorizontalFacingAngle() + random.uniform(-5, 5), eventPlayer.getVerticalFacingAngle() + random.uniform(-5, 5))) * 1.5), 0.1)
-    playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.BLUE, eventPlayer.getPosition(), 75)
-    waitUntil(not eventPlayer.isHoldingButton(Button.MELEE) or eventPlayer.isDead(), Math.INFINITY)
-    checkEnhancementPlacement()
-    if isEnhancementPlacementInvalid:
-        return
-    #Laser Barrier health
-    eventPlayer.enhancementBarrierHealth = 10000
-    #Barrier center point
-    eventPlayer.enhancementBarrierPosition = raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)
-    #Barrier corner 1
-    eventPlayer.enhancementBarrierCorner1 = eventPlayer.enhancementBarrierPosition + worldVector((-0.5 * LASER_BARRICADE_WIDTH) * Vector.LEFT, eventPlayer, Transform.ROTATION)
-    #Barrier Corner 2
-    eventPlayer.enhancementBarrierCorner2 = eventPlayer.enhancementBarrierPosition + worldVector((0.5 * LASER_BARRICADE_WIDTH) * Vector.LEFT, eventPlayer, Transform.ROTATION)
-    # Horizontal push direction captured at placement; reference points are center +/- this vector.
-    eventPlayer.enhancementBarrierFacing = directionFromAngles(eventPlayer.getHorizontalFacingAngle(), 0)
-    # Along-barrier direction, reused by collision checks.
-    eventPlayer.enhancementBarrierEdgeDirection = directionTowards(eventPlayer.enhancementBarrierCorner1, eventPlayer.enhancementBarrierCorner2)
-    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.BLUE, eventPlayer.enhancementBarrierPosition, 2)
-    playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, Color.BLUE, eventPlayer.enhancementBarrierPosition, 50)
-    smallMessage(eventPlayer, "  Barricade placed!")
-    #Laser Barrier cooldown
-    eventPlayer.enhancementBarrierPlacementCooldown = 30
-    while eventPlayer.enhancementBarrierPlacementCooldown > 0:
-        wait(1)
-        eventPlayer.enhancementBarrierPlacementCooldown += -1
-
-
-rule "LASER BARRICADE BLOCKS ZOMBIES":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.enhancementId == Enhancement.LASER_BARRICADE
-    #Barrier health is greater than 0
-    @Condition eventPlayer.enhancementBarrierHealth > 0
-    #Horizontal distance check
-    @Condition getLivingPlayers(Team.2).any(lambda player: distance(eventPlayer.enhancementBarrierPosition, vect(player.getPosition().x, eventPlayer.enhancementBarrierPosition.getPosition().y, player.getPosition().z)) < 0.5 * LASER_BARRICADE_WIDTH) == true
-    #If feet are below highest point of wall
-    @Condition getLivingPlayers(Team.2).any(lambda player: player.getPosition().y < eventPlayer.enhancementBarrierPosition.y + LASER_BARRICADE_HEIGHT) == true
-    #If eyes are above lowest point of wall
-    @Condition getLivingPlayers(Team.2).any(lambda player: player.getEyePosition().y > eventPlayer.enhancementBarrierPosition.y) == true
-    #Distance from wall
-    @Condition getLivingPlayers(Team.2).any(lambda player: distance(vect(player.getPosition().x, eventPlayer.enhancementBarrierCorner1.y, player.getPosition().z), eventPlayer.enhancementBarrierCorner1 + eventPlayer.enhancementBarrierEdgeDirection * (min(LASER_BARRICADE_WIDTH, abs(dotProduct(eventPlayer.enhancementBarrierEdgeDirection, vect(player.getPosition().x, eventPlayer.enhancementBarrierCorner1.y, player.getPosition().z) - eventPlayer.enhancementBarrierCorner1))))) < 1.5) == true
-    
-    stopChasing(eventPlayer.enhancementBarrierHealth)
-    #Filter horizontal distance, feet height, eye height and distance from wall together.
-    eventPlayer.enhancementBarrierTargetList = getLivingPlayers(Team.2).filter(lambda target: (distance(eventPlayer.enhancementBarrierPosition, vect(target.getPosition().x, eventPlayer.enhancementBarrierPosition.getPosition().y, target.getPosition().z)) < 0.5 * LASER_BARRICADE_WIDTH) and (target.getPosition().y < eventPlayer.enhancementBarrierPosition.y + LASER_BARRICADE_HEIGHT) and (target.getEyePosition().y > eventPlayer.enhancementBarrierPosition.y) and (distance(vect(target.getPosition().x, eventPlayer.enhancementBarrierCorner1.y, target.getPosition().z), eventPlayer.enhancementBarrierCorner1 + eventPlayer.enhancementBarrierEdgeDirection * (min(LASER_BARRICADE_WIDTH, abs(dotProduct(eventPlayer.enhancementBarrierEdgeDirection, vect(target.getPosition().x, eventPlayer.enhancementBarrierCorner1.y, target.getPosition().z) - eventPlayer.enhancementBarrierCorner1))))) < 1.5))
-    # barrierPushReferencePointList: both push reference points, reconstructed from saved geometry and consumed before wait.
-    #!define barrierPushReferencePointList tmp1
-    barrierPushReferencePointList = [eventPlayer.enhancementBarrierPosition + eventPlayer.enhancementBarrierFacing, eventPlayer.enhancementBarrierPosition + eventPlayer.enhancementBarrierFacing * -1]
-    # barrierCollisionTargetIndex: barricade target index, to damage and push each zombie crossing the barrier.
-    #!define barrierCollisionTargetIndex tmp0
-    for barrierCollisionTargetIndex in range(len(eventPlayer.enhancementBarrierTargetList)):
-        # barrierCollisionTarget: current zombie, consumed by this iteration's damage/push actions before wait.
-        #!define barrierCollisionTarget tmp2
-        barrierCollisionTarget = eventPlayer.enhancementBarrierTargetList[barrierCollisionTargetIndex]
-        if not barrierCollisionTarget.hasStatus(Status.ROOTED):
-            #Damage the barricade
-            eventPlayer.enhancementBarrierHealth -= barrierCollisionTarget.getMaxHealth() * 2.5
-            barrierCollisionTarget.setStatusEffect(eventPlayer, Status.ROOTED, 0.5)
-            damage(barrierCollisionTarget, eventPlayer, 10)
-        if not magnitude(barrierCollisionTarget.getThrottle()):
-            #If bot is not throttling
-            barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(barrierPushReferencePointList, lambda x: distance(barrierCollisionTarget, x)))[0])), (-1 if barrierCollisionTarget.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(barrierCollisionTarget.getPosition(), barrierCollisionTarget.getPosition() + Vector.DOWN, null, getAllPlayers(), false))))), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
-        else:
-            #If bot is throttling
-            barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementBarrierPosition, (sorted(barrierPushReferencePointList, lambda x: angleBetweenVectors(worldVector(barrierCollisionTarget.getThrottle(), barrierCollisionTarget, Transform.ROTATION), directionTowards(eventPlayer.enhancementBarrierPosition, x)))).last())), (-1 if barrierCollisionTarget.getPosition().y > eventPlayer.enhancementBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(barrierCollisionTarget.getPosition(), barrierCollisionTarget.getPosition() + Vector.DOWN, null, getAllPlayers(), false))))), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
-    wait()
-    if ruleCondition:
-        loop()
-    if eventPlayer.enhancementBarrierHealth > 0:
-        wait(3, Wait.RESTART_WHEN_TRUE)
-    else:
-        wait(6, Wait.RESTART_WHEN_TRUE)
-        #If shield is regenerating from 0HP
-        if eventPlayer.enhancementBarrierHealth <= 0:
-            eventPlayer.enhancementBarrierHealth = 1
-    chaseAtRate(eventPlayer.enhancementBarrierHealth, 10000, 500, ChaseRateReeval.NONE)
-    if ruleCondition:
-        loop()
-
 
 rule "BRAIN KILLER EXTRA DAMAGE":
     @Event playerDealtDamage

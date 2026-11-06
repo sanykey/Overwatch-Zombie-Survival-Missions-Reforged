@@ -70,7 +70,7 @@ rule "EFFECT/TEXT (PERMANENT)":
                     "to stun nearby enemies"
                 ][evalOnce(powerUpHudItemIndex)]
             ),
-            HudPosition.LEFT,
+            HudPosition.ACTUALLY_LEFT,
             100,
             evalOnce(powerUpColorListConst[powerUpHudItemIndex]),
             evalOnce(powerUpColorListConst[powerUpHudItemIndex]),

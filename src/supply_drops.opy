@@ -82,6 +82,8 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
+    # Reserve Laser Barricade input until Interact is released, even after Crouch is released.
+    @Condition (eventPlayer.augmentId != Augment.LASER_BARRICADE or (not eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.augmentBarrierPlacementCooldown >= 0)) == true
     @Condition eventPlayer.isAlive() == true
     @Condition isGameplayActive == true
     @Condition eventPlayer.isDummy() == false

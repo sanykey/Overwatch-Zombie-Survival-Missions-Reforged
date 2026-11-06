@@ -1,6 +1,7 @@
 #!extension playMoreEffects
 #!extension spawnMoreDummyBots
 
+#!setupTags
 #!optimizeForSize
 #!optimizeForSizeAggressive
 #!debugElementCount
