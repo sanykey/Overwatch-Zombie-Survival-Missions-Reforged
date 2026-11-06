@@ -56,10 +56,11 @@ enum Augment:
     AMMO_PACK = 5,
     GRAPNEL_LAUNCHER = 6,
     LASER_BARRICADE = 7,
+    APOTHECARY = 8,
 
 # Compile-time icon tables, indexed by their corresponding selection ID.
 #!define ENHANCEMENT_ICONS [iconString(Icon.QUESTION_MARK), iconString(Icon.SKULL), iconString(Icon.POISON), iconString(Icon.FIRE), iconString(Icon.PLUS), iconString(Icon.BOLT), iconString(Icon.SPIRAL), iconString(Icon.FLAG), iconString(Icon.HAPPY), iconString(Icon.BOLT), iconString(Icon.ARROW_UP)]
-#!define AUGMENT_ICONS [iconString(Icon.QUESTION_MARK), iconString(Icon.STOP), iconString(Icon.ARROW_RIGHT), iconString(Icon.ARROW_UP), iconString(Icon.CROSS), iconString(Icon.PLUS), iconString(Icon.ARROW_DOWN), iconString(Icon.DIAMOND)]
+#!define AUGMENT_ICONS [iconString(Icon.QUESTION_MARK), iconString(Icon.STOP), iconString(Icon.ARROW_RIGHT), iconString(Icon.ARROW_UP), iconString(Icon.CROSS), iconString(Icon.PLUS), iconString(Icon.ARROW_DOWN), iconString(Icon.DIAMOND), iconString(Icon.HEART)]
 
 # Objective IDs also index objectiveTypeVoteList and identify entries in objectiveTypeList.
 # Biomorphing and Survivor Rescue are only selectable through the mixed pool.
@@ -375,6 +376,9 @@ playervar enhancementId  # Selected Enhancement enum; pregame selection, runtime
 # Only the selected augment owns these slots; selection is fixed once gameplay begins.
 playervar augmentId  # Selected Augment enum; pregame Interact selection and gameplay effects.
 playervar augmentState0
+# Apothecary speed-bonus expiry (Total Time Elapsed); zero when inactive.
+# Refreshed on pickup, cleared on expiry/death and alongside movement reset on spawn.
+#!define augmentApothecarySpeedUntil augmentState0
 # Laser Barricade placement facing direction; persists for collision checks.
 #!define augmentBarrierFacing augmentState0
 # Shock Landing / Double Jump / Grapnel Launcher next allowed activation time; persists across landing and death, read by the HUD.

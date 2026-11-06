@@ -3,7 +3,7 @@
 subroutine extendAugmentMelee
 subroutine useAugmentAirAction
 
-#!define AUGMENT_NAMES ["No Preference", "Kevlar", "Shock Landing", "Double Jump", "Long Reach", "Ammo Pack", "Grapnel Launcher", "Laser Barricade"]
+#!define AUGMENT_NAMES ["No Preference", "Kevlar", "Shock Landing", "Double Jump", "Long Reach", "Ammo Pack", "Grapnel Launcher", "Laser Barricade", "Apothecary"]
 #!define AUGMENT_DASH_PHASE_DURATION 0.5
 #!define AUGMENT_DASH_COOLDOWN 13
 #!define AUGMENT_DASH_WAVE_RADIUS 6
@@ -54,7 +54,8 @@ rule "AUGMENT MENU":
             "Triple Quick Melee, melee weapon, Dragonblade and Carnage reach",
             "Carry twice the ammo per full magazine; full reloads restore the bonus",
             "Crouch + Jump: grapple 7-40m; hit for 35 damage and stun for 0.5s. Cooldown: 16s",
-            "Hold Crouch + Interact to place a wall that blocks zombies; release Interact to deploy; Crouch may be released while aiming. Cooldown: 30s"
+            "Hold Crouch + Interact to place a wall that blocks zombies; release Interact to deploy; Crouch may be released while aiming. Cooldown: 30s",
+            "Health packs heal twice as much, remove up to 1 existing infection even after time runs out, and grant +5% ultimate charge and +30% move speed for 3s"
         ][localPlayer.augmentId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.INTERACT)),
         HudPosition.LEFT, 4, Color.AQUA, Color.AQUA, Color.AQUA,
@@ -78,7 +79,7 @@ rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)":
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
 
-    eventPlayer.augmentId = (eventPlayer.augmentId + (Augment.LASER_BARRICADE if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else 1)) % (Augment.LASER_BARRICADE + 1)
+    eventPlayer.augmentId = (eventPlayer.augmentId + (Augment.APOTHECARY if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else 1)) % (Augment.APOTHECARY + 1)
 
 
 rule "PLAYER AUGMENT INITIALIZATION":
@@ -92,7 +93,7 @@ rule "PLAYER AUGMENT INITIALIZATION":
     if eventPlayer.augmentId == Augment.NO_PREFERENCE:
         # Menu non-selection and late-join zero state each receive one real
         # random choice. A nonzero ID preserves explicit and previously rolled choices.
-        eventPlayer.augmentId = random.randint(Augment.KEVLAR, Augment.LASER_BARRICADE)
+        eventPlayer.augmentId = random.randint(Augment.KEVLAR, Augment.APOTHECARY)
     if eventPlayer.augmentId == Augment.LASER_BARRICADE:
         #Augment: Laser Barricade
         # augmentBarrierFacing: horizontal unit direction saved at placement, to reconstruct both push reference points.
@@ -129,7 +130,7 @@ rule "PLAYER AUGMENT INITIALIZATION":
             "{1} | {0}".format(
                 iconString(Icon.CHECKMARK) if getTotalTimeElapsed() >= eventPlayer.augmentMovementReadyAt else f"{ceil(eventPlayer.augmentMovementReadyAt - getTotalTimeElapsed())}s",
                 f"[{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.JUMP)}]" if eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER else f"[{inputBindingString(Button.JUMP)}] in midair / double-tap" if eventPlayer.augmentId == Augment.DOUBLE_JUMP else f"[{inputBindingString(Button.JUMP)}] in midair"
-            ) if eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP, Augment.GRAPNEL_LAUNCHER] else ["", "+75 armor", "", "", "Extended melee reach", "Double magazine capacity"][eventPlayer.augmentId],
+            ) if eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP, Augment.GRAPNEL_LAUNCHER] else ["", "+75 armor", "", "", "Extended melee reach", "Double magazine capacity", "", "", "2x pack healing | -1 infection (min 0) | +5% ult | +30% speed 3s"][eventPlayer.augmentId],
             AUGMENT_NAMES[eventPlayer.augmentId],
             HudPosition.ACTUALLY_LEFT, 100, Color.AQUA, Color.AQUA, Color.AQUA,
             HudReeval.STRING
@@ -138,6 +139,18 @@ rule "PLAYER AUGMENT INITIALIZATION":
         # Preserve the original enhancement's 75 armor and readiness gate.
         waitUntil(eventPlayer.initialMaxHealth > 0, Math.INFINITY)
         eventPlayer.addHealthPool(Health.ARMOR, 75, true, false)
+
+
+rule "APOTHECARY SPEED BONUS EXPIRES":
+    @Event eachPlayer
+    @Team 1
+    @Condition eventPlayer.augmentId == Augment.APOTHECARY
+    @Condition eventPlayer.augmentApothecarySpeedUntil > 0
+    @Condition (getTotalTimeElapsed() >= eventPlayer.augmentApothecarySpeedUntil or not eventPlayer.isAlive()) == true
+
+    eventPlayer.augmentApothecarySpeedUntil = 0
+    eventPlayer.movementSpeedScale /= 1.3
+    applyScaledMoveSpeed()
 
 
 rule "AUGMENT AIR ACTION RECHARGE":

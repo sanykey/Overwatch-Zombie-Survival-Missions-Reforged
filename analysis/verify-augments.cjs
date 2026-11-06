@@ -67,6 +67,9 @@ function value(expr, state, element) {
     if (expr === 'Victim') return state.victim;
     if (expr === 'Event Ability') return state.eventAbility ?? 0;
     if (expr === 'Event Damage') return state.eventDamage ?? 0;
+    if (expr === 'Event Healing') return state.eventHealing;
+    if (expr === 'Event Was Health Pack') return state.eventWasHealthPack;
+    if (expr === 'Match Time') return state.matchTime;
     if (expr === 'Current Array Element') return element;
     if (expr.startsWith('Global.')) return state.globals[expr.slice(7)] ?? 0;
     const field = expr.match(/^\((.+)\)\.(\w+)$/);
@@ -137,6 +140,8 @@ function value(expr, state, element) {
         case 'Is Using Ultimate': return state.ultimate;
         case 'Is Reloading': return state.reloading;
         case 'Is In Alternate Form': return state.alternateForm;
+        case 'Ultimate Charge Percent': return state.ultCharge;
+        case 'Is True For All': return array(v(0)).every(item => truth(value(a[1], state, item)));
         case 'Health': return v(0).health ?? 10000;
         case 'Is Using Ability 1': return state.ability1 ?? state.ability;
         case 'Is Using Ability 2': return state.ability2 ?? state.ability;
@@ -254,6 +259,8 @@ function* execute(rule, state, compiled) {
                 case 'Modify Player Variable': {
                     const current = state.player[a[1]] ?? 0;
                     state.player[a[1]] = a[2] === 'Append To Array' ? array(current).concat(v(3))
+                        : a[2] === 'Multiply' ? Number(current) * Number(v(3))
+                        : a[2] === 'Divide' ? Number(current) / Number(v(3))
                         : Number(current) + (a[2] === 'Add' ? 1 : -1) * Number(v(3));
                     break;
                 }
@@ -330,6 +337,16 @@ function* execute(rule, state, compiled) {
                     break;
                 case 'Create In-World Text': break;
                 case 'Create HUD Text': state.huds++; break;
+                case 'Start Heal Over Time': state.healOverTime = [v(2), v(3)]; break;
+                case 'Set Move Speed': state.moveSpeed = v(1); break;
+                case 'Stop All Damage Over Time': state.stoppedDots = true; break;
+                case 'Clear Status': state.status.delete(a[1]); break;
+                case 'Set Ultimate Charge': state.ultCharge = Math.min(100, v(1)); break;
+                case 'Heal':
+                    assert.equal(v(1), 0, 'Pack bonus has no healer attribution');
+                    state.healBonus = v(2);
+                    state.player.health = Math.min(state.maxHealth, state.player.health + v(2));
+                    break;
                 case 'Small Message': state.messages.push(v(1)); break;
                 case 'Add Health Pool To Player': state.armor += v(2); break;
                 default: throw new Error('Unsupported action: ' + line);
@@ -354,7 +371,7 @@ function start(rule, state, compiled) {
 }
 
 function scenario(augmentId, overrides = {}) {
-    return {time: 100, player: {augmentId, sizeScale: 1, position: [0, 0, 0]},
+    return {time: 100, player: {augmentId, sizeScale: 1, movementSpeedScale: 1, position: [0, 0, 0]},
         globals: {isGameplayActive: true, isPregameSetup: false}, alive: true, spawned: true,
         dummy: false, ground: false, buttons: new Set(overrides.firing ? ['Primary Fire'] : []), throttle: [0, 0, 1], facing: [0, 0, 1], yaw: 0,
         hero: 'Soldier: 76', weapon: 1, ammo: [18, 4], maxAmmo: [20, 10],
@@ -373,18 +390,108 @@ async function main() {
     assert.deepEqual(build.warnings, []);
     const parsed = rules(build.result), compiled = new Map(parsed.map(rule => [rule.name, rule]));
     const run = (name, state) => start(compiled.get(name), state, compiled);
+    // Run the shared pickup handler across both normal cure and timeout paths.
+    const pickup = 'PLAYER PICKS UP HEALTH PACK';
+    for (const augment of [1, 8]) for (const difficulty of [1, 3, 5])
+    for (const remaining of [30, 0, -30]) for (const infection of [-2, 0, 0.5, 1, 4])
+    for (const healing of [10, 75, 250]) for (const charge of [0, 98, 100]) {
+        const state = scenario(augment, {eventWasHealthPack: true, eventHealing: healing,
+            matchTime: remaining, ultCharge: charge, maxHealth: 1000});
+        Object.assign(state.globals, {difficultySetting: difficulty, matchEndTime: 0,
+            healthpackPositionList: [[0, 0, 0]]});
+        Object.assign(state.player, {infectionLevel: infection, isInfected: infection >= 1, health: 500});
+        state.status.add('Burning');
+        run(pickup, state);
+        const fullCure = difficulty < 3 || remaining > 0;
+        const cured = fullCure && infection > 0 ? 0 : infection;
+        assert.equal(state.player.infectionLevel,
+            augment === 8 && cured > 0 ? Math.max(0, cured - 1) : cured);
+        assert.equal(state.player.health, 500 + (augment === 8 ? healing : 0));
+        assert.equal(state.ultCharge, augment === 8 ? Math.min(100, charge + 5) : charge);
+        assert.equal(state.player.movementSpeedScale, augment === 8 ? 1.3 : 1);
+        assert.deepEqual(state.healOverTime, [5, 20], 'Preserve existing pack regeneration');
+        assert.equal(!!state.stoppedDots, fullCure);
+        assert.equal(state.status.has('Burning'), !fullCure);
+        assert.equal(state.messages.length, !fullCure && infection >= 1 && augment !== 8 ? 1 : 0);
+        state.eventWasHealthPack = false;
+        assert(!applies(compiled.get(pickup), state), 'Supplemental and other healing cannot trigger pickup bonuses');
+    }
+    const speedUntil = slot('augmentApothecarySpeedUntil');
+    const speedExpiry = compiled.get('APOTHECARY SPEED BONUS EXPIRES');
+    for (const initialScale of [0.5, 1, 1.5]) for (const die of [false, true]) {
+        const state = scenario(8, {eventWasHealthPack: true, eventHealing: 75,
+            matchTime: -1, ultCharge: 0, maxHealth: 1000});
+        Object.assign(state.globals, {difficultySetting: 3, matchEndTime: 0});
+        Object.assign(state.player, {health: 100, movementSpeedScale: initialScale});
+        run(pickup, state);
+        assert.equal(state.player[speedUntil], 103);
+        assert.equal(state.moveSpeed, initialScale * 1.3 * 100);
+        state.time = 102;
+        assert(!applies(speedExpiry, state));
+        run(pickup, state);
+        assert.equal(state.player[speedUntil], 105, 'Pickup refreshes duration');
+        assert.equal(state.player.movementSpeedScale, initialScale * 1.3, 'Bonus cannot stack');
+        // Another effect starts during the bonus; expiry must preserve its multiplier.
+        state.player.movementSpeedScale *= 1.5;
+        state.time = 104.99;
+        assert(!applies(speedExpiry, state));
+        if (die) state.alive = false;
+        else state.time = 105;
+        run(speedExpiry.name, state);
+        assert.equal(state.player[speedUntil], 0);
+        assert(Math.abs(state.player.movementSpeedScale - initialScale * 1.5) < 1e-10);
+        assert(!applies(speedExpiry, state), 'Cleanup runs once');
+    }
+    const playerInit = actions(compiled.get('PLAYER INITIALIZATION'));
+    const resetStart = playerInit.indexOf('Set Player Variable(Event Player, movementSpeedScale, 1);');
+    const resetEnd = playerInit.indexOf('Call Subroutine(applyScaledMoveSpeed);', resetStart);
+    assert(resetStart >= 0 && resetEnd > resetStart);
+    const speedReset = {name: 'speed reset', body: 'actions {\n' + playerInit.slice(resetStart, resetEnd + 1).join('\n') + '\n}'};
+    for (const augment of [1, 8]) {
+        const state = scenario(augment);
+        state.player[speedUntil] = 103;
+        state.player.movementSpeedScale = 1.3;
+        start(speedReset, state, compiled);
+        assert.equal(state.player.movementSpeedScale, 1);
+        assert.equal(state.player[speedUntil], augment === 8 ? 0 : 103);
+        assert(!applies(speedExpiry, state), 'Spawn/hero reset cannot leave a stale expiry');
+    }
     const dash = 'AUGMENT AIR ACTION INPUT', jump = dash, recharge = 'AUGMENT AIR ACTION RECHARGE';
     const ammo = 'AMMO PACK MAGAZINES', quick = 'LONG REACH QUICK MELEE', sword = 'LONG REACH VENDETTA SWORD';
     const readyAt = slot('augmentDashReadyAt'), jumpReady = slot('augmentIsAirActionReady');
     const jumpReadyAt = slot('augmentJumpReadyAt');
     assert.notEqual(jumpReady, jumpReadyAt, 'Landing/death must not overwrite the cooldown timestamp');
     const menu = 'PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)';
-    for (const backwards of [false, true]) for (let id = 0; id <= 7; id++) {
+    for (const backwards of [false, true]) for (let id = 0; id <= 8; id++) {
         const state = scenario(id, {globals: {isPregameSetup: true}, buttons: new Set(['Interact', ...(backwards ? ['Secondary Fire'] : [])])});
         run(menu, state);
-        assert.equal(state.player.augmentId, (id + (backwards ? 7 : 1)) % 8);
+        assert.equal(state.player.augmentId, (id + (backwards ? 8 : 1)) % 9);
         state.globals.isPregameSetup = false;
         assert(!applies(compiled.get(menu), state));
+    }
+    if (process.argv.includes('--apothecary-only')) {
+        for (const selected of [0, 8]) {
+            const state = scenario(selected, {randomRoll: 8});
+            run('PLAYER AUGMENT INITIALIZATION', state);
+            assert.equal(state.player.augmentId, 8);
+            assert.equal(state.huds, 1);
+            assert.deepEqual(state.randomCalls, selected === 0 ? [[1, 8]] : []);
+        }
+        if (process.argv.includes('--export')) {
+            const exported = await compiler.compile(fs.readFileSync(path.join(root, 'main.opy'), 'utf8'),
+                'en-US', root.replace(/\\/g, '/') + '/', 'main.opy');
+            assert.deepEqual(exported.encounteredWarnings, []);
+            assert.equal(exported.nbElements, build.elements);
+            assert.deepEqual(rules(exported.result), parsed);
+            fs.writeFileSync(path.join(root, 'main.ws.txt'), exported.result);
+        }
+        console.log(JSON.stringify({elements: build.elements, warnings: build.warnings,
+            pickupCases: 810, checked: ['infection clamped to zero / no vaccine gain', 'normal cure and timeout',
+                'supplemental healing', 'ultimate charge', 'other augments unchanged',
+                'no recursion', 'speed duration / refresh / no stacking / other multipliers / death / spawn reset',
+                'forward/reverse menu', 'random and explicit selection'],
+            exported: process.argv.includes('--export')}, null, 2));
+        return;
     }
     const prepareDash = (overrides = {}) => {
         // Start with takeoff still held and a different direction. Only movement
@@ -1269,19 +1376,19 @@ async function main() {
     }
     const kevlar = scenario(1); kevlar.player.initialMaxHealth = 250;
     run('PLAYER AUGMENT INITIALIZATION', kevlar); assert.equal(kevlar.armor, 75);
-    for (const picked of [1, 2, 3, 4, 5, 6, 7]) for (const missing of [false, true]) {
+    for (const picked of [1, 2, 3, 4, 5, 6, 7, 8]) for (const missing of [false, true]) {
         const state = scenario(0, {randomRoll: picked}); state.player.initialMaxHealth = 250;
         if (missing) delete state.player.augmentId;
         run('PLAYER AUGMENT INITIALIZATION', state);
         assert.equal(state.player.augmentId, picked, 'Unselected and late-join players can receive every real Augment');
         assert.equal(state.armor, picked === 1 ? 75 : 0);
-        assert.deepEqual(state.randomCalls, [[1, 7]], 'No Preference is excluded from the random range');
+        assert.deepEqual(state.randomCalls, [[1, 8]], 'No Preference is excluded from the random range');
         state.randomRoll = picked === 6 ? 1 : 6;
         run('PLAYER AUGMENT INITIALIZATION', state);
         assert.equal(state.player.augmentId, picked, 'Respawn/reinitialization retains the previously rolled ID');
         assert.equal(state.randomCalls.length, 1);
     }
-    for (const selected of [2, 3, 4, 5, 6, 7]) {
+    for (const selected of [2, 3, 4, 5, 6, 7, 8]) {
         const chosen = scenario(selected); chosen.player.initialMaxHealth = 250;
         run('PLAYER AUGMENT INITIALIZATION', chosen);
         assert.equal(chosen.player.augmentId, selected, 'Keep an explicit Augment selection');
@@ -1441,7 +1548,7 @@ async function main() {
     }
     console.log(JSON.stringify({elements: build.elements, warnings: build.warnings.length,
         playerVariables: playerCount, globalVariables: globalCount, compiledRules: parsed.length,
-        checked: ['menu forward/reverse', 'Laser Barricade augment selection / independent storage / Crouch + Interact placement / release Crouch during windup and aiming / cancel and death cleanup / power up input exclusion / 10000 HP / 30s cooldown', 'Shock Landing name / second-jump/eight directions/45-degree diagonals/no direction means wave only/death/CC/cooldown/collision cleanup',
+        checked: ['Apothecary health-pack healing / timeout infection cure / zero floor / no vaccine gain / ultimate cap / no recursion / unchanged other augments', 'menu forward/reverse', 'Laser Barricade augment selection / independent storage / Crouch + Interact placement / release Crouch during windup and aiming / cancel and death cleanup / power up input exclusion / 10000 HP / 30s cooldown', 'Shock Landing name / second-jump/eight directions/45-degree diagonals/no direction means wave only/death/CC/cooldown/collision cleanup',
             'dash 13s cooldown / 0.5s phase / first landing wave / 40 damage to all targets including unpushable / Pyrotechnic actual-hit burns and 15m limit / lethal and invulnerable targets / 32 impulse at 6.5 degrees / early and late landing / radius / all directions / resistance / attribution / interrupts',
             'double jump airborne + grounded double-tap / ability-active launch / 14.4 impulse / 16s cooldown / shared gate / tap timeout / CC / landing / death',
             'double jump first-hit +50% / minimum damage 30 inclusive / smaller hits preserve bonus / native and script damage / flight / 0.5s landing window / expiry / no recursion / no rearm / death / hero switch', 'movement cooldown HUD',
