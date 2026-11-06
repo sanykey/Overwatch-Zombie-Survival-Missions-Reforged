@@ -18,16 +18,20 @@ The `main` branch is intended for further Reforged development, including new fu
 
 ## Enhancements and Augments
 
-Choose one primary **Enhancement** with **Quick Melee** and one independent **Augment** with **Interact** before the match. Hold **Secondary Fire** while choosing to cycle backwards. During gameplay, Interact continues to pick up power-ups. Each unselected slot receives a random real option when gameplay starts, including for players joining an ongoing match: one of nine Enhancements and one of six Augments. Explicit choices are preserved, and an assigned option is retained across later spawns. There are no Workshop settings for default selections.
+Choose one primary **Enhancement** with **Quick Melee** and one independent **Augment** with **Interact** before the match. Hold **Secondary Fire** while choosing to cycle backwards. During gameplay, Interact continues to pick up power-ups. Each unselected slot receives a random real option when gameplay starts, including for players joining an ongoing match: one of ten Enhancements and one of six Augments. Explicit choices are preserved, and an assigned option is retained across later spawns. There are no Workshop settings for default selections.
 
 Brain Killer is the first primary Enhancement in the voting list. Kevlar has moved from the primary slot to Augments and can now accompany any primary enhancement. Born to Battle stores up to two ability resets, earning one per final blow and spending one per reset.
+
+Overcharge stores 1 energy per 3 actual healing, without a cap. Hold Melee to spend up to 250 energy and arm a fixed bonus; excess energy remains stored for later charges. Your next damaging hero attack or ability starts a 0.3-second window; every damage event during that window adds the same bonus, including each enemy hit by Ana's grenade. Releasing Melee does not cancel the armed charge. Healing continues to build a separate next charge; holding Melee rearms it after the current window ends. Death clears the armed charge but preserves unspent energy. Turrets, air strikes, Augments and the bonus damage itself do not trigger this effect.
+
+Bulking Season grants one stack per credited elimination: a kill or damage participation. Healing and buff assists do not grant stacks. Each stack adds 0.5% native maximum health and 0.5% hero size, additively. Size caps at 1.35x at 70 stacks. Maximum health caps at 200% of base at 200 stacks; stacks continue accumulating beyond both caps. Death halves stacks, rounding down (5 becomes 2); surviving stacks remain after revival and hero switches. The HUD shows stacks, health bonus and size.
 
 | Augment | Effect |
 |---|---|
 | Kevlar | Adds 75 armor, helping protect against infection. |
 | Shock Landing | Release Jump after takeoff, then press Jump again in midair to arm a shockwave on first landing, with invulnerability and player collisions disabled for 0.5 seconds; 13-second cooldown. Movement at the second press adds a dash 15° upward: adjacent inputs give a 45° diagonal. No input or cancelled opposite inputs arm the wave without adding a movement impulse. |
 | Double Jump | Press Jump again after releasing it in midair, or double-tap Jump within 0.3 seconds while grounded (including during abilities that prevent native jumping). Both methods share a 16-second cooldown; impulse 14.4. The first enemy hit dealing at least 30 damage during this flight or within 0.5 seconds after landing receives +50% damage. Landing does not reset the cooldown. |
-| Long Reach | Quadruples Quick Melee reach to 10 meters at normal size, with a small outward push; triples supported melee weapons and Carnage reach. Hits all enemies in the strike area. |
+| Long Reach | Triples Quick Melee reach to 7.5 meters at normal size; triples supported melee weapons and Carnage reach. Hits all enemies in the strike area. |
 | Ammo Pack | Doubles the ammo available per full magazine, including the second ammunition clip where applicable. |
 | Grapnel Launcher | Crouch + Jump locks the nearest aimed zombie 7–40 meters away, pulls you to it and deals 35 damage with a 0.5-second stun on arrival. Cooldown: 16 seconds. |
 
@@ -43,7 +47,7 @@ Holding Vendetta's primary attack repeats Long Reach on a fixed **0.6-second** t
 
 The tripled melee attacks are Vendetta's sword, Reinhardt's hammer, Brigitte's flail, D.Mon's mech saber, Genji's Dragonblade, Ramattra's Nemesis punches, Torbjörn's equipped hammer, and Junker Queen's Carnage. Melee weapons repeat while held, including the Melee binding for Reinhardt, Brigitte and Torbjörn; Carnage extends once per cast. Ranged weapons and inactive forms do not trigger these attacks. The added weapon controllers also use approximate swing timers.
 
-The extended area adds direct damage outside native reach; it does not reproduce melee weapons' native knockback, wounds, Inspire or perk effects. Quick Melee separately receives a small custom push, both on native inner-range hits and in the extension: impulse 10 at 10° upward, scaled by the zombie's knockback resistance. Only actual damaging hits on living, pushable targets assign the attacker as environmental kill creditor. Native [environmental credit](https://workshop.codes/wiki/articles/set-environment-credit-player) lasts until the target's next landing. **Pyrotechnic** explicitly works with Long Reach and Grapnel Launcher: every target which loses health from an extended melee hit or the hook's arrival damage within its normal 15-meter limit enters the existing burn queue. Invulnerable targets do not ignite, and burn damage cannot trigger itself.
+The extended area adds direct damage outside native reach; it does not reproduce melee weapons' native knockback, wounds, Inspire or perk effects. **Pyrotechnic** explicitly works with Long Reach and Grapnel Launcher: every target which loses health from an extended melee hit or the hook's arrival damage within its normal 15-meter limit enters the existing burn queue. Invulnerable targets do not ignite, and burn damage cannot trigger itself.
 
 ## Using the mod code
 

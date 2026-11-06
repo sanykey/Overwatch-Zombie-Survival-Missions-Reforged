@@ -31,7 +31,7 @@ enum Challenge:
     PANDORAS_BOX = 5,
 
 # Enhancement IDs index enhancementOptionList and the start-menu tables.
-# Zero means no preference; initialization randomly selects a real ID 1-8.
+# Zero means no preference; initialization randomly selects a real ID 1-10.
 # Brain Killer remains the first explicit menu choice.
 enum Enhancement:
     NO_PREFERENCE = 0,
@@ -43,6 +43,8 @@ enum Enhancement:
     CHARGE_BATTERY = 6,
     HITCHHIKER = 7,
     PUP = 8,
+    OVERCHARGE = 9,
+    BULKING_SEASON = 10,
 
 # Independent secondary enhancement slot. IDs index the names/icons in augments.opy.
 enum Augment:
@@ -56,7 +58,7 @@ enum Augment:
     LASER_BARRICADE = 7,
 
 # Compile-time icon tables, indexed by their corresponding selection ID.
-#!define ENHANCEMENT_ICONS [iconString(Icon.QUESTION_MARK), iconString(Icon.SKULL), iconString(Icon.POISON), iconString(Icon.FIRE), iconString(Icon.PLUS), iconString(Icon.BOLT), iconString(Icon.SPIRAL), iconString(Icon.FLAG), iconString(Icon.HAPPY)]
+#!define ENHANCEMENT_ICONS [iconString(Icon.QUESTION_MARK), iconString(Icon.SKULL), iconString(Icon.POISON), iconString(Icon.FIRE), iconString(Icon.PLUS), iconString(Icon.BOLT), iconString(Icon.SPIRAL), iconString(Icon.FLAG), iconString(Icon.HAPPY), iconString(Icon.BOLT), iconString(Icon.ARROW_UP)]
 #!define AUGMENT_ICONS [iconString(Icon.QUESTION_MARK), iconString(Icon.STOP), iconString(Icon.ARROW_RIGHT), iconString(Icon.ARROW_UP), iconString(Icon.CROSS), iconString(Icon.PLUS), iconString(Icon.ARROW_DOWN), iconString(Icon.DIAMOND)]
 
 # Objective IDs also index objectiveTypeVoteList and identify entries in objectiveTypeList.
@@ -716,6 +718,12 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 #!define enhancementPyroHitList actorTeamSlot22
 # Total infection levels cured by Plague Doctor.
 #!define enhancementPlagueCureTotal actorTeamSlot22
+# Bulking Season: retained stacks; each credited elimination (kill/damage participation) adds one; death halves it (rounded down).
+# Exclusive primary enhancement, owned by this human; safe alongside all independent Augments.
+#!define enhancementBulkStacks actorTeamSlot22
+# Overcharge: unspent energy (actual healing / 3), accumulated independently of an armed burst.
+# Exclusive primary enhancement; all capacitor slots belong to the healer, never the target.
+#!define enhancementCapacitorEnergy actorTeamSlot22
 # Born to Battle unspent ability resets (0-2); retained through ability waits and reevaluated by its HUD.
 #!define enhancementBattleResetCharges actorTeamSlot22
 # Placed Charge Battery position; zero clears it.
@@ -728,6 +736,8 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateSlot2. Receivers, not rule teams, own the storage.
 # Boss Behemoth gas-cloud radii, aligned with botGasPositionList.
 #!define botGasRadiusList actorTeamSlot23
+# Overcharge: energy spent on the armed/active burst, retained across damage events and HUD reevaluation.
+#!define enhancementCapacitorCharge actorTeamSlot23
 # Born to Battle button whose charge/cooldown is reset.
 #!define enhancementBattleAbilityButton actorTeamSlot23
 # Battery remaining reuse cooldown.
@@ -740,6 +750,9 @@ playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateS
 playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateSlot3. Receivers, not rule teams, own the storage.
 # Movement waypoint associated with the accepted zombie spawn point.
 #!define botSpawnWaypoint actorTeamSlot24
+# Overcharge: absolute burst deadline; zero means armed but waiting for its first hit.
+# Set once by the first hit, read by later hits, cleared with the charge on expiry/death.
+#!define enhancementCapacitorDeadline actorTeamSlot24
 # Full battery reuse cooldown used for progress scaling (10 seconds).
 #!define enhancementBatteryReuseDuration actorTeamSlot24
 # Current P.U.P. enemy target; null while idle.

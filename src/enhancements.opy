@@ -3,6 +3,7 @@ subroutine resetBattleAbilityCharge
 
 subroutine checkEnhancementPlacement
 subroutine startPupDefaultChase
+subroutine applyBulkingSeasonStats
 
 rule "PLAYER ENHANCEMENT INITIALIZATION":
     @Event eachPlayer
@@ -15,7 +16,7 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
     if eventPlayer.enhancementId == Enhancement.NO_PREFERENCE:
         # No preference and late-join zero state receive one real choice before
         # its state is initialized. Retain the selected ID across later spawns.
-        eventPlayer.enhancementId = random.randint(Enhancement.BRAIN_KILLER, Enhancement.PUP)
+        eventPlayer.enhancementId = random.randint(Enhancement.BRAIN_KILLER, Enhancement.BULKING_SEASON)
     #Zombie Hybrid
     if eventPlayer.enhancementId == Enhancement.ZOMBIE_HYBRID:
         #Enhancement: Zombie Hyrbid
@@ -75,6 +76,28 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             eventPlayer.setHealingDealt(130)
             startHealingModification(getPlayers(Team.1).filter(lambda player: player.isInfected), eventPlayer, 125, HealingReeval.RECEIVERS_AND_HEALERS)
             eventPlayer.enhancementPlagueCureTotal = 0
+            break
+        case Enhancement.OVERCHARGE:
+            eventPlayer.enhancementCapacitorEnergy = 0
+            eventPlayer.enhancementCapacitorCharge = 0
+            eventPlayer.enhancementCapacitorDeadline = 0
+            hudText(
+                eventPlayer,
+                iconString(Icon.BOLT),
+                f"Hold [{inputBindingString(Button.MELEE)}] to charge | Energy: {floor(eventPlayer.enhancementCapacitorEnergy)} | Charged: {floor(eventPlayer.enhancementCapacitorCharge)}",
+                "Overcharge",
+                HudPosition.ACTUALLY_LEFT, 99, Color.YELLOW, Color.YELLOW, Color.YELLOW, HudReeval.STRING
+            )
+            break
+        case Enhancement.BULKING_SEASON:
+            eventPlayer.enhancementBulkStacks = 0
+            hudText(
+                eventPlayer,
+                iconString(Icon.ARROW_UP),
+                f"Stacks: {eventPlayer.enhancementBulkStacks} | +{min(100, eventPlayer.enhancementBulkStacks * 0.5)}% Max Life | Size: {min(1.35, 1 + eventPlayer.enhancementBulkStacks * 0.005)}x",
+                "Bulking Season",
+                HudPosition.ACTUALLY_LEFT, 99, Color.ORANGE, Color.ORANGE, Color.ORANGE, HudReeval.STRING
+            )
             break
         #Born to Battle
         case Enhancement.BORN_TO_BATTLE:
@@ -311,6 +334,89 @@ rule "PLAGUE DOCTOR REDUCES PLAYERS' INFECTION LEVELS":
             eventPlayer.enhancementPlagueCureTotal += 0.5
             playEffect(eventPlayer, DynamicEffect.GOOD_PICKUP_EFFECT, Color.GREEN, healee, 1)
             smallMessage(eventPlayer, "You cured yourself!" if healee == eventPlayer else "You cured {0} {1}!".format(healee, heroIcon(healee.getHero())))
+
+
+rule "BULKING SEASON EARNS STACKS":
+    @Event playerEarnedElimination
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.enhancementId == Enhancement.BULKING_SEASON
+
+    # One credit for a kill or damage participation; healing/buff assists do not count.
+    eventPlayer.enhancementBulkStacks += 1
+    applyBulkingSeasonStats()
+
+
+rule "BULKING SEASON LOSES STACKS ON DEATH":
+    @Event playerDied
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.enhancementId == Enhancement.BULKING_SEASON
+
+    eventPlayer.enhancementBulkStacks = floor(eventPlayer.enhancementBulkStacks / 2)
+    applyBulkingSeasonStats()
+
+
+def applyBulkingSeasonStats():
+    @Name "applyBulkingSeasonStats"
+
+    # Additive percentages from the native hero baseline; never compound live max health.
+    eventPlayer.setMaxHealth(min(200, 100 + eventPlayer.enhancementBulkStacks * 0.5))
+    eventPlayer.sizeScale = min(1.35, 1 + eventPlayer.enhancementBulkStacks * 0.005)
+    applyCurrentSizeScale()
+
+
+rule "OVERCHARGE STORES HEALING":
+    @Event playerDealtHealing
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
+
+    eventPlayer.enhancementCapacitorEnergy += eventHealing / 3
+
+
+rule "OVERCHARGE ARMS CHARGE":
+    @Event eachPlayer
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
+    @Condition eventPlayer.enhancementCapacitorEnergy > 0
+    @Condition eventPlayer.enhancementCapacitorCharge == 0
+
+    # Transfer at most 250; retain the remainder in the uncapped bank.
+    # Continued healing cannot change this burst's fixed damage.
+    eventPlayer.enhancementCapacitorCharge = min(eventPlayer.enhancementCapacitorEnergy, 250)
+    eventPlayer.enhancementCapacitorEnergy -= eventPlayer.enhancementCapacitorCharge
+
+
+rule "OVERCHARGE CLEARS CHARGE":
+    @Event eachPlayer
+    @Team 1
+    @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
+    @Condition eventPlayer.enhancementCapacitorCharge > 0
+    @Condition (not isGameplayActive or not eventPlayer.isAlive() or eventPlayer.enhancementCapacitorDeadline > 0 and getTotalTimeElapsed() >= eventPlayer.enhancementCapacitorDeadline) == true
+
+    eventPlayer.enhancementCapacitorCharge = 0
+    eventPlayer.enhancementCapacitorDeadline = 0
+
+
+rule "OVERCHARGE BONUS DAMAGE":
+    @Event playerDealtDamage
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
+    @Condition eventPlayer.enhancementCapacitorCharge > 0
+    @Condition eventDamage > 0
+    @Condition victim.getTeam() == Team.2
+    # Workshop Damage has no Event Ability; never amplify this rule's own bonus.
+    @Condition eventAbility != null
+
+    if eventPlayer.enhancementCapacitorDeadline == 0:
+        eventPlayer.enhancementCapacitorDeadline = getTotalTimeElapsed() + 0.3
+    if getTotalTimeElapsed() < eventPlayer.enhancementCapacitorDeadline:
+        damage(victim, eventPlayer, eventPlayer.enhancementCapacitorCharge)
 
 
 rule "CHARGE BATTERY":

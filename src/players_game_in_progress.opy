@@ -39,6 +39,10 @@ rule "PLAYER INITIALIZATION":
     @Condition eventPlayer.isDummy() == false
     
     eventPlayer.initialMaxHealth = eventPlayer.getMaxHealth()
+    if eventPlayer.enhancementId == Enhancement.BULKING_SEASON:
+        # Max-health scaling persists through respawns/hero switches. Keep the
+        # native baseline for infection checks, Hitchhiker and Nemesis detection.
+        eventPlayer.initialMaxHealth /= min(2, 1 + eventPlayer.enhancementBulkStacks * 0.005)
     eventPlayer.invisibilityCount = false
     eventPlayer.movementSpeedScale = 1
     applyScaledMoveSpeed()

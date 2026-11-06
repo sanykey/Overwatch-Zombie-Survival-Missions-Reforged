@@ -191,14 +191,14 @@ rule "EFFECTS/TEXTS":
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Enhancement
-    startMenuEnhancementColorList = [Color.AQUA, Color.RED, Color.GRAY, Color.ORANGE, Color.GREEN, Color.GRAY, colorChargeBatteryConst, Color.PURPLE, Color.BLUE]
+    startMenuEnhancementColorList = [Color.AQUA, Color.RED, Color.GRAY, Color.ORANGE, Color.GREEN, Color.GRAY, colorChargeBatteryConst, Color.PURPLE, Color.BLUE, Color.YELLOW, Color.ORANGE]
     hudText(
         getPlayers(Team.1),
         "Enhancement: {0}{1}".format(
             [
                 "No Preference", "Brain Killer ", "Zombie Hybrid ",
                 "Pyrotechnic ", "Plague Doctor ", "Born to Battle ",
-                "Charge Battery ", "Hitchhiker ", "P.U.P. "
+                "Charge Battery ", "Hitchhiker ", "P.U.P. ", "Overcharge ", "Bulking Season "
             ][localPlayer.enhancementId],
             enhancementOptionList[localPlayer.enhancementId] if localPlayer.enhancementId > Enhancement.NO_PREFERENCE else ""
         ),
@@ -211,7 +211,9 @@ rule "EFFECTS/TEXTS":
             "Final blows grant a cooldown reset on the next ability use, storing up to 2 charges",
             "Survivor can place a battery that gives ultimate charge",
             "Survivor can attach to a teammate and fuse their health.",
-            "Survivor is equipped with an autonomous friendly droid"
+            "Survivor is equipped with an autonomous friendly droid",
+            "Store 1 energy per 3 healing, uncapped. Hold Melee to spend up to 250: the next hit and all hits for 0.3s gain that damage",
+            "Kills and damage participation grant +0.5% Max Life and +0.5% Hero Size per stack (caps: 200% Life, 1.35x size). Lose half on death"
         ][localPlayer.enhancementId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)),
         HudPosition.LEFT,

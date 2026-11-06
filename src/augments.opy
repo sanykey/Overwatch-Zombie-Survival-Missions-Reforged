@@ -10,7 +10,6 @@ subroutine useAugmentAirAction
 #!define AUGMENT_DASH_WAVE_IMPULSE 32
 #!define AUGMENT_JUMP_IMPULSE 14.4
 #!define AUGMENT_JUMP_TAP_WINDOW 0.3
-#!define AUGMENT_QUICK_MELEE_PUSH 10
 #!define AUGMENT_MELEE_RADIUS 2.5
 #!define AUGMENT_WEAPON_REACH_MULTIPLIER 3
 #!define AUGMENT_VENDETTA_RADIUS 4.3
@@ -30,10 +29,9 @@ subroutine useAugmentAirAction
 
 # Only synchronous melee query inputs use global scratch storage. Callers set
 # these AFTER their windup wait; the helper consumes them without yielding or HUD capture.
-# [native radius, augmented radius, view angle, optional Quick Melee push flag].
+# [native radius, augmented radius, view angle].
 #!define augmentMeleeBounds tmp0
-# Native radius is dead after the query; reuse just that array entry for health,
-# retaining the Quick Melee flag throughout this synchronous hit loop.
+# Native radius is dead after the query; reuse that array entry for health.
 #!define augmentMeleeHealthBeforeDamage augmentMeleeBounds[0]
 #!define augmentMeleeDamage tmp1
 # The helper snapshots targets once, then deals damage per player without yielding.
@@ -53,7 +51,7 @@ rule "AUGMENT MENU":
             "Gain 75 armor that helps protect against infection",
             "Press Jump again in midair: landing shockwave deals 40 damage and pushes nearby zombies; movement input adds a dash. Phased and invulnerable for 0.5s. Cooldown: 13s",
             "Jump in midair or double-tap Jump. First hit of 30+ damage in flight or within 0.5s after landing deals +50%. Cooldown: 16s",
-            "Quadruple Quick Melee reach with a small push; triple melee weapon, Dragonblade and Carnage reach",
+            "Triple Quick Melee, melee weapon, Dragonblade and Carnage reach",
             "Carry twice the ammo per full magazine; full reloads restore the bonus",
             "Crouch + Jump: grapple 7-40m; hit for 35 damage and stun for 0.5s. Cooldown: 16s",
             "Hold Crouch + Interact to place a wall that blocks zombies; release Interact to deploy; Crouch may be released while aiming. Cooldown: 30s"
@@ -412,35 +410,9 @@ rule "LONG REACH QUICK MELEE":
     wait(0.15, Wait.ABORT_WHEN_FALSE)
     if eventPlayer.getHero() != eventPlayer.augmentMeleeHero:
         return
-    augmentMeleeBounds = [AUGMENT_MELEE_RADIUS, AUGMENT_MELEE_RADIUS * 4, 30, true]
+    augmentMeleeBounds = [AUGMENT_MELEE_RADIUS, AUGMENT_MELEE_RADIUS * AUGMENT_WEAPON_REACH_MULTIPLIER, 30]
     augmentMeleeDamage = 60 if eventPlayer.getHero() == Hero.ZENYATTA else 70 if eventPlayer.getHero() == Hero.VENTURE else 40
     extendAugmentMelee()
-
-
-macro pushAugmentQuickMelee(target):
-    if target.isAlive() and target.botKnockbackScale > 0:
-        # A small upward component lifts grounded targets; retain the mod's
-        # knockback resistance. Native attribution lasts until their next landing.
-        target.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, target)), -10), AUGMENT_QUICK_MELEE_PUSH * target.botKnockbackScale, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
-        target.setEnvironmentalKillCreditor(eventPlayer)
-
-
-rule "LONG REACH NATIVE QUICK MELEE KNOCKBACK":
-    @Event playerDealtDamage
-    @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.augmentId == Augment.LONG_REACH
-    @Condition eventAbility == Button.MELEE
-    @Condition eventDamage > 0
-    @Condition victim.getTeam() == Team.2
-    @Condition eventPlayer.getHero() not in [Hero.REINHARDT, Hero.BRIGITTE]
-    @Condition (eventPlayer.getHero() != Hero.TORBJORN or eventPlayer.getCurrentWeapon() != 2) == true
-    @Condition (eventPlayer.getHero() != Hero.VENDETTA or not eventPlayer.isFiringPrimaryFire()) == true
-    @Condition eventPlayer.isUsingUltimate() == false
-
-    # Native inner-range damage is untouched; add the same push/credit as the
-    # scripted outer zone. Script Damage has no Event Ability and cannot enter here.
-    pushAugmentQuickMelee(victim)
 
 
 rule "LONG REACH VENDETTA SWORD":
@@ -576,8 +548,6 @@ def extendAugmentMelee():
             if eventPlayer.enhancementId == Enhancement.PYROTECHNIC and distance(eventPlayer, augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex]) < 15:
                 augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex].setStatusEffect(eventPlayer, Status.BURNING, 3)
                 eventPlayer.enhancementPyroHitList.append(augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex])
-            if augmentMeleeBounds[3]:
-                pushAugmentQuickMelee(augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex])
     if augmentMeleeTargets != []:
         # One impact per swing, on the nearest hit target. Rounded from 0.3 to 0.4
         # (about one third larger); Grapnel Launcher uses the same impact size.
