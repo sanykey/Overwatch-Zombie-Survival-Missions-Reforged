@@ -1178,7 +1178,7 @@ async function main() {
             return state;
         };
         const state = attackState();
-        const multiplier = name === quick ? 4 : 3;
+        const multiplier = 3;
         state.targets = [base - 0.1, base + 0.1, base * multiplier, base * multiplier + 0.1].map((distance, id) => ({id, position: [0, 0, distance], alive: true, visible: true}));
         state.targets.push({id: 'wall', position: [0, 0, base + 0.1], alive: true, visible: false},
             {id: 'behind', position: [0, 0, -base - 0.1], alive: true, visible: true},
@@ -1193,17 +1193,8 @@ async function main() {
         assert(state.damage.every(hit => hit.targets.length === 1 && hit.amount === amount));
         assert.deepEqual(state.effects, [{effect: 'Bad Explosion', color: 'Color(Orange)',
             position: [0, 1, base + 0.05], size: 0.4}], 'One enlarged turret impact at the nearest hit target');
-        const pushed = name === quick ? [1, 2, 'left', 'right', 'nearest'] : [];
-        assert.deepEqual(state.impulses.map(impulse => impulse.target), pushed, 'Only Quick Melee gets the new push');
-        assert.deepEqual(state.environmentCredits, pushed, 'Each pushed enemy receives native fall-credit attribution');
-        for (const impulse of state.impulses) {
-            assert.equal(impulse.speed, 10);
-            assert(impulse.direction[1] > 0, 'A slight lift carries grounded enemies over ledges');
-            const target = state.targets.find(target => target.id === impulse.target);
-            assert(impulse.direction[0] * target.position[0] + impulse.direction[2] * target.position[2] > 0,
-                'Push away from the attacker rather than using the camera direction');
-            assert.equal(target.environmentCreditor, state.player);
-        }
+        assert.deepEqual(state.impulses, [], 'Extended melee damage does not add scripted knockback');
+        assert.deepEqual(state.environmentCredits, [], 'Extended melee damage does not rewrite environmental kill credit');
         const empty = attackState();
         const miss = run(name, empty); empty.time += 0.15; miss.resume();
         assert.equal(empty.damage.length, 0, 'No damage action when no targets qualify');
@@ -1228,29 +1219,6 @@ async function main() {
             'Pyrotechnic queues each actual extended hit once, without igniting invulnerable targets');
         assert.deepEqual(state.statusWrites.map(write => write.target), expected);
         assert(state.statusWrites.every(write => write.status === 'Burning' && write.duration === 3));
-    }
-    const nativePush = 'LONG REACH NATIVE QUICK MELEE KNOCKBACK';
-    for (const scale of [0, 0.5, 1]) for (const invincible of [false, true]) {
-        const target = {id: 'push target', position: [0, 0, 9.9], alive: true, visible: true, invincible,
-            [slot('botKnockbackScale')]: scale};
-        const state = scenario(4, {meleeing: true, targets: [target]}), swing = run(quick, state);
-        state.time += 0.15; swing.resume();
-        assert.equal(state.impulses.length, !invincible && scale > 0 ? 1 : 0);
-        assert.equal(state.environmentCredits.length, state.impulses.length,
-            'Invulnerable / knockback-immune enemies must not receive false fall credit');
-        if (state.impulses.length) assert.equal(state.impulses[0].speed, 10 * scale);
-    }
-    const nativeVictim = {id: 'native inner hit', position: [0, 0, 1.5], alive: true, team: 2,
-        [slot('botKnockbackScale')]: 1};
-    const innerHit = scenario(4, {victim: nativeVictim, eventAbility: 'Melee', eventDamage: 40});
-    run(nativePush, innerHit);
-    assert.deepEqual(innerHit.environmentCredits, ['native inner hit']);
-    assert.equal(nativeVictim.environmentCreditor, innerHit.player);
-    assert.equal(innerHit.impulses[0].speed, 10);
-    assert.deepEqual(innerHit.damage, [], 'Native melee damage is never duplicated');
-    for (const override of [{eventAbility: 0}, {eventAbility: 'Primary Fire'}, {eventDamage: 0},
-        {hero: 'Reinhardt'}, {hero: 'Brigitte'}, {hero: 'Torbjörn', weapon: 2}]) {
-        assert(!applies(compiled.get(nativePush), {...innerHit, ...override}), 'Script hits and melee weapons cannot double-trigger the native push');
     }
     const weapons = 'LONG REACH MELEE WEAPONS', carnage = 'LONG REACH CARNAGE';
     const weaponCases = [
@@ -1440,13 +1408,13 @@ async function main() {
     assert(selectionActions[1].startsWith('Set Player Variable(Event Player, enhancementId, Random Integer('));
     const enhancementSelection = {...enhancementInit,
         body: enhancementInit.body.split('actions {\n')[0] + 'actions {\n' + selectionActions.join('\n') + '\n}'};
-    for (let picked = 1; picked <= 8; picked++) for (const missing of [false, true]) {
+    for (let picked = 1; picked <= 10; picked++) for (const missing of [false, true]) {
         const state = scenario(1, {randomRoll: picked});
         if (!missing) state.player.enhancementId = 0;
         start(enhancementSelection, state, compiled);
-        assert.equal(state.player.enhancementId, picked, 'All eight enhancements are eligible for unselected / late-join players');
-        assert.deepEqual(state.randomCalls, [[1, 8]]);
-        state.randomRoll = picked === 8 ? 1 : 8;
+        assert.equal(state.player.enhancementId, picked, 'All ten enhancements are eligible for unselected / late-join players');
+        assert.deepEqual(state.randomCalls, [[1, 10]]);
+        state.randomRoll = picked === 10 ? 1 : 10;
         start(enhancementSelection, state, compiled);
         assert.equal(state.player.enhancementId, picked, 'An already resolved enhancement is retained');
         assert.equal(state.randomCalls.length, 1);
@@ -1591,7 +1559,7 @@ async function main() {
             'double jump first-hit +50% / minimum damage 30 inclusive / smaller hits preserve bonus / native and script damage / flight / 0.5s landing window / expiry / no recursion / no rearm / death / hero switch', 'movement cooldown HUD',
             'grapnel 7-40m selection / live cable / moving target / velocity correction / melee combo / 35 impact damage / Pyrotechnic actual-hit burn / grounded 0.5s stun / airborne 3s knockdown / ground state sampled on arrival / launch sound / shared 0.4 impact / no arrival jump / 16s cooldown / misses / timeout / CC / death / hero switch / disconnect cleanup',
             'ammo respawn/hero/weapon/cache/spent rounds/single clip/reload input lifetime/native failure fallback/cancelled reload/empty boundary/dual clip',
-            'quick melee x4 / native + extended push / knockback resistance / native environment credit / no immune credit / no duplicate damage / Vendetta x3 / LoS / cone / windup / all targets',
+            'quick melee x3 / 7.5m boundary / native range excluded / no scripted knockback or environmental credit / Vendetta x3 / LoS / cone / windup / all targets',
             'Reinhardt / Brigitte / D.Mon / Dragonblade / Nemesis / Forge Hammer x3 / held attacks / short clicks / forms / interrupts',
             'Carnage x3 / one hit per cast / cancelled casts', 'Pyrotechnic all targets / actual health loss / invulnerability / distance limit',
             'Vendetta held fire / short clicks / fixed 0.6s interval / interruptions / restart / target refresh',
