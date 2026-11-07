@@ -58,9 +58,9 @@ enum Augment:
     LASER_BARRICADE = 7,
     APOTHECARY = 8,
 
-# Compile-time icon tables, indexed by their corresponding selection ID.
+# Icon tables, indexed by their corresponding selection ID.
 #!define ENHANCEMENT_ICONS [iconString(Icon.QUESTION_MARK), iconString(Icon.SKULL), iconString(Icon.POISON), iconString(Icon.FIRE), iconString(Icon.PLUS), iconString(Icon.BOLT), iconString(Icon.SPIRAL), iconString(Icon.FLAG), iconString(Icon.HAPPY), iconString(Icon.BOLT), iconString(Icon.ARROW_UP)]
-#!define AUGMENT_ICONS [iconString(Icon.QUESTION_MARK), iconString(Icon.STOP), iconString(Icon.ARROW_RIGHT), iconString(Icon.ARROW_UP), iconString(Icon.CROSS), iconString(Icon.PLUS), iconString(Icon.ARROW_DOWN), iconString(Icon.DIAMOND), iconString(Icon.HEART)]
+#!define AUGMENT_ICONS augmentIconListConst
 
 # Objective IDs also index objectiveTypeVoteList and identify entries in objectiveTypeList.
 # Biomorphing and Survivor Rescue are only selectable through the mixed pool.
@@ -868,3 +868,8 @@ playervar botReigniteRisePosition  # Chased Anran emergence position, forced acr
 playervar enhancementPupCooldown  # Chased P.U.P. ability cooldown (1 or 2 seconds); independent of positions.
 
 playervar augmentBarrierHealth  # Chased Laser Barricade health; placement, damage, regeneration and HUD; independent of icon IDs.
+
+# Immutable Augment icons, indexed by selection ID and initialized once before UI rules.
+# Shared by the pregame menu, world labels, personal HUD and roster throughout the match.
+# Keep a dedicated slot: pregame storage is reused by objectives during gameplay.
+globalvar augmentIconListConst = [iconString(Icon.QUESTION_MARK), iconString(Icon.STOP), iconString(Icon.ARROW_RIGHT), iconString(Icon.ARROW_UP), iconString(Icon.CROSS), iconString(Icon.PLUS), iconString(Icon.ARROW_DOWN), iconString(Icon.DIAMOND), iconString(Icon.HEART)]
