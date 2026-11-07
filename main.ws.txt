@@ -1,4 +1,4 @@
-/* Element count: (total 28543)
+/* Element count: (total 28523)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
@@ -6,7 +6,7 @@
   822: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
   481: rule "GRAPNEL LAUNCHER" (src/augments.opy)
   467: rule "PLAYER AUGMENT INITIALIZATION" (src/augments.opy)
-  456: rule "SKIP ASSEMBLING HEROES" (src/global_startup.opy)
+  434: rule "SKIP ASSEMBLING HEROES" (src/global_startup.opy)
   412: rule "PLAYERS REPAIR TERMINALS" (src/objective_types/objective_type_satellite_uplink.opy)
   398: rule "LASER BARRICADE BLOCKS ZOMBIES" (src/augments.opy)
   369: rule "LONG REACH MELEE WEAPONS" (src/augments.opy)
@@ -14,9 +14,9 @@
   321: rule "DAYTAKER (ILLARI) BURST" (src/zombie_types.opy)
   314: rule "BEHEMOTH (ROAD) TOXIC CLOUD" (src/zombie_types.opy)
   313: rule "SLIMER (MERCY) TENTACLE GRAB" (src/zombie_types.opy)
-  310: rule "EFFECTS/TEXTS" (src/players_game_in_progress.opy)
   293: rule "teleportBots" (src/bots_game_in_progress.opy)
   290: rule "sentryTurret (50-59)" (src/supply_drops.opy)
+  288: rule "EFFECTS/TEXTS" (src/players_game_in_progress.opy)
   286: rule "INITIALIZE SURVIVOR TO BE RESCUED" (src/objective_types/objective_type_survivor_rescue.opy)
   281: rule "WIN/LOSS CONDITIONS" (src/objective_types/objective_type_extraction_point.opy)
   272: rule "EFFECTS/TEXTS" (src/global_game_in_progress.opy)
@@ -26,12 +26,12 @@
   248: rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)" (src/supply_drops.opy)
   247: rule "VARIABLE ASSIGNMENT" (src/global_startup.opy)
   239: rule "HITCHHIKER ATTACH/DETATCH" (src/enhancements.opy)
+  225: rule "Initialize global variables"
   219: rule "BOT DIES" (src/bots_game_in_progress.opy)
   214: rule "powerUpUsage" (src/supply_drops.opy)
   211: rule "P.U.P. CONTROL" (src/enhancements.opy)
   208: rule "setDifficulty" (src/subroutines.opy)
   203: rule "AMMO PACK MAGAZINES" (src/augments.opy)
-  201: rule "Initialize global variables"
   200: rule "stun (100-109)" (src/supply_drops.opy)
   195: rule "setObjectiveType" (src/global_start_menu.opy)
   195: rule "PLAYER INITIALIZATION" (src/players_game_in_progress.opy)
@@ -575,7 +575,8 @@ variables {
         101: menuFinaleMotionSlot
         102: supplyDropPosition
         103: augmentIconListConst
-        104: numbersList
+        104: enhancementIconListConst
+        105: numbersList
         127: __holygrail__
     player:
         0: botBiteDamage
@@ -780,7 +781,7 @@ rule ("OverPy <­tx> / <­fg> setup code") {
     }
 }
 
-//201 elements
+//225 elements
 rule ("Initialize global variables") {
     event {
         Ongoing - Global;
@@ -796,6 +797,7 @@ rule ("Initialize global variables") {
         Set Global Variable(offsetUpQuarterConst, Vector(0, 0.25, 0)); // 7 elements
         Set Global Variable(powerUpColorListConst, Array(Color(Green), Color(Yellow), Color(Blue), Color(Red), Color(Orange), Color(Yellow), Color(Green), Color(Orange), Color(Blue), Color(Red), Color(Purple), Color(Red), Color(White))); // 28 elements
         Set Global Variable(augmentIconListConst, Array(Icon String(Question Mark), Icon String(Stop), Icon String(Arrow: Right), Icon String(Arrow: Up), Icon String(X), Icon String(Plus), Icon String(Arrow: Down), Icon String(Diamond), Icon String(Heart))); // 20 elements
+        Set Global Variable(enhancementIconListConst, Array(Icon String(Question Mark), Icon String(Skull), Icon String(Poison), Icon String(Fire), Icon String(Plus), Icon String(Bolt), Icon String(Spiral), Icon String(Flag), Icon String(Happy), Icon String(Bolt), Icon String(Arrow: Up))); // 24 elements
         Set Global Variable(numbersList, Mapped Array(Mapped Array(String Split(Custom String("00000000000000000\n000000000000000000000<000000{0}", Custom String("000000000000000000000000\n0000000000<00000<00<00\n000<0\n0<{0}", Custom String("000<0<00<000<00:00.0000$0=0.0<000~000Q0$0000000000<00{0}", Custom String("00000000000000000<000<00000<0<00000)0000{0}", Custom String("000\n00_0)00_0<0$000<00000000000<0000000000000{0}", Custom String("0000<000000<0000000000<000000<0<00<0<000<00000000000{0}", Custom String("0000<0_0_00~0_0Q00Q0Q0~0<0Q0<000_0_0<	0<000<0	0000<0000<00<	00<0<0<0<000\r0)00{0}", Custom String("00\r0000.0000000000<0<0000<0000000000<00<0000000_00_0)000{0}", Custom String("~00~0~00_0~0_0000000000\r00<00000<00<0<0<00000000\n000<0	00{0}", Custom String("<0000<00<0000+000Q0<000)0$0000<0<00)0000)0)00000000000{0}", Custom String("0~00000000000<000000000<000)000<000<0<0000<0)00<0{0}", Custom String("000)0_0)0)00)000000000_000)000~00~0~00_000000000<0<00)0<0<0<0<000{0}", Custom String("00000000"))))))))))))), First Of(Null)), Append To Array(Current Array Element, Custom String("	\n\r !\"#$%&'()*+,-./2:;<=>?@Q[\\]^_`q|}~¡"))), Add(Add(Multiply(0.01, Index Of String Char(Last Of(Current Array Element), Char In String(Current Array Element, 0))), Index Of String Char(Last Of(Current Array Element), Char In String(Current Array Element, 1))), Multiply(100, Index Of String Char(Last Of(Current Array Element), Char In String(Current Array Element, 2)))))); // 94 elements
     }
 }
@@ -1878,7 +1880,7 @@ rule ("START GAME IF WAITING FOR PLAYERS") {
     }
 }
 
-//456 elements
+//434 elements
 rule ("SKIP ASSEMBLING HEROES") {
     event {
         Ongoing - Global;
@@ -1889,7 +1891,7 @@ rule ("SKIP ASSEMBLING HEROES") {
     actions {
         Wait(False, Abort When False); // 1 element
         Set Global Variable(isVoting, True); // 1 element
-        Set Global Variable(phaseSlot9, Array(Icon String(Question Mark), Icon String(Skull), Icon String(Poison), Icon String(Fire), Icon String(Plus), Icon String(Bolt), Icon String(Spiral), Icon String(Flag), Icon String(Happy), Icon String(Bolt), Icon String(Arrow: Up))); // 24 elements
+        Set Global Variable(phaseSlot9, Global.enhancementIconListConst); // 2 elements
         "Set difficulty votes empty"
         Set Global Variable(phaseSlot3, Mapped Array(Array(True, True, Workshop Setting Toggle(Custom String("Challenge Toggle"), Custom String("Swarm Shootout"), True, 1), Workshop Setting Toggle(Custom String("Challenge Toggle"), Custom String("Random Abilities"), True, 2), Workshop Setting Toggle(Custom String("Challenge Toggle"), Custom String("Insanity"), True, 3), Workshop Setting Toggle(Custom String("Challenge Toggle"), Custom String("Pandora's Box"), True, 4)), Array(Null, Current Array Element))); // 65 elements
         "Set zombie modes empty"
@@ -4544,7 +4546,7 @@ rule ("PLAYER INITIALIZATION") {
     }
 }
 
-//310 elements
+//288 elements
 rule ("EFFECTS/TEXTS") {
     event {
         Ongoing - Each Player;
@@ -4568,7 +4570,7 @@ rule ("EFFECTS/TEXTS") {
         "Reviving ring"
         Create Effect(Filtered Array(All Players(All Teams), (Event Player).isReviving), Ring, Color(Yellow), Position Of(Event Player), 5, Visible To Position and Radius); // 10 elements
         "One portrait card per player, matching OW2ZombieAndAbilities' two-line layout.\nKeep live player reads in the HUD; no temporary slots may be captured here."
-        Create HUD Text(Filtered Array(All Players(All Teams), And(Compare((Event Player).rescueTimeRemaining, >, Null), Not((Event Player).isAfk))), If-Then-Else(Global.isSmolderEventActive, Hero Icon String(Hero(Winston)), If-Then-Else(Is Duplicating(Event Player), Hero Icon String(Hero Being Duplicated(Event Player)), Hero Icon String(Hero Of(Event Player)))), Custom String("{0}fgFFAA40FF>{1}{0}/fg> {0}fg66FFFFFF>{2}", Global.__holygrail__, Value In Array(Array(Icon String(Question Mark), Icon String(Skull), Icon String(Poison), Icon String(Fire), Icon String(Plus), Icon String(Bolt), Icon String(Spiral), Icon String(Flag), Icon String(Happy), Icon String(Bolt), Icon String(Arrow: Up)), (Event Player).enhancementId), Custom String("{0}{1}/fg>{2}", Value In Array(Global.augmentIconListConst, (Event Player).augmentId), Global.__holygrail__, Custom String("{0}{1}                                                                                                                       {2}", If-Then-Else(Compare((Event Player).infectionLevel, >=, 1), Custom String(" {0}fgA0E81BFF>Infection: {1}{0}/fg>", Global.__holygrail__, Round To Integer((Event Player).infectionLevel, Down)), If-Then-Else(Compare((Event Player).infectionLevel, <, Null), Custom String(" {0}fg66BBFFFF>Vaccine: {1}{0}/fg>", Global.__holygrail__, Absolute Value(Round To Integer((Event Player).infectionLevel, Down))), Char In String(Empty Array, False))), If-Then-Else((Event Player).isReviving, Custom String(" {0}fgFFE14AFF>Reviving: {1}s{0}/fg>", Global.__holygrail__, Round To Integer((Event Player).recoveryTimeSlot, Up)), If-Then-Else(Is Dead(Event Player), Custom String(" {0}fgFF6666FF>Revive: {1}s{0}/fg>", Global.__holygrail__, Round To Integer((Event Player).rescueTimeRemaining, Up)), Char In String(Empty Array, False))), Custom String("                                                   ")))), Custom String("{0}: {1}", Event Player, If-Then-Else(Is Alive(Event Player), Custom String("{0}%", Round To Integer(Multiply(Normalized Health(Event Player), 100), Up)), Custom String("DOWN"))), Left, Slot Of(Event Player), If-Then-Else(Is Alive(Event Player), Color(Blue), Color(Red)), Color(White), If-Then-Else(Compare(Normalized Health(Event Player), >, 0.97), Color(Blue), If-Then-Else(Compare(Normalized Health(Event Player), >, 0.66), Color(Green), If-Then-Else(Compare(Normalized Health(Event Player), >, 0.33), Color(Yellow), If-Then-Else(Compare(Normalized Health(Event Player), >, Null), Color(Orange), Color(Red))))), Visible To String and Color, Default Visibility); // 212 elements
+        Create HUD Text(Filtered Array(All Players(All Teams), And(Compare((Event Player).rescueTimeRemaining, >, Null), Not((Event Player).isAfk))), If-Then-Else(Global.isSmolderEventActive, Hero Icon String(Hero(Winston)), If-Then-Else(Is Duplicating(Event Player), Hero Icon String(Hero Being Duplicated(Event Player)), Hero Icon String(Hero Of(Event Player)))), Custom String("{0}fgFFAA40FF>{1}{0}/fg> {0}fg66FFFFFF>{2}", Global.__holygrail__, Value In Array(Global.enhancementIconListConst, (Event Player).enhancementId), Custom String("{0}{1}/fg>{2}", Value In Array(Global.augmentIconListConst, (Event Player).augmentId), Global.__holygrail__, Custom String("{0}{1}                                                                                                                       {2}", If-Then-Else(Compare((Event Player).infectionLevel, >=, 1), Custom String(" {0}fgA0E81BFF>Infection: {1}{0}/fg>", Global.__holygrail__, Round To Integer((Event Player).infectionLevel, Down)), If-Then-Else(Compare((Event Player).infectionLevel, <, Null), Custom String(" {0}fg66BBFFFF>Vaccine: {1}{0}/fg>", Global.__holygrail__, Absolute Value(Round To Integer((Event Player).infectionLevel, Down))), Char In String(Empty Array, False))), If-Then-Else((Event Player).isReviving, Custom String(" {0}fgFFE14AFF>Reviving: {1}s{0}/fg>", Global.__holygrail__, Round To Integer((Event Player).recoveryTimeSlot, Up)), If-Then-Else(Is Dead(Event Player), Custom String(" {0}fgFF6666FF>Revive: {1}s{0}/fg>", Global.__holygrail__, Round To Integer((Event Player).rescueTimeRemaining, Up)), Char In String(Empty Array, False))), Custom String("                                                   ")))), Custom String("{0}: {1}", Event Player, If-Then-Else(Is Alive(Event Player), Custom String("{0}%", Round To Integer(Multiply(Normalized Health(Event Player), 100), Up)), Custom String("DOWN"))), Left, Slot Of(Event Player), If-Then-Else(Is Alive(Event Player), Color(Blue), Color(Red)), Color(White), If-Then-Else(Compare(Normalized Health(Event Player), >, 0.97), Color(Blue), If-Then-Else(Compare(Normalized Health(Event Player), >, 0.66), Color(Green), If-Then-Else(Compare(Normalized Health(Event Player), >, 0.33), Color(Yellow), If-Then-Else(Compare(Normalized Health(Event Player), >, Null), Color(Orange), Color(Red))))), Visible To String and Color, Default Visibility); // 190 elements
     }
 }
 
