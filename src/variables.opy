@@ -726,7 +726,8 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 # Exclusive primary enhancement, owned by this human; safe alongside all independent Augments.
 #!define enhancementBulkStacks actorTeamSlot22
 # Overcharge: unspent energy (actual healing / 3), accumulated independently of an armed burst.
-# Exclusive primary enhancement; all capacitor slots belong to the healer, never the target.
+# Exclusive primary enhancement; slots belong to its selected human (the healer
+# for dealt-healing events, the receiver for health packs), never an enemy target.
 #!define enhancementCapacitorEnergy actorTeamSlot22
 # Born to Battle unspent ability resets (0-2); retained through ability waits and reevaluated by its HUD.
 #!define enhancementBattleResetCharges actorTeamSlot22

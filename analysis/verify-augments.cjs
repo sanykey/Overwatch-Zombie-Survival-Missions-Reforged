@@ -12,7 +12,7 @@ const truth = value => Array.isArray(value) ? value.length > 0 : !!value;
 const array = value => Array.isArray(value) ? value : value ? [value] : [];
 const equal = (left, right) => Array.isArray(left) || Array.isArray(right)
     ? Array.isArray(left) && Array.isArray(right) && left.length === right.length && left.every((x, i) => equal(x, right[i]))
-    : typeof left === 'string' || typeof right === 'string' ? left === right : Number(left) === Number(right);
+    : typeof left === 'object' || typeof right === 'object' || typeof left === 'string' || typeof right === 'string' ? left === right : Number(left) === Number(right);
 const point = object => Array.isArray(object) ? object : object.position;
 const magnitude = vector => Math.hypot(...vector);
 const angle = (a, b) => Math.acos(Math.max(-1, Math.min(1,
@@ -68,6 +68,7 @@ function value(expr, state, element) {
     if (expr === 'Event Ability') return state.eventAbility ?? 0;
     if (expr === 'Event Damage') return state.eventDamage ?? 0;
     if (expr === 'Event Healing') return state.eventHealing;
+    if (expr === 'Healer') return state.healer ?? 0;
     if (expr === 'Event Was Health Pack') return state.eventWasHealthPack;
     if (expr === 'Match Time') return state.matchTime;
     if (expr === 'Current Array Element') return element;
@@ -415,6 +416,41 @@ async function main() {
         assert.equal(state.messages.length, !fullCure && infection >= 1 && augment !== 8 ? 1 : 0);
         state.eventWasHealthPack = false;
         assert(!applies(compiled.get(pickup), state), 'Supplemental and other healing cannot trigger pickup bonuses');
+    }
+    const capacitorEnergy = slot('enhancementCapacitorEnergy');
+    const packChargeSlot = slot('enhancementCapacitorCharge');
+    const packDeadlineSlot = slot('enhancementCapacitorDeadline');
+    let packChargeCases = 0;
+    for (const augment of [1, 8]) for (const enhancement of [1, 9])
+    for (const healing of [0, 2.25, 75, 250]) for (const gameplay of [false, true])
+    for (const attribution of ['none', 'self', 'other']) for (const healerFirst of [false, true]) {
+        const state = scenario(augment, {eventWasHealthPack: true, eventHealing: healing,
+            matchTime: -1, ultCharge: 0, maxHealth: 1000});
+        Object.assign(state.globals, {difficultySetting: 3, matchEndTime: 0, isGameplayActive: gameplay});
+        Object.assign(state.player, {enhancementId: enhancement, health: 500,
+            [capacitorEnergy]: 10, [packChargeSlot]: 60, [packDeadlineSlot]: 101});
+        const otherHealer = {id: 'other healer', [capacitorEnergy]: 123};
+        state.healer = attribution === 'self' ? state.player : attribution === 'other' ? otherHealer : 0;
+        const dealt = compiled.get('OVERCHARGE STORES HEALING');
+        const selfHealingEvent = () => {
+            if (attribution === 'self' && applies(dealt, state)) run(dealt.name, state);
+        };
+        if (healerFirst) selfHealingEvent();
+        const expectedBeforePickup = 10 + (healerFirst && attribution === 'self' && gameplay && enhancement === 9 ? healing / 3 : 0);
+        run(pickup, state);
+        const pickupCredit = gameplay && enhancement === 9 && attribution !== 'self' ? healing / 3 : 0;
+        assert.equal(state.player[capacitorEnergy], expectedBeforePickup + pickupCredit,
+            'Received packs credit only the selected Overcharge player; self attribution is handled by dealt healing');
+        if (!healerFirst) selfHealingEvent();
+        assert.equal(state.player[capacitorEnergy], 10 + (gameplay && enhancement === 9 ? healing / 3 : 0),
+            'A health pack is counted once regardless of attribution or healing-event order');
+        assert.equal(otherHealer[capacitorEnergy], 123, 'Receiver handling cannot write the healer state');
+        assert.equal(state.player[packChargeSlot], 60, 'Pack energy cannot alter an armed burst');
+        assert.equal(state.player[packDeadlineSlot], 101, 'Pack energy cannot refresh the burst window');
+        assert.equal(state.player.health, 500 + (augment === 8 ? healing : 0), 'Apothecary supplemental healing is preserved');
+        state.eventWasHealthPack = false;
+        assert(!applies(compiled.get(pickup), state), 'Supplemental healing cannot reenter health-pack handling');
+        packChargeCases++;
     }
     const speedUntil = slot('augmentApothecarySpeedUntil');
     const speedExpiry = compiled.get('APOTHECARY SPEED BONUS EXPIRES');
@@ -1552,7 +1588,7 @@ async function main() {
         fs.writeFileSync(path.join(root, 'main.ws.txt'), exported.result);
     }
     console.log(JSON.stringify({elements: build.elements, warnings: build.warnings.length,
-        playerVariables: playerCount, globalVariables: globalCount, compiledRules: parsed.length,
+        playerVariables: playerCount, globalVariables: globalCount, compiledRules: parsed.length, packChargeCases,
         checked: ['Apothecary health-pack healing / timeout infection cure / zero floor / no vaccine gain / ultimate cap / no recursion / unchanged other augments', 'menu forward/reverse', 'Laser Barricade augment selection / independent storage / Crouch + Interact placement / release Crouch during windup and aiming / cancel and death cleanup / power up input exclusion / 10000 HP / 30s cooldown', 'Shock Landing name / second-jump/eight directions/45-degree diagonals/no direction means wave only/death/CC/cooldown/collision cleanup',
             'dash 13s cooldown / 0.5s phase / first landing wave / 40 damage to all targets including unpushable / Pyrotechnic actual-hit burns and 15m limit / lethal and invulnerable targets / 32 impulse at 6.5 degrees / early and late landing / radius / all directions / resistance / attribution / interrupts',
             'double jump airborne + grounded double-tap / ability-active launch / 14.4 impulse / 16s cooldown / shared gate / tap timeout / CC / landing / death',
@@ -1563,7 +1599,8 @@ async function main() {
             'Reinhardt / Brigitte / D.Mon / Dragonblade / Nemesis / Forge Hammer x3 / held attacks / short clicks / forms / interrupts',
             'Carnage x3 / one hit per cast / cancelled casts', 'Pyrotechnic all targets / actual health loss / invulnerability / distance limit',
             'Vendetta held fire / short clicks / fixed 0.6s interval / interruptions / restart / target refresh',
-            'random Enhancement + Augment / all real IDs / late join / retain rolls / preserve explicit selections / removed Workshop settings'],
+            'random Enhancement + Augment / all real IDs / late join / retain rolls / preserve explicit selections / removed Workshop settings',
+            'Overcharge health packs / receiver ownership / null-self-other attribution / both event orders / no double credit / fractional energy / gameplay gate / Apothecary / armed burst preserved'],
         exported: process.argv.includes('--export'), limitation: 'Game physics, native hitboxes and engine ammo support require an in-game check.'}, null, 2));
 }
 main().catch(error => {console.error(error); process.exitCode = 1;});
