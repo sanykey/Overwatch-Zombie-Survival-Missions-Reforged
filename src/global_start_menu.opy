@@ -147,7 +147,7 @@ rule "EFFECTS/TEXTS":
             "Only Reinhardt {0} and Wrecking Ball {1} zombies will spawn".format(heroIcon(Hero.REINHARDT), heroIcon(Hero.WRECKING_BALL))
         ][localPlayer.pregameZombieVote],
         "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_1)) if isVoting or localPlayer.pregameZombieVote == 0 else [],
-        HudPosition.LEFT,
+        HudPosition.ACTUALLY_LEFT,
         1,
         startMenuZombieColorList[localPlayer.pregameZombieVote],
         startMenuZombieColorList[localPlayer.pregameZombieVote],
