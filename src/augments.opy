@@ -3,7 +3,7 @@
 subroutine extendAugmentMelee
 subroutine useAugmentAirAction
 
-#!define AUGMENT_NAMES ["No Preference", "Kevlar", "Shock Landing", "Double Jump", "Long Reach", "Ammo Pack", "Grapnel Launcher", "Laser Barricade", "Apothecary", "Scavenger", "Leech", "Dead Weight"]
+#!define AUGMENT_NAMES ["No Preference", "Kevlar", "Shock Landing", "Double Jump", "Long Reach", "Ammo Pack", "Grapnel Launcher", "Laser Barricade", "Apothecary", "Scavenger", "Leech"]
 #!define AUGMENT_DASH_PHASE_DURATION 0.5
 #!define AUGMENT_DASH_COOLDOWN 13
 #!define AUGMENT_DASH_WAVE_RADIUS 6
@@ -23,12 +23,6 @@ subroutine useAugmentAirAction
 #!define AUGMENT_GRAPNEL_SPEED 40
 #!define AUGMENT_GRAPNEL_COOLDOWN 16
 #!define AUGMENT_GRAPNEL_TIMEOUT 1.5
-#!define AUGMENT_CARRY_RANGE 4
-#!define AUGMENT_CARRY_DURATION 5
-#!define AUGMENT_CARRY_KNOCKDOWN_DURATION 6
-#!define AUGMENT_CARRY_THROW_SPEED 12.5
-#!define AUGMENT_CARRY_THROW_DAMAGE 50
-#!define AUGMENT_CARRY_DAMAGE_DELAY 0.75
 #!define augmentGrapnelCenter(player) ((player.getPosition() + player.getEyePosition()) * 0.5)
 #!define AUGMENT_GRAPNEL_MOVEMENT_BLOCKED (eventPlayer.isAttached or eventPlayer.hasStatus(Status.ROOTED) or eventPlayer.hasStatus(Status.STUNNED) or eventPlayer.hasStatus(Status.ASLEEP) or eventPlayer.hasStatus(Status.FROZEN) or eventPlayer.hasStatus(Status.KNOCKED_DOWN))
 #!define AUGMENT_GRAPNEL_CAN_MOVE (eventPlayer.hasSpawned() and eventPlayer.isAlive() and not AUGMENT_GRAPNEL_MOVEMENT_BLOCKED)
@@ -65,8 +59,7 @@ rule "AUGMENT MENU":
             "Hold Crouch + Interact to place a wall that blocks zombies; release Interact to deploy. cd: 30s",
             "Health packs: 2x healing, -1 infection even after time runs out, +7% ult, +50% move speed for 5s",
             "Crouch + Interact stores a powerup in backpack. Interact picks up the active item. Hold Reload to drop all. Bot eliminations: 5% random powerup, backpack first",
-            "Heal for 15% of damage dealt and gain 50 recoverable health",
-            "Interact grabs/throws non-bosses within 4m: CC except Rooted or <20% HP"
+            "Heal for 15% of damage dealt and gain 50 recoverable health"
         ][localPlayer.augmentId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.INTERACT)),
         HudPosition.ACTUALLY_LEFT, 4, AUGMENT_COLORS[localPlayer.augmentId], AUGMENT_COLORS[localPlayer.augmentId], AUGMENT_COLORS[localPlayer.augmentId],
@@ -81,7 +74,7 @@ rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)":
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
 
-    eventPlayer.augmentId = (eventPlayer.augmentId + (Augment.LIVING_PROJECTILE if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else 1)) % (Augment.LIVING_PROJECTILE + 1)
+    eventPlayer.augmentId = (eventPlayer.augmentId + (Augment.LEECH if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else 1)) % (Augment.LEECH + 1)
 
 
 rule "PLAYER AUGMENT INITIALIZATION":
@@ -95,7 +88,7 @@ rule "PLAYER AUGMENT INITIALIZATION":
     if eventPlayer.augmentId == Augment.NO_PREFERENCE:
         # Menu non-selection and late-join zero state each receive one real
         # random choice. A nonzero ID preserves explicit and previously rolled choices.
-        eventPlayer.augmentId = random.randint(Augment.KEVLAR, Augment.LIVING_PROJECTILE)
+        eventPlayer.augmentId = random.randint(Augment.KEVLAR, Augment.LEECH)
     if eventPlayer.augmentId == Augment.SCAVENGER:
         eventPlayer.augmentScavengerBackpack = []
     if eventPlayer.augmentId == Augment.LASER_BARRICADE:
@@ -115,7 +108,7 @@ rule "PLAYER AUGMENT INITIALIZATION":
             HudPosition.ACTUALLY_LEFT, 100, Color.RED if eventPlayer.augmentBarrierPlacementCooldown > 0 else Color.BLUE, Color.BLUE, Color.RED if eventPlayer.augmentBarrierPlacementCooldown > 0 else Color.BLUE, HudReeval.VISIBILITY_STRING_AND_COLOR
         )
         #Barricade placement visual
-        createBeam(eventPlayer.filter(lambda _: eventPlayer.augmentBarrierPlacementCooldown < 0 and eventPlayer.isHoldingButton(Button.INTERACT) and distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) <= 30), Beam.BAD, worldVector(vect(-0.5 * LASER_BARRICADE_WIDTH, 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), worldVector(vect(0.5 * LASER_BARRICADE_WIDTH, 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), Color.GREEN, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createBeam(eventPlayer.filter(lambda _: eventPlayer.augmentBarrierPlacementCooldown == -1 and eventPlayer.isHoldingButton(Button.INTERACT) and distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) <= 30), Beam.BAD, worldVector(vect(-0.5 * LASER_BARRICADE_WIDTH, 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), worldVector(vect(0.5 * LASER_BARRICADE_WIDTH, 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), Color.GREEN, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         #Barricade bottom
         createBeam(getAllPlayers().filter(lambda _: eventPlayer.augmentBarrierPosition != null), Beam.BAD, eventPlayer.augmentBarrierCorner1, eventPlayer.augmentBarrierCorner2, Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         #Barricade side 1
@@ -134,7 +127,7 @@ rule "PLAYER AUGMENT INITIALIZATION":
             "{1} | {0}".format(
                 iconString(Icon.CHECKMARK) if getTotalTimeElapsed() >= eventPlayer.augmentMovementReadyAt else f"{ceil(eventPlayer.augmentMovementReadyAt - getTotalTimeElapsed())}s",
                 f"[{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.JUMP)}]" if eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER else f"[{inputBindingString(Button.JUMP)}] in midair / double-tap" if eventPlayer.augmentId == Augment.DOUBLE_JUMP else f"[{inputBindingString(Button.JUMP)}] in midair"
-            ) if eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP, Augment.GRAPNEL_LAUNCHER] else (f"{max(0, ceil(eventPlayer.augmentHoldUntil - getTotalTimeElapsed()))}s | [{inputBindingString(Button.INTERACT)}] to throw" if eventPlayer.augmentHeldZombie != null else f"Aim at a vulnerable zombie | [{inputBindingString(Button.INTERACT)}] to pick up") if eventPlayer.augmentId == Augment.LIVING_PROJECTILE else f"Backpack: {len(eventPlayer.augmentScavengerBackpack)}/2 | Crouch + Interact to store | Hold [{inputBindingString(Button.RELOAD)}] to drop all" if eventPlayer.augmentId == Augment.SCAVENGER else ["", "+75 armor", "", "", "Extended melee reach", "Double magazine capacity", "", "", "2x pack healing | -1 infection (min 0) | +7% ult | +50% speed 5s", "", "15% lifesteal | +50 health"][eventPlayer.augmentId],
+            ) if eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP, Augment.GRAPNEL_LAUNCHER] else f"Backpack: {len(eventPlayer.augmentScavengerBackpack)}/2 | Crouch + Interact to store | Hold [{inputBindingString(Button.RELOAD)}] to drop all" if eventPlayer.augmentId == Augment.SCAVENGER else ["", "+75 armor", "", "", "Extended melee reach", "Double magazine capacity", "", "", "2x pack healing | -1 infection (min 0) | +7% ult | +50% speed 5s", "", "15% lifesteal | +50 health"][eventPlayer.augmentId],
             AUGMENT_NAMES[eventPlayer.augmentId],
             HudPosition.ACTUALLY_LEFT, 100, AUGMENT_COLORS[eventPlayer.augmentId], AUGMENT_COLORS[eventPlayer.augmentId], AUGMENT_COLORS[eventPlayer.augmentId],
             HudReeval.STRING
@@ -684,7 +677,8 @@ rule "LASER BARRICADE (PLACEMENT)":
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.augmentBarrierPlacementCooldown <= 0
+    @Condition eventPlayer.augmentBarrierPlacementCooldown == 0
+    @Condition (eventPlayer.enhancementId != Enhancement.DEAD_WEIGHT or eventPlayer.enhancementHeldZombie == null) == true
 
     # Negative cooldown latches aiming without another player variable; clear it
     # on every exit before starting the normal cooldown.
@@ -804,68 +798,3 @@ rule "LEECH LIFESTEAL":
 
     # Include damage from the hero, primary enhancement and scripted powerups.
     heal(eventPlayer, eventPlayer, eventDamage * 0.15)
-
-
-def useLivingProjectile():
-    @Name "useLivingProjectile"
-
-    if eventPlayer.augmentHeldZombie != null:
-        eventPlayer.augmentHoldUntil = 0
-        return
-    if [eventPlayer.isAttached, eventPlayer.hasStatus(Status.STUNNED), eventPlayer.hasStatus(Status.ASLEEP), eventPlayer.hasStatus(Status.FROZEN), eventPlayer.hasStatus(Status.KNOCKED_DOWN)].any():
-        return
-    # One raycast per press, against all players so intervening actors block pickup.
-    # Synchronous scratch only: the candidate is committed to both actors before returning.
-    #!define livingProjectileCandidate tmp0
-    livingProjectileCandidate = raycastHitPlayer(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * AUGMENT_CARRY_RANGE, getAllPlayers(), eventPlayer, false)
-    if livingProjectileCandidate == null:
-        return
-    if [livingProjectileCandidate.getTeam() != Team.2, not livingProjectileCandidate.isDummy(), not livingProjectileCandidate.isAlive(), livingProjectileCandidate in bossStateList.concat(miniBossList), livingProjectileCandidate.botIsInitializing, livingProjectileCandidate.botIsTeleporting, livingProjectileCandidate.botIsAttached].any():
-        return
-    # Inspect native statuses directly: the cached bot CC flag can lag by 0.125s.
-    # Rooted alone never qualifies; Rooted plus low health or another CC still does.
-    if not (livingProjectileCandidate.getNormalizedHealth() < 0.2 or livingProjectileCandidate.hasStatus(Status.STUNNED) or livingProjectileCandidate.hasStatus(Status.ASLEEP) or livingProjectileCandidate.hasStatus(Status.FROZEN) or livingProjectileCandidate.hasStatus(Status.KNOCKED_DOWN)):
-        return
-    eventPlayer.augmentHeldZombie = livingProjectileCandidate
-    eventPlayer.augmentHoldUntil = getTotalTimeElapsed() + AUGMENT_CARRY_DURATION
-    livingProjectileCandidate.augmentCarryHero = eventPlayer.getHero()
-    livingProjectileCandidate.augmentZombieCarrier = eventPlayer
-    livingProjectileCandidate.botIsAttached = true
-    # Knockdown begins at pickup and outlasts the hold limit by one second.
-    # Clearing it early interrupts the carry; throw damage clears it explicitly.
-    livingProjectileCandidate.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, AUGMENT_CARRY_KNOCKDOWN_DURATION)
-    livingProjectileCandidate.attachTo(eventPlayer, vect(0, 1.5, 1))
-
-
-#!define livingProjectileInterrupted(carrier) ([not isGameplayActive, not entityExists(carrier), not carrier.isAlive(), carrier.isAttached, carrier.getHero() != eventPlayer.augmentCarryHero, not eventPlayer.isAlive(), eventPlayer.botIsInitializing, eventPlayer.botIsTeleporting, not eventPlayer.botIsAttached, not eventPlayer.hasStatus(Status.KNOCKED_DOWN)].any())
-
-rule "LIVING PROJECTILE RELEASE":
-    @Event eachPlayer
-    @Team 2
-    @Condition eventPlayer.augmentZombieCarrier != null
-    @Condition (eventPlayer.augmentZombieCarrier.augmentHoldUntil <= getTotalTimeElapsed() or livingProjectileInterrupted(eventPlayer.augmentZombieCarrier)) == true
-
-    # Release and cleanup are synchronous; only throw damage waits below.
-    # Bot-owned cleanup survives carrier departure.
-    # A second press requests release by setting the carrier's deadline to zero.
-    # Synchronous carrier snapshot, used only through release cleanup below.
-    # No wait, async call or live HUD/effect captures this global scratch alias.
-    #!define deadWeightCarrier tmp0
-    deadWeightCarrier = eventPlayer.augmentZombieCarrier
-    # Boolean snapshot, consumed by the branch before its damage wait.
-    # No later action reads this scratch slot after yielding.
-    #!define deadWeightShouldThrow tmp1
-    deadWeightShouldThrow = deadWeightCarrier.augmentHoldUntil == 0 and not livingProjectileInterrupted(deadWeightCarrier)
-    eventPlayer.detach()
-    eventPlayer.botIsAttached = false
-    deadWeightCarrier.augmentHeldZombie = null
-    eventPlayer.augmentZombieCarrier = null
-    if deadWeightShouldThrow:
-        eventPlayer.applyImpulse(deadWeightCarrier.getFacingDirection(), AUGMENT_CARRY_THROW_SPEED, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
-        eventPlayer.augmentThrowDamageCredit = deadWeightCarrier
-        wait(AUGMENT_CARRY_DAMAGE_DELAY, Wait.IGNORE_CONDITION)
-        damage(eventPlayer, eventPlayer.augmentThrowDamageCredit, AUGMENT_CARRY_THROW_DAMAGE)
-        eventPlayer.clearStatusEffect(Status.KNOCKED_DOWN)
-    # A pickup/release request made during the short damage wait is handled next.
-    if ruleCondition:
-        loop()

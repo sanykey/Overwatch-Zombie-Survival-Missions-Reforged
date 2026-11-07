@@ -191,14 +191,14 @@ rule "EFFECTS/TEXTS":
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Enhancement
-    startMenuEnhancementColorList = [Color.AQUA, Color.RED, Color.GRAY, Color.ORANGE, Color.GREEN, Color.GRAY, Color.WHITE, Color.PURPLE, Color.BLUE, Color.TURQUOISE, Color.LIME_GREEN, Color.YELLOW]
+    startMenuEnhancementColorList = [Color.AQUA, Color.RED, Color.GRAY, Color.ORANGE, Color.GREEN, Color.GRAY, Color.WHITE, Color.PURPLE, Color.BLUE, Color.TURQUOISE, Color.LIME_GREEN, Color.YELLOW, Color.PURPLE]
     hudText(
         getPlayers(Team.1),
         "Enhancement: {0}{1}".format(
             [
                 "No Preference", "Brain Killer ", "Zombie Hybrid ",
                 "Pyrotechnic ", "Plague Doctor ", "Born to Battle ",
-                "Charge Battery ", "Hitchhiker ", "P.U.P. ", "Overcharge ", "Bulking Season ", "Bolt Strike "
+                "Charge Battery ", "Hitchhiker ", "P.U.P. ", "Overcharge ", "Bulking Season ", "Bolt Strike ", "Dead Weight "
             ][localPlayer.enhancementId],
             enhancementOptionList[localPlayer.enhancementId] if localPlayer.enhancementId > Enhancement.NO_PREFERENCE else ""
         ),
@@ -214,7 +214,8 @@ rule "EFFECTS/TEXTS":
             "Survivor is equipped with an autonomous friendly droid",
             "Store 1 energy per 3 healing, +10 per assist; uncapped. Hold Melee: spend up to 100 for bonus damage on hits for 0.3s",
             "Kills and damage participation grant +0.5% Max Life and +0.5% Hero Size per stack (caps: 200% Life, 1.35x size). Lose half on death",
-            "Chain to 2 visible zombies within 10m: 25% damage, max 20 each. Store chain damage (200 max). Hold Melee at 200: hits for 0.3s strike for 60 and stun 2s"
+            "Chain to 2 visible zombies within 10m: 25% damage, max 20 each. Store chain damage (200 max). Hold Melee at 200: hits for 0.3s strike for 60 and stun 2s",
+            "Interact grabs/throws non-bosses within 4m: CC except Rooted or <20% HP"
         ][localPlayer.enhancementId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)),
         HudPosition.ACTUALLY_LEFT,

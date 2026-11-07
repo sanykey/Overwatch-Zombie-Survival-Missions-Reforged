@@ -7,6 +7,13 @@ subroutine startPupDefaultChase
 subroutine applyBulkingSeasonStats
 subroutine clearBoltEffects
 
+#!define DEAD_WEIGHT_RANGE 4
+#!define DEAD_WEIGHT_DURATION 5
+#!define DEAD_WEIGHT_KNOCKDOWN_DURATION 6
+#!define DEAD_WEIGHT_THROW_SPEED 12.5
+#!define DEAD_WEIGHT_THROW_DAMAGE 50
+#!define DEAD_WEIGHT_DAMAGE_DELAY 0.75
+
 #!define overchargeAssistTotal(player) (player.getStatistic(Stat.OFFENSIVE_ASSISTS) + player.getStatistic(Stat.DEFENSIVE_ASSISTS))
 
 rule "PLAYER ENHANCEMENT INITIALIZATION":
@@ -20,7 +27,7 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
     if eventPlayer.enhancementId == Enhancement.NO_PREFERENCE:
         # No preference and late-join zero state receive one real choice before
         # its state is initialized. Retain the selected ID across later spawns.
-        eventPlayer.enhancementId = random.randint(Enhancement.BRAIN_KILLER, Enhancement.BOLT_STRIKE)
+        eventPlayer.enhancementId = random.randint(Enhancement.BRAIN_KILLER, Enhancement.DEAD_WEIGHT)
     #Zombie Hybrid
     if eventPlayer.enhancementId == Enhancement.ZOMBIE_HYBRID:
         #Enhancement: Zombie Hyrbid
@@ -93,6 +100,16 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
                 f"Hold [{inputBindingString(Button.MELEE)}] to charge | Energy: {floor(eventPlayer.enhancementCapacitorEnergy)} | Charged: {floor(eventPlayer.enhancementCapacitorCharge)}",
                 "Overcharge",
                 HudPosition.ACTUALLY_LEFT, 99, Color.TURQUOISE, Color.TURQUOISE, Color.TURQUOISE, HudReeval.STRING
+            )
+            break
+        case Enhancement.DEAD_WEIGHT:
+            # This shared slot must start as a player reference or null, never
+            # a previous enhancement's number/array/color. Pickup sets its deadline.
+            eventPlayer.enhancementHeldZombie = null
+            hudText(
+                eventPlayer, ENHANCEMENT_ICONS[eventPlayer.enhancementId],
+                (f"{max(0, ceil(eventPlayer.enhancementHoldUntil - getTotalTimeElapsed()))}s | [{inputBindingString(Button.INTERACT)}] to throw" if eventPlayer.enhancementHeldZombie != null else f"Aim at a vulnerable zombie | [{inputBindingString(Button.INTERACT)}] to pick up"),
+                "Dead Weight", HudPosition.ACTUALLY_LEFT, 99, Color.PURPLE, Color.PURPLE, Color.PURPLE, HudReeval.STRING
             )
             break
         case Enhancement.BOLT_STRIKE:
@@ -792,3 +809,68 @@ def resetBattleAbilityCharge():
 
     eventPlayer.setAbilityCharge(eventPlayer.enhancementBattleAbilityButton, 1)
     eventPlayer.enhancementBattleResetCharges -= 1
+
+
+def useLivingProjectile():
+    @Name "useLivingProjectile"
+
+    if eventPlayer.enhancementHeldZombie != null:
+        eventPlayer.enhancementHoldUntil = 0
+        return
+    if [eventPlayer.isAttached, eventPlayer.hasStatus(Status.STUNNED), eventPlayer.hasStatus(Status.ASLEEP), eventPlayer.hasStatus(Status.FROZEN), eventPlayer.hasStatus(Status.KNOCKED_DOWN)].any():
+        return
+    # One raycast per press, against all players so intervening actors block pickup.
+    # Synchronous scratch only: the candidate is committed to both actors before returning.
+    #!define livingProjectileCandidate tmp0
+    livingProjectileCandidate = raycastHitPlayer(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * DEAD_WEIGHT_RANGE, getAllPlayers(), eventPlayer, false)
+    if livingProjectileCandidate == null:
+        return
+    if [livingProjectileCandidate.getTeam() != Team.2, not livingProjectileCandidate.isDummy(), not livingProjectileCandidate.isAlive(), livingProjectileCandidate in bossStateList.concat(miniBossList), livingProjectileCandidate.botIsInitializing, livingProjectileCandidate.botIsTeleporting, livingProjectileCandidate.botIsAttached].any():
+        return
+    # Inspect native statuses directly: the cached bot CC flag can lag by 0.125s.
+    # Rooted alone never qualifies; Rooted plus low health or another CC still does.
+    if not (livingProjectileCandidate.getNormalizedHealth() < 0.2 or livingProjectileCandidate.hasStatus(Status.STUNNED) or livingProjectileCandidate.hasStatus(Status.ASLEEP) or livingProjectileCandidate.hasStatus(Status.FROZEN) or livingProjectileCandidate.hasStatus(Status.KNOCKED_DOWN)):
+        return
+    eventPlayer.enhancementHeldZombie = livingProjectileCandidate
+    eventPlayer.enhancementHoldUntil = getTotalTimeElapsed() + DEAD_WEIGHT_DURATION
+    livingProjectileCandidate.deadWeightCarryHero = eventPlayer.getHero()
+    livingProjectileCandidate.deadWeightZombieCarrier = eventPlayer
+    livingProjectileCandidate.botIsAttached = true
+    # Knockdown begins at pickup and outlasts the hold limit by one second.
+    # Clearing it early interrupts the carry; throw damage clears it explicitly.
+    livingProjectileCandidate.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, DEAD_WEIGHT_KNOCKDOWN_DURATION)
+    livingProjectileCandidate.attachTo(eventPlayer, vect(0, 1.5, 1))
+
+
+#!define livingProjectileInterrupted(carrier) ([not isGameplayActive, not entityExists(carrier), not carrier.isAlive(), carrier.isAttached, carrier.getHero() != eventPlayer.deadWeightCarryHero, not eventPlayer.isAlive(), eventPlayer.botIsInitializing, eventPlayer.botIsTeleporting, not eventPlayer.botIsAttached, not eventPlayer.hasStatus(Status.KNOCKED_DOWN)].any())
+
+rule "LIVING PROJECTILE RELEASE":
+    @Event eachPlayer
+    @Team 2
+    @Condition eventPlayer.deadWeightZombieCarrier != null
+    @Condition (eventPlayer.deadWeightZombieCarrier.enhancementHoldUntil <= getTotalTimeElapsed() or livingProjectileInterrupted(eventPlayer.deadWeightZombieCarrier)) == true
+
+    # Release and cleanup are synchronous; only throw damage waits below.
+    # Bot-owned cleanup survives carrier departure.
+    # A second press requests release by setting the carrier's deadline to zero.
+    # Synchronous carrier snapshot, used only through release cleanup below.
+    # No wait, async call or live HUD/effect captures this global scratch alias.
+    #!define deadWeightCarrier tmp0
+    deadWeightCarrier = eventPlayer.deadWeightZombieCarrier
+    # Boolean snapshot, consumed by the branch before its damage wait.
+    # No later action reads this scratch slot after yielding.
+    #!define deadWeightShouldThrow tmp1
+    deadWeightShouldThrow = deadWeightCarrier.enhancementHoldUntil == 0 and not livingProjectileInterrupted(deadWeightCarrier)
+    eventPlayer.detach()
+    eventPlayer.botIsAttached = false
+    deadWeightCarrier.enhancementHeldZombie = null
+    eventPlayer.deadWeightZombieCarrier = null
+    if deadWeightShouldThrow:
+        eventPlayer.applyImpulse(deadWeightCarrier.getFacingDirection(), DEAD_WEIGHT_THROW_SPEED, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+        eventPlayer.deadWeightThrowDamageCredit = deadWeightCarrier
+        wait(DEAD_WEIGHT_DAMAGE_DELAY, Wait.IGNORE_CONDITION)
+        damage(eventPlayer, eventPlayer.deadWeightThrowDamageCredit, DEAD_WEIGHT_THROW_DAMAGE)
+        eventPlayer.clearStatusEffect(Status.KNOCKED_DOWN)
+    # A pickup/release request made during the short damage wait is handled next.
+    if ruleCondition:
+        loop()

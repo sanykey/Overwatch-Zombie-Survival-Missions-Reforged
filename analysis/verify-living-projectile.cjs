@@ -2,11 +2,12 @@
 const assert = require('node:assert/strict');
 const {files, compile, compiler} = require('./measure-further-optimizations.cjs');
 const {rules} = require('./verify-player-variables.cjs');
-const {scenario, start, actions, applies} = require('./verify-augments.cjs');
+const {scenario, start, actions, applies, value} = require('./verify-augments.cjs');
+const {args} = require('./verify-global-temporaries.cjs');
 const slot = name => files['variables.opy'].match(new RegExp('^#!define ' + name + ' (\\w+)$', 'm'))[1];
-const held = slot('augmentHeldZombie'), owner = slot('augmentZombieCarrier');
-const until = slot('augmentHoldUntil'), attached = slot('botIsAttached');
-const credit = slot('augmentThrowDamageCredit');
+const held = slot('enhancementHeldZombie'), owner = slot('deadWeightZombieCarrier');
+const until = slot('enhancementHoldUntil'), attached = slot('botIsAttached');
+const credit = slot('deadWeightThrowDamageCredit');
 async function main() {
     await compiler.readyPromise;
     const build = await compile(files);
@@ -15,8 +16,47 @@ async function main() {
     assert(!compiled.has('DEAD WEIGHT LANDING'), 'Landing damage rule is removed');
     assert(!compiled.has('DEAD WEIGHT DELAYED DAMAGE'), 'No queue processor');
     const run = (name, state) => start(compiled.get(name), state, compiled);
+    assert(compiled.get('useLivingProjectile').body.includes('Multiply(Facing Direction Of(Event Player), 4)'),
+        'The emitted pickup ray extends exactly four meters');
+    assert(!files['augments.opy'].includes('Dead Weight'));
+    const enhancementInit = compiled.get('PLAYER ENHANCEMENT INITIALIZATION');
+    const selection = {...enhancementInit, body: enhancementInit.body.split('actions {\n')[0]
+        + 'actions {\n' + actions(enhancementInit).slice(0, 2).join('\n') + '\n}'};
+    for (let id = 1; id <= 12; id++) for (const missing of [false, true]) {
+        const s = scenario(1, {randomRoll: id});
+        if (!missing) s.player.enhancementId = 0;
+        start(selection, s, compiled);
+        assert.equal(s.player.enhancementId, id);
+        start(selection, s, compiled);
+        assert.deepEqual(s.randomCalls, [[1, 12]], 'Enhancement rolls include Dead Weight and persist');
+    }
+    for (let id = 0; id <= 12; id++) for (const backwards of [false, true]) {
+        const s = scenario(1, {buttons: new Set(['Melee', ...(backwards ? ['Secondary Fire'] : [])])});
+        s.globals.isPregameSetup = true;
+        s.globals[slot('enhancementOptionList')] = Array(13).fill('icon');
+        s.player.enhancementId = id;
+        run('PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)', s);
+        assert.equal(s.player.enhancementId, (id + (backwards ? 12 : 1)) % 13);
+    }
+    for (let id = 0; id <= 10; id++) for (const backwards of [false, true]) {
+        const s = scenario(id, {buttons: new Set(['Interact', ...(backwards ? ['Secondary Fire'] : [])])});
+        s.globals.isPregameSetup = true;
+        run('PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)', s);
+        assert.equal(s.player.augmentId, (id + (backwards ? 10 : 1)) % 11);
+    }
+    for (let id = 1; id <= 10; id++) {
+        const s = scenario(0, {randomRoll: id});
+        s.player.enhancementId = 12; s.player.initialMaxHealth = 250;
+        run('PLAYER AUGMENT INITIALIZATION', s);
+        assert.equal(s.player.augmentId, id);
+        assert.deepEqual(s.randomCalls, [[1, 10]], 'Augment rolls exclude the moved ability');
+        run('PLAYER ENHANCEMENT INITIALIZATION', s);
+        assert.equal(s.player.enhancementId, 12, 'An explicit Dead Weight selection survives initialization');
+        assert.equal(s.huds, 2, 'Each slot has an independent gameplay HUD');
+    }
     function setup(health = 100, statuses = []) {
-        const s = scenario(11);
+        const s = scenario(1);
+        s.player.enhancementId = 12;
         s.player.team = 1; s.player.alive = true; s.player.hero = s.hero;
         const bot = {id: 'zombie', team: 2, dummy: true, alive: true, exists: true,
             health, maxHealth: 1000, status: new Set(statuses), position: [0, 0, 2]};
@@ -26,6 +66,67 @@ async function main() {
     function botState(s, bot) {
         return {...s, player: bot, targets: [s.player], status: bot.status,
             dummy: true, hero: 'Ana'};
+    }
+    const hudAction = actions(enhancementInit).find(line => line.startsWith('Create HUD Text(') && line.includes('Custom String("Dead Weight")'));
+    const hudStatus = args(hudAction)[2].replaceAll('Input Binding String(Button(Interact))', '"Interact"');
+    // A shared enhancement slot may retain a previous role's value. Numeric,
+    // array and entity values must all become idle before the HUD/input reads it.
+    for (const stale of [0, 12, [], [1, 2, 3], {id: 'old target', exists: false}]) {
+        const {s, bot} = setup();
+        s.player[held] = stale; s.player[until] = 0;
+        if (stale !== 0) {
+            assert(value(hudStatus, s).includes('0s |'), 'Stale state reproduces the reported permanent 0s');
+            run('useLivingProjectile', s);
+            assert.equal(s.raycastCalls ?? 0, 0, 'Phantom carry requests a throw without querying a new target');
+        }
+        run('PLAYER ENHANCEMENT INITIALIZATION', s);
+        assert.equal(s.player[held], 0, 'Initialization must clear the shared held-target slot');
+        assert(value(hudStatus, s).includes('to pick up'), 'Idle HUD must show pickup, without a timer');
+        s.buttons.add('Interact');
+        const inputTask = run('PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)', s);
+        assert(inputTask.done());
+        assert.equal(s.player[held], bot, 'First press after initialization must grab instead of requesting a phantom throw');
+        assert(value(hudStatus, s).includes('5s |'), 'The timer measures hold duration only');
+        const bs = botState(s, bot); bs.time += 5;
+        run('LIVING PROJECTILE RELEASE', bs);
+        assert(value(hudStatus, s).includes('to pick up'), 'Release restores the idle HUD immediately');
+    }
+    // Every independent Augment can own all of its state while carrying/throwing.
+    for (let id = 1; id <= 10; id++) {
+        const {s, bot} = setup(); s.player.augmentId = id;
+        const slots = ['augmentState0', 'augmentState1', 'augmentState2', 'augmentState3'];
+        slots.forEach((name, i) => s.player[name] = [i, id]);
+        const before = slots.map(name => s.player[name]);
+        run('useLivingProjectile', s); run('useLivingProjectile', s);
+        const bs = botState(s, bot), task = run('LIVING PROJECTILE RELEASE', bs);
+        bs.time += 0.75; task.resume();
+        assert(task.done());
+        assert.deepEqual(slots.map(name => s.player[name]), before, `Augment ${id} state survives carry and throw`);
+    }
+    // The zombie release can run between Interact handling and barrier placement.
+    // Reserve the entire consumed press, preserving an already-running cooldown.
+    const interactName = 'PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)';
+    const placementName = 'LASER BARRICADE (PLACEMENT)';
+    const cooldown = slot('augmentBarrierPlacementCooldown');
+    for (const cooldownBefore of [0, 10]) {
+        const {s, bot} = setup(); s.player.augmentId = 7; s.player[cooldown] = cooldownBefore;
+        run('useLivingProjectile', s);
+        s.buttons = new Set(['Crouch', 'Interact']);
+        assert(!applies(compiled.get(placementName), s), 'A held zombie reserves Crouch + Interact before the input handler runs');
+        assert(applies(compiled.get(interactName), s), 'Throw remains available with Crouch and Laser Barricade');
+        const inputTask = run(interactName, s);
+        const bs = botState(s, bot), release = run('LIVING PROJECTILE RELEASE', bs);
+        assert.equal(s.player[held], 0);
+        assert(!applies(compiled.get(placementName), s), 'Bot cleanup must not enable placement on the throwing press');
+        assert.equal(s.player[cooldown], cooldownBefore || -2);
+        s.buttons.delete('Interact'); inputTask.resume();
+        assert(inputTask.done());
+        assert.equal(s.player[cooldown], cooldownBefore, 'Throw spends no barricade cooldown');
+        bs.time += 0.75; release.resume();
+        assert(release.done());
+        s.buttons.add('Interact');
+        assert.equal(applies(compiled.get(placementName), s), cooldownBefore === 0,
+            'The next press can place a ready barricade normally');
     }
     for (const health of [0, 199, 200, 1000]) for (const status of [null, 'Rooted', 'Hacked', 'Stunned', 'Asleep', 'Frozen', 'Knocked Down']) {
         const {s, bot} = setup(health, status ? [status] : []);
@@ -58,7 +159,6 @@ async function main() {
     const miss = setup(); miss.s.raycastTarget = 0; run('useLivingProjectile', miss.s);
     assert(!miss.s.player[held]);
     const input = setup(); input.s.buttons.add('Interact');
-    const interactName = 'PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)';
     assert(run(interactName, input.s).done());
     assert.equal(input.s.player[held], input.bot, 'Pickup consumes the press before item queries');
     assert(run(interactName, input.s).done());
@@ -149,7 +249,7 @@ async function main() {
     for (const name of ['RIDER DETACH WHEN DEAD OR TARGET IS DEAD', 'RIDER DETATCH FROM TEAMMATES WHILE ALIVE'])
         assert(compiled.get(name).body.includes('augmentState0 == Null'));
     console.log(JSON.stringify({elements: build.elements,
-        warnings: build.warnings, checked: 'boss/miniboss pickup ban / 5s hold / 6s knockdown from pickup / cleared synchronously with throw damage / eligibility / CC / input / lifetime cleanup / 50 damage after 0.75s / native Wait(0.75) / persistent credit / release before wait / pending release after wait / lethal throw cleanup / no cooldown / immediate repeat pickup / no landing rule or splash / item priority / Rider guards',
+        warnings: build.warnings, checked: 'stale shared-state initialization / idle HUD without timer / hold countdown and HUD reset / first pickup after initialization / 4m ray / primary selection forward and backward / 12 Enhancements and 10 Augments / explicit choice and late-join rolls / independent HUDs / all Augment state preserved / Laser Barricade throw priority and cooldown / boss/miniboss pickup ban / 5s hold / 6s knockdown from pickup / cleared synchronously with throw damage / eligibility / CC / input / lifetime cleanup / 50 damage after 0.75s / native Wait(0.75) / persistent credit / release before wait / pending release after wait / lethal throw cleanup / no cooldown / immediate repeat pickup / no landing rule or splash / item priority / Rider guards',
         limitation: 'Raycast geometry, attachment appearance and throw physics require Overwatch.'}, null, 2));
 }
 main().catch(e => {console.error(e); process.exitCode = 1;});
