@@ -144,7 +144,6 @@ function value(expr, state, element) {
         case 'Ultimate Charge Percent': return state.ultCharge;
         case 'Is True For All': return array(v(0)).every(item => truth(value(a[1], state, item)));
         case 'Health': return v(0).health ?? 10000;
-        case 'Max Health': assert.equal(v(0), state.player); return state.maxHealth;
         case 'Is Using Ability 1': return state.ability1 ?? state.ability;
         case 'Is Using Ability 2': return state.ability2 ?? state.ability;
         case 'Max Health Of Type': assert.equal(a[1], 'Armor'); return state.maxArmor;
@@ -344,10 +343,6 @@ function* execute(rule, state, compiled) {
                 case 'Stop All Damage Over Time': state.stoppedDots = true; break;
                 case 'Clear Status': state.status.delete(a[1]); break;
                 case 'Set Ultimate Charge': state.ultCharge = Math.min(100, v(1)); break;
-                case 'Set Player Health':
-                    assert.equal(v(0), state.player);
-                    state.player.health = v(1);
-                    break;
                 case 'Heal':
                     assert.equal(v(1), 0, 'Pack bonus has no healer attribution');
                     state.healBonus = v(2);
@@ -461,54 +456,6 @@ async function main() {
     }
     const speedUntil = slot('augmentApothecarySpeedUntil');
     const speedExpiry = compiled.get('APOTHECARY SPEED BONUS EXPIRES');
-    const fullHealthPickup = compiled.get('APOTHECARY ALLOW HEALTH PACK PICKUP');
-    assert.deepEqual(actions(fullHealthPickup).map(action => action.slice(0, action.indexOf('('))), ['Set Player Health'],
-        'Pickup preparation must not use damage, healing, waits or temporary variables');
-    let fullHealthPickupCases = 0;
-    for (const augment of [0, 1, 8]) for (const gameplay of [false, true])
-    for (const alive of [false, true]) for (const dummy of [false, true])
-    for (const maxHealth of [175, 250, 600]) for (const missing of [0, 0.5, 1, 25])
-    for (const invincible of [false, true]) {
-        const state = scenario(augment, {alive, dummy, maxHealth, ultCharge: 0});
-        Object.assign(state.globals, {isGameplayActive: gameplay});
-        Object.assign(state.player, {health: maxHealth - missing, [capacitorEnergy]: 10});
-        if (invincible) state.status.add('Invincible');
-        const eligible = gameplay && augment === 8 && alive && !dummy && missing === 0;
-        assert.equal(applies(fullHealthPickup, state), eligible);
-        if (eligible) run(fullHealthPickup.name, state);
-        assert.equal(state.player.health, maxHealth - missing - Number(eligible), 'Only full-health Apothecary leaves one HP for a pack');
-        assert(!applies(fullHealthPickup, state), 'Preparation cannot repeatedly reduce health below the one-HP gap');
-        assert.equal(state.damage.length, 0, 'Set Health cannot produce a damage event in the script');
-        assert.equal(state.healBonus, undefined);
-        assert.equal(state.ultCharge, 0, 'Leaving room alone grants no pack bonus');
-        assert.equal(state.player[capacitorEnergy], 10);
-        assert.equal(state.player[speedUntil] ?? 0, 0);
-        fullHealthPickupCases++;
-    }
-    for (const enhancement of [1, 9]) {
-        const state = scenario(8, {maxHealth: 250, matchTime: -1, ultCharge: 0});
-        Object.assign(state.globals, {difficultySetting: 3, matchEndTime: 0});
-        Object.assign(state.player, {health: 250, infectionLevel: 1.5, isInfected: true,
-            enhancementId: enhancement, [capacitorEnergy]: 0});
-        run(fullHealthPickup.name, state);
-        assert.equal(state.player.health, 249);
-        // Simulate the native pickup filling the gap and reporting actual healing.
-        state.player.health = 250;
-        state.eventWasHealthPack = true;
-        state.eventHealing = 1;
-        run(pickup, state);
-        assert.equal(state.player.health, 250);
-        assert.equal(state.ultCharge, 7);
-        assert.equal(state.player.movementSpeedScale, 1.5);
-        assert.equal(state.player[speedUntil], 105);
-        assert.equal(state.player.infectionLevel, 0.5);
-        assert.equal(state.player[capacitorEnergy], enhancement === 9 ? 1 / 3 : 0);
-        assert(applies(fullHealthPickup, state), 'Returning to full health prepares the next native pickup');
-        run(fullHealthPickup.name, state);
-        assert.equal(state.player.health, 249);
-        assert.equal(state.ultCharge, 7, 'Preparation never repeats the pack reward');
-        fullHealthPickupCases++;
-    }
     for (const initialScale of [0.5, 1, 1.5]) for (const die of [false, true]) {
         const state = scenario(8, {eventWasHealthPack: true, eventHealing: 75,
             matchTime: -1, ultCharge: 0, maxHealth: 1000});
@@ -635,7 +582,7 @@ async function main() {
             fs.writeFileSync(path.join(root, 'main.ws.txt'), exported.result);
         }
         console.log(JSON.stringify({elements: build.elements, warnings: build.warnings,
-            pickupCases, fullHealthPickupCases, checked: ['infection clamped to zero / no vaccine gain', 'normal cure and timeout',
+            pickupCases, checked: ['infection clamped to zero / no vaccine gain', 'normal cure and timeout',
                 'supplemental healing', 'ultimate charge', 'other augments unchanged',
                 'no recursion', 'speed duration / refresh / no stacking / other multipliers / death / spawn reset',
                 'forward/reverse menu', 'random and explicit selection'],
@@ -1701,7 +1648,7 @@ async function main() {
         fs.writeFileSync(path.join(root, 'main.ws.txt'), exported.result);
     }
     console.log(JSON.stringify({elements: build.elements, warnings: build.warnings.length,
-        playerVariables: playerCount, globalVariables: globalCount, compiledRules: parsed.length, pickupCases, fullHealthPickupCases, packChargeCases, meleeOverchargeCases,
+        playerVariables: playerCount, globalVariables: globalCount, compiledRules: parsed.length, pickupCases, packChargeCases, meleeOverchargeCases,
         checked: ['Apothecary health-pack healing / timeout infection cure / zero floor / no vaccine gain / ultimate cap / no recursion / unchanged other augments', 'menu forward/reverse', 'Laser Barricade augment selection / independent storage / Crouch + Interact placement / release Crouch during windup and aiming / cancel and death cleanup / power up input exclusion / 10000 HP / 30s cooldown', 'Shock Landing name / second-jump/eight directions/45-degree diagonals/no direction means wave only/death/CC/cooldown/collision cleanup',
             'dash 13s cooldown / 0.5s phase / first landing wave / 40 damage to all targets including unpushable / Pyrotechnic actual-hit burns and 15m limit / lethal and invulnerable targets / 32 impulse at 6.5 degrees / early and late landing / radius / all directions / resistance / attribution / interrupts',
             'double jump airborne + grounded double-tap / ability-active launch / 14.4 impulse / 16s cooldown / shared gate / tap timeout / CC / landing / death',
@@ -1714,7 +1661,6 @@ async function main() {
             'Vendetta held fire / short clicks / fixed 0.6s interval / interruptions / restart / target refresh',
             'random Enhancement + Augment / all real IDs / late join / retain rolls / preserve explicit selections / removed Workshop settings',
             'Overcharge health packs / receiver ownership / null-self-other attribution / both event orders / no double credit / fractional energy / gameplay gate / Apothecary / armed burst preserved',
-            'Apothecary full-health packs / exactly one HP gap / active gameplay / living humans only / other Augments unchanged / invulnerability / no damage or bonus on preparation / native pickup simulation',
             'Long Reach Overcharge / actual damage / immunity / mixed targets / first hit / multiple targets and swings / exact expiry / fixed window / independent next bank / scripted-event filtering'],
         exported: process.argv.includes('--export'), limitation: 'Game physics, native hitboxes and engine ammo support require an in-game check.'}, null, 2));
 }
