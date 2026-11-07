@@ -58,6 +58,7 @@ enum Augment:
     LASER_BARRICADE = 7,
     APOTHECARY = 8,
     SCAVENGER = 9,
+    LEECH = 10,
 
 # Icon tables, indexed by their corresponding selection ID.
 #!define ENHANCEMENT_ICONS enhancementIconListConst
@@ -871,7 +872,7 @@ playervar augmentBarrierHealth  # Chased Laser Barricade health; placement, dama
 # Immutable Augment icons, indexed by selection ID and initialized once before UI rules.
 # Shared by the pregame menu, world labels, personal HUD and roster throughout the match.
 # Keep a dedicated slot: pregame storage is reused by objectives during gameplay.
-globalvar augmentIconListConst = [iconString(Icon.QUESTION_MARK), iconString(Icon.STOP), iconString(Icon.ARROW_RIGHT), iconString(Icon.ARROW_UP), iconString(Icon.CROSS), iconString(Icon.PLUS), iconString(Icon.ARROW_DOWN), iconString(Icon.DIAMOND), iconString(Icon.HEART), iconString(Icon.RECYCLE)]
+globalvar augmentIconListConst = [iconString(Icon.QUESTION_MARK), iconString(Icon.STOP), iconString(Icon.ARROW_RIGHT), iconString(Icon.ARROW_UP), iconString(Icon.CROSS), iconString(Icon.PLUS), iconString(Icon.ARROW_DOWN), iconString(Icon.DIAMOND), iconString(Icon.HEART), iconString(Icon.RECYCLE), iconString(Icon.ASTERISK)]
 
 # Immutable Enhancement icons, indexed by selection ID; shared by pregame options and roster.
 # Keep a dedicated slot: enhancementOptionList becomes Biomorphing text after menu cleanup.

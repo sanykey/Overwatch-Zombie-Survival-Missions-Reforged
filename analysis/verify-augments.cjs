@@ -367,12 +367,15 @@ function* execute(rule, state, compiled) {
                 case 'Clear Status': state.status.delete(a[1]); break;
                 case 'Set Ultimate Charge': state.ultCharge = Math.min(100, v(1)); break;
                 case 'Heal':
-                    assert.equal(v(1), 0, 'Pack bonus has no healer attribution');
+                    assert.equal(v(1), state.expectedHealer ?? 0, 'Unexpected healer attribution');
                     state.healBonus = v(2);
                     state.player.health = Math.min(state.maxHealth, state.player.health + v(2));
                     break;
                 case 'Small Message': state.messages.push(v(1)); break;
-                case 'Add Health Pool To Player': state.armor += v(2); break;
+                case 'Add Health Pool To Player':
+                    (state.healthPools ??= []).push({type: a[1], amount: v(2), recoverable: v(3), reevaluate: v(4)});
+                    if (a[1] === 'Armor') state.armor += v(2);
+                    break;
                 default: throw new Error('Unsupported action: ' + line);
             }
         }
@@ -525,10 +528,10 @@ async function main() {
     const jumpReadyAt = slot('augmentJumpReadyAt');
     assert.notEqual(jumpReady, jumpReadyAt, 'Landing/death must not overwrite the cooldown timestamp');
     const menu = 'PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)';
-    for (const backwards of [false, true]) for (let id = 0; id <= 9; id++) {
+    for (const backwards of [false, true]) for (let id = 0; id <= 10; id++) {
         const state = scenario(id, {globals: {isPregameSetup: true}, buttons: new Set(['Interact', ...(backwards ? ['Secondary Fire'] : [])])});
         run(menu, state);
-        assert.equal(state.player.augmentId, (id + (backwards ? 9 : 1)) % 10);
+        assert.equal(state.player.augmentId, (id + (backwards ? 10 : 1)) % 11);
         state.globals.isPregameSetup = false;
         assert(!applies(compiled.get(menu), state));
     }
@@ -594,7 +597,7 @@ async function main() {
             run('PLAYER AUGMENT INITIALIZATION', state);
             assert.equal(state.player.augmentId, 8);
             assert.equal(state.huds, 1);
-            assert.deepEqual(state.randomCalls, selected === 0 ? [[1, 9]] : []);
+            assert.deepEqual(state.randomCalls, selected === 0 ? [[1, 10]] : []);
         }
         if (process.argv.includes('--export')) {
             const exported = await compiler.compile(fs.readFileSync(path.join(root, 'main.opy'), 'utf8'),
@@ -1500,19 +1503,19 @@ async function main() {
     }
     const kevlar = scenario(1); kevlar.player.initialMaxHealth = 250;
     run('PLAYER AUGMENT INITIALIZATION', kevlar); assert.equal(kevlar.armor, 75);
-    for (const picked of [1, 2, 3, 4, 5, 6, 7, 8, 9]) for (const missing of [false, true]) {
+    for (const picked of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) for (const missing of [false, true]) {
         const state = scenario(0, {randomRoll: picked}); state.player.initialMaxHealth = 250;
         if (missing) delete state.player.augmentId;
         run('PLAYER AUGMENT INITIALIZATION', state);
         assert.equal(state.player.augmentId, picked, 'Unselected and late-join players can receive every real Augment');
         assert.equal(state.armor, picked === 1 ? 75 : 0);
-        assert.deepEqual(state.randomCalls, [[1, 9]], 'No Preference is excluded from the random range');
+        assert.deepEqual(state.randomCalls, [[1, 10]], 'No Preference is excluded from the random range');
         state.randomRoll = picked === 6 ? 1 : 6;
         run('PLAYER AUGMENT INITIALIZATION', state);
         assert.equal(state.player.augmentId, picked, 'Respawn/reinitialization retains the previously rolled ID');
         assert.equal(state.randomCalls.length, 1);
     }
-    for (const selected of [2, 3, 4, 5, 6, 7, 8, 9]) {
+    for (const selected of [2, 3, 4, 5, 6, 7, 8, 9, 10]) {
         const chosen = scenario(selected); chosen.player.initialMaxHealth = 250;
         run('PLAYER AUGMENT INITIALIZATION', chosen);
         assert.equal(chosen.player.augmentId, selected, 'Keep an explicit Augment selection');

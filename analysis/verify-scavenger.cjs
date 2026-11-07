@@ -208,18 +208,18 @@ async function main() {
         const s = state(); s.randomRoll = 9; s.player.initialMaxHealth = 250;
         if (missing) delete s.player.augmentId; else s.player.augmentId = 0;
         assert(run('PLAYER AUGMENT INITIALIZATION', s).done());
-        assert.equal(s.player.augmentId, 9); assert.deepEqual(s.randomCalls, [[1, 9]]);
+        assert.equal(s.player.augmentId, 9); assert.deepEqual(s.randomCalls, [[1, 10]]);
         s.randomRoll = 1; assert(run('PLAYER AUGMENT INITIALIZATION', s).done());
         assert.equal(s.player.augmentId, 9); assert.equal(s.randomCalls.length, 1);
     }
     const menu = 'PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)';
-    for (let id = 0; id <= 9; id++) for (const reverse of [false, true]) {
+    for (let id = 0; id <= 10; id++) for (const reverse of [false, true]) {
         const s = state(0, [], id); s.globals.isPregameSetup = true;
         if (reverse) s.buttons.add('Secondary Fire');
-        run(menu, s); assert.equal(s.player.augmentId, (id + (reverse ? 9 : 1)) % 10);
+        run(menu, s); assert.equal(s.player.augmentId, (id + (reverse ? 10 : 1)) % 11);
     }
     const declarations = actions(compiled.get('Initialize global variables'));
-    for (const [name, size] of [['enhancementIconListConst', 11], ['augmentIconListConst', 10]]) {
+    for (const [name, size] of [['enhancementIconListConst', 11], ['augmentIconListConst', 11]]) {
         const line = declarations.find(l => l.startsWith('Set Global Variable(' + name + ','));
         assert(line); assert.equal(args(args(line)[1]).length, size);
     }
