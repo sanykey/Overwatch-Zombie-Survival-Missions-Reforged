@@ -53,7 +53,7 @@ rule "AUGMENT MENU":
     # Like the primary enhancement HUD, this is created once and reevaluates per viewer.
     hudText(
         getPlayers(Team.1),
-        "Augment: {0} {1}".format(AUGMENT_NAMES[localPlayer.augmentId], AUGMENT_ICONS[localPlayer.augmentId]),
+        f"Augment: {AUGMENT_NAMES[localPlayer.augmentId]} {AUGMENT_ICONS[localPlayer.augmentId] if localPlayer.augmentId != Augment.NO_PREFERENCE else ''}",
         [
             "",
             "Gain 75 armor that helps protect against infection",
@@ -63,13 +63,13 @@ rule "AUGMENT MENU":
             "Carry twice the ammo per full magazine; full reloads restore the bonus",
             "Crouch + Jump: grapple 7-40m; hit for 35 damage; stun grounded targets for 0.5s or knock airborne targets down for 3s. Cooldown: 16s",
             "Hold Crouch + Interact to place a wall that blocks zombies; release Interact to deploy; Crouch may be released while aiming. Cooldown: 30s",
-            "Health packs heal twice as much, remove up to 1 existing infection even after time runs out, and grant +5% ultimate charge and +50% move speed for 3s",
+            "Health packs heal twice as much, remove up to 1 existing infection even after time runs out, and grant +7% ultimate charge and +50% move speed for 5s",
             "Crouch + Interact stores a powerup in 2 reserve slots (cannot activate). Interact picks up the active item. Hold Reload to drop all. Bot eliminations: 5% random powerup, backpack first",
             "Heal for 15% of damage dealt and gain 50 recoverable health",
             "Interact grabs/throws non-bosses within 4m: CC except Rooted or <20% HP. Hold 5s, knockdown up to 6s; 50 throw damage after 0.75s clears knockdown. No cooldown."
         ][localPlayer.augmentId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.INTERACT)),
-        HudPosition.LEFT, 4, AUGMENT_COLORS[localPlayer.augmentId], AUGMENT_COLORS[localPlayer.augmentId], AUGMENT_COLORS[localPlayer.augmentId],
+        HudPosition.ACTUALLY_LEFT, 4, AUGMENT_COLORS[localPlayer.augmentId], AUGMENT_COLORS[localPlayer.augmentId], AUGMENT_COLORS[localPlayer.augmentId],
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
 
@@ -134,7 +134,7 @@ rule "PLAYER AUGMENT INITIALIZATION":
             "{1} | {0}".format(
                 iconString(Icon.CHECKMARK) if getTotalTimeElapsed() >= eventPlayer.augmentMovementReadyAt else f"{ceil(eventPlayer.augmentMovementReadyAt - getTotalTimeElapsed())}s",
                 f"[{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.JUMP)}]" if eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER else f"[{inputBindingString(Button.JUMP)}] in midair / double-tap" if eventPlayer.augmentId == Augment.DOUBLE_JUMP else f"[{inputBindingString(Button.JUMP)}] in midair"
-            ) if eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP, Augment.GRAPNEL_LAUNCHER] else (f"{max(0, ceil(eventPlayer.augmentHoldUntil - getTotalTimeElapsed()))}s | [{inputBindingString(Button.INTERACT)}] to throw" if eventPlayer.augmentHeldZombie != null else f"Aim at a vulnerable zombie | [{inputBindingString(Button.INTERACT)}] to pick up") if eventPlayer.augmentId == Augment.LIVING_PROJECTILE else f"Backpack: {len(eventPlayer.augmentScavengerBackpack)}/2 | Crouch + Interact to store | Hold [{inputBindingString(Button.RELOAD)}] to drop all" if eventPlayer.augmentId == Augment.SCAVENGER else ["", "+75 armor", "", "", "Extended melee reach", "Double magazine capacity", "", "", "2x pack healing | -1 infection (min 0) | +5% ult | +50% speed 3s", "", "15% lifesteal | +50 health"][eventPlayer.augmentId],
+            ) if eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP, Augment.GRAPNEL_LAUNCHER] else (f"{max(0, ceil(eventPlayer.augmentHoldUntil - getTotalTimeElapsed()))}s | [{inputBindingString(Button.INTERACT)}] to throw" if eventPlayer.augmentHeldZombie != null else f"Aim at a vulnerable zombie | [{inputBindingString(Button.INTERACT)}] to pick up") if eventPlayer.augmentId == Augment.LIVING_PROJECTILE else f"Backpack: {len(eventPlayer.augmentScavengerBackpack)}/2 | Crouch + Interact to store | Hold [{inputBindingString(Button.RELOAD)}] to drop all" if eventPlayer.augmentId == Augment.SCAVENGER else ["", "+75 armor", "", "", "Extended melee reach", "Double magazine capacity", "", "", "2x pack healing | -1 infection (min 0) | +7% ult | +50% speed 5s", "", "15% lifesteal | +50 health"][eventPlayer.augmentId],
             AUGMENT_NAMES[eventPlayer.augmentId],
             HudPosition.ACTUALLY_LEFT, 100, AUGMENT_COLORS[eventPlayer.augmentId], AUGMENT_COLORS[eventPlayer.augmentId], AUGMENT_COLORS[eventPlayer.augmentId],
             HudReeval.STRING
@@ -147,6 +147,20 @@ rule "PLAYER AUGMENT INITIALIZATION":
         # Permanent recoverable health; keep the native-health initialization gate.
         waitUntil(eventPlayer.initialMaxHealth > 0, Math.INFINITY)
         eventPlayer.addHealthPool(Health.NORMAL, 50, true, false)
+
+
+rule "APOTHECARY ALLOW HEALTH PACK PICKUP":
+    @Event eachPlayer
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.augmentId == Augment.APOTHECARY
+    @Condition eventPlayer.isDummy() == false
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.getHealth() == eventPlayer.getMaxHealth()
+
+    # Leave room for a health pack, including during invulnerability.
+    # Set Health avoids damage events/modifiers; this rule retriggers only on full health.
+    eventPlayer.setHealth(eventPlayer.getHealth() - 1)
 
 
 rule "APOTHECARY SPEED BONUS EXPIRES":

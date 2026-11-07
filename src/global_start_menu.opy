@@ -117,7 +117,7 @@ rule "EFFECTS/TEXTS":
             "All challenges at Once!"
         ][localPlayer.pregameChallengeVote],
         "Change Vote (Press [{0}])".format(inputBindingString(Button.ULTIMATE)) if isVoting or localPlayer.pregameChallengeVote == Challenge.NO_PREFERENCE else [],
-        HudPosition.LEFT,
+        HudPosition.ACTUALLY_LEFT,
         0,
         [Color.AQUA, Color.YELLOW, Color.LIME_GREEN, Color.ORANGE, Color.WHITE if isPregameGlitchActive else Color.TURQUOISE, Color.GRAY if isPregameGlitchActive else Color.PURPLE][localPlayer.pregameChallengeVote],
         [Color.AQUA, null, Color.LIME_GREEN, Color.ORANGE, Color.WHITE, Color.WHITE][localPlayer.pregameChallengeVote],
@@ -147,7 +147,7 @@ rule "EFFECTS/TEXTS":
             "Only Reinhardt {0} and Wrecking Ball {1} zombies will spawn".format(heroIcon(Hero.REINHARDT), heroIcon(Hero.WRECKING_BALL))
         ][localPlayer.pregameZombieVote],
         "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_1)) if isVoting or localPlayer.pregameZombieVote == 0 else [],
-        HudPosition.LEFT,
+        HudPosition.ACTUALLY_LEFT,
         1,
         startMenuZombieColorList[localPlayer.pregameZombieVote],
         startMenuZombieColorList[localPlayer.pregameZombieVote],
@@ -183,7 +183,7 @@ rule "EFFECTS/TEXTS":
             "Randomly assigns all types of objectives"
         ][localPlayer.pregameObjectiveVote],
         "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if isVoting or localPlayer.pregameObjectiveVote == 0 else [],
-        HudPosition.LEFT,
+        HudPosition.ACTUALLY_LEFT,
         2,
         startMenuObjectiveColorList[localPlayer.pregameObjectiveVote],
         startMenuObjectiveColorList[localPlayer.pregameObjectiveVote],
@@ -217,7 +217,7 @@ rule "EFFECTS/TEXTS":
             "Chain to 2 visible zombies within 10m: 25% damage, max 20 each. Store chain damage (200 max). Hold Melee at 200: hits for 0.3s strike for 60 and stun 2s"
         ][localPlayer.enhancementId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)),
-        HudPosition.LEFT,
+        HudPosition.ACTUALLY_LEFT,
         3,
         startMenuEnhancementColorList[localPlayer.enhancementId],
         startMenuEnhancementColorList[localPlayer.enhancementId],

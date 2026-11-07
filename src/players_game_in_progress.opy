@@ -259,12 +259,12 @@ rule "PLAYER PICKS UP HEALTH PACK":
         heal(eventPlayer, null, eventHealing)
         if eventPlayer.infectionLevel > 0:
             eventPlayer.infectionLevel = max(0, eventPlayer.infectionLevel - 1)
-        eventPlayer.setUltCharge(eventPlayer.getUltCharge() + 5)
+        eventPlayer.setUltCharge(eventPlayer.getUltCharge() + 7)
         # Refresh duration without stacking; preserve other movement multipliers.
         if eventPlayer.augmentApothecarySpeedUntil == 0:
             eventPlayer.movementSpeedScale *= 1.5
             applyScaledMoveSpeed()
-        eventPlayer.augmentApothecarySpeedUntil = getTotalTimeElapsed() + 3
+        eventPlayer.augmentApothecarySpeedUntil = getTotalTimeElapsed() + 5
 
 
 rule "PLAYER CLEARS DAMAGE OVER TIME":
