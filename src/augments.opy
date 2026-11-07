@@ -57,16 +57,16 @@ rule "AUGMENT MENU":
         [
             "",
             "Gain 75 armor that helps protect against infection",
-            "Press Jump again in midair: landing shockwave deals 40 damage and pushes nearby zombies; movement input adds a dash. Phased and invulnerable for 0.5s. Cooldown: 13s",
-            "Jump in midair or double-tap Jump. First hit of 30+ damage in flight or within 0.5s after landing deals +50%. Cooldown: 16s",
+            "Press Jump again in midair: landing shockwave deals 40 damage and pushes nearby zombies; movement input adds a dash. Phased and invulnerable for 0.5s. cd: 13s",
+            "Jump in midair or double-tap Jump. First hit of 30+ damage in flight deals +50%. cd: 16s",
             "Triple Quick Melee, melee weapon, Dragonblade and Carnage reach",
             "Carry twice the ammo per full magazine; full reloads restore the bonus",
-            "Crouch + Jump: grapple 7-40m; hit for 35 damage; stun grounded targets for 0.5s or knock airborne targets down for 3s. Cooldown: 16s",
-            "Hold Crouch + Interact to place a wall that blocks zombies; release Interact to deploy; Crouch may be released while aiming. Cooldown: 30s",
-            "Health packs heal twice as much, remove up to 1 existing infection even after time runs out, and grant +7% ultimate charge and +50% move speed for 5s",
-            "Crouch + Interact stores a powerup in 2 reserve slots (cannot activate). Interact picks up the active item. Hold Reload to drop all. Bot eliminations: 5% random powerup, backpack first",
+            "Crouch + Jump: grapple 7-40m; hit for 35 damage; stun grounded targets for 0.5s or knock airborne targets down for 3s. cd: 16s",
+            "Hold Crouch + Interact to place a wall that blocks zombies; release Interact to deploy. cd: 30s",
+            "Health packs: 2x healing, -1 infection even after time runs out, +7% ult, +50% move speed for 5s",
+            "Crouch + Interact stores a powerup in backpack. Interact picks up the active item. Hold Reload to drop all. Bot eliminations: 5% random powerup, backpack first",
             "Heal for 15% of damage dealt and gain 50 recoverable health",
-            "Interact grabs/throws non-bosses within 4m: CC except Rooted or <20% HP. Hold 5s, knockdown up to 6s; 50 throw damage after 0.75s clears knockdown. No cooldown."
+            "Interact grabs/throws non-bosses within 4m: CC except Rooted or <20% HP"
         ][localPlayer.augmentId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.INTERACT)),
         HudPosition.ACTUALLY_LEFT, 4, AUGMENT_COLORS[localPlayer.augmentId], AUGMENT_COLORS[localPlayer.augmentId], AUGMENT_COLORS[localPlayer.augmentId],
