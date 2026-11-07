@@ -7,6 +7,8 @@ subroutine startPupDefaultChase
 subroutine applyBulkingSeasonStats
 subroutine clearBoltEffects
 
+#!define overchargeAssistTotal(player) (player.getStatistic(Stat.OFFENSIVE_ASSISTS) + player.getStatistic(Stat.DEFENSIVE_ASSISTS))
+
 rule "PLAYER ENHANCEMENT INITIALIZATION":
     @Event eachPlayer
     @Team 1
@@ -83,6 +85,8 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             eventPlayer.enhancementCapacitorEnergy = 0
             eventPlayer.enhancementCapacitorCharge = 0
             eventPlayer.enhancementCapacitorDeadline = 0
+            # Baseline existing match stats; do not pay for assists before selection/join.
+            eventPlayer.enhancementCapacitorAssistSnapshot = overchargeAssistTotal(eventPlayer)
             hudText(
                 eventPlayer,
                 ENHANCEMENT_ICONS[eventPlayer.enhancementId],
@@ -471,6 +475,22 @@ rule "OVERCHARGE STORES HEALING":
     eventPlayer.enhancementCapacitorEnergy += eventHealing / 3
 
 
+rule "OVERCHARGE STORES ASSISTS":
+    @Event eachPlayer
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
+    @Condition overchargeAssistTotal(eventPlayer) != eventPlayer.enhancementCapacitorAssistSnapshot
+
+    # No assist event exists. Only Overcharge players observe the two native counters.
+    # Synchronous scratch: consumed before any wait/call/HUD reevaluation can reuse tmp0.
+    #!define overchargeCurrentAssists tmp0
+    overchargeCurrentAssists = overchargeAssistTotal(eventPlayer)
+    eventPlayer.enhancementCapacitorEnergy += max(0, overchargeCurrentAssists - eventPlayer.enhancementCapacitorAssistSnapshot) * 10
+    # Resync on a stat reset too, without subtracting energy or paying twice.
+    eventPlayer.enhancementCapacitorAssistSnapshot = overchargeCurrentAssists
+
+
 rule "OVERCHARGE ARMS CHARGE":
     @Event eachPlayer
     @Team 1
@@ -481,9 +501,9 @@ rule "OVERCHARGE ARMS CHARGE":
     @Condition eventPlayer.enhancementCapacitorEnergy > 0
     @Condition eventPlayer.enhancementCapacitorCharge == 0
 
-    # Transfer at most 250; retain the remainder in the uncapped bank.
+    # Transfer at most 100; retain the remainder in the uncapped bank.
     # Continued healing cannot change this burst's fixed damage.
-    eventPlayer.enhancementCapacitorCharge = min(eventPlayer.enhancementCapacitorEnergy, 250)
+    eventPlayer.enhancementCapacitorCharge = min(eventPlayer.enhancementCapacitorEnergy, 100)
     eventPlayer.enhancementCapacitorEnergy -= eventPlayer.enhancementCapacitorCharge
 
 
