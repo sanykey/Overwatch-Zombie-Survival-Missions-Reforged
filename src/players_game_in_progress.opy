@@ -259,7 +259,7 @@ rule "PLAYER PICKS UP HEALTH PACK":
         eventPlayer.setUltCharge(eventPlayer.getUltCharge() + 5)
         # Refresh duration without stacking; preserve other movement multipliers.
         if eventPlayer.augmentApothecarySpeedUntil == 0:
-            eventPlayer.movementSpeedScale *= 1.3
+            eventPlayer.movementSpeedScale *= 1.5
             applyScaledMoveSpeed()
         eventPlayer.augmentApothecarySpeedUntil = getTotalTimeElapsed() + 3
 

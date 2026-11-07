@@ -408,7 +408,7 @@ async function main() {
             augment === 8 && cured > 0 ? Math.max(0, cured - 1) : cured);
         assert.equal(state.player.health, 500 + (augment === 8 ? healing : 0));
         assert.equal(state.ultCharge, augment === 8 ? Math.min(100, charge + 5) : charge);
-        assert.equal(state.player.movementSpeedScale, augment === 8 ? 1.3 : 1);
+        assert.equal(state.player.movementSpeedScale, augment === 8 ? 1.5 : 1);
         assert.deepEqual(state.healOverTime, [5, 20], 'Preserve existing pack regeneration');
         assert.equal(!!state.stoppedDots, fullCure);
         assert.equal(state.status.has('Burning'), !fullCure);
@@ -425,12 +425,12 @@ async function main() {
         Object.assign(state.player, {health: 100, movementSpeedScale: initialScale});
         run(pickup, state);
         assert.equal(state.player[speedUntil], 103);
-        assert.equal(state.moveSpeed, initialScale * 1.3 * 100);
+        assert.equal(state.moveSpeed, initialScale * 1.5 * 100);
         state.time = 102;
         assert(!applies(speedExpiry, state));
         run(pickup, state);
         assert.equal(state.player[speedUntil], 105, 'Pickup refreshes duration');
-        assert.equal(state.player.movementSpeedScale, initialScale * 1.3, 'Bonus cannot stack');
+        assert.equal(state.player.movementSpeedScale, initialScale * 1.5, 'Bonus cannot stack');
         // Another effect starts during the bonus; expiry must preserve its multiplier.
         state.player.movementSpeedScale *= 1.5;
         state.time = 104.99;
@@ -450,7 +450,7 @@ async function main() {
     for (const augment of [1, 8]) {
         const state = scenario(augment);
         state.player[speedUntil] = 103;
-        state.player.movementSpeedScale = 1.3;
+        state.player.movementSpeedScale = 1.5;
         start(speedReset, state, compiled);
         assert.equal(state.player.movementSpeedScale, 1);
         assert.equal(state.player[speedUntil], augment === 8 ? 0 : 103);
