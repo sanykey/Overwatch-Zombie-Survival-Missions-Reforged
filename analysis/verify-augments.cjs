@@ -12,7 +12,7 @@ const truth = value => Array.isArray(value) ? value.length > 0 : !!value;
 const array = value => Array.isArray(value) ? value : value ? [value] : [];
 const equal = (left, right) => Array.isArray(left) || Array.isArray(right)
     ? Array.isArray(left) && Array.isArray(right) && left.length === right.length && left.every((x, i) => equal(x, right[i]))
-    : typeof left === 'string' || typeof right === 'string' ? left === right : Number(left) === Number(right);
+    : typeof left === 'object' || typeof right === 'object' || typeof left === 'string' || typeof right === 'string' ? left === right : Number(left) === Number(right);
 const point = object => Array.isArray(object) ? object : object.position;
 const magnitude = vector => Math.hypot(...vector);
 const angle = (a, b) => Math.acos(Math.max(-1, Math.min(1,
@@ -68,6 +68,7 @@ function value(expr, state, element) {
     if (expr === 'Event Ability') return state.eventAbility ?? 0;
     if (expr === 'Event Damage') return state.eventDamage ?? 0;
     if (expr === 'Event Healing') return state.eventHealing;
+    if (expr === 'Healer') return state.healer ?? 0;
     if (expr === 'Event Was Health Pack') return state.eventWasHealthPack;
     if (expr === 'Match Time') return state.matchTime;
     if (expr === 'Current Array Element') return element;
@@ -87,6 +88,8 @@ function value(expr, state, element) {
         case 'First Of': return array(v(0))[0] ?? 0;
         case 'Count Of': return array(v(0)).length;
         case 'Value In Array': return array(v(0))[Number(v(1))] ?? 0;
+        case 'Remove From Array': return array(v(0)).filter(item => !equal(item, v(1)));
+        case 'Random Value In Array': return array(v(0))[state.randomIndex ?? 0] ?? 0;
         case 'If-Then-Else': return truth(v(0)) ? v(1) : v(2);
         case 'Evaluate Once': return v(0);
         case 'Filtered Array': return array(v(0)).filter(item => truth(value(a[1], state, item)));
@@ -118,7 +121,7 @@ function value(expr, state, element) {
         case 'Is Dead': return !(v(0) === state.player ? state.alive : v(0).alive);
         case 'Has Spawned': return state.spawned;
         case 'Is Dummy Bot': return state.dummy;
-        case 'Is On Ground': return state.ground;
+        case 'Is On Ground': return v(0) === state.player ? state.ground : v(0).ground;
         case 'Is Button Held': return state.buttons.has(v(1));
         case 'Throttle Of': return state.throttle;
         case 'Magnitude Of': return magnitude(v(0));
@@ -159,7 +162,7 @@ function value(expr, state, element) {
         case 'Distance Between': return magnitude(point(v(0)).map((x, i) => x - point(v(1))[i]));
         case 'Players Within Radius':
             assert.equal(a[2], 'Team 2'); assert.equal(a[3], 'Surfaces');
-            return state.targets.filter(target => (target.team ?? 2) === 2 && target.visible && magnitude(target.position.map((x, i) => x - v(0)[i])) <= v(1));
+            return state.targets.filter(target => (target.team ?? 2) === 2 && target.visible && magnitude(target.position.map((x, i) => x - point(v(0))[i])) <= v(1));
         case 'Is In View Angle': return angle(state.facing, v(1).map((x, i) => x - value('Eye Position(Event Player)', state)[i])) <= v(2);
         case 'Random Integer': {
             const min = Number(v(0)), max = Number(v(1)), roll = state.randomRoll ?? min;
@@ -252,6 +255,7 @@ function* execute(rule, state, compiled) {
                 case 'Loop If': if (truth(v(0))) {pc = -1; branches = [];} break;
                 case 'Abort If': if (truth(v(0))) return; break;
                 case 'Skip If': if (truth(v(0))) pc += Number(v(1)); break;
+                case 'Skip': pc += Number(v(0)); break;
                 case 'Set Player Variable': state.player[a[1]] = v(2); break;
                 case 'Set Player Variable At Index': state.player[a[1]][Number(v(2))] = v(3); break;
                 case 'Set Global Variable': state.globals[a[0]] = v(1); break;
@@ -265,6 +269,9 @@ function* execute(rule, state, compiled) {
                     break;
                 }
                 case 'Wait Until': yield {until: a[0], deadline: state.time + Number(v(1))}; break;
+                case 'Chase Player Variable At Rate':
+                    (state.chases ??= []).push({field: a[1], destination: v(2), rate: v(3)});
+                    break;
                 case 'Wait':
                     // Workshop clamps Wait(0) to one frame; OverPy emits it for wait(0.016).
                     yield {deadline: state.time + Math.max(0.016, Number(v(0))), abort: a[1] === 'Abort When False'};
@@ -343,12 +350,15 @@ function* execute(rule, state, compiled) {
                 case 'Clear Status': state.status.delete(a[1]); break;
                 case 'Set Ultimate Charge': state.ultCharge = Math.min(100, v(1)); break;
                 case 'Heal':
-                    assert.equal(v(1), 0, 'Pack bonus has no healer attribution');
+                    assert.equal(v(1), state.expectedHealer ?? 0, 'Expected healer attribution');
                     state.healBonus = v(2);
                     state.player.health = Math.min(state.maxHealth, state.player.health + v(2));
                     break;
                 case 'Small Message': state.messages.push(v(1)); break;
-                case 'Add Health Pool To Player': state.armor += v(2); break;
+                case 'Add Health Pool To Player':
+                    (state.healthPools ??= []).push({type: a[1], amount: v(2)});
+                    if (a[1] === 'Armor') state.armor += v(2);
+                    break;
                 default: throw new Error('Unsupported action: ' + line);
             }
         }
@@ -392,6 +402,20 @@ async function main() {
     const run = (name, state) => start(compiled.get(name), state, compiled);
     // Run the shared pickup handler across both normal cure and timeout paths.
     const pickup = 'PLAYER PICKS UP HEALTH PACK';
+    const energy = slot('enhancementCapacitorEnergy');
+    for (const augment of [1, 8]) for (const enhancement of [1, 9])
+    for (const active of [false, true]) for (const attribution of ['none', 'self', 'other'])
+    for (const healing of [25, 50, 75]) {
+        const state = scenario(augment, {eventWasHealthPack: true, eventHealing: healing,
+            matchTime: 30, ultCharge: 0, maxHealth: 1000});
+        Object.assign(state.globals, {isGameplayActive: active, difficultySetting: 3,
+            matchEndTime: 0, healthpackPositionList: [[0, 0, 0]]});
+        Object.assign(state.player, {enhancementId: enhancement, health: 500, [energy]: 10});
+        state.healer = attribution === 'self' ? state.player : attribution === 'other' ? {id: 'Sombra'} : 0;
+        run(pickup, state);
+        assert.equal(state.player[energy], 10 + (active && enhancement === 9 && attribution !== 'self' ? healing / 3 : 0),
+            'Health packs charge the receiver; self-attributed packs use the existing dealt-healing rule once');
+    }
     for (const augment of [1, 8]) for (const difficulty of [1, 3, 5])
     for (const remaining of [30, 0, -30]) for (const infection of [-2, 0, 0.5, 1, 4])
     for (const healing of [10, 75, 250]) for (const charge of [0, 98, 100]) {
@@ -408,7 +432,7 @@ async function main() {
             augment === 8 && cured > 0 ? Math.max(0, cured - 1) : cured);
         assert.equal(state.player.health, 500 + (augment === 8 ? healing : 0));
         assert.equal(state.ultCharge, augment === 8 ? Math.min(100, charge + 5) : charge);
-        assert.equal(state.player.movementSpeedScale, augment === 8 ? 1.3 : 1);
+        assert.equal(state.player.movementSpeedScale, augment === 8 ? 1.5 : 1);
         assert.deepEqual(state.healOverTime, [5, 20], 'Preserve existing pack regeneration');
         assert.equal(!!state.stoppedDots, fullCure);
         assert.equal(state.status.has('Burning'), !fullCure);
@@ -425,12 +449,12 @@ async function main() {
         Object.assign(state.player, {health: 100, movementSpeedScale: initialScale});
         run(pickup, state);
         assert.equal(state.player[speedUntil], 103);
-        assert.equal(state.moveSpeed, initialScale * 1.3 * 100);
+        assert.equal(state.moveSpeed, initialScale * 1.5 * 100);
         state.time = 102;
         assert(!applies(speedExpiry, state));
         run(pickup, state);
         assert.equal(state.player[speedUntil], 105, 'Pickup refreshes duration');
-        assert.equal(state.player.movementSpeedScale, initialScale * 1.3, 'Bonus cannot stack');
+        assert.equal(state.player.movementSpeedScale, initialScale * 1.5, 'Bonus cannot stack');
         // Another effect starts during the bonus; expiry must preserve its multiplier.
         state.player.movementSpeedScale *= 1.5;
         state.time = 104.99;
@@ -450,7 +474,7 @@ async function main() {
     for (const augment of [1, 8]) {
         const state = scenario(augment);
         state.player[speedUntil] = 103;
-        state.player.movementSpeedScale = 1.3;
+        state.player.movementSpeedScale = 1.5;
         start(speedReset, state, compiled);
         assert.equal(state.player.movementSpeedScale, 1);
         assert.equal(state.player[speedUntil], augment === 8 ? 0 : 103);
@@ -469,7 +493,127 @@ async function main() {
         state.globals.isPregameSetup = false;
         assert(!applies(compiled.get(menu), state));
     }
-    if (process.argv.includes('--apothecary-only')) {
+    const capacitorCharge = slot('enhancementCapacitorCharge');
+    const capacitorDeadline = slot('enhancementCapacitorDeadline');
+    for (const enhancement of [1, 9]) for (const charge of [0, 125, 250])
+    for (const deadline of [0, 99, 100.2]) for (const immune of [false, true]) {
+        const state = scenario(4, {targets: [4, 6].map((z, id) => ({id, position: [0, 0, z],
+            alive: true, visible: true, health: 1000, invincible: immune}))});
+        Object.assign(state.player, {enhancementId: enhancement, [capacitorCharge]: charge,
+            [capacitorDeadline]: deadline, [energy]: 500});
+        Object.assign(state.globals, {tmp0: [2.5, 7.5, 90], tmp1: 40});
+        run('extendAugmentMelee', state);
+        const bonus = enhancement === 9 && charge > 0 && !immune && deadline !== 99;
+        assert.deepEqual(state.damage.map(hit => hit.amount), bonus ? [40, charge, 40, charge] : [40, 40],
+            'Long Reach applies one armed bonus per actual hit, across every target, only within the burst window');
+        assert.equal(state.player[capacitorDeadline], bonus && deadline === 0 ? 100.3 : deadline,
+            'Only the first actual hit starts the window; further targets do not refresh it');
+        assert.equal(state.player[capacitorCharge], charge, 'The armed burst remains fixed for its window');
+        assert.equal(state.player[energy], 500, 'Long Reach does not spend the next charge bank');
+    }
+    if (process.argv.includes('--lordy-enhancements-only')) {
+        const init = compiled.get('PLAYER ENHANCEMENT INITIALIZATION');
+        const selection = {...init, body: init.body.split('actions {\n')[0] + 'actions {\n'
+            + actions(init).slice(0, 2).join('\n') + '\n}'};
+        for (let id = 1; id <= 12; id++) for (const missing of [false, true]) {
+            const state = scenario(1, {randomRoll: id});
+            if (!missing) state.player.enhancementId = 0;
+            start(selection, state, compiled);
+            assert.equal(state.player.enhancementId, id);
+            start(selection, state, compiled);
+            assert.deepEqual(state.randomCalls, [[1, 12]], 'All 12 real Enhancements are eligible and retained on respawn');
+        }
+        const optionSlot = slot('enhancementOptionList');
+        for (const reverse of [false, true]) for (let id = 0; id <= 12; id++) {
+            const state = scenario(1, {buttons: new Set(['Melee', ...(reverse ? ['Secondary Fire'] : [])])});
+            state.globals.isPregameSetup = true;
+            state.globals[optionSlot] = Array(13).fill('icon');
+            state.player.enhancementId = id;
+            run('PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)', state);
+            assert.equal(state.player.enhancementId, (id + (reverse ? 12 : 1)) % 13);
+        }
+        for (const selected of [0, 11, 12]) {
+            const state = scenario(1, {randomRoll: 12});
+            Object.assign(state.player, {enhancementId: selected, initialMaxHealth: 250});
+            const task = run('PLAYER ENHANCEMENT INITIALIZATION', state);
+            task.resume();
+            assert(task.done());
+            assert.equal(state.player.enhancementId, selected || 12);
+            assert.equal(state.huds, 1);
+            assert.deepEqual(state.randomCalls, selected === 0 ? [[1, 12]] : []);
+            assert.deepEqual(state.healthPools ?? [], selected === 11 ? [{type: 'Health', amount: 50}] : []);
+        }
+        for (const damage of [1, 40, 100, 1000]) for (const ability of [0, 'Melee']) {
+            const state = scenario(4, {eventDamage: damage, eventAbility: ability, maxHealth: 10000});
+            Object.assign(state.player, {enhancementId: 11, health: 100});
+            state.expectedHealer = state.player;
+            run('LEECH LIFESTEAL', state);
+            assert.equal(state.player.health, 100 + damage * 0.25, 'Leech includes native and scripted damage');
+            state.player.enhancementId = 12;
+            assert(!applies(compiled.get('LEECH LIFESTEAL'), state));
+            state.player.enhancementId = 11; state.globals.isGameplayActive = false;
+            assert(!applies(compiled.get('LEECH LIFESTEAL'), state));
+        }
+        const bank = slot('enhancementBoltDamage'), chain = slot('enhancementBoltChainEffect'), strike = slot('enhancementBoltStrikeEffect');
+        const boltState = () => {
+            const victim = {id: 'original', team: 2, position: [0, 0, 5], alive: true, visible: true, health: 10000};
+            const state = scenario(1, {victim, eventAbility: 'Primary Fire', eventDamage: 100,
+                targets: [victim, {id: 'neighbor', team: 2, position: [0, 0, 15], alive: true, visible: true, health: 10000},
+                    {id: 'far', team: 2, position: [0, 0, 15.01], alive: true, visible: true},
+                    {id: 'dead', team: 2, position: [0, 0, 6], alive: false, visible: true},
+                    {id: 'wall', team: 2, position: [0, 0, 7], alive: true, visible: false},
+                    {id: 'ally', team: 1, position: [0, 0, 8], alive: true, visible: true}]});
+            Object.assign(state.player, {enhancementId: 12, [bank]: 0, [chain]: 0, [strike]: 0});
+            return state;
+        };
+        const bolt = 'BOLT STRIKE DAMAGE', chainExpiry = 'BOLT STRIKE CHAIN EFFECT EXPIRES', strikeExpiry = 'BOLT STRIKE VERTICAL EFFECT EXPIRES';
+        const state = boltState();
+        assert(run(bolt, state).done(), 'Damage processing must never wait for visual cleanup');
+        assert.equal(state.player[bank], 100);
+        assert.deepEqual(state.damage.map(hit => [hit.targets[0].id, hit.amount]), [['neighbor', 50]]);
+        const firstChain = state.player[chain][0];
+        state.time = 100.01; state.eventDamage = 50;
+        run(bolt, state);
+        assert.equal(state.player[bank], 0, '150 native damage strikes once and resets the bank');
+        assert.deepEqual(state.damage.slice(1).map(hit => [hit.targets[0].id, hit.amount]), [['neighbor', 25], ['original', 75]]);
+        assert(state.destroyedEffects.includes(firstChain), 'Fast hits replace the previous chain without leaking effects');
+        assert.equal(state.liveEffects.size, 2);
+        const expiry = state.player[strike][1];
+        state.time = expiry - 0.001;
+        assert(!applies(compiled.get(strikeExpiry), state));
+        state.time = expiry;
+        assert(applies(compiled.get(strikeExpiry), state)); run(strikeExpiry, state);
+        assert(!applies(compiled.get(strikeExpiry), state));
+        assert(!applies(compiled.get(chainExpiry), state), 'Chain and strike expire independently');
+        state.time = state.player[chain][1]; run(chainExpiry, state);
+        assert.equal(state.liveEffects.size, 0);
+        const solo = boltState(); solo.targets = [solo.victim]; solo.eventDamage = 400;
+        run(bolt, solo);
+        assert.equal(solo.player[bank], 0, 'Threshold overflow is discarded as in Lordy\'s source');
+        assert.deepEqual(solo.damage.map(hit => [hit.targets[0].id, hit.amount]), [['original', 75]], 'Strike works without a chain target');
+        for (const override of [{eventAbility: 0}, {eventDamage: 0}]) {
+            const blocked = Object.assign(boltState(), override);
+            assert(!applies(compiled.get(bolt), blocked), 'Scripted chain/strike/Augment damage cannot recurse');
+        }
+        for (const stop of [s => {s.alive = false;}, s => {s.globals.isGameplayActive = false;}]) {
+            const interrupted = boltState(); interrupted.eventDamage = 150; run(bolt, interrupted);
+            stop(interrupted);
+            for (const name of [chainExpiry, strikeExpiry]) {
+                assert(applies(compiled.get(name), interrupted)); run(name, interrupted);
+            }
+            assert.equal(interrupted.liveEffects.size, 0);
+        }
+        const disconnected = boltState(); disconnected.eventDamage = 150; run(bolt, disconnected);
+        run('BOLT STRIKE DISCONNECT CLEANUP', disconnected);
+        assert.equal(disconnected.liveEffects.size, 0);
+        const variableBlock = build.result.match(/variables \{\n    global:\n([\s\S]*?)\n    player:\n([\s\S]*?)\n\}/);
+        const counts = variableBlock.slice(1).map(block => [...block.matchAll(/^\s+\d+: /gm)].length);
+        assert(counts.every(count => count <= 128));
+        console.log(JSON.stringify({elements: build.elements, warnings: build.warnings, globalVariables: counts[0], playerVariables: counts[1],
+            checked: 'Leech health/lifesteal/attribution/scripted damage; Bolt random target/radius/LoS/exclusions/50% chain/150 threshold/75 strike/no overflow/no waits/no recursion/fast hits/expiry/death/game end/disconnect; selection'}, null, 2));
+        return;
+    }
+    if (process.argv.includes('--apothecary-only') || process.argv.includes('--long-reach-overcharge-only')) {
         for (const selected of [0, 8]) {
             const state = scenario(selected, {randomRoll: 8});
             run('PLAYER AUGMENT INITIALIZATION', state);
@@ -489,7 +633,9 @@ async function main() {
             pickupCases: 810, checked: ['infection clamped to zero / no vaccine gain', 'normal cure and timeout',
                 'supplemental healing', 'ultimate charge', 'other augments unchanged',
                 'no recursion', 'speed duration / refresh / no stacking / other multipliers / death / spawn reset',
-                'forward/reverse menu', 'random and explicit selection'],
+                'forward/reverse menu', 'random and explicit selection',
+                'Overcharge pack energy / gameplay gate / other enhancements / Apothecary / healer attribution / no double self credit',
+                'Long Reach Overcharge / all targets / actual hits / immunity / fixed burst / expiry / unchanged next bank'],
             exported: process.argv.includes('--export')}, null, 2));
         return;
     }
@@ -851,7 +997,7 @@ async function main() {
     }
     const grapnel = 'GRAPNEL LAUNCHER', grappleTargetSlot = slot('augmentGrapnelTarget');
     const zombie = (id, position = [0, 0, 20], overrides = {}) =>
-        ({id, position, alive: true, visible: true, team: 2, sizeScale: 1, ...overrides});
+        ({id, position, alive: true, visible: true, team: 2, sizeScale: 1, ground: true, ...overrides});
     const grapnelState = (overrides = {}) => scenario(6, {buttons: new Set(['Crouch', 'Jump']),
         targets: [zombie('locked')], ...overrides});
     const advancePull = (state, task, integrate = true) => {
@@ -994,6 +1140,31 @@ async function main() {
             'Departure cleanup requires Grapnel Launcher with an active cable');
     }
     assert(!files['variables.opy'].includes('globalvar augmentGrapnel'), 'Cable ownership needs no additional global state');
+    for (const launchGround of [false, true]) for (const impactGround of [false, true]) {
+        const target = zombie('air test', [0, 0, 20], {ground: launchGround});
+        const state = grapnelState({ground: !impactGround, targets: [target]});
+        const task = run(grapnel, state);
+        target.ground = impactGround;
+        finishPull(state, task);
+        assert.deepEqual(state.damage.map(hit => hit.amount), [35]);
+        assert.deepEqual(state.statusWrites, [{status: impactGround ? 'Stunned' : 'Knocked Down',
+            duration: impactGround ? 0.5 : 3, target: 'air test'}],
+            'Grapnel checks the target at impact, independently of its launch state and the player ground state');
+    }
+    if (process.argv.includes('--grapnel-only')) {
+        if (process.argv.includes('--export')) {
+            const exported = await compiler.compile(fs.readFileSync(path.join(root, 'main.opy'), 'utf8'),
+                'en-US', root.replace(/\\/g, '/') + '/', 'main.opy');
+            assert.deepEqual(exported.encounteredWarnings, []);
+            assert.equal(exported.nbElements, build.elements);
+            assert.deepEqual(rules(exported.result), parsed);
+            fs.writeFileSync(path.join(root, 'main.ws.txt'), exported.result);
+        }
+        console.log(JSON.stringify({elements: build.elements, warnings: build.warnings,
+            checked: 'Grapnel existing regressions; ground/air transitions at impact; 0.5s stun / 3s knockdown',
+            exported: process.argv.includes('--export')}));
+        return;
+    }
     const gun = scenario(5), gunTask = run(ammo, gun);
     const settleAmmo = (state, task) => {state.time = task.deadline(); task.resume();};
     assert.deepEqual(gun.maxAmmo, [40, 20]); assert.deepEqual(gun.ammo, [38, 14]);
@@ -1403,12 +1574,12 @@ async function main() {
     assert(selectionActions[1].startsWith('Set Player Variable(Event Player, enhancementId, Random Integer('));
     const enhancementSelection = {...enhancementInit,
         body: enhancementInit.body.split('actions {\n')[0] + 'actions {\n' + selectionActions.join('\n') + '\n}'};
-    for (let picked = 1; picked <= 8; picked++) for (const missing of [false, true]) {
+    for (let picked = 1; picked <= 12; picked++) for (const missing of [false, true]) {
         const state = scenario(1, {randomRoll: picked});
         if (!missing) state.player.enhancementId = 0;
         start(enhancementSelection, state, compiled);
-        assert.equal(state.player.enhancementId, picked, 'All eight enhancements are eligible for unselected / late-join players');
-        assert.deepEqual(state.randomCalls, [[1, 8]]);
+        assert.equal(state.player.enhancementId, picked, 'All twelve enhancements are eligible for unselected / late-join players');
+        assert.deepEqual(state.randomCalls, [[1, 12]]);
         state.randomRoll = picked === 8 ? 1 : 8;
         start(enhancementSelection, state, compiled);
         assert.equal(state.player.enhancementId, picked, 'An already resolved enhancement is retained');

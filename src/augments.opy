@@ -53,9 +53,9 @@ rule "AUGMENT MENU":
             "Jump in midair or double-tap Jump. First hit of 30+ damage in flight or within 0.5s after landing deals +50%. Cooldown: 16s",
             "Triple Quick Melee, melee weapon, Dragonblade and Carnage reach",
             "Carry twice the ammo per full magazine; full reloads restore the bonus",
-            "Crouch + Jump: grapple 7-40m; hit for 35 damage and stun for 0.5s. Cooldown: 16s",
+            "Crouch + Jump: grapple 7-40m; hit for 35 damage; stun grounded targets for 0.5s or knock airborne targets down for 3s. Cooldown: 16s",
             "Hold Crouch + Interact to place a wall that blocks zombies; release Interact to deploy; Crouch may be released while aiming. Cooldown: 30s",
-            "Health packs heal twice as much, remove up to 1 existing infection even after time runs out, and grant +5% ultimate charge and +30% move speed for 3s"
+            "Health packs heal twice as much, remove up to 1 existing infection even after time runs out, and grant +5% ultimate charge and +50% move speed for 3s"
         ][localPlayer.augmentId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.INTERACT)),
         HudPosition.LEFT, 4, Color.AQUA, Color.AQUA, Color.AQUA,
@@ -130,7 +130,7 @@ rule "PLAYER AUGMENT INITIALIZATION":
             "{1} | {0}".format(
                 iconString(Icon.CHECKMARK) if getTotalTimeElapsed() >= eventPlayer.augmentMovementReadyAt else f"{ceil(eventPlayer.augmentMovementReadyAt - getTotalTimeElapsed())}s",
                 f"[{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.JUMP)}]" if eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER else f"[{inputBindingString(Button.JUMP)}] in midair / double-tap" if eventPlayer.augmentId == Augment.DOUBLE_JUMP else f"[{inputBindingString(Button.JUMP)}] in midair"
-            ) if eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP, Augment.GRAPNEL_LAUNCHER] else ["", "+75 armor", "", "", "Extended melee reach", "Double magazine capacity", "", "", "2x pack healing | -1 infection (min 0) | +5% ult | +30% speed 3s"][eventPlayer.augmentId],
+            ) if eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP, Augment.GRAPNEL_LAUNCHER] else ["", "+75 armor", "", "", "Extended melee reach", "Double magazine capacity", "", "", "2x pack healing | -1 infection (min 0) | +5% ult | +50% speed 3s"][eventPlayer.augmentId],
             AUGMENT_NAMES[eventPlayer.augmentId],
             HudPosition.ACTUALLY_LEFT, 100, Color.AQUA, Color.AQUA, Color.AQUA,
             HudReeval.STRING
@@ -149,7 +149,7 @@ rule "APOTHECARY SPEED BONUS EXPIRES":
     @Condition (getTotalTimeElapsed() >= eventPlayer.augmentApothecarySpeedUntil or not eventPlayer.isAlive()) == true
 
     eventPlayer.augmentApothecarySpeedUntil = 0
-    eventPlayer.movementSpeedScale /= 1.3
+    eventPlayer.movementSpeedScale /= 1.5
     applyScaledMoveSpeed()
 
 
@@ -376,7 +376,10 @@ rule "GRAPNEL LAUNCHER":
             if eventPlayer.enhancementId == Enhancement.PYROTECHNIC and eventPlayer.augmentGrapnelTarget.getHealth() < augmentGrapnelHealthBeforeDamage and distance(eventPlayer, eventPlayer.augmentGrapnelTarget) < 15:
                 eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.BURNING, 3)
                 eventPlayer.enhancementPyroHitList.append(eventPlayer.augmentGrapnelTarget)
-            eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.STUNNED, 0.5)
+            if eventPlayer.augmentGrapnelTarget.isOnGround():
+                eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.STUNNED, 0.5)
+            else:
+                eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 3)
             playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer.augmentGrapnelTarget.getPosition() + Vector.UP, AUGMENT_IMPACT_SIZE)
             break
         # Synchronous scratch: correct current velocity to the desired velocity,
@@ -561,6 +564,13 @@ def extendAugmentMelee():
             if eventPlayer.enhancementId == Enhancement.PYROTECHNIC and distance(eventPlayer, augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex]) < 15:
                 augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex].setStatusEffect(eventPlayer, Status.BURNING, 3)
                 eventPlayer.enhancementPyroHitList.append(augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex])
+            elif eventPlayer.enhancementId == Enhancement.OVERCHARGE and eventPlayer.enhancementCapacitorCharge > 0:
+                # Extended melee is hero attack damage. Apply the armed burst here;
+                # the event rule still ignores scripted damage, preventing recursion.
+                if eventPlayer.enhancementCapacitorDeadline == 0:
+                    eventPlayer.enhancementCapacitorDeadline = getTotalTimeElapsed() + 0.3
+                if getTotalTimeElapsed() < eventPlayer.enhancementCapacitorDeadline:
+                    damage(augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex], eventPlayer, eventPlayer.enhancementCapacitorCharge)
     if augmentMeleeTargets != []:
         # One impact per swing, on the nearest hit target. Rounded from 0.3 to 0.4
         # (about one third larger); Grapnel Launcher uses the same impact size.

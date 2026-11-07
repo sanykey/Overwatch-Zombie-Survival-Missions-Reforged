@@ -1,5 +1,6 @@
 #!extension playMoreEffects
 #!extension spawnMoreDummyBots
+#!extension beamEffects
 
 #!setupTags
 #!optimizeForSize

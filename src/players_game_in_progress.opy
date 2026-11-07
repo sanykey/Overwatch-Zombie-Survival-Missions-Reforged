@@ -239,6 +239,9 @@ rule "PLAYER PICKS UP HEALTH PACK":
     @Condition eventWasHealthPack == true
     
     eventPlayer.startHealingOverTime(null, 5, 20)
+    # Self-attributed packs already charge Overcharge through playerDealtHealing.
+    if isGameplayActive == true and eventPlayer.enhancementId == Enhancement.OVERCHARGE and healer != eventPlayer:
+        eventPlayer.enhancementCapacitorEnergy += eventHealing / 3
     if difficultySetting < Difficulty.EXPERT or getMatchTime() > matchEndTime:
         #Update known health pack positions
         if healthpackPositionList.all(lambda x: distance(x, eventPlayer) > 5):
@@ -259,7 +262,7 @@ rule "PLAYER PICKS UP HEALTH PACK":
         eventPlayer.setUltCharge(eventPlayer.getUltCharge() + 5)
         # Refresh duration without stacking; preserve other movement multipliers.
         if eventPlayer.augmentApothecarySpeedUntil == 0:
-            eventPlayer.movementSpeedScale *= 1.3
+            eventPlayer.movementSpeedScale *= 1.5
             applyScaledMoveSpeed()
         eventPlayer.augmentApothecarySpeedUntil = getTotalTimeElapsed() + 3
 

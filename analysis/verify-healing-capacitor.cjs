@@ -151,7 +151,7 @@ async function main() {
     execute(rule['ARMS CHARGE'], overflow);
     assert.equal(overflow[slots.Charge], 250);
     assert.equal(overflow[slots.Energy], 249500.75, 'Remainder funds subsequent bursts');
-    assert(/Set Player Variable\(Event Player, enhancementId, Random Integer\((?:True|1), 10\)\)/.test(built.result));
+    assert(/Set Player Variable\(Event Player, enhancementId, Random Integer\((?:True|1), 12\)\)/.test(built.result));
     assert(built.result.includes('Overcharge'));
     if (process.argv.includes('--export')) {
         const exported = await compiler.compile(fs.readFileSync('main.opy', 'utf8'), 'en-US', process.cwd().replace(/\\/g, '/') + '/', 'main.opy');

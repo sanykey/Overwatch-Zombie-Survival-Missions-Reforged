@@ -31,7 +31,7 @@ enum Challenge:
     PANDORAS_BOX = 5,
 
 # Enhancement IDs index enhancementOptionList and the start-menu tables.
-# Zero means no preference; initialization randomly selects a real ID 1-10.
+# Zero means no preference; initialization randomly selects a real ID 1-12.
 # Brain Killer remains the first explicit menu choice.
 enum Enhancement:
     NO_PREFERENCE = 0,
@@ -45,6 +45,8 @@ enum Enhancement:
     PUP = 8,
     OVERCHARGE = 9,
     BULKING_SEASON = 10,
+    LEECH = 11,
+    BOLT_STRIKE = 12,
 
 # Independent secondary enhancement slot. IDs index the names/icons in augments.opy.
 enum Augment:
@@ -59,7 +61,7 @@ enum Augment:
     APOTHECARY = 8,
 
 # Compile-time icon tables, indexed by their corresponding selection ID.
-#!define ENHANCEMENT_ICONS [iconString(Icon.QUESTION_MARK), iconString(Icon.SKULL), iconString(Icon.POISON), iconString(Icon.FIRE), iconString(Icon.PLUS), iconString(Icon.BOLT), iconString(Icon.SPIRAL), iconString(Icon.FLAG), iconString(Icon.HAPPY), iconString(Icon.BOLT), iconString(Icon.ARROW_UP)]
+#!define ENHANCEMENT_ICONS [iconString(Icon.QUESTION_MARK), iconString(Icon.SKULL), iconString(Icon.POISON), iconString(Icon.FIRE), iconString(Icon.PLUS), iconString(Icon.BOLT), iconString(Icon.SPIRAL), iconString(Icon.FLAG), iconString(Icon.HAPPY), iconString(Icon.BOLT), iconString(Icon.ARROW_UP), iconString(Icon.PLUS), iconString(Icon.BOLT)]
 #!define AUGMENT_ICONS [iconString(Icon.QUESTION_MARK), iconString(Icon.STOP), iconString(Icon.ARROW_RIGHT), iconString(Icon.ARROW_UP), iconString(Icon.CROSS), iconString(Icon.PLUS), iconString(Icon.ARROW_DOWN), iconString(Icon.DIAMOND), iconString(Icon.HEART)]
 
 # Objective IDs also index objectiveTypeVoteList and identify entries in objectiveTypeList.
@@ -725,8 +727,12 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 # Bulking Season: retained stacks; each credited elimination (kill/damage participation) adds one; death halves it (rounded down).
 # Exclusive primary enhancement, owned by this human; safe alongside all independent Augments.
 #!define enhancementBulkStacks actorTeamSlot22
+# Bolt Strike native damage accumulated toward 150; reset on a strike (no overflow).
+# Exclusive primary enhancement; only the attacking human owns this bank.
+#!define enhancementBoltDamage actorTeamSlot22
 # Overcharge: unspent energy (actual healing / 3), accumulated independently of an armed burst.
-# Exclusive primary enhancement; all capacitor slots belong to the healer, never the target.
+# Exclusive primary enhancement; slots belong to its selected human (the healer
+# for dealt-healing events, the receiver for health packs), never an enemy target.
 #!define enhancementCapacitorEnergy actorTeamSlot22
 # Born to Battle unspent ability resets (0-2); retained through ability waits and reevaluated by its HUD.
 #!define enhancementBattleResetCharges actorTeamSlot22
@@ -742,6 +748,9 @@ playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateS
 #!define botGasRadiusList actorTeamSlot23
 # Overcharge: energy spent on the armed/active burst, retained across damage events and HUD reevaluation.
 #!define enhancementCapacitorCharge actorTeamSlot23
+# Bolt Strike [chain beam ID, absolute expiry], zero while inactive; replaced on each chain hit,
+# read only by its expiry worker. No Augment uses this primary-only slot.
+#!define enhancementBoltChainEffect actorTeamSlot23
 # Born to Battle button whose charge/cooldown is reset.
 #!define enhancementBattleAbilityButton actorTeamSlot23
 # Battery remaining reuse cooldown.
@@ -757,6 +766,9 @@ playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateS
 # Overcharge: absolute burst deadline; zero means armed but waiting for its first hit.
 # Set once by the first hit, read by later hits, cleared with the charge on expiry/death.
 #!define enhancementCapacitorDeadline actorTeamSlot24
+# Bolt Strike [vertical beam ID, absolute expiry], zero while inactive; replaced on each strike,
+# read only by its expiry worker. Separate from the independently expiring chain.
+#!define enhancementBoltStrikeEffect actorTeamSlot24
 # Full battery reuse cooldown used for progress scaling (10 seconds).
 #!define enhancementBatteryReuseDuration actorTeamSlot24
 # Current P.U.P. enemy target; null while idle.

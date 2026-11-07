@@ -16,7 +16,7 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
     if eventPlayer.enhancementId == Enhancement.NO_PREFERENCE:
         # No preference and late-join zero state receive one real choice before
         # its state is initialized. Retain the selected ID across later spawns.
-        eventPlayer.enhancementId = random.randint(Enhancement.BRAIN_KILLER, Enhancement.BULKING_SEASON)
+        eventPlayer.enhancementId = random.randint(Enhancement.BRAIN_KILLER, Enhancement.BOLT_STRIKE)
     #Zombie Hybrid
     if eventPlayer.enhancementId == Enhancement.ZOMBIE_HYBRID:
         #Enhancement: Zombie Hyrbid
@@ -88,6 +88,19 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
                 "Overcharge",
                 HudPosition.ACTUALLY_LEFT, 99, Color.YELLOW, Color.YELLOW, Color.YELLOW, HudReeval.STRING
             )
+            break
+        case Enhancement.LEECH:
+            hudText(eventPlayer, iconString(Icon.PLUS), "25% lifesteal | +50 health", "Leech", HudPosition.ACTUALLY_LEFT, 99, Color.RED, Color.RED, Color.RED, HudReeval.STRING)
+            # Match Kevlar's initialization gate; no pool ID is needed for a
+            # permanent pool retained across respawns and hero switches.
+            waitUntil(eventPlayer.initialMaxHealth > 0, Math.INFINITY)
+            eventPlayer.addHealthPool(Health.NORMAL, 50, true, false)
+            break
+        case Enhancement.BOLT_STRIKE:
+            eventPlayer.enhancementBoltDamage = 0
+            eventPlayer.enhancementBoltChainEffect = 0
+            eventPlayer.enhancementBoltStrikeEffect = 0
+            hudText(eventPlayer, iconString(Icon.BOLT), "50% chain damage | 75 lightning damage per 150 damage", "Bolt Strike", HudPosition.ACTUALLY_LEFT, 99, Color.YELLOW, Color.YELLOW, Color.YELLOW, HudReeval.STRING)
             break
         case Enhancement.BULKING_SEASON:
             eventPlayer.enhancementBulkStacks = 0
@@ -366,6 +379,79 @@ def applyBulkingSeasonStats():
     applyCurrentSizeScale()
 
 
+rule "LEECH LIFESTEAL":
+    @Event playerDealtDamage
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.enhancementId == Enhancement.LEECH
+
+    # Include scripted damage, including independent Augments, as in the source.
+    heal(eventPlayer, eventPlayer, eventDamage * 0.25)
+
+
+rule "BOLT STRIKE DAMAGE":
+    @Event playerDealtDamage
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.enhancementId == Enhancement.BOLT_STRIKE
+    @Condition eventAbility != null
+    @Condition victim.getTeam() == Team.2
+    @Condition eventDamage > 0
+
+    # Synchronous target scratch; both beam endpoints are frozen at creation.
+    # Never retain scratch in effect reevaluation or across waits.
+    #!define boltChainTarget tmp0
+    boltChainTarget = random.choice(getPlayersInRadius(victim, 10, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive()).exclude(victim))
+    eventPlayer.enhancementBoltDamage += eventDamage
+    if boltChainTarget != null:
+        if eventPlayer.enhancementBoltChainEffect[0] != null:
+            destroyEffect(eventPlayer.enhancementBoltChainEffect[0])
+        damage(boltChainTarget, eventPlayer, eventDamage * 0.5)
+        createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, victim.getPosition() + vect(0, 0.7, 0), boltChainTarget.getPosition() + vect(0, 0.7, 0), Color.YELLOW, EffectReeval.NONE)
+        eventPlayer.enhancementBoltChainEffect = [getLastCreatedEntity(), getTotalTimeElapsed() + 0.3]
+        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, boltChainTarget, 0.5)
+    if eventPlayer.enhancementBoltDamage >= 150:
+        eventPlayer.enhancementBoltDamage = 0
+        if eventPlayer.enhancementBoltStrikeEffect[0] != null:
+            destroyEffect(eventPlayer.enhancementBoltStrikeEffect[0])
+        createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, victim.getPosition() + vect(0, 20, 0), victim, Color.YELLOW, EffectReeval.NONE)
+        eventPlayer.enhancementBoltStrikeEffect = [getLastCreatedEntity(), getTotalTimeElapsed() + 0.15]
+        damage(victim, eventPlayer, 75)
+
+
+rule "BOLT STRIKE CHAIN EFFECT EXPIRES":
+    @Event eachPlayer
+    @Team 1
+    @Condition eventPlayer.enhancementId == Enhancement.BOLT_STRIKE
+    @Condition eventPlayer.enhancementBoltChainEffect[0] != null
+    @Condition (getTotalTimeElapsed() >= eventPlayer.enhancementBoltChainEffect[1] or not isGameplayActive or not eventPlayer.isAlive()) == true
+
+    destroyEffect(eventPlayer.enhancementBoltChainEffect[0])
+    eventPlayer.enhancementBoltChainEffect = 0
+
+
+rule "BOLT STRIKE VERTICAL EFFECT EXPIRES":
+    @Event eachPlayer
+    @Team 1
+    @Condition eventPlayer.enhancementId == Enhancement.BOLT_STRIKE
+    @Condition eventPlayer.enhancementBoltStrikeEffect[0] != null
+    @Condition (getTotalTimeElapsed() >= eventPlayer.enhancementBoltStrikeEffect[1] or not isGameplayActive or not eventPlayer.isAlive()) == true
+
+    destroyEffect(eventPlayer.enhancementBoltStrikeEffect[0])
+    eventPlayer.enhancementBoltStrikeEffect = 0
+
+
+rule "BOLT STRIKE DISCONNECT CLEANUP":
+    @Event playerLeft
+    @Team 1
+    @Condition eventPlayer.enhancementId == Enhancement.BOLT_STRIKE
+
+    if eventPlayer.enhancementBoltChainEffect[0] != null:
+        destroyEffect(eventPlayer.enhancementBoltChainEffect[0])
+    if eventPlayer.enhancementBoltStrikeEffect[0] != null:
+        destroyEffect(eventPlayer.enhancementBoltStrikeEffect[0])
+
+
 rule "OVERCHARGE STORES HEALING":
     @Event playerDealtHealing
     @Team 1
@@ -411,6 +497,7 @@ rule "OVERCHARGE BONUS DAMAGE":
     @Condition eventDamage > 0
     @Condition victim.getTeam() == Team.2
     # Workshop Damage has no Event Ability; never amplify this rule's own bonus.
+    # Long Reach applies the same burst directly after confirming its actual hit.
     @Condition eventAbility != null
 
     if eventPlayer.enhancementCapacitorDeadline == 0:

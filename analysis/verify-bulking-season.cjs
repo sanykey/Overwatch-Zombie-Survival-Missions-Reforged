@@ -113,7 +113,7 @@ async function main() {
     assert.equal(capped.maxHealthPercent, 150, 'Death lowers health once stacks fall below the cap');
     assert(files['players_game_in_progress.opy'].includes('eventPlayer.initialMaxHealth /= min(2, 1 + eventPlayer.enhancementBulkStacks * 0.005)'));
     assert(files['enhancements.opy'].includes('@Condition eventPlayer.isHeroSwitchRespawn == false'));
-    assert(built.result.includes('Random Integer(True, 10)'));
+    assert(built.result.includes('Random Integer(True, 12)'));
     assert(built.result.includes('Bulking Season'));
     console.log(JSON.stringify({elements: built.elements, warnings: built.warnings, scenarios: 'elimination event, no assist-stat polling, 70-stack size cap, 200% health cap, uncapped stack growth, repeated/odd deaths, enhancement isolation'}));
 }
