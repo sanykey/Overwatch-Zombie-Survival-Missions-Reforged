@@ -55,7 +55,7 @@ rule "AUGMENT MENU":
             "Carry twice the ammo per full magazine; full reloads restore the bonus",
             "Crouch + Jump: grapple 7-40m; deal 35 damage. Grounded: stun 0.5s. Airborne: knockdown 3s. Cooldown: 16s",
             "Hold Crouch + Interact to place a wall that blocks zombies; release Interact to deploy; Crouch may be released while aiming. Cooldown: 30s",
-            "Health packs heal twice as much, remove up to 1 existing infection even after time runs out, and grant +7% ultimate charge and +50% move speed for 5s"
+            "Health packs, even at full health, heal twice as much, remove up to 1 existing infection even after time runs out, and grant +7% ultimate charge and +50% move speed for 5s"
         ][localPlayer.augmentId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.INTERACT)),
         HudPosition.LEFT, 4, Color.AQUA, Color.AQUA, Color.AQUA,
@@ -130,7 +130,7 @@ rule "PLAYER AUGMENT INITIALIZATION":
             "{1} | {0}".format(
                 iconString(Icon.CHECKMARK) if getTotalTimeElapsed() >= eventPlayer.augmentMovementReadyAt else f"{ceil(eventPlayer.augmentMovementReadyAt - getTotalTimeElapsed())}s",
                 f"[{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.JUMP)}]" if eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER else f"[{inputBindingString(Button.JUMP)}] in midair / double-tap" if eventPlayer.augmentId == Augment.DOUBLE_JUMP else f"[{inputBindingString(Button.JUMP)}] in midair"
-            ) if eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP, Augment.GRAPNEL_LAUNCHER] else ["", "+75 armor", "", "", "Extended melee reach", "Double magazine capacity", "", "", "2x pack healing | -1 infection (min 0) | +7% ult | +50% speed 5s"][eventPlayer.augmentId],
+            ) if eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP, Augment.GRAPNEL_LAUNCHER] else ["", "+75 armor", "", "", "Extended melee reach", "Double magazine capacity", "", "", "2x pack healing (even at full HP) | -1 infection (min 0) | +7% ult | +50% speed 5s"][eventPlayer.augmentId],
             AUGMENT_NAMES[eventPlayer.augmentId],
             HudPosition.ACTUALLY_LEFT, 100, Color.AQUA, Color.AQUA, Color.AQUA,
             HudReeval.STRING
@@ -139,6 +139,20 @@ rule "PLAYER AUGMENT INITIALIZATION":
         # Preserve the original enhancement's 75 armor and readiness gate.
         waitUntil(eventPlayer.initialMaxHealth > 0, Math.INFINITY)
         eventPlayer.addHealthPool(Health.ARMOR, 75, true, false)
+
+
+rule "APOTHECARY ALLOW HEALTH PACK PICKUP":
+    @Event eachPlayer
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.augmentId == Augment.APOTHECARY
+    @Condition eventPlayer.isDummy() == false
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.getHealth() == eventPlayer.getMaxHealth()
+
+    # Leave room for a health pack, including during invulnerability.
+    # Set Health avoids damage events/modifiers; this rule retriggers only on full health.
+    eventPlayer.setHealth(eventPlayer.getHealth() - 1)
 
 
 rule "APOTHECARY SPEED BONUS EXPIRES":
