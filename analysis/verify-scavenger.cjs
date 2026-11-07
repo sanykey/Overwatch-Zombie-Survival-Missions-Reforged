@@ -13,6 +13,12 @@ async function main() {
     const build = await compile(files);
     assert.deepEqual(build.warnings, []);
     const parsed = rules(build.result), compiled = new Map(parsed.map(rule => [rule.name, rule]));
+    // The grouped predicate is an engine workaround, not just a source-level style:
+    // OverPy normally expands it into separate conditions and restores the defect.
+    const manualConditions = compiled.get('PLAYER DROPS POWER UP (MANUAL)').body.match(/conditions \{([\s\S]*?)\}/)[1];
+    assert(manualConditions.includes('And(Global.isGameplayActive, Is Alive(Event Player)) == True;'));
+    assert(!manualConditions.includes('Global.isGameplayActive == True;'));
+    assert(!manualConditions.includes('\nIs Alive(Event Player) == True;'));
     const run = (name, state) => start(compiled.get(name), state, compiled);
     const state = (held = 0, reserve = [], augment = 9, enhancement = 1) => {
         const s = scenario(augment, {ground: true, buttons: new Set(['Interact']), maxHealth: 1000});

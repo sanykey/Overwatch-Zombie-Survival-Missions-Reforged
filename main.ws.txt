@@ -1,4 +1,4 @@
-/* Element count: (total 28715)
+/* Element count: (total 28716)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
@@ -187,10 +187,10 @@
    36: rule "UPDATE SUCCESSFUL TELEPORT STATUS" (src/bots_game_in_progress.opy)
    36: rule "OVERCHARGE STORES ASSISTS" (src/enhancements.opy)
    35: rule "PREVENT PLAYERS FROM LEAVING START EARLY" (src/player_start_menu.opy)
+   35: rule "PLAYER DROPS POWER UP (MANUAL)" (src/power_ups.opy)
    35: rule "ZOMBIE HYBRID" (src/enhancements.opy)
    34: rule "abilityPlacement" (src/subroutines.opy)
    34: rule "entityFloat" (src/zombie_types.opy)
-   34: rule "PLAYER DROPS POWER UP (MANUAL)" (src/power_ups.opy)
    34: rule "OVERCHARGE BONUS DAMAGE" (src/enhancements.opy)
    34: rule "DOUBLE JUMP BONUS EXPIRES" (src/augments.opy)
    33: rule "SMOLDER ACTIVATES FROM DAMAGE" (src/zombie_types.opy)
@@ -8439,7 +8439,8 @@ rule ("EFFECT/TEXT (PERMANENT)") {
     }
 }
 
-//34 elements
+//Optimizations disabled
+//35 elements
 rule ("PLAYER DROPS POWER UP (MANUAL)") {
     event {
         Ongoing - Each Player;
@@ -8448,8 +8449,7 @@ rule ("PLAYER DROPS POWER UP (MANUAL)") {
     }
     conditions {
         Is Button Held(Event Player, Button(Reload)) == True; // 4 elements
-        Global.isGameplayActive == True; // 2 elements
-        Is Alive(Event Player) == True; // 2 elements
+        And(Global.isGameplayActive, Is Alive(Event Player)) == True; // 5 elements
         Or(Compare((Event Player).actorTeamSlot2, !=, Null), And(Compare((Event Player).augmentId, ==, 9), Compare(Count Of((Event Player).augmentState0), >, Null))) == True; // 22 elements
     }
     actions {
@@ -8458,6 +8458,7 @@ rule ("PLAYER DROPS POWER UP (MANUAL)") {
     }
 }
 
+//Optimizations enabled
 //38 elements
 rule ("PLAYER DROPS POWER UP (DEATH)") {
     event {

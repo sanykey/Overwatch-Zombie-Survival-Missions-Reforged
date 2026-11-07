@@ -80,17 +80,25 @@ rule "EFFECT/TEXT (PERMANENT)":
         )
 
 
+# Workshop workaround: separate gameplay/alive conditions here can make newer
+# heroes disappear when returning to hero selection during voting (map dependent).
+# Grouping them with And prevented reproduction in user tests; the cause is unknown.
+# The same workaround did NOT help "APOTHECARY ALLOW HEALTH PACK PICKUP" in
+# src/augments.opy, reverted by ba8e70de7d4e282b2f90c8ae6c15f6d1d500a342.
+# OverPy 9.7.20 splits And conditions; disable optimization only for this rule.
+# Explicit Null operands below preserve the existing compiled inventory comparisons.
+#!disableOptimizations
 rule "PLAYER DROPS POWER UP (MANUAL)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isHoldingButton(Button.RELOAD) == true
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.isAlive() == true
-    @Condition (eventPlayer.powerUpItemId != 0 or (eventPlayer.augmentId == Augment.SCAVENGER and len(eventPlayer.augmentScavengerBackpack) > 0)) == true
+    @Condition (isGameplayActive and eventPlayer.isAlive()) == true
+    @Condition (eventPlayer.powerUpItemId != null or (eventPlayer.augmentId == Augment.SCAVENGER and len(eventPlayer.augmentScavengerBackpack) > null)) == true
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     dropCarriedPowerUps()
 
+#!enableOptimizations
 
 rule "PLAYER DROPS POWER UP (DEATH)":
     @Event playerDied
