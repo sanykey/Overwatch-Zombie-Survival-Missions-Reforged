@@ -1,0 +1,123 @@
+{
+  "before": 29409,
+  "after": 29382,
+  "saved": 27,
+  "previousAbilityBudget": 497,
+  "optimizedAbilityBudget": 470,
+  "probes": {
+    "groupValidity": 8,
+    "combineBoss": 3,
+    "cacheCarrier": 8,
+    "groupPickup": 4,
+    "groupMovement": 1,
+    "removeDeadReset": 3,
+    "heroOnBot": 3
+  },
+  "notes": [
+    "Individual savings do not add linearly: the compiler combines nested boolean expressions.",
+    "The small boolean arrays reduce compiled elements but are evaluated while holding; no new loop, radius query, raycast or variable is introduced.",
+    "The hero snapshot is owned by the held bot.",
+    "The hold deadline is only read while a target is held, and is overwritten on the next pickup."
+  ],
+  "rejected": {
+    "removeRedundantExists": "The native behavior of null/deleted player references must remain explicitly guarded.",
+    "compactHud": "Measured HUD variant added two elements.",
+    "groupFlight": "No element savings."
+  },
+  "landingRule": {
+    "before": 29382,
+    "after": 29374,
+    "saved": 8,
+    "changes": [
+      "Pending-impact flag plus ground-contact rule replaces the two flight waits.",
+      "Invalid flight states clear the flag without damage.",
+      "No arbitrary five-second flight timeout: a long flight still damages on landing."
+    ]
+  },
+  "currentAbilityBudget": 345,
+  "stateMachineStudy": {
+    "baseline": 29374,
+    "candidates": {
+      "numericState": 29377,
+      "inferredOwnerLinkState": 29371,
+      "eventDrivenRelease": 29365
+    },
+    "selected": "eventDrivenRelease",
+    "saved": 9,
+    "changedRules": [
+      "LIVING PROJECTILE RELEASE"
+    ],
+    "notes": [
+      "State is already represented by carrier/thrower references; an additional enum costs elements.",
+      "Held-to-thrown/idle transition now starts from rule conditions instead of Wait Until.",
+      "Both release and landing execute synchronously without action loops or waits.",
+      "All interruption checks and damage behavior are retained."
+    ]
+  },
+  "throwDamageSimplification": {
+    "before": 29365,
+    "after": 29253,
+    "saved": 112,
+    "changes": [
+      "Cooldown and flight/landing state removed.",
+      "Throw immediately deals 50 damage to the thrown bot; no splash damage.",
+      "Hold 5s, knockdown 6s from pickup, range 4m, throw speed 12.5 and boss restrictions retained."
+    ]
+  },
+  "finalAudit": {
+    "before": 29253,
+    "after": 29249,
+    "saved": 4,
+    "candidates": {
+      "mergeMiss": 29253,
+      "groupEligibility": 29253,
+      "shortHud": 29255,
+      "inlineInput": 29254,
+      "shortDescription": 29249
+    },
+    "notes": [
+      "Only the shorter menu description was selected; it retains range, eligibility, hold/knockdown duration, throw damage and no-cooldown information.",
+      "No changes to gameplay checks or runtime calculations."
+    ]
+  },
+  "delayedThrowDamage": {
+    "before": 29249,
+    "after": 29315,
+    "added": 66,
+    "notes": [
+      "50 damage 0.75s after each throw.",
+      "Per-bot FIFO deadlines/throwers use an existing augment slot; repeat pickups remain unblocked.",
+      "Due-only draining has no Wait or per-frame action polling; death, teleport, initialization or game end cancels pending hits."
+    ]
+  },
+  "simpleThrowWait": {
+    "beforeQueue": 29249,
+    "queueVersion": 29315,
+    "after": 29263,
+    "delayCost": 14,
+    "savedAgainstQueue": 52,
+    "notes": [
+      "Queue and separate damage rule removed; use native Wait(0.75, Ignore Condition) then Damage.",
+      "Cleanup finishes before waiting. Credit is retained in an existing bot slot.",
+      "A repeat release for the same bot during the wait is processed once the current wait completes."
+    ]
+  },
+  "releaseBranchOptimization": {
+    "before": 29263,
+    "after": 29257,
+    "saved": 6,
+    "probes": {
+      "livingRoster": 29262,
+      "snapshotThrow": 29257,
+      "duplicatedCleanupBranches": 29260,
+      "combined": 29256
+    },
+    "selected": "snapshotThrow",
+    "notes": [
+      "Compute the throw decision once synchronously, clear carry state, then perform impulse/wait/damage in one branch.",
+      "Remove redundant credit-presence branch and reset: credit is read only by the branch that initializes it.",
+      "Reject living-player roster variant: only one element saved, but a player array is queried in held-state conditions.",
+      "Only the release rule changes; all eligibility and interruption predicates remain."
+    ]
+  }
+}

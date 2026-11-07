@@ -452,6 +452,7 @@ rule "RIDER DETACH WHEN DEAD OR TARGET IS DEAD":
     @Team 2
     @Hero widowmaker
     @Condition eventPlayer.botIsAttached == true
+    @Condition eventPlayer.augmentZombieCarrier == null
     @Condition eventPlayer.botAbilityTarget != null
     @Condition (eventPlayer.isCrowdControlled or eventPlayer.botAbilityTarget.invisibilityCount or eventPlayer.isDead() or eventPlayer.botAbilityTarget.isDead() or eventPlayer.botAbilityTarget.hasStatus(Status.PHASED_OUT) or eventPlayer.botAbilityTarget.hasStatus(Status.INVINCIBLE) or not entityExists(eventPlayer.botAbilityTarget)) == true
     
@@ -482,6 +483,7 @@ rule "RIDER DETATCH FROM TEAMMATES WHILE ALIVE":
     @Team 2
     @Hero widowmaker
     @Condition eventPlayer.botIsAttached == true
+    @Condition eventPlayer.augmentZombieCarrier == null
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer.botAbilityTarget.getTeam() == Team.2
     @Condition (eventPlayer.botIsTeleporting or eventPlayer.botAbilityTarget.botIsTeleporting or distance(eventPlayer.getEyePosition(), eventPlayer.botTarget) < 3 or eventPlayer.botTarget.isOnGround() and not eventPlayer.getAbilityCooldown(Button.ABILITY_1) and distance(eventPlayer.getEyePosition(), eventPlayer.botTarget) < 10) == true

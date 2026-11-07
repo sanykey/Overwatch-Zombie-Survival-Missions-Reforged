@@ -1,9 +1,11 @@
 #!mainFile "../main.opy"
+
 subroutine resetBattleAbilityCharge
 
 subroutine checkEnhancementPlacement
 subroutine startPupDefaultChase
 subroutine applyBulkingSeasonStats
+subroutine clearBoltEffects
 
 rule "PLAYER ENHANCEMENT INITIALIZATION":
     @Event eachPlayer
@@ -23,7 +25,7 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
         # enhancementHybridCooldown: remaining explosion cooldown in seconds (20 on use), for activation checks and HUD.
         hudText(
             eventPlayer,
-            iconString(Icon.POISON),
+            ENHANCEMENT_ICONS[eventPlayer.enhancementId],
             "{1} {0}".format(f"{ceil(eventPlayer.enhancementHybridCooldown)}s" if eventPlayer.enhancementHybridCooldown > 0 else iconString(Icon.CHECKMARK), "Press [{0}] to deal {1}00 damage".format(inputBindingString(Button.MELEE), floor(eventPlayer.infectionLevel)) if eventPlayer.infectionLevel >= 1 and eventPlayer.enhancementHybridCooldown <= 0 else []),
             "Zombie Hybrid",
             HudPosition.ACTUALLY_LEFT, 99, Color.GRAY if eventPlayer.enhancementHybridCooldown <= 0 else Color.RED, Color.GRAY if eventPlayer.enhancementHybridCooldown <= 0 else Color.RED, Color.GRAY if eventPlayer.enhancementHybridCooldown <= 0 else Color.RED, HudReeval.STRING_AND_COLOR
@@ -42,7 +44,7 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             # No enhancement state slots: bonus damage is calculated directly from the damage event.
             hudText(
                 eventPlayer,
-                iconString(Icon.SKULL),
+                ENHANCEMENT_ICONS[eventPlayer.enhancementId],
                 "Bonus critical damage",
                 "Brain Killer",
                 HudPosition.ACTUALLY_LEFT, 99, Color.RED, Color.RED, Color.RED, HudReeval.STRING
@@ -53,7 +55,7 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             #Enhancement: Pyrotechnic
             hudText(
                 eventPlayer,
-                iconString(Icon.FIRE),
+                ENHANCEMENT_ICONS[eventPlayer.enhancementId],
                 "Ignites nearby targets",
                 "Pyrotechnic",
                 HudPosition.ACTUALLY_LEFT, 99, Color.ORANGE, Color.ORANGE, Color.ORANGE, HudReeval.STRING
@@ -67,7 +69,7 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             # enhancementPlagueCureTotal: accumulated infection levels removed, including cure bonuses, displayed in the HUD.
             hudText(
                 eventPlayer,
-                iconString(Icon.PLUS),
+                ENHANCEMENT_ICONS[eventPlayer.enhancementId],
                 "Infection Reduced: {0} lvls".format(eventPlayer.enhancementPlagueCureTotal),
                 "Plague Doctor",
                 HudPosition.ACTUALLY_LEFT, 99, Color.GREEN, Color.GREEN, Color.GREEN, HudReeval.STRING
@@ -83,33 +85,26 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             eventPlayer.enhancementCapacitorDeadline = 0
             hudText(
                 eventPlayer,
-                iconString(Icon.BOLT),
+                ENHANCEMENT_ICONS[eventPlayer.enhancementId],
                 f"Hold [{inputBindingString(Button.MELEE)}] to charge | Energy: {floor(eventPlayer.enhancementCapacitorEnergy)} | Charged: {floor(eventPlayer.enhancementCapacitorCharge)}",
                 "Overcharge",
-                HudPosition.ACTUALLY_LEFT, 99, Color.YELLOW, Color.YELLOW, Color.YELLOW, HudReeval.STRING
+                HudPosition.ACTUALLY_LEFT, 99, Color.TURQUOISE, Color.TURQUOISE, Color.TURQUOISE, HudReeval.STRING
             )
             break
-        case Enhancement.LEECH:
-            hudText(eventPlayer, iconString(Icon.PLUS), "25% lifesteal | +50 health", "Leech", HudPosition.ACTUALLY_LEFT, 99, Color.RED, Color.RED, Color.RED, HudReeval.STRING)
-            # Match Kevlar's initialization gate; no pool ID is needed for a
-            # permanent pool retained across respawns and hero switches.
-            waitUntil(eventPlayer.initialMaxHealth > 0, Math.INFINITY)
-            eventPlayer.addHealthPool(Health.NORMAL, 50, true, false)
-            break
         case Enhancement.BOLT_STRIKE:
-            eventPlayer.enhancementBoltDamage = 0
-            eventPlayer.enhancementBoltChainEffect = 0
-            eventPlayer.enhancementBoltStrikeEffect = 0
-            hudText(eventPlayer, iconString(Icon.BOLT), "50% chain damage | 75 lightning damage per 150 damage", "Bolt Strike", HudPosition.ACTUALLY_LEFT, 99, Color.YELLOW, Color.YELLOW, Color.YELLOW, HudReeval.STRING)
+            eventPlayer.enhancementBoltEnergy = 0
+            eventPlayer.enhancementBoltBurst = 0
+            eventPlayer.enhancementBoltChainEffect = []
+            hudText(eventPlayer, ENHANCEMENT_ICONS[eventPlayer.enhancementId], f"2 targets | 25%, max 20 | Energy: {floor(eventPlayer.enhancementBoltEnergy)}/200 | Hold [{inputBindingString(Button.MELEE)}] | Armed: {eventPlayer.enhancementBoltBurst != 0}", "Bolt Strike", HudPosition.ACTUALLY_LEFT, 99, Color.YELLOW, Color.YELLOW, Color.YELLOW, HudReeval.STRING)
             break
         case Enhancement.BULKING_SEASON:
             eventPlayer.enhancementBulkStacks = 0
             hudText(
                 eventPlayer,
-                iconString(Icon.ARROW_UP),
+                ENHANCEMENT_ICONS[eventPlayer.enhancementId],
                 f"Stacks: {eventPlayer.enhancementBulkStacks} | +{min(100, eventPlayer.enhancementBulkStacks * 0.5)}% Max Life | Size: {min(1.35, 1 + eventPlayer.enhancementBulkStacks * 0.005)}x",
                 "Bulking Season",
-                HudPosition.ACTUALLY_LEFT, 99, Color.ORANGE, Color.ORANGE, Color.ORANGE, HudReeval.STRING
+                HudPosition.ACTUALLY_LEFT, 99, Color.LIME_GREEN, Color.LIME_GREEN, Color.LIME_GREEN, HudReeval.STRING
             )
             break
         #Born to Battle
@@ -119,7 +114,7 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             # enhancementBattleAbilityButton: selected ability button, retained through waits to reset its charge or cooldown.
             hudText(
                 eventPlayer,
-                iconString(Icon.BOLT),
+                ENHANCEMENT_ICONS[eventPlayer.enhancementId],
                 f"{eventPlayer.enhancementBattleResetCharges}/2 resets",
                 "Born to Battle",
                 HudPosition.ACTUALLY_LEFT, 99, Color.GRAY, Color.GRAY, Color.GRAY, HudReeval.STRING
@@ -135,10 +130,10 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             # enhancementBatteryPlacementCooldown: remaining placement cooldown in seconds (20 on placement), for placement checks and HUD.
             hudText(
                 eventPlayer,
-                iconString(Icon.SPIRAL),
+                ENHANCEMENT_ICONS[eventPlayer.enhancementId],
                 "{1} {0}".format(f"{ceil(eventPlayer.enhancementBatteryPlacementCooldown)}s" if eventPlayer.enhancementBatteryPlacementCooldown > 0 else iconString(Icon.CHECKMARK), "Hold [{0}]".format(inputBindingString(Button.MELEE)) if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else []),
                 "Charge Battery",
-                HudPosition.ACTUALLY_LEFT, 99, colorChargeBatteryConst if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else Color.RED, colorChargeBatteryConst if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else Color.RED, colorChargeBatteryConst if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else Color.RED, HudReeval.STRING_AND_COLOR
+                HudPosition.ACTUALLY_LEFT, 99, Color.WHITE if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else Color.RED, Color.WHITE if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else Color.RED, Color.WHITE if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else Color.RED, HudReeval.STRING_AND_COLOR
             )
             #Battery placement visual
             createEffect(eventPlayer.filter(lambda _: eventPlayer.isHoldingButton(Button.MELEE) and eventPlayer.enhancementBatteryPlacementCooldown <= 0 and distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) <= 30), Effect.RING, rgb(0, 255, 0, 204), worldVector(0.1 * Vector.UP, eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), 0.45, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -159,7 +154,7 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             # enhancementHitchhikerPassengerPoolId: extra health pool ID on this passenger, retained to remove that pool when detaching.
             hudText(
                 eventPlayer,
-                iconString(Icon.FLAG),
+                ENHANCEMENT_ICONS[eventPlayer.enhancementId],
                 "Press [{0}] to dismount".format(inputBindingString(Button.CROUCH)) if eventPlayer.enhancementIsHitchhiking else "Press [{0}] to attach".format(inputBindingString(Button.CROUCH)) if playerTargetList.exclude(eventPlayer).any(lambda x: not x.isAttached and distance(eventPlayer, x) < 2 * x.sizeScale) else [],
                 "Hitchhiker",
                 HudPosition.ACTUALLY_LEFT, 99, Color.PURPLE, Color.RED if eventPlayer.enhancementIsHitchhiking else Color.PURPLE, Color.PURPLE, HudReeval.VISIBILITY_STRING_AND_COLOR
@@ -182,7 +177,7 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             # enhancementPupCooldown: remaining ability cooldown in seconds (2 after freezing, 1 after laser), gating target selection.
             hudText(
                 eventPlayer,
-                iconString(Icon.HAPPY),
+                ENHANCEMENT_ICONS[eventPlayer.enhancementId],
                 f"{ceil(eventPlayer.enhancementPupCooldown)}s" if eventPlayer.enhancementPupCooldown > 0 else iconString(Icon.CHECKMARK),
                 "P.U.P.",
                 HudPosition.ACTUALLY_LEFT, 99, Color.BLUE if eventPlayer.enhancementPupColor == Color.SKY_BLUE and eventPlayer.enhancementPupCooldown > 0 else eventPlayer.enhancementPupColor, Color.BLUE if eventPlayer.enhancementPupColor == Color.SKY_BLUE and eventPlayer.enhancementPupCooldown > 0 else eventPlayer.enhancementPupColor, Color.BLUE if eventPlayer.enhancementPupColor == Color.SKY_BLUE and eventPlayer.enhancementPupCooldown > 0 else eventPlayer.enhancementPupColor, HudReeval.VISIBILITY_STRING_AND_COLOR
@@ -379,16 +374,6 @@ def applyBulkingSeasonStats():
     applyCurrentSizeScale()
 
 
-rule "LEECH LIFESTEAL":
-    @Event playerDealtDamage
-    @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.enhancementId == Enhancement.LEECH
-
-    # Include scripted damage, including independent Augments, as in the source.
-    heal(eventPlayer, eventPlayer, eventDamage * 0.25)
-
-
 rule "BOLT STRIKE DAMAGE":
     @Event playerDealtDamage
     @Team 1
@@ -398,47 +383,50 @@ rule "BOLT STRIKE DAMAGE":
     @Condition victim.getTeam() == Team.2
     @Condition eventDamage > 0
 
-    # Synchronous target scratch; both beam endpoints are frozen at creation.
-    # Never retain scratch in effect reevaluation or across waits.
-    #!define boltChainTarget tmp0
-    boltChainTarget = random.choice(getPlayersInRadius(victim, 10, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive()).exclude(victim))
-    eventPlayer.enhancementBoltDamage += eventDamage
-    if boltChainTarget != null:
-        if eventPlayer.enhancementBoltChainEffect[0] != null:
-            destroyEffect(eventPlayer.enhancementBoltChainEffect[0])
-        damage(boltChainTarget, eventPlayer, eventDamage * 0.5)
-        createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, victim.getPosition() + vect(0, 0.7, 0), boltChainTarget.getPosition() + vect(0, 0.7, 0), Color.YELLOW, EffectReeval.NONE)
-        eventPlayer.enhancementBoltChainEffect = [getLastCreatedEntity(), getTotalTimeElapsed() + 0.3]
-        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, boltChainTarget, 0.5)
-    if eventPlayer.enhancementBoltDamage >= 150:
-        eventPlayer.enhancementBoltDamage = 0
-        if eventPlayer.enhancementBoltStrikeEffect[0] != null:
-            destroyEffect(eventPlayer.enhancementBoltStrikeEffect[0])
-        createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, victim.getPosition() + vect(0, 20, 0), victim, Color.YELLOW, EffectReeval.NONE)
-        eventPlayer.enhancementBoltStrikeEffect = [getLastCreatedEntity(), getTotalTimeElapsed() + 0.15]
-        damage(victim, eventPlayer, 75)
+    # All scratch is synchronous: no waits, async calls or effect reevaluation.
+    # Cleanup finishes before target scratch is assigned (it also uses tmp2).
+    clearBoltEffects()
+    #!define boltChainTargets tmp0
+    #!define boltHealthBefore tmp1
+    #!define boltIndex tmp2
+    boltChainTargets = random.shuffle(getPlayersInRadius(victim, 10, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive()).exclude(victim)).slice(0, 2)
+    for boltIndex in range(len(boltChainTargets)):
+        boltHealthBefore = boltChainTargets[boltIndex].getHealth()
+        damage(boltChainTargets[boltIndex], eventPlayer, min(20, eventDamage * 0.25))
+        # Only actual health removed: respects immunity, reduction and overkill.
+        eventPlayer.enhancementBoltEnergy = min(200, eventPlayer.enhancementBoltEnergy + max(0, boltHealthBefore - boltChainTargets[boltIndex].getHealth()))
+        createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, victim.getPosition() + vect(0, 0.7, 0), boltChainTargets[boltIndex].getPosition() + vect(0, 0.7, 0), Color.YELLOW, EffectReeval.NONE)
+        eventPlayer.enhancementBoltChainEffect.append(getLastCreatedEntity())
+        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, boltChainTargets[boltIndex], 0.5)
+    if eventPlayer.enhancementBoltBurst == -1:
+        eventPlayer.enhancementBoltBurst = getTotalTimeElapsed() + 0.3
+    if eventPlayer.enhancementBoltBurst > getTotalTimeElapsed():
+        # Lordy's sky-to-victim Tesla beam; frozen endpoints and shared cleanup.
+        createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, victim.getPosition() + vect(0, 20, 0), victim.getPosition(), Color.YELLOW, EffectReeval.NONE)
+        eventPlayer.enhancementBoltChainEffect.append(getLastCreatedEntity())
+        victim.setStatusEffect(eventPlayer, Status.STUNNED, 2)
+        damage(victim, eventPlayer, 60)
+    eventPlayer.enhancementBoltEffectDeadline = getTotalTimeElapsed() + 0.3
+
+
+def clearBoltEffects():
+    @Name "clearBoltEffects"
+
+    # Synchronous cleanup index; never called inside the chain target loop.
+    #!define boltEffectIndex tmp2
+    for boltEffectIndex in range(len(eventPlayer.enhancementBoltChainEffect)):
+        destroyEffect(eventPlayer.enhancementBoltChainEffect[boltEffectIndex])
+    eventPlayer.enhancementBoltChainEffect = []
 
 
 rule "BOLT STRIKE CHAIN EFFECT EXPIRES":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.enhancementId == Enhancement.BOLT_STRIKE
-    @Condition eventPlayer.enhancementBoltChainEffect[0] != null
-    @Condition (getTotalTimeElapsed() >= eventPlayer.enhancementBoltChainEffect[1] or not isGameplayActive or not eventPlayer.isAlive()) == true
+    @Condition eventPlayer.enhancementBoltChainEffect != []
+    @Condition (getTotalTimeElapsed() >= eventPlayer.enhancementBoltEffectDeadline or not isGameplayActive or not eventPlayer.isAlive()) == true
 
-    destroyEffect(eventPlayer.enhancementBoltChainEffect[0])
-    eventPlayer.enhancementBoltChainEffect = 0
-
-
-rule "BOLT STRIKE VERTICAL EFFECT EXPIRES":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.enhancementId == Enhancement.BOLT_STRIKE
-    @Condition eventPlayer.enhancementBoltStrikeEffect[0] != null
-    @Condition (getTotalTimeElapsed() >= eventPlayer.enhancementBoltStrikeEffect[1] or not isGameplayActive or not eventPlayer.isAlive()) == true
-
-    destroyEffect(eventPlayer.enhancementBoltStrikeEffect[0])
-    eventPlayer.enhancementBoltStrikeEffect = 0
+    clearBoltEffects()
 
 
 rule "BOLT STRIKE DISCONNECT CLEANUP":
@@ -446,10 +434,32 @@ rule "BOLT STRIKE DISCONNECT CLEANUP":
     @Team 1
     @Condition eventPlayer.enhancementId == Enhancement.BOLT_STRIKE
 
-    if eventPlayer.enhancementBoltChainEffect[0] != null:
-        destroyEffect(eventPlayer.enhancementBoltChainEffect[0])
-    if eventPlayer.enhancementBoltStrikeEffect[0] != null:
-        destroyEffect(eventPlayer.enhancementBoltStrikeEffect[0])
+    clearBoltEffects()
+
+
+rule "BOLT STRIKE ARMS CHARGE":
+    @Event eachPlayer
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.enhancementId == Enhancement.BOLT_STRIKE
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
+    @Condition eventPlayer.enhancementBoltEnergy >= 200
+    @Condition eventPlayer.enhancementBoltBurst == 0
+
+    eventPlayer.enhancementBoltEnergy = 0
+    eventPlayer.enhancementBoltBurst = -1
+
+
+rule "BOLT STRIKE CLEARS CHARGE":
+    @Event eachPlayer
+    @Team 1
+    @Condition eventPlayer.enhancementId == Enhancement.BOLT_STRIKE
+    @Condition eventPlayer.enhancementBoltBurst != 0
+    @Condition (not isGameplayActive or not eventPlayer.isAlive() or eventPlayer.enhancementBoltBurst > 0 and getTotalTimeElapsed() >= eventPlayer.enhancementBoltBurst) == true
+
+    # Death cancels the armed burst; unspent energy remains in the bank.
+    eventPlayer.enhancementBoltBurst = 0
 
 
 rule "OVERCHARGE STORES HEALING":

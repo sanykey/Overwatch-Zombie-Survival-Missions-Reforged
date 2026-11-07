@@ -31,7 +31,7 @@ enum Challenge:
     PANDORAS_BOX = 5,
 
 # Enhancement IDs index enhancementOptionList and the start-menu tables.
-# Zero means no preference; initialization randomly selects a real ID 1-12.
+# Zero means no preference; initialization randomly selects a real ID 1-11.
 # Brain Killer remains the first explicit menu choice.
 enum Enhancement:
     NO_PREFERENCE = 0,
@@ -45,8 +45,7 @@ enum Enhancement:
     PUP = 8,
     OVERCHARGE = 9,
     BULKING_SEASON = 10,
-    LEECH = 11,
-    BOLT_STRIKE = 12,
+    BOLT_STRIKE = 11,
 
 # Independent secondary enhancement slot. IDs index the names/icons in augments.opy.
 enum Augment:
@@ -59,10 +58,14 @@ enum Augment:
     GRAPNEL_LAUNCHER = 6,
     LASER_BARRICADE = 7,
     APOTHECARY = 8,
+    SCAVENGER = 9,
+    LEECH = 10,
+    LIVING_PROJECTILE = 11,
 
-# Compile-time icon tables, indexed by their corresponding selection ID.
-#!define ENHANCEMENT_ICONS [iconString(Icon.QUESTION_MARK), iconString(Icon.SKULL), iconString(Icon.POISON), iconString(Icon.FIRE), iconString(Icon.PLUS), iconString(Icon.BOLT), iconString(Icon.SPIRAL), iconString(Icon.FLAG), iconString(Icon.HAPPY), iconString(Icon.BOLT), iconString(Icon.ARROW_UP), iconString(Icon.PLUS), iconString(Icon.BOLT)]
-#!define AUGMENT_ICONS [iconString(Icon.QUESTION_MARK), iconString(Icon.STOP), iconString(Icon.ARROW_RIGHT), iconString(Icon.ARROW_UP), iconString(Icon.CROSS), iconString(Icon.PLUS), iconString(Icon.ARROW_DOWN), iconString(Icon.DIAMOND), iconString(Icon.HEART)]
+# Icon tables, indexed by their corresponding selection ID.
+#!define ENHANCEMENT_ICONS enhancementIconListConst
+#!define AUGMENT_ICONS augmentIconListConst
+#!define AUGMENT_COLORS augmentColorListConst
 
 # Objective IDs also index objectiveTypeVoteList and identify entries in objectiveTypeList.
 # Biomorphing and Survivor Rescue are only selectable through the mixed pool.
@@ -200,7 +203,6 @@ globalvar currentObjectivePosition  # Mirrors the objective queue head, includin
 globalvar offsetUpThreeQuartersConst = 0.75 * Vector.UP    # Vertical offset of 0.75 m for labels, icons and visibility checks. Source uses: 7 (excluding declaration).
 globalvar offsetUpHalfConst = 0.5 * Vector.UP              # Vertical offset of 0.5 m for labels and effects. Source uses: 7 (excluding declaration).
 globalvar losOffsetConst = 1.2 * Vector.UP                 # Vertical offset of 1.2 m used by line-of-sight checks. Source uses: 16 (excluding declaration).
-globalvar colorChargeBatteryConst = rgb(236, 206, 44)    # Shared Charge Battery color used by the menu and enhancement visuals. Source uses: 4 (excluding declaration).
 globalvar dummyHoldingPositionConst = vect(500, 500, 500)  # Off-map holding position for newly created or reconfigured dummy bots. Source uses: 6 (excluding declaration).
 globalvar offsetDownHundredConst = -100 * Vector.UP       # Downward offset of 100 m for raycasts, hidden effects and dead-player storage. Source uses: 7 (excluding declaration).
 globalvar offsetUpOneAndHalfConst = 1.5 * Vector.UP       # Vertical offset of 1.5 m for the pregame camera and player labels. Source uses: 6 (excluding declaration).
@@ -208,6 +210,65 @@ globalvar offsetUpQuarterConst = 0.25 * Vector.UP         # Vertical offset of 0
 
 # Immutable palette indexed by item ID minus one; shared by ground items and their HUD.
 globalvar powerUpColorListConst = [Color.GREEN, Color.YELLOW, Color.BLUE, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.BLUE, Color.RED, Color.PURPLE, Color.RED, Color.WHITE]
+
+# Immutable icons shared by pregame selection, in-world labels and the in-match HUD.
+# Cache texture strings once instead of expanding their formatting at every use.
+enum EnhancementIcon:
+    NO_PREFERENCE = iconString(Icon.QUESTION_MARK),
+    BRAIN_KILLER = iconString(Icon.SKULL),
+    ZOMBIE_HYBRID = iconString(Icon.POISON),
+    PYROTECHNIC = iconString(Icon.FIRE),
+    PLAGUE_DOCTOR = iconString(Icon.PLUS),
+    BORN_TO_BATTLE = "<TX C000000000039D7>",
+    CHARGE_BATTERY = iconString(Icon.SPIRAL),
+    HITCHHIKER = iconString(Icon.FLAG),
+    PUP = iconString(Icon.HAPPY),
+    OVERCHARGE = iconString(Icon.MOON),
+    BULKING_SEASON = "<TX C0000000002A9ED>",
+    BOLT_STRIKE = iconString(Icon.BOLT),
+
+globalvar enhancementIconListConst = [
+    EnhancementIcon.NO_PREFERENCE,
+    EnhancementIcon.BRAIN_KILLER,
+    EnhancementIcon.ZOMBIE_HYBRID,
+    EnhancementIcon.PYROTECHNIC,
+    EnhancementIcon.PLAGUE_DOCTOR,
+    EnhancementIcon.BORN_TO_BATTLE,
+    EnhancementIcon.CHARGE_BATTERY,
+    EnhancementIcon.HITCHHIKER,
+    EnhancementIcon.PUP,
+    EnhancementIcon.OVERCHARGE,
+    EnhancementIcon.BULKING_SEASON,
+    EnhancementIcon.BOLT_STRIKE,
+]
+enum AugmentIcon:
+    NO_PREFERENCE = iconString(Icon.QUESTION_MARK),
+    KEVLAR = "<TX C0000000004F73E>",
+    PHASE_DASH = iconString(Icon.ARROW_RIGHT),
+    DOUBLE_JUMP = iconString(Icon.ARROW_UP),
+    LONG_REACH = abilityIconString(Hero.DOOMFIST, Button.SECONDARY_FIRE),
+    AMMO_PACK = "<TX C0000000004F73A>",
+    GRAPNEL_LAUNCHER = iconString(Icon.DIZZY),
+    LASER_BARRICADE = iconString(Icon.DIAMOND),
+    APOTHECARY = "<TX C0000000004F73B>",
+    SCAVENGER = iconString(Icon.RECYCLE),
+    LEECH = iconString(Icon.ASTERISK),
+    LIVING_PROJECTILE = iconString(Icon.TRASHCAN),
+
+globalvar augmentIconListConst = [
+    AugmentIcon.NO_PREFERENCE,
+    AugmentIcon.KEVLAR,
+    AugmentIcon.PHASE_DASH,
+    AugmentIcon.DOUBLE_JUMP,
+    AugmentIcon.LONG_REACH,
+    AugmentIcon.AMMO_PACK,
+    AugmentIcon.GRAPNEL_LAUNCHER,
+    AugmentIcon.LASER_BARRICADE,
+    AugmentIcon.APOTHECARY,
+    AugmentIcon.SCAVENGER,
+    AugmentIcon.LEECH,
+    AugmentIcon.LIVING_PROJECTILE,
+]
 
 # Match state and configuration.
 globalvar isPregameSetup        # Pregame hero selection/voting is active; cleared by START GAME before gameplay activation.
@@ -378,6 +439,14 @@ playervar enhancementId  # Selected Enhancement enum; pregame selection, runtime
 # Only the selected augment owns these slots; selection is fixed once gameplay begins.
 playervar augmentId  # Selected Augment enum; pregame Interact selection and gameplay effects.
 playervar augmentState0
+# Dead Weight: human's held zombie; on Team 2, its carrier instead.
+# The bot owns release through the held phase, including carrier disconnect; no bot augment uses this slot.
+#!define augmentHeldZombie augmentState0
+#!define augmentZombieCarrier augmentState0
+# Scavenger: up to two reserve item IDs, independent of the active powerup and
+# all primary enhancement state. Retained across hero switches; death/manual
+# drop clears it synchronously before respawn initialization. Never activated.
+#!define augmentScavengerBackpack augmentState0
 # Apothecary speed-bonus expiry (Total Time Elapsed); zero when inactive.
 # Refreshed on pickup, cleared on expiry/death and alongside movement reset on spawn.
 #!define augmentApothecarySpeedUntil augmentState0
@@ -393,6 +462,9 @@ playervar augmentState0
 #!define augmentAmmoLoadoutList augmentState0
 
 playervar augmentState1
+# Dead Weight hold deadline; 0 requests a throw. Read by HUD and held bot only
+# while a target is held. Inactive values are dead; pickup overwrites before use.
+#!define augmentHoldUntil augmentState1
 # Laser Barricade unit edge direction; persists for collision checks.
 #!define augmentBarrierEdgeDirection augmentState1
 # Shock Landing / Double Jump is armed after releasing Jump in midair; consumed once, cleared on landing/death.
@@ -405,6 +477,9 @@ playervar augmentState1
 #!define augmentMeleeTargetIndex augmentState1
 
 playervar augmentState2
+# Team 2 Dead Weight: carrier hero at pickup; a switch drops the zombie safely.
+# Stored on the held bot, retained until the release transition; no human reader.
+#!define augmentCarryHero augmentState2
 # Laser Barricade: -1 latches aiming until Interact release/death/cancel; 0 is ready,
 # positive values are cooldown seconds. Owned by placement across waits; read by
 # preview, HUD and power-up input exclusion. Clear the latch before every abort.
@@ -431,6 +506,10 @@ playervar augmentState2
 #!define augmentGrapnelState augmentState2
 
 playervar augmentState3
+# Team 2 Dead Weight: damage credit written on throw, retained through its 0.75s
+# wait, and read only by that throw branch. Inactive values are dead; no reset
+# is required. Carry/pickup never writes this role, so new grabs are safe.
+#!define augmentThrowDamageCredit augmentState3
 # Laser Barricade center; retained across waits and reevaluated by live effects.
 #!define augmentBarrierPosition augmentState3
 # Double Jump only: [signed bonus deadline, launch hero], null when spent/expired.
@@ -585,14 +664,12 @@ playervar actorTeamSlot1  # Team 2: botIsSelectingTarget; Team 1: powerUpReviveT
 playervar actorTeamSlot2  # Boss return snapshot on Team 2 or carried item ID on Team 1.
 # Boss eye-position snapshot written and cleared during return; currently not read.
 #!define botReturnPosition actorTeamSlot2
-# Currently carried supply item ID; zero means no item.
+# Active supply item ID; zero means none. Reserve Scavenger items never occupy this slot.
 #!define powerUpItemId actorTeamSlot2
 
-playervar actorTeamSlot3  # Team 2 teleport flag; Team 1 human challenge vote -> trade position, or Rescue dummy path. Menu writers are phase-guarded; trade position is assigned before reading.
+playervar actorTeamSlot3  # Team 2 teleport flag; Team 1 human challenge vote, or Rescue dummy path. Menu writers are phase-guarded.
 # Zombie is inside enterExitTeleport; spawn/target/ability consumers also read it.
 #!define botIsTeleporting actorTeamSlot3
-# Aimed ground-item position; retained across all waits in the exchange.
-#!define powerUpTradePosition actorTeamSlot3
 # Human challenge vote during pregame only; END VOTING aborts after the phase boundary.
 #!define pregameChallengeVote actorTeamSlot3
 # Recorded leader positions followed and trimmed by the Rescue NPC.
@@ -707,11 +784,9 @@ playervar actorTeamSlot20  # Team 2: botCustomTeleportPosition; Team 1: powerUpA
 # Ground center of the active air-strike area.
 #!define powerUpAirStrikePosition actorTeamSlot20
 
-playervar actorTeamSlot21  # Team 2: botLastTarget; Team 1: objective vote -> trade index. Exchange assigns its index before reading it; pregame readers/writers end before gameplay.
+playervar actorTeamSlot21  # Team 2: botLastTarget; Team 1: pregame objective vote. Pregame readers/writers end before gameplay.
 # Last visible/attacking target retained when zombie line of sight is lost.
 #!define botLastTarget actorTeamSlot21
-# Index of the aimed ground item in the global supply item arrays.
-#!define powerUpTradeIndex actorTeamSlot21
 # Human objective vote during pregame only; distinct from the selected global objective mode.
 #!define pregameObjectiveVote actorTeamSlot21
 
@@ -727,13 +802,12 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 # Bulking Season: retained stacks; each credited elimination (kill/damage participation) adds one; death halves it (rounded down).
 # Exclusive primary enhancement, owned by this human; safe alongside all independent Augments.
 #!define enhancementBulkStacks actorTeamSlot22
-# Bolt Strike native damage accumulated toward 150; reset on a strike (no overflow).
-# Exclusive primary enhancement; only the attacking human owns this bank.
-#!define enhancementBoltDamage actorTeamSlot22
 # Overcharge: unspent energy (actual healing / 3), accumulated independently of an armed burst.
 # Exclusive primary enhancement; slots belong to its selected human (the healer
 # for dealt-healing events, the receiver for health packs), never an enemy target.
 #!define enhancementCapacitorEnergy actorTeamSlot22
+# Bolt Strike: actual chain damage bank, capped at 200; retained on death.
+#!define enhancementBoltEnergy actorTeamSlot22
 # Born to Battle unspent ability resets (0-2); retained through ability waits and reevaluated by its HUD.
 #!define enhancementBattleResetCharges actorTeamSlot22
 # Placed Charge Battery position; zero clears it.
@@ -748,8 +822,8 @@ playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateS
 #!define botGasRadiusList actorTeamSlot23
 # Overcharge: energy spent on the armed/active burst, retained across damage events and HUD reevaluation.
 #!define enhancementCapacitorCharge actorTeamSlot23
-# Bolt Strike [chain beam ID, absolute expiry], zero while inactive; replaced on each chain hit,
-# read only by its expiry worker. No Augment uses this primary-only slot.
+# Bolt Strike: array of chain/sky beam IDs, empty while inactive.
+# Replaced per hero hit; expiry/disconnect cleanup destroys them. No Augment uses this slot.
 #!define enhancementBoltChainEffect actorTeamSlot23
 # Born to Battle button whose charge/cooldown is reset.
 #!define enhancementBattleAbilityButton actorTeamSlot23
@@ -766,9 +840,9 @@ playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateS
 # Overcharge: absolute burst deadline; zero means armed but waiting for its first hit.
 # Set once by the first hit, read by later hits, cleared with the charge on expiry/death.
 #!define enhancementCapacitorDeadline actorTeamSlot24
-# Bolt Strike [vertical beam ID, absolute expiry], zero while inactive; replaced on each strike,
-# read only by its expiry worker. Separate from the independently expiring chain.
-#!define enhancementBoltStrikeEffect actorTeamSlot24
+# Bolt Strike: 0 inactive, -1 armed, positive absolute 0.3s burst deadline.
+# Exclusive enhancement state on the attacking human; no waits or chases.
+#!define enhancementBoltBurst actorTeamSlot24
 # Full battery reuse cooldown used for progress scaling (10 seconds).
 #!define enhancementBatteryReuseDuration actorTeamSlot24
 # Current P.U.P. enemy target; null while idle.
@@ -777,6 +851,8 @@ playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateS
 playervar actorTeamSlot25  # Team 2: botCandidateTarget; Team 1: enhancementStateSlot4. Receivers, not rule teams, own the storage.
 # First candidate that passed line of sight in selectTarget; null when none passed.
 #!define botCandidateTarget actorTeamSlot25
+# Bolt Strike: absolute deadline for current frozen beams; read only with nonempty IDs.
+#!define enhancementBoltEffectDeadline actorTeamSlot25
 # Battery remaining placement cooldown.
 #!define enhancementBatteryPlacementCooldown actorTeamSlot25
 # P.U.P. freezing aura is visible.
@@ -810,9 +886,8 @@ playervar objectiveActorKindSlot  # Biomorphing resource type on both teams, or 
 # Rescue NPC mood/status icon: halo, sad, dizzy or extraction celebration.
 #!define rescueMoodIcon objectiveActorKindSlot
 
-playervar menuTradeItemSlot  # Human zombie vote -> previous carried item ID. No chase owns this slot; exchange assigns it before its first wait/read.
+playervar menuTradeItemSlot  # Human zombie vote; legacy slot name. Gameplay item trades use synchronous global scratch.
 #!define pregameZombieVote menuTradeItemSlot
-#!define powerUpTradePreviousItemId menuTradeItemSlot
 
 # Chased variables
 
@@ -876,3 +951,6 @@ playervar botReigniteRisePosition  # Chased Anran emergence position, forced acr
 playervar enhancementPupCooldown  # Chased P.U.P. ability cooldown (1 or 2 seconds); independent of positions.
 
 playervar augmentBarrierHealth  # Chased Laser Barricade health; placement, damage, regeneration and HUD; independent of icon IDs.
+
+# Immutable palette shared by the pregame menu and gameplay HUD; indexed by Augment.
+globalvar augmentColorListConst = [Color.AQUA, Color.LIGHT_GRAY, Color.YELLOW, Color.SKY_BLUE, Color.ORANGE, Color.WHITE, Color.TURQUOISE, Color.BLUE, Color.GREEN, Color.LIME_GREEN, Color.RED, Color.PURPLE]

@@ -1,4 +1,5 @@
 #!mainFile "../main.opy"
+subroutine useLivingProjectile
 
 subroutine playAquaPowerUpSound
 
@@ -82,12 +83,23 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
-    # Reserve Laser Barricade input until Interact is released, even after Crouch is released.
+    # Reserve Laser Barricade input until Interact release, even after Crouch release.
     @Condition (eventPlayer.augmentId != Augment.LASER_BARRICADE or (not eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.augmentBarrierPlacementCooldown >= 0)) == true
     @Condition eventPlayer.isAlive() == true
     @Condition isGameplayActive == true
     @Condition eventPlayer.isDummy() == false
     
+    # Resolve zombie interaction once per press, before any item transaction.
+    # The held reference survives a throw request until the bot finishes cleanup.
+    if eventPlayer.augmentId == Augment.LIVING_PROJECTILE:
+        useLivingProjectile()
+        if eventPlayer.augmentHeldZombie != null:
+            return
+
+    # Query aimed items only on interaction; reuse this scratch slot for the chosen
+    # position below after sorting. No reader retains the candidate array across waits.
+    #!define aimedPowerUpPositions tmp0
+    aimedPowerUpPositions = supplyPowerUpPositionList.filter(lambda x: distance(x, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), x)) < 0.5 and distance(eventPlayer, x) <= 6)
     if distance(supplyDropLandingPosition, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), supplyDropLandingPosition)) < 0.5 and not isSupplyDropOpen and distance(eventPlayer, supplyDropLandingPosition) <= 6 and supplyDropLandingPosition != null and distance(supplyDropLandingPosition, supplyDropPosition) < 1:
         isSupplyDropOpen = true
         playEffect(getPlayers(Team.1), DynamicEffect.GOOD_EXPLOSION, Color.AQUA, supplyDropPosition, 0.5)
@@ -103,29 +115,32 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         #!define supplyDropItemAngleOffset tmp0
         for supplyDropItemAngleOffset in range(-60, 61, 120 / (supplyDropPowerUpCount - 1)):
             supplyPowerUpPositionList.append(supplyDropLandingPosition + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(supplyDropLandingPosition, eventPlayer)) + supplyDropItemAngleOffset, 0)) * 2))
-    elif supplyPowerUpPositionList.any(lambda x: distance(x, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), x)) < 0.5 and distance(eventPlayer, x) <= 6):
-        #Power up effect position
-        eventPlayer.powerUpTradePosition = (sorted(supplyPowerUpPositionList.filter(lambda x: distance(x, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), x)) < 0.5 and distance(eventPlayer, x) <= 6), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x))))[0]
-        #Current power up (or 0 if no current power up)
-        eventPlayer.powerUpTradePreviousItemId = eventPlayer.powerUpItemId
-        wait()
-        #Index of position of current power up being aquired
-        eventPlayer.powerUpTradeIndex = supplyPowerUpPositionList.index(eventPlayer.powerUpTradePosition)
-        wait()
-        #Pick up power up
-        eventPlayer.powerUpItemId = supplyPowerUpIdList[eventPlayer.powerUpTradeIndex]
-        destroyEffect(supplyPowerUpEffectIdList[eventPlayer.powerUpTradeIndex])
-        destroyInWorldText(supplyPowerUpTextIdList[eventPlayer.powerUpTradeIndex])
-        wait()
-        del supplyPowerUpIdList[eventPlayer.powerUpTradeIndex]
-        del supplyPowerUpPositionList[eventPlayer.powerUpTradeIndex]
-        del supplyPowerUpEffectIdList[eventPlayer.powerUpTradeIndex]
-        del supplyPowerUpTextIdList[eventPlayer.powerUpTradeIndex]
-        wait()
-        #Trade power ups. Ignore if no power up is currently held.
-        if eventPlayer.powerUpTradePreviousItemId:
-            supplyPowerUpIdList.append(eventPlayer.powerUpTradePreviousItemId)
-            supplyPowerUpPositionList.append(eventPlayer.powerUpTradePosition)
+    elif len(aimedPowerUpPositions) > 0:
+        if eventPlayer.augmentId == Augment.SCAVENGER and eventPlayer.isHoldingButton(Button.CROUCH) and len(eventPlayer.augmentScavengerBackpack) >= 2:
+            return
+        # Commit pickup and all four aligned ground lists without waits: another
+        # player's pickup or a Reload drop must never observe a half-finished trade.
+        # Synchronous scratch; no subroutine calls or reevaluated captures here.
+        #!define pickedPowerUpPosition tmp0
+        #!define pickedPowerUpIndex tmp1
+        #!define tradedPowerUpItemId tmp2
+        pickedPowerUpPosition = (sorted(aimedPowerUpPositions, lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x))))[0]
+        pickedPowerUpIndex = supplyPowerUpPositionList.index(pickedPowerUpPosition)
+        tradedPowerUpItemId = eventPlayer.powerUpItemId
+        if eventPlayer.augmentId == Augment.SCAVENGER and eventPlayer.isHoldingButton(Button.CROUCH):
+            eventPlayer.augmentScavengerBackpack.append(supplyPowerUpIdList[pickedPowerUpIndex])
+            tradedPowerUpItemId = 0
+        else:
+            eventPlayer.powerUpItemId = supplyPowerUpIdList[pickedPowerUpIndex]
+        destroyEffect(supplyPowerUpEffectIdList[pickedPowerUpIndex])
+        destroyInWorldText(supplyPowerUpTextIdList[pickedPowerUpIndex])
+        del supplyPowerUpIdList[pickedPowerUpIndex]
+        del supplyPowerUpPositionList[pickedPowerUpIndex]
+        del supplyPowerUpEffectIdList[pickedPowerUpIndex]
+        del supplyPowerUpTextIdList[pickedPowerUpIndex]
+        if tradedPowerUpItemId != 0:
+            supplyPowerUpIdList.append(tradedPowerUpItemId)
+            supplyPowerUpPositionList.append(pickedPowerUpPosition)
     elif eventPlayer.powerUpItemId:
         wait(0.25, Wait.ABORT_WHEN_FALSE)
         powerUpUsage()

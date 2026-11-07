@@ -1,5 +1,6 @@
 #!mainFile "../main.opy"
 subroutine finishPowerUpDrop
+subroutine dropCarriedPowerUps
 
 
 
@@ -85,25 +86,40 @@ rule "PLAYER DROPS POWER UP (MANUAL)":
     @Condition eventPlayer.isHoldingButton(Button.RELOAD) == true
     @Condition isGameplayActive == true
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.powerUpItemId
+    @Condition (eventPlayer.powerUpItemId != 0 or (eventPlayer.augmentId == Augment.SCAVENGER and len(eventPlayer.augmentScavengerBackpack) > 0)) == true
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
-    supplyPowerUpIdList.append(eventPlayer.powerUpItemId)
-    supplyPowerUpPositionList.append(eventPlayer.getPosition() + offsetUpQuarterConst if eventPlayer.isOnGround() else nearestWalkablePosition(eventPlayer.getPosition()))
-    wait()
-    finishPowerUpDrop()
+    dropCarriedPowerUps()
 
 
 rule "PLAYER DROPS POWER UP (DEATH)":
     @Event playerDied
     @Team 1
-    @Condition eventPlayer.powerUpItemId
+    @Condition (eventPlayer.powerUpItemId != 0 or (eventPlayer.augmentId == Augment.SCAVENGER and len(eventPlayer.augmentScavengerBackpack) > 0)) == true
     
-    while not eventPlayer.isOnGround():
-        wait(0.25)
-    supplyPowerUpIdList.append(eventPlayer.powerUpItemId)
-    supplyPowerUpPositionList.append(eventPlayer.getPosition() + offsetUpQuarterConst)
-    wait()
+    # Reserve slots must be emptied before respawn initialization; use a walkable
+    # drop position immediately for Scavenger instead of waiting for the corpse.
+    if eventPlayer.augmentId != Augment.SCAVENGER:
+        while not eventPlayer.isOnGround():
+            wait(0.25)
+    dropCarriedPowerUps()
+
+
+def dropCarriedPowerUps():
+    @Name "dropCarriedPowerUps"
+
+    # Snapshot all carried IDs and the drop center, then publish and clear them in
+    # one execution. All writes are synchronous; no waits in this helper.
+    #!define droppedPowerUpIds tmp0
+    #!define droppedPowerUpPosition tmp1
+    droppedPowerUpIds = [eventPlayer.powerUpItemId] if eventPlayer.powerUpItemId != 0 else []
+    if eventPlayer.augmentId == Augment.SCAVENGER:
+        droppedPowerUpIds = droppedPowerUpIds.concat(eventPlayer.augmentScavengerBackpack)
+        eventPlayer.augmentScavengerBackpack = []
+    droppedPowerUpPosition = eventPlayer.getPosition() + offsetUpQuarterConst if eventPlayer.isOnGround() else nearestWalkablePosition(eventPlayer.getPosition())
+    supplyPowerUpIdList = supplyPowerUpIdList.concat(droppedPowerUpIds)
+    # Spread the items so each can be aimed at independently.
+    supplyPowerUpPositionList = supplyPowerUpPositionList.concat(droppedPowerUpIds.map(lambda _, index: droppedPowerUpPosition + index * 0.75 * Vector.RIGHT))
     finishPowerUpDrop()
 
 

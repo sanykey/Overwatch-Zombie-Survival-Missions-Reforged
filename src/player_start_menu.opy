@@ -57,8 +57,8 @@ rule "EFFECTS/TEXT":
     createInWorldText(getAllPlayers().filter(lambda _: eventPlayer.isPregameVoting == true), "Voting...", eventPlayer.pregamePosition + ((1.5 if eventPlayer.pregameState < PregameState.READY else -1) * Vector.UP), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.PURPLE)
     #Name text
     createInWorldText(getAllPlayers().filter(lambda _: eventPlayer.pregameState < PregameState.READY), eventPlayer, eventPlayer.pregamePosition + Vector.DOWN, 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.AQUA)
-    #Enhancement icon
-    createInWorldText(getAllPlayers(), enhancementOptionList[eventPlayer.enhancementId], eventPlayer.pregamePosition + 2.25 * Vector.UP, 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING)
+    # Enhancement and Augment share one line above the player.
+    createInWorldText(getAllPlayers(), f"{ENHANCEMENT_ICONS[eventPlayer.enhancementId]} {AUGMENT_ICONS[eventPlayer.augmentId]}", eventPlayer.pregamePosition + 2.25 * Vector.UP, 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING)
 
 
 rule "PLAYER SELECTS/RESELECTS HERO":
