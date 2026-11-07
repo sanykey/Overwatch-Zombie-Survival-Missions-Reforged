@@ -1609,11 +1609,14 @@ async function main() {
         state.player[barrierCooldown] = cooldown;
         assert.equal(truth(value(previewInput, state)), cooldown === -1 && interact,
             'Preview requires the exact aiming latch and Interact, independently of Crouch');
+        assert.equal(applies(placementRule, state), cooldown === 0 && crouch && interact,
+            'A placement starts only when ready, never during aiming or cooldown');
     }
     for (const crouchReleasedAt of [0.1, 0.6]) {
         const state = scenario(7, {buttons: new Set(['Crouch', 'Interact'])});
         const task = start(aimRule, state, compiled);
         assert.equal(state.player[barrierCooldown], -1);
+        assert(!applies(placementRule, state), 'Entering aim blocks another placement start without aborting the active controller');
         state.time += crouchReleasedAt; state.buttons.delete('Crouch'); task.resume();
         assert(!task.done(), 'Releasing Crouch must keep aiming active, including during the windup');
         state.time = 101; task.resume();

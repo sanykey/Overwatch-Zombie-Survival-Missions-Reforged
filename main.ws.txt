@@ -9941,7 +9941,7 @@ rule ("LASER BARRICADE (PLACEMENT)") {
         Is Button Held(Event Player, Button(Crouch)) == True; // 4 elements
         Is Button Held(Event Player, Button(Interact)) == True; // 4 elements
         Is Alive(Event Player) == True; // 2 elements
-        (Event Player).augmentState2 <= Null; // 3 elements
+        (Event Player).augmentState2 == Null; // 3 elements
     }
     actions {
         "Negative cooldown latches aiming without another player variable. Only this\nrule owns it; clear it on every exit before starting the normal cooldown."

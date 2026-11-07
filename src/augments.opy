@@ -653,7 +653,7 @@ rule "LASER BARRICADE (PLACEMENT)":
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.augmentBarrierPlacementCooldown <= 0
+    @Condition eventPlayer.augmentBarrierPlacementCooldown == 0
 
     # Negative cooldown latches aiming without another player variable. Only this
     # rule owns it; clear it on every exit before starting the normal cooldown.
