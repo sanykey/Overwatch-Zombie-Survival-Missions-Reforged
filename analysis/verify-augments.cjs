@@ -393,9 +393,10 @@ async function main() {
     const run = (name, state) => start(compiled.get(name), state, compiled);
     // Run the shared pickup handler across both normal cure and timeout paths.
     const pickup = 'PLAYER PICKS UP HEALTH PACK';
+    let pickupCases = 0;
     for (const augment of [1, 8]) for (const difficulty of [1, 3, 5])
     for (const remaining of [30, 0, -30]) for (const infection of [-2, 0, 0.5, 1, 4])
-    for (const healing of [10, 75, 250]) for (const charge of [0, 98, 100]) {
+    for (const healing of [10, 75, 250]) for (const charge of [0, 92.75, 93, 93.25, 98, 100]) {
         const state = scenario(augment, {eventWasHealthPack: true, eventHealing: healing,
             matchTime: remaining, ultCharge: charge, maxHealth: 1000});
         Object.assign(state.globals, {difficultySetting: difficulty, matchEndTime: 0,
@@ -408,7 +409,7 @@ async function main() {
         assert.equal(state.player.infectionLevel,
             augment === 8 && cured > 0 ? Math.max(0, cured - 1) : cured);
         assert.equal(state.player.health, 500 + (augment === 8 ? healing : 0));
-        assert.equal(state.ultCharge, augment === 8 ? Math.min(100, charge + 5) : charge);
+        assert.equal(state.ultCharge, augment === 8 ? Math.min(100, charge + 7) : charge);
         assert.equal(state.player.movementSpeedScale, augment === 8 ? 1.5 : 1);
         assert.deepEqual(state.healOverTime, [5, 20], 'Preserve existing pack regeneration');
         assert.equal(!!state.stoppedDots, fullCure);
@@ -416,6 +417,7 @@ async function main() {
         assert.equal(state.messages.length, !fullCure && infection >= 1 && augment !== 8 ? 1 : 0);
         state.eventWasHealthPack = false;
         assert(!applies(compiled.get(pickup), state), 'Supplemental and other healing cannot trigger pickup bonuses');
+        pickupCases++;
     }
     const capacitorEnergy = slot('enhancementCapacitorEnergy');
     const packChargeSlot = slot('enhancementCapacitorCharge');
@@ -578,7 +580,7 @@ async function main() {
             fs.writeFileSync(path.join(root, 'main.ws.txt'), exported.result);
         }
         console.log(JSON.stringify({elements: build.elements, warnings: build.warnings,
-            pickupCases: 810, checked: ['infection clamped to zero / no vaccine gain', 'normal cure and timeout',
+            pickupCases, checked: ['infection clamped to zero / no vaccine gain', 'normal cure and timeout',
                 'supplemental healing', 'ultimate charge', 'other augments unchanged',
                 'no recursion', 'speed duration / refresh / no stacking / other multipliers / death / spawn reset',
                 'forward/reverse menu', 'random and explicit selection'],
@@ -1644,7 +1646,7 @@ async function main() {
         fs.writeFileSync(path.join(root, 'main.ws.txt'), exported.result);
     }
     console.log(JSON.stringify({elements: build.elements, warnings: build.warnings.length,
-        playerVariables: playerCount, globalVariables: globalCount, compiledRules: parsed.length, packChargeCases, meleeOverchargeCases,
+        playerVariables: playerCount, globalVariables: globalCount, compiledRules: parsed.length, pickupCases, packChargeCases, meleeOverchargeCases,
         checked: ['Apothecary health-pack healing / timeout infection cure / zero floor / no vaccine gain / ultimate cap / no recursion / unchanged other augments', 'menu forward/reverse', 'Laser Barricade augment selection / independent storage / Crouch + Interact placement / release Crouch during windup and aiming / cancel and death cleanup / power up input exclusion / 10000 HP / 30s cooldown', 'Shock Landing name / second-jump/eight directions/45-degree diagonals/no direction means wave only/death/CC/cooldown/collision cleanup',
             'dash 13s cooldown / 0.5s phase / first landing wave / 40 damage to all targets including unpushable / Pyrotechnic actual-hit burns and 15m limit / lethal and invulnerable targets / 32 impulse at 6.5 degrees / early and late landing / radius / all directions / resistance / attribution / interrupts',
             'double jump airborne + grounded double-tap / ability-active launch / 14.4 impulse / 16s cooldown / shared gate / tap timeout / CC / landing / death',
