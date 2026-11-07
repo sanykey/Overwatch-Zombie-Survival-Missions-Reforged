@@ -1,4 +1,4 @@
-/* Element count: (total 28523)
+/* Element count: (total 28509)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
@@ -33,10 +33,10 @@
   208: rule "setDifficulty" (src/subroutines.opy)
   203: rule "AMMO PACK MAGAZINES" (src/augments.opy)
   200: rule "stun (100-109)" (src/supply_drops.opy)
+  197: rule "EFFECTS/TEXT" (src/player_start_menu.opy)
   195: rule "setObjectiveType" (src/global_start_menu.opy)
   195: rule "PLAYER INITIALIZATION" (src/players_game_in_progress.opy)
   189: rule "PRIME SLIMER (EMRE) FLIGHT (BOSS)" (src/zombie_types.opy)
-  188: rule "EFFECTS/TEXT" (src/player_start_menu.opy)
   183: rule "BRUTE (REIN) SUPER SEISMIC SLAM" (src/zombie_types.opy)
   183: rule "PHASE DASH LANDING WAVE" (src/augments.opy)
   181: rule "extendAugmentMelee" (src/augments.opy)
@@ -214,7 +214,6 @@
    23: rule "UPDATE PREGAME VOTING STATUS" (src/player_start_menu.opy)
    23: rule "BOT TAKES DAMAGE AND SWITCHES TARGETS" (src/bots_game_in_progress.opy)
    23: rule "Subroutine spawnGasCloud" (src/zombie_types.opy)
-   23: rule "AUGMENT PREGAME ICON" (src/augments.opy)
    22: rule "PLAYER AUTOMATIC RELOAD" (src/players_game_in_progress.opy)
    22: rule "MINIBOSS MESSAGE" (src/bots_game_in_progress.opy)
    22: rule "Subroutine smolderBoost" (src/zombie_types.opy)
@@ -2526,7 +2525,7 @@ rule ("PLAYER MENU INITIALIZATION") {
     }
 }
 
-//188 elements
+//197 elements
 rule ("EFFECTS/TEXT") {
     event {
         Ongoing - Each Player;
@@ -2553,8 +2552,8 @@ rule ("EFFECTS/TEXT") {
         Create In-World Text(Filtered Array(All Players(All Teams), Compare((Event Player).isPregameVoting, ==, True)), Custom String("Voting..."), Add((Event Player).team1PositionSlot, Multiply(If-Then-Else(Compare((Event Player).pregameState, <, 2), 1.5, -1), Up)), 1.5, Do Not Clip, Visible To Position and String, Color(Purple), Default Visibility); // 33 elements
         "Name text"
         Create In-World Text(Filtered Array(All Players(All Teams), Compare((Event Player).pregameState, <, 2)), Event Player, Add((Event Player).team1PositionSlot, Down), 1.5, Do Not Clip, Visible To Position and String, Color(Aqua), Default Visibility); // 17 elements
-        "Enhancement icon"
-        Create In-World Text(All Players(All Teams), Value In Array(Global.phaseSlot9, (Event Player).enhancementId), Add((Event Player).team1PositionSlot, Multiply(2.25, Up)), 1.5, Do Not Clip, Visible To Position and String, Color(White), Default Visibility); // 17 elements
+        "Enhancement and Augment share one line above the player."
+        Create In-World Text(All Players(All Teams), Custom String("{0} {1}", Value In Array(Global.enhancementIconListConst, (Event Player).enhancementId), Value In Array(Global.augmentIconListConst, (Event Player).augmentId)), Add((Event Player).team1PositionSlot, Multiply(2.25, Up)), 1.5, Do Not Clip, Visible To Position and String, Color(White), Default Visibility); // 26 elements
     }
 }
 
@@ -9272,22 +9271,6 @@ rule ("AUGMENT MENU") {
     actions {
         "Like the primary enhancement HUD, this is created once and reevaluates per viewer."
         Create HUD Text(All Players(Team 1), Custom String("Augment: {0} {1}", Value In Array(String Split(Custom String("No Preference0Kevlar0Shock Landing0Double Jump0Long Reach0Ammo Pack0Grapnel Launcher0Laser Barricade0Apothecary"), First Of(Null)), (Local Player).augmentId), Value In Array(Global.augmentIconListConst, (Local Player).augmentId)), Value In Array(Array(Char In String(Empty Array, False), Custom String("Gain 75 armor that helps protect against infection"), Custom String("Press Jump again in midair: landing shockwave deals 40 damage and pushes nearby zombies; movement input adds a dash. Phased a{0}", Custom String("nd invulnerable for 0.5s. Cooldown: 13s")), Custom String("Jump in midair or double-tap Jump. First hit of 30+ damage in flight or within 0.5s after landing deals +50%. Cooldown: 16s"), Custom String("Triple Quick Melee, melee weapon, Dragonblade and Carnage reach"), Custom String("Carry twice the ammo per full magazine; full reloads restore the bonus"), Custom String("Crouch + Jump: grapple 7-40m; deal 35 damage. Grounded: stun 0.5s. Airborne: knockdown 3s. Cooldown: 16s"), Custom String("Hold Crouch + Interact to place a wall that blocks zombies; release Interact to deploy; Crouch may be released while aiming. {0}", Custom String("Cooldown: 30s")), Custom String("Health packs heal twice as much, remove up to 1 existing infection even after time runs out, and grant +7% ultimate charge an{0}", Custom String("d +50% move speed for 5s"))), (Local Player).augmentId), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Interact))), Left, 4, Color(Aqua), Color(Aqua), Color(Aqua), Visible To and String, Default Visibility); // 93 elements
-    }
-}
-
-//23 elements
-rule ("AUGMENT PREGAME ICON") {
-    event {
-        Ongoing - Each Player;
-        Team 1;
-        All;
-    }
-    conditions {
-        Global.isPregameSetup == True; // 2 elements
-        (Event Player).isPlayerActive == True; // 3 elements
-    }
-    actions {
-        Create In-World Text(All Players(All Teams), Value In Array(Global.augmentIconListConst, (Event Player).augmentId), Add((Event Player).team1PositionSlot, Multiply(2.75, Up)), 1.5, Do Not Clip, Visible To Position and String, Color(White), Default Visibility); // 17 elements
     }
 }
 

@@ -63,15 +63,6 @@ rule "AUGMENT MENU":
     )
 
 
-rule "AUGMENT PREGAME ICON":
-    @Event eachPlayer
-    @Team 1
-    @Condition isPregameSetup == true
-    @Condition eventPlayer.isPlayerActive == true
-
-    createInWorldText(getAllPlayers(), AUGMENT_ICONS[eventPlayer.augmentId], eventPlayer.pregamePosition + 2.75 * Vector.UP, 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING)
-
-
 rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)":
     @Event eachPlayer
     @Team 1
