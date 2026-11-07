@@ -10102,7 +10102,7 @@ rule ("LEECH LIFESTEAL") {
         All;
     }
     actions {
-        "Workshop workaround: either eligibility check in rule Conditions reproduced\ndisappearing newer heroes during voting. Keep both checks in Actions instead;\nthe engine cause is unknown. isGameplayActive only holds boolean/default zero."
+        "with And DID prevent reproduction in user tests; preserve its compiled And.\nThis event rule adds only an If per damage event, without polling or waits.\nisGameplayActive only holds boolean/default zero."
         If(And(Global.isGameplayActive, Compare((Event Player).augmentId, ==, 10))); // 10 elements
             "Include damage from the hero, primary enhancement and scripted powerups."
             Heal(Event Player, Event Player, Multiply(Event Damage, 0.15)); // 4 elements
