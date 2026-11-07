@@ -5,6 +5,8 @@ subroutine checkEnhancementPlacement
 subroutine startPupDefaultChase
 subroutine applyBulkingSeasonStats
 
+#!define overchargeAssistTotal(player) (player.getStatistic(Stat.OFFENSIVE_ASSISTS) + player.getStatistic(Stat.DEFENSIVE_ASSISTS))
+
 rule "PLAYER ENHANCEMENT INITIALIZATION":
     @Event eachPlayer
     @Team 1
@@ -81,6 +83,8 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             eventPlayer.enhancementCapacitorEnergy = 0
             eventPlayer.enhancementCapacitorCharge = 0
             eventPlayer.enhancementCapacitorDeadline = 0
+            # Baseline existing match stats; do not pay for assists before selection/join.
+            eventPlayer.enhancementCapacitorAssistSnapshot = overchargeAssistTotal(eventPlayer)
             hudText(
                 eventPlayer,
                 iconString(Icon.BOLT),
@@ -373,6 +377,22 @@ rule "OVERCHARGE STORES HEALING":
     @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
 
     eventPlayer.enhancementCapacitorEnergy += eventHealing / 3
+
+
+rule "OVERCHARGE STORES ASSISTS":
+    @Event eachPlayer
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
+    @Condition overchargeAssistTotal(eventPlayer) != eventPlayer.enhancementCapacitorAssistSnapshot
+
+    # No assist event exists. Only Overcharge players observe the two native counters.
+    # Synchronous scratch: consumed before any wait/call/HUD reevaluation can reuse tmp0.
+    #!define overchargeCurrentAssists tmp0
+    overchargeCurrentAssists = overchargeAssistTotal(eventPlayer)
+    eventPlayer.enhancementCapacitorEnergy += max(0, overchargeCurrentAssists - eventPlayer.enhancementCapacitorAssistSnapshot) * 10
+    # Resync on a stat reset too, without subtracting energy or paying twice.
+    eventPlayer.enhancementCapacitorAssistSnapshot = overchargeCurrentAssists
 
 
 rule "OVERCHARGE ARMS CHARGE":

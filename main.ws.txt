@@ -1,8 +1,8 @@
-/* Element count: (total 28552)
+/* Element count: (total 28595)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
-  917: rule "PLAYER ENHANCEMENT INITIALIZATION" (src/enhancements.opy)
+  924: rule "PLAYER ENHANCEMENT INITIALIZATION" (src/enhancements.opy)
   822: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
   485: rule "PLAYER AUGMENT INITIALIZATION" (src/augments.opy)
   481: rule "GRAPNEL LAUNCHER" (src/augments.opy)
@@ -183,6 +183,7 @@
    36: rule "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)" (src/player_start_menu.opy)
    36: rule "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)" (src/player_start_menu.opy)
    36: rule "UPDATE SUCCESSFUL TELEPORT STATUS" (src/bots_game_in_progress.opy)
+   36: rule "OVERCHARGE STORES ASSISTS" (src/enhancements.opy)
    35: rule "PREVENT PLAYERS FROM LEAVING START EARLY" (src/player_start_menu.opy)
    35: rule "ZOMBIE HYBRID" (src/enhancements.opy)
    34: rule "abilityPlacement" (src/subroutines.opy)
@@ -2216,7 +2217,7 @@ rule ("EFFECTS/TEXTS") {
         Create HUD Text(All Players(Team 1), Value In Array(Array(Custom String("Objective Type: No Preference"), Custom String("Objective Type: Showdown {0}", Ability Icon String(Hero(Brigitte), Button(Ultimate))), Custom String("Objective Type: Bosses {0}", Icon String(Warning)), Null, Null, Custom String("Objective Type: Kill Zone {0}", If-Then-Else(Modulo(Round To Integer(Multiply(Total Time Elapsed, 1.25), Up), 2), Icon String(Ring Thin), Icon String(Ring Thick))), Custom String("Objective Type: Zombie Egg {0}", Icon String(Radioactive)), Custom String("Objective Type: Satellite Uplink {0}", Icon String(Moon)), Null, Custom String("Objective Type: Mixed Objectives {0}", Icon String(Spiral))), (Local Player).actorTeamSlot21), Value In Array(Array(Char In String(Empty Array, False), Custom String("Players must contest a point against zombies"), Custom String("Spawns giant versions of zombies"), Null, Null, Custom String("Clear zombies from a designated area"), Custom String("Survivors must destroy an object that is spawning zombies"), Custom String("Survivors must repair terminals to communicate with a satellite"), Null, Custom String("Randomly assigns all types of objectives")), (Local Player).actorTeamSlot21), If-Then-Else(Or(Global.isVoting, Compare((Local Player).actorTeamSlot21, ==, Null)), Custom String("Change Vote (Press [{0}])", Input Binding String(Button(Ability 2))), Empty Array), Left, 2, Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Visible To String and Color, Default Visibility); // 141 elements
         "Enhancement"
         Set Global Variable(phaseSlot2, Array(Color(Aqua), Color(Red), Color(Gray), Color(Orange), Color(Green), Color(Gray), Global.colorChargeBatteryConst, Color(Purple), Color(Blue), Color(Yellow), Color(Orange))); // 24 elements
-        Create HUD Text(All Players(Team 1), Custom String("Enhancement: {0}{1}", Value In Array(String Split(Custom String("No Preference0Brain Killer 0Zombie Hybrid 0Pyrotechnic 0Plague Doctor 0Born to Battle 0Charge Battery 0Hitchhiker 0P.U.P. 0Ov{0}", Custom String("ercharge 0Bulking Season ")), First Of(Null)), (Local Player).enhancementId), If-Then-Else(Compare((Local Player).enhancementId, >, Null), Value In Array(Global.phaseSlot9, (Local Player).enhancementId), Char In String(Empty Array, False))), Value In Array(Array(Char In String(Empty Array, False), Custom String("Critical hits do more damage"), Custom String("Get infected faster, and convert it to explosive damage"), Custom String("Dealing damage, within 15 meters, sets enemies on fire"), Custom String("Deal 30% more healing, plus another 25% to infected players while reducing their infection level"), Custom String("Final blows grant a cooldown reset on the next ability use, storing up to 2 charges"), Custom String("Survivor can place a battery that gives ultimate charge"), Custom String("Survivor can attach to a teammate and fuse their health."), Custom String("Survivor is equipped with an autonomous friendly droid"), Custom String("Store 1 energy per 3 healing, including packs; uncapped. Hold Melee: spend up to 100 for bonus damage on hits for 0.3s"), Custom String("Kills and damage participation grant +0.5% Max Life and +0.5% Hero Size per stack (caps: 200% Life, 1.35x size). Lose half on{0}", Custom String(" death"))), (Local Player).enhancementId), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Melee))), Left, 3, Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Visible To String and Color, Default Visibility); // 121 elements
+        Create HUD Text(All Players(Team 1), Custom String("Enhancement: {0}{1}", Value In Array(String Split(Custom String("No Preference0Brain Killer 0Zombie Hybrid 0Pyrotechnic 0Plague Doctor 0Born to Battle 0Charge Battery 0Hitchhiker 0P.U.P. 0Ov{0}", Custom String("ercharge 0Bulking Season ")), First Of(Null)), (Local Player).enhancementId), If-Then-Else(Compare((Local Player).enhancementId, >, Null), Value In Array(Global.phaseSlot9, (Local Player).enhancementId), Char In String(Empty Array, False))), Value In Array(Array(Char In String(Empty Array, False), Custom String("Critical hits do more damage"), Custom String("Get infected faster, and convert it to explosive damage"), Custom String("Dealing damage, within 15 meters, sets enemies on fire"), Custom String("Deal 30% more healing, plus another 25% to infected players while reducing their infection level"), Custom String("Final blows grant a cooldown reset on the next ability use, storing up to 2 charges"), Custom String("Survivor can place a battery that gives ultimate charge"), Custom String("Survivor can attach to a teammate and fuse their health."), Custom String("Survivor is equipped with an autonomous friendly droid"), Custom String("Store healing / 3 incl. packs, +10 per assist; uncapped. Hold Melee: spend up to 100 for bonus damage on hits for 0.3s"), Custom String("Kills and damage participation grant +0.5% Max Life and +0.5% Hero Size per stack (caps: 200% Life, 1.35x size). Lose half on{0}", Custom String(" death"))), (Local Player).enhancementId), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Melee))), Left, 3, Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Visible To String and Color, Default Visibility); // 121 elements
     }
 }
 
@@ -8487,7 +8488,7 @@ rule ("finishPowerUpDrop") {
     }
 }
 
-//917 elements
+//924 elements
 rule ("PLAYER ENHANCEMENT INITIALIZATION") {
     event {
         Ongoing - Each Player;
@@ -8518,7 +8519,7 @@ rule ("PLAYER ENHANCEMENT INITIALIZATION") {
             Chase Player Variable At Rate(Event Player, infectionLevel, False, If-Then-Else(Compare((Event Player).infectionLevel, >, Null), 0.015, Null), Destination and Rate); // 10 elements
         End; // 1 element
         If(True); // 1 element
-            Skip(Value In Array(Array(48, Null, 2, 5, 10, 15, 18, 21, 29, 35), Add(True, Index Of Array Value(Array(1, 3, 4, 9, 10, 5, 6, 7, 8), (Event Player).enhancementId)))); // 48 elements
+            Skip(Value In Array(Array(49, Null, 2, 5, 10, 16, 19, 22, 30, 36), Add(True, Index Of Array Value(Array(1, 3, 4, 9, 10, 5, 6, 7, 8), (Event Player).enhancementId)))); // 48 elements
         //__label_switch_70_0__:
         "Enhancement: Brain Killer\nNo enhancement state slots: bonus damage is calculated directly from the damage event."
         Create HUD Text(Event Player, Icon String(Skull), Custom String("Bonus critical damage                                                                                                        {0}", Custom String("                                                                  ")), Custom String("Brain Killer"), Left, 99, Color(Red), Color(Red), Color(Red), String, Default Visibility); // 18 elements
@@ -8541,6 +8542,8 @@ rule ("PLAYER ENHANCEMENT INITIALIZATION") {
         Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
         Set Player Variable(Event Player, actorTeamSlot23, Null); // 1 element
         Set Player Variable(Event Player, actorTeamSlot24, Null); // 1 element
+        "Baseline existing match stats; do not pay for assists before selection/join."
+        Set Player Variable(Event Player, actorTeamSlot25, Add(Player Stat(Event Player, Offensive Assists), Player Stat(Event Player, Defensive Assists))); // 7 elements
         Create HUD Text(Event Player, Icon String(Bolt), Custom String("Hold [{0}] to charge | Energy: {1} | Charged: {2}", Input Binding String(Button(Melee)), Round To Integer((Event Player).actorTeamSlot22, Down), Custom String("{0}                                                                                                                          {1}", Round To Integer((Event Player).actorTeamSlot23, Down), Custom String("                                                "))), Custom String("Overcharge"), Left, 99, Color(Yellow), Color(Yellow), Color(Yellow), String, Default Visibility); // 32 elements
         Else; // 1 element
         //__label_switch_70_4__:
@@ -8856,6 +8859,27 @@ rule ("OVERCHARGE STORES HEALING") {
     }
     actions {
         Modify Player Variable(Event Player, actorTeamSlot22, Add, Divide(Event Healing, 3)); // 4 elements
+    }
+}
+
+//36 elements
+rule ("OVERCHARGE STORES ASSISTS") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        All;
+    }
+    conditions {
+        Global.isGameplayActive == True; // 2 elements
+        (Event Player).enhancementId == 9; // 4 elements
+        Add(Player Stat(Event Player, Offensive Assists), Player Stat(Event Player, Defensive Assists)) != (Event Player).actorTeamSlot25; // 9 elements
+    }
+    actions {
+        "No assist event exists. Only Overcharge players observe the two native counters.\nSynchronous scratch: consumed before any wait/call/HUD reevaluation can reuse tmp0."
+        Set Global Variable(tmp0, Add(Player Stat(Event Player, Offensive Assists), Player Stat(Event Player, Defensive Assists))); // 7 elements
+        Modify Player Variable(Event Player, actorTeamSlot22, Add, Multiply(Max(False, Subtract(Global.tmp0, (Event Player).actorTeamSlot25)), 10)); // 11 elements
+        "Resync on a stat reset too, without subtracting energy or paying twice."
+        Set Player Variable(Event Player, actorTeamSlot25, Global.tmp0); // 2 elements
     }
 }
 

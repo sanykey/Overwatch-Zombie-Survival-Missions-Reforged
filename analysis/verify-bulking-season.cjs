@@ -59,7 +59,7 @@ async function main() {
     assert.deepEqual(built.warnings, []);
     const all = rules(built.result), earn = 'BULKING SEASON EARNS STACKS', die = 'BULKING SEASON LOSES STACKS ON DEATH';
     assert(built.result.match(/rule \("BULKING SEASON EARNS STACKS"\) \{\s*event \{\s*Player Earned Elimination;/));
-    assert(!files['enhancements.opy'].includes('getStatistic('), 'No assist-stat polling');
+    assert(!JSON.stringify(all[earn]).includes('Player Stat('), 'Bulking Season does not poll assist stats');
     assert(!files['variables.opy'].includes('enhancementBulkCreditSnapshot'));
     const state = {enhancementId: 10, isGameplayActive: 1, [stack]: 0, sizeScale: 1};
     execute(all, earn, state);
