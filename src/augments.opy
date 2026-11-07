@@ -58,7 +58,7 @@ rule "AUGMENT MENU":
             "Health packs heal twice as much, remove up to 1 existing infection even after time runs out, and grant +7% ultimate charge and +50% move speed for 5s"
         ][localPlayer.augmentId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.INTERACT)),
-        HudPosition.LEFT, 4, Color.AQUA, Color.AQUA, Color.AQUA,
+        HudPosition.ACTUALLY_LEFT, 4, Color.AQUA, Color.AQUA, Color.AQUA,
         HudReeval.VISIBILITY_AND_STRING
     )
 

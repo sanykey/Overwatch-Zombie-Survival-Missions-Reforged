@@ -183,7 +183,7 @@ rule "EFFECTS/TEXTS":
             "Randomly assigns all types of objectives"
         ][localPlayer.pregameObjectiveVote],
         "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if isVoting or localPlayer.pregameObjectiveVote == 0 else [],
-        HudPosition.LEFT,
+        HudPosition.ACTUALLY_LEFT,
         2,
         startMenuObjectiveColorList[localPlayer.pregameObjectiveVote],
         startMenuObjectiveColorList[localPlayer.pregameObjectiveVote],
@@ -216,7 +216,7 @@ rule "EFFECTS/TEXTS":
             "Kills and damage participation grant +0.5% Max Life and +0.5% Hero Size per stack (caps: 200% Life, 1.35x size). Lose half on death"
         ][localPlayer.enhancementId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)),
-        HudPosition.LEFT,
+        HudPosition.ACTUALLY_LEFT,
         3,
         startMenuEnhancementColorList[localPlayer.enhancementId],
         startMenuEnhancementColorList[localPlayer.enhancementId],
