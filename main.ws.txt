@@ -1,4 +1,4 @@
-/* Element count: (total 28514)
+/* Element count: (total 28552)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
@@ -39,6 +39,7 @@
   183: rule "BRUTE (REIN) SUPER SEISMIC SLAM" (src/zombie_types.opy)
   183: rule "PHASE DASH LANDING WAVE" (src/augments.opy)
   181: rule "Initialize global variables"
+  181: rule "extendAugmentMelee" (src/augments.opy)
   179: rule "STALKER (MOIRA) FADE" (src/zombie_types.opy)
   178: rule "BOSS DIES (ALL BOSS OBJECTIVES)" (src/objective_types/objective_type_bosses.opy)
   174: rule "BOT BECOMES BOSS" (src/objective_types/objective_type_bosses.opy)
@@ -55,7 +56,6 @@
   147: rule "BIOMORPHING GOAL START" (src/objective_types/objective_type_biomorphing.opy)
   145: rule "airStrike (30-39)" (src/supply_drops.opy)
   144: rule "SMOLDER SUPER SLAM" (src/zombie_types.opy)
-  143: rule "extendAugmentMelee" (src/augments.opy)
   140: rule "generateMapGrid" (src/global_startup.opy)
   140: rule "beaconofHealing (40-49)" (src/supply_drops.opy)
   137: rule "explosionSequence" (src/subroutines.opy)
@@ -9802,7 +9802,7 @@ rule ("LONG REACH CARNAGE") {
     }
 }
 
-//143 elements
+//181 elements
 rule ("extendAugmentMelee") {
     event {
         Subroutine;
@@ -9820,13 +9820,20 @@ rule ("extendAugmentMelee") {
                 If(And(Compare((Event Player).enhancementId, ==, 3), Compare(Distance Between(Event Player, Value In Array(Global.tmp2, (Event Player).augmentState1)), <, 15))); // 20 elements
                     Set Status(Value In Array(Global.tmp2, (Event Player).augmentState1), Event Player, Burning, 3); // 7 elements
                     Modify Player Variable(Event Player, actorTeamSlot22, Append To Array, Value In Array(Global.tmp2, (Event Player).augmentState1)); // 6 elements
+                Else If(And(Compare((Event Player).enhancementId, ==, 9), Compare((Event Player).actorTeamSlot23, >, Null))); // 14 elements
+                    Skip If(Compare((Event Player).actorTeamSlot24, !=, Null), True); // 6 elements
+                    Set Player Variable(Event Player, actorTeamSlot24, Add(Total Time Elapsed, 0.3)); // 4 elements
+                    //__label_if_78__:
+                    Skip If(Compare(Total Time Elapsed, >=, (Event Player).actorTeamSlot24), True); // 6 elements
+                    Damage(Value In Array(Global.tmp2, (Event Player).augmentState1), Event Player, (Event Player).actorTeamSlot23); // 8 elements
+                    //__label_if_79__:
                 End; // 1 element
             End; // 1 element
         End; // 1 element
         Skip If(Compare(Global.tmp2, ==, Empty Array), True); // 5 elements
         "One impact per swing, on the nearest hit target. Rounded from 0.3 to 0.4\n(about one third larger); Grapnel Launcher uses the same impact size."
         Play Effect(All Players(All Teams), Bad Explosion, Color(Orange), Add(Position Of(First Of(Sorted Array(Global.tmp2, Distance Between(Event Player, Current Array Element)))), Up), 0.4); // 14 elements
-        //__label_if_78__:
+        //__label_if_80__:
     }
 }
 
@@ -9849,7 +9856,7 @@ rule ("AMMO PACK MAGAZINES") {
         Set Player Variable(Event Player, augmentState2, Null); // 1 element
         Skip If((Event Player).augmentState0, True); // 3 elements
         Set Player Variable(Event Player, augmentState0, Empty Array); // 1 element
-        //__label_if_79__:
+        //__label_if_81__:
         Set Player Variable(Event Player, augmentState1, First Of(Filtered Array((Event Player).augmentState0, And(Compare(First Of(Current Array Element), ==, Hero Of(Event Player)), Compare(Value In Array(Current Array Element, True), ==, Weapon(Event Player)))))); // 19 elements
         If(Compare((Event Player).augmentState1, ==, Null)); // 6 elements
             Set Player Variable(Event Player, augmentState1, Array(Hero Of(Event Player), Weapon(Event Player), Multiply(Max Ammo(Event Player, False), 2), Multiply(Max Ammo(Event Player, True), 2))); // 18 elements
@@ -9997,7 +10004,7 @@ rule ("LASER BARRICADE BLOCKS ZOMBIES") {
             Modify Player Variable(Event Player, augmentBarrierHealth, Subtract, Multiply(Max Health(Global.tmp2), 2.5)); // 6 elements
             Set Status(Global.tmp2, Event Player, Rooted, 0.5); // 3 elements
             Damage(Global.tmp2, Event Player, 10); // 3 elements
-            //__label_if_80__:
+            //__label_if_82__:
             If(Not(Magnitude Of(Throttle Of(Global.tmp2)))); // 5 elements
                 "If bot is not throttling"
                 Apply Impulse(Global.tmp2, Direction From Angles(Horizontal Angle From Direction(Direction Towards((Event Player).augmentState3, First Of(Sorted Array(Global.tmp1, Distance Between(Global.tmp2, Current Array Element))))), Multiply(If-Then-Else(Compare(Y Component Of(Position Of(Global.tmp2)), >, Y Component Of((Event Player).augmentState3)), -1, 1), Add(90, Vertical Angle From Direction(Ray Cast Hit Normal(Position Of(Global.tmp2), Add(Position Of(Global.tmp2), Down), Null, All Players(All Teams), False))))), 1, To World, Incorporate Contrary Motion); // 50 elements
@@ -10014,7 +10021,7 @@ rule ("LASER BARRICADE BLOCKS ZOMBIES") {
             Wait(6, Restart When True); // 2 elements
             Skip If(Compare((Event Player).augmentBarrierHealth, >, Null), True); // 6 elements
             Set Player Variable(Event Player, augmentBarrierHealth, 1); // 2 elements
-            //__label_if_81__:
+            //__label_if_83__:
         End; // 1 element
         Chase Player Variable At Rate(Event Player, augmentBarrierHealth, 10000, 500, None); // 3 elements
         Loop If Condition Is True; // 1 element

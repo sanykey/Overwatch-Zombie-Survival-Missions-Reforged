@@ -505,6 +505,62 @@ async function main() {
         state.globals.isPregameSetup = false;
         assert(!applies(compiled.get(menu), state));
     }
+    let meleeOverchargeCases = 0;
+    const runExtendedMelee = state => {
+        // The helper reuses the native-radius entry for health; each caller
+        // supplies a fresh query before a synchronous swing.
+        Object.assign(state.globals, {tmp0: [2.5, 7.5, 30], tmp1: 40});
+        run('extendAugmentMelee', state);
+    };
+    const meleeTargets = invincible => [4, 6].map((z, id) =>
+        ({id, position: [0, 0, z], alive: true, visible: true, health: 1000, invincible}));
+    for (const enhancement of [1, 9]) for (const charge of [0, 60, 250])
+    for (const deadline of [0, 99, 100.3]) for (const invincible of [false, true])
+    for (const time of [100, 100.3]) {
+        const state = scenario(4, {targets: meleeTargets(invincible), time});
+        Object.assign(state.player, {enhancementId: enhancement, [capacitorEnergy]: 500,
+            [packChargeSlot]: charge, [packDeadlineSlot]: deadline});
+        runExtendedMelee(state);
+        const bonus = enhancement === 9 && charge > 0 && !invincible && (deadline === 0 || time < deadline);
+        assert.deepEqual(state.damage.map(hit => hit.amount), bonus ? [40, charge, 40, charge] : [40, 40]);
+        assert.equal(state.player[packDeadlineSlot], bonus && deadline === 0 ? time + 0.3 : deadline,
+            'Only an actual first hit opens the burst; existing deadlines cannot be extended');
+        assert.equal(state.player[packChargeSlot], charge, 'Extended hits preserve the fixed armed charge');
+        assert.equal(state.player[capacitorEnergy], 500, 'Extended hits cannot spend the next energy bank');
+        meleeOverchargeCases++;
+    }
+    const burstMelee = scenario(4, {targets: meleeTargets(false)});
+    Object.assign(burstMelee.player, {enhancementId: 9, [capacitorEnergy]: 500,
+        [packChargeSlot]: 125, [packDeadlineSlot]: 0});
+    runExtendedMelee(burstMelee);
+    assert.equal(burstMelee.player[packDeadlineSlot], 100.3);
+    burstMelee.time = 100.15;
+    burstMelee.player[capacitorEnergy] += 10;
+    runExtendedMelee(burstMelee);
+    assert.equal(burstMelee.player[packDeadlineSlot], 100.3, 'Later swings do not restart the window');
+    assert.deepEqual(burstMelee.damage.map(hit => hit.amount), [40,125,40,125,40,125,40,125]);
+    burstMelee.time = 100.3;
+    runExtendedMelee(burstMelee);
+    assert.deepEqual(burstMelee.damage.slice(-2).map(hit => hit.amount), [40,40], 'Expiry blocks bonus damage before cleanup runs');
+    run('OVERCHARGE CLEARS CHARGE', burstMelee);
+    assert.equal(burstMelee.player[packChargeSlot], 0);
+    assert.equal(burstMelee.player[capacitorEnergy], 510);
+    for (const targets of [[], meleeTargets(true),
+        [{id: 'wall', position: [0,0,4], alive: true, visible: false, health: 1000},
+         {id: 'too far', position: [0,0,9], alive: true, visible: true, health: 1000}]]) {
+        const state = scenario(4, {targets});
+        Object.assign(state.player, {enhancementId: 9, [packChargeSlot]: 125, [packDeadlineSlot]: 0});
+        runExtendedMelee(state);
+        assert.equal(state.player[packDeadlineSlot], 0, 'Misses, blocked and invulnerable targets preserve an unstarted burst');
+    }
+    const mixedMelee = scenario(4, {targets: meleeTargets(false)});
+    mixedMelee.targets[0].invincible = true;
+    Object.assign(mixedMelee.player, {enhancementId: 9, [packChargeSlot]: 125, [packDeadlineSlot]: 0});
+    runExtendedMelee(mixedMelee);
+    assert.deepEqual(mixedMelee.damage.map(hit => [hit.targets[0].id, hit.amount]), [[0,40],[1,40],[1,125]]);
+    const syntheticBonus = scenario(4, {eventAbility: 0, eventDamage: 125, victim: {team: 2}});
+    Object.assign(syntheticBonus.player, {enhancementId: 9, [packChargeSlot]: 125, [packDeadlineSlot]: 100.3});
+    assert(!applies(compiled.get('OVERCHARGE BONUS DAMAGE'), syntheticBonus), 'Scripted melee/bonus damage cannot reenter native bonus handling');
     if (process.argv.includes('--apothecary-only')) {
         for (const selected of [0, 8]) {
             const state = scenario(selected, {randomRoll: 8});
@@ -1588,7 +1644,7 @@ async function main() {
         fs.writeFileSync(path.join(root, 'main.ws.txt'), exported.result);
     }
     console.log(JSON.stringify({elements: build.elements, warnings: build.warnings.length,
-        playerVariables: playerCount, globalVariables: globalCount, compiledRules: parsed.length, packChargeCases,
+        playerVariables: playerCount, globalVariables: globalCount, compiledRules: parsed.length, packChargeCases, meleeOverchargeCases,
         checked: ['Apothecary health-pack healing / timeout infection cure / zero floor / no vaccine gain / ultimate cap / no recursion / unchanged other augments', 'menu forward/reverse', 'Laser Barricade augment selection / independent storage / Crouch + Interact placement / release Crouch during windup and aiming / cancel and death cleanup / power up input exclusion / 10000 HP / 30s cooldown', 'Shock Landing name / second-jump/eight directions/45-degree diagonals/no direction means wave only/death/CC/cooldown/collision cleanup',
             'dash 13s cooldown / 0.5s phase / first landing wave / 40 damage to all targets including unpushable / Pyrotechnic actual-hit burns and 15m limit / lethal and invulnerable targets / 32 impulse at 6.5 degrees / early and late landing / radius / all directions / resistance / attribution / interrupts',
             'double jump airborne + grounded double-tap / ability-active launch / 14.4 impulse / 16s cooldown / shared gate / tap timeout / CC / landing / death',
@@ -1600,7 +1656,8 @@ async function main() {
             'Carnage x3 / one hit per cast / cancelled casts', 'Pyrotechnic all targets / actual health loss / invulnerability / distance limit',
             'Vendetta held fire / short clicks / fixed 0.6s interval / interruptions / restart / target refresh',
             'random Enhancement + Augment / all real IDs / late join / retain rolls / preserve explicit selections / removed Workshop settings',
-            'Overcharge health packs / receiver ownership / null-self-other attribution / both event orders / no double credit / fractional energy / gameplay gate / Apothecary / armed burst preserved'],
+            'Overcharge health packs / receiver ownership / null-self-other attribution / both event orders / no double credit / fractional energy / gameplay gate / Apothecary / armed burst preserved',
+            'Long Reach Overcharge / actual damage / immunity / mixed targets / first hit / multiple targets and swings / exact expiry / fixed window / independent next bank / scripted-event filtering'],
         exported: process.argv.includes('--export'), limitation: 'Game physics, native hitboxes and engine ammo support require an in-game check.'}, null, 2));
 }
 main().catch(error => {console.error(error); process.exitCode = 1;});

@@ -564,6 +564,13 @@ def extendAugmentMelee():
             if eventPlayer.enhancementId == Enhancement.PYROTECHNIC and distance(eventPlayer, augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex]) < 15:
                 augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex].setStatusEffect(eventPlayer, Status.BURNING, 3)
                 eventPlayer.enhancementPyroHitList.append(augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex])
+            elif eventPlayer.enhancementId == Enhancement.OVERCHARGE and eventPlayer.enhancementCapacitorCharge > 0:
+                # Extended hits have no Event Ability; apply the armed bonus here.
+                # The native-event rule excludes scripted damage, preventing recursion.
+                if eventPlayer.enhancementCapacitorDeadline == 0:
+                    eventPlayer.enhancementCapacitorDeadline = getTotalTimeElapsed() + 0.3
+                if getTotalTimeElapsed() < eventPlayer.enhancementCapacitorDeadline:
+                    damage(augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex], eventPlayer, eventPlayer.enhancementCapacitorCharge)
     if augmentMeleeTargets != []:
         # One impact per swing, on the nearest hit target. Rounded from 0.3 to 0.4
         # (about one third larger); Grapnel Launcher uses the same impact size.
