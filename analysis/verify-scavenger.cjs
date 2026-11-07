@@ -45,6 +45,33 @@ async function main() {
         assert.equal(s.globals.supplyPowerUpTextIdList.length, 0);
         assert.equal(s.globals.supplyPowerUpIdList.length, s.globals.supplyPowerUpPositionList.length);
     };
+    const interactRule = compiled.get(interact);
+    const interactConditions = interactRule.body.match(/conditions \{([\s\S]*?)\}/)[1];
+    assert(!interactConditions.includes('Global.isGameplayActive'), 'Keep phase eligibility out of Interact Conditions');
+    assert.equal(actions(interactRule)[0], 'Abort If(Not(Global.isGameplayActive));', 'Reject pregame before any item query or mutation');
+    for (const phase of [undefined, false, 0]) {
+        const s = state(1, [7]); s.buttons.add('Crouch'); ground(s, 4);
+        if (phase === undefined) delete s.globals.isGameplayActive;
+        else s.globals.isGameplayActive = phase;
+        s.globals.isSupplyDropOpen = false; s.globals.tmp0 = 1234;
+        assert(applies(interactRule, s), 'The pressed input reaches the action-level phase guard');
+        assert(run(interact, s).done());
+        assert.equal(s.globals.isSupplyDropOpen, false);
+        assert.deepEqual(s.globals.supplyPowerUpIdList, [4]);
+        assert.deepEqual(s.player[backpack], [7]); assert.equal(s.player[active], 1);
+        assert.equal(s.destroyedEffects.length, 0); assert.equal(s.globals.tmp0, 1234);
+    }
+    for (const stop of ['game end', 'released Interact', 'death']) {
+        const s = state(1, [7]); s.player.infectionLevel = 5;
+        const pending = run(interact, s); assert(!pending.done());
+        if (stop === 'game end') s.globals.isGameplayActive = false;
+        if (stop === 'released Interact') s.buttons.delete('Interact');
+        if (stop === 'death') s.alive = false;
+        s.time += 0.25; pending.resume(); assert(pending.done());
+        assert.equal(s.player[active], 1, 'Interrupted item use must not consume the active item');
+        assert.deepEqual(s.player[backpack], [7]); assert.equal(s.player.infectionLevel, 5);
+        assert.equal(s.effects.length, 0);
+    }
 
     const crate = state(); crate.buttons.add('Crouch'); ground(crate, 4);
     Object.assign(crate.globals, {supplyDropLandingPosition: [0, 1.5, 3],

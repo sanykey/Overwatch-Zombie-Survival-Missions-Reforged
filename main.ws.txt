@@ -1,4 +1,4 @@
-/* Element count: (total 29172)
+/* Element count: (total 29175)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
@@ -12,7 +12,7 @@
   369: rule "LONG REACH MELEE WEAPONS" (src/augments.opy)
   327: rule "GLOBAL MENU INITIALIZATION" (src/global_start_menu.opy)
   321: rule "DAYTAKER (ILLARI) BURST" (src/zombie_types.opy)
-  317: rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)" (src/supply_drops.opy)
+  320: rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)" (src/supply_drops.opy)
   314: rule "BEHEMOTH (ROAD) TOXIC CLOUD" (src/zombie_types.opy)
   313: rule "SLIMER (MERCY) TENTACLE GRAB" (src/zombie_types.opy)
   293: rule "teleportBots" (src/bots_game_in_progress.opy)
@@ -7864,7 +7864,7 @@ rule ("EFFECT/TEXT (GLOBAL)") {
     }
 }
 
-//317 elements
+//320 elements
 rule ("PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)") {
     event {
         Ongoing - Each Player;
@@ -7876,10 +7876,11 @@ rule ("PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER U
         "Reserve Laser Barricade input until Interact is released, even after Crouch is released.\nThrowing a carried Dead Weight target takes precedence over barricade placement."
         Or(Or(And(Compare((Event Player).enhancementId, ==, 11), Compare((Event Player).actorTeamSlot22, !=, Null)), Compare((Event Player).augmentId, !=, 7)), And(Not(Is Button Held(Event Player, Button(Crouch))), Compare((Event Player).augmentState2, >=, Null))) == True; // 35 elements
         Is Alive(Event Player) == True; // 2 elements
-        Global.isGameplayActive == True; // 2 elements
         Is Dummy Bot(Event Player) == False; // 2 elements
     }
     actions {
+        "1079602bbdcf12d9e989d595c315949601fd184b; grouped And helped in user tests.\n- Leech: \"LEECH LIFESTEAL\", src/augments.opy,\nde11b70848715973335c011e19821273504f5d3c; eligibility moved to Actions.\nisGameplayActive only holds boolean/default zero."
+        Abort If(Not(Global.isGameplayActive)); // 3 elements
         "Resolve zombie interaction once per press, before any item transaction.\nThe held reference survives a throw request until the bot finishes cleanup."
         If(Compare((Event Player).enhancementId, ==, 11)); // 7 elements
             Call Subroutine(useLivingProjectile); // 1 element
@@ -7931,7 +7932,9 @@ rule ("PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER U
             End; // 1 element
         Else If((Event Player).actorTeamSlot2); // 3 elements
             Wait(0.25, Abort When False); // 2 elements
-            Call Subroutine(powerUpUsage); // 1 element
+            "Phase is no longer in Conditions, so Abort When False cannot observe it.\nRecheck after the hold to prevent item activation after gameplay ends."
+            If(Global.isGameplayActive); // 2 elements
+                Call Subroutine(powerUpUsage); // 1 element
     }
 }
 

@@ -1592,9 +1592,10 @@ async function main() {
     const interactActions = actions(interactRule);
     const useIndex = interactActions.indexOf('Call Subroutine(powerUpUsage);');
     assert(useIndex > 0);
-    assert.equal(interactActions[useIndex - 1], 'Wait(0.25, Abort When False);');
+    assert.equal(interactActions[useIndex - 2], 'Wait(0.25, Abort When False);');
+    assert.equal(interactActions[useIndex - 1], 'If(Global.isGameplayActive);', 'Recheck phase after the hold now that it is absent from Conditions');
     const useOnly = {...interactRule, body: interactRule.body.split('actions {\n')[0]
-        + 'actions {\n' + interactActions.slice(useIndex - 1, useIndex + 1).join('\n') + '\n}'};
+        + 'actions {\n' + interactActions.slice(useIndex - 2, useIndex + 1).join('\n') + '\n}'};
     const useCompiled = new Map(compiled);
     useCompiled.set('powerUpUsage', {name: 'powerUpUsage',
         body: 'actions {\nSet Player Variable(Event Player, powerUpItemId, 0);\n}'});

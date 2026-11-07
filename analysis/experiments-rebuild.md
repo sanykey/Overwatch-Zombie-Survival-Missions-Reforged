@@ -105,6 +105,32 @@ Custom String в соответствующих правилах осталос�
 
 ## Текущий шаг
 
+25 — isGameplayActive удалён из Conditions правила PLAYER INTERACT
+(1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP) по результату пользователя:
+на шаге 24 снова исчезали новые герои при возврате из голосования к выбору героя.
+Фаза проверяется первым действием Abort If(Not(Global.isGameplayActive)) до raycast,
+захвата, открытия ящика и любых записей предметов. После Wait(0.25, Abort When False)
+в ветке использования предмета фаза проверяется повторно, поскольку Wait больше
+не наблюдает её через Conditions. Неактивная игра не активирует и не расходует предмет.
+Остальные условия, приоритет Dead Weight/баррикады и освобождение бота сохранены.
+Комментарий у guard описывает неизвестную причину и ссылается на Apothecary
+(ba8e70de7d4e282b2f90c8ae6c15f6d1d500a342, src/augments.opy,
+APOTHECARY ALLOW HEALTH PACK PICKUP), Scavenger (1079602bbdcf12d9e989d595c315949601fd184b,
+src/power_ups.opy, PLAYER DROPS POWER UP (MANUAL)) и Leech
+(de11b70848715973335c011e19821273504f5d3c, src/augments.opy, LEECH LIFESTEAL).
+29 172 -> 29 175 элементов (+3), предупреждений нет; новых правил/переменных нет.
+305 правил, 107 global / 95 player; другие 304 правила, объявления и настройки карт
+идентичны родителю. Новых циклов, raycast, таймеров и периодических проверок нет.
+Полные Augments/Scavenger/Leech/living-projectile suites прошли. Дополнительно:
+unset/false/0 блокируют взаимодействие до изменений; конец игры, отпускание Interact
+и смерть во время удержания не расходуют предмет; pregame не захватывает бота;
+после конца игры не запрашивается бросок и не резервируется баррикада, бот отпускается.
+Артефакты: `experiments/rebuild/25-interact-phase-in-actions.ws.txt` и
+`experiments/rebuild/25-interact-phase-in-actions-lijiang-night-market.ws.txt`.
+Отсутствие дефекта выбора героя ещё требуется подтвердить в игре.
+
+## Шаг 24: Dead Weight до переноса фазовой проверки Interact
+
 24 — Dead Weight целиком одним коммитом: основной Enhancement ID 11 без Bolt Strike,
 выбор/HUD/значок Trashcan, захват и бросок через Interact, отложенный урон и освобождение.
 Оригинал взят из 9640f50049f7cce3e4e78265a9c80a7f71f03191; прежние ID 1–10 сохранены.
@@ -135,8 +161,9 @@ Asleep, Frozen или Knocked Down. Rooted/Hacked сами по себе не п
 Обходы Scavenger и Leech сохранены; full-health Apothecary и Bolt Strike не возвращались.
 Артефакты: `experiments/rebuild/24-dead-weight.ws.txt` и
 `experiments/rebuild/24-dead-weight-lijiang-night-market.ws.txt` (CTF, только Night Market).
-Нативные raycast/attach/throw и возврат к выбору героя требуют проверки в игре.
-Следующий перенос до результата пользователя не начинать.
+Пользователь воспроизвёл дефект выбора героя в PLAYER INTERACT; фазовая проверка
+этого правила по его просьбе перенесена в Actions шагом 25. Остальные нативные
+raycast/attach/throw требуют проверки в игре. Следующий перенос пока не начинать.
 
 ## Шаг 23: перенос условий Leech в Actions
 

@@ -87,9 +87,22 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
     # Throwing a carried Dead Weight target takes precedence over barricade placement.
     @Condition ((eventPlayer.enhancementId == Enhancement.DEAD_WEIGHT and eventPlayer.enhancementHeldZombie != null) or eventPlayer.augmentId != Augment.LASER_BARRICADE or (not eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.augmentBarrierPlacementCooldown >= 0)) == true
     @Condition eventPlayer.isAlive() == true
-    @Condition isGameplayActive == true
     @Condition eventPlayer.isDummy() == false
-    
+
+    # Workshop workaround (map dependent): the gameplay Condition here reproduced
+    # newer heroes disappearing when returning from voting to hero selection.
+    # Keep the phase guard in Actions, before any raycast/pickup/throw; cause unknown.
+    # Related cases:
+    # - Apothecary: "APOTHECARY ALLOW HEALTH PACK PICKUP", src/augments.opy,
+    #   reverted by ba8e70de7d4e282b2f90c8ae6c15f6d1d500a342; And did NOT help.
+    # - Scavenger: "PLAYER DROPS POWER UP (MANUAL)", src/power_ups.opy,
+    #   1079602bbdcf12d9e989d595c315949601fd184b; grouped And helped in user tests.
+    # - Leech: "LEECH LIFESTEAL", src/augments.opy,
+    #   de11b70848715973335c011e19821273504f5d3c; eligibility moved to Actions.
+    # isGameplayActive only holds boolean/default zero.
+    if not isGameplayActive:
+        return
+
     # Resolve zombie interaction once per press, before any item transaction.
     # The held reference survives a throw request until the bot finishes cleanup.
     if eventPlayer.enhancementId == Enhancement.DEAD_WEIGHT:
@@ -150,7 +163,10 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
             supplyPowerUpPositionList.append(pickedPowerUpPosition)
     elif eventPlayer.powerUpItemId:
         wait(0.25, Wait.ABORT_WHEN_FALSE)
-        powerUpUsage()
+        # Phase is no longer in Conditions, so Abort When False cannot observe it.
+        # Recheck after the hold to prevent item activation after gameplay ends.
+        if isGameplayActive:
+            powerUpUsage()
 
 
 def instantRevive():

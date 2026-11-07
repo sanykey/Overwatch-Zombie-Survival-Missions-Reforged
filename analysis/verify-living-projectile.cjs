@@ -108,6 +108,17 @@ async function main() {
     const interactName = 'PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)';
     const placementName = 'LASER BARRICADE (PLACEMENT)';
     const cooldown = slot('augmentBarrierPlacementCooldown');
+    const voting = setup(); voting.s.globals.isGameplayActive = false; voting.s.buttons.add('Interact');
+    assert(run(interactName, voting.s).done());
+    assert.equal(voting.s.raycastCalls ?? 0, 0); assert(!voting.s.player[held], 'Pregame input cannot grab a zombie');
+    const ended = setup(); ended.s.player.augmentId = 7; ended.s.player[cooldown] = 0;
+    run('useLivingProjectile', ended.s);
+    ended.s.globals.isGameplayActive = false; ended.s.buttons = new Set(['Crouch', 'Interact']);
+    assert(run(interactName, ended.s).done());
+    assert.equal(ended.s.player[until], 105, 'The action guard must not request a throw after game end');
+    assert.equal(ended.s.player[cooldown], 0, 'Rejected input must not reserve barricade placement');
+    assert(run('LIVING PROJECTILE RELEASE', botState(ended.s, ended.bot)).done());
+    assert.equal(ended.s.player[held], 0); assert.equal(ended.s.damage.length, 0, 'The bot release rule still drops safely');
     for (const cooldownBefore of [0, 10]) {
         const {s, bot} = setup(); s.player.augmentId = 7; s.player[cooldown] = cooldownBefore;
         run('useLivingProjectile', s);
