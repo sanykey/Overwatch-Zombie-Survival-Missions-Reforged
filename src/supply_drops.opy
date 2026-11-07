@@ -1,4 +1,5 @@
 #!mainFile "../main.opy"
+subroutine useLivingProjectile
 
 subroutine playAquaPowerUpSound
 
@@ -83,11 +84,25 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
     @Team 1
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
     # Reserve Laser Barricade input until Interact is released, even after Crouch is released.
-    @Condition (eventPlayer.augmentId != Augment.LASER_BARRICADE or (not eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.augmentBarrierPlacementCooldown >= 0)) == true
+    # Throwing a carried Dead Weight target takes precedence over barricade placement.
+    @Condition ((eventPlayer.enhancementId == Enhancement.DEAD_WEIGHT and eventPlayer.enhancementHeldZombie != null) or eventPlayer.augmentId != Augment.LASER_BARRICADE or (not eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.augmentBarrierPlacementCooldown >= 0)) == true
     @Condition eventPlayer.isAlive() == true
     @Condition isGameplayActive == true
     @Condition eventPlayer.isDummy() == false
     
+    # Resolve zombie interaction once per press, before any item transaction.
+    # The held reference survives a throw request until the bot finishes cleanup.
+    if eventPlayer.enhancementId == Enhancement.DEAD_WEIGHT:
+        useLivingProjectile()
+        if eventPlayer.enhancementHeldZombie != null:
+            # Reserve a ready barricade until this consumed press ends. Bot release
+            # can clear the held reference before the placement rule runs.
+            if eventPlayer.augmentId == Augment.LASER_BARRICADE and eventPlayer.augmentBarrierPlacementCooldown <= 0:
+                eventPlayer.augmentBarrierPlacementCooldown = -2
+                waitUntil(not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead(), Math.INFINITY)
+                eventPlayer.augmentBarrierPlacementCooldown = 0
+            return
+
     # Query aimed items only on interaction; reuse this scratch slot for the chosen
     # position below after sorting. No reader retains the candidate array across waits.
     #!define aimedPowerUpPositions tmp0

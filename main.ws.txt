@@ -1,9 +1,9 @@
-/* Element count: (total 28759)
+/* Element count: (total 29172)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
-  924: rule "PLAYER ENHANCEMENT INITIALIZATION" (src/enhancements.opy)
-  854: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
+  976: rule "PLAYER ENHANCEMENT INITIALIZATION" (src/enhancements.opy)
+  861: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
   515: rule "PLAYER AUGMENT INITIALIZATION" (src/augments.opy)
   481: rule "GRAPNEL LAUNCHER" (src/augments.opy)
   434: rule "SKIP ASSEMBLING HEROES" (src/global_startup.opy)
@@ -12,6 +12,7 @@
   369: rule "LONG REACH MELEE WEAPONS" (src/augments.opy)
   327: rule "GLOBAL MENU INITIALIZATION" (src/global_start_menu.opy)
   321: rule "DAYTAKER (ILLARI) BURST" (src/zombie_types.opy)
+  317: rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)" (src/supply_drops.opy)
   314: rule "BEHEMOTH (ROAD) TOXIC CLOUD" (src/zombie_types.opy)
   313: rule "SLIMER (MERCY) TENTACLE GRAB" (src/zombie_types.opy)
   293: rule "teleportBots" (src/bots_game_in_progress.opy)
@@ -22,11 +23,10 @@
   272: rule "EFFECTS/TEXTS" (src/global_game_in_progress.opy)
   265: rule "REVIVE PLAYER OR ADVANCE DEATH TIMER" (src/players_game_in_progress.opy)
   259: rule "EFFECT/TEXT (GLOBAL)" (src/supply_drops.opy)
-  258: rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)" (src/supply_drops.opy)
   249: rule "AMMO PACK REFILL FALLBACK" (src/augments.opy)
   247: rule "VARIABLE ASSIGNMENT" (src/global_startup.opy)
   239: rule "HITCHHIKER ATTACH/DETATCH" (src/enhancements.opy)
-  229: rule "Initialize global variables"
+  231: rule "Initialize global variables"
   219: rule "BOT DIES" (src/bots_game_in_progress.opy)
   214: rule "powerUpUsage" (src/supply_drops.opy)
   211: rule "P.U.P. CONTROL" (src/enhancements.opy)
@@ -40,12 +40,12 @@
   183: rule "BRUTE (REIN) SUPER SEISMIC SLAM" (src/zombie_types.opy)
   183: rule "PHASE DASH LANDING WAVE" (src/augments.opy)
   181: rule "extendAugmentMelee" (src/augments.opy)
+  181: rule "LASER BARRICADE (PLACEMENT)" (src/augments.opy)
   179: rule "STALKER (MOIRA) FADE" (src/zombie_types.opy)
   178: rule "BOSS DIES (ALL BOSS OBJECTIVES)" (src/objective_types/objective_type_bosses.opy)
   174: rule "BOT BECOMES BOSS" (src/objective_types/objective_type_bosses.opy)
   173: rule "REIGNITED (ANRAN) ABILITIES" (src/zombie_types.opy)
   170: rule "selectTarget" (src/subroutines.opy)
-  167: rule "LASER BARRICADE (PLACEMENT)" (src/augments.opy)
   166: rule "DOWNFALLEN GRABS PLAYER" (src/zombie_types.opy)
   163: rule "SURVIVOR FOLLOW TARGET" (src/objective_types/objective_type_survivor_rescue.opy)
   163: rule "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES" (src/zombie_types.opy)
@@ -58,9 +58,11 @@
   144: rule "SMOLDER SUPER SLAM" (src/zombie_types.opy)
   140: rule "generateMapGrid" (src/global_startup.opy)
   140: rule "beaconofHealing (40-49)" (src/supply_drops.opy)
+  138: rule "useLivingProjectile" (src/enhancements.opy)
   137: rule "explosionSequence" (src/subroutines.opy)
   137: rule "BORN TO BATTLE PLAYER USES ABILITY CHARGE" (src/enhancements.opy)
   136: rule "GENERATE SUPPLY DROPS" (src/supply_drops.opy)
+  135: rule "LIVING PROJECTILE RELEASE" (src/enhancements.opy)
   133: rule "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)" (src/bots_game_in_progress.opy)
   132: rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS" (src/objective_types/objective_type_biomorphing.opy)
   132: rule "STRIKER (WRECKING BALL) PILE DRIVER" (src/zombie_types.opy)
@@ -130,10 +132,10 @@
    65: rule "noCooldowns (20-29)" (src/supply_drops.opy)
    63: rule "LONG REACH VENDETTA SWORD" (src/augments.opy)
    61: rule "PLAYER GETS DOWNED" (src/players_game_in_progress.opy)
+   60: rule "RIDER DETATCH FROM TEAMMATES WHILE ALIVE" (src/zombie_types.opy)
    58: rule "randomActions" (src/player_start_menu.opy)
    57: rule "PLAYERS ON OBJECTIVE CONTROL" (src/objective_types/objective_type_showdown.opy)
    57: rule "BOTS TELEPORT TO THE EGG" (src/objective_types/objective_type_zombie_egg.opy)
-   57: rule "RIDER DETATCH FROM TEAMMATES WHILE ALIVE" (src/zombie_types.opy)
    56: rule "TRIGGER OVERTIME MUSIC" (src/global_game_in_progress.opy)
    56: rule "PYROTECHNIC APPLIES DAMAGE" (src/enhancements.opy)
    55: rule "BOTS JUMP" (src/bots_game_in_progress.opy)
@@ -149,6 +151,7 @@
    52: rule "dropCarriedPowerUps" (src/power_ups.opy)
    50: rule "BOT WANDERS" (src/bots_game_in_progress.opy)
    49: rule "CREATE PATH" (src/objective_types/objective_type_survivor_rescue.opy)
+   48: rule "RIDER DETACH WHEN DEAD OR TARGET IS DEAD" (src/zombie_types.opy)
    48: rule "BLASTER ROCKET HITS TARGET" (src/zombie_types.opy)
    48: rule "TUNNELER (SYMMETRA) BUILDS PORTAL" (src/zombie_types.opy)
    48: rule "SMOLDER BOSS EVENT STARTS" (src/zombie_types.opy)
@@ -162,7 +165,6 @@
    46: rule "CADAVER (ANA) DETONATION" (src/zombie_types.opy)
    45: rule "BIOWASTE MANAGEMENT" (src/objective_types/objective_type_biomorphing.opy)
    45: rule "PLAYER INFECTION DAMAGE MANAGEMENT" (src/players_game_in_progress.opy)
-   45: rule "RIDER DETACH WHEN DEAD OR TARGET IS DEAD" (src/zombie_types.opy)
    44: rule "BRUTE FIRE STRIKE (BOSS)" (src/zombie_types.opy)
    43: rule "OverPy <\ztx> / <\zfg> setup code"
    43: rule "Subroutine selectVoteWinner" (src/global_start_menu.opy)
@@ -744,27 +746,28 @@ subroutines {
     62: abilityThrowdown
     63: entityFloat
     64: explosionWarning
-    65: playAquaPowerUpSound
-    66: powerUpUsage
-    67: playerForceField
-    68: noCooldowns
-    69: airStrike
-    70: instantRevive
-    71: healBeacon
-    72: sentryTurret
-    73: cloakingDevice
-    74: superNano
-    75: bouncePad
-    76: ultimateCharger
-    77: stun
-    78: finishPowerUpDrop
-    79: dropCarriedPowerUps
-    80: resetBattleAbilityCharge
-    81: checkEnhancementPlacement
-    82: startPupDefaultChase
-    83: applyBulkingSeasonStats
-    84: extendAugmentMelee
-    85: useAugmentAirAction
+    65: useLivingProjectile
+    66: playAquaPowerUpSound
+    67: powerUpUsage
+    68: playerForceField
+    69: noCooldowns
+    70: airStrike
+    71: instantRevive
+    72: healBeacon
+    73: sentryTurret
+    74: cloakingDevice
+    75: superNano
+    76: bouncePad
+    77: ultimateCharger
+    78: stun
+    79: finishPowerUpDrop
+    80: dropCarriedPowerUps
+    81: resetBattleAbilityCharge
+    82: checkEnhancementPlacement
+    83: startPupDefaultChase
+    84: applyBulkingSeasonStats
+    85: extendAugmentMelee
+    86: useAugmentAirAction
 }
 
 //43 elements
@@ -784,7 +787,7 @@ rule ("OverPy <­tx> / <­fg> setup code") {
     }
 }
 
-//229 elements
+//231 elements
 rule ("Initialize global variables") {
     event {
         Ongoing - Global;
@@ -800,7 +803,7 @@ rule ("Initialize global variables") {
         Set Global Variable(offsetUpQuarterConst, Vector(0, 0.25, 0)); // 7 elements
         Set Global Variable(powerUpColorListConst, Array(Color(Green), Color(Yellow), Color(Blue), Color(Red), Color(Orange), Color(Yellow), Color(Green), Color(Orange), Color(Blue), Color(Red), Color(Purple), Color(Red), Color(White))); // 28 elements
         Set Global Variable(augmentIconListConst, Array(Icon String(Question Mark), Icon String(Stop), Icon String(Arrow: Right), Icon String(Arrow: Up), Icon String(X), Icon String(Plus), Icon String(Arrow: Down), Icon String(Diamond), Icon String(Heart), Icon String(Recycle), Icon String(Asterisk))); // 24 elements
-        Set Global Variable(enhancementIconListConst, Array(Icon String(Question Mark), Icon String(Skull), Icon String(Poison), Icon String(Fire), Icon String(Plus), Icon String(Bolt), Icon String(Spiral), Icon String(Flag), Icon String(Happy), Icon String(Bolt), Icon String(Arrow: Up))); // 24 elements
+        Set Global Variable(enhancementIconListConst, Array(Icon String(Question Mark), Icon String(Skull), Icon String(Poison), Icon String(Fire), Icon String(Plus), Icon String(Bolt), Icon String(Spiral), Icon String(Flag), Icon String(Happy), Icon String(Bolt), Icon String(Arrow: Up), Icon String(Trashcan))); // 26 elements
         Set Global Variable(numbersList, Mapped Array(Mapped Array(String Split(Custom String("00000000000000000\n000000000000000000000<000000{0}", Custom String("000000000000000000000000\n0000000000<00000<00<00\n000<0\n0<{0}", Custom String("000<0<00<000<00:00.0000$0=0.0<000~000Q0$0000000000<00{0}", Custom String("00000000000000000<000<00000<0<00000)0000{0}", Custom String("000\n00_0)00_0<0$000<00000000000<0000000000000{0}", Custom String("0000<000000<0000000000<000000<0<00<0<000<00000000000{0}", Custom String("0000<0_0_00~0_0Q00Q0Q0~0<0Q0<000_0_0<	0<000<0	0000<0000<00<	00<0<0<0<000\r0)00{0}", Custom String("00\r0000.0000000000<0<0000<0000000000<00<0000000_00_0)000{0}", Custom String("~00~0~00_0~0_0000000000\r00<00000<00<0<0<00000000\n000<0	00{0}", Custom String("<0000<00<0000+000Q0<000)0$0000<0<00)0000)0)00000000000{0}", Custom String("0~00000000000<000000000<000)000<000<0<0000<0)00<0{0}", Custom String("000)0_0)0)00)000000000_000)000~00~0~00_000000000<0<00)0<0<0<0<000{0}", Custom String("00000000"))))))))))))), First Of(Null)), Append To Array(Current Array Element, Custom String("	\n\r !\"#$%&'()*+,-./2:;<=>?@Q[\\]^_`q|}~¡"))), Add(Add(Multiply(0.01, Index Of String Char(Last Of(Current Array Element), Char In String(Current Array Element, 0))), Index Of String Char(Last Of(Current Array Element), Char In String(Current Array Element, 1))), Multiply(100, Index Of String Char(Last Of(Current Array Element), Char In String(Current Array Element, 2)))))); // 94 elements
     }
 }
@@ -2192,7 +2195,7 @@ rule ("GLOBAL MENU INITIALIZATION") {
     }
 }
 
-//854 elements
+//861 elements
 rule ("EFFECTS/TEXTS") {
     event {
         Ongoing - Global;
@@ -2223,8 +2226,8 @@ rule ("EFFECTS/TEXTS") {
         Set Global Variable(phaseSlot1, Array(Color(Aqua), Color(Orange), Color(Red), Null, Null, Color(Red), Color(Lime Green), Custom Color(12, 129, 132, 255), Null, Color(Purple))); // 26 elements
         Create HUD Text(All Players(Team 1), Value In Array(Array(Custom String("Objective Type: No Preference"), Custom String("Objective Type: Showdown {0}", Ability Icon String(Hero(Brigitte), Button(Ultimate))), Custom String("Objective Type: Bosses {0}", Icon String(Warning)), Null, Null, Custom String("Objective Type: Kill Zone {0}", If-Then-Else(Modulo(Round To Integer(Multiply(Total Time Elapsed, 1.25), Up), 2), Icon String(Ring Thin), Icon String(Ring Thick))), Custom String("Objective Type: Zombie Egg {0}", Icon String(Radioactive)), Custom String("Objective Type: Satellite Uplink {0}", Icon String(Moon)), Null, Custom String("Objective Type: Mixed Objectives {0}", Icon String(Spiral))), (Local Player).actorTeamSlot21), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Custom String("Players must contest a point against zombies"), Custom String("Spawns giant versions of zombies"), Null, Null, Custom String("Clear zombies from a designated area"), Custom String("Survivors must destroy an object that is spawning zombies"), Custom String("Survivors must repair terminals to communicate with a satellite"), Null, Custom String("Randomly assigns all types of objectives")), (Local Player).actorTeamSlot21), Custom String("                                                ")), If-Then-Else(Or(Global.isVoting, Compare((Local Player).actorTeamSlot21, ==, Null)), Custom String("Change Vote (Press [{0}])", Input Binding String(Button(Ability 2))), Empty Array), Left, 2, Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Visible To String and Color, Default Visibility); // 149 elements
         "Enhancement"
-        Set Global Variable(phaseSlot2, Array(Color(Aqua), Color(Red), Color(Gray), Color(Orange), Color(Green), Color(Gray), Global.colorChargeBatteryConst, Color(Purple), Color(Blue), Color(Yellow), Color(Orange))); // 24 elements
-        Create HUD Text(All Players(Team 1), Custom String("Enhancement: {0}{1}", Value In Array(String Split(Custom String("No Preference0Brain Killer 0Zombie Hybrid 0Pyrotechnic 0Plague Doctor 0Born to Battle 0Charge Battery 0Hitchhiker 0P.U.P. 0Ov{0}", Custom String("ercharge 0Bulking Season ")), First Of(Null)), (Local Player).enhancementId), If-Then-Else(Compare((Local Player).enhancementId, >, Null), Value In Array(Global.phaseSlot9, (Local Player).enhancementId), Char In String(Empty Array, False))), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Custom String("Critical hits do more damage"), Custom String("Get infected faster, and convert it to explosive damage"), Custom String("Dealing damage, within 15 meters, sets enemies on fire"), Custom String("Deal 30% more healing, plus another 25% to infected players while reducing their infection level"), Custom String("Final blows grant a cooldown reset on the next ability use, storing up to 2 charges"), Custom String("Survivor can place a battery that gives ultimate charge"), Custom String("Survivor can attach to a teammate and fuse their health."), Custom String("Survivor is equipped with an autonomous friendly droid"), Custom String("Store healing / 3 incl. packs, +10 per assist; uncapped. Hold Melee: spend up to 100 for bonus damage on hits for 0.3s"), Custom String("Kills and damage participation grant +0.5% Max Life and +0.5% Hero Size per stack (caps: 200% Life, 1.35x size). Lose half on{0}", Custom String(" death"))), (Local Player).enhancementId), Custom String("                                                ")), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Melee))), Left, 3, Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Visible To String and Color, Default Visibility); // 129 elements
+        Set Global Variable(phaseSlot2, Array(Color(Aqua), Color(Red), Color(Gray), Color(Orange), Color(Green), Color(Gray), Global.colorChargeBatteryConst, Color(Purple), Color(Blue), Color(Yellow), Color(Orange), Color(Purple))); // 26 elements
+        Create HUD Text(All Players(Team 1), Custom String("Enhancement: {0}{1}", Value In Array(String Split(Custom String("No Preference0Brain Killer 0Zombie Hybrid 0Pyrotechnic 0Plague Doctor 0Born to Battle 0Charge Battery 0Hitchhiker 0P.U.P. 0Ov{0}", Custom String("ercharge 0Bulking Season 0Dead Weight ")), First Of(Null)), (Local Player).enhancementId), If-Then-Else(Compare((Local Player).enhancementId, >, Null), Value In Array(Global.phaseSlot9, (Local Player).enhancementId), Char In String(Empty Array, False))), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Custom String("Critical hits do more damage"), Custom String("Get infected faster, and convert it to explosive damage"), Custom String("Dealing damage, within 15 meters, sets enemies on fire"), Custom String("Deal 30% more healing, plus another 25% to infected players while reducing their infection level"), Custom String("Final blows grant a cooldown reset on the next ability use, storing up to 2 charges"), Custom String("Survivor can place a battery that gives ultimate charge"), Custom String("Survivor can attach to a teammate and fuse their health."), Custom String("Survivor is equipped with an autonomous friendly droid"), Custom String("Store healing / 3 incl. packs, +10 per assist; uncapped. Hold Melee: spend up to 100 for bonus damage on hits for 0.3s"), Custom String("Kills and damage participation grant +0.5% Max Life and +0.5% Hero Size per stack (caps: 200% Life, 1.35x size). Lose half on{0}", Custom String(" death")), Custom String("Interact grabs/throws non-bosses within 4m: CC except Rooted or <20% HP")), (Local Player).enhancementId), Custom String("                                                ")), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Melee))), Left, 3, Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Visible To String and Color, Default Visibility); // 134 elements
     }
 }
 
@@ -6338,7 +6341,7 @@ rule ("RIDER (WIDOWMAKER) ATTACH TO PLAYERS") {
     }
 }
 
-//45 elements
+//48 elements
 rule ("RIDER DETACH WHEN DEAD OR TARGET IS DEAD") {
     event {
         Ongoing - Each Player;
@@ -6346,6 +6349,7 @@ rule ("RIDER DETACH WHEN DEAD OR TARGET IS DEAD") {
         Widowmaker;
     }
     conditions {
+        (Event Player).augmentState0 == Null; // 3 elements
         (Event Player).isAttached == True; // 3 elements
         (Event Player).actorTeamSlot10 != Null; // 3 elements
         Or(Or(Or(Or(Or(Or((Event Player).isCrowdControlled, ((Event Player).actorTeamSlot10).invisibilityCount), Is Dead(Event Player)), Is Dead((Event Player).actorTeamSlot10)), Has Status((Event Player).actorTeamSlot10, Phased Out)), Has Status((Event Player).actorTeamSlot10, Invincible)), Not(Entity Exists((Event Player).actorTeamSlot10))) == True; // 35 elements
@@ -6380,7 +6384,7 @@ rule ("RIDER ATTACH TO TEAMMATES") {
     }
 }
 
-//57 elements
+//60 elements
 rule ("RIDER DETATCH FROM TEAMMATES WHILE ALIVE") {
     event {
         Ongoing - Each Player;
@@ -6388,6 +6392,7 @@ rule ("RIDER DETATCH FROM TEAMMATES WHILE ALIVE") {
         Widowmaker;
     }
     conditions {
+        (Event Player).augmentState0 == Null; // 3 elements
         (Event Player).isAttached == True; // 3 elements
         (Event Player).actorTeamSlot5 != Null; // 3 elements
         Team Of((Event Player).actorTeamSlot10) == Team 2; // 5 elements
@@ -7859,7 +7864,7 @@ rule ("EFFECT/TEXT (GLOBAL)") {
     }
 }
 
-//258 elements
+//317 elements
 rule ("PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)") {
     event {
         Ongoing - Each Player;
@@ -7868,13 +7873,26 @@ rule ("PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER U
     }
     conditions {
         Is Button Held(Event Player, Button(Interact)) == True; // 4 elements
-        "Reserve Laser Barricade input until Interact is released, even after Crouch is released."
-        Or(Compare((Event Player).augmentId, !=, 7), And(Not(Is Button Held(Event Player, Button(Crouch))), Compare((Event Player).augmentState2, >=, Null))) == True; // 20 elements
+        "Reserve Laser Barricade input until Interact is released, even after Crouch is released.\nThrowing a carried Dead Weight target takes precedence over barricade placement."
+        Or(Or(And(Compare((Event Player).enhancementId, ==, 11), Compare((Event Player).actorTeamSlot22, !=, Null)), Compare((Event Player).augmentId, !=, 7)), And(Not(Is Button Held(Event Player, Button(Crouch))), Compare((Event Player).augmentState2, >=, Null))) == True; // 35 elements
         Is Alive(Event Player) == True; // 2 elements
         Global.isGameplayActive == True; // 2 elements
         Is Dummy Bot(Event Player) == False; // 2 elements
     }
     actions {
+        "Resolve zombie interaction once per press, before any item transaction.\nThe held reference survives a throw request until the bot finishes cleanup."
+        If(Compare((Event Player).enhancementId, ==, 11)); // 7 elements
+            Call Subroutine(useLivingProjectile); // 1 element
+            If(Compare((Event Player).actorTeamSlot22, !=, Null)); // 6 elements
+                "Reserve a ready barricade until this consumed press ends. Bot release\ncan clear the held reference before the placement rule runs."
+                If(And(Compare((Event Player).augmentId, ==, 7), Compare((Event Player).augmentState2, <=, Null))); // 14 elements
+                    Set Player Variable(Event Player, augmentState2, -2); // 2 elements
+                    Wait Until(Or(Not(Is Button Held(Event Player, Button(Interact))), Is Dead(Event Player)), 999999999999); // 9 elements
+                    Set Player Variable(Event Player, augmentState2, Null); // 1 element
+                End; // 1 element
+                Abort; // 1 element
+            End; // 1 element
+        End; // 1 element
         "Query aimed items only on interaction; reuse this scratch slot for the chosen\nposition below after sorting. No reader retains the candidate array across waits."
         Set Global Variable(tmp0, Filtered Array(Global.supplyPowerUpPositionList, And(Compare(Distance Between(Current Array Element, Add(Eye Position(Event Player), Multiply(Facing Direction Of(Event Player), Distance Between(Eye Position(Event Player), Current Array Element)))), <, 0.5), Compare(Distance Between(Event Player, Current Array Element), <=, 6)))); // 27 elements
         If(And(And(And(And(Compare(Distance Between(Global.supplyDropLandingPosition, Add(Eye Position(Event Player), Multiply(Facing Direction Of(Event Player), Distance Between(Eye Position(Event Player), Global.supplyDropLandingPosition)))), <, 0.5), Not(Global.isSupplyDropOpen)), Compare(Distance Between(Event Player, Global.supplyDropLandingPosition), <=, 6)), Compare(Global.supplyDropLandingPosition, !=, Null)), Compare(Distance Between(Global.supplyDropLandingPosition, Global.supplyDropPosition), <, 1))); // 47 elements
@@ -8514,7 +8532,7 @@ rule ("finishPowerUpDrop") {
     }
 }
 
-//924 elements
+//976 elements
 rule ("PLAYER ENHANCEMENT INITIALIZATION") {
     event {
         Ongoing - Each Player;
@@ -8530,7 +8548,7 @@ rule ("PLAYER ENHANCEMENT INITIALIZATION") {
     actions {
         Skip If(Compare((Event Player).enhancementId, !=, Null), True); // 6 elements
         "No preference and late-join zero state receive one real choice before\nits state is initialized. Retain the selected ID across later spawns."
-        Set Player Variable(Event Player, enhancementId, Random Integer(True, 10)); // 4 elements
+        Set Player Variable(Event Player, enhancementId, Random Integer(True, 11)); // 4 elements
         //__label_if_69__:
         "Zombie Hybrid"
         If(Compare((Event Player).enhancementId, ==, 2)); // 7 elements
@@ -8545,7 +8563,7 @@ rule ("PLAYER ENHANCEMENT INITIALIZATION") {
             Chase Player Variable At Rate(Event Player, infectionLevel, False, If-Then-Else(Compare((Event Player).infectionLevel, >, Null), 0.015, Null), Destination and Rate); // 10 elements
         End; // 1 element
         If(True); // 1 element
-            Skip(Value In Array(Array(49, Null, 2, 5, 10, 16, 19, 22, 30, 36), Add(True, Index Of Array Value(Array(1, 3, 4, 9, 10, 5, 6, 7, 8), (Event Player).enhancementId)))); // 48 elements
+            Skip(Value In Array(Array(52, Null, 2, 5, 10, 16, 19, 22, 25, 33, 39), Add(True, Index Of Array Value(Array(1, 3, 4, 9, 10, 11, 5, 6, 7, 8), (Event Player).enhancementId)))); // 52 elements
         //__label_switch_70_0__:
         "Enhancement: Brain Killer\nNo enhancement state slots: bonus damage is calculated directly from the damage event."
         Create HUD Text(Event Player, Icon String(Skull), Custom String("Bonus critical damage                                                                                                        {0}", Custom String("                                                                  ")), Custom String("Brain Killer"), Left, 99, Color(Red), Color(Red), Color(Red), String, Default Visibility); // 18 elements
@@ -8577,11 +8595,16 @@ rule ("PLAYER ENHANCEMENT INITIALIZATION") {
         Create HUD Text(Event Player, Icon String(Arrow: Up), Custom String("Stacks: {0} | +{1}% Max Life | Size: {2}", (Event Player).actorTeamSlot22, Min(100, Multiply((Event Player).actorTeamSlot22, 0.5)), Custom String("{0}x                                                                                                                         {1}", Min(1.35, Add(True, Multiply((Event Player).actorTeamSlot22, 0.005))), Custom String("                                                 "))), Custom String("Bulking Season"), Left, 99, Color(Orange), Color(Orange), Color(Orange), String, Default Visibility); // 42 elements
         Else; // 1 element
         //__label_switch_70_5__:
+        "This shared slot must start as a player reference or null, never\na previous enhancement's number/array/color. Pickup sets its deadline."
+        Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
+        Create HUD Text(Event Player, Icon String(Trashcan), Custom String("{0}                                                                                                                          {1}", If-Then-Else(Compare((Event Player).actorTeamSlot22, !=, Null), Custom String("{0}s | [{1}] to throw", Max(False, Round To Integer(Subtract((Event Player).actorTeamSlot23, Total Time Elapsed), Up)), Input Binding String(Button(Interact))), Custom String("Aim at a vulnerable zombie | [{0}] to pick up", Input Binding String(Button(Interact)))), Custom String("                                                ")), Custom String("Dead Weight"), Left, 99, Color(Purple), Color(Purple), Color(Purple), String, Default Visibility); // 46 elements
+        Else; // 1 element
+        //__label_switch_70_6__:
         "Enhancement: Born to Battle\nenhancementBattleResetCharges: 0-2 earned ability resets; final blows add one and each reset consumes one.\nenhancementBattleAbilityButton: selected ability button, retained through waits to reset its charge or cooldown."
         Create HUD Text(Event Player, Icon String(Bolt), Custom String("{0}/2 resets                                                                                                                 {1}", (Event Player).actorTeamSlot22, Custom String("                                                         ")), Custom String("Born to Battle"), Left, 99, Color(Gray), Color(Gray), Color(Gray), String, Default Visibility); // 20 elements
         Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
         Else; // 1 element
-        //__label_switch_70_6__:
+        //__label_switch_70_7__:
         "enhancementBatteryReuseDuration: full battery reuse cooldown in seconds (10), used to start the timer and scale progress.\nenhancementBatteryPlacementCooldown: remaining placement cooldown in seconds (20 on placement), for placement checks and HUD."
         Create HUD Text(Event Player, Icon String(Spiral), Custom String("{0} {1}                                                                                                                      {2}", If-Then-Else(Compare((Event Player).actorTeamSlot25, <=, Null), Custom String("Hold [{0}]", Input Binding String(Button(Melee))), Empty Array), If-Then-Else(Compare((Event Player).actorTeamSlot25, >, Null), Custom String("{0}s", Round To Integer((Event Player).actorTeamSlot25, Up)), Icon String(Checkmark)), Custom String("                                                    ")), Custom String("Charge Battery"), Left, 99, If-Then-Else(Compare((Event Player).actorTeamSlot25, <=, Null), Global.colorChargeBatteryConst, Color(Red)), If-Then-Else(Compare((Event Player).actorTeamSlot25, <=, Null), Global.colorChargeBatteryConst, Color(Red)), If-Then-Else(Compare((Event Player).actorTeamSlot25, <=, Null), Global.colorChargeBatteryConst, Color(Red)), String and Color, Default Visibility); // 76 elements
         "Battery placement visual"
@@ -8596,7 +8619,7 @@ rule ("PLAYER ENHANCEMENT INITIALIZATION") {
         Create Progress Bar In-World Text(Filtered Array(All Players(All Teams), And(And(Compare((Event Player).actorTeamSlot22, !=, Null), Compare((Event Player).actorTeamSlot23, >, Null)), Compare(Distance Between(Current Array Element, (Event Player).actorTeamSlot22), <, 6))), Subtract(100, Multiply(Divide((Event Player).actorTeamSlot23, (Event Player).actorTeamSlot24), 100)), Empty Array, Add((Event Player).actorTeamSlot22, Multiply(0.4, Up)), 0.5, Clip Against Surfaces, Color(White), Null, Visible To Position and Values, Default Visibility); // 48 elements
         Set Player Variable(Event Player, actorTeamSlot24, 10); // 2 elements
         Else; // 1 element
-        //__label_switch_70_7__:
+        //__label_switch_70_8__:
         "enhancementHitchhikerCarrier: carrier player reference, for attachment, shared health, assists and HUD; 0 when detached.\nenhancementHitchhikerPassengerPoolId: extra health pool ID on this passenger, retained to remove that pool when detaching."
         Create HUD Text(Event Player, Icon String(Flag), Custom String("{0}                                                                                                                          {1}", If-Then-Else((Event Player).isAttached, Custom String("Press [{0}] to dismount", Input Binding String(Button(Crouch))), If-Then-Else(Is True For Any(Remove From Array(Global.playerTargetList, Event Player), And(Not((Current Array Element).isAttached), Compare(Distance Between(Event Player, Current Array Element), <, Multiply(2, (Current Array Element).sizeScale)))), Custom String("Press [{0}] to attach", Input Binding String(Button(Crouch))), Empty Array)), Custom String("                                                ")), Custom String("Hitchhiker"), Left, 99, Color(Purple), If-Then-Else((Event Player).isAttached, Color(Red), Color(Purple)), Color(Purple), Visible To String and Color, Default Visibility); // 64 elements
         Create HUD Text(Filtered Array(Event Player, (Event Player).isAttached), Null, Custom String("Attached to {0} {1}                                                                                                          {2}", Hero Icon String(Hero Of((Event Player).actorTeamSlot22)), (Event Player).actorTeamSlot22, Custom String("                                                                ")), Null, Left, 100, Null, Color(Purple), Null, Visible To and String, Default Visibility); // 21 elements
@@ -8604,7 +8627,7 @@ rule ("PLAYER ENHANCEMENT INITIALIZATION") {
         Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
         Start Assist((Event Player).actorTeamSlot22, Event Player, Assisters and Targets); // 3 elements
         Else; // 1 element
-        //__label_switch_70_8__:
+        //__label_switch_70_9__:
         "enhancementPupPosition: chased drone position in world coordinates, for movement, effects and attack direction.\nenhancementPupCooldown: remaining ability cooldown in seconds (2 after freezing, 1 after laser), gating target selection."
         Create HUD Text(Event Player, Icon String(Happy), Custom String("{0}                                                                                                                          {1}", If-Then-Else(Compare((Event Player).enhancementPupCooldown, >, Null), Custom String("{0}s", Round To Integer((Event Player).enhancementPupCooldown, Up)), Icon String(Checkmark)), Custom String("                                                ")), Custom String("P.U.P."), Left, 99, If-Then-Else(And(Compare((Event Player).actorTeamSlot22, ==, Color(Sky Blue)), Compare((Event Player).enhancementPupCooldown, >, Null)), Color(Blue), (Event Player).actorTeamSlot22), If-Then-Else(And(Compare((Event Player).actorTeamSlot22, ==, Color(Sky Blue)), Compare((Event Player).enhancementPupCooldown, >, Null)), Color(Blue), (Event Player).actorTeamSlot22), If-Then-Else(And(Compare((Event Player).actorTeamSlot22, ==, Color(Sky Blue)), Compare((Event Player).enhancementPupCooldown, >, Null)), Color(Blue), (Event Player).actorTeamSlot22), Visible To String and Color, Default Visibility); // 89 elements
         "Postion of P.U.P."
@@ -9286,6 +9309,67 @@ rule ("resetBattleAbilityCharge") {
     }
 }
 
+//138 elements
+rule ("useLivingProjectile") {
+    event {
+        Subroutine;
+        useLivingProjectile;
+    }
+    actions {
+        If(Compare((Event Player).actorTeamSlot22, !=, Null)); // 6 elements
+            Set Player Variable(Event Player, actorTeamSlot23, Null); // 1 element
+            Abort; // 1 element
+        End; // 1 element
+        Abort If(Is True For Any(Array((Event Player).isAttached, Has Status(Event Player, Stunned), Has Status(Event Player, Asleep), Has Status(Event Player, Frozen), Has Status(Event Player, Knocked Down)), Current Array Element)); // 19 elements
+        "One raycast per press, against all players so intervening actors block pickup.\nSynchronous scratch only: the candidate is committed to both actors before returning."
+        Set Global Variable(tmp0, Ray Cast Hit Player(Eye Position(Event Player), Add(Eye Position(Event Player), Multiply(Facing Direction Of(Event Player), 4)), All Players(All Teams), Event Player, False)); // 16 elements
+        Abort If(Compare(Global.tmp0, ==, Null)); // 5 elements
+        Abort If(Is True For Any(Array(Compare(Team Of(Global.tmp0), !=, Team 2), Not(Is Dummy Bot(Global.tmp0)), Is Dead(Global.tmp0), Array Contains(Append To Array(Global.bossStateList, Global.miniBossList), Global.tmp0), (Global.tmp0).actorTeamSlot18, (Global.tmp0).actorTeamSlot3, (Global.tmp0).isAttached), Current Array Element)); // 38 elements
+        "Inspect native statuses directly: the cached bot CC flag can lag by 0.125s.\nRooted alone never qualifies; Rooted plus low health or another CC still does."
+        Abort If(Not(Or(Or(Or(Or(Compare(Normalized Health(Global.tmp0), <, 0.2), Has Status(Global.tmp0, Stunned)), Has Status(Global.tmp0, Asleep)), Has Status(Global.tmp0, Frozen)), Has Status(Global.tmp0, Knocked Down)))); // 28 elements
+        Set Player Variable(Event Player, actorTeamSlot22, Global.tmp0); // 2 elements
+        Set Player Variable(Event Player, actorTeamSlot23, Add(Total Time Elapsed, 5)); // 4 elements
+        Set Player Variable(Global.tmp0, augmentState2, Hero Of(Event Player)); // 3 elements
+        Set Player Variable(Global.tmp0, augmentState0, Event Player); // 2 elements
+        Set Player Variable(Global.tmp0, isAttached, True); // 2 elements
+        "Knockdown begins at pickup and outlasts the hold limit by one second.\nClearing it early interrupts the carry; throw damage clears it explicitly."
+        Set Status(Global.tmp0, Event Player, Knocked Down, 6); // 3 elements
+        Attach Players(Global.tmp0, Event Player, Vector(False, 1.5, True)); // 6 elements
+    }
+}
+
+//135 elements
+rule ("LIVING PROJECTILE RELEASE") {
+    event {
+        Ongoing - Each Player;
+        Team 2;
+        All;
+    }
+    conditions {
+        (Event Player).augmentState0 != Null; // 3 elements
+        Or(Compare(((Event Player).augmentState0).actorTeamSlot23, <=, Total Time Elapsed), Is True For Any(Array(Not(Global.isGameplayActive), Not(Entity Exists((Event Player).augmentState0)), Is Dead((Event Player).augmentState0), ((Event Player).augmentState0).isAttached, Compare(Hero Of((Event Player).augmentState0), !=, (Event Player).augmentState2), Is Dead(Event Player), (Event Player).actorTeamSlot18, (Event Player).actorTeamSlot3, Not((Event Player).isAttached), Not(Has Status(Event Player, Knocked Down))), Current Array Element)) == True; // 55 elements
+    }
+    actions {
+        "A second press requests release by setting the carrier's deadline to zero.\nSynchronous carrier snapshot, used only through release cleanup below.\nNo wait, async call or live HUD/effect captures this global scratch alias."
+        Set Global Variable(tmp0, (Event Player).augmentState0); // 3 elements
+        "Boolean snapshot, consumed by the branch before its damage wait.\nNo later action reads this scratch slot after yielding."
+        Set Global Variable(tmp1, And(Compare((Global.tmp0).actorTeamSlot23, ==, Null), Not(Is True For Any(Array(Not(Global.isGameplayActive), Not(Entity Exists(Global.tmp0)), Is Dead(Global.tmp0), (Global.tmp0).isAttached, Compare(Hero Of(Global.tmp0), !=, (Event Player).augmentState2), Is Dead(Event Player), (Event Player).actorTeamSlot18, (Event Player).actorTeamSlot3, Not((Event Player).isAttached), Not(Has Status(Event Player, Knocked Down))), Current Array Element)))); // 51 elements
+        Detach Players(Event Player); // 1 element
+        Set Player Variable(Event Player, isAttached, False); // 1 element
+        Set Player Variable(Global.tmp0, actorTeamSlot22, Null); // 2 elements
+        Set Player Variable(Event Player, augmentState0, Null); // 1 element
+        If(Global.tmp1); // 2 elements
+            Apply Impulse(Event Player, Facing Direction Of(Global.tmp0), 12.5, To World, Cancel Contrary Motion); // 4 elements
+            Set Player Variable(Event Player, augmentState3, Global.tmp0); // 2 elements
+            Wait(0.75, Ignore Condition); // 2 elements
+            Damage(Event Player, (Event Player).augmentState3, 50); // 4 elements
+            Clear Status(Event Player, Knocked Down); // 1 element
+        End; // 1 element
+        "A pickup/release request made during the short damage wait is handled next."
+        Loop If Condition Is True; // 1 element
+    }
+}
+
 //112 elements
 rule ("AUGMENT MENU") {
     event {
@@ -9957,7 +10041,7 @@ rule ("AMMO PACK REFILL FALLBACK") {
     }
 }
 
-//167 elements
+//181 elements
 rule ("LASER BARRICADE (PLACEMENT)") {
     event {
         Ongoing - Each Player;
@@ -9971,9 +10055,10 @@ rule ("LASER BARRICADE (PLACEMENT)") {
         Is Button Held(Event Player, Button(Interact)) == True; // 4 elements
         Is Alive(Event Player) == True; // 2 elements
         (Event Player).augmentState2 == Null; // 3 elements
+        Or(Compare((Event Player).enhancementId, !=, 11), Compare((Event Player).actorTeamSlot22, ==, Null)) == True; // 14 elements
     }
     actions {
-        "Negative cooldown latches aiming without another player variable. Only this\nrule owns it; clear it on every exit before starting the normal cooldown."
+        "-1 latches aiming; Interact may reserve -2 for a consumed Dead Weight press.\nClear the placement latch on every exit before starting the normal cooldown."
         Set Player Variable(Event Player, augmentState2, -1); // 2 elements
         Wait Until(Or(Not(Is Button Held(Event Player, Button(Interact))), Is Dead(Event Player)), 0.5); // 9 elements
         If(Or(Not(Is Button Held(Event Player, Button(Interact))), Is Dead(Event Player))); // 8 elements

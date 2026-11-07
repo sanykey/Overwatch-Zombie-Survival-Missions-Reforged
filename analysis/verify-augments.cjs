@@ -134,7 +134,7 @@ function value(expr, state, element) {
         case 'Magnitude Of': return magnitude(v(0));
         case 'Normalize': { const vector = v(0), length = magnitude(vector); return vector.map(x => length ? x / length : 0); }
         case 'Angle Between Vectors': return angle(v(0), v(1));
-        case 'Hero Of': return state.hero;
+        case 'Hero Of': return v(0) === state.player ? state.hero : v(0).hero ?? state.hero;
         case 'Horizontal Facing Angle Of': case 'Horizontal Facing Angle': return state.yaw;
         case 'Horizontal Angle From Direction': {const vector = v(0); return Math.atan2(vector[0], vector[2]) * 180 / Math.PI;}
         case 'Direction From Angles': {
@@ -157,7 +157,10 @@ function value(expr, state, element) {
         case 'Is Using Ability 1': return state.ability1 ?? state.ability;
         case 'Is Using Ability 2': return state.ability2 ?? state.ability;
         case 'Max Health Of Type': assert.equal(a[1], 'Armor'); return state.maxArmor;
-        case 'Has Status': return state.status.has(a[1]);
+        case 'Has Status': return (v(0) === state.player ? state.status : v(0).status ?? state.status).has(a[1]);
+        case 'Entity Exists': return !!v(0) && v(0).exists !== false;
+        case 'Normalized Health': return v(0).health / v(0).maxHealth;
+        case 'Ray Cast Hit Player': state.raycastCalls = (state.raycastCalls ?? 0) + 1; return state.raycastTarget ?? 0;
         case 'Eye Position': return point(v(0)).map((x, i) => x + (i === 1 ? 1.5 : 0));
         case 'Facing Direction Of': return state.facing;
         case 'All Players': return [state.player, ...state.targets];
@@ -266,7 +269,9 @@ function* execute(rule, state, compiled) {
                 case 'Abort If': if (truth(v(0))) return; break;
                 case 'Skip If': if (truth(v(0))) pc += Number(v(1)); break;
                 case 'Skip': pc += Number(v(0)); break;
-                case 'Set Player Variable': state.player[a[1]] = v(2); break;
+                case 'Set Player Variable': if (v(0)) v(0)[a[1]] = v(2); break;
+                case 'Attach Players': v(0).attachedTo = v(1); v(0).attachmentOffset = v(2); break;
+                case 'Detach Players': v(0).attachedTo = null; break;
                 case 'Set Player Variable At Index': state.player[a[1]][Number(v(2))] = v(3); break;
                 case 'Set Global Variable': state.globals[a[0]] = v(1); break;
                 case 'Set Global Variable At Index': state.globals[a[0]][Number(v(1))] = v(2); break;
@@ -347,6 +352,7 @@ function* execute(rule, state, compiled) {
                 case 'Call Subroutine': yield* execute(compiled.get(a[0]), state, compiled); break;
                 case 'Damage': {
                     const target = v(0);
+                    if (state.expectedDamager !== undefined) assert.equal(v(1), state.expectedDamager);
                     assert(!Array.isArray(target), 'Each scripted augment Damage must target one player for actual-hit checks');
                     const targets = Array.isArray(target) ? target : [target];
                     state.damage.push({targets, amount: v(2), time: state.time});
@@ -362,6 +368,10 @@ function* execute(rule, state, compiled) {
                 case 'Create In-World Text': break;
                 case 'Create HUD Text': state.huds++; break;
                 case 'Start Heal Over Time': state.healOverTime = [v(2), v(3)]; break;
+                case 'Chase Player Variable At Rate':
+                    assert.equal(a[1], 'infectionLevel');
+                    (state.chases ??= []).push({field: a[1], destination: v(2), rate: v(3)});
+                    break;
                 case 'Set Move Speed': state.moveSpeed = v(1); break;
                 case 'Stop All Damage Over Time': state.stoppedDots = true; break;
                 case 'Clear Status': state.status.delete(a[1]); break;
@@ -1530,12 +1540,12 @@ async function main() {
     assert(selectionActions[1].startsWith('Set Player Variable(Event Player, enhancementId, Random Integer('));
     const enhancementSelection = {...enhancementInit,
         body: enhancementInit.body.split('actions {\n')[0] + 'actions {\n' + selectionActions.join('\n') + '\n}'};
-    for (let picked = 1; picked <= 10; picked++) for (const missing of [false, true]) {
+    for (let picked = 1; picked <= 11; picked++) for (const missing of [false, true]) {
         const state = scenario(1, {randomRoll: picked});
         if (!missing) state.player.enhancementId = 0;
         start(enhancementSelection, state, compiled);
-        assert.equal(state.player.enhancementId, picked, 'All ten enhancements are eligible for unselected / late-join players');
-        assert.deepEqual(state.randomCalls, [[1, 10]]);
+        assert.equal(state.player.enhancementId, picked, 'All eleven enhancements are eligible for unselected / late-join players');
+        assert.deepEqual(state.randomCalls, [[1, 11]]);
         state.randomRoll = picked === 10 ? 1 : 10;
         start(enhancementSelection, state, compiled);
         assert.equal(state.player.enhancementId, picked, 'An already resolved enhancement is retained');
@@ -1559,7 +1569,9 @@ async function main() {
     for (const name of ['LASER BARRICADE (PLACEMENT)', 'LASER BARRICADE BLOCKS ZOMBIES']) {
         const body = compiled.get(name).body;
         assert(body.includes('(Event Player).augmentId == 7;'));
-        assert(!body.includes('(Event Player).enhancementId'));
+        if (name === 'LASER BARRICADE (PLACEMENT)')
+            assert(body.includes('Compare((Event Player).enhancementId, !=, 11)'), 'Only Dead Weight carry reserves a ready barricade press');
+        else assert(!body.includes('(Event Player).enhancementId'));
     }
     const placement = compiled.get('LASER BARRICADE (PLACEMENT)').body;
     assert(placement.includes('Button(Interact)'));

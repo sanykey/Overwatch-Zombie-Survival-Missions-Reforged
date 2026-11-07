@@ -661,9 +661,10 @@ rule "LASER BARRICADE (PLACEMENT)":
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.augmentBarrierPlacementCooldown == 0
+    @Condition (eventPlayer.enhancementId != Enhancement.DEAD_WEIGHT or eventPlayer.enhancementHeldZombie == null) == true
 
-    # Negative cooldown latches aiming without another player variable. Only this
-    # rule owns it; clear it on every exit before starting the normal cooldown.
+    # -1 latches aiming; Interact may reserve -2 for a consumed Dead Weight press.
+    # Clear the placement latch on every exit before starting the normal cooldown.
     eventPlayer.augmentBarrierPlacementCooldown = -1
     waitUntil(not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead(), 0.5)
     if not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead():

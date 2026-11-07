@@ -93,17 +93,18 @@ async function main() {
         assert.deepEqual(ordinary.player[backpack], [99], 'Other augments never read/write the aliased backpack slot');
     }
     const primaryState = slot('enhancementBulkStacks');
-    for (let enhancement = 1; enhancement <= 10; enhancement++) {
+    for (let enhancement = 1; enhancement <= 11; enhancement++) {
         const s = state(1, [], 9, enhancement); s.buttons.add('Crouch');
-        s.player[primaryState] = 42; pickup(s, 7);
-        assert.deepEqual(s.player[backpack], [7]); assert.equal(s.player[primaryState], 42, 'Backpack storage must not overwrite any primary enhancement state');
+        const primaryValue = enhancement === 11 ? 0 : 42; // Dead Weight's idle held-target is null.
+        s.player[primaryState] = primaryValue; pickup(s, 7);
+        assert.deepEqual(s.player[backpack], [7]); assert.equal(s.player[primaryState], primaryValue, 'Backpack storage must not overwrite any primary enhancement state');
         assert.equal(s.player.health, 100, 'Scavenger no longer grants lifesteal');
     }
     // Scavenger and Laser Barricade are now mutually exclusive Augments.
     const barrier = state(1, [], 7); barrier.buttons.add('Crouch'); ground(barrier, 4);
     assert(!applies(compiled.get(interact), barrier));
     assert(applies(compiled.get('LASER BARRICADE (PLACEMENT)'), barrier));
-    assert(!compiled.get('LASER BARRICADE (PLACEMENT)').body.includes('enhancementId'));
+    assert(compiled.get('LASER BARRICADE (PLACEMENT)').body.includes('Compare((Event Player).enhancementId, !=, 11)'));
     const usePreview = actions(compiled.get('PLAYER AUGMENT INITIALIZATION')).find(l => l.startsWith('Create Beam Effect('));
     assert(usePreview.includes('augmentState2, ==, -1'));
     // Duplicate item types occupy separate slots and must all be dropped exactly once.
@@ -198,7 +199,7 @@ async function main() {
     const other = state(0, [], 1); assert(!applies(compiled.get(loot), other));
     const stopped = state(); stopped.globals.isGameplayActive = false; assert(!applies(compiled.get(loot), stopped));
     assert(!compiled.has('SCAVENGER LIFESTEAL'));
-    for (let enhancement = 1; enhancement <= 10; enhancement++) {
+    for (let enhancement = 1; enhancement <= 11; enhancement++) {
         const s = state(0, [], 9, enhancement); s.player[primaryState] = 123; s.player.initialMaxHealth = 250;
         assert(run('PLAYER AUGMENT INITIALIZATION', s).done()); assert.equal(s.huds, 1);
         assert.equal(s.player[primaryState], 123);
@@ -219,7 +220,7 @@ async function main() {
         run(menu, s); assert.equal(s.player.augmentId, (id + (reverse ? 10 : 1)) % 11);
     }
     const declarations = actions(compiled.get('Initialize global variables'));
-    for (const [name, size] of [['enhancementIconListConst', 11], ['augmentIconListConst', 11]]) {
+    for (const [name, size] of [['enhancementIconListConst', 12], ['augmentIconListConst', 11]]) {
         const line = declarations.find(l => l.startsWith('Set Global Variable(' + name + ','));
         assert(line); assert.equal(args(args(line)[1]).length, size);
     }
@@ -234,6 +235,6 @@ async function main() {
     // The only calls in these rules occur after the last scratch read.
     checkWorkshop(raw.join('\n'));
     console.log(JSON.stringify({elements: build.elements, warnings: build.warnings.length,
-        checked: 'plain Interact active trade/crouch stash/empty active/full backpack rejection/mutually exclusive barricade/all 10 primary combinations/actual Cure use/locked reserve/ordinary players/duplicate IDs/hold/cancel/death/drop positions/elimination event/5% boundary/all 13 types/auto-stash/full fallback/consecutive wins/Scavenger no healing/scratch'}, null, 2));
+        checked: 'plain Interact active trade/crouch stash/empty active/full backpack rejection/mutually exclusive barricade/all 11 primary combinations/actual Cure use/locked reserve/ordinary players/duplicate IDs/hold/cancel/death/drop positions/elimination event/5% boundary/all 13 types/auto-stash/full fallback/consecutive wins/Scavenger no healing/scratch'}, null, 2));
 }
 main().catch(error => {console.error(error); process.exitCode = 1;});

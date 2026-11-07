@@ -23,7 +23,7 @@ async function main() {
         'Only guarded healing, with self attribution and no damage recursion, waits or state writes');
 
     let damageCases = 0;
-    for (let enhancement = 1; enhancement <= 10; enhancement++)
+    for (let enhancement = 1; enhancement <= 11; enhancement++)
     for (const damage of [0, 1, 40, 100, 1000]) for (const ability of [0, 'Primary Fire']) {
         const s = scenario(10, {eventDamage: damage, eventAbility: ability, maxHealth: 10000});
         Object.assign(s.player, {enhancementId: enhancement, health: 100, [energy]: 17, [backpack]: 42});
@@ -59,7 +59,7 @@ async function main() {
     const pregame = scenario(10, {globals: {isGameplayActive: false}});
     assert(!applies(init, pregame));
 
-    for (let enhancement = 1; enhancement <= 10; enhancement++) {
+    for (let enhancement = 1; enhancement <= 11; enhancement++) {
         const s = scenario(10);
         Object.assign(s.player, {enhancementId: enhancement, initialMaxHealth: 250, [energy]: 17, [backpack]: 42});
         assert(run(init, s).done());
@@ -88,6 +88,6 @@ async function main() {
     assert(!compiled.has('APOTHECARY ALLOW HEALTH PACK PICKUP'));
     assert(![...compiled.keys()].some(name => name.includes('BOLT')));
     console.log(JSON.stringify({elements: build.elements, warnings: build.warnings.length, damageCases, eligibilityCases,
-        checked: '15% native/scripted damage/all 10 Enhancements/self attribution/healing cap/Overcharge actual healing/no recursion/50 recoverable normal health/readiness gate/Kevlar/hero-switch gate/random choice/no shared state'}, null, 2));
+        checked: '15% native/scripted damage/all 11 Enhancements/self attribution/healing cap/Overcharge actual healing/no recursion/50 recoverable normal health/readiness gate/Kevlar/hero-switch gate/random choice/no shared state'}, null, 2));
 }
 main().catch(error => {console.error(error); process.exitCode = 1;});

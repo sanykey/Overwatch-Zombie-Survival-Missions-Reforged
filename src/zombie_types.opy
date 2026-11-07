@@ -450,6 +450,7 @@ rule "RIDER (WIDOWMAKER) ATTACH TO PLAYERS":
 rule "RIDER DETACH WHEN DEAD OR TARGET IS DEAD":
     @Event eachPlayer
     @Team 2
+    @Condition eventPlayer.deadWeightZombieCarrier == null
     @Hero widowmaker
     @Condition eventPlayer.botIsAttached == true
     @Condition eventPlayer.botAbilityTarget != null
@@ -480,6 +481,7 @@ rule "RIDER ATTACH TO TEAMMATES":
 rule "RIDER DETATCH FROM TEAMMATES WHILE ALIVE":
     @Event eachPlayer
     @Team 2
+    @Condition eventPlayer.deadWeightZombieCarrier == null
     @Hero widowmaker
     @Condition eventPlayer.botIsAttached == true
     @Condition eventPlayer.botTarget != null
