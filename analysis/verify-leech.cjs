@@ -15,8 +15,12 @@ async function main() {
     const run = (rule, state) => start(rule, state, compiled);
     const energy = slot('enhancementCapacitorEnergy'), backpack = slot('augmentScavengerBackpack');
     assert(lifesteal.body.includes('Player Dealt Damage;\nTeam 1;'));
-    assert.deepEqual(actions(lifesteal), ['Heal(Event Player, Event Player, Multiply(Event Damage, 0.15));'],
-        'Heal every native or scripted damage event once, with self attribution and no damage recursion');
+    assert(!lifesteal.body.includes('conditions {'), 'Eligibility must remain in Actions for the Workshop workaround');
+    const emittedActions = actions(lifesteal);
+    assert(emittedActions[0].startsWith('If('));
+    assert.deepEqual(emittedActions.filter(line => !line.startsWith('If(') && line !== 'End;'),
+        ['Heal(Event Player, Event Player, Multiply(Event Damage, 0.15));'],
+        'Only guarded healing, with self attribution and no damage recursion, waits or state writes');
 
     let damageCases = 0;
     for (let enhancement = 1; enhancement <= 10; enhancement++)
@@ -38,9 +42,22 @@ async function main() {
     capped.eventHealing = 1; // Native healing event reports only the actual missing health.
     run(compiled.get('OVERCHARGE STORES HEALING'), capped);
     assert.equal(capped.player[energy], 10 + 1 / 3);
-    for (let augment = 0; augment < 10; augment++) assert(!applies(lifesteal, scenario(augment)));
+    let eligibilityCases = 0;
+    for (let augment = 0; augment <= 10; augment++) for (const active of [undefined, false, 0, true]) {
+        const s = scenario(augment, {eventDamage: 100, maxHealth: 1000});
+        if (active === undefined) delete s.globals.isGameplayActive;
+        else s.globals.isGameplayActive = active;
+        s.player.health = 100; s.expectedHealer = s.player;
+        assert(applies(lifesteal, s), 'The event enters Actions even when eligibility fails');
+        assert(run(lifesteal, s).done());
+        const eligible = augment === 10 && active === true;
+        assert.equal(s.player.health, eligible ? 115 : 100, 'Rejected events must not heal');
+        assert.equal(s.healBonus, eligible ? 15 : undefined);
+        assert.equal(s.damage.length, 0);
+        eligibilityCases++;
+    }
     const pregame = scenario(10, {globals: {isGameplayActive: false}});
-    assert(!applies(lifesteal, pregame)); assert(!applies(init, pregame));
+    assert(!applies(init, pregame));
 
     for (let enhancement = 1; enhancement <= 10; enhancement++) {
         const s = scenario(10);
@@ -70,7 +87,7 @@ async function main() {
     assert(init.body.includes('15% lifesteal | +50 health'));
     assert(!compiled.has('APOTHECARY ALLOW HEALTH PACK PICKUP'));
     assert(![...compiled.keys()].some(name => name.includes('BOLT')));
-    console.log(JSON.stringify({elements: build.elements, warnings: build.warnings.length, damageCases,
+    console.log(JSON.stringify({elements: build.elements, warnings: build.warnings.length, damageCases, eligibilityCases,
         checked: '15% native/scripted damage/all 10 Enhancements/self attribution/healing cap/Overcharge actual healing/no recursion/50 recoverable normal health/readiness gate/Kevlar/hero-switch gate/random choice/no shared state'}, null, 2));
 }
 main().catch(error => {console.error(error); process.exitCode = 1;});

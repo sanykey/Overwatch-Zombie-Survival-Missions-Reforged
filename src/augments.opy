@@ -774,8 +774,10 @@ rule "SCAVENGER BOT LOOT":
 rule "LEECH LIFESTEAL":
     @Event playerDealtDamage
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.augmentId == Augment.LEECH
 
-    # Include damage from the hero, primary enhancement and scripted powerups.
-    heal(eventPlayer, eventPlayer, eventDamage * 0.15)
+    # Workshop workaround: either eligibility check in rule Conditions reproduced
+    # disappearing newer heroes during voting. Keep both checks in Actions instead;
+    # the engine cause is unknown. isGameplayActive only holds boolean/default zero.
+    if isGameplayActive and eventPlayer.augmentId == Augment.LEECH:
+        # Include damage from the hero, primary enhancement and scripted powerups.
+        heal(eventPlayer, eventPlayer, eventDamage * 0.15)

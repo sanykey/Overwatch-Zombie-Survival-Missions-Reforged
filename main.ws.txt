@@ -1,4 +1,4 @@
-/* Element count: (total 28755)
+/* Element count: (total 28759)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
@@ -250,6 +250,7 @@
    16: rule "BULKING SEASON LOSES STACKS ON DEATH" (src/enhancements.opy)
    15: rule "chaseSatelliteTarget" (src/objective_types/objective_type_satellite_uplink.opy)
    15: rule "playReignitedWarningPair" (src/zombie_types.opy)
+   15: rule "LEECH LIFESTEAL" (src/augments.opy)
    14: rule "Subroutine createRemainingObjectivesHud" (src/subroutines.opy)
    14: rule "SURVIVOR TO BE RESCUED DIES" (src/objective_types/objective_type_survivor_rescue.opy)
    14: rule "TELEPORT BOTS (GENERAL)" (src/bots_game_in_progress.opy)
@@ -271,7 +272,6 @@
    11: rule "TRACER INVIS WHILE RECALLING" (src/hero_tuning.opy)
    11: rule "STRIKER CANCEL BALL FORM" (src/zombie_types.opy)
    11: rule "OVERCHARGE STORES HEALING" (src/enhancements.opy)
-   11: rule "LEECH LIFESTEAL" (src/augments.opy)
    10: rule "PREVENT MATCH TIME FROM UNPAUSING" (src/global_game_in_progress.opy)
    10: rule "startExtractionAscent" (src/objective_types/objective_type_extraction_point.opy)
    10: rule "setClosestPlayerTeleportCenter" (src/bots_game_in_progress.opy)
@@ -10094,20 +10094,18 @@ rule ("SCAVENGER BOT LOOT") {
     }
 }
 
-//11 elements
+//15 elements
 rule ("LEECH LIFESTEAL") {
     event {
         Player Dealt Damage;
         Team 1;
         All;
     }
-    conditions {
-        Global.isGameplayActive == True; // 2 elements
-        (Event Player).augmentId == 10; // 4 elements
-    }
     actions {
-        "Include damage from the hero, primary enhancement and scripted powerups."
-        Heal(Event Player, Event Player, Multiply(Event Damage, 0.15)); // 4 elements
+        "Workshop workaround: either eligibility check in rule Conditions reproduced\ndisappearing newer heroes during voting. Keep both checks in Actions instead;\nthe engine cause is unknown. isGameplayActive only holds boolean/default zero."
+        If(And(Global.isGameplayActive, Compare((Event Player).augmentId, ==, 10))); // 10 elements
+            "Include damage from the hero, primary enhancement and scripted powerups."
+            Heal(Event Player, Event Player, Multiply(Event Damage, 0.15)); // 4 elements
     }
 }
 
