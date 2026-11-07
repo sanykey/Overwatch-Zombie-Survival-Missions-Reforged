@@ -3,7 +3,7 @@
 subroutine extendAugmentMelee
 subroutine useAugmentAirAction
 
-#!define AUGMENT_NAMES ["No Preference", "Kevlar", "Shock Landing", "Double Jump", "Long Reach", "Ammo Pack", "Grapnel Launcher", "Laser Barricade", "Apothecary"]
+#!define AUGMENT_NAMES ["No Preference", "Kevlar", "Shock Landing", "Double Jump", "Long Reach", "Ammo Pack", "Grapnel Launcher", "Laser Barricade", "Apothecary", "Scavenger"]
 #!define AUGMENT_DASH_PHASE_DURATION 0.5
 #!define AUGMENT_DASH_COOLDOWN 13
 #!define AUGMENT_DASH_WAVE_RADIUS 6
@@ -55,7 +55,8 @@ rule "AUGMENT MENU":
             "Carry twice the ammo per full magazine; full reloads restore the bonus",
             "Crouch + Jump: grapple 7-40m; deal 35 damage. Grounded: stun 0.5s. Airborne: knockdown 3s. Cooldown: 16s",
             "Hold Crouch + Interact to place a wall that blocks zombies; release Interact to deploy; Crouch may be released while aiming. Cooldown: 30s",
-            "Health packs heal twice as much, remove up to 1 existing infection even after time runs out, and grant +7% ultimate charge and +50% move speed for 5s"
+            "Health packs heal twice as much, remove up to 1 existing infection even after time runs out, and grant +7% ultimate charge and +50% move speed for 5s",
+            "Crouch + Interact: stash (2 slots). Interact: active slot. Hold Reload: drop all. Bot eliminations: 5% loot, backpack first"
         ][localPlayer.augmentId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.INTERACT)),
         HudPosition.ACTUALLY_LEFT, 4, Color.AQUA, Color.AQUA, Color.AQUA,
@@ -70,7 +71,7 @@ rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)":
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
 
-    eventPlayer.augmentId = (eventPlayer.augmentId + (Augment.APOTHECARY if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else 1)) % (Augment.APOTHECARY + 1)
+    eventPlayer.augmentId = (eventPlayer.augmentId + (Augment.SCAVENGER if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else 1)) % (Augment.SCAVENGER + 1)
 
 
 rule "PLAYER AUGMENT INITIALIZATION":
@@ -84,7 +85,9 @@ rule "PLAYER AUGMENT INITIALIZATION":
     if eventPlayer.augmentId == Augment.NO_PREFERENCE:
         # Menu non-selection and late-join zero state each receive one real
         # random choice. A nonzero ID preserves explicit and previously rolled choices.
-        eventPlayer.augmentId = random.randint(Augment.KEVLAR, Augment.APOTHECARY)
+        eventPlayer.augmentId = random.randint(Augment.KEVLAR, Augment.SCAVENGER)
+    if eventPlayer.augmentId == Augment.SCAVENGER:
+        eventPlayer.augmentScavengerBackpack = []
     if eventPlayer.augmentId == Augment.LASER_BARRICADE:
         #Augment: Laser Barricade
         # augmentBarrierFacing: horizontal unit direction saved at placement, to reconstruct both push reference points.
@@ -121,7 +124,7 @@ rule "PLAYER AUGMENT INITIALIZATION":
             "{1} | {0}".format(
                 iconString(Icon.CHECKMARK) if getTotalTimeElapsed() >= eventPlayer.augmentMovementReadyAt else f"{ceil(eventPlayer.augmentMovementReadyAt - getTotalTimeElapsed())}s",
                 f"[{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.JUMP)}]" if eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER else f"[{inputBindingString(Button.JUMP)}] in midair / double-tap" if eventPlayer.augmentId == Augment.DOUBLE_JUMP else f"[{inputBindingString(Button.JUMP)}] in midair"
-            ) if eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP, Augment.GRAPNEL_LAUNCHER] else ["", "+75 armor", "", "", "Extended melee reach", "Double magazine capacity", "", "", "2x pack healing | -1 infection (min 0) | +7% ult | +50% speed 5s"][eventPlayer.augmentId],
+            ) if eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP, Augment.GRAPNEL_LAUNCHER] else f"Backpack: {len(eventPlayer.augmentScavengerBackpack)}/2 | Crouch + Interact to store | Hold [{inputBindingString(Button.RELOAD)}] to drop all" if eventPlayer.augmentId == Augment.SCAVENGER else ["", "+75 armor", "", "", "Extended melee reach", "Double magazine capacity", "", "", "2x pack healing | -1 infection (min 0) | +7% ult | +50% speed 5s"][eventPlayer.augmentId],
             AUGMENT_NAMES[eventPlayer.augmentId],
             HudPosition.ACTUALLY_LEFT, 100, Color.AQUA, Color.AQUA, Color.AQUA,
             HudReeval.STRING
@@ -742,3 +745,23 @@ rule "LASER BARRICADE BLOCKS ZOMBIES":
     chaseAtRate(eventPlayer.augmentBarrierHealth, 10000, 500, ChaseRateReeval.NONE)
     if ruleCondition:
         loop()
+
+rule "SCAVENGER BOT LOOT":
+    @Event playerEarnedElimination
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.augmentId == Augment.SCAVENGER
+    @Condition victim.getTeam() == Team.2
+    @Condition victim.isDummy() == true
+
+    if random.randint(1, 20) == 1:
+        # One item roll per credited kill or damage participation. No waits or
+        # calls while this scratch value is live; reserves never activate here.
+        #!define scavengerLootItemId tmp0
+        scavengerLootItemId = random.randint(1, 13)
+        if len(eventPlayer.augmentScavengerBackpack) < 2:
+            eventPlayer.augmentScavengerBackpack.append(scavengerLootItemId)
+            smallMessage(eventPlayer, "Scavenger: powerup added to backpack")
+        else:
+            supplyPowerUpIdList.append(scavengerLootItemId)
+            supplyPowerUpPositionList.append(nearestWalkablePosition(victim.getPosition()) + offsetUpQuarterConst)

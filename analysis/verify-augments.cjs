@@ -72,6 +72,7 @@ function value(expr, state, element) {
     if (expr === 'Event Was Health Pack') return state.eventWasHealthPack;
     if (expr === 'Match Time') return state.matchTime;
     if (expr === 'Current Array Element') return element;
+    if (expr === 'Current Array Index') return state.arrayIndex;
     if (expr.startsWith('Global.')) return state.globals[expr.slice(7)] ?? 0;
     const field = expr.match(/^\((.+)\)\.(\w+)$/);
     if (field) return value(field[1], state, element)[field[2]] ?? 0;
@@ -88,9 +89,17 @@ function value(expr, state, element) {
         case 'First Of': return array(v(0))[0] ?? 0;
         case 'Count Of': return array(v(0)).length;
         case 'Value In Array': return array(v(0))[Number(v(1))] ?? 0;
+        case 'Append To Array': return array(v(0)).concat(v(1));
+        case 'Nearest Walkable Position': return state.walkablePosition ?? point(v(0));
         case 'If-Then-Else': return truth(v(0)) ? v(1) : v(2);
         case 'Evaluate Once': return v(0);
         case 'Filtered Array': return array(v(0)).filter(item => truth(value(a[1], state, item)));
+        case 'Mapped Array': return array(v(0)).map((item, index) => {
+            const outer = state.arrayIndex;
+            state.arrayIndex = index;
+            try { return value(a[1], state, item); }
+            finally { state.arrayIndex = outer; }
+        });
         case 'Sorted Array': return [...array(v(0))].sort((left, right) =>
             value(a[1], state, left) - value(a[1], state, right));
         case 'Array Contains': return array(v(0)).includes(v(1));
@@ -118,7 +127,7 @@ function value(expr, state, element) {
         case 'Is Alive': return v(0) === state.player ? state.alive : v(0).alive;
         case 'Is Dead': return !(v(0) === state.player ? state.alive : v(0).alive);
         case 'Has Spawned': return state.spawned;
-        case 'Is Dummy Bot': return state.dummy;
+        case 'Is Dummy Bot': return v(0) === state.player ? state.dummy : !!v(0).dummy;
         case 'Is On Ground': return v(0) === state.player ? state.ground : v(0).ground;
         case 'Is Button Held': return state.buttons.has(v(1));
         case 'Throttle Of': return state.throttle;
@@ -143,12 +152,15 @@ function value(expr, state, element) {
         case 'Is In Alternate Form': return state.alternateForm;
         case 'Ultimate Charge Percent': return state.ultCharge;
         case 'Is True For All': return array(v(0)).every(item => truth(value(a[1], state, item)));
+        case 'Is True For Any': return array(v(0)).some(item => truth(value(a[1], state, item)));
         case 'Health': return v(0).health ?? 10000;
         case 'Is Using Ability 1': return state.ability1 ?? state.ability;
         case 'Is Using Ability 2': return state.ability2 ?? state.ability;
         case 'Max Health Of Type': assert.equal(a[1], 'Armor'); return state.maxArmor;
         case 'Has Status': return state.status.has(a[1]);
         case 'Eye Position': return point(v(0)).map((x, i) => x + (i === 1 ? 1.5 : 0));
+        case 'Facing Direction Of': return state.facing;
+        case 'All Players': return [state.player, ...state.targets];
         case 'Position Of': return point(v(0));
         case 'Velocity Of': return state.velocity;
         case 'Team Of': return v(0).team ?? 2;
@@ -163,7 +175,7 @@ function value(expr, state, element) {
             return state.targets.filter(target => (target.team ?? 2) === 2 && target.visible && magnitude(target.position.map((x, i) => x - v(0)[i])) <= v(1));
         case 'Is In View Angle': return angle(state.facing, v(1).map((x, i) => x - value('Eye Position(Event Player)', state)[i])) <= v(2);
         case 'Random Integer': {
-            const min = Number(v(0)), max = Number(v(1)), roll = state.randomRoll ?? min;
+            const min = Number(v(0)), max = Number(v(1)), roll = state.randomRolls?.shift() ?? state.randomRoll ?? min;
             assert(Number.isInteger(roll) && roll >= min && roll <= max);
             state.randomCalls.push([min, max]);
             return roll;
@@ -253,10 +265,21 @@ function* execute(rule, state, compiled) {
                 case 'Loop If': if (truth(v(0))) {pc = -1; branches = [];} break;
                 case 'Abort If': if (truth(v(0))) return; break;
                 case 'Skip If': if (truth(v(0))) pc += Number(v(1)); break;
+                case 'Skip': pc += Number(v(0)); break;
                 case 'Set Player Variable': state.player[a[1]] = v(2); break;
                 case 'Set Player Variable At Index': state.player[a[1]][Number(v(2))] = v(3); break;
                 case 'Set Global Variable': state.globals[a[0]] = v(1); break;
                 case 'Set Global Variable At Index': state.globals[a[0]][Number(v(1))] = v(2); break;
+                case 'Modify Global Variable': {
+                    const current = state.globals[a[0]] ?? 0, operand = v(2);
+                    // Workshop vectors are scalar values, represented here as JS arrays.
+                    if (a[1] === 'Append To Array') state.globals[a[0]] = array(current).concat(
+                        a[0] === 'supplyPowerUpPositionList' && !a[2].startsWith('Mapped Array(') ? [operand] : operand);
+                    else if (a[1] === 'Remove From Array By Index') state.globals[a[0]] = array(current).filter((_, index) => index !== Number(operand));
+                    else throw new Error('Unsupported global modification: ' + line);
+                    break;
+                }
+                case 'Destroy In-World Text': (state.destroyedTexts ??= []).push(v(0)); break;
                 case 'Modify Player Variable': {
                     const current = state.player[a[1]] ?? 0;
                     state.player[a[1]] = a[2] === 'Append To Array' ? array(current).concat(v(3))
@@ -333,7 +356,7 @@ function* execute(rule, state, compiled) {
                     break;
                 }
                 case 'Play Effect':
-                    assert.equal(a[0], 'All Players(All Teams)');
+                    assert(['All Players(All Teams)', 'All Players(Team 1)', 'Event Player'].includes(a[0]));
                     state.effects.push({effect: a[1], color: a[2], position: v(3), size: v(4)});
                     break;
                 case 'Create In-World Text': break;
@@ -502,10 +525,10 @@ async function main() {
     const jumpReadyAt = slot('augmentJumpReadyAt');
     assert.notEqual(jumpReady, jumpReadyAt, 'Landing/death must not overwrite the cooldown timestamp');
     const menu = 'PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)';
-    for (const backwards of [false, true]) for (let id = 0; id <= 8; id++) {
+    for (const backwards of [false, true]) for (let id = 0; id <= 9; id++) {
         const state = scenario(id, {globals: {isPregameSetup: true}, buttons: new Set(['Interact', ...(backwards ? ['Secondary Fire'] : [])])});
         run(menu, state);
-        assert.equal(state.player.augmentId, (id + (backwards ? 8 : 1)) % 9);
+        assert.equal(state.player.augmentId, (id + (backwards ? 9 : 1)) % 10);
         state.globals.isPregameSetup = false;
         assert(!applies(compiled.get(menu), state));
     }
@@ -571,7 +594,7 @@ async function main() {
             run('PLAYER AUGMENT INITIALIZATION', state);
             assert.equal(state.player.augmentId, 8);
             assert.equal(state.huds, 1);
-            assert.deepEqual(state.randomCalls, selected === 0 ? [[1, 8]] : []);
+            assert.deepEqual(state.randomCalls, selected === 0 ? [[1, 9]] : []);
         }
         if (process.argv.includes('--export')) {
             const exported = await compiler.compile(fs.readFileSync(path.join(root, 'main.opy'), 'utf8'),
@@ -1477,19 +1500,19 @@ async function main() {
     }
     const kevlar = scenario(1); kevlar.player.initialMaxHealth = 250;
     run('PLAYER AUGMENT INITIALIZATION', kevlar); assert.equal(kevlar.armor, 75);
-    for (const picked of [1, 2, 3, 4, 5, 6, 7, 8]) for (const missing of [false, true]) {
+    for (const picked of [1, 2, 3, 4, 5, 6, 7, 8, 9]) for (const missing of [false, true]) {
         const state = scenario(0, {randomRoll: picked}); state.player.initialMaxHealth = 250;
         if (missing) delete state.player.augmentId;
         run('PLAYER AUGMENT INITIALIZATION', state);
         assert.equal(state.player.augmentId, picked, 'Unselected and late-join players can receive every real Augment');
         assert.equal(state.armor, picked === 1 ? 75 : 0);
-        assert.deepEqual(state.randomCalls, [[1, 8]], 'No Preference is excluded from the random range');
+        assert.deepEqual(state.randomCalls, [[1, 9]], 'No Preference is excluded from the random range');
         state.randomRoll = picked === 6 ? 1 : 6;
         run('PLAYER AUGMENT INITIALIZATION', state);
         assert.equal(state.player.augmentId, picked, 'Respawn/reinitialization retains the previously rolled ID');
         assert.equal(state.randomCalls.length, 1);
     }
-    for (const selected of [2, 3, 4, 5, 6, 7, 8]) {
+    for (const selected of [2, 3, 4, 5, 6, 7, 8, 9]) {
         const chosen = scenario(selected); chosen.player.initialMaxHealth = 250;
         run('PLAYER AUGMENT INITIALIZATION', chosen);
         assert.equal(chosen.player.augmentId, selected, 'Keep an explicit Augment selection');
@@ -1675,4 +1698,5 @@ async function main() {
             'Long Reach Overcharge / actual damage / immunity / mixed targets / first hit / multiple targets and swings / exact expiry / fixed window / independent next bank / scripted-event filtering'],
         exported: process.argv.includes('--export'), limitation: 'Game physics, native hitboxes and engine ammo support require an in-game check.'}, null, 2));
 }
-main().catch(error => {console.error(error); process.exitCode = 1;});
+module.exports = {value, applies, execute, start, scenario, actions};
+if (require.main === module) main().catch(error => {console.error(error); process.exitCode = 1;});

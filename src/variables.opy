@@ -57,6 +57,7 @@ enum Augment:
     GRAPNEL_LAUNCHER = 6,
     LASER_BARRICADE = 7,
     APOTHECARY = 8,
+    SCAVENGER = 9,
 
 # Icon tables, indexed by their corresponding selection ID.
 #!define ENHANCEMENT_ICONS enhancementIconListConst
@@ -376,6 +377,9 @@ playervar enhancementId  # Selected Enhancement enum; pregame selection, runtime
 # Only the selected augment owns these slots; selection is fixed once gameplay begins.
 playervar augmentId  # Selected Augment enum; pregame Interact selection and gameplay effects.
 playervar augmentState0
+# Scavenger: up to two reserve item IDs, separate from the active powerup and primary enhancement.
+# Retained through hero switches; death/manual drop clears it synchronously. Never activated.
+#!define augmentScavengerBackpack augmentState0
 # Apothecary speed-bonus expiry (Total Time Elapsed); zero when inactive.
 # Refreshed on pickup, cleared on expiry/death and alongside movement reset on spawn.
 #!define augmentApothecarySpeedUntil augmentState0
@@ -583,14 +587,12 @@ playervar actorTeamSlot1  # Team 2: botIsSelectingTarget; Team 1: powerUpReviveT
 playervar actorTeamSlot2  # Boss return snapshot on Team 2 or carried item ID on Team 1.
 # Boss eye-position snapshot written and cleared during return; currently not read.
 #!define botReturnPosition actorTeamSlot2
-# Currently carried supply item ID; zero means no item.
+# Active supply item ID; zero means none. Scavenger reserves never occupy this slot.
 #!define powerUpItemId actorTeamSlot2
 
-playervar actorTeamSlot3  # Team 2 teleport flag; Team 1 human challenge vote -> trade position, or Rescue dummy path. Menu writers are phase-guarded; trade position is assigned before reading.
+playervar actorTeamSlot3  # Team 2 teleport flag; Team 1 human challenge vote or Rescue dummy path. Menu writers are phase-guarded.
 # Zombie is inside enterExitTeleport; spawn/target/ability consumers also read it.
 #!define botIsTeleporting actorTeamSlot3
-# Aimed ground-item position; retained across all waits in the exchange.
-#!define powerUpTradePosition actorTeamSlot3
 # Human challenge vote during pregame only; END VOTING aborts after the phase boundary.
 #!define pregameChallengeVote actorTeamSlot3
 # Recorded leader positions followed and trimmed by the Rescue NPC.
@@ -705,11 +707,9 @@ playervar actorTeamSlot20  # Team 2: botCustomTeleportPosition; Team 1: powerUpA
 # Ground center of the active air-strike area.
 #!define powerUpAirStrikePosition actorTeamSlot20
 
-playervar actorTeamSlot21  # Team 2: botLastTarget; Team 1: objective vote -> trade index. Exchange assigns its index before reading it; pregame readers/writers end before gameplay.
+playervar actorTeamSlot21  # Team 2: botLastTarget; Team 1: pregame objective vote. Pregame readers/writers end before gameplay.
 # Last visible/attacking target retained when zombie line of sight is lost.
 #!define botLastTarget actorTeamSlot21
-# Index of the aimed ground item in the global supply item arrays.
-#!define powerUpTradeIndex actorTeamSlot21
 # Human objective vote during pregame only; distinct from the selected global objective mode.
 #!define pregameObjectiveVote actorTeamSlot21
 
@@ -802,9 +802,8 @@ playervar objectiveActorKindSlot  # Biomorphing resource type on both teams, or 
 # Rescue NPC mood/status icon: halo, sad, dizzy or extraction celebration.
 #!define rescueMoodIcon objectiveActorKindSlot
 
-playervar menuTradeItemSlot  # Human zombie vote -> previous carried item ID. No chase owns this slot; exchange assigns it before its first wait/read.
+playervar menuTradeItemSlot  # Human zombie vote; legacy slot name. Gameplay trades use synchronous scratch.
 #!define pregameZombieVote menuTradeItemSlot
-#!define powerUpTradePreviousItemId menuTradeItemSlot
 
 # Chased variables
 
@@ -872,7 +871,7 @@ playervar augmentBarrierHealth  # Chased Laser Barricade health; placement, dama
 # Immutable Augment icons, indexed by selection ID and initialized once before UI rules.
 # Shared by the pregame menu, world labels, personal HUD and roster throughout the match.
 # Keep a dedicated slot: pregame storage is reused by objectives during gameplay.
-globalvar augmentIconListConst = [iconString(Icon.QUESTION_MARK), iconString(Icon.STOP), iconString(Icon.ARROW_RIGHT), iconString(Icon.ARROW_UP), iconString(Icon.CROSS), iconString(Icon.PLUS), iconString(Icon.ARROW_DOWN), iconString(Icon.DIAMOND), iconString(Icon.HEART)]
+globalvar augmentIconListConst = [iconString(Icon.QUESTION_MARK), iconString(Icon.STOP), iconString(Icon.ARROW_RIGHT), iconString(Icon.ARROW_UP), iconString(Icon.CROSS), iconString(Icon.PLUS), iconString(Icon.ARROW_DOWN), iconString(Icon.DIAMOND), iconString(Icon.HEART), iconString(Icon.RECYCLE)]
 
 # Immutable Enhancement icons, indexed by selection ID; shared by pregame options and roster.
 # Keep a dedicated slot: enhancementOptionList becomes Biomorphing text after menu cleanup.
