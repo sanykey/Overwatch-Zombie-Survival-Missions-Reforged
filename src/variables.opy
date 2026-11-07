@@ -201,7 +201,6 @@ globalvar currentObjectivePosition  # Mirrors the objective queue head, includin
 globalvar offsetUpThreeQuartersConst = 0.75 * Vector.UP    # Vertical offset of 0.75 m for labels, icons and visibility checks. Source uses: 7 (excluding declaration).
 globalvar offsetUpHalfConst = 0.5 * Vector.UP              # Vertical offset of 0.5 m for labels and effects. Source uses: 7 (excluding declaration).
 globalvar losOffsetConst = 1.2 * Vector.UP                 # Vertical offset of 1.2 m used by line-of-sight checks. Source uses: 16 (excluding declaration).
-globalvar colorChargeBatteryConst = rgb(236, 206, 44)    # Shared Charge Battery color used by the menu and enhancement visuals. Source uses: 4 (excluding declaration).
 globalvar dummyHoldingPositionConst = vect(500, 500, 500)  # Off-map holding position for newly created or reconfigured dummy bots. Source uses: 6 (excluding declaration).
 globalvar offsetDownHundredConst = -100 * Vector.UP       # Downward offset of 100 m for raycasts, hidden effects and dead-player storage. Source uses: 7 (excluding declaration).
 globalvar offsetUpOneAndHalfConst = 1.5 * Vector.UP       # Vertical offset of 1.5 m for the pregame camera and player labels. Source uses: 6 (excluding declaration).
@@ -893,4 +892,18 @@ globalvar augmentIconListConst = [iconString(Icon.QUESTION_MARK), iconString(Ico
 
 # Immutable Enhancement icons, indexed by selection ID; shared by pregame options and roster.
 # Keep a dedicated slot: enhancementOptionList becomes Biomorphing text after menu cleanup.
-globalvar enhancementIconListConst = [iconString(Icon.QUESTION_MARK), iconString(Icon.SKULL), iconString(Icon.POISON), iconString(Icon.FIRE), iconString(Icon.PLUS), iconString(Icon.BOLT), iconString(Icon.SPIRAL), iconString(Icon.FLAG), iconString(Icon.HAPPY), iconString(Icon.BOLT), iconString(Icon.ARROW_UP), iconString(Icon.TRASHCAN)]
+enum EnhancementIcon:
+    NO_PREFERENCE = iconString(Icon.QUESTION_MARK),
+    BRAIN_KILLER = iconString(Icon.SKULL),
+    ZOMBIE_HYBRID = iconString(Icon.POISON),
+    PYROTECHNIC = iconString(Icon.FIRE),
+    PLAGUE_DOCTOR = iconString(Icon.PLUS),
+    BORN_TO_BATTLE = "<TX C000000000039D7>",
+    CHARGE_BATTERY = iconString(Icon.SPIRAL),
+    HITCHHIKER = iconString(Icon.FLAG),
+    PUP = iconString(Icon.HAPPY),
+    OVERCHARGE = iconString(Icon.MOON),
+    BULKING_SEASON = "<TX C0000000002A9ED>",
+    DEAD_WEIGHT = iconString(Icon.TRASHCAN),
+
+globalvar enhancementIconListConst = [EnhancementIcon.NO_PREFERENCE, EnhancementIcon.BRAIN_KILLER, EnhancementIcon.ZOMBIE_HYBRID, EnhancementIcon.PYROTECHNIC, EnhancementIcon.PLAGUE_DOCTOR, EnhancementIcon.BORN_TO_BATTLE, EnhancementIcon.CHARGE_BATTERY, EnhancementIcon.HITCHHIKER, EnhancementIcon.PUP, EnhancementIcon.OVERCHARGE, EnhancementIcon.BULKING_SEASON, EnhancementIcon.DEAD_WEIGHT]

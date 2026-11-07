@@ -94,20 +94,20 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             eventPlayer.enhancementCapacitorAssistSnapshot = overchargeAssistTotal(eventPlayer)
             hudText(
                 eventPlayer,
-                iconString(Icon.BOLT),
+                EnhancementIcon.OVERCHARGE,
                 f"Hold [{inputBindingString(Button.MELEE)}] to charge | Energy: {floor(eventPlayer.enhancementCapacitorEnergy)} | Charged: {floor(eventPlayer.enhancementCapacitorCharge)}",
                 "Overcharge",
-                HudPosition.ACTUALLY_LEFT, 99, Color.YELLOW, Color.YELLOW, Color.YELLOW, HudReeval.STRING
+                HudPosition.ACTUALLY_LEFT, 99, Color.TURQUOISE, Color.TURQUOISE, Color.TURQUOISE, HudReeval.STRING
             )
             break
         case Enhancement.BULKING_SEASON:
             eventPlayer.enhancementBulkStacks = 0
             hudText(
                 eventPlayer,
-                iconString(Icon.ARROW_UP),
+                EnhancementIcon.BULKING_SEASON,
                 f"Stacks: {eventPlayer.enhancementBulkStacks} | +{min(100, eventPlayer.enhancementBulkStacks * 0.5)}% Max Life | Size: {min(1.35, 1 + eventPlayer.enhancementBulkStacks * 0.005)}x",
                 "Bulking Season",
-                HudPosition.ACTUALLY_LEFT, 99, Color.ORANGE, Color.ORANGE, Color.ORANGE, HudReeval.STRING
+                HudPosition.ACTUALLY_LEFT, 99, Color.LIME_GREEN, Color.LIME_GREEN, Color.LIME_GREEN, HudReeval.STRING
             )
             break
         case Enhancement.DEAD_WEIGHT:
@@ -127,7 +127,7 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
             # enhancementBattleAbilityButton: selected ability button, retained through waits to reset its charge or cooldown.
             hudText(
                 eventPlayer,
-                iconString(Icon.BOLT),
+                EnhancementIcon.BORN_TO_BATTLE,
                 f"{eventPlayer.enhancementBattleResetCharges}/2 resets",
                 "Born to Battle",
                 HudPosition.ACTUALLY_LEFT, 99, Color.GRAY, Color.GRAY, Color.GRAY, HudReeval.STRING
@@ -146,7 +146,7 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
                 iconString(Icon.SPIRAL),
                 "{1} {0}".format(f"{ceil(eventPlayer.enhancementBatteryPlacementCooldown)}s" if eventPlayer.enhancementBatteryPlacementCooldown > 0 else iconString(Icon.CHECKMARK), "Hold [{0}]".format(inputBindingString(Button.MELEE)) if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else []),
                 "Charge Battery",
-                HudPosition.ACTUALLY_LEFT, 99, colorChargeBatteryConst if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else Color.RED, colorChargeBatteryConst if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else Color.RED, colorChargeBatteryConst if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else Color.RED, HudReeval.STRING_AND_COLOR
+                HudPosition.ACTUALLY_LEFT, 99, Color.WHITE if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else Color.RED, Color.WHITE if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else Color.RED, Color.WHITE if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else Color.RED, HudReeval.STRING_AND_COLOR
             )
             #Battery placement visual
             createEffect(eventPlayer.filter(lambda _: eventPlayer.isHoldingButton(Button.MELEE) and eventPlayer.enhancementBatteryPlacementCooldown <= 0 and distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) <= 30), Effect.RING, rgb(0, 255, 0, 204), worldVector(0.1 * Vector.UP, eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), 0.45, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)

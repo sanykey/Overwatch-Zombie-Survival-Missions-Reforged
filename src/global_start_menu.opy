@@ -191,7 +191,7 @@ rule "EFFECTS/TEXTS":
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Enhancement
-    startMenuEnhancementColorList = [Color.AQUA, Color.RED, Color.GRAY, Color.ORANGE, Color.GREEN, Color.GRAY, colorChargeBatteryConst, Color.PURPLE, Color.BLUE, Color.YELLOW, Color.ORANGE, Color.PURPLE]
+    startMenuEnhancementColorList = [Color.AQUA, Color.RED, Color.GRAY, Color.ORANGE, Color.GREEN, Color.GRAY, Color.WHITE, Color.PURPLE, Color.BLUE, Color.TURQUOISE, Color.LIME_GREEN, Color.PURPLE]
     hudText(
         getPlayers(Team.1),
         "Enhancement: {0}{1}".format(

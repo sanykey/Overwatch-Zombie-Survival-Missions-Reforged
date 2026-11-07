@@ -1,8 +1,8 @@
-/* Element count: (total 29175)
+/* Element count: (total 29182)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
-  976: rule "PLAYER ENHANCEMENT INITIALIZATION" (src/enhancements.opy)
+  984: rule "PLAYER ENHANCEMENT INITIALIZATION" (src/enhancements.opy)
   861: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
   515: rule "PLAYER AUGMENT INITIALIZATION" (src/augments.opy)
   481: rule "GRAPNEL LAUNCHER" (src/augments.opy)
@@ -26,7 +26,7 @@
   249: rule "AMMO PACK REFILL FALLBACK" (src/augments.opy)
   247: rule "VARIABLE ASSIGNMENT" (src/global_startup.opy)
   239: rule "HITCHHIKER ATTACH/DETATCH" (src/enhancements.opy)
-  231: rule "Initialize global variables"
+  230: rule "Initialize global variables"
   219: rule "BOT DIES" (src/bots_game_in_progress.opy)
   214: rule "powerUpUsage" (src/supply_drops.opy)
   211: rule "P.U.P. CONTROL" (src/enhancements.opy)
@@ -494,93 +494,92 @@ variables {
         16: offsetUpThreeQuartersConst
         17: offsetUpHalfConst
         18: losOffsetConst
-        19: colorChargeBatteryConst
-        20: dummyHoldingPositionConst
-        21: offsetDownHundredConst
-        22: offsetUpOneAndHalfConst
-        23: offsetUpQuarterConst
-        24: powerUpColorListConst
-        25: isPregameSetup
-        26: isSpecialGameMode
-        27: isGameplayActive
-        28: isOvertimeActive
-        29: isVoting
-        30: difficultySetting
-        31: challengeSetting
-        32: zombieSetting
-        33: objectiveTypeSetting
-        34: matchEndTime
-        35: uniqueSkinCap
-        36: numberOfBots
-        37: walkCenter
-        38: mapGridList
-        39: attackSpawnRooms
-        40: activeAttackSpawnRoom
-        41: spawnRoomIndex
-        42: botSpawnPointList
-        43: botSpawnPointTimerList
-        44: botSpawnWaypointList
-        45: customTeleportPositionList
-        46: botSpawnTimeList
-        47: startPos
-        48: startCamPos
-        49: objectivePositionList
-        50: objectiveTypeList
-        51: objectiveSpacingList
-        52: objectiveValue
-        53: objectiveProgressSlot
-        54: objectiveDescription
-        55: objectiveColor
-        56: isObjectiveComplete
-        57: objectivePlayerList
-        58: objectiveEntityIdList
-        59: objectivePositionsSlot
-        60: objectivePlacementSlot
-        61: objectiveMotionSlot
-        62: objectiveCheckpointSlot
-        63: objectiveQueueSlot
-        64: objectiveActorSlot
-        65: isBiomorphingGoalPending
-        66: biomorphingResourceTypeList
-        67: biomorphingDeferredTypeList
-        68: biomorphingDeferredPositionList
-        69: biomorphingResourceTextIdList
-        70: biomorphingResourceEffectIdList
-        71: extractionSpeedUp
-        72: evacSurvivorList
-        73: supplyDropLandingPosition
-        74: isSupplyDropOpen
-        75: supplyDropPowerUpCount
-        76: supplyPowerUpIdList
-        77: supplyPowerUpPositionList
-        78: supplyPowerUpTextIdList
-        79: supplyPowerUpEffectIdList
-        80: playerTargetList
-        81: userNameList
-        82: playerStatsList
-        83: healthpackPositionList
-        84: mustReviveTime
-        85: botHeroList
-        86: botSpawnRateList
-        87: botBiteDamageList
-        88: botBiteDurationList
-        89: botDamageDealtList
-        90: botHealthList
-        91: botThrottleSpeedList
-        92: availableMutationList
-        93: miniBossList
-        94: bossStateList
-        95: isSmolderEventActive
-        96: bossesAvailableHeroList
-        97: bossesExcludedHeroList
-        98: objectiveRad
-        99: satelliteLaserPosition
-        100: extractionZoneRad
-        101: menuFinaleMotionSlot
-        102: supplyDropPosition
-        103: augmentIconListConst
-        104: enhancementIconListConst
-        105: numbersList
+        19: dummyHoldingPositionConst
+        20: offsetDownHundredConst
+        21: offsetUpOneAndHalfConst
+        22: offsetUpQuarterConst
+        23: powerUpColorListConst
+        24: isPregameSetup
+        25: isSpecialGameMode
+        26: isGameplayActive
+        27: isOvertimeActive
+        28: isVoting
+        29: difficultySetting
+        30: challengeSetting
+        31: zombieSetting
+        32: objectiveTypeSetting
+        33: matchEndTime
+        34: uniqueSkinCap
+        35: numberOfBots
+        36: walkCenter
+        37: mapGridList
+        38: attackSpawnRooms
+        39: activeAttackSpawnRoom
+        40: spawnRoomIndex
+        41: botSpawnPointList
+        42: botSpawnPointTimerList
+        43: botSpawnWaypointList
+        44: customTeleportPositionList
+        45: botSpawnTimeList
+        46: startPos
+        47: startCamPos
+        48: objectivePositionList
+        49: objectiveTypeList
+        50: objectiveSpacingList
+        51: objectiveValue
+        52: objectiveProgressSlot
+        53: objectiveDescription
+        54: objectiveColor
+        55: isObjectiveComplete
+        56: objectivePlayerList
+        57: objectiveEntityIdList
+        58: objectivePositionsSlot
+        59: objectivePlacementSlot
+        60: objectiveMotionSlot
+        61: objectiveCheckpointSlot
+        62: objectiveQueueSlot
+        63: objectiveActorSlot
+        64: isBiomorphingGoalPending
+        65: biomorphingResourceTypeList
+        66: biomorphingDeferredTypeList
+        67: biomorphingDeferredPositionList
+        68: biomorphingResourceTextIdList
+        69: biomorphingResourceEffectIdList
+        70: extractionSpeedUp
+        71: evacSurvivorList
+        72: supplyDropLandingPosition
+        73: isSupplyDropOpen
+        74: supplyDropPowerUpCount
+        75: supplyPowerUpIdList
+        76: supplyPowerUpPositionList
+        77: supplyPowerUpTextIdList
+        78: supplyPowerUpEffectIdList
+        79: playerTargetList
+        80: userNameList
+        81: playerStatsList
+        82: healthpackPositionList
+        83: mustReviveTime
+        84: botHeroList
+        85: botSpawnRateList
+        86: botBiteDamageList
+        87: botBiteDurationList
+        88: botDamageDealtList
+        89: botHealthList
+        90: botThrottleSpeedList
+        91: availableMutationList
+        92: miniBossList
+        93: bossStateList
+        94: isSmolderEventActive
+        95: bossesAvailableHeroList
+        96: bossesExcludedHeroList
+        97: objectiveRad
+        98: satelliteLaserPosition
+        99: extractionZoneRad
+        100: menuFinaleMotionSlot
+        101: supplyDropPosition
+        102: augmentIconListConst
+        103: enhancementIconListConst
+        104: numbersList
         127: __holygrail__
     player:
         0: botBiteDamage
@@ -787,7 +786,7 @@ rule ("OverPy <­tx> / <­fg> setup code") {
     }
 }
 
-//231 elements
+//230 elements
 rule ("Initialize global variables") {
     event {
         Ongoing - Global;
@@ -796,14 +795,13 @@ rule ("Initialize global variables") {
         Set Global Variable(offsetUpThreeQuartersConst, Vector(0, 0.75, 0)); // 7 elements
         Set Global Variable(offsetUpHalfConst, Vector(0, 0.5, 0)); // 7 elements
         Set Global Variable(losOffsetConst, Vector(0, 1.2, 0)); // 7 elements
-        Set Global Variable(colorChargeBatteryConst, Custom Color(236, 206, 44, 255)); // 9 elements
         Set Global Variable(dummyHoldingPositionConst, Vector(500, 500, 500)); // 7 elements
         Set Global Variable(offsetDownHundredConst, Vector(0, -100, 0)); // 7 elements
         Set Global Variable(offsetUpOneAndHalfConst, Vector(0, 1.5, 0)); // 7 elements
         Set Global Variable(offsetUpQuarterConst, Vector(0, 0.25, 0)); // 7 elements
         Set Global Variable(powerUpColorListConst, Array(Color(Green), Color(Yellow), Color(Blue), Color(Red), Color(Orange), Color(Yellow), Color(Green), Color(Orange), Color(Blue), Color(Red), Color(Purple), Color(Red), Color(White))); // 28 elements
         Set Global Variable(augmentIconListConst, Array(Icon String(Question Mark), Icon String(Stop), Icon String(Arrow: Right), Icon String(Arrow: Up), Icon String(X), Icon String(Plus), Icon String(Arrow: Down), Icon String(Diamond), Icon String(Heart), Icon String(Recycle), Icon String(Asterisk))); // 24 elements
-        Set Global Variable(enhancementIconListConst, Array(Icon String(Question Mark), Icon String(Skull), Icon String(Poison), Icon String(Fire), Icon String(Plus), Icon String(Bolt), Icon String(Spiral), Icon String(Flag), Icon String(Happy), Icon String(Bolt), Icon String(Arrow: Up), Icon String(Trashcan))); // 26 elements
+        Set Global Variable(enhancementIconListConst, Array(Icon String(Question Mark), Icon String(Skull), Icon String(Poison), Icon String(Fire), Icon String(Plus), Custom String("{0}TX C000000000039D7>", Global.__holygrail__), Icon String(Spiral), Icon String(Flag), Icon String(Happy), Icon String(Moon), Custom String("{0}TX C0000000002A9ED>", Global.__holygrail__), Icon String(Trashcan))); // 34 elements
         Set Global Variable(numbersList, Mapped Array(Mapped Array(String Split(Custom String("00000000000000000\n000000000000000000000<000000{0}", Custom String("000000000000000000000000\n0000000000<00000<00<00\n000<0\n0<{0}", Custom String("000<0<00<000<00:00.0000$0=0.0<000~000Q0$0000000000<00{0}", Custom String("00000000000000000<000<00000<0<00000)0000{0}", Custom String("000\n00_0)00_0<0$000<00000000000<0000000000000{0}", Custom String("0000<000000<0000000000<000000<0<00<0<000<00000000000{0}", Custom String("0000<0_0_00~0_0Q00Q0Q0~0<0Q0<000_0_0<	0<000<0	0000<0000<00<	00<0<0<0<000\r0)00{0}", Custom String("00\r0000.0000000000<0<0000<0000000000<00<0000000_00_0)000{0}", Custom String("~00~0~00_0~0_0000000000\r00<00000<00<0<0<00000000\n000<0	00{0}", Custom String("<0000<00<0000+000Q0<000)0$0000<0<00)0000)0)00000000000{0}", Custom String("0~00000000000<000000000<000)000<000<0<0000<0)00<0{0}", Custom String("000)0_0)0)00)000000000_000)000~00~0~00_000000000<0<00)0<0<0<0<000{0}", Custom String("00000000"))))))))))))), First Of(Null)), Append To Array(Current Array Element, Custom String("	\n\r !\"#$%&'()*+,-./2:;<=>?@Q[\\]^_`q|}~¡"))), Add(Add(Multiply(0.01, Index Of String Char(Last Of(Current Array Element), Char In String(Current Array Element, 0))), Index Of String Char(Last Of(Current Array Element), Char In String(Current Array Element, 1))), Multiply(100, Index Of String Char(Last Of(Current Array Element), Char In String(Current Array Element, 2)))))); // 94 elements
     }
 }
@@ -2226,7 +2224,7 @@ rule ("EFFECTS/TEXTS") {
         Set Global Variable(phaseSlot1, Array(Color(Aqua), Color(Orange), Color(Red), Null, Null, Color(Red), Color(Lime Green), Custom Color(12, 129, 132, 255), Null, Color(Purple))); // 26 elements
         Create HUD Text(All Players(Team 1), Value In Array(Array(Custom String("Objective Type: No Preference"), Custom String("Objective Type: Showdown {0}", Ability Icon String(Hero(Brigitte), Button(Ultimate))), Custom String("Objective Type: Bosses {0}", Icon String(Warning)), Null, Null, Custom String("Objective Type: Kill Zone {0}", If-Then-Else(Modulo(Round To Integer(Multiply(Total Time Elapsed, 1.25), Up), 2), Icon String(Ring Thin), Icon String(Ring Thick))), Custom String("Objective Type: Zombie Egg {0}", Icon String(Radioactive)), Custom String("Objective Type: Satellite Uplink {0}", Icon String(Moon)), Null, Custom String("Objective Type: Mixed Objectives {0}", Icon String(Spiral))), (Local Player).actorTeamSlot21), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Custom String("Players must contest a point against zombies"), Custom String("Spawns giant versions of zombies"), Null, Null, Custom String("Clear zombies from a designated area"), Custom String("Survivors must destroy an object that is spawning zombies"), Custom String("Survivors must repair terminals to communicate with a satellite"), Null, Custom String("Randomly assigns all types of objectives")), (Local Player).actorTeamSlot21), Custom String("                                                ")), If-Then-Else(Or(Global.isVoting, Compare((Local Player).actorTeamSlot21, ==, Null)), Custom String("Change Vote (Press [{0}])", Input Binding String(Button(Ability 2))), Empty Array), Left, 2, Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Visible To String and Color, Default Visibility); // 149 elements
         "Enhancement"
-        Set Global Variable(phaseSlot2, Array(Color(Aqua), Color(Red), Color(Gray), Color(Orange), Color(Green), Color(Gray), Global.colorChargeBatteryConst, Color(Purple), Color(Blue), Color(Yellow), Color(Orange), Color(Purple))); // 26 elements
+        Set Global Variable(phaseSlot2, Array(Color(Aqua), Color(Red), Color(Gray), Color(Orange), Color(Green), Color(Gray), Color(White), Color(Purple), Color(Blue), Color(Turquoise), Color(Lime Green), Color(Purple))); // 26 elements
         Create HUD Text(All Players(Team 1), Custom String("Enhancement: {0}{1}", Value In Array(String Split(Custom String("No Preference0Brain Killer 0Zombie Hybrid 0Pyrotechnic 0Plague Doctor 0Born to Battle 0Charge Battery 0Hitchhiker 0P.U.P. 0Ov{0}", Custom String("ercharge 0Bulking Season 0Dead Weight ")), First Of(Null)), (Local Player).enhancementId), If-Then-Else(Compare((Local Player).enhancementId, >, Null), Value In Array(Global.phaseSlot9, (Local Player).enhancementId), Char In String(Empty Array, False))), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Custom String("Critical hits do more damage"), Custom String("Get infected faster, and convert it to explosive damage"), Custom String("Dealing damage, within 15 meters, sets enemies on fire"), Custom String("Deal 30% more healing, plus another 25% to infected players while reducing their infection level"), Custom String("Final blows grant a cooldown reset on the next ability use, storing up to 2 charges"), Custom String("Survivor can place a battery that gives ultimate charge"), Custom String("Survivor can attach to a teammate and fuse their health."), Custom String("Survivor is equipped with an autonomous friendly droid"), Custom String("Store healing / 3 incl. packs, +10 per assist; uncapped. Hold Melee: spend up to 100 for bonus damage on hits for 0.3s"), Custom String("Kills and damage participation grant +0.5% Max Life and +0.5% Hero Size per stack (caps: 200% Life, 1.35x size). Lose half on{0}", Custom String(" death")), Custom String("Interact grabs/throws non-bosses within 4m: CC except Rooted or <20% HP")), (Local Player).enhancementId), Custom String("                                                ")), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Melee))), Left, 3, Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Visible To String and Color, Default Visibility); // 134 elements
     }
 }
@@ -8535,7 +8533,7 @@ rule ("finishPowerUpDrop") {
     }
 }
 
-//976 elements
+//984 elements
 rule ("PLAYER ENHANCEMENT INITIALIZATION") {
     event {
         Ongoing - Each Player;
@@ -8591,11 +8589,11 @@ rule ("PLAYER ENHANCEMENT INITIALIZATION") {
         Set Player Variable(Event Player, actorTeamSlot24, Null); // 1 element
         "Baseline existing match stats; do not pay for assists before selection/join."
         Set Player Variable(Event Player, actorTeamSlot25, Add(Player Stat(Event Player, Offensive Assists), Player Stat(Event Player, Defensive Assists))); // 7 elements
-        Create HUD Text(Event Player, Icon String(Bolt), Custom String("Hold [{0}] to charge | Energy: {1} | Charged: {2}", Input Binding String(Button(Melee)), Round To Integer((Event Player).actorTeamSlot22, Down), Custom String("{0}                                                                                                                          {1}", Round To Integer((Event Player).actorTeamSlot23, Down), Custom String("                                                "))), Custom String("Overcharge"), Left, 99, Color(Yellow), Color(Yellow), Color(Yellow), String, Default Visibility); // 32 elements
+        Create HUD Text(Event Player, Icon String(Moon), Custom String("Hold [{0}] to charge | Energy: {1} | Charged: {2}", Input Binding String(Button(Melee)), Round To Integer((Event Player).actorTeamSlot22, Down), Custom String("{0}                                                                                                                          {1}", Round To Integer((Event Player).actorTeamSlot23, Down), Custom String("                                                "))), Custom String("Overcharge"), Left, 99, Color(Turquoise), Color(Turquoise), Color(Turquoise), String, Default Visibility); // 32 elements
         Else; // 1 element
         //__label_switch_70_4__:
         Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
-        Create HUD Text(Event Player, Icon String(Arrow: Up), Custom String("Stacks: {0} | +{1}% Max Life | Size: {2}", (Event Player).actorTeamSlot22, Min(100, Multiply((Event Player).actorTeamSlot22, 0.5)), Custom String("{0}x                                                                                                                         {1}", Min(1.35, Add(True, Multiply((Event Player).actorTeamSlot22, 0.005))), Custom String("                                                 "))), Custom String("Bulking Season"), Left, 99, Color(Orange), Color(Orange), Color(Orange), String, Default Visibility); // 42 elements
+        Create HUD Text(Event Player, Custom String("{0}TX C0000000002A9ED>", Global.__holygrail__), Custom String("Stacks: {0} | +{1}% Max Life | Size: {2}", (Event Player).actorTeamSlot22, Min(100, Multiply((Event Player).actorTeamSlot22, 0.5)), Custom String("{0}x                                                                                                                         {1}", Min(1.35, Add(True, Multiply((Event Player).actorTeamSlot22, 0.005))), Custom String("                                                 "))), Custom String("Bulking Season"), Left, 99, Color(Lime Green), Color(Lime Green), Color(Lime Green), String, Default Visibility); // 46 elements
         Else; // 1 element
         //__label_switch_70_5__:
         "This shared slot must start as a player reference or null, never\na previous enhancement's number/array/color. Pickup sets its deadline."
@@ -8604,12 +8602,12 @@ rule ("PLAYER ENHANCEMENT INITIALIZATION") {
         Else; // 1 element
         //__label_switch_70_6__:
         "Enhancement: Born to Battle\nenhancementBattleResetCharges: 0-2 earned ability resets; final blows add one and each reset consumes one.\nenhancementBattleAbilityButton: selected ability button, retained through waits to reset its charge or cooldown."
-        Create HUD Text(Event Player, Icon String(Bolt), Custom String("{0}/2 resets                                                                                                                 {1}", (Event Player).actorTeamSlot22, Custom String("                                                         ")), Custom String("Born to Battle"), Left, 99, Color(Gray), Color(Gray), Color(Gray), String, Default Visibility); // 20 elements
+        Create HUD Text(Event Player, Custom String("{0}TX C000000000039D7>", Global.__holygrail__), Custom String("{0}/2 resets                                                                                                                 {1}", (Event Player).actorTeamSlot22, Custom String("                                                         ")), Custom String("Born to Battle"), Left, 99, Color(Gray), Color(Gray), Color(Gray), String, Default Visibility); // 24 elements
         Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
         Else; // 1 element
         //__label_switch_70_7__:
         "enhancementBatteryReuseDuration: full battery reuse cooldown in seconds (10), used to start the timer and scale progress.\nenhancementBatteryPlacementCooldown: remaining placement cooldown in seconds (20 on placement), for placement checks and HUD."
-        Create HUD Text(Event Player, Icon String(Spiral), Custom String("{0} {1}                                                                                                                      {2}", If-Then-Else(Compare((Event Player).actorTeamSlot25, <=, Null), Custom String("Hold [{0}]", Input Binding String(Button(Melee))), Empty Array), If-Then-Else(Compare((Event Player).actorTeamSlot25, >, Null), Custom String("{0}s", Round To Integer((Event Player).actorTeamSlot25, Up)), Icon String(Checkmark)), Custom String("                                                    ")), Custom String("Charge Battery"), Left, 99, If-Then-Else(Compare((Event Player).actorTeamSlot25, <=, Null), Global.colorChargeBatteryConst, Color(Red)), If-Then-Else(Compare((Event Player).actorTeamSlot25, <=, Null), Global.colorChargeBatteryConst, Color(Red)), If-Then-Else(Compare((Event Player).actorTeamSlot25, <=, Null), Global.colorChargeBatteryConst, Color(Red)), String and Color, Default Visibility); // 76 elements
+        Create HUD Text(Event Player, Icon String(Spiral), Custom String("{0} {1}                                                                                                                      {2}", If-Then-Else(Compare((Event Player).actorTeamSlot25, <=, Null), Custom String("Hold [{0}]", Input Binding String(Button(Melee))), Empty Array), If-Then-Else(Compare((Event Player).actorTeamSlot25, >, Null), Custom String("{0}s", Round To Integer((Event Player).actorTeamSlot25, Up)), Icon String(Checkmark)), Custom String("                                                    ")), Custom String("Charge Battery"), Left, 99, If-Then-Else(Compare((Event Player).actorTeamSlot25, <=, Null), Color(White), Color(Red)), If-Then-Else(Compare((Event Player).actorTeamSlot25, <=, Null), Color(White), Color(Red)), If-Then-Else(Compare((Event Player).actorTeamSlot25, <=, Null), Color(White), Color(Red)), String and Color, Default Visibility); // 76 elements
         "Battery placement visual"
         Create Effect(Filtered Array(Event Player, And(And(Is Button Held(Event Player, Button(Melee)), Compare((Event Player).actorTeamSlot25, <=, Null)), Compare(Distance Between(Eye Position(Event Player), Ray Cast Hit Position(Eye Position(Event Player), Add(Eye Position(Event Player), Multiply(Facing Direction Of(Event Player), 31)), Null, Null, False)), <=, 30))), Ring, Custom Color(0, 255, 0, 204), Add(World Vector Of(Multiply(0.1, Up), Event Player, Rotation), Ray Cast Hit Position(Eye Position(Event Player), Add(Eye Position(Event Player), Multiply(Facing Direction Of(Event Player), 30)), Null, All Players(All Teams), False)), 0.45, Visible To Position and Radius); // 67 elements
         "Battery ring"
