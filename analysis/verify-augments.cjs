@@ -514,7 +514,7 @@ async function main() {
     };
     const meleeTargets = invincible => [4, 6].map((z, id) =>
         ({id, position: [0, 0, z], alive: true, visible: true, health: 1000, invincible}));
-    for (const enhancement of [1, 9]) for (const charge of [0, 60, 250])
+    for (const enhancement of [1, 9]) for (const charge of [0, 60, 100])
     for (const deadline of [0, 99, 100.3]) for (const invincible of [false, true])
     for (const time of [100, 100.3]) {
         const state = scenario(4, {targets: meleeTargets(invincible), time});
@@ -531,14 +531,14 @@ async function main() {
     }
     const burstMelee = scenario(4, {targets: meleeTargets(false)});
     Object.assign(burstMelee.player, {enhancementId: 9, [capacitorEnergy]: 500,
-        [packChargeSlot]: 125, [packDeadlineSlot]: 0});
+        [packChargeSlot]: 75, [packDeadlineSlot]: 0});
     runExtendedMelee(burstMelee);
     assert.equal(burstMelee.player[packDeadlineSlot], 100.3);
     burstMelee.time = 100.15;
     burstMelee.player[capacitorEnergy] += 10;
     runExtendedMelee(burstMelee);
     assert.equal(burstMelee.player[packDeadlineSlot], 100.3, 'Later swings do not restart the window');
-    assert.deepEqual(burstMelee.damage.map(hit => hit.amount), [40,125,40,125,40,125,40,125]);
+    assert.deepEqual(burstMelee.damage.map(hit => hit.amount), [40,75,40,75,40,75,40,75]);
     burstMelee.time = 100.3;
     runExtendedMelee(burstMelee);
     assert.deepEqual(burstMelee.damage.slice(-2).map(hit => hit.amount), [40,40], 'Expiry blocks bonus damage before cleanup runs');
@@ -549,17 +549,17 @@ async function main() {
         [{id: 'wall', position: [0,0,4], alive: true, visible: false, health: 1000},
          {id: 'too far', position: [0,0,9], alive: true, visible: true, health: 1000}]]) {
         const state = scenario(4, {targets});
-        Object.assign(state.player, {enhancementId: 9, [packChargeSlot]: 125, [packDeadlineSlot]: 0});
+        Object.assign(state.player, {enhancementId: 9, [packChargeSlot]: 75, [packDeadlineSlot]: 0});
         runExtendedMelee(state);
         assert.equal(state.player[packDeadlineSlot], 0, 'Misses, blocked and invulnerable targets preserve an unstarted burst');
     }
     const mixedMelee = scenario(4, {targets: meleeTargets(false)});
     mixedMelee.targets[0].invincible = true;
-    Object.assign(mixedMelee.player, {enhancementId: 9, [packChargeSlot]: 125, [packDeadlineSlot]: 0});
+    Object.assign(mixedMelee.player, {enhancementId: 9, [packChargeSlot]: 75, [packDeadlineSlot]: 0});
     runExtendedMelee(mixedMelee);
-    assert.deepEqual(mixedMelee.damage.map(hit => [hit.targets[0].id, hit.amount]), [[0,40],[1,40],[1,125]]);
-    const syntheticBonus = scenario(4, {eventAbility: 0, eventDamage: 125, victim: {team: 2}});
-    Object.assign(syntheticBonus.player, {enhancementId: 9, [packChargeSlot]: 125, [packDeadlineSlot]: 100.3});
+    assert.deepEqual(mixedMelee.damage.map(hit => [hit.targets[0].id, hit.amount]), [[0,40],[1,40],[1,75]]);
+    const syntheticBonus = scenario(4, {eventAbility: 0, eventDamage: 75, victim: {team: 2}});
+    Object.assign(syntheticBonus.player, {enhancementId: 9, [packChargeSlot]: 75, [packDeadlineSlot]: 100.3});
     assert(!applies(compiled.get('OVERCHARGE BONUS DAMAGE'), syntheticBonus), 'Scripted melee/bonus damage cannot reenter native bonus handling');
     if (process.argv.includes('--apothecary-only')) {
         for (const selected of [0, 8]) {

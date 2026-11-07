@@ -97,8 +97,8 @@ async function main() {
     assert.equal(run('ARMS CHARGE'), false, 'Interact no longer arms the charge');
     state.held = 1;
     run('ARMS CHARGE');
-    assert.equal(state[slots.Charge], 250);
-    assert.equal(state[slots.Energy], 0);
+    assert.equal(state[slots.Charge], 100);
+    assert.equal(state[slots.Energy], 150);
     state.held = 0;
     // An armed charge has no timeout before the first qualifying hit.
     state.time = 100;
@@ -111,11 +111,12 @@ async function main() {
     hit(100, 'nade B');
     hit(100.296, 'nade C');
     assert.equal(state[slots.Deadline], 100.3);
-    assert.deepEqual(state.hits.map(x => x.amount), [250, 250, 250]);
+    assert.deepEqual(state.hits.map(x => x.amount), [100, 100, 100]);
     run('STORES HEALING', {healing: 300});
     state.held = 1;
     assert.equal(run('ARMS CHARGE'), false);
-    assert.equal(state[slots.Charge], 250);
+    assert.equal(state[slots.Charge], 100);
+    assert.equal(state[slots.Energy], 250, 'Healing during the burst builds the next bank');
     hit(100.3, 'too late');
     assert.equal(state.hits.length, 3);
     run('CLEARS CHARGE');
@@ -125,16 +126,16 @@ async function main() {
     hit(101, 'next burst');
     assert.equal(state.hits.at(-1).amount, 100);
     run('STORES HEALING', {healing: 2.25});
-    assert.equal(state[slots.Energy], 0.75);
+    assert.equal(state[slots.Energy], 150.75);
     state.alive = 0;
     run('CLEARS CHARGE');
     assert.equal(state[slots.Charge], 0);
-    assert.equal(state[slots.Energy], 0.75);
+    assert.equal(state[slots.Energy], 150.75);
     assert.equal(run('ARMS CHARGE'), false);
     const other = fresh();
     execute(rule['STORES HEALING'], other, {healing: 30});
     assert.equal(other[slots.Energy], 10);
-    assert.equal(state[slots.Energy], 0.75);
+    assert.equal(state[slots.Energy], 150.75);
     other.enhancementId = 4;
     assert.equal(execute(rule['STORES HEALING'], other, {healing: 100}), false);
     const overflow = fresh();
@@ -142,15 +143,22 @@ async function main() {
     execute(rule['STORES HEALING'], overflow, {healing: 750002.25});
     assert.equal(overflow[slots.Energy], 250000.75, 'Bank remains uncapped');
     execute(rule['ARMS CHARGE'], overflow);
-    assert.equal(overflow[slots.Charge], 250);
-    assert.equal(overflow[slots.Energy], 249750.75, 'Only the armed energy is spent');
+    assert.equal(overflow[slots.Charge], 100);
+    assert.equal(overflow[slots.Energy], 249900.75, 'Only the armed energy is spent');
     execute(rule['BONUS DAMAGE'], overflow, {ability: 1, damage: 90, target: 'capped burst'});
-    assert.equal(overflow.hits.at(-1).amount, 250);
+    assert.equal(overflow.hits.at(-1).amount, 100);
     overflow.time += 1;
     execute(rule['CLEARS CHARGE'], overflow);
     execute(rule['ARMS CHARGE'], overflow);
-    assert.equal(overflow[slots.Charge], 250);
-    assert.equal(overflow[slots.Energy], 249500.75, 'Remainder funds subsequent bursts');
+    assert.equal(overflow[slots.Charge], 100);
+    assert.equal(overflow[slots.Energy], 249800.75, 'Remainder funds subsequent bursts');
+    for (const energy of [0, 0.75, 99.75, 100, 100.25, 250, 250000.75]) {
+        const boundary = {...fresh(), held: 1, [slots.Energy]: energy};
+        assert.equal(execute(rule['ARMS CHARGE'], boundary), energy > 0);
+        assert.equal(boundary[slots.Charge] ?? 0, Math.min(energy, 100));
+        assert.equal(boundary[slots.Energy], Math.max(energy - 100, 0), 'The cap preserves all unspent energy');
+    }
+    assert(built.result.includes('Hold Melee: spend up to 100 for bonus damage'));
     assert(/Set Player Variable\(Event Player, enhancementId, Random Integer\((?:True|1), 10\)\)/.test(built.result));
     assert(built.result.includes('Overcharge'));
     if (process.argv.includes('--export')) {

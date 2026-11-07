@@ -385,9 +385,9 @@ rule "OVERCHARGE ARMS CHARGE":
     @Condition eventPlayer.enhancementCapacitorEnergy > 0
     @Condition eventPlayer.enhancementCapacitorCharge == 0
 
-    # Transfer at most 250; retain the remainder in the uncapped bank.
+    # Transfer at most 100; retain the remainder in the uncapped bank.
     # Continued healing cannot change this burst's fixed damage.
-    eventPlayer.enhancementCapacitorCharge = min(eventPlayer.enhancementCapacitorEnergy, 250)
+    eventPlayer.enhancementCapacitorCharge = min(eventPlayer.enhancementCapacitorEnergy, 100)
     eventPlayer.enhancementCapacitorEnergy -= eventPlayer.enhancementCapacitorCharge
 
 

@@ -212,7 +212,7 @@ rule "EFFECTS/TEXTS":
             "Survivor can place a battery that gives ultimate charge",
             "Survivor can attach to a teammate and fuse their health.",
             "Survivor is equipped with an autonomous friendly droid",
-            "Store 1 energy per 3 healing, including packs; uncapped. Hold Melee: spend up to 250 for bonus damage on hits for 0.3s",
+            "Store 1 energy per 3 healing, including packs; uncapped. Hold Melee: spend up to 100 for bonus damage on hits for 0.3s",
             "Kills and damage participation grant +0.5% Max Life and +0.5% Hero Size per stack (caps: 200% Life, 1.35x size). Lose half on death"
         ][localPlayer.enhancementId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)),
