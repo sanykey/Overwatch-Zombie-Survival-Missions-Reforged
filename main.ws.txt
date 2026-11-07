@@ -1,11 +1,11 @@
-/* Element count: (total 28549)
+/* Element count: (total 28550)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
   924: rule "PLAYER ENHANCEMENT INITIALIZATION" (src/enhancements.opy)
   854: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
   481: rule "GRAPNEL LAUNCHER" (src/augments.opy)
-  467: rule "PLAYER AUGMENT INITIALIZATION" (src/augments.opy)
+  468: rule "PLAYER AUGMENT INITIALIZATION" (src/augments.opy)
   434: rule "SKIP ASSEMBLING HEROES" (src/global_startup.opy)
   412: rule "PLAYERS REPAIR TERMINALS" (src/objective_types/objective_type_satellite_uplink.opy)
   398: rule "LASER BARRICADE BLOCKS ZOMBIES" (src/augments.opy)
@@ -9291,7 +9291,7 @@ rule ("PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)") {
     }
 }
 
-//467 elements
+//468 elements
 rule ("PLAYER AUGMENT INITIALIZATION") {
     event {
         Ongoing - Each Player;
@@ -9313,7 +9313,7 @@ rule ("PLAYER AUGMENT INITIALIZATION") {
             "augmentBarrierCorner2: second lower corner in world coordinates, for beams and the along-barrier direction.\naugmentBarrierHealth: current barrier health (10000 on placement), for blocking, damage, regeneration and HUD."
             Create HUD Text(Event Player, Icon String(Diamond), Custom String("{0} {1} {2}", If-Then-Else(Compare((Event Player).augmentState2, <=, Null), Custom String("Hold [{0}] + [{1}] to place a barricade", Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Empty Array), If-Then-Else(Compare((Event Player).augmentBarrierHealth, >, Null), Custom String(" {0}HP", Round To Integer((Event Player).augmentBarrierHealth, Up)), Empty Array), Custom String("{0}                                                                                                                          {1}", If-Then-Else(Compare((Event Player).augmentState2, >, Null), Custom String("{0}s", (Event Player).augmentState2), Icon String(Checkmark)), Custom String("                                                "))), Custom String("Laser Barricade"), Left, 100, If-Then-Else(Compare((Event Player).augmentState2, >, Null), Color(Red), Color(Blue)), Color(Blue), If-Then-Else(Compare((Event Player).augmentState2, >, Null), Color(Red), Color(Blue)), Visible To String and Color, Default Visibility); // 87 elements
             "Barricade placement visual"
-            Create Beam Effect(Filtered Array(Event Player, And(And(Compare((Event Player).augmentState2, <, Null), Is Button Held(Event Player, Button(Interact))), Compare(Distance Between(Eye Position(Event Player), Ray Cast Hit Position(Eye Position(Event Player), Add(Eye Position(Event Player), Multiply(Facing Direction Of(Event Player), 31)), Null, Null, False)), <=, 30))), Bad Beam, Add(World Vector Of(Vector(-2.5, 0.1, False), Event Player, Rotation), Ray Cast Hit Position(Eye Position(Event Player), Add(Eye Position(Event Player), Multiply(Facing Direction Of(Event Player), 30)), Null, All Players(All Teams), False)), Add(World Vector Of(Vector(2.5, 0.1, False), Event Player, Rotation), Ray Cast Hit Position(Eye Position(Event Player), Add(Eye Position(Event Player), Multiply(Facing Direction Of(Event Player), 30)), Null, All Players(All Teams), False)), Color(Green), Visible To Position and Radius); // 86 elements
+            Create Beam Effect(Filtered Array(Event Player, And(And(Compare((Event Player).augmentState2, ==, -1), Is Button Held(Event Player, Button(Interact))), Compare(Distance Between(Eye Position(Event Player), Ray Cast Hit Position(Eye Position(Event Player), Add(Eye Position(Event Player), Multiply(Facing Direction Of(Event Player), 31)), Null, Null, False)), <=, 30))), Bad Beam, Add(World Vector Of(Vector(-2.5, 0.1, False), Event Player, Rotation), Ray Cast Hit Position(Eye Position(Event Player), Add(Eye Position(Event Player), Multiply(Facing Direction Of(Event Player), 30)), Null, All Players(All Teams), False)), Add(World Vector Of(Vector(2.5, 0.1, False), Event Player, Rotation), Ray Cast Hit Position(Eye Position(Event Player), Add(Eye Position(Event Player), Multiply(Facing Direction Of(Event Player), 30)), Null, All Players(All Teams), False)), Color(Green), Visible To Position and Radius); // 87 elements
             "Barricade bottom"
             Create Beam Effect(Filtered Array(All Players(All Teams), Compare((Event Player).augmentState3, !=, Null)), Bad Beam, (Event Player).actorTeamSlot26, (Event Player).actorTeamSlot27, Color(Blue), Visible To Position and Radius); // 15 elements
             "Barricade side 1"

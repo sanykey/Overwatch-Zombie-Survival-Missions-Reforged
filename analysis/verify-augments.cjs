@@ -1600,8 +1600,16 @@ async function main() {
     const previewPredicate = args(args(preview)[0])[1];
     assert(!previewPredicate.includes('Button(Crouch)'), 'Preview must not require Crouch after aiming begins');
     const previewInput = args(previewPredicate)[0];
-    assert(previewInput.includes('Compare((Event Player).augmentState2, <, Null)'));
+    assert(previewInput.includes('Compare((Event Player).augmentState2, ==, -1)'));
     const barrierCooldown = slot('augmentBarrierPlacementCooldown');
+    for (const cooldown of [-2, -1, -0.5, 0, 1, 30])
+    for (const interact of [false, true]) for (const crouch of [false, true]) {
+        const state = scenario(7, {buttons: new Set([
+            ...(interact ? ['Interact'] : []), ...(crouch ? ['Crouch'] : [])])});
+        state.player[barrierCooldown] = cooldown;
+        assert.equal(truth(value(previewInput, state)), cooldown === -1 && interact,
+            'Preview requires the exact aiming latch and Interact, independently of Crouch');
+    }
     for (const crouchReleasedAt of [0.1, 0.6]) {
         const state = scenario(7, {buttons: new Set(['Crouch', 'Interact'])});
         const task = start(aimRule, state, compiled);
