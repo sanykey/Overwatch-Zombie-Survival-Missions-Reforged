@@ -53,7 +53,7 @@ rule "AUGMENT MENU":
             "Jump in midair or double-tap Jump. First hit of 30+ damage in flight or within 0.5s after landing deals +50%. Cooldown: 16s",
             "Triple Quick Melee, melee weapon, Dragonblade and Carnage reach",
             "Carry twice the ammo per full magazine; full reloads restore the bonus",
-            "Crouch + Jump: grapple 7-40m; hit for 35 damage and stun for 0.5s. Cooldown: 16s",
+            "Crouch + Jump: grapple 7-40m; deal 35 damage. Grounded: stun 0.5s. Airborne: knockdown 3s. Cooldown: 16s",
             "Hold Crouch + Interact to place a wall that blocks zombies; release Interact to deploy; Crouch may be released while aiming. Cooldown: 30s",
             "Health packs heal twice as much, remove up to 1 existing infection even after time runs out, and grant +5% ultimate charge and +50% move speed for 3s"
         ][localPlayer.augmentId],
@@ -376,7 +376,10 @@ rule "GRAPNEL LAUNCHER":
             if eventPlayer.enhancementId == Enhancement.PYROTECHNIC and eventPlayer.augmentGrapnelTarget.getHealth() < augmentGrapnelHealthBeforeDamage and distance(eventPlayer, eventPlayer.augmentGrapnelTarget) < 15:
                 eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.BURNING, 3)
                 eventPlayer.enhancementPyroHitList.append(eventPlayer.augmentGrapnelTarget)
-            eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.STUNNED, 0.5)
+            if eventPlayer.augmentGrapnelTarget.isOnGround():
+                eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.STUNNED, 0.5)
+            else:
+                eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 3)
             playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer.augmentGrapnelTarget.getPosition() + Vector.UP, AUGMENT_IMPACT_SIZE)
             break
         # Synchronous scratch: correct current velocity to the desired velocity,

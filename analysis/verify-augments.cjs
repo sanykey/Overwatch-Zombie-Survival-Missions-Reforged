@@ -118,7 +118,7 @@ function value(expr, state, element) {
         case 'Is Dead': return !(v(0) === state.player ? state.alive : v(0).alive);
         case 'Has Spawned': return state.spawned;
         case 'Is Dummy Bot': return state.dummy;
-        case 'Is On Ground': return state.ground;
+        case 'Is On Ground': return v(0) === state.player ? state.ground : v(0).ground;
         case 'Is Button Held': return state.buttons.has(v(1));
         case 'Throttle Of': return state.throttle;
         case 'Magnitude Of': return magnitude(v(0));
@@ -851,7 +851,7 @@ async function main() {
     }
     const grapnel = 'GRAPNEL LAUNCHER', grappleTargetSlot = slot('augmentGrapnelTarget');
     const zombie = (id, position = [0, 0, 20], overrides = {}) =>
-        ({id, position, alive: true, visible: true, team: 2, sizeScale: 1, ...overrides});
+        ({id, position, alive: true, visible: true, team: 2, ground: true, sizeScale: 1, ...overrides});
     const grapnelState = (overrides = {}) => scenario(6, {buttons: new Set(['Crouch', 'Jump']),
         targets: [zombie('locked')], ...overrides});
     const advancePull = (state, task, integrate = true) => {
@@ -962,6 +962,25 @@ async function main() {
     const large = grapnelState({targets: [zombie('large', [0, 0, 10], {sizeScale: 3})]});
     const largePull = run(grapnel, large); finishPull(large, largePull);
     assert.equal(large.damage.length, 1, 'Body-sized contact distance also reaches large zombies');
+    for (const groundAtLaunch of [false, true]) for (const groundAtArrival of [false, true])
+    for (const invincible of [false, true]) for (const enhancement of [0, 3]) {
+        const target = zombie('changing altitude', [0, 0, 20], {ground: groundAtLaunch, invincible});
+        const state = grapnelState({targets: [target]});
+        state.player.enhancementId = enhancement;
+        const task = run(grapnel, state);
+        advancePull(state, task);
+        assert.deepEqual(state.statusWrites, [], 'Launch and travel do not control the target');
+        target.ground = groundAtArrival;
+        finishPull(state, task);
+        assert.deepEqual(state.statusWrites.filter(write => ['Stunned', 'Knocked Down'].includes(write.status)),
+            [{status: groundAtArrival ? 'Stunned' : 'Knocked Down', duration: groundAtArrival ? 0.5 : 3, target: target.id}],
+            'Arrival reads the target ground state, even if it changed in flight; control also applies to invulnerable targets');
+        assert.equal(state.damage.length, 1);
+        assert.equal(state.damage[0].amount, 35);
+        assert.equal(state.player[readyAt], 116);
+        assert.equal(state.statusWrites.filter(write => write.status === 'Burning').length,
+            enhancement === 3 && !invincible ? 1 : 0, 'Both control branches preserve actual-hit Pyrotechnic burns');
+    }
     for (const enhancement of [0, 3]) for (const invincible of [false, true]) {
         const state = grapnelState({targets: [zombie('pyro hook', [0, 0, 20], {invincible})]});
         state.player.enhancementId = enhancement;
@@ -994,6 +1013,24 @@ async function main() {
             'Departure cleanup requires Grapnel Launcher with an active cable');
     }
     assert(!files['variables.opy'].includes('globalvar augmentGrapnel'), 'Cable ownership needs no additional global state');
+    if (process.argv.includes('--grapnel-only')) {
+        if (process.argv.includes('--export')) {
+            const exported = await compiler.compile(fs.readFileSync(path.join(root, 'main.opy'), 'utf8'),
+                'en-US', root.replace(/\\/g, '/') + '/', 'main.opy');
+            assert.deepEqual(exported.encounteredWarnings, []);
+            assert.equal(exported.nbElements, build.elements);
+            assert.deepEqual(rules(exported.result), parsed);
+            fs.writeFileSync(path.join(root, 'main.ws.txt'), exported.result);
+        }
+        console.log(JSON.stringify({elements: build.elements, warnings: build.warnings,
+            groundTransitionCases: 16,
+            checked: ['target ground state sampled on arrival, independent of player/launch state',
+                'grounded 0.5s stun / airborne 3s knockdown', '35 damage / immunity / Pyrotechnic',
+                '7-40m selection / live cable / moving targets / 16s cooldown',
+                'misses / timeout / crowd control / death / hero switch / disconnect cleanup'],
+            exported: process.argv.includes('--export')}, null, 2));
+        return;
+    }
     const gun = scenario(5), gunTask = run(ammo, gun);
     const settleAmmo = (state, task) => {state.time = task.deadline(); task.resume();};
     assert.deepEqual(gun.maxAmmo, [40, 20]); assert.deepEqual(gun.ammo, [38, 14]);
@@ -1552,7 +1589,7 @@ async function main() {
             'dash 13s cooldown / 0.5s phase / first landing wave / 40 damage to all targets including unpushable / Pyrotechnic actual-hit burns and 15m limit / lethal and invulnerable targets / 32 impulse at 6.5 degrees / early and late landing / radius / all directions / resistance / attribution / interrupts',
             'double jump airborne + grounded double-tap / ability-active launch / 14.4 impulse / 16s cooldown / shared gate / tap timeout / CC / landing / death',
             'double jump first-hit +50% / minimum damage 30 inclusive / smaller hits preserve bonus / native and script damage / flight / 0.5s landing window / expiry / no recursion / no rearm / death / hero switch', 'movement cooldown HUD',
-            'grapnel 7-40m selection / live cable / moving target / velocity correction / melee combo / 35 impact damage / Pyrotechnic actual-hit burn / 0.5s stun / launch sound / shared 0.4 impact / no arrival jump / 16s cooldown / misses / timeout / CC / death / hero switch / disconnect cleanup',
+            'grapnel 7-40m selection / live cable / moving target / velocity correction / melee combo / 35 impact damage / Pyrotechnic actual-hit burn / grounded 0.5s stun / airborne 3s knockdown / ground state sampled on arrival / launch sound / shared 0.4 impact / no arrival jump / 16s cooldown / misses / timeout / CC / death / hero switch / disconnect cleanup',
             'ammo respawn/hero/weapon/cache/spent rounds/single clip/reload input lifetime/native failure fallback/cancelled reload/empty boundary/dual clip',
             'quick melee x4 / native + extended push / knockback resistance / native environment credit / no immune credit / no duplicate damage / Vendetta x3 / LoS / cone / windup / all targets',
             'Reinhardt / Brigitte / D.Mon / Dragonblade / Nemesis / Forge Hammer x3 / held attacks / short clicks / forms / interrupts',
