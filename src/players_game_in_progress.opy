@@ -264,7 +264,7 @@ rule "PLAYER PICKS UP HEALTH PACK":
         if eventPlayer.augmentApothecarySpeedUntil == 0:
             eventPlayer.movementSpeedScale *= 1.5
             applyScaledMoveSpeed()
-        eventPlayer.augmentApothecarySpeedUntil = getTotalTimeElapsed() + 3
+        eventPlayer.augmentApothecarySpeedUntil = getTotalTimeElapsed() + 5
 
 
 rule "PLAYER CLEARS DAMAGE OVER TIME":

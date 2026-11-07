@@ -462,19 +462,21 @@ async function main() {
         Object.assign(state.globals, {difficultySetting: 3, matchEndTime: 0});
         Object.assign(state.player, {health: 100, movementSpeedScale: initialScale});
         run(pickup, state);
-        assert.equal(state.player[speedUntil], 103);
+        assert.equal(state.player[speedUntil], 105);
         assert.equal(state.moveSpeed, initialScale * 1.5 * 100);
         state.time = 102;
         assert(!applies(speedExpiry, state));
         run(pickup, state);
-        assert.equal(state.player[speedUntil], 105, 'Pickup refreshes duration');
+        assert.equal(state.player[speedUntil], 107, 'Pickup refreshes the full five-second duration');
         assert.equal(state.player.movementSpeedScale, initialScale * 1.5, 'Bonus cannot stack');
         // Another effect starts during the bonus; expiry must preserve its multiplier.
         state.player.movementSpeedScale *= 1.5;
-        state.time = 104.99;
+        state.time = 105;
+        assert(!applies(speedExpiry, state), 'The original deadline cannot expire a refreshed bonus');
+        state.time = 106.99;
         assert(!applies(speedExpiry, state));
         if (die) state.alive = false;
-        else state.time = 105;
+        else state.time = 107;
         run(speedExpiry.name, state);
         assert.equal(state.player[speedUntil], 0);
         assert(Math.abs(state.player.movementSpeedScale - initialScale * 1.5) < 1e-10);
@@ -487,11 +489,11 @@ async function main() {
     const speedReset = {name: 'speed reset', body: 'actions {\n' + playerInit.slice(resetStart, resetEnd + 1).join('\n') + '\n}'};
     for (const augment of [1, 8]) {
         const state = scenario(augment);
-        state.player[speedUntil] = 103;
+        state.player[speedUntil] = 105;
         state.player.movementSpeedScale = 1.5;
         start(speedReset, state, compiled);
         assert.equal(state.player.movementSpeedScale, 1);
-        assert.equal(state.player[speedUntil], augment === 8 ? 0 : 103);
+        assert.equal(state.player[speedUntil], augment === 8 ? 0 : 105);
         assert(!applies(speedExpiry, state), 'Spawn/hero reset cannot leave a stale expiry');
     }
     const dash = 'AUGMENT AIR ACTION INPUT', jump = dash, recharge = 'AUGMENT AIR ACTION RECHARGE';
