@@ -220,7 +220,7 @@ async function main() {
         assert.equal(execute(rule['STORES ASSISTS'], assisted), false);
         assistCases += 4;
     }
-    for (const gameplay of [0, 1]) for (const enhancementId of [1, 9, 10]) {
+    for (const gameplay of [0, 1]) for (const enhancementId of [1, 9, 10, 11]) {
         const gated = {...fresh(), gameplay, enhancementId, [slots.Energy]: 0.75,
             [slots.AssistSnapshot]: 0, stats: {'Offensive Assists': 1}};
         const eligible = gameplay === 1 && enhancementId === 9;
@@ -230,7 +230,8 @@ async function main() {
         assistCases++;
     }
     assert(built.result.includes('Hold Melee: spend up to 100 for bonus damage'));
-    assert(/Set Player Variable\(Event Player, enhancementId, Random Integer\((?:True|1), 10\)\)/.test(built.result));
+    assert(/Set Player Variable\(Event Player, enhancementId, Random Integer\((?:True|1), 11\)\)/.test(built.result),
+        'The completed roster includes Dead Weight alongside the ten earlier Enhancements');
     assert(built.result.includes('Overcharge'));
     if (process.argv.includes('--export')) {
         const exported = await compiler.compile(fs.readFileSync('main.opy', 'utf8'), 'en-US', process.cwd().replace(/\\/g, '/') + '/', 'main.opy');

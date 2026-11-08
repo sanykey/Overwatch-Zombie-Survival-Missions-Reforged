@@ -1,0 +1,81 @@
+{
+  "reference": "9640f50049f7cce3e4e78265a9c80a7f71f03191",
+  "rebuiltCodeRef": "819c1cdc15ddcf0ce34f6e28f8fb3ae77856c8ae",
+  "elements": 29230,
+  "referenceWithoutExcludedFeaturesElements": 29278,
+  "rules": 305,
+  "warnings": 0,
+  "exactRules": 294,
+  "intentionalRuleDifferences": [
+    {
+      "rule": "Initialize global variables",
+      "index": 1,
+      "reason": "Same immutable icon caches declared later; initialization order and compression differ."
+    },
+    {
+      "rule": "EFFECTS/TEXTS",
+      "index": 33,
+      "reason": "Equivalent Enhancement selection IDs; retain explicit health-pack mention in Overcharge help."
+    },
+    {
+      "rule": "PLAYER PICKS UP HEALTH PACK",
+      "index": 115,
+      "reason": "Boolean/default-zero phase guard uses the smaller equivalent expression."
+    },
+    {
+      "rule": "RIDER DETACH WHEN DEAD OR TARGET IS DEAD",
+      "index": 175,
+      "reason": "Check Dead Weight ownership before the remaining bot predicates."
+    },
+    {
+      "rule": "RIDER DETATCH FROM TEAMMATES WHILE ALIVE",
+      "index": 177,
+      "reason": "Check Dead Weight ownership before the remaining bot predicates."
+    },
+    {
+      "rule": "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)",
+      "index": 230,
+      "reason": "Preserve action-level phase guard and post-wait recheck for the known Workshop UI bug."
+    },
+    {
+      "rule": "PLAYER DROPS POWER UP (MANUAL)",
+      "index": 246,
+      "reason": "Preserve the locally tested Scavenger gameplay/alive And workaround."
+    },
+    {
+      "rule": "PLAYER ENHANCEMENT INITIALIZATION",
+      "index": 250,
+      "reason": "Direct fixed HUD icons avoid cache lookups; equivalent Bulking Season/Dead Weight case order."
+    },
+    {
+      "rule": "AUGMENT MENU",
+      "index": 278,
+      "reason": "Concise accurate voting help; retain Double Jump post-landing window and two Scavenger slots."
+    },
+    {
+      "rule": "PLAYER AUGMENT INITIALIZATION",
+      "index": 280,
+      "reason": "Single synchronous HUD-color lookup and shared Kevlar/Leech health-readiness gate; fixed Laser icon."
+    },
+    {
+      "rule": "LEECH LIFESTEAL",
+      "index": 304,
+      "reason": "Preserve action-level eligibility guard for the known Workshop UI bug."
+    }
+  ],
+  "exportSha256LF": "6f366e2f754d6966fc759da160375445c70b6dad60330a25d53a1631808bbb55",
+  "excluded": [
+    "Bolt Strike rules, initialization, menu entries, IDs and effect cleanup",
+    "beamEffects extension and custom Tesla beams",
+    "APOTHECARY ALLOW HEALTH PACK PICKUP",
+    "Reverted mode-wide Conditions grouping"
+  ],
+  "sourceOnlyDifferences": [
+    "Comments and formatting",
+    "Equivalent immutable icon declarations and enum aliases",
+    "Existing optimizations retained instead of copying larger expressions",
+    "Reference-only Jazzy snapshot and investigation scripts are not needed for runtime feature parity"
+  ],
+  "gameplayVerification": "Run verify-augments, verify-scavenger, verify-leech, verify-living-projectile, verify-healing-capacitor and verify-bulking-season separately.",
+  "nativeStatus": "User authorized finishing without waiting for in-game debugging; native UI stability is not asserted."
+}
