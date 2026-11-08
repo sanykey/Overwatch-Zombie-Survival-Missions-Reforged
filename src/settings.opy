@@ -16,17 +16,11 @@ settings {
     },
     "gamemodes": {
         "assault": {
-            "captureSpeed%": 10,
-            "tankPassiveHealthBonus": "alwaysEnabled"
+            "enabled": false
         },
         "ctf": {
-            "disabledMaps": [
-                "busanSanctuaryLny",
-                "lijiangControlCenterLny",
-                "lijiangGardenLny",
-                "oasisCityCenter",
-                "oasisGardens",
-                "oasisUniversity"
+            "enabledMaps": [
+                "iliosLighthouse"
             ],
             "enableDropFlagOnDmg": true,
             "enablePerks": true,
@@ -38,22 +32,10 @@ settings {
             "tankPassiveHealthBonus": "alwaysEnabled"
         },
         "clash": {
-            "captureSpeed%": 10,
-            "tankPassiveHealthBonus": "alwaysEnabled"
+            "enabled": false
         },
         "control": {
-            "enabledMaps": [
-                {
-                    "antarcticPeninsula": [
-                        "morning"
-                    ]
-                },
-                "oasis",
-                "samoa"
-            ],
-            "captureSpeed%": 10,
-            "scoringSpeed%": 10,
-            "tankPassiveHealthBonus": "alwaysEnabled"
+            "enabled": false
         },
         "controlBalancedOverwatch": {
             "enabled": false
@@ -62,33 +44,19 @@ settings {
             "enabled": false
         },
         "escort": {
-            "disabledMaps": [
-                "watchpointGibraltar"
-            ],
-            "payloadSpeed%": 10,
-            "tankPassiveHealthBonus": "alwaysEnabled"
+            "enabled": false
         },
         "escortBalancedOverwatch": {
             "enabled": false
         },
         "flashpoint": {
-            "captureSpeed%": 10,
-            "scoreToWin": 10,
-            "scoringSpeed%": 10,
-            "tankPassiveHealthBonus": "alwaysEnabled"
+            "enabled": false
         },
         "hybridBalancedOverwatch": {
             "enabled": false
         },
         "hybrid": {
-            "disabledMaps": [
-                "eichenwalde",
-                "kingsRow",
-                "paraiso"
-            ],
-            "captureSpeed%": 10,
-            "payloadSpeed%": 10,
-            "tankPassiveHealthBonus": "alwaysEnabled"
+            "enabled": false
         },
         "practiceRange": {
             "enabled": false
@@ -97,6 +65,9 @@ settings {
             "enabled": false
         },
         "push": {
+            "enabledMaps": [
+                "colosseo"
+            ],
             "tankPassiveHealthBonus": "alwaysEnabled",
             "ts1PushSpeedModifier%": 10,
             "ts1WalkSpeedModifier%": 10
@@ -106,17 +77,9 @@ settings {
         },
         "tdm": {
             "enabledMaps": [
-                "blackForest",
-                "blackForestWinter",
-                "castillo",
-                "chateauGuillard",
-                "chateauGuillardHalloween",
-                "ecopointAntarctica",
-                "ecopointAntarcticaWinter",
-                "kanezaka",
                 "malevento",
                 "necropolis",
-                "petra"
+                "blackForest"
             ],
             "enablePerks": true,
             "tankPassiveHealthBonus": "alwaysEnabled"
