@@ -73,12 +73,23 @@ rule "SOLDIER TACTICAL VISOR DAMAGE BONUS":
     eventPlayer.setDamageDealt(100)
 
 
-rule "CASSIDY GRENADE HACK":
+rule "SIERRA TRACKING SHOT HACK":
+    @Event playerDealtDamage
+    @Team 1
+    @Hero sierra
+    @Condition eventAbility == Button.SECONDARY_FIRE
+    @Condition victim.getTeam() == Team.2
+
+    # Match Tracking Shot's base mark duration from impact. No waits: every hit
+    # can apply/refresh Hack, including when another source already hacked it.
+    victim.setStatusEffect(attacker, Status.HACKED, 3)
+
+
+rule "CASSIDY FLASHBANG STUN":
     @Event playerDealtDamage
     @Team 1
     @Hero cassidy
     @Condition eventAbility == Button.ABILITY_2
-    @Condition victim.hasStatus(Status.HACKED) == false
     @Condition victim != attacker
     
-    victim.setStatusEffect(attacker, Status.HACKED, 1)
+    victim.setStatusEffect(attacker, Status.STUNNED, 0.8)

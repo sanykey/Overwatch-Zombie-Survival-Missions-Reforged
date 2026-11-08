@@ -18,6 +18,8 @@ The `main` branch is intended for further Reforged development, including new fu
 
 ## Hero changes
 
+- **Cassidy:** Flashbang damage stuns the target for 0.8 seconds instead of applying Hack. Each hit applies or refreshes the stun, including against hacked targets.
+- **Sierra:** hitting an enemy with Tracking Shot applies Hack for 3 seconds, matching the mark's base duration. This timer is independent of early mark cancellation/removal; another Tracking Shot hit refreshes Hack.
 - **Soldier: 76:** deals 50% more damage while Tactical Visor is active. The bonus multiplies damage alongside Super Nano and other damage boosts; Super Nano's 2× damage becomes 3× during Tactical Visor. The bonus ends when Tactical Visor ends or the player changes heroes.
 
 ## Enhancements and Augments

@@ -1,4 +1,4 @@
-/* Element count: (total 29561)
+/* Element count: (total 29567)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
  1557: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
@@ -277,10 +277,11 @@
     9: rule "CC COOLDOWN FROM DOWNFALLEN/BRUTE" (src/hero_tuning.opy)
     8: rule "START GAME IF WAITING FOR PLAYERS" (src/global_startup.opy)
     8: rule "completeBossObjective" (src/objective_types/objective_type_bosses.opy)
-    8: rule "CASSIDY GRENADE HACK" (src/hero_tuning.opy)
+    8: rule "SIERRA TRACKING SHOT HACK" (src/hero_tuning.opy)
     8: rule "startBotThrottleAtTarget" (src/zombie_types.opy)
     7: rule "applyScaledMoveSpeed" (src/subroutines.opy)
     7: rule "applyBotKnockbackScale" (src/subroutines.opy)
+    6: rule "CASSIDY FLASHBANG STUN" (src/hero_tuning.opy)
     6: rule "daytakerAbortReset" (src/zombie_types.opy)
     6: rule "finishPowerUpDrop" (src/power_ups.opy)
     5: rule "excludeCurrentHeroFromSelection" (src/subroutines.opy)
@@ -4962,7 +4963,24 @@ rule ("SOLDIER TACTICAL VISOR DAMAGE BONUS") {
 }
 
 //8 elements
-rule ("CASSIDY GRENADE HACK") {
+rule ("SIERRA TRACKING SHOT HACK") {
+    event {
+        Player Dealt Damage;
+        Team 1;
+        Sierra;
+    }
+    conditions {
+        Event Ability == Button(Secondary Fire); // 2 elements
+        Team Of(Victim) == Team 2; // 3 elements
+    }
+    actions {
+        "Match Tracking Shot's base mark duration from impact. No waits: every hit\ncan apply/refresh Hack, including when another source already hacked it."
+        Set Status(Victim, Attacker, Hacked, 3); // 2 elements
+    }
+}
+
+//6 elements
+rule ("CASSIDY FLASHBANG STUN") {
     event {
         Player Dealt Damage;
         Team 1;
@@ -4970,11 +4988,10 @@ rule ("CASSIDY GRENADE HACK") {
     }
     conditions {
         Event Ability == Button(Ability 2); // 2 elements
-        Has Status(Victim, Hacked) == False; // 3 elements
         Victim != Attacker; // 1 element
     }
     actions {
-        Set Status(Victim, Attacker, Hacked, True); // 1 element
+        Set Status(Victim, Attacker, Stunned, 0.8); // 2 elements
     }
 }
 
