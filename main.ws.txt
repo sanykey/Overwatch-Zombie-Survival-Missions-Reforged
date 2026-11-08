@@ -1,4 +1,4 @@
-/* Element count: (total 29238)
+/* Element count: (total 29230)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
@@ -63,13 +63,13 @@
   137: rule "BORN TO BATTLE PLAYER USES ABILITY CHARGE" (src/enhancements.opy)
   136: rule "GENERATE SUPPLY DROPS" (src/supply_drops.opy)
   135: rule "LIVING PROJECTILE RELEASE" (src/enhancements.opy)
-  134: rule "AUGMENT MENU" (src/augments.opy)
   133: rule "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)" (src/bots_game_in_progress.opy)
   132: rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS" (src/objective_types/objective_type_biomorphing.opy)
   132: rule "STRIKER (WRECKING BALL) PILE DRIVER" (src/zombie_types.opy)
   132: rule "useAugmentAirAction" (src/augments.opy)
   129: rule "BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)" (src/zombie_types.opy)
   126: rule "PLAYER DELIVERS RESOURCE VALUE" (src/objective_types/objective_type_biomorphing.opy)
+  126: rule "AUGMENT MENU" (src/augments.opy)
   123: rule "OBJECTIVE CHANGES AND PLAYER ENTITIES UPDATE" (src/players_game_in_progress.opy)
   121: rule "determineChallenge" (src/global_start_menu.opy)
   121: rule "superNano (70-79)" (src/supply_drops.opy)
@@ -9373,14 +9373,14 @@ rule ("LIVING PROJECTILE RELEASE") {
     }
 }
 
-//134 elements
+//126 elements
 rule ("AUGMENT MENU") {
     event {
         Ongoing - Global;
     }
     actions {
         "Like the primary enhancement HUD, this is created once and reevaluates per viewer."
-        Create HUD Text(All Players(Team 1), Custom String("Augment: {0} {1}", Value In Array(String Split(Custom String("No Preference0Kevlar0Shock Landing0Double Jump0Long Reach0Ammo Pack0Grapnel Launcher0Laser Barricade0Apothecary0Scavenger0Leech"), First Of(Null)), (Local Player).augmentId), If-Then-Else(Compare((Local Player).augmentId, !=, Null), Value In Array(Global.augmentIconListConst, (Local Player).augmentId), Char In String(Empty Array, False))), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Custom String("Gain 75 armor that helps protect against infection"), Custom String("Press Jump again in midair: landing shockwave deals 40 damage and pushes nearby zombies; movement input adds a dash. Phased a{0}", Custom String("nd invulnerable for 0.5s. Cooldown: 13s")), Custom String("Jump in midair or double-tap Jump. First hit of 30+ damage in flight or within 0.5s after landing deals +50%. Cooldown: 16s"), Custom String("Triple Quick Melee, melee weapon, Dragonblade and Carnage reach"), Custom String("Carry twice the ammo per full magazine; full reloads restore the bonus"), Custom String("Crouch + Jump: grapple 7-40m; deal 35 damage. Grounded: stun 0.5s. Airborne: knockdown 3s. Cooldown: 16s"), Custom String("Hold Crouch + Interact to place a wall that blocks zombies; release Interact to deploy; Crouch may be released while aiming. {0}", Custom String("Cooldown: 30s")), Custom String("Health packs heal twice as much, remove up to 1 existing infection even after time runs out, and grant +7% ultimate charge an{0}", Custom String("d +50% move speed for 5s")), Custom String("Crouch + Interact: stash (2 slots). Interact: active slot. Hold Reload: drop all. Bot eliminations: 5% loot, backpack first"), Custom String("Heal for 15% of damage dealt and gain 50 recoverable health")), (Local Player).augmentId), Custom String("                                                ")), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Interact))), Left, 4, Value In Array(Global.augmentColorListConst, (Local Player).augmentId), Value In Array(Global.augmentColorListConst, (Local Player).augmentId), Value In Array(Global.augmentColorListConst, (Local Player).augmentId), Visible To String and Color, Default Visibility); // 133 elements
+        Create HUD Text(All Players(Team 1), Custom String("Augment: {0} {1}", Value In Array(String Split(Custom String("No Preference0Kevlar0Shock Landing0Double Jump0Long Reach0Ammo Pack0Grapnel Launcher0Laser Barricade0Apothecary0Scavenger0Leech"), First Of(Null)), (Local Player).augmentId), If-Then-Else(Compare((Local Player).augmentId, !=, Null), Value In Array(Global.augmentIconListConst, (Local Player).augmentId), Char In String(Empty Array, False))), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Custom String("Gain 75 armor that helps protect against infection"), Custom String("Press Jump again in midair: landing shockwave deals 40 damage and pushes nearby zombies; movement input adds a dash. Phased a{0}", Custom String("nd invulnerable for 0.5s. cd: 13s")), Custom String("Jump in midair / double-tap Jump. First hit of 30+ damage in flight or within 0.5s after landing: +50%. cd: 16s"), Custom String("Triple Quick Melee, melee weapon, Dragonblade and Carnage reach"), Custom String("Carry twice the ammo per full magazine; full reloads restore the bonus"), Custom String("Crouch + Jump: grapple 7-40m; hit for 35 damage; stun grounded targets for 0.5s or knock airborne targets down for 3s. cd: 16s"), Custom String("Hold Crouch + Interact to aim a zombie-blocking wall; release Interact to deploy. cd: 30s"), Custom String("Health packs: 2x healing, remove up to 1 infection even after time runs out, +7% ult, +50% speed for 5s"), Custom String("Crouch + Interact: stash (2 slots). Interact: active slot. Hold Reload: drop all. Bot eliminations: 5% loot, backpack first"), Custom String("Heal for 15% of damage dealt and gain 50 recoverable health")), (Local Player).augmentId), Custom String("                                                ")), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Interact))), Left, 4, Value In Array(Global.augmentColorListConst, (Local Player).augmentId), Value In Array(Global.augmentColorListConst, (Local Player).augmentId), Value In Array(Global.augmentColorListConst, (Local Player).augmentId), Visible To String and Color, Default Visibility); // 125 elements
     }
 }
 
