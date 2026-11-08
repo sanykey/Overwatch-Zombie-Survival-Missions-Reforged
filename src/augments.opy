@@ -45,7 +45,7 @@ rule "AUGMENT MENU":
     # Like the primary enhancement HUD, this is created once and reevaluates per viewer.
     hudText(
         getPlayers(Team.1),
-        "Augment: {0} {1}".format(AUGMENT_NAMES[localPlayer.augmentId], AUGMENT_ICONS[localPlayer.augmentId]),
+        f"Augment: {AUGMENT_NAMES[localPlayer.augmentId]} {AUGMENT_ICONS[localPlayer.augmentId] if localPlayer.augmentId != Augment.NO_PREFERENCE else ''}",
         [
             "",
             "Gain 75 armor that helps protect against infection",
@@ -60,8 +60,8 @@ rule "AUGMENT MENU":
             "Heal for 15% of damage dealt and gain 50 recoverable health"
         ][localPlayer.augmentId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.INTERACT)),
-        HudPosition.ACTUALLY_LEFT, 4, Color.AQUA, Color.AQUA, Color.AQUA,
-        HudReeval.VISIBILITY_AND_STRING
+        HudPosition.ACTUALLY_LEFT, 4, AUGMENT_COLORS[localPlayer.augmentId], AUGMENT_COLORS[localPlayer.augmentId], AUGMENT_COLORS[localPlayer.augmentId],
+        HudReeval.VISIBILITY_STRING_AND_COLOR
     )
 
 
@@ -118,6 +118,10 @@ rule "PLAYER AUGMENT INITIALIZATION":
         #Barricade health
         createInWorldText(getAllPlayers() if eventPlayer.augmentBarrierHealth > 0 else null, "{0}HP".format(ceil(eventPlayer.augmentBarrierHealth)), eventPlayer.augmentBarrierPosition + Vector.UP, 1.5, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.BLUE)
     else:
+        # Color is consumed at HUD creation: STRING reevaluates text, not colors.
+        # Synchronous scratch; no capture survives this action or later waits.
+        #!define augmentHudColor tmp0
+        augmentHudColor = AUGMENT_COLORS[eventPlayer.augmentId]
         # Match the roster: icon, small status/instructions, then the ability name.
         hudText(
             eventPlayer,
@@ -127,7 +131,7 @@ rule "PLAYER AUGMENT INITIALIZATION":
                 f"[{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.JUMP)}]" if eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER else f"[{inputBindingString(Button.JUMP)}] in midair / double-tap" if eventPlayer.augmentId == Augment.DOUBLE_JUMP else f"[{inputBindingString(Button.JUMP)}] in midair"
             ) if eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP, Augment.GRAPNEL_LAUNCHER] else f"Backpack: {len(eventPlayer.augmentScavengerBackpack)}/2 | Crouch + Interact to store | Hold [{inputBindingString(Button.RELOAD)}] to drop all" if eventPlayer.augmentId == Augment.SCAVENGER else ["", "+75 armor", "", "", "Extended melee reach", "Double magazine capacity", "", "", "2x pack healing | -1 infection (min 0) | +7% ult | +50% speed 5s", "", "15% lifesteal | +50 health"][eventPlayer.augmentId],
             AUGMENT_NAMES[eventPlayer.augmentId],
-            HudPosition.ACTUALLY_LEFT, 100, Color.AQUA, Color.AQUA, Color.AQUA,
+            HudPosition.ACTUALLY_LEFT, 100, augmentHudColor, augmentHudColor, augmentHudColor,
             HudReeval.STRING
         )
     if eventPlayer.augmentId in [Augment.KEVLAR, Augment.LEECH]:

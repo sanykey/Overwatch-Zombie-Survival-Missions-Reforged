@@ -64,6 +64,7 @@ enum Augment:
 # Icon tables, indexed by their corresponding selection ID.
 #!define ENHANCEMENT_ICONS enhancementIconListConst
 #!define AUGMENT_ICONS augmentIconListConst
+#!define AUGMENT_COLORS augmentColorListConst
 
 # Objective IDs also index objectiveTypeVoteList and identify entries in objectiveTypeList.
 # Biomorphing and Survivor Rescue are only selectable through the mixed pool.
@@ -888,7 +889,20 @@ playervar augmentBarrierHealth  # Chased Laser Barricade health; placement, dama
 # Immutable Augment icons, indexed by selection ID and initialized once before UI rules.
 # Shared by the pregame menu, world labels, personal HUD and roster throughout the match.
 # Keep a dedicated slot: pregame storage is reused by objectives during gameplay.
-globalvar augmentIconListConst = [iconString(Icon.QUESTION_MARK), iconString(Icon.STOP), iconString(Icon.ARROW_RIGHT), iconString(Icon.ARROW_UP), iconString(Icon.CROSS), iconString(Icon.PLUS), iconString(Icon.ARROW_DOWN), iconString(Icon.DIAMOND), iconString(Icon.HEART), iconString(Icon.RECYCLE), iconString(Icon.ASTERISK)]
+enum AugmentIcon:
+    NO_PREFERENCE = iconString(Icon.QUESTION_MARK),
+    KEVLAR = "<TX C0000000004F73E>",
+    PHASE_DASH = iconString(Icon.ARROW_RIGHT),
+    DOUBLE_JUMP = iconString(Icon.ARROW_UP),
+    LONG_REACH = abilityIconString(Hero.DOOMFIST, Button.SECONDARY_FIRE),
+    AMMO_PACK = "<TX C0000000004F73A>",
+    GRAPNEL_LAUNCHER = iconString(Icon.DIZZY),
+    LASER_BARRICADE = iconString(Icon.DIAMOND),
+    APOTHECARY = "<TX C0000000004F73B>",
+    SCAVENGER = iconString(Icon.RECYCLE),
+    LEECH = iconString(Icon.ASTERISK),
+
+globalvar augmentIconListConst = [AugmentIcon.NO_PREFERENCE, AugmentIcon.KEVLAR, AugmentIcon.PHASE_DASH, AugmentIcon.DOUBLE_JUMP, AugmentIcon.LONG_REACH, AugmentIcon.AMMO_PACK, AugmentIcon.GRAPNEL_LAUNCHER, AugmentIcon.LASER_BARRICADE, AugmentIcon.APOTHECARY, AugmentIcon.SCAVENGER, AugmentIcon.LEECH]
 
 # Immutable Enhancement icons, indexed by selection ID; shared by pregame options and roster.
 # Keep a dedicated slot: enhancementOptionList becomes Biomorphing text after menu cleanup.
@@ -907,3 +921,6 @@ enum EnhancementIcon:
     DEAD_WEIGHT = iconString(Icon.TRASHCAN),
 
 globalvar enhancementIconListConst = [EnhancementIcon.NO_PREFERENCE, EnhancementIcon.BRAIN_KILLER, EnhancementIcon.ZOMBIE_HYBRID, EnhancementIcon.PYROTECHNIC, EnhancementIcon.PLAGUE_DOCTOR, EnhancementIcon.BORN_TO_BATTLE, EnhancementIcon.CHARGE_BATTERY, EnhancementIcon.HITCHHIKER, EnhancementIcon.PUP, EnhancementIcon.OVERCHARGE, EnhancementIcon.BULKING_SEASON, EnhancementIcon.DEAD_WEIGHT]
+
+# Immutable palette shared by the pregame menu and gameplay HUD; indexed by Augment.
+globalvar augmentColorListConst = [Color.AQUA, Color.LIGHT_GRAY, Color.YELLOW, Color.SKY_BLUE, Color.ORANGE, Color.WHITE, Color.TURQUOISE, Color.BLUE, Color.GREEN, Color.LIME_GREEN, Color.RED]
