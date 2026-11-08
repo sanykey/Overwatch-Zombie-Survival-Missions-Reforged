@@ -79,15 +79,15 @@ rule "EFFECT/TEXT (GLOBAL)":
     createInWorldText(getAllPlayers().filter(lambda player: supplyDropLandingPosition != null and distance(player, supplyDropPosition) > 5), "Supply Drop: {0}m".format(distance(localPlayer, supplyDropPosition)), supplyDropPosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.AQUA, SpecVisibility.NEVER)
 
 
+# Carried Dead Weight throws take priority over augment input reservations.
+# Boolean predicate, reused after the powerup hold because these checks live in
+# Actions and are no longer observed by Abort When False.
+#!define INTERACT_AUGMENT_INPUT_ALLOWED ((eventPlayer.enhancementId == Enhancement.DEAD_WEIGHT and eventPlayer.enhancementHeldZombie != null) or ((eventPlayer.augmentId not in [Augment.APOTHECARY, Augment.LEECH] or not eventPlayer.isHoldingButton(Button.CROUCH)) and (eventPlayer.augmentId != Augment.LASER_BARRICADE or (not eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.augmentBarrierPlacementCooldown >= 0))))
+
 rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
-    # Reserve Crouch + Interact for Apothecary, even without a teleport charge.
-    @Condition ((eventPlayer.enhancementId == Enhancement.DEAD_WEIGHT and eventPlayer.enhancementHeldZombie != null) or eventPlayer.augmentId != Augment.APOTHECARY or not eventPlayer.isHoldingButton(Button.CROUCH)) == true
-    # Reserve Laser Barricade input until Interact is released, even after Crouch is released.
-    # Throwing a carried Dead Weight target takes precedence over barricade placement.
-    @Condition ((eventPlayer.enhancementId == Enhancement.DEAD_WEIGHT and eventPlayer.enhancementHeldZombie != null) or eventPlayer.augmentId != Augment.LASER_BARRICADE or (not eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.augmentBarrierPlacementCooldown >= 0)) == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isDummy() == false
 
@@ -103,6 +103,11 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
     #   de11b70848715973335c011e19821273504f5d3c; eligibility moved to Actions.
     # isGameplayActive only holds boolean/default zero.
     if not isGameplayActive:
+        return
+
+    # Reserve Crouch + Interact for Apothecary/Leech even without a target/charge.
+    # Barricade keeps the reservation until Interact release, even without Crouch.
+    if not INTERACT_AUGMENT_INPUT_ALLOWED:
         return
 
     # Resolve zombie interaction once per press, before any item transaction.
@@ -165,9 +170,9 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
             supplyPowerUpPositionList.append(pickedPowerUpPosition)
     elif eventPlayer.powerUpItemId:
         wait(0.25, Wait.ABORT_WHEN_FALSE)
-        # Phase is no longer in Conditions, so Abort When False cannot observe it.
-        # Recheck after the hold to prevent item activation after gameplay ends.
-        if isGameplayActive:
+        # Phase/input guards are in Actions, outside Abort When False checks.
+        # Recheck to prevent activation after game end or a reserved input change.
+        if isGameplayActive and INTERACT_AUGMENT_INPUT_ALLOWED:
             powerUpUsage()
 
 

@@ -124,6 +124,12 @@ rule "BOT DIES":
     @Condition eventPlayer.isDead() == true
     @Condition eventPlayer in bossStateList == false
     
+    # Environmental deaths do not grant normal damage-event lifesteal.
+    # Heal the credited survivor before any death-handler waits.
+    if eventWasEnvironment and attacker.getTeam() == Team.1:
+        if attacker.augmentId == Augment.LEECH:
+            heal(attacker, attacker, eventDamage * 0.15)
+
     if eventPlayer.botIsReigniteAttackUsed and eventPlayer.getHero() == Hero.ANRAN and not eventWasEnvironment:
         eventPlayer.setUltCharge(100)
         eventPlayer.forceButtonPress(Button.ULTIMATE)

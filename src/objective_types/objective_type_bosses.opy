@@ -3,6 +3,8 @@ subroutine completeBossObjective
 
 subroutine bossReturn
 
+#!define BOSS_ENVIRONMENT_DAMAGE 200
+
 
 rule "SPAWN BOSS":
     @Condition currentObjectiveType == ObjectiveType.BOSSES
@@ -125,7 +127,10 @@ rule "BOSS DIES (ALL BOSS OBJECTIVES)":
     if eventWasEnvironment:
         eventPlayer.stopAllDamageOverTime()
         if attacker.getTeam() == getOppositeTeam(eventPlayer.getTeam()):
-            eventPlayer.botBossHealth = eventDamage - 200
+            eventPlayer.botBossHealth = eventDamage - BOSS_ENVIRONMENT_DAMAGE
+            if attacker.augmentId == Augment.LEECH:
+                # Only the scripted health loss counts, capped by remaining HP.
+                heal(attacker, attacker, min(eventDamage, BOSS_ENVIRONMENT_DAMAGE) * 0.15)
         else:
             eventPlayer.botBossHealth = eventDamage
         if eventPlayer.botBossHealth > 0:

@@ -11,7 +11,13 @@ async function main() {
     assert.deepEqual(build.warnings, []);
     const compiled = new Map(rules(build.result).map(rule => [rule.name, rule]));
     const lifesteal = compiled.get('LEECH LIFESTEAL');
-    const init = compiled.get('PLAYER AUGMENT INITIALIZATION');
+    const combinedInit = compiled.get('PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION');
+    // Keep this focused on the augment macro after initialization was merged.
+    const initActions = actions(combinedInit);
+    const augmentStart = initActions.findIndex(line => line === 'Skip If(Compare((Event Player).augmentId, !=, Null), True);');
+    assert(augmentStart >= 0);
+    const init = {...combinedInit, body: combinedInit.body.split('actions {\n')[0] +
+        'actions {\n' + initActions.slice(augmentStart).join('\n') + '\n}'};
     const run = (rule, state) => start(rule, state, compiled);
     const energy = slot('enhancementCapacitorEnergy'), backpack = slot('augmentScavengerBackpack');
     assert(lifesteal.body.includes('Player Dealt Damage;\nTeam 1;'));
@@ -59,6 +65,32 @@ async function main() {
     const pregame = scenario(10, {globals: {isGameplayActive: false}});
     assert(!applies(init, pregame));
 
+    // Execute the emitted death-handler prefixes before unrelated cleanup/waits.
+    const ordinary = compiled.get('BOT DIES');
+    const boss = compiled.get('BOSS DIES (ALL BOSS OBJECTIVES)');
+    const prefix = (rule, end) => ({body: 'actions {\n' + rule.body.split('actions {\n')[1].split(end)[0].trimEnd() + '\n}'});
+    const ordinaryPrefix = prefix(ordinary, 'If(And(And((Event Player).');
+    const bossPrefix = prefix(boss, 'If(Compare((Event Player).');
+    // The boss prefix ends inside the outer environment block.
+    bossPrefix.body = bossPrefix.body.slice(0, -2) + '\nEnd;\n}';
+    let environmentCases = 0;
+    for (const isBoss of [false, true])
+    for (const environmental of [false, true])
+    for (const team of [1, 2])
+    for (const augment of [0, 9, 10])
+    for (const hp of [1, 100, 200, 1000, 15000]) {
+        const s = scenario(augment, {eventDamage: hp, maxHealth: 10000});
+        s.player.health = 0; s.player.team = 2;
+        s.attacker = {team, augmentId: augment, health: 100};
+        s.expectedHealer = s.attacker; s.eventWasEnvironment = environmental;
+        assert(run(isBoss ? bossPrefix : ordinaryPrefix, s).done());
+        const eligible = environmental && team === 1 && augment === 10;
+        assert.equal(s.attacker.health, 100 + (eligible ? Math.min(hp, isBoss ? 200 : hp) * 0.15 : 0));
+        assert.equal(s.player.health, 0, 'Heal the credited attacker, never the dead bot');
+        assert.equal(s.damage.length, 0, 'Environmental lifesteal does not deal recursive damage');
+        environmentCases++;
+    }
+
     for (let enhancement = 1; enhancement <= enhancementCount; enhancement++) {
         const s = scenario(10);
         Object.assign(s.player, {enhancementId: enhancement, initialMaxHealth: 250, [energy]: 17, [backpack]: 42});
@@ -87,7 +119,7 @@ async function main() {
     assert(init.body.includes('15% lifesteal | +50 health'));
     assert(!compiled.has('APOTHECARY ALLOW HEALTH PACK PICKUP'));
     assert(compiled.has('BOLT STRIKE DAMAGE'));
-    console.log(JSON.stringify({elements: build.elements, warnings: build.warnings.length, damageCases, eligibilityCases,
+    console.log(JSON.stringify({elements: build.elements, warnings: build.warnings.length, damageCases, eligibilityCases, environmentCases,
         checked: '15% native/scripted damage/all Enhancements including Bolt Strike/self attribution/healing cap/Overcharge actual healing/no recursion/50 recoverable normal health/readiness gate/Kevlar/hero-switch gate/random choice/no shared state'}, null, 2));
 }
 main().catch(error => {console.error(error); process.exitCode = 1;});

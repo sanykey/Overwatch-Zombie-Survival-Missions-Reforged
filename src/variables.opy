@@ -459,6 +459,11 @@ playervar augmentState3
 
 playervar enhancementHitchhikerPassenger  # Passenger attached to this carrier; null when absent. Infection rules also query it.
 
+# Recipient-owned across all Augments: one nonrecoverable 50-HP Leech gift pool,
+# shared by every donor. Never reuse an augment slot here: recipients can have any
+# Augment. Consumed pool IDs can remain until refill; death removes/clears the ID.
+playervar leechGrantedHealthPoolId
+
 playervar enhancementCarrierPoolId  # Extra health-pool ID granted to a Hitchhiker carrier, retained for removal. Exported names must fit 32 characters.
 #!define enhancementHitchhikerCarrierPoolId enhancementCarrierPoolId
 

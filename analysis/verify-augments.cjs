@@ -63,7 +63,11 @@ function value(expr, state, element) {
     if (expr === 'Right') return [-1, 0, 0];
     if (expr === 'Total Time Elapsed') return state.time;
     if (expr === 'Last Created Entity') return state.lastEntity;
+    if (expr === 'Last Created Health Pool') return state.lastHealthPool;
     if (expr === 'Team 2') return 2;
+    if (expr === 'Team 1') return 1;
+    if (expr === 'Attacker') return state.attacker ?? 0;
+    if (expr === 'Event Was Environment') return state.eventWasEnvironment ?? false;
     if (expr === 'Event Player' || expr === 'Local Player') return state.player;
     if (expr === 'Victim') return state.victim;
     if (expr === 'Event Ability') return state.eventAbility ?? 0;
@@ -170,9 +174,11 @@ function value(expr, state, element) {
         case 'Eye Position': return point(v(0)).map((x, i) => x + (i === 1 ? 1.5 : 0));
         case 'Facing Direction Of': return state.facing;
         case 'All Players': return [state.player, ...state.targets];
+        case 'All Living Players': return [state.player, ...state.targets].filter(p => p === state.player ? state.alive : p.alive);
         case 'Position Of': return point(v(0));
         case 'Velocity Of': return state.velocity;
         case 'Team Of': return v(0).team ?? 2;
+        case 'Opposite Team Of': return v(0) === 1 ? 2 : 1;
         case 'Direction Towards': {
             const delta = point(v(1)).map((x, i) => x - point(v(0))[i]), length = magnitude(delta);
             return delta.map(x => length ? x / length : 0);
@@ -198,6 +204,10 @@ function value(expr, state, element) {
 const conditions = rule => rule.body.match(/conditions \{\n([\s\S]*?)\n\}/)?.[1].split('\n').map(line => line.slice(0, -1)) ?? [];
 const actions = rule => rule.body.split('actions {\n')[1].replace(/\n\}$/, '').split('\n');
 const applies = (rule, state) => conditions(rule).every(expr => truth(value(expr, state)));
+// Interact reservations now abort in Actions; test those emitted entry guards too.
+const allowsInteraction = (rule, state) => applies(rule, state) && actions(rule)
+    .slice(0, actions(rule).findIndex(line => !line.startsWith('Abort If(')))
+    .every(line => !truth(value(args(line)[0], state)));
 
 function* execute(rule, state, compiled) {
     const lines = actions(rule);
@@ -385,14 +395,26 @@ function* execute(rule, state, compiled) {
                 case 'Stop All Damage Over Time': state.stoppedDots = true; break;
                 case 'Clear Status': state.status.delete(a[1]); break;
                 case 'Set Ultimate Charge': state.ultCharge = Math.min(100, v(1)); break;
+                case 'Set Player Health': v(0).health = v(1); break;
+                case 'Remove Health Pool From Player': {
+                    assert(state.poolState, 'This scenario needs an explicit health-pool model');
+                    const pool = state.poolState.get(v(0));
+                    if (pool) {pool.player.health -= pool.remaining; state.poolState.delete(v(0));}
+                    break;
+                }
                 case 'Heal':
                     assert.equal(v(1), state.expectedHealer ?? 0, 'Unexpected healer attribution');
                     state.healBonus = v(2);
-                    state.player.health = Math.min(state.maxHealth, state.player.health + v(2));
+                    v(0).health = Math.min(state.maxHealth, v(0).health + v(2));
                     break;
                 case 'Small Message': state.messages.push(v(1)); break;
                 case 'Add Health Pool To Player':
                     (state.healthPools ??= []).push({type: a[1], amount: v(2), recoverable: v(3), reevaluate: v(4)});
+                    if (state.poolState) {
+                        state.lastHealthPool = ++state.nextHealthPool;
+                        state.poolState.set(state.lastHealthPool, {player: v(0), remaining: v(2)});
+                        v(0).health += v(2);
+                    }
                     if (a[1] === 'Armor') state.armor += v(2);
                     break;
                 default: throw new Error('Unsupported action: ' + line);
@@ -1604,10 +1626,10 @@ async function main() {
         const state = scenario(7, {buttons: new Set([...(crouch ? ['Crouch'] : []), ...(interact ? ['Interact'] : [])])});
         assert.equal(applies(compiled.get('LASER BARRICADE (PLACEMENT)'), state), crouch && interact,
             'Barricade placement requires both buttons');
-        assert.equal(applies(interactRule, state), interact && !crouch,
+        assert.equal(allowsInteraction(interactRule, state), interact && !crouch,
             'Barricade input must not also use or pick up a power up');
         state.player.augmentId = 1;
-        assert.equal(applies(interactRule, state), interact, 'Other augments preserve crouched interaction');
+        assert.equal(allowsInteraction(interactRule, state), interact, 'Other augments preserve crouched interaction');
     }
 
     // Execute the emitted use delay with the real interaction conditions. Stub only
@@ -1616,7 +1638,7 @@ async function main() {
     const useIndex = interactActions.indexOf('Call Subroutine(powerUpUsage);');
     assert(useIndex > 0);
     assert.equal(interactActions[useIndex - 2], 'Wait(0.25, Abort When False);');
-    assert.equal(interactActions[useIndex - 1], 'If(Global.isGameplayActive);', 'Recheck phase after the hold now that it is absent from Conditions');
+    assert(interactActions[useIndex - 1].startsWith('If(And(Global.isGameplayActive,'), 'Recheck phase and input reservations after the hold');
     const useOnly = {...interactRule, body: interactRule.body.split('actions {\n')[0]
         + 'actions {\n' + interactActions.slice(useIndex - 2, useIndex + 1).join('\n') + '\n}'};
     const useCompiled = new Map(compiled);
@@ -1627,7 +1649,7 @@ async function main() {
         held.player.powerUpItemId = item;
         for (const seconds of [0, 0.25, 0.5, 1, 5, 30]) {
             held.time = 100 + seconds;
-            assert(!applies(interactRule, held), 'Holding the combo must never start power-up use');
+            assert(!allowsInteraction(interactRule, held), 'Holding the combo must never start power-up use');
             assert.equal(held.player.powerUpItemId, item);
         }
         for (const pressAt of [0.01, 0.125, 0.249]) {
@@ -1635,7 +1657,7 @@ async function main() {
             state.player.powerUpItemId = item;
             const task = start(useOnly, state, useCompiled);
             state.time += pressAt; state.buttons.add('Crouch'); task.resume();
-            assert(task.done(), 'Adding Crouch must abort pending power-up activation');
+            // Action guards are rechecked when the hold completes.
             state.time = 101; task.resume();
             assert.equal(state.player.powerUpItemId, item, 'An aborted hold must not consume the item');
         }
@@ -1684,7 +1706,7 @@ async function main() {
         state.time = 101; task.resume();
         assert(!task.done());
         assert(truth(value(previewInput, state)), 'Preview stays visible while Interact is held');
-        assert(!applies(interactRule, state), 'Releasing Crouch while aiming must not activate a power up');
+        assert(!allowsInteraction(interactRule, state), 'Releasing Crouch while aiming must not activate a power up');
         state.buttons.delete('Interact'); task.resume();
         assert(task.done(), 'Releasing Interact completes aiming');
         assert.equal(state.player[barrierCooldown], 0);
@@ -1737,5 +1759,5 @@ async function main() {
             'Long Reach Overcharge / actual damage / immunity / mixed targets / first hit / multiple targets and swings / exact expiry / fixed window / independent next bank / scripted-event filtering'],
         exported: process.argv.includes('--export'), limitation: 'Game physics, native hitboxes and engine ammo support require an in-game check.'}, null, 2));
 }
-module.exports = {value, applies, execute, start, scenario, actions, enhancementCount};
+module.exports = {value, applies, allowsInteraction, execute, start, scenario, actions, enhancementCount};
 if (require.main === module) main().catch(error => {console.error(error); process.exitCode = 1;});
