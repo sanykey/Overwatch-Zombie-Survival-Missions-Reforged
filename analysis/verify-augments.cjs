@@ -345,9 +345,11 @@ function* execute(rule, state, compiled) {
                 case 'Destroy Effect': state.destroyedEffects.push(v(0)); state.liveEffects.delete(v(0)); break;
                 case 'Set Status': {
                     const target = v(0);
-                    if (target === state.player) state.status.add(a[2]);
-                    else (target.status ??= new Set()).add(a[2]);
-                    state.statusWrites.push({status: a[2], duration: v(3), ...(target === state.player ? {} : {target: target.id})});
+                    for (const recipient of Array.isArray(target) ? target : [target]) {
+                        if (recipient === state.player) state.status.add(a[2]);
+                        else (recipient.status ??= new Set()).add(a[2]);
+                        state.statusWrites.push({status: a[2], duration: v(3), ...(recipient === state.player ? {} : {target: recipient.id})});
+                    }
                     break;
                 }
                 case 'Disable Movement Collision With Players': case 'Enable Movement Collision With Players':
@@ -359,7 +361,7 @@ function* execute(rule, state, compiled) {
                 case 'Damage': {
                     const target = v(0);
                     if (state.expectedDamager !== undefined) assert.equal(v(1), state.expectedDamager);
-                    assert(!Array.isArray(target), 'Each scripted augment Damage must target one player for actual-hit checks');
+                    assert(state.allowArrayDamage || !Array.isArray(target), 'Each scripted augment Damage must target one player for actual-hit checks');
                     const targets = Array.isArray(target) ? target : [target];
                     state.damage.push({targets, amount: v(2), time: state.time});
                     for (const recipient of targets) {

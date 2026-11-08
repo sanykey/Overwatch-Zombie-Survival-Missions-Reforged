@@ -749,7 +749,7 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 # Exclusive primary enhancement; slots belong to its selected human (the healer
 # for dealt-healing events, the receiver for health packs), never an enemy target.
 #!define enhancementCapacitorEnergy actorTeamSlot22
-# Bolt Strike: actual chain health removed, capped at 200; retained on death.
+# Bolt Strike: actual chain health removed, capped at 350; retained on death.
 # Exclusive primary enhancement on its attacking human; no Augment owns this slot.
 #!define enhancementBoltEnergy actorTeamSlot22
 # Born to Battle unspent ability resets (0-2); retained through ability waits and reevaluated by its HUD.
@@ -784,7 +784,7 @@ playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateS
 # Overcharge: absolute burst deadline; zero means armed but waiting for its first hit.
 # Set once by the first hit, read by later hits, cleared with the charge on expiry/death.
 #!define enhancementCapacitorDeadline actorTeamSlot24
-# Bolt Strike: 0 inactive, -1 armed, positive absolute 0.3-second burst deadline.
+# Bolt Strike: 0 inactive, -1 armed until the first eligible hit; consumed once.
 # Exclusive primary enhancement; read across damage events/HUD, with no waits/chases.
 #!define enhancementBoltBurst actorTeamSlot24
 # Full battery reuse cooldown used for progress scaling (10 seconds).
@@ -809,7 +809,11 @@ playervar actorTeamSlot26  # Teleport permission on Team 2 or first barrier corn
 # Barrier first lower corner.
 #!define augmentBarrierCorner1 actorTeamSlot26
 
-playervar actorTeamSlot27  # Second barrier corner.
+playervar actorTeamSlot27  # Team 2: Bolt Strike flash deadline; Team 1: second barrier corner.
+# Next allowed Bolt Strike flash time on this zombie, shared across attackers.
+# Default 0 permits its first flash; retained across respawns (at most 0.2s).
+# Written only on a flash; no chase, waits or reevaluated visuals own this slot.
+#!define botBoltFlashReadyAt actorTeamSlot27
 # Barrier second lower corner.
 #!define augmentBarrierCorner2 actorTeamSlot27
 

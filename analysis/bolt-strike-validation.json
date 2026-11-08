@@ -1,24 +1,9 @@
 {
-  "elements": 29437,
+  "elements": 29285,
   "warnings": 0,
-  "rules": 306,
-  "cases": 55,
-  "comparison": {
-    "ref": "d9571b0",
-    "beforeElements": 29229,
-    "afterElements": 29437,
-    "delta": 208,
-    "addedRules": 3,
-    "changedExistingRules": [
-      "Initialize global variables",
-      "EFFECTS/TEXTS",
-      "PLAYER ENHANCEMENT INITIALIZATION"
-    ],
-    "unchangedExistingRules": 300,
-    "newVariables": 0,
-    "mapsAndDeclarations": "identical"
-  },
-  "checked": "25%/20 cap/two visible living secondary targets/10m boundary/no victim/actual-health bank/200 cap/arming/window/expiry/death/retained bank/no recursion/Leech/all Augments/stable Dead Weight ID/no persistent effects/no waits",
+  "rules": 304,
+  "cases": 63,
+  "checked": "0.75 flash size/per-target 0.2s gate/shared across attackers/no deadline extension/damage and bank unaffected/25%/15 cap/two visible living secondary targets/10m boundary/no victim/actual-health bank/350 cap/arming/no timeout/first-hit 5m discharge/one-shot/death/retained bank/no recursion/Leech/all Augments/stable Dead Weight ID/no persistent effects/no waits",
   "exported": true,
   "limitation": "Native RNG distribution and geometry require the game; no client UI stability claim."
 }

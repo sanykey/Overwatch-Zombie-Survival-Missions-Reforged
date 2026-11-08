@@ -104,7 +104,7 @@ macro initializePlayerEnhancement():
             eventPlayer.enhancementBoltBurst = 0
             hudText(
                 eventPlayer, EnhancementIcon.BOLT_STRIKE,
-                f"2 targets | 25%, max 20 | Energy: {floor(eventPlayer.enhancementBoltEnergy)}/200 | Hold [{inputBindingString(Button.MELEE)}] | Armed: {eventPlayer.enhancementBoltBurst != 0}",
+                f"Energy: {floor(eventPlayer.enhancementBoltEnergy)}/350 | Hold [{inputBindingString(Button.MELEE)}] | Armed: {eventPlayer.enhancementBoltBurst != 0}",
                 "Bolt Strike", HudPosition.ACTUALLY_LEFT, 99, Color.YELLOW, Color.YELLOW, Color.YELLOW, HudReeval.STRING
             )
             break

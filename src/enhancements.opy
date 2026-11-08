@@ -184,15 +184,22 @@ rule "BOLT STRIKE DAMAGE":
         boltChainTargets = random.shuffle(getPlayersInRadius(victim, 10, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive()).exclude(victim)).slice(0, 2)
         for boltIndex in range(len(boltChainTargets)):
             boltHealthBefore = boltChainTargets[boltIndex].getHealth()
-            damage(boltChainTargets[boltIndex], eventPlayer, min(20, eventDamage * 0.25))
+            damage(boltChainTargets[boltIndex], eventPlayer, min(15, eventDamage * 0.25))
             # Bank only actual health removed, including immunity/reduction/overkill.
-            eventPlayer.enhancementBoltEnergy = min(200, eventPlayer.enhancementBoltEnergy + max(0, boltHealthBefore - boltChainTargets[boltIndex].getHealth()))
-            playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, boltChainTargets[boltIndex], 1.5)
+            eventPlayer.enhancementBoltEnergy = min(350, eventPlayer.enhancementBoltEnergy + max(0, boltHealthBefore - boltChainTargets[boltIndex].getHealth()))
+            # Per-target gate shared by every attacker. Suppressed flashes never
+            # extend the deadline or throttle damage/energy; no polling or waits.
+            if getTotalTimeElapsed() >= boltChainTargets[boltIndex].botBoltFlashReadyAt:
+                boltChainTargets[boltIndex].botBoltFlashReadyAt = getTotalTimeElapsed() + 0.2
+                playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, boltChainTargets[boltIndex], 0.75)
         if eventPlayer.enhancementBoltBurst == -1:
-            eventPlayer.enhancementBoltBurst = getTotalTimeElapsed() + 0.3
-        if eventPlayer.enhancementBoltBurst > getTotalTimeElapsed():
-            victim.setStatusEffect(eventPlayer, Status.STUNNED, 2)
-            damage(victim, eventPlayer, 60)
+            # Consume before applying damage. The chain list is no longer live;
+            # reuse its synchronous slot for this one-shot area discharge.
+            #!define boltDischargeTargets tmp0
+            eventPlayer.enhancementBoltBurst = 0
+            boltDischargeTargets = getPlayersInRadius(victim, 5, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive())
+            boltDischargeTargets.setStatusEffect(eventPlayer, Status.STUNNED, 2)
+            damage(boltDischargeTargets, eventPlayer, 60)
 
 
 rule "BOLT STRIKE ARMS CHARGE":
@@ -202,7 +209,7 @@ rule "BOLT STRIKE ARMS CHARGE":
     @Condition eventPlayer.enhancementId == Enhancement.BOLT_STRIKE
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
-    @Condition eventPlayer.enhancementBoltEnergy >= 200
+    @Condition eventPlayer.enhancementBoltEnergy >= 350
     @Condition eventPlayer.enhancementBoltBurst == 0
 
     eventPlayer.enhancementBoltEnergy = 0
@@ -214,9 +221,9 @@ rule "BOLT STRIKE CLEARS CHARGE":
     @Team 1
     @Condition eventPlayer.enhancementId == Enhancement.BOLT_STRIKE
     @Condition eventPlayer.enhancementBoltBurst != 0
-    @Condition (not isGameplayActive or not eventPlayer.isAlive() or eventPlayer.enhancementBoltBurst > 0 and getTotalTimeElapsed() >= eventPlayer.enhancementBoltBurst) == true
+    @Condition (not isGameplayActive or not eventPlayer.isAlive()) == true
 
-    # Death/game end cancels the burst; unspent energy stays in the bank.
+    # Death/game end cancels the armed discharge; unspent energy stays in the bank.
     eventPlayer.enhancementBoltBurst = 0
 
 
