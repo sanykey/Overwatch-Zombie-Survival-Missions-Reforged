@@ -15,6 +15,7 @@
 #!suppressWarnings w_wait_until
 
 #!include "settings.opy"
+#!include "rule_conditions.opy"
 #!include "variables.opy"
 #!include "compressed numbers.opy"
 #!include "subroutines.opy"

@@ -11,8 +11,7 @@ subroutine attachPlayerToPregameAnchor
 rule "PLAYER MENU INITIALIZATION":
     @Event eachPlayer
     @Team 1
-    @Condition isPregameSetup == true
-    @Condition startMenuSpacingAngle != 0
+    @Condition groupedConditions(((isPregameSetup == true) and (startMenuSpacingAngle != 0)))
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
     eventPlayer.disableGamemodeInWorldUi()
@@ -40,8 +39,7 @@ rule "PLAYER MENU INITIALIZATION":
 rule "EFFECTS/TEXT":
     @Event eachPlayer
     @Team 1
-    @Condition isPregameSetup == true
-    @Condition eventPlayer.isPlayerActive == true
+    @Condition groupedConditions(((isPregameSetup == true) and (eventPlayer.isPlayerActive == true)))
     
     if not isSpecialGameMode:
         #Invis start ring
@@ -64,10 +62,7 @@ rule "EFFECTS/TEXT":
 rule "PLAYER SELECTS/RESELECTS HERO":
     @Event eachPlayer
     @Team 1
-    @Condition isPregameSetup == true
-    @Condition startMenuSpacingAngle != 0
-    @Condition eventPlayer.pregameState == PregameState.SELECTING_HERO
-    @Condition eventPlayer.hasSpawned() == true
+    @Condition groupedConditions((((isPregameSetup == true) and (startMenuSpacingAngle != 0)) and ((eventPlayer.pregameState == PregameState.SELECTING_HERO) and (eventPlayer.hasSpawned() == true))))
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
     startRule(setPrematchTimer)
@@ -107,10 +102,7 @@ rule "PLAYER SELECTS/RESELECTS HERO":
 rule "PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY)":
     @Event eachPlayer
     @Team 1
-    @Condition isPregameSetup == true
-    @Condition eventPlayer.pregameState > PregameState.SELECTING_HERO
-    @Condition (eventPlayer.isHoldingButton(Button.JUMP) or eventPlayer.isHoldingButton(Button.CROUCH)) == true
-    @Condition eventPlayer.hasSpawned() == true
+    @Condition groupedConditions((((isPregameSetup == true) and (eventPlayer.pregameState > PregameState.SELECTING_HERO)) and (((eventPlayer.isHoldingButton(Button.JUMP) or eventPlayer.isHoldingButton(Button.CROUCH)) == true) and (eventPlayer.hasSpawned() == true))))
     
     #Player indicates they are ready
     if eventPlayer.isHoldingButton(Button.JUMP):
@@ -138,10 +130,7 @@ rule "PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY)":
 rule "PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)":
     @Event eachPlayer
     @Team 1
-    @Condition isVoting == true
-    @Condition isPregameSetup == true
-    @Condition eventPlayer.hasSpawned() == true
-    @Condition eventPlayer.isHoldingButton(Button.ULTIMATE) == true
+    @Condition groupedConditions((((isVoting == true) and (isPregameSetup == true)) and ((eventPlayer.hasSpawned() == true) and (eventPlayer.isHoldingButton(Button.ULTIMATE) == true))))
     
     #Update player voting status
     eventPlayer.isPregameVoting = true
@@ -155,10 +144,7 @@ rule "PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)":
 rule "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)":
     @Event eachPlayer
     @Team 1
-    @Condition isVoting == true
-    @Condition isPregameSetup == true
-    @Condition eventPlayer.hasSpawned() == true
-    @Condition eventPlayer.isHoldingButton(Button.ABILITY_1) == true
+    @Condition groupedConditions((((isVoting == true) and (isPregameSetup == true)) and ((eventPlayer.hasSpawned() == true) and (eventPlayer.isHoldingButton(Button.ABILITY_1) == true))))
     
     #Update player voting status
     eventPlayer.isPregameVoting = true
@@ -172,10 +158,7 @@ rule "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)":
 rule "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)":
     @Event eachPlayer
     @Team 1
-    @Condition isVoting == true
-    @Condition isPregameSetup == true
-    @Condition eventPlayer.hasSpawned() == true
-    @Condition eventPlayer.isHoldingButton(Button.ABILITY_2) == true
+    @Condition groupedConditions((((isVoting == true) and (isPregameSetup == true)) and ((eventPlayer.hasSpawned() == true) and (eventPlayer.isHoldingButton(Button.ABILITY_2) == true))))
     
     #Update player voting status
     eventPlayer.isPregameVoting = true
@@ -189,9 +172,7 @@ rule "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)":
 rule "PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)":
     @Event eachPlayer
     @Team 1
-    @Condition isPregameSetup == true
-    @Condition eventPlayer.hasSpawned() == true
-    @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
+    @Condition groupedConditions((((isPregameSetup == true) and (eventPlayer.hasSpawned() == true)) and (eventPlayer.isHoldingButton(Button.MELEE) == true)))
     
     #!define enhancementIdOffset tmp0
     enhancementIdOffset = 1 if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else len(enhancementOptionList) - 1
@@ -203,11 +184,7 @@ rule "PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)":
 rule "UPDATE PREGAME VOTING STATUS":
     @Event eachPlayer
     @Team 1
-    @Condition isPregameSetup == true
-    @Condition eventPlayer.isPregameVoting == true
-    @Condition eventPlayer.isHoldingButton(Button.ULTIMATE) == false
-    @Condition eventPlayer.isHoldingButton(Button.ABILITY_1) == false
-    @Condition eventPlayer.isHoldingButton(Button.ABILITY_2) == false
+    @Condition groupedConditions(((((isPregameSetup == true) and (eventPlayer.isPregameVoting == true)) and (eventPlayer.isHoldingButton(Button.ULTIMATE) == false)) and ((eventPlayer.isHoldingButton(Button.ABILITY_1) == false) and (eventPlayer.isHoldingButton(Button.ABILITY_2) == false))))
     
     startRule(setPrematchTimer)
     wait(2, Wait.ABORT_WHEN_FALSE)
@@ -218,10 +195,7 @@ rule "UPDATE PREGAME VOTING STATUS":
 rule "PREVENT PLAYERS FROM LEAVING START EARLY":
     @Event eachPlayer
     @Team 1
-    @Condition isPregameSetup == true
-    @Condition eventPlayer.hasSpawned() == true
-    @Condition eventPlayer.pregameState > PregameState.SELECTING_HERO
-    @Condition distance(eventPlayer, vect(eventPlayer.pregamePosition.x, eventPlayer.getPosition().y, eventPlayer.pregamePosition.z)) > 0.6
+    @Condition groupedConditions((((isPregameSetup == true) and (eventPlayer.hasSpawned() == true)) and ((eventPlayer.pregameState > PregameState.SELECTING_HERO) and (distance(eventPlayer, vect(eventPlayer.pregamePosition.x, eventPlayer.getPosition().y, eventPlayer.pregamePosition.z)) > 0.6))))
     
     wait(2, Wait.ABORT_WHEN_FALSE)
     if not isSpecialGameMode:

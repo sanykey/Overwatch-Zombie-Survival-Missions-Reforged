@@ -28,8 +28,7 @@ rule "DOOMFIST INVIS WHILE ULTING":
     @Event eachPlayer
     @Team 1
     @Hero doomfist
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.isUsingUltimate() == true
+    @Condition groupedConditions(((isGameplayActive == true) and (eventPlayer.isUsingUltimate() == true)))
     
     eventPlayer.invisibilityCount++
     waitUntil(not eventPlayer.isUsingUltimate(), Math.INFINITY)
@@ -39,9 +38,7 @@ rule "DOOMFIST INVIS WHILE ULTING":
 rule "MOIRA & VENTURE INVIS WHILE USING SKILL":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.isUsingAbility1() == true
-    @Condition eventPlayer.getHero() in [Hero.MOIRA, Hero.VENTURE] == true
+    @Condition groupedConditions((((isGameplayActive == true) and (eventPlayer.isUsingAbility1() == true)) and (eventPlayer.getHero() in [Hero.MOIRA, Hero.VENTURE] == true)))
     
     eventPlayer.invisibilityCount++
     waitUntil(not eventPlayer.isUsingAbility1(), Math.INFINITY)
@@ -52,8 +49,7 @@ rule "TRACER INVIS WHILE RECALLING":
     @Event eachPlayer
     @Team 1
     @Hero tracer
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.isUsingAbility2() == true
+    @Condition groupedConditions(((isGameplayActive == true) and (eventPlayer.isUsingAbility2() == true)))
     
     eventPlayer.invisibilityCount++
     waitUntil(not eventPlayer.isUsingAbility2(), Math.INFINITY)
@@ -64,8 +60,6 @@ rule "CASSIDY GRENADE HACK":
     @Event playerDealtDamage
     @Team 1
     @Hero cassidy
-    @Condition eventAbility == Button.ABILITY_2
-    @Condition victim.hasStatus(Status.HACKED) == false
-    @Condition victim != attacker
+    @Condition groupedConditions((((eventAbility == Button.ABILITY_2) and (victim.hasStatus(Status.HACKED) == false)) and (victim != attacker)))
     
     victim.setStatusEffect(attacker, Status.HACKED, 1)

@@ -5,12 +5,8 @@ subroutine bossReturn
 
 
 rule "SPAWN BOSS":
-    @Condition currentObjectiveType == ObjectiveType.BOSSES
-    @Condition isObjectiveComplete == false
-    @Condition not bossesStateList.any(lambda x: entityExists(x))
-    @Condition (getLivingPlayers(Team.2).any(lambda player: player.hasSpawned() and not player.botIsTeleporting and player.botTarget == null)) == true
+    @Condition groupedConditions(((((currentObjectiveType == ObjectiveType.BOSSES) and (isObjectiveComplete == false)) and (not bossesStateList.any(lambda x: entityExists(x)))) and (((getLivingPlayers(Team.2).any(lambda player: player.hasSpawned() and not player.botIsTeleporting and player.botTarget == null)) == true) and (len(botHeroList.filter(lambda x: getNumberOfHeroes(x, Team.2))) < (uniqueSkinCap - max(getNumberOfSlots(Team.1), getNumberOfPlayers(Team.1)))))))
     #Keeps amount of different bots within the max limit.
-    @Condition len(botHeroList.filter(lambda x: getNumberOfHeroes(x, Team.2))) < (uniqueSkinCap - max(getNumberOfSlots(Team.1), getNumberOfPlayers(Team.1)))
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     bossesStateList[0] = (getLivingPlayers(Team.2).filter(lambda player: player.hasSpawned() and not miniBossList[player] and not player.botIsTeleporting and player.botTarget == null))[0]
@@ -30,9 +26,7 @@ rule "SPAWN BOSS":
 rule "BOT BECOMES BOSS":
     @Event eachPlayer
     @Team 2
-    @Condition currentObjectiveType == ObjectiveType.BOSSES
-    @Condition isObjectiveComplete == false
-    @Condition eventPlayer in bossesStateList == true
+    @Condition groupedConditions((((currentObjectiveType == ObjectiveType.BOSSES) and (isObjectiveComplete == false)) and (eventPlayer in bossesStateList == true)))
     
     miniBossList.remove(eventPlayer)
     if eventPlayer.botIsAttached:
@@ -87,13 +81,7 @@ rule "BOT BECOMES BOSS":
 rule "BOSS STUCK":
     @Event eachPlayer
     @Team 2
-    @Condition currentObjectiveType == ObjectiveType.BOSSES
-    @Condition eventPlayer.botIsWallCollisionEnabled == true
-    @Condition eventPlayer.botIsWallPhaseAllowed == true
-    @Condition eventPlayer.botTarget != null
-    @Condition eventPlayer.isCrouching() == false
-    @Condition eventPlayer in bossesStateList == true
-    @Condition distance(eventPlayer, eventPlayer.getEyePosition()) < bossesStateList[1] - 0.25
+    @Condition groupedConditions(((((currentObjectiveType == ObjectiveType.BOSSES) and (eventPlayer.botIsWallCollisionEnabled == true)) and ((eventPlayer.botIsWallPhaseAllowed == true) and (eventPlayer.botTarget != null))) and (((eventPlayer.isCrouching() == false) and (eventPlayer in bossesStateList == true)) and (distance(eventPlayer, eventPlayer.getEyePosition()) < bossesStateList[1] - 0.25))))
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.botIsWallCollisionEnabled = false
@@ -108,9 +96,7 @@ rule "BOSS STUCK":
 rule "BOSS HEALTH CONTROL (ALL BOSS OBJECTIVES)":
     @Event playerTookDamage
     @Team 2
-    @Condition eventDamage > 1000
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer in bossesStateList == true
+    @Condition groupedConditions((((eventDamage > 1000) and (eventPlayer.isAlive() == true)) and (eventPlayer in bossesStateList == true)))
     
     eventPlayer.botBossHealth = eventPlayer.getHealth() + eventDamage - 1000
     applyBotBossHealth()
@@ -119,8 +105,7 @@ rule "BOSS HEALTH CONTROL (ALL BOSS OBJECTIVES)":
 rule "BOSS DIES (ALL BOSS OBJECTIVES)":
     @Event playerDied
     @Team 2
-    @Condition eventPlayer.isDead() == true
-    @Condition eventPlayer in bossesStateList == true
+    @Condition groupedConditions(((eventPlayer.isDead() == true) and (eventPlayer in bossesStateList == true)))
     
     if eventWasEnvironment:
         eventPlayer.stopAllDamageOverTime()
@@ -170,9 +155,7 @@ rule "BOSS DIES (ALL BOSS OBJECTIVES)":
 rule "BOSS TAKES KNOCKBACK":
     @Event playerReceivedKnockback
     @Team 2
-    @Condition currentObjectiveType == ObjectiveType.BOSSES
-    @Condition eventPlayer.botIsWallCollisionEnabled == false
-    @Condition eventPlayer in bossesStateList == true
+    @Condition groupedConditions((((currentObjectiveType == ObjectiveType.BOSSES) and (eventPlayer.botIsWallCollisionEnabled == false)) and (eventPlayer in bossesStateList == true)))
     
     eventPlayer.enableEnvironmentCollision()
     eventPlayer.botIsWallCollisionEnabled = true
@@ -181,8 +164,7 @@ rule "BOSS TAKES KNOCKBACK":
 rule "BOSS TELEPORT TO TARGET IF NOT USED":
     @Event eachPlayer
     @Team 2
-    @Condition eventPlayer in bossesStateList == true
-    @Condition eventPlayer.hasStatus(Status.ROOTED) != true
+    @Condition groupedConditions(((eventPlayer in bossesStateList == true) and (eventPlayer.hasStatus(Status.ROOTED) != true)))
     
     chaseAtRate(eventPlayer.botReturnTime, 15, 1)
     waitUntil(eventPlayer.botReturnTime >= 14 or eventPlayer.botTarget != null, Math.INFINITY)

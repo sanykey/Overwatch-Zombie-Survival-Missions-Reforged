@@ -2,8 +2,7 @@
 
 
 rule "EFFECTS/TEXTS":
-    @Condition isGameInProgress() == true
-    @Condition isPregameSetup != true
+    @Condition groupedConditions(((isGameInProgress() == true) and (isPregameSetup != true)))
     
     wait(1)
     #Objective description and match timer
@@ -19,10 +18,8 @@ rule "EFFECTS/TEXTS":
 
 
 rule "ATTACK SPAWN ROOM CONTROL":
-    @Condition isPregameSetup != true
+    @Condition groupedConditions((((isPregameSetup != true) and (isSpecialGameMode != true)) and (playerTargetList.any(lambda x: distance(x, activeAttackSpawnRoom) < 45) == true)))
     #Does not apply if game mode is special mode
-    @Condition isSpecialGameMode != true
-    @Condition playerTargetList.any(lambda x: distance(x, activeAttackSpawnRoom) < 45) == true
     
     spawnRoomIndex = (spawnRoomIndex + 1) % len(attackSpawnRooms)
     #Make sure players are clear of test spawn room before activating
@@ -35,8 +32,7 @@ rule "ATTACK SPAWN ROOM CONTROL":
 
 
 rule "PREVENT MATCH TIME FROM UNPAUSING":
-    @Condition isGameplayActive == true
-    @Condition getMatchTime() < matchEndTime
+    @Condition groupedConditions(((isGameplayActive == true) and (getMatchTime() < matchEndTime)))
     
     pauseMatchTime()
     setMatchTime(matchEndTime)
@@ -46,10 +42,7 @@ rule "PREVENT MATCH TIME FROM UNPAUSING":
 
 
 rule "TRIGGER OVERTIME MUSIC":
-    @Condition isGameplayActive == true
-    @Condition isOvertimeActive == false
-    @Condition getMatchTime() < matchEndTime + 3
-    @Condition getLivingPlayers(Team.2).any(lambda player: player.botTarget == null and not player in bossStateList)
+    @Condition groupedConditions((((isGameplayActive == true) and (isOvertimeActive == false)) and ((getMatchTime() < matchEndTime + 3) and (getLivingPlayers(Team.2).any(lambda player: player.botTarget == null and not player in bossStateList)))))
     
     enableMusic()
     if not isSpecialGameMode:
@@ -58,8 +51,7 @@ rule "TRIGGER OVERTIME MUSIC":
 
 
 rule "ZOMBIE SHUFFLE":
-    @Condition isGameplayActive == true
-    @Condition zombieSetting == 4
+    @Condition groupedConditions(((isGameplayActive == true) and (zombieSetting == 4)))
     
     #Bot respawn probablities
     botSpawnRateList = random.shuffle(botSpawnRateList)
@@ -89,9 +81,7 @@ rule "SWARM SHOOTOUT":
 rule "RANDOM ABILITIES":
     @Event eachPlayer
     @Team 2
-    @Condition (challengeSetting in [Challenge.RANDOM_ABILITIES, Challenge.PANDORAS_BOX] or isSmolderEventActive) == true
-    @Condition eventPlayer in bossStateList != true
-    @Condition isPregameSetup == false
+    @Condition groupedConditions(((((challengeSetting in [Challenge.RANDOM_ABILITIES, Challenge.PANDORAS_BOX] or isSmolderEventActive) == true) and (eventPlayer in bossStateList != true)) and (isPregameSetup == false)))
     
     wait(random.uniform(2, 8))
     if eventPlayer.getHero() in [Hero.MERCY]:
@@ -121,8 +111,7 @@ rule "PLAYER LEAVES THE GAME":
 
 
 rule "OBJECTIVE COMPLETE":
-    @Condition isGameplayActive == true
-    @Condition isObjectiveComplete == true
+    @Condition groupedConditions(((isGameplayActive == true) and (isObjectiveComplete == true)))
     
     startRule(objectivesManagement)
     (getDeadPlayers(Team.1).filter(lambda player: player.rescueTimeRemaining < 50)).rescueTimeRemaining += 10

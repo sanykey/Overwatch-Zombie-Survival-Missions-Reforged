@@ -87,11 +87,8 @@ rule "PREGAME QUICK TIPS FOR PLAYERS":
 
 
 rule "SPAWN BOTS":
-    @Condition isGameplayActive == true
-    @Condition getAverageServerLoad() <= createWorkshopSettingInt("General", "Spawn Zombies When Server Load Average is Less Than", 180, 100, 255, 2)
+    @Condition groupedConditions((((isGameplayActive == true) and (getAverageServerLoad() <= createWorkshopSettingInt("General", "Spawn Zombies When Server Load Average is Less Than", 180, 100, 255, 2))) and ((getNumberOfPlayers(Team.ALL) < 24) and ((botSpawnTimeList != [] and botSpawnTimeList[0] <= 0 or len(botSpawnTimeList) + getNumberOfPlayers(Team.2) < numberOfBots) == true))))
     #@Condition getNumberOfPlayers(Team.2) < numberOfBots
-    @Condition getNumberOfPlayers(Team.ALL) < 24
-    @Condition (botSpawnTimeList != [] and botSpawnTimeList[0] <= 0 or len(botSpawnTimeList) + getNumberOfPlayers(Team.2) < numberOfBots) == true
     
     botHeroRandomizationMacro()
     if botSpawnTimeList != [] and botSpawnTimeList[0] <= 0:
@@ -169,9 +166,8 @@ rule "SKIP ASSEMBLING HEROES":
 
 
 rule "PREGAME SPAWN ROOM ROTATION":
-    @Condition isPregameSetup == true
+    @Condition groupedConditions(((isPregameSetup == true) and (isSpecialGameMode != true)))
     #Does not apply if game mode is special gamemode
-    @Condition isSpecialGameMode != true
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
     createDummy(Hero.ANA, Team.2, -1, 500 * Vector.UP)
@@ -261,9 +257,7 @@ rule "VARIABLE ASSIGNMENT":
 
 
 rule "START GAME":
-    @Condition isPregameSetup != false
-    @Condition getMatchTime() <= 0.1
-    @Condition getPlayers(Team.1).any(lambda player: player.hasSpawned())
+    @Condition groupedConditions((((isPregameSetup != false) and (getMatchTime() <= 0.1)) and (getPlayers(Team.1).any(lambda player: player.hasSpawned()))))
     
     if isInSetup():
         setMatchTime(0)

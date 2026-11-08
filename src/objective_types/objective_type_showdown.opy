@@ -3,15 +3,9 @@
 
 rule "PLAYERS ON OBJECTIVE CONTROL":
     @Event eachPlayer
-    @Condition currentObjectiveType == ObjectiveType.SHOWDOWN
-    @Condition len(objectivePositionList) > 1
-    @Condition eventPlayer.invisibilityCount != true
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.hasSpawned() == true
+    @Condition groupedConditions(((((currentObjectiveType == ObjectiveType.SHOWDOWN) and (len(objectivePositionList) > 1)) and ((eventPlayer.invisibilityCount != true) and (eventPlayer.isAlive() == true))) and (((eventPlayer.hasSpawned() == true) and (abs(currentObjectivePosition.y - eventPlayer.getPosition().y) < 12)) and (distance(vect(currentObjectivePosition.x, eventPlayer.getPosition().y, currentObjectivePosition.z), eventPlayer.getPosition()) < objectiveRad))))
     #Objective Cylinder Height As Above, So Below
-    @Condition abs(currentObjectivePosition.y - eventPlayer.getPosition().y) < 12
     #Objective Cylinder Radius
-    @Condition distance(vect(currentObjectivePosition.x, eventPlayer.getPosition().y, currentObjectivePosition.z), eventPlayer.getPosition()) < objectiveRad
     
     if eventPlayer.isDummy():
         if not eventPlayer in showdownContestingZombieList:
@@ -27,10 +21,7 @@ rule "PLAYERS ON OBJECTIVE CONTROL":
 
 
 rule "INCREASE OBJECTIVE CAPTURE PERCENTAGE":
-    @Condition currentObjectiveType == ObjectiveType.SHOWDOWN
-    @Condition len(objectivePositionList) > 1
-    @Condition objectivePlayerList != []
-    @Condition isObjectiveComplete == false
+    @Condition groupedConditions((((currentObjectiveType == ObjectiveType.SHOWDOWN) and (len(objectivePositionList) > 1)) and ((objectivePlayerList != []) and (isObjectiveComplete == false))))
     
     #Proceed to next objective
     if showdownCapturePercent >= 100:
@@ -57,11 +48,7 @@ rule "INCREASE OBJECTIVE CAPTURE PERCENTAGE":
 
 
 rule "DECREASES CAPTURE PERCENTAGE":
-    @Condition currentObjectiveType == ObjectiveType.SHOWDOWN
-    @Condition len(objectivePositionList) > 1
-    @Condition showdownContestingZombieList != []
-    @Condition isObjectiveComplete == false
-    @Condition showdownCapturePercent > showdownNextCheckpoint - 25
+    @Condition groupedConditions(((((currentObjectiveType == ObjectiveType.SHOWDOWN) and (len(objectivePositionList) > 1)) and (showdownContestingZombieList != [])) and ((isObjectiveComplete == false) and (showdownCapturePercent > showdownNextCheckpoint - 25))))
     
     wait(1, Wait.RESTART_WHEN_TRUE)
     if currentObjectiveType != ObjectiveType.SHOWDOWN:

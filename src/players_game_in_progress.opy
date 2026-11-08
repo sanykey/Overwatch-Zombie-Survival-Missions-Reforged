@@ -33,10 +33,7 @@ macro playerObjectiveEntityManagementMacro():
 rule "PLAYER INITIALIZATION":
     @Event eachPlayer
     @Team 1
-    @Condition isGameInProgress() == true
-    @Condition isPregameSetup != true
-    @Condition eventPlayer.hasSpawned() == true
-    @Condition eventPlayer.isDummy() == false
+    @Condition groupedConditions((((isGameInProgress() == true) and (isPregameSetup != true)) and ((eventPlayer.hasSpawned() == true) and (eventPlayer.isDummy() == false))))
     
     eventPlayer.initialMaxHealth = eventPlayer.getMaxHealth()
     if eventPlayer.enhancementId == Enhancement.BULKING_SEASON:
@@ -116,12 +113,7 @@ rule "PLAYER INITIALIZATION":
 rule "EFFECTS/TEXTS":
     @Event eachPlayer
     @Team 1
-    @Condition isGameInProgress() == true
-    @Condition eventPlayer.isPlayerActive == true
-    @Condition eventPlayer.hasSpawned() == true
-    @Condition isPregameSetup != true
-    @Condition eventPlayer.isDummy() == false
-    @Condition eventPlayer.isHeroSwitchRespawn == false
+    @Condition groupedConditions(((((isGameInProgress() == true) and (eventPlayer.isPlayerActive == true)) and (eventPlayer.hasSpawned() == true)) and (((isPregameSetup != true) and (eventPlayer.isDummy() == false)) and (eventPlayer.isHeroSwitchRespawn == false))))
     
     wait(0.25)
     #Infected aura
@@ -155,8 +147,7 @@ rule "EFFECTS/TEXTS":
 rule "PLAYER GETS DOWNED":
     @Event playerDied
     @Team 1
-    @Condition eventPlayer.isPlayerActive == true
-    @Condition eventPlayer.isDummy() == false
+    @Condition groupedConditions(((eventPlayer.isPlayerActive == true) and (eventPlayer.isDummy() == false)))
     
     wait(0.16)
     eventPlayer.reviveTimeRemaining = eventPlayer.reviveDuration / (2 if challengeSetting == Challenge.SWARM_SHOOTOUT else 1)
@@ -175,11 +166,7 @@ rule "PLAYER GETS DOWNED":
 rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
     @Event eachPlayer
     @Team 1
-    @Condition eventPlayer.isDead() == true
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.isPlayerActive == true
-    @Condition eventPlayer.rescueTimeRemaining > 0
-    @Condition eventPlayer.isDummy() == false
+    @Condition groupedConditions(((((eventPlayer.isDead() == true) and (isGameplayActive == true)) and (eventPlayer.isPlayerActive == true)) and ((eventPlayer.rescueTimeRemaining > 0) and (eventPlayer.isDummy() == false))))
     
     # Save row in ReconnectField order.
     playerStatsList[eventPlayer.reconnectUserIndex] = [ReconnectStatus.DOWNED, eventPlayer.rescueTimeRemaining, eventPlayer.reviveTimeRemaining, eventPlayer.reviveDuration, eventPlayer.getPosition()]
@@ -270,9 +257,7 @@ rule "PLAYER PICKS UP HEALTH PACK":
 rule "PLAYER CLEARS DAMAGE OVER TIME":
     @Event eachPlayer
     @Team 1
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isDummy() == false
-    @Condition (eventPlayer.hasStatus(Status.PHASED_OUT) or eventPlayer.hasStatus(Status.INVINCIBLE)) == true
+    @Condition groupedConditions((((eventPlayer.isAlive() == true) and (eventPlayer.isDummy() == false)) and ((eventPlayer.hasStatus(Status.PHASED_OUT) or eventPlayer.hasStatus(Status.INVINCIBLE)) == true)))
     
     eventPlayer.stopAllDamageOverTime()
     eventPlayer.clearStatusEffect(Status.BURNING)
@@ -299,17 +284,7 @@ rule "PLAYER INFECTION DAMAGE MANAGEMENT":
 rule "PLAYER AFK":
     @Event eachPlayer
     @Team 1
-    @Condition isPregameSetup != true
-    @Condition createWorkshopSettingBool("General", "Allow players to go AFK", true, 3) == true
-    @Condition eventPlayer.isPlayerActive == true
-    @Condition eventPlayer.isAttached != true
-    @Condition not magnitude(eventPlayer.getThrottle())
-    @Condition eventPlayer.isDummy() == false
-    @Condition eventPlayer.hasSpawned() == true
-    @Condition eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) == false
-    @Condition eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) == false
-    @Condition eventPlayer in objectivePlayerList != true
-    @Condition eventPlayer.isCommunicatingVoiceline() == false
+    @Condition groupedConditions((((((isPregameSetup != true) and (createWorkshopSettingBool("General", "Allow players to go AFK", true, 3) == true)) and (eventPlayer.isPlayerActive == true)) and (((eventPlayer.isAttached != true) and (not magnitude(eventPlayer.getThrottle()))) and (eventPlayer.isDummy() == false))) and ((((eventPlayer.hasSpawned() == true) and (eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) == false)) and (eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) == false)) and ((eventPlayer in objectivePlayerList != true) and (eventPlayer.isCommunicatingVoiceline() == false)))))
     
     if not eventPlayer.isAfk:
         wait(45, Wait.ABORT_WHEN_FALSE)
@@ -333,9 +308,7 @@ rule "PLAYER AFK":
 rule "PLAYER SWITCHES HERO":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.isHoldingButton(Button.RELOAD) == true
-    @Condition eventPlayer.isAlive() == true
+    @Condition groupedConditions((((isGameplayActive == true) and (eventPlayer.isHoldingButton(Button.RELOAD) == true)) and (eventPlayer.isAlive() == true)))
     
     wait(5, Wait.ABORT_WHEN_FALSE)
     excludeCurrentHeroFromSelection()
@@ -349,10 +322,7 @@ rule "PLAYER SWITCHES HERO":
 rule "PLAYER AUTOMATIC RELOAD":
     @Event eachPlayer
     @Team 1
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.getAmmo() == 0
-    @Condition eventPlayer.getMaxAmmo() != 0
-    @Condition eventPlayer.getHero() != Hero.ILLARI
+    @Condition groupedConditions((((eventPlayer.isAlive() == true) and (eventPlayer.getAmmo() == 0)) and ((eventPlayer.getMaxAmmo() != 0) and (eventPlayer.getHero() != Hero.ILLARI))))
     
     wait(3, Wait.ABORT_WHEN_FALSE)
     eventPlayer.setAmmo(0, eventPlayer.getMaxAmmo())
@@ -361,9 +331,7 @@ rule "PLAYER AUTOMATIC RELOAD":
 
 rule "OBJECTIVE CHANGES AND PLAYER ENTITIES UPDATE":
     @Event eachPlayer
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.hasSpawned() == true
-    @Condition (eventPlayer.objectiveTypeSnapshot != objectiveValue or len(objectivePositionList) == 1) == true
+    @Condition groupedConditions((((isGameplayActive == true) and (eventPlayer.hasSpawned() == true)) and ((eventPlayer.objectiveTypeSnapshot != objectiveValue or len(objectivePositionList) == 1) == true)))
     
     playerObjectiveEntityManagementMacro()
 
@@ -371,12 +339,7 @@ rule "OBJECTIVE CHANGES AND PLAYER ENTITIES UPDATE":
 rule "PLAYER TARGET (ADD)":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.isAfk != true
-    @Condition eventPlayer.hasSpawned() == true
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer in playerTargetList == false
-    @Condition eventPlayer.isDummy() == false
+    @Condition groupedConditions(((((isGameplayActive == true) and (eventPlayer.isAfk != true)) and (eventPlayer.hasSpawned() == true)) and (((eventPlayer.isAlive() == true) and (eventPlayer in playerTargetList == false)) and (eventPlayer.isDummy() == false))))
     
     wait(0.032, Wait.ABORT_WHEN_FALSE)
     playerTargetList.append(eventPlayer)
@@ -387,9 +350,7 @@ rule "PLAYER TARGET (ADD)":
 rule "PLAYER TARGET (REMOVE)":
     @Event eachPlayer
     @Team 1
-    @Condition (eventPlayer.isDead() or not eventPlayer.hasSpawned()) == true
-    @Condition eventPlayer in playerTargetList == true
-    @Condition eventPlayer.isDummy() == false
+    @Condition groupedConditions(((((eventPlayer.isDead() or not eventPlayer.hasSpawned()) == true) and (eventPlayer in playerTargetList == true)) and (eventPlayer.isDummy() == false)))
     
     wait(0.032, Wait.ABORT_WHEN_FALSE)
     playerTargetList.remove(eventPlayer)

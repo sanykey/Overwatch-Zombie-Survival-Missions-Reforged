@@ -16,8 +16,7 @@ macro powerUpAssignmentMacro():
 
 
 rule "POWER UP EFFECT/TEXT MANAGEMENT":
-    @Condition isGameplayActive == true
-    @Condition len(supplyPowerUpPositionList) > len(supplyPowerUpEffectIdList)
+    @Condition groupedConditions(((isGameplayActive == true) and (len(supplyPowerUpPositionList) > len(supplyPowerUpEffectIdList))))
     
     powerUpAssignmentMacro()
     supplyPowerUpEffectIdList.append(getLastCreatedEntity())
@@ -91,9 +90,7 @@ rule "EFFECT/TEXT (PERMANENT)":
 rule "PLAYER DROPS POWER UP (MANUAL)":
     @Event eachPlayer
     @Team 1
-    @Condition eventPlayer.isHoldingButton(Button.RELOAD) == true
-    @Condition (isGameplayActive and eventPlayer.isAlive()) == true
-    @Condition (eventPlayer.powerUpItemId != null or (eventPlayer.augmentId == Augment.SCAVENGER and len(eventPlayer.augmentScavengerBackpack) > null)) == true
+    @Condition groupedConditions((((eventPlayer.isHoldingButton(Button.RELOAD) == true) and ((isGameplayActive and eventPlayer.isAlive()) == true)) and ((eventPlayer.powerUpItemId != null or (eventPlayer.augmentId == Augment.SCAVENGER and len(eventPlayer.augmentScavengerBackpack) > null)) == true)))
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     dropCarriedPowerUps()

@@ -3,8 +3,7 @@
 
 rule "MODIFY KILL ZONE SCORE":
     @Event playerDealtFinalBlow
-    @Condition currentObjectiveType == ObjectiveType.KILL_ZONE
-    @Condition playerTargetList.concat(victim).any(lambda x: distance(x, killZoneCenter) < objectiveRad) == true
+    @Condition groupedConditions(((currentObjectiveType == ObjectiveType.KILL_ZONE) and (playerTargetList.concat(victim).any(lambda x: distance(x, killZoneCenter) < objectiveRad) == true)))
     
     if distance(eventPlayer, killZoneCenter) < objectiveRad or distance(victim, killZoneCenter) < objectiveRad:
         victim.botRespawnDelay = 2
