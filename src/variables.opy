@@ -172,12 +172,10 @@ globalvar phaseSlot5  # Zombie votes (startup/global/player menu) -> resource-ty
 #!define zombieVoteList phaseSlot5
 #!define biomorphingQueuedTypeList phaseSlot5
 
-globalvar phaseSlot6  # Menu glitch text -> extraction flight destination; WIN/LOSS CONDITIONS sets it before evacSurvivorList.
-#!define pregameGlitchText phaseSlot6
+globalvar phaseSlot6  # Extraction flight destination; WIN/LOSS CONDITIONS sets it before evacSurvivorList.
 #!define extractionFlightDestination phaseSlot6
 
-globalvar phaseSlot7  # Menu glitch flag -> extraction flight speed (2/10/50); menu waits abort when isPregameSetup is cleared.
-#!define isPregameGlitchActive phaseSlot7
+globalvar phaseSlot7  # Extraction flight speed (2/10/50); WIN/LOSS CONDITIONS initializes it before evacSurvivorList.
 #!define extractionFlightSpeed phaseSlot7
 
 globalvar phaseSlot8  # Mixed objective pool (startup/generation) -> nukeMap explosion counter, on victory or defeat AFTER generation.

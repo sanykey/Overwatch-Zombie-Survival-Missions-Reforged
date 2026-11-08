@@ -105,8 +105,8 @@ rule "EFFECTS/TEXTS":
             "Challenge: None",
             "Challenge: Swarm Shootout",
             "Challenge: Random Abilities",
-            pregameGlitchText if isPregameGlitchActive else "Challenge: Insanity",
-            pregameGlitchText if isPregameGlitchActive else "Challenge: Pandora's Box"
+            "Challenge: Insanity",
+            "Challenge: Pandora's Box"
         ][localPlayer.pregameChallengeVote],
         [
             "",
@@ -119,7 +119,7 @@ rule "EFFECTS/TEXTS":
         "Change Vote (Press [{0}])".format(inputBindingString(Button.ULTIMATE)) if isVoting or localPlayer.pregameChallengeVote == Challenge.NO_PREFERENCE else [],
         HudPosition.ACTUALLY_LEFT,
         0,
-        [Color.AQUA, Color.YELLOW, Color.LIME_GREEN, Color.ORANGE, Color.WHITE if isPregameGlitchActive else Color.TURQUOISE, Color.GRAY if isPregameGlitchActive else Color.PURPLE][localPlayer.pregameChallengeVote],
+        [Color.AQUA, Color.YELLOW, Color.LIME_GREEN, Color.ORANGE, Color.TURQUOISE, Color.PURPLE][localPlayer.pregameChallengeVote],
         [Color.AQUA, null, Color.LIME_GREEN, Color.ORANGE, Color.WHITE, Color.WHITE][localPlayer.pregameChallengeVote],
         [Color.AQUA, Color.YELLOW, Color.LIME_GREEN, Color.ORANGE, Color.WHITE, Color.WHITE][localPlayer.pregameChallengeVote],
         HudReeval.VISIBILITY_STRING_AND_COLOR
@@ -225,17 +225,6 @@ rule "EFFECTS/TEXTS":
         startMenuEnhancementColorList[localPlayer.enhancementId],
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
-
-
-rule "SPECIAL EFFECT CONTROLS":
-    @Condition isPregameSetup == true
-    
-    pregameGlitchText = ["alglChene oteV: KaMeNrldEr", "You won't win", "Don't even try it"][random.randint(1, 3) - 1]
-    isPregameGlitchActive = true
-    wait(random.uniform(0.063, 0.325), Wait.ABORT_WHEN_FALSE)
-    isPregameGlitchActive = false
-    wait(random.uniform(0.325, 1.5), Wait.ABORT_WHEN_FALSE)
-    loop()
 
 
 rule "END VOTING":

@@ -1,9 +1,9 @@
-/* Element count: (total 29403)
+/* Element count: (total 29332)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1535: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
-  860: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
+  820: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
   481: rule "GRAPNEL LAUNCHER" (src/augments.opy)
   434: rule "SKIP ASSEMBLING HEROES" (src/global_startup.opy)
   412: rule "PLAYERS REPAIR TERMINALS" (src/objective_types/objective_type_satellite_uplink.opy)
@@ -196,7 +196,6 @@
    33: rule "SMOLDER ACTIVATES FROM DAMAGE" (src/zombie_types.opy)
    33: rule "PROTECTOR (KIRIKO) USES CLEANSE" (src/zombie_types.opy)
    32: rule "OVERCHARGE BONUS DAMAGE" (src/enhancements.opy)
-   31: rule "SPECIAL EFFECT CONTROLS" (src/global_start_menu.opy)
    31: rule "PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)" (src/player_start_menu.opy)
    30: rule "OVERCHARGE CLEARS CHARGE" (src/enhancements.opy)
    29: rule "BOLT STRIKE CLEARS CHARGE" (src/enhancements.opy)
@@ -2154,7 +2153,7 @@ rule ("GLOBAL MENU INITIALIZATION") {
     }
 }
 
-//860 elements
+//820 elements
 rule ("EFFECTS/TEXTS") {
     event {
         Ongoing - Global;
@@ -2177,7 +2176,7 @@ rule ("EFFECTS/TEXTS") {
         "Cancel In World Text"
         Create In-World Text(Filtered Array(All Players(All Teams), And(Compare((Current Array Element).pregameState, ==, 2), Compare(Match Time, >, 2.5))), Custom String("{0}fgFF3131FF>Cancel [{1}]{0}/fg>", Global.__holygrail__, Input Binding String(Button(Crouch))), Add((Local Player).team1PositionSlot, Multiply(-0.6, Up)), True, Do Not Clip, Visible To Position String and Color, Color(White), Visible Never); // 32 elements
         "Do not capture vote indices or dynamic text/colors with evalOnce.\nEmpty descriptions must be strings: null selected from an array displays as 0.\nTeam 1 vote IDs are initialized to valid menu entries before players use the menu.\nChallenge"
-        Create HUD Text(All Players(Team 1), Value In Array(Array(Custom String("Challenge: No Preference"), Custom String("Challenge: None"), Custom String("Challenge: Swarm Shootout"), Custom String("Challenge: Random Abilities"), If-Then-Else(Global.phaseSlot7, Global.phaseSlot6, Custom String("Challenge: Insanity")), If-Then-Else(Global.phaseSlot7, Global.phaseSlot6, Custom String("Challenge: Pandora's Box"))), (Local Player).actorTeamSlot3), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Char In String(Empty Array, False), Custom String("Zombies fire their guns!"), Custom String("Non-boss zombies use abilities"), Custom String("Faster, stronger, and deadlier"), Custom String("All challenges at Once!")), (Local Player).actorTeamSlot3), Custom String("                                                ")), If-Then-Else(Or(Global.isVoting, Compare((Local Player).actorTeamSlot3, ==, Null)), Custom String("Change Vote (Press [{0}])", Input Binding String(Button(Ultimate))), Empty Array), Left, False, Value In Array(Array(Color(Aqua), Color(Yellow), Color(Lime Green), Color(Orange), If-Then-Else(Global.phaseSlot7, Color(White), Color(Turquoise)), If-Then-Else(Global.phaseSlot7, Color(Gray), Color(Purple))), (Local Player).actorTeamSlot3), Value In Array(Array(Color(Aqua), Null, Color(Lime Green), Color(Orange), Color(White), Color(White)), (Local Player).actorTeamSlot3), Value In Array(Array(Color(Aqua), Color(Yellow), Color(Lime Green), Color(Orange), Color(White), Color(White)), (Local Player).actorTeamSlot3), Visible To String and Color, Default Visibility); // 164 elements
+        Create HUD Text(All Players(Team 1), Value In Array(String Split(Custom String("Challenge: No Preference0Challenge: None0Challenge: Swarm Shootout0Challenge: Random Abilities0Challenge: Insanity0Challenge:{0}", Custom String(" Pandora's Box")), First Of(Null)), (Local Player).actorTeamSlot3), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Char In String(Empty Array, False), Custom String("Zombies fire their guns!"), Custom String("Non-boss zombies use abilities"), Custom String("Faster, stronger, and deadlier"), Custom String("All challenges at Once!")), (Local Player).actorTeamSlot3), Custom String("                                                ")), If-Then-Else(Or(Global.isVoting, Compare((Local Player).actorTeamSlot3, ==, Null)), Custom String("Change Vote (Press [{0}])", Input Binding String(Button(Ultimate))), Empty Array), Left, False, Value In Array(Array(Color(Aqua), Color(Yellow), Color(Lime Green), Color(Orange), Color(Turquoise), Color(Purple)), (Local Player).actorTeamSlot3), Value In Array(Array(Color(Aqua), Null, Color(Lime Green), Color(Orange), Color(White), Color(White)), (Local Player).actorTeamSlot3), Value In Array(Array(Color(Aqua), Color(Yellow), Color(Lime Green), Color(Orange), Color(White), Color(White)), (Local Player).actorTeamSlot3), Visible To String and Color, Default Visibility); // 124 elements
         "Zombie Mode"
         Set Global Variable(phaseSlot0, Array(Color(Aqua), Color(Orange), Color(Red), Color(Purple), Color(Lime Green), Color(Blue), Color(Gray))); // 16 elements
         Create HUD Text(All Players(Team 1), Value In Array(String Split(Custom String("Zombie Mode: No Preference0Zombie Mode: All Zombies0Zombie Mode: New Blood0Zombie Mode: What'll it be?0Zombie Mode: Zombie Sh{0}", Custom String("uffle0Zombie Mode: Dinner Rush!0Zombie Mode: Ham N' Hammer!")), First Of(Null)), (Local Player).menuTradeItemSlot), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Custom String("Normal game featuring all zombie types"), Custom String("The 13 most recent zombie types will spawn"), Custom String("All zombie types have equal spawn rates"), Custom String("The zombie spawn rates twist and turn with wild abandon!"), Custom String("Only zombies with mobility abilities will spawn"), Custom String("Only Reinhardt {0} and Wrecking Ball {1} zombies will spawn", Hero Icon String(Hero(Reinhardt)), Hero Icon String(Hero(Wrecking Ball)))), (Local Player).menuTradeItemSlot), Custom String("                                                ")), If-Then-Else(Or(Global.isVoting, Compare((Local Player).menuTradeItemSlot, ==, Null)), Custom String("Change Vote (Press [{0}])", Input Binding String(Button(Ability 1))), Empty Array), Left, True, Value In Array(Global.phaseSlot0, (Local Player).menuTradeItemSlot), Value In Array(Global.phaseSlot0, (Local Player).menuTradeItemSlot), Value In Array(Global.phaseSlot0, (Local Player).menuTradeItemSlot), Visible To String and Color, Default Visibility); // 101 elements
@@ -2187,24 +2186,6 @@ rule ("EFFECTS/TEXTS") {
         "Enhancement"
         Set Global Variable(phaseSlot2, Array(Color(Aqua), Color(Red), Color(Gray), Color(Orange), Color(Green), Color(Gray), Color(White), Color(Purple), Color(Blue), Color(Turquoise), Color(Lime Green), Color(Purple), Color(Yellow))); // 28 elements
         Create HUD Text(All Players(Team 1), Custom String("Enhancement: {0}{1}", Value In Array(String Split(Custom String("No Preference0Brain Killer 0Zombie Hybrid 0Pyrotechnic 0Plague Doctor 0Born to Battle 0Charge Battery 0Hitchhiker 0P.U.P. 0Ov{0}", Custom String("ercharge 0Bulking Season 0Dead Weight 0Bolt Strike ")), First Of(Null)), (Local Player).enhancementId), If-Then-Else(Compare((Local Player).enhancementId, >, Null), Value In Array(Global.phaseSlot9, (Local Player).enhancementId), Char In String(Empty Array, False))), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Custom String("Critical hits do more damage"), Custom String("Get infected faster, and convert it to explosive damage"), Custom String("Dealing damage, within 15 meters, sets enemies on fire"), Custom String("Deal 30% more healing, plus another 25% to infected players while reducing their infection level"), Custom String("Final blows grant a cooldown reset on the next ability use, storing up to 2 charges"), Custom String("Survivor can place a battery that gives ultimate charge"), Custom String("Survivor can attach to a teammate and fuse their health."), Custom String("Survivor is equipped with an autonomous friendly droid"), Custom String("Store healing / 3 incl. packs, +10 per assist; uncapped. Hold Melee: spend up to 100 for bonus damage on hits for 0.3s"), Custom String("Kills and damage participation grant +0.5% Max Life and +0.5% Hero Size per stack (caps: 200% Life, 1.35x size). Lose half on{0}", Custom String(" death")), Custom String("Interact grabs/throws non-bosses within 4m: CC except Rooted or <20% HP"), Custom String("Chain to 2 visible zombies within 10m: 25% damage, max 20 each. Bank 200 chain damage; hold Melee: +60 damage and stun 2s on {0}", Custom String("hits for 0.3s"))), (Local Player).enhancementId), Custom String("                                                ")), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Melee))), Left, 3, Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Visible To String and Color, Default Visibility); // 143 elements
-    }
-}
-
-//31 elements
-rule ("SPECIAL EFFECT CONTROLS") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.isPregameSetup == True; // 2 elements
-    }
-    actions {
-        Set Global Variable(phaseSlot6, Value In Array(String Split(Custom String("alglChene oteV: KaMeNrldEr0You won't win0Don't even try it"), First Of(Null)), Subtract(Random Integer(True, 3), True))); // 15 elements
-        Set Global Variable(phaseSlot7, True); // 1 element
-        Wait(Random Real(0.063, 0.325), Abort When False); // 5 elements
-        Set Global Variable(phaseSlot7, False); // 1 element
-        Wait(Random Real(0.325, 1.5), Abort When False); // 5 elements
-        Loop; // 1 element
     }
 }
 
