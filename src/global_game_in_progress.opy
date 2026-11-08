@@ -7,7 +7,7 @@ rule "EFFECTS/TEXTS":
     
     wait(1)
     #Objective description and match timer
-    hudSubtext(getAllPlayers(), "{0}{1}".format(objectiveDescription, (" | {0}".format("{0}s".format(getMatchTime()) if getMatchTime() <= 60 else "{0}:{2}{1}".format(floor(getMatchTime() / 60), floor(getMatchTime() % 60), 0 if floor(getMatchTime() % 60) < 10 else []))) if getMatchTime() > 0 + matchEndTime else []), HudPosition.TOP, -1, rgb(215, 215, 215), HudReeval.VISIBILITY_AND_STRING)
+    hudSubtext(getAllPlayers(), "<fgD7D7D7FF>{0}{1}</fg>".format(objectiveDescription, (" | {0}".format("{0}s".format(getMatchTime()) if getMatchTime() <= 60 else "{0}:{2}{1}".format(floor(getMatchTime() / 60), floor(getMatchTime() % 60), 0 if floor(getMatchTime() % 60) < 10 else []))) if getMatchTime() > 0 + matchEndTime else []), HudPosition.TOP, -1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
     #Infected Hud
     hudHeader(getAllPlayers().filter(lambda player: ((player.enhancementId != Enhancement.ZOMBIE_HYBRID and (healthpackPositionList == [] or player.getHealth() < floor(player.infectionLevel) ** 2 * 20)) and player.isInfected) and getMatchTime() > matchEndTime), "{0} Find a healthpack {0}".format(iconString(Icon.PLUS)), HudPosition.RIGHT, 0, (Color.RED if localPlayer.getHealth() < floor(localPlayer.infectionLevel) ** 2 * 10 else Color.LIME_GREEN) if not (ceil(getTotalTimeElapsed() * 2) % 2) else Color.WHITE, HudReeval.VISIBILITY_AND_COLOR)
     #Nearest Healthpack Distance

@@ -78,7 +78,7 @@ rule "GLOBAL MENU INITIALIZATION":
 
 rule "EFFECTS/TEXTS":
     #Pre game objective description and match timer
-    hudSubtext(getAllPlayers(), "{0} | {1}s".format("Voting will end in {0}s".format(ceil(getMatchTime() - VOTING_END_TIME)) if isVoting else "Select your hero", ceil(getMatchTime())), HudPosition.TOP, -1, rgb(215, 215, 215), HudReeval.VISIBILITY_AND_STRING)
+    hudSubtext(getAllPlayers(), "<fgD7D7D7FF>{0} | {1}s</fg>".format("Voting will end in {0}s".format(ceil(getMatchTime() - VOTING_END_TIME)) if isVoting else "Select your hero", ceil(getMatchTime())), HudPosition.TOP, -1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
     #Creator/Game Code Promo
     hudSubtext(getAllPlayers(), "Original Game Code: MPJFR" if not (ceil(getTotalTimeElapsed() * 0.2) % 2) else "Game Mode Creator: Mazattack#1183", HudPosition.RIGHT, 0, Color.BLUE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
     #Creator/Game Code Promo
@@ -92,7 +92,7 @@ rule "EFFECTS/TEXTS":
     #Change Hero In World Text
     createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.HERO_SELECTED and getMatchTime() > 2.5), "Change Hero [{0}]".format(inputBindingString(Button.CROUCH)), localPlayer.pregamePosition + 1.8 * Vector.UP, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.ORANGE, SpecVisibility.NEVER)
     #Cancel In World Text
-    createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.READY and getMatchTime() > 2.5), "Cancel [{0}]".format(inputBindingString(Button.CROUCH)), localPlayer.pregamePosition + -0.6 * Vector.UP, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, rgb(255, 49, 49), SpecVisibility.NEVER)
+    createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.READY and getMatchTime() > 2.5), f"<fgFF3131FF>Cancel [{inputBindingString(Button.CROUCH)}]</fg>", localPlayer.pregamePosition + -0.6 * Vector.UP, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.WHITE, SpecVisibility.NEVER)
     #One reevaluated HUD per category; localPlayer selects the viewer's current option.
     #Do not capture vote indices or dynamic text/colors with evalOnce.
     #Empty descriptions must be strings: null selected from an array displays as 0.

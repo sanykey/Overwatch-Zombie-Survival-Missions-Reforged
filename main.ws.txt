@@ -1,9 +1,9 @@
-/* Element count: (total 29256)
+/* Element count: (total 29238)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
   984: rule "PLAYER ENHANCEMENT INITIALIZATION" (src/enhancements.opy)
-  861: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
+  849: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
   521: rule "PLAYER AUGMENT INITIALIZATION" (src/augments.opy)
   481: rule "GRAPNEL LAUNCHER" (src/augments.opy)
   434: rule "SKIP ASSEMBLING HEROES" (src/global_startup.opy)
@@ -21,7 +21,7 @@
   286: rule "INITIALIZE SURVIVOR TO BE RESCUED" (src/objective_types/objective_type_survivor_rescue.opy)
   281: rule "WIN/LOSS CONDITIONS" (src/objective_types/objective_type_extraction_point.opy)
   276: rule "Initialize global variables"
-  272: rule "EFFECTS/TEXTS" (src/global_game_in_progress.opy)
+  266: rule "EFFECTS/TEXTS" (src/global_game_in_progress.opy)
   265: rule "REVIVE PLAYER OR ADVANCE DEATH TIMER" (src/players_game_in_progress.opy)
   259: rule "EFFECT/TEXT (GLOBAL)" (src/supply_drops.opy)
   249: rule "AMMO PACK REFILL FALLBACK" (src/augments.opy)
@@ -2195,14 +2195,14 @@ rule ("GLOBAL MENU INITIALIZATION") {
     }
 }
 
-//861 elements
+//849 elements
 rule ("EFFECTS/TEXTS") {
     event {
         Ongoing - Global;
     }
     actions {
         "Pre game objective description and match timer"
-        Create HUD Text(All Players(All Teams), Null, Null, Custom String("{0} | {1}s", If-Then-Else(Global.isVoting, Custom String("Voting will end in {0}s", Round To Integer(Subtract(Match Time, 30), Up)), Custom String("Select your hero")), Round To Integer(Match Time, Up)), Top, -1, Null, Null, Custom Color(215, 215, 215, 255), Visible To and String, Default Visibility); // 35 elements
+        Create HUD Text(All Players(All Teams), Null, Null, Custom String("{0}fgD7D7D7FF>{1} | {2}s{0}/fg>", Global.__holygrail__, If-Then-Else(Global.isVoting, Custom String("Voting will end in {0}s", Round To Integer(Subtract(Match Time, 30), Up)), Custom String("Select your hero")), Round To Integer(Match Time, Up)), Top, -1, Null, Null, Color(White), Visible To and String, Default Visibility); // 29 elements
         "Creator/Game Code Promo"
         Create HUD Text(All Players(All Teams), Null, Null, If-Then-Else(Modulo(Round To Integer(Multiply(Total Time Elapsed, 0.2), Up), 2), Custom String("Game Mode Creator: Mazattack#1183"), Custom String("Original Game Code: MPJFR")), Right, False, Null, Null, Color(Blue), Visible To and String, Visible Always); // 23 elements
         "Creator/Game Code Promo"
@@ -2216,7 +2216,7 @@ rule ("EFFECTS/TEXTS") {
         "Change Hero In World Text"
         Create In-World Text(Filtered Array(All Players(All Teams), And(Compare((Current Array Element).pregameState, ==, 1), Compare(Match Time, >, 2.5))), Custom String("Change Hero [{0}]", Input Binding String(Button(Crouch))), Add((Local Player).team1PositionSlot, Multiply(1.8, Up)), True, Do Not Clip, Visible To Position String and Color, Color(Orange), Visible Never); // 31 elements
         "Cancel In World Text"
-        Create In-World Text(Filtered Array(All Players(All Teams), And(Compare((Current Array Element).pregameState, ==, 2), Compare(Match Time, >, 2.5))), Custom String("Cancel [{0}]", Input Binding String(Button(Crouch))), Add((Local Player).team1PositionSlot, Multiply(-0.6, Up)), True, Do Not Clip, Visible To Position String and Color, Custom Color(255, 49, 49, 255), Visible Never); // 38 elements
+        Create In-World Text(Filtered Array(All Players(All Teams), And(Compare((Current Array Element).pregameState, ==, 2), Compare(Match Time, >, 2.5))), Custom String("{0}fgFF3131FF>Cancel [{1}]{0}/fg>", Global.__holygrail__, Input Binding String(Button(Crouch))), Add((Local Player).team1PositionSlot, Multiply(-0.6, Up)), True, Do Not Clip, Visible To Position String and Color, Color(White), Visible Never); // 32 elements
         "Do not capture vote indices or dynamic text/colors with evalOnce.\nEmpty descriptions must be strings: null selected from an array displays as 0.\nTeam 1 vote IDs are initialized to valid menu entries before players use the menu.\nChallenge"
         Create HUD Text(All Players(Team 1), Value In Array(Array(Custom String("Challenge: No Preference"), Custom String("Challenge: None"), Custom String("Challenge: Swarm Shootout"), Custom String("Challenge: Random Abilities"), If-Then-Else(Global.phaseSlot7, Global.phaseSlot6, Custom String("Challenge: Insanity")), If-Then-Else(Global.phaseSlot7, Global.phaseSlot6, Custom String("Challenge: Pandora's Box"))), (Local Player).actorTeamSlot3), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Char In String(Empty Array, False), Custom String("Zombies fire their guns!"), Custom String("Non-boss zombies use abilities"), Custom String("Faster, stronger, and deadlier"), Custom String("All challenges at Once!")), (Local Player).actorTeamSlot3), Custom String("                                                ")), If-Then-Else(Or(Global.isVoting, Compare((Local Player).actorTeamSlot3, ==, Null)), Custom String("Change Vote (Press [{0}])", Input Binding String(Button(Ultimate))), Empty Array), Left, False, Value In Array(Array(Color(Aqua), Color(Yellow), Color(Lime Green), Color(Orange), If-Then-Else(Global.phaseSlot7, Color(White), Color(Turquoise)), If-Then-Else(Global.phaseSlot7, Color(Gray), Color(Purple))), (Local Player).actorTeamSlot3), Value In Array(Array(Color(Aqua), Null, Color(Lime Green), Color(Orange), Color(White), Color(White)), (Local Player).actorTeamSlot3), Value In Array(Array(Color(Aqua), Color(Yellow), Color(Lime Green), Color(Orange), Color(White), Color(White)), (Local Player).actorTeamSlot3), Visible To String and Color, Default Visibility); // 164 elements
         "Zombie Mode"
@@ -2882,7 +2882,7 @@ rule ("advanceEnhancementChoice") {
     }
 }
 
-//272 elements
+//266 elements
 rule ("EFFECTS/TEXTS") {
     event {
         Ongoing - Global;
@@ -2894,7 +2894,7 @@ rule ("EFFECTS/TEXTS") {
     actions {
         Wait(True, Ignore Condition); // 1 element
         "Objective description and match timer"
-        Create HUD Text(All Players(All Teams), Null, Null, Custom String("{0}{1}", Global.objectiveDescription, If-Then-Else(Compare(Match Time, >, Global.matchEndTime), Custom String(" | {0}", If-Then-Else(Compare(Match Time, <=, 60), Custom String("{0}s", Match Time), Custom String("{0}:{1}{2}", Round To Integer(Divide(Match Time, 60), Down), If-Then-Else(Compare(Round To Integer(Modulo(Match Time, 60), Down), <, 10), Null, Empty Array), Round To Integer(Modulo(Match Time, 60), Down)))), Empty Array)), Top, -1, Null, Null, Custom Color(215, 215, 215, 255), Visible To and String, Default Visibility); // 65 elements
+        Create HUD Text(All Players(All Teams), Null, Null, Custom String("{0}fgD7D7D7FF>{1}{2}{0}/fg>", Global.__holygrail__, Global.objectiveDescription, If-Then-Else(Compare(Match Time, >, Global.matchEndTime), Custom String(" | {0}", If-Then-Else(Compare(Match Time, <=, 60), Custom String("{0}s", Match Time), Custom String("{0}:{1}{2}", Round To Integer(Divide(Match Time, 60), Down), If-Then-Else(Compare(Round To Integer(Modulo(Match Time, 60), Down), <, 10), Null, Empty Array), Round To Integer(Modulo(Match Time, 60), Down)))), Empty Array)), Top, -1, Null, Null, Color(White), Visible To and String, Default Visibility); // 59 elements
         "Infected Hud"
         Create HUD Text(Filtered Array(All Players(All Teams), And(And(And(Compare((Current Array Element).enhancementId, !=, 2), Or(Compare(Global.healthpackPositionList, ==, Empty Array), Compare(Health(Current Array Element), <, Multiply(Raise To Power(Round To Integer((Current Array Element).infectionLevel, Down), 2), 20)))), (Current Array Element).isInfected), Compare(Match Time, >, Global.matchEndTime))), Custom String("{0} Find a healthpack {0}", Icon String(Plus)), Null, Null, Right, False, If-Then-Else(Modulo(Round To Integer(Multiply(Total Time Elapsed, 2), Up), 2), Color(White), If-Then-Else(Compare(Health(Local Player), <, Multiply(Raise To Power(Round To Integer((Local Player).infectionLevel, Down), 2), 10)), Color(Red), Color(Lime Green))), Null, Null, Visible To and Color, Default Visibility); // 79 elements
         "Nearest Healthpack Distance"
