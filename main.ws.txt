@@ -1,4 +1,4 @@
-/* Element count: (total 29581)
+/* Element count: (total 29566)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
  1557: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
@@ -79,12 +79,12 @@
   117: rule "PLAYER SELECTS/RESELECTS HERO" (src/player_start_menu.opy)
   117: rule "BOTS MOVE THROUGH SPAWN DOORS" (src/bots_game_in_progress.opy)
   116: rule "BEHEMOTH GAS STREAM (BOSS)" (src/zombie_types.opy)
-  115: rule "PLAYER PICKS UP HEALTH PACK" (src/players_game_in_progress.opy)
   115: rule "BASIC (REAPER) SHADOW STEP (BOSS)" (src/zombie_types.opy)
   115: rule "EFFECT/TEXT (PERMANENT)" (src/power_ups.opy)
   114: rule "RUSHER MOLTEN CORE (BOSS)" (src/zombie_types.opy)
   113: rule "RIDER ATTACH TO TEAMMATES" (src/zombie_types.opy)
   113: rule "CHARGE BATTERY (USAGE AND COOLDOWNS)" (src/enhancements.opy)
+  112: rule "PLAYER PICKS UP HEALTH PACK" (src/players_game_in_progress.opy)
   111: rule "SPAWN BOSS" (src/objective_types/objective_type_bosses.opy)
   110: rule "RIDER USE GRAPPLING HOOK" (src/zombie_types.opy)
   108: rule "ENSNARER (HAZARD) BLOCKS PLAYERS" (src/zombie_types.opy)
@@ -96,7 +96,6 @@
    99: rule "CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)" (src/zombie_types.opy)
    98: rule "LONG REACH QUICK MELEE" (src/augments.opy)
    97: rule "ZOMBIES SPAWN AT REIGNITED" (src/zombie_types.opy)
-   96: rule "PLAYER DEALT HEALING" (src/player_events.opy)
    94: rule "SURVIVOR REACHES EXTRACTION SITE" (src/objective_types/objective_type_survivor_rescue.opy)
    94: rule "playerForceField (10-19)" (src/supply_drops.opy)
    93: rule "LEECH GRANTS ALLY OVERHEALTH" (src/augments.opy)
@@ -109,6 +108,7 @@
    85: rule "PREGAME SPAWN ROOM ROTATION" (src/global_startup.opy)
    85: rule "determineObjectiveType" (src/global_start_menu.opy)
    85: rule "DECREASES CAPTURE PERCENTAGE" (src/objective_types/objective_type_showdown.opy)
+   84: rule "PLAYER DEALT HEALING" (src/player_events.opy)
    83: rule "SMOLDER (WINSTON) SEES PLAYER" (src/zombie_types.opy)
    80: rule "HITCHHIKER LIFEBONDS" (src/enhancements.opy)
    77: rule "RANDOM ABILITIES" (src/global_game_in_progress.opy)
@@ -4556,7 +4556,7 @@ rule ("REVIVE PLAYER OR ADVANCE DEATH TIMER") {
     }
 }
 
-//115 elements
+//112 elements
 rule ("PLAYER PICKS UP HEALTH PACK") {
     event {
         Player Received Healing;
@@ -4570,7 +4570,7 @@ rule ("PLAYER PICKS UP HEALTH PACK") {
         Start Heal Over Time(Event Player, Null, 5, 20); // 3 elements
         "Self-attributed packs already charge Overcharge through playerDealtHealing."
         If(And(And(Global.isGameplayActive, Compare((Event Player).enhancementId, ==, 9)), Compare(Healer, !=, Event Player))); // 15 elements
-            Modify Player Variable(Event Player, actorTeamSlot22, Add, Divide(Event Healing, 3)); // 4 elements
+            Modify Player Variable(Event Player, actorTeamSlot22, Add, Event Healing); // 1 element
         End; // 1 element
         If(Or(Compare(Global.difficultySetting, <, 3), Compare(Match Time, >, Global.matchEndTime))); // 12 elements
             "Update known health pack positions"
@@ -10032,7 +10032,7 @@ rule ("PLAYER DIED") {
     }
 }
 
-//96 elements
+//84 elements
 rule ("PLAYER DEALT HEALING") {
     event {
         Player Dealt Healing;
@@ -10056,8 +10056,7 @@ rule ("PLAYER DEALT HEALING") {
                 End; // 1 element
             End; // 1 element
         Else If(Compare((Event Player).enhancementId, ==, 9)); // 7 elements
-            If(Or(Compare(Healee, !=, Event Player), Compare(Event Ability, !=, Null))); // 9 elements
-                Modify Player Variable(Event Player, actorTeamSlot22, Add, Divide(Event Healing, 3)); // 4 elements
+            Modify Player Variable(Event Player, actorTeamSlot22, Add, Event Healing); // 1 element
     }
 }
 
@@ -10105,7 +10104,7 @@ rule ("PLAYER DEALT DAMAGE") {
                     End; // 1 element
                 End; // 1 element
             Else If(Compare((Event Player).enhancementId, ==, 9)); // 7 elements
-                If(And(And(Compare((Event Player).actorTeamSlot23, >, Null), Compare(Event Damage, >, Null)), Compare(Victim, ==, Event Player))); // 16 elements
+                If(And(And(Compare((Event Player).actorTeamSlot23, >, Null), Compare(Event Damage, >, Null)), Compare(Victim, !=, Event Player))); // 16 elements
                     Skip If(Compare((Event Player).actorTeamSlot24, !=, Null), True); // 6 elements
                     Set Player Variable(Event Player, actorTeamSlot24, Add(Total Time Elapsed, 0.3)); // 4 elements
                     //__label_if_86__:

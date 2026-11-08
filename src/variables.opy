@@ -750,7 +750,7 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 # Bulking Season: retained stacks; each credited elimination (kill/damage participation) adds one; death halves it (rounded down).
 # Exclusive primary enhancement, owned by this human; safe alongside all independent Augments.
 #!define enhancementBulkStacks actorTeamSlot22
-# Overcharge: unspent energy (actual healing / 3, +10 per offensive/defensive assist), independent of an armed burst.
+# Overcharge: unspent energy (actual healing 1:1, +10 per offensive/defensive assist), independent of an armed burst.
 # Exclusive primary enhancement; slots belong to its selected human (the healer
 # for dealt-healing events, the receiver for health packs), never an enemy target.
 #!define enhancementCapacitorEnergy actorTeamSlot22

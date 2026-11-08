@@ -79,8 +79,9 @@ rule "PLAYER DEALT HEALING":
                 playEffect(eventPlayer, DynamicEffect.GOOD_PICKUP_EFFECT, Color.GREEN, healee, 1)
                 smallMessage(eventPlayer, "You cured yourself!" if healee == eventPlayer else "You cured {0} {1}!".format(healee, heroIcon(healee.getHero())))
     elif eventPlayer.enhancementId == Enhancement.OVERCHARGE:
-        if healee != eventPlayer or eventAbility != null:
-            eventPlayer.enhancementCapacitorEnergy += eventHealing / 3
+        # Event Ability can be Null for hero self-healing (including Inspire).
+        # Credit actual healing without filtering it by ability attribution.
+        eventPlayer.enhancementCapacitorEnergy += eventHealing
 
 
 rule "PLAYER DEALT DAMAGE":
@@ -124,7 +125,7 @@ rule "PLAYER DEALT DAMAGE":
                     boltDischargeTargets.setStatusEffect(eventPlayer, Status.STUNNED, 2)
                     damage(boltDischargeTargets, eventPlayer, 60)
         elif eventPlayer.enhancementId == Enhancement.OVERCHARGE:
-            if eventPlayer.enhancementCapacitorCharge > 0 and eventDamage > 0 and victim == eventPlayer:
+            if eventPlayer.enhancementCapacitorCharge > 0 and eventDamage > 0 and victim != eventPlayer:
                 if eventPlayer.enhancementCapacitorDeadline == 0:
                     eventPlayer.enhancementCapacitorDeadline = getTotalTimeElapsed() + 0.3
                 if getTotalTimeElapsed() < eventPlayer.enhancementCapacitorDeadline:

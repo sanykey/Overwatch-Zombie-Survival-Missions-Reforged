@@ -74,6 +74,7 @@ function value(expr, state, element) {
     if (expr === 'Event Damage') return state.eventDamage ?? 0;
     if (expr === 'Event Healing') return state.eventHealing;
     if (expr === 'Healer') return state.healer ?? 0;
+    if (expr === 'Healee') return state.healee ?? state.player;
     if (expr === 'Event Was Health Pack') return state.eventWasHealthPack;
     if (expr === 'Match Time') return state.matchTime;
     if (expr === 'Current Array Element') return element;
