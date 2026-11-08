@@ -366,7 +366,6 @@ rule "PLAGUE DOCTOR REDUCES PLAYERS' INFECTION LEVELS":
 rule "BULKING SEASON LOSES STACKS ON DEATH":
     @Event playerDied
     @Team 1
-    @Condition isGameplayActive == true
     @Condition eventPlayer.enhancementId == Enhancement.BULKING_SEASON
 
     eventPlayer.enhancementBulkStacks = floor(eventPlayer.enhancementBulkStacks / 2)
@@ -439,7 +438,6 @@ rule "BOLT STRIKE CLEARS CHARGE":
 rule "OVERCHARGE STORES HEALING":
     @Event playerDealtHealing
     @Team 1
-    @Condition isGameplayActive == true
     @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
 
     eventPlayer.enhancementCapacitorEnergy += eventHealing / 3
@@ -491,7 +489,6 @@ rule "OVERCHARGE CLEARS CHARGE":
 rule "OVERCHARGE BONUS DAMAGE":
     @Event playerDealtDamage
     @Team 1
-    @Condition isGameplayActive == true
     @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
     @Condition eventPlayer.enhancementCapacitorCharge > 0
     @Condition eventDamage > 0

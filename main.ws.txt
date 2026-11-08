@@ -1,4 +1,4 @@
-/* Element count: (total 29437)
+/* Element count: (total 29158)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
@@ -58,11 +58,9 @@
   144: rule "SMOLDER SUPER SLAM" (src/zombie_types.opy)
   140: rule "generateMapGrid" (src/global_startup.opy)
   140: rule "beaconofHealing (40-49)" (src/supply_drops.opy)
-  138: rule "useLivingProjectile" (src/enhancements.opy)
   137: rule "explosionSequence" (src/subroutines.opy)
   137: rule "BORN TO BATTLE PLAYER USES ABILITY CHARGE" (src/enhancements.opy)
   136: rule "GENERATE SUPPLY DROPS" (src/supply_drops.opy)
-  135: rule "LIVING PROJECTILE RELEASE" (src/enhancements.opy)
   133: rule "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)" (src/bots_game_in_progress.opy)
   132: rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS" (src/objective_types/objective_type_biomorphing.opy)
   132: rule "STRIKER (WRECKING BALL) PILE DRIVER" (src/zombie_types.opy)
@@ -194,10 +192,10 @@
    35: rule "ZOMBIE HYBRID" (src/enhancements.opy)
    34: rule "abilityPlacement" (src/subroutines.opy)
    34: rule "entityFloat" (src/zombie_types.opy)
-   34: rule "OVERCHARGE BONUS DAMAGE" (src/enhancements.opy)
    34: rule "DOUBLE JUMP BONUS EXPIRES" (src/augments.opy)
    33: rule "SMOLDER ACTIVATES FROM DAMAGE" (src/zombie_types.opy)
    33: rule "PROTECTOR (KIRIKO) USES CLEANSE" (src/zombie_types.opy)
+   32: rule "OVERCHARGE BONUS DAMAGE" (src/enhancements.opy)
    31: rule "SPECIAL EFFECT CONTROLS" (src/global_start_menu.opy)
    31: rule "PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)" (src/player_start_menu.opy)
    30: rule "OVERCHARGE CLEARS CHARGE" (src/enhancements.opy)
@@ -252,7 +250,6 @@
    17: rule "Subroutine saveAlivePlayerState" (src/players_game_in_progress.opy)
    17: rule "SUCCESSOR (DOOMFIST) HOLDS BLOCK IF TARGET USE ULTIMATE" (src/zombie_types.opy)
    16: rule "SURVIVOR FOLLOW TARGET LETS GO" (src/objective_types/objective_type_survivor_rescue.opy)
-   16: rule "BULKING SEASON LOSES STACKS ON DEATH" (src/enhancements.opy)
    15: rule "chaseSatelliteTarget" (src/objective_types/objective_type_satellite_uplink.opy)
    15: rule "playReignitedWarningPair" (src/zombie_types.opy)
    14: rule "Subroutine createRemainingObjectivesHud" (src/subroutines.opy)
@@ -261,6 +258,7 @@
    14: rule "Subroutine removeBotSpawnPoint" (src/bots_game_in_progress.opy)
    14: rule "CHARGER KNOCKBACK" (src/zombie_types.opy)
    14: rule "PYROTECHNIC SETS ENEMIES ON FIRE" (src/enhancements.opy)
+   14: rule "BULKING SEASON LOSES STACKS ON DEATH" (src/enhancements.opy)
    13: rule "attachPlayerToPregameAnchor" (src/player_start_menu.opy)
    13: rule "BOSS TAKES KNOCKBACK" (src/objective_types/objective_type_bosses.opy)
    13: rule "teleportToClosestPlayer" (src/players_game_in_progress.opy)
@@ -276,12 +274,12 @@
    11: rule "DOOMFIST INVIS WHILE ULTING" (src/hero_tuning.opy)
    11: rule "TRACER INVIS WHILE RECALLING" (src/hero_tuning.opy)
    11: rule "STRIKER CANCEL BALL FORM" (src/zombie_types.opy)
-   11: rule "OVERCHARGE STORES HEALING" (src/enhancements.opy)
    10: rule "PREVENT MATCH TIME FROM UNPAUSING" (src/global_game_in_progress.opy)
    10: rule "startExtractionAscent" (src/objective_types/objective_type_extraction_point.opy)
    10: rule "setClosestPlayerTeleportCenter" (src/bots_game_in_progress.opy)
     9: rule "resolveReconnectUserIndex" (src/subroutines.opy)
     9: rule "CC COOLDOWN FROM DOWNFALLEN/BRUTE" (src/hero_tuning.opy)
+    9: rule "OVERCHARGE STORES HEALING" (src/enhancements.opy)
     8: rule "START GAME IF WAITING FOR PLAYERS" (src/global_startup.opy)
     8: rule "completeBossObjective" (src/objective_types/objective_type_bosses.opy)
     8: rule "CASSIDY GRENADE HACK" (src/hero_tuning.opy)
@@ -8771,7 +8769,7 @@ rule ("PLAGUE DOCTOR REDUCES PLAYERS' INFECTION LEVELS") {
     }
 }
 
-//16 elements
+//14 elements
 rule ("BULKING SEASON LOSES STACKS ON DEATH") {
     event {
         Player Died;
@@ -8779,7 +8777,6 @@ rule ("BULKING SEASON LOSES STACKS ON DEATH") {
         All;
     }
     conditions {
-        Global.isGameplayActive == True; // 2 elements
         (Event Player).enhancementId == 10; // 4 elements
     }
     actions {
@@ -8874,7 +8871,7 @@ rule ("BOLT STRIKE CLEARS CHARGE") {
     }
 }
 
-//11 elements
+//9 elements
 rule ("OVERCHARGE STORES HEALING") {
     event {
         Player Dealt Healing;
@@ -8882,7 +8879,6 @@ rule ("OVERCHARGE STORES HEALING") {
         All;
     }
     conditions {
-        Global.isGameplayActive == True; // 2 elements
         (Event Player).enhancementId == 9; // 4 elements
     }
     actions {
@@ -8951,7 +8947,7 @@ rule ("OVERCHARGE CLEARS CHARGE") {
     }
 }
 
-//34 elements
+//32 elements
 rule ("OVERCHARGE BONUS DAMAGE") {
     event {
         Player Dealt Damage;
@@ -8959,7 +8955,6 @@ rule ("OVERCHARGE BONUS DAMAGE") {
         All;
     }
     conditions {
-        Global.isGameplayActive == True; // 2 elements
         (Event Player).enhancementId == 9; // 4 elements
         (Event Player).actorTeamSlot23 > Null; // 3 elements
         Event Damage > Null; // 1 element
@@ -9285,67 +9280,6 @@ rule ("resetBattleAbilityCharge") {
     actions {
         Set Ability Charge(Event Player, (Event Player).actorTeamSlot23, True); // 3 elements
         Modify Player Variable(Event Player, actorTeamSlot22, Subtract, True); // 1 element
-    }
-}
-
-//138 elements
-rule ("useLivingProjectile") {
-    event {
-        Subroutine;
-        useLivingProjectile;
-    }
-    actions {
-        If(Compare((Event Player).actorTeamSlot22, !=, Null)); // 6 elements
-            Set Player Variable(Event Player, actorTeamSlot23, Null); // 1 element
-            Abort; // 1 element
-        End; // 1 element
-        Abort If(Is True For Any(Array((Event Player).isAttached, Has Status(Event Player, Stunned), Has Status(Event Player, Asleep), Has Status(Event Player, Frozen), Has Status(Event Player, Knocked Down)), Current Array Element)); // 19 elements
-        "One raycast per press, against all players so intervening actors block pickup.\nSynchronous scratch only: the candidate is committed to both actors before returning."
-        Set Global Variable(tmp0, Ray Cast Hit Player(Eye Position(Event Player), Add(Eye Position(Event Player), Multiply(Facing Direction Of(Event Player), 4)), All Players(All Teams), Event Player, False)); // 16 elements
-        Abort If(Compare(Global.tmp0, ==, Null)); // 5 elements
-        Abort If(Is True For Any(Array(Compare(Team Of(Global.tmp0), !=, Team 2), Not(Is Dummy Bot(Global.tmp0)), Is Dead(Global.tmp0), Array Contains(Append To Array(Global.bossStateList, Global.miniBossList), Global.tmp0), (Global.tmp0).actorTeamSlot18, (Global.tmp0).actorTeamSlot3, (Global.tmp0).isAttached), Current Array Element)); // 38 elements
-        "Inspect native statuses directly: the cached bot CC flag can lag by 0.125s.\nRooted alone never qualifies; Rooted plus low health or another CC still does."
-        Abort If(Not(Or(Or(Or(Or(Compare(Normalized Health(Global.tmp0), <, 0.2), Has Status(Global.tmp0, Stunned)), Has Status(Global.tmp0, Asleep)), Has Status(Global.tmp0, Frozen)), Has Status(Global.tmp0, Knocked Down)))); // 28 elements
-        Set Player Variable(Event Player, actorTeamSlot22, Global.tmp0); // 2 elements
-        Set Player Variable(Event Player, actorTeamSlot23, Add(Total Time Elapsed, 5)); // 4 elements
-        Set Player Variable(Global.tmp0, augmentState2, Hero Of(Event Player)); // 3 elements
-        Set Player Variable(Global.tmp0, augmentState0, Event Player); // 2 elements
-        Set Player Variable(Global.tmp0, isAttached, True); // 2 elements
-        "Knockdown begins at pickup and outlasts the hold limit by one second.\nClearing it early interrupts the carry; throw damage clears it explicitly."
-        Set Status(Global.tmp0, Event Player, Knocked Down, 6); // 3 elements
-        Attach Players(Global.tmp0, Event Player, Vector(False, 1.5, True)); // 6 elements
-    }
-}
-
-//135 elements
-rule ("LIVING PROJECTILE RELEASE") {
-    event {
-        Ongoing - Each Player;
-        Team 2;
-        All;
-    }
-    conditions {
-        (Event Player).augmentState0 != Null; // 3 elements
-        Or(Compare(((Event Player).augmentState0).actorTeamSlot23, <=, Total Time Elapsed), Is True For Any(Array(Not(Global.isGameplayActive), Not(Entity Exists((Event Player).augmentState0)), Is Dead((Event Player).augmentState0), ((Event Player).augmentState0).isAttached, Compare(Hero Of((Event Player).augmentState0), !=, (Event Player).augmentState2), Is Dead(Event Player), (Event Player).actorTeamSlot18, (Event Player).actorTeamSlot3, Not((Event Player).isAttached), Not(Has Status(Event Player, Knocked Down))), Current Array Element)) == True; // 55 elements
-    }
-    actions {
-        "A second press requests release by setting the carrier's deadline to zero.\nSynchronous carrier snapshot, used only through release cleanup below.\nNo wait, async call or live HUD/effect captures this global scratch alias."
-        Set Global Variable(tmp0, (Event Player).augmentState0); // 3 elements
-        "Boolean snapshot, consumed by the branch before its damage wait.\nNo later action reads this scratch slot after yielding."
-        Set Global Variable(tmp1, And(Compare((Global.tmp0).actorTeamSlot23, ==, Null), Not(Is True For Any(Array(Not(Global.isGameplayActive), Not(Entity Exists(Global.tmp0)), Is Dead(Global.tmp0), (Global.tmp0).isAttached, Compare(Hero Of(Global.tmp0), !=, (Event Player).augmentState2), Is Dead(Event Player), (Event Player).actorTeamSlot18, (Event Player).actorTeamSlot3, Not((Event Player).isAttached), Not(Has Status(Event Player, Knocked Down))), Current Array Element)))); // 51 elements
-        Detach Players(Event Player); // 1 element
-        Set Player Variable(Event Player, isAttached, False); // 1 element
-        Set Player Variable(Global.tmp0, actorTeamSlot22, Null); // 2 elements
-        Set Player Variable(Event Player, augmentState0, Null); // 1 element
-        If(Global.tmp1); // 2 elements
-            Apply Impulse(Event Player, Facing Direction Of(Global.tmp0), 12.5, To World, Cancel Contrary Motion); // 4 elements
-            Set Player Variable(Event Player, augmentState3, Global.tmp0); // 2 elements
-            Wait(0.75, Ignore Condition); // 2 elements
-            Damage(Event Player, (Event Player).augmentState3, 50); // 4 elements
-            Clear Status(Event Player, Knocked Down); // 1 element
-        End; // 1 element
-        "A pickup/release request made during the short damage wait is handled next."
-        Loop If Condition Is True; // 1 element
     }
 }
 
