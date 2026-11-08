@@ -28,7 +28,6 @@
 #!include "objective_types/objective_type_bosses.opy"
 #!include "objective_types/objective_type_biomorphing.opy"
 #!include "objective_types/objective_type_survivor_rescue.opy"
-#!include "objective_types/objective_type_kill_zone.opy"
 #!include "objective_types/objective_type_zombie_egg.opy"
 #!include "objective_types/objective_type_satellite_uplink.opy"
 #!include "players_game_in_progress.opy"
@@ -39,4 +38,5 @@
 #!include "power_ups.opy"
 #!include "enhancements.opy"
 #!include "augments.opy"
+#!include "player_events.opy"
 ##!include "debug.opy"

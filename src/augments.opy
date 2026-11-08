@@ -755,25 +755,7 @@ rule "LASER BARRICADE BLOCKS ZOMBIES":
     if ruleCondition:
         loop()
 
-rule "SCAVENGER BOT LOOT":
-    @Event playerEarnedElimination
-    @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.augmentId == Augment.SCAVENGER
-    @Condition victim.getTeam() == Team.2
-    @Condition victim.isDummy() == true
-
-    if random.randint(1, 20) == 1:
-        # One item roll per credited kill or damage participation. No waits or
-        # calls while this scratch value is live; reserves never activate here.
-        #!define scavengerLootItemId tmp0
-        scavengerLootItemId = random.randint(1, 13)
-        if len(eventPlayer.augmentScavengerBackpack) < 2:
-            eventPlayer.augmentScavengerBackpack.append(scavengerLootItemId)
-            smallMessage(eventPlayer, "Scavenger: powerup added to backpack")
-        else:
-            supplyPowerUpIdList.append(scavengerLootItemId)
-            supplyPowerUpPositionList.append(nearestWalkablePosition(victim.getPosition()) + offsetUpQuarterConst)
+# SCAVENGER BOT LOOT moved to "PLAYER EARNED ELIMINATION" in player_events.opy.
 
 
 rule "LEECH LIFESTEAL":

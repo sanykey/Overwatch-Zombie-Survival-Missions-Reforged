@@ -288,13 +288,7 @@ rule "PYROTECHNIC APPLIES DAMAGE":
         loop()
 
 
-rule "BORN TO BATTLE PLAYER EARNS ELIMINATION":
-    @Event playerDealtFinalBlow
-    @Team 1
-    @Condition eventPlayer.enhancementId == Enhancement.BORN_TO_BATTLE
-    @Condition eventPlayer.enhancementBattleResetCharges < 2
-    
-    eventPlayer.enhancementBattleResetCharges += 1
+# BORN TO BATTLE PLAYER EARNS ELIMINATION moved to "PLAYER DEALT FINAL BLOW" in player_events.opy.
 
 
 rule "BORN TO BATTLE PLAYER USES ABILITY CHARGE":
@@ -357,15 +351,7 @@ rule "PLAGUE DOCTOR REDUCES PLAYERS' INFECTION LEVELS":
             smallMessage(eventPlayer, "You cured yourself!" if healee == eventPlayer else "You cured {0} {1}!".format(healee, heroIcon(healee.getHero())))
 
 
-rule "BULKING SEASON EARNS STACKS":
-    @Event playerEarnedElimination
-    @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.enhancementId == Enhancement.BULKING_SEASON
-
-    # One credit for a kill or damage participation; healing/buff assists do not count.
-    eventPlayer.enhancementBulkStacks += 1
-    applyBulkingSeasonStats()
+# BULKING SEASON EARNS STACKS moved to "PLAYER EARNED ELIMINATION" in player_events.opy.
 
 
 rule "BULKING SEASON LOSES STACKS ON DEATH":

@@ -10,6 +10,9 @@ function value(text, state) {
     if (text.startsWith('Global.')) return state[text.slice(7)] ?? 0;
     const a = args(text), v = i => value(a[i], state);
     switch (text.slice(0, text.indexOf('('))) {
+        case 'Compare':
+            assert(['==', '!='].includes(a[1]));
+            return a[1] === '==' ? v(0) === v(2) : v(0) !== v(2);
         case 'Add': return v(0) + v(1);
         case 'Subtract': return v(0) - v(1);
         case 'Multiply': return v(0) * v(1);
@@ -36,9 +39,20 @@ function execute(all, name, state) {
         const equal = value(m[1], state) === value(m[3], state);
         return m[2] === '==' ? equal : !equal;
     })) return false;
-    for (const action of all[name].actions) {
+    for (let i = 0; i < all[name].actions.length; i++) {
+        const action = all[name].actions[i];
+        if (action === 'End') continue;
         const a = args(action), v = i => value(a[i], state);
         switch (action.slice(0, action.indexOf('('))) {
+            case 'If':
+                if (!v(0)) {
+                    let depth = 1;
+                    while (++i < all[name].actions.length) {
+                        if (all[name].actions[i].startsWith('If(')) depth++;
+                        if (all[name].actions[i] === 'End' && --depth === 0) break;
+                    }
+                }
+                break;
             case 'Set Global Variable': state[a[0]] = v(1); break;
             case 'Set Player Variable': state[a[1]] = v(2); break;
             case 'Modify Player Variable':
@@ -57,8 +71,8 @@ async function main() {
     await compiler.readyPromise;
     const built = await compile(files);
     assert.deepEqual(built.warnings, []);
-    const all = rules(built.result), earn = 'BULKING SEASON EARNS STACKS', die = 'BULKING SEASON LOSES STACKS ON DEATH';
-    assert(built.result.match(/rule \("BULKING SEASON EARNS STACKS"\) \{\s*event \{\s*Player Earned Elimination;/));
+    const all = rules(built.result), earn = 'PLAYER EARNED ELIMINATION', die = 'BULKING SEASON LOSES STACKS ON DEATH';
+    assert(built.result.match(/rule \("PLAYER EARNED ELIMINATION"\) \{\s*event \{\s*Player Earned Elimination;\s*Team 1;/));
     assert(!JSON.stringify(all[earn]).includes('Player Stat('), 'Bulking Season does not poll assist stats');
     assert(!files['variables.opy'].includes('enhancementBulkCreditSnapshot'));
     const state = {enhancementId: 10, isGameplayActive: 1, [stack]: 0, sizeScale: 1};
@@ -95,7 +109,9 @@ async function main() {
     assert.equal(state.maxHealthPercent, 100);
     assert.equal(state.engineSize, 1);
     state.enhancementId = 9;
-    assert.equal(execute(all, earn, state), false, 'Other enhancements retain their shared storage');
+    const otherEnhancement = {...state};
+    execute(all, earn, state);
+    assert.deepEqual(state, otherEnhancement, 'Other enhancements retain their shared storage');
     assert.equal(execute(all, die, state), false);
     const capped = {enhancementId: 10, isGameplayActive: 1, [stack]: 199, sizeScale: 1.35};
     execute(all, earn, capped);

@@ -1,4 +1,4 @@
-/* Element count: (total 29230)
+/* Element count: (total 29236)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1088: rule "botRespawnInitialization" (src/subroutines.opy)
@@ -100,6 +100,7 @@
    94: rule "playerForceField (10-19)" (src/supply_drops.opy)
    92: rule "setPrematchTimer" (src/subroutines.opy)
    89: rule "PLAYER AFK" (src/players_game_in_progress.opy)
+   88: rule "PLAYER DEALT FINAL BLOW" (src/player_events.opy)
    87: rule "PLAYER MENU INITIALIZATION" (src/player_start_menu.opy)
    87: rule "BOT BECOMES ZOMBIE EGG" (src/objective_types/objective_type_zombie_egg.opy)
    86: rule "INCREASE OBJECTIVE CAPTURE PERCENTAGE" (src/objective_types/objective_type_showdown.opy)
@@ -122,7 +123,6 @@
    71: rule "PLAGUE DOCTOR REDUCES PLAYERS' INFECTION LEVELS" (src/enhancements.opy)
    70: rule "POWER UP EFFECT/TEXT MANAGEMENT" (src/power_ups.opy)
    69: rule "PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY)" (src/player_start_menu.opy)
-   69: rule "MODIFY KILL ZONE SCORE" (src/objective_types/objective_type_kill_zone.opy)
    68: rule "BOT TARGET VISIBLE" (src/bots_game_in_progress.opy)
    67: rule "DELETE PATH" (src/objective_types/objective_type_survivor_rescue.opy)
    67: rule "PLAYER SAYS GROUP UP TO SURVIVOR" (src/objective_types/objective_type_survivor_rescue.opy)
@@ -143,6 +143,7 @@
    54: rule "shortenPrematchTimer" (src/subroutines.opy)
    54: rule "END VOTING" (src/global_start_menu.opy)
    54: rule "EXTRACTION ZONE INFECTION INCREASE" (src/objective_types/objective_type_extraction_point.opy)
+   54: rule "PLAYER EARNED ELIMINATION" (src/player_events.opy)
    53: rule "ATTACK SPAWN ROOM CONTROL" (src/global_game_in_progress.opy)
    53: rule "BOSS TELEPORT TO TARGET IF NOT USED" (src/objective_types/objective_type_bosses.opy)
    52: rule "START GAME" (src/global_startup.opy)
@@ -157,7 +158,6 @@
    48: rule "SMOLDER BOSS EVENT STARTS" (src/zombie_types.opy)
    48: rule "instantRevive (0-9)" (src/supply_drops.opy)
    48: rule "AUGMENT AIR ACTION RECHARGE" (src/augments.opy)
-   48: rule "SCAVENGER BOT LOOT" (src/augments.opy)
    47: rule "determineZombieMode" (src/global_start_menu.opy)
    47: rule "PLAYERS AT TERMINALS CONTROLS" (src/objective_types/objective_type_satellite_uplink.opy)
    46: rule "DOWNFALLEN PULLS PLAYERS" (src/zombie_types.opy)
@@ -277,10 +277,8 @@
    10: rule "PREVENT MATCH TIME FROM UNPAUSING" (src/global_game_in_progress.opy)
    10: rule "startExtractionAscent" (src/objective_types/objective_type_extraction_point.opy)
    10: rule "setClosestPlayerTeleportCenter" (src/bots_game_in_progress.opy)
-   10: rule "BORN TO BATTLE PLAYER EARNS ELIMINATION" (src/enhancements.opy)
     9: rule "resolveReconnectUserIndex" (src/subroutines.opy)
     9: rule "CC COOLDOWN FROM DOWNFALLEN/BRUTE" (src/hero_tuning.opy)
-    9: rule "BULKING SEASON EARNS STACKS" (src/enhancements.opy)
     8: rule "START GAME IF WAITING FOR PLAYERS" (src/global_startup.opy)
     8: rule "completeBossObjective" (src/objective_types/objective_type_bosses.opy)
     8: rule "CASSIDY GRENADE HACK" (src/hero_tuning.opy)
@@ -4138,33 +4136,6 @@ rule ("SURVIVOR REACHES EXTRACTION SITE") {
         Chase Player Variable At Rate(Global.objectiveActorSlot, actorMotionSlot1, Add(Position Of(Global.objectiveActorSlot), Multiply(100, Up)), 10, None); // 10 elements
         Wait(3, Ignore Condition); // 2 elements
         Destroy Dummy Bot(Team 1, Slot Of(Global.objectiveActorSlot)); // 4 elements
-    }
-}
-
-//69 elements
-rule ("MODIFY KILL ZONE SCORE") {
-    event {
-        Player Dealt Final Blow;
-        All;
-        All;
-    }
-    conditions {
-        Global.phaseSlot10 == 5; // 3 elements
-        Is True For Any(Append To Array(Global.playerTargetList, Victim), Compare(Distance Between(Current Array Element, Global.objectiveMotionSlot), <, Global.objectiveRad)) == True; // 13 elements
-    }
-    actions {
-        If(Or(Compare(Distance Between(Event Player, Global.objectiveMotionSlot), <, Global.objectiveRad), Compare(Distance Between(Victim, Global.objectiveMotionSlot), <, Global.objectiveRad))); // 17 elements
-            Set Player Variable(Victim, recoveryTimeSlot, 2); // 2 elements
-            Modify Global Variable(objectiveProgressSlot, Add, Round To Integer(Divide((Victim).botBaseHealth, 280), Up)); // 8 elements
-            If(Compare(Global.objectiveProgressSlot, >=, 50)); // 6 elements
-                Set Global Variable(isObjectiveComplete, True); // 1 element
-                "Give all bots a long respawn time"
-                Set Player Variable(All Players(Team 2), recoveryTimeSlot, 12); // 4 elements
-                Set Global Variable(botSpawnTimeList, Mapped Array(Global.botSpawnTimeList, 12)); // 5 elements
-            End; // 1 element
-        End; // 1 element
-        "Adjust Kill Zone Positions"
-        Modify Global Variable(objectiveMotionSlot, Add, Multiply(0.5, Direction Towards(Global.objectiveMotionSlot, Victim))); // 7 elements
     }
 }
 
@@ -8754,22 +8725,6 @@ rule ("PYROTECHNIC APPLIES DAMAGE") {
     }
 }
 
-//10 elements
-rule ("BORN TO BATTLE PLAYER EARNS ELIMINATION") {
-    event {
-        Player Dealt Final Blow;
-        Team 1;
-        All;
-    }
-    conditions {
-        (Event Player).enhancementId == 5; // 4 elements
-        (Event Player).actorTeamSlot22 < 2; // 4 elements
-    }
-    actions {
-        Modify Player Variable(Event Player, actorTeamSlot22, Add, True); // 1 element
-    }
-}
-
 //137 elements
 rule ("BORN TO BATTLE PLAYER USES ABILITY CHARGE") {
     event {
@@ -8846,24 +8801,6 @@ rule ("PLAGUE DOCTOR REDUCES PLAYERS' INFECTION LEVELS") {
                 Modify Player Variable(Event Player, actorTeamSlot22, Add, 0.5); // 2 elements
                 Play Effect(Event Player, Good Pickup Effect, Color(Green), Healee, 1); // 3 elements
                 Small Message(Event Player, If-Then-Else(Compare(Healee, ==, Event Player), Custom String("You cured yourself!"), Custom String("You cured {0} {1}!", Healee, Hero Icon String(Hero Of(Healee))))); // 17 elements
-    }
-}
-
-//9 elements
-rule ("BULKING SEASON EARNS STACKS") {
-    event {
-        Player Earned Elimination;
-        Team 1;
-        All;
-    }
-    conditions {
-        Global.isGameplayActive == True; // 2 elements
-        (Event Player).enhancementId == 10; // 4 elements
-    }
-    actions {
-        "One credit for a kill or damage participation; healing/buff assists do not count."
-        Modify Player Variable(Event Player, actorTeamSlot22, Add, True); // 1 element
-        Call Subroutine(applyBulkingSeasonStats); // 1 element
     }
 }
 
@@ -10158,32 +10095,6 @@ rule ("LASER BARRICADE BLOCKS ZOMBIES") {
     }
 }
 
-//48 elements
-rule ("SCAVENGER BOT LOOT") {
-    event {
-        Player Earned Elimination;
-        Team 1;
-        All;
-    }
-    conditions {
-        Global.isGameplayActive == True; // 2 elements
-        (Event Player).augmentId == 9; // 4 elements
-        Team Of(Victim) == Team 2; // 3 elements
-        Is Dummy Bot(Victim) == True; // 2 elements
-    }
-    actions {
-        If(Compare(Random Integer(True, 20), ==, 1)); // 8 elements
-            "One item roll per credited kill or damage participation. No waits or\ncalls while this scratch value is live; reserves never activate here."
-            Set Global Variable(tmp0, Random Integer(True, 13)); // 4 elements
-            If(Compare(Count Of((Event Player).augmentState0), <, 2)); // 8 elements
-                Modify Player Variable(Event Player, augmentState0, Append To Array, Global.tmp0); // 2 elements
-                Small Message(Event Player, Custom String("Scavenger: powerup added to backpack")); // 5 elements
-            Else; // 1 element
-                Modify Global Variable(supplyPowerUpIdList, Append To Array, Global.tmp0); // 2 elements
-                Modify Global Variable(supplyPowerUpPositionList, Append To Array, Add(Nearest Walkable Position(Position Of(Victim)), Global.offsetUpQuarterConst)); // 6 elements
-    }
-}
-
 //15 elements
 rule ("LEECH LIFESTEAL") {
     event {
@@ -10196,6 +10107,60 @@ rule ("LEECH LIFESTEAL") {
         If(And(Global.isGameplayActive, Compare((Event Player).augmentId, ==, 10))); // 10 elements
             "Include damage from the hero, primary enhancement and scripted powerups."
             Heal(Event Player, Event Player, Multiply(Event Damage, 0.15)); // 4 elements
+    }
+}
+
+//88 elements
+rule ("PLAYER DEALT FINAL B­LOW") {
+    event {
+        Player Dealt Final Blow;
+        Team 1;
+        All;
+    }
+    actions {
+        If(Compare((Event Player).enhancementId, ==, 5)); // 7 elements
+            Skip If(Compare((Event Player).actorTeamSlot22, >=, 2), True); // 7 elements
+            Modify Player Variable(Event Player, actorTeamSlot22, Add, True); // 1 element
+            //__label_if_85__:
+        End; // 1 element
+        Abort If(Compare(Global.phaseSlot10, !=, 5)); // 6 elements
+        If(Is True For Any(Append To Array(Global.playerTargetList, Victim), Compare(Distance Between(Current Array Element, Global.objectiveMotionSlot), <, Global.objectiveRad))); // 13 elements
+            If(Or(Compare(Distance Between(Event Player, Global.objectiveMotionSlot), <, Global.objectiveRad), Compare(Distance Between(Victim, Global.objectiveMotionSlot), <, Global.objectiveRad))); // 17 elements
+                Set Player Variable(Victim, recoveryTimeSlot, 2); // 2 elements
+                Modify Global Variable(objectiveProgressSlot, Add, Round To Integer(Divide((Victim).botBaseHealth, 280), Up)); // 8 elements
+                If(Compare(Global.objectiveProgressSlot, >=, 50)); // 6 elements
+                    Set Global Variable(isObjectiveComplete, True); // 1 element
+                    "Give all bots a long respawn time"
+                    Set Player Variable(All Players(Team 2), recoveryTimeSlot, 12); // 4 elements
+                    Set Global Variable(botSpawnTimeList, Mapped Array(Global.botSpawnTimeList, 12)); // 5 elements
+                End; // 1 element
+            End; // 1 element
+            Modify Global Variable(objectiveMotionSlot, Add, Multiply(0.5, Direction Towards(Global.objectiveMotionSlot, Victim))); // 7 elements
+    }
+}
+
+//54 elements
+rule ("PLAYER EARNED ELIMINATION") {
+    event {
+        Player Earned Elimination;
+        Team 1;
+        All;
+    }
+    actions {
+        If(Compare((Event Player).enhancementId, ==, 10)); // 7 elements
+            Modify Player Variable(Event Player, actorTeamSlot22, Add, True); // 1 element
+            Call Subroutine(applyBulkingSeasonStats); // 1 element
+        End; // 1 element
+        If(Compare((Event Player).augmentId, ==, 9)); // 7 elements
+            If(Compare(Random Integer(True, 20), ==, 1)); // 8 elements
+                "One item roll per credited kill or damage participation. No waits or\ncalls while this scratch value is live; reserves never activate here."
+                Set Global Variable(tmp0, Random Integer(True, 13)); // 4 elements
+                If(Compare(Count Of((Event Player).augmentState0), <, 2)); // 8 elements
+                    Modify Player Variable(Event Player, augmentState0, Append To Array, Global.tmp0); // 2 elements
+                    Small Message(Event Player, Custom String("Scavenger: powerup added to backpack")); // 5 elements
+                Else; // 1 element
+                    Modify Global Variable(supplyPowerUpIdList, Append To Array, Global.tmp0); // 2 elements
+                    Modify Global Variable(supplyPowerUpPositionList, Append To Array, Add(Nearest Walkable Position(Position Of(Victim)), Global.offsetUpQuarterConst)); // 6 elements
     }
 }
 

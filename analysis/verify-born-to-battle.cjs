@@ -14,9 +14,11 @@ const charge = `(Event Player).${chargeSlot}`;
 const setCharge = `Set Player Variable(Event Player, ${chargeSlot}, False);`;
 const spendCharge = `Modify Player Variable(Event Player, ${chargeSlot}, Subtract, True);`;
 const earnName = 'BORN TO BATTLE PLAYER EARNS ELIMINATION';
+// OverPy inserts a soft hyphen in "BLOW" in emitted rule names.
+const finalBlowName = 'PLAYER DEALT FINAL B\u00adLOW';
 const useName = 'BORN TO BATTLE PLAYER USES ABILITY CHARGE';
 const description = 'Final blows grant a cooldown reset on the next ability use, storing up to 2 charges';
-const hudLine = body => body.split('\n').find(line => line.startsWith('Create HUD Text(Event Player, Custom String("Born to Battle'));
+const hudLine = body => body.split('\n').find(line => line.startsWith('Create HUD Text(Event Player,') && line.includes('Custom String("Born to Battle")'));
 
 // Evaluate actual emitted numeric/HUD values, including OverPy's True/Null constants.
 function value(expr, count) {
@@ -71,9 +73,17 @@ async function main() {
         let expected = rule.body.replace('(Event Player).enhancementId == 7;',
             `(Event Player).enhancementId == ${enhancementId};`);
         if (rule.name === earnName) {
-            expected = expected.replace(`${charge} != True;`, `${charge} < 2;`)
-                .replace(`Set Player Variable(Event Player, ${chargeSlot}, True);`,
-                    `Modify Player Variable(Event Player, ${chargeSlot}, Add, True);`);
+            // Earning moved into the shared Team 1 final-blow handler. The nested
+            // charge-cap check compiles to Skip If; it must skip only the increment.
+            assert(!current.has(earnName));
+            assert(current.get(finalBlowName).startsWith([
+                'event {', 'Player Dealt Final Blow;', 'Team 1;', 'All;', '}', 'actions {',
+                `If(Compare((Event Player).enhancementId, ==, ${enhancementId}));`,
+                `Skip If(Compare(${charge}, >=, 2), True);`,
+                `Modify Player Variable(Event Player, ${chargeSlot}, Add, True);`,
+                'End;', 'Abort If('
+            ].join('\n')));
+            continue;
         } else if (rule.name === useName) {
             expected = expected.replace(`${charge} == True;`, `${charge} > Null;`)
                 .replaceAll(setCharge, spendCharge);
@@ -85,16 +95,16 @@ async function main() {
     assert(newRules.some(rule => rule.body.includes(description)));
     const init = current.get('PLAYER ENHANCEMENT INITIALIZATION');
     assert(init.includes(hudLine(init) + '\n' + `Set Player Variable(Event Player, ${chargeSlot}, Null);`));
-    const earn = current.get(earnName);
-    assert(earn.includes(`${charge} < 2;`));
+    const earn = current.get(finalBlowName);
+    assert(earn.includes(`Skip If(Compare(${charge}, >=, 2), True);`));
     assert(current.get(useName).includes(`${charge} > Null;`));
     const earnAction = earn.split('\n').find(line => line.startsWith('Modify Player Variable('));
     const spendActions = [useName, 'resetBattleAbilityCharge'].flatMap(name =>
         current.get(name).split('\n').filter(line => line.startsWith('Modify Player Variable(')));
     assert.equal(spendActions.length, 3, 'Charge, cooldown and special hero branches must each spend one');
-    const hud = args(hudLine(current.get('PLAYER ENHANCEMENT INITIALIZATION')))[3];
+    const hud = args(hudLine(current.get('PLAYER ENHANCEMENT INITIALIZATION')))[2];
     for (const count of [0, 1, 2]) {
-        assert.equal(value(hud, count), ['', '✓', '✓ ✓'][count]);
+        assert.equal(value(hud, count).trim(), `${count}/2 resets`);
         // Only final-blow events below the cap run the earned-charge action.
         assert.equal(count < 2 ? modify(earnAction, count) : count, [1, 2, 2][count]);
         for (const spend of spendActions) {

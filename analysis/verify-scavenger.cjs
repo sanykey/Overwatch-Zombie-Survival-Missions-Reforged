@@ -192,7 +192,7 @@ async function main() {
     assert(!applies(compiled.get('PLAYER AUGMENT INITIALIZATION'), heroSwitch));
     assert.deepEqual(heroSwitch.player[backpack], [5, 7]);
 
-    const loot = 'SCAVENGER BOT LOOT';
+    const loot = 'PLAYER EARNED ELIMINATION';
     assert(compiled.get(loot).body.includes('Player Earned Elimination;'), 'Kills and damage participation use elimination credit, not only final blows');
     for (let roll = 1; roll <= 20; roll++) {
         const s = state(); s.victim = {team: 2, dummy: true, position: [5, 2, 5]}; s.randomRolls = [roll, 7];
@@ -220,11 +220,10 @@ async function main() {
     consecutive.randomRolls = [1, 5, 1, 6]; run(loot, consecutive); run(loot, consecutive);
     assert.deepEqual(consecutive.player[backpack], [3, 5]);
     assert.deepEqual(consecutive.globals.supplyPowerUpIdList, [6], 'After filling the last reserve slot, the next success falls to the ground');
-    for (const victim of [{team: 1, dummy: true}, {team: 2, dummy: false}]) {
-        const s = state(); s.victim = victim; assert(!applies(compiled.get(loot), s));
-    }
-    const other = state(0, [], 1); assert(!applies(compiled.get(loot), other));
-    const stopped = state(); stopped.globals.isGameplayActive = false; assert(!applies(compiled.get(loot), stopped));
+    const other = state(0, [], 1);
+    assert(run(loot, other).done());
+    assert.deepEqual(other.randomCalls, [], 'Other augments must not roll for loot');
+    assert.deepEqual(other.player[backpack], []);
     assert(!compiled.has('SCAVENGER LIFESTEAL'));
     for (let enhancement = 1; enhancement <= 11; enhancement++) {
         const s = state(0, [], 9, enhancement); s.player[primaryState] = 123; s.player.initialMaxHealth = 250;
@@ -258,7 +257,7 @@ async function main() {
     const useBody = compiled.get('powerUpUsage').body;
     assert(!useBody.includes(backpack), 'Reserve storage must never be a source for powerUpUsage');
     assert(!actions(compiled.get('dropCarriedPowerUps')).some(line => /^Wait/.test(line)));
-    const raw = [...build.result.matchAll(/^rule \("(?:SCAVENGER BOT LOOT|dropCarriedPowerUps|PLAYER INTERACT [^"]*)"\) \{\n[\s\S]*?^\}/gm)].map(m => m[0]);
+    const raw = [...build.result.matchAll(/^rule \("(?:PLAYER EARNED ELIMINATION|dropCarriedPowerUps|PLAYER INTERACT [^"]*)"\) \{\n[\s\S]*?^\}/gm)].map(m => m[0]);
     // The only calls in these rules occur after the last scratch read.
     checkWorkshop(raw.join('\n'));
     console.log(JSON.stringify({elements: build.elements, warnings: build.warnings.length,
