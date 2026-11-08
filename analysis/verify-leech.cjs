@@ -2,7 +2,7 @@
 const assert = require('node:assert/strict');
 const {files, compile, compiler} = require('./measure-further-optimizations.cjs');
 const {rules} = require('./verify-player-variables.cjs');
-const {scenario, start, applies, actions} = require('./verify-augments.cjs');
+const {scenario, start, applies, actions, enhancementCount} = require('./verify-augments.cjs');
 const slot = name => files['variables.opy'].match(new RegExp('^#!define ' + name + ' (\\w+)$', 'm'))[1];
 
 async function main() {
@@ -23,7 +23,7 @@ async function main() {
         'Only guarded healing, with self attribution and no damage recursion, waits or state writes');
 
     let damageCases = 0;
-    for (let enhancement = 1; enhancement <= 11; enhancement++)
+    for (let enhancement = 1; enhancement <= enhancementCount; enhancement++)
     for (const damage of [0, 1, 40, 100, 1000]) for (const ability of [0, 'Primary Fire']) {
         const s = scenario(10, {eventDamage: damage, eventAbility: ability, maxHealth: 10000});
         Object.assign(s.player, {enhancementId: enhancement, health: 100, [energy]: 17, [backpack]: 42});
@@ -50,7 +50,7 @@ async function main() {
         s.player.health = 100; s.expectedHealer = s.player;
         assert(applies(lifesteal, s), 'The event enters Actions even when eligibility fails');
         assert(run(lifesteal, s).done());
-        const eligible = augment === 10 && active === true;
+        const eligible = augment === 10; // d9571b0 intentionally removed the gameplay-phase gate.
         assert.equal(s.player.health, eligible ? 115 : 100, 'Rejected events must not heal');
         assert.equal(s.healBonus, eligible ? 15 : undefined);
         assert.equal(s.damage.length, 0);
@@ -59,7 +59,7 @@ async function main() {
     const pregame = scenario(10, {globals: {isGameplayActive: false}});
     assert(!applies(init, pregame));
 
-    for (let enhancement = 1; enhancement <= 11; enhancement++) {
+    for (let enhancement = 1; enhancement <= enhancementCount; enhancement++) {
         const s = scenario(10);
         Object.assign(s.player, {enhancementId: enhancement, initialMaxHealth: 250, [energy]: 17, [backpack]: 42});
         assert(run(init, s).done());
@@ -86,8 +86,8 @@ async function main() {
     }
     assert(init.body.includes('15% lifesteal | +50 health'));
     assert(!compiled.has('APOTHECARY ALLOW HEALTH PACK PICKUP'));
-    assert(![...compiled.keys()].some(name => name.includes('BOLT')));
+    assert(compiled.has('BOLT STRIKE DAMAGE'));
     console.log(JSON.stringify({elements: build.elements, warnings: build.warnings.length, damageCases, eligibilityCases,
-        checked: '15% native/scripted damage/all 11 Enhancements/self attribution/healing cap/Overcharge actual healing/no recursion/50 recoverable normal health/readiness gate/Kevlar/hero-switch gate/random choice/no shared state'}, null, 2));
+        checked: '15% native/scripted damage/all Enhancements including Bolt Strike/self attribution/healing cap/Overcharge actual healing/no recursion/50 recoverable normal health/readiness gate/Kevlar/hero-switch gate/random choice/no shared state'}, null, 2));
 }
 main().catch(error => {console.error(error); process.exitCode = 1;});

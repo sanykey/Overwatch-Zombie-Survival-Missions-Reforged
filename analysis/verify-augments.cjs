@@ -7,6 +7,7 @@ const {files, compile, compiler, src} = require('./measure-further-optimizations
 const {rules} = require('./verify-player-variables.cjs');
 const {args} = require('./verify-global-temporaries.cjs');
 const root = path.dirname(src);
+const enhancementCount = Math.max(...[...files['variables.opy'].match(/enum Enhancement:([\s\S]*?)\n\n/)[1].matchAll(/= (\d+),/g)].map(m => Number(m[1])));
 const slot = name => files['variables.opy'].match(new RegExp('^#!define ' + name + ' (\\w+)$', 'm'))[1];
 const truth = value => Array.isArray(value) ? value.length > 0 : !!value;
 const array = value => Array.isArray(value) ? value : value ? [value] : [];
@@ -88,8 +89,12 @@ function value(expr, state, element) {
         case 'Z Component Of': return v(0)[2];
         case 'First Of': return array(v(0))[0] ?? 0;
         case 'Count Of': return array(v(0)).length;
+        case 'Array Slice': return array(v(0)).slice(Number(v(1)), Number(v(1)) + Number(v(2)));
+        // Deterministic shuffle fixture: native RNG distribution is outside this interpreter.
+        case 'Randomized Array': state.shuffleCalls = (state.shuffleCalls ?? 0) + 1; return [...array(v(0))];
         case 'Value In Array': return array(v(0))[Number(v(1))] ?? 0;
         case 'Append To Array': return array(v(0)).concat(v(1));
+        case 'Remove From Array': return array(v(0)).filter(item => !array(v(1)).includes(item));
         case 'Nearest Walkable Position': return state.walkablePosition ?? point(v(0));
         case 'If-Then-Else': return truth(v(0)) ? v(1) : v(2);
         case 'Evaluate Once': return v(0);
@@ -118,6 +123,7 @@ function value(expr, state, element) {
         }
         case 'Modulo': return v(0) % v(1);
         case 'Max': return Math.max(v(0), v(1));
+        case 'Min': return Math.min(v(0), v(1));
         case 'Divide': return v(0) / v(1);
         case 'Absolute Value': return Math.abs(v(0));
         case 'And': return truth(v(0)) && truth(v(1));
@@ -175,7 +181,7 @@ function value(expr, state, element) {
         case 'Distance Between': return magnitude(point(v(0)).map((x, i) => x - point(v(1))[i]));
         case 'Players Within Radius':
             assert.equal(a[2], 'Team 2'); assert.equal(a[3], 'Surfaces');
-            return state.targets.filter(target => (target.team ?? 2) === 2 && target.visible && magnitude(target.position.map((x, i) => x - v(0)[i])) <= v(1));
+            return state.targets.filter(target => (target.team ?? 2) === 2 && target.visible && magnitude(target.position.map((x, i) => x - point(v(0))[i])) <= v(1));
         case 'Is In View Angle': return angle(state.facing, v(1).map((x, i) => x - value('Eye Position(Event Player)', state)[i])) <= v(2);
         case 'Random Integer': {
             const min = Number(v(0)), max = Number(v(1)), roll = state.randomRolls?.shift() ?? state.randomRoll ?? min;
@@ -357,7 +363,7 @@ function* execute(rule, state, compiled) {
                     const targets = Array.isArray(target) ? target : [target];
                     state.damage.push({targets, amount: v(2), time: state.time});
                     for (const recipient of targets) {
-                        if (!recipient.invincible) recipient.health = Math.max(0, (recipient.health ?? 10000) - v(2));
+                        if (!recipient.invincible) recipient.health = Math.max(0, (recipient.health ?? 10000) - v(2) * (recipient.damageMultiplier ?? 1));
                     }
                     break;
                 }
@@ -960,9 +966,10 @@ async function main() {
     stepOff.time = 102.2; stepOff.ground = false; updateBonus(stepOff);
     assert.equal(stepOff.player[bonusSlot][0], -102.5, 'Walking off another ledge does not restart the original flight window');
     stepOff.time = 102.5; updateBonus(stepOff); assert.equal(stepOff.player[bonusSlot], 0);
-    for (const overrides of [{eventDamage: 0}, {victim: {team: 1}}]) {
-        const state = armedJump({victim: {team: 2}, eventAbility: 'Primary Fire', eventDamage: 100, ...overrides});
-        assert(!applies(compiled.get(hitBonus), state), 'Zero damage and friendly hits do not spend the bonus');
+    for (const self of [false, true]) {
+        const state = armedJump({victim: {team: 2}, eventAbility: 'Primary Fire', eventDamage: self ? 100 : 0});
+        if (self) state.victim = state.player;
+        assert(!applies(compiled.get(hitBonus), state), 'Zero damage and self hits do not spend the bonus');
         assert(Array.isArray(state.player[bonusSlot]));
     }
     for (const cancel of [s => {s.alive = false;}, s => {s.hero = 'Ana';}, s => {s.globals.isGameplayActive = false;}]) {
@@ -1540,12 +1547,12 @@ async function main() {
     assert(selectionActions[1].startsWith('Set Player Variable(Event Player, enhancementId, Random Integer('));
     const enhancementSelection = {...enhancementInit,
         body: enhancementInit.body.split('actions {\n')[0] + 'actions {\n' + selectionActions.join('\n') + '\n}'};
-    for (let picked = 1; picked <= 11; picked++) for (const missing of [false, true]) {
+    for (let picked = 1; picked <= enhancementCount; picked++) for (const missing of [false, true]) {
         const state = scenario(1, {randomRoll: picked});
         if (!missing) state.player.enhancementId = 0;
         start(enhancementSelection, state, compiled);
-        assert.equal(state.player.enhancementId, picked, 'All eleven enhancements are eligible for unselected / late-join players');
-        assert.deepEqual(state.randomCalls, [[1, 11]]);
+        assert.equal(state.player.enhancementId, picked, 'All enhancements are eligible for unselected / late-join players');
+        assert.deepEqual(state.randomCalls, [[1, enhancementCount]]);
         state.randomRoll = picked === 10 ? 1 : 10;
         start(enhancementSelection, state, compiled);
         assert.equal(state.player.enhancementId, picked, 'An already resolved enhancement is retained');
@@ -1714,5 +1721,5 @@ async function main() {
             'Long Reach Overcharge / actual damage / immunity / mixed targets / first hit / multiple targets and swings / exact expiry / fixed window / independent next bank / scripted-event filtering'],
         exported: process.argv.includes('--export'), limitation: 'Game physics, native hitboxes and engine ammo support require an in-game check.'}, null, 2));
 }
-module.exports = {value, applies, execute, start, scenario, actions};
+module.exports = {value, applies, execute, start, scenario, actions, enhancementCount};
 if (require.main === module) main().catch(error => {console.error(error); process.exitCode = 1;});

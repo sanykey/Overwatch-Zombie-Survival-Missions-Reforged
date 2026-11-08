@@ -25,7 +25,7 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
     if eventPlayer.enhancementId == Enhancement.NO_PREFERENCE:
         # No preference and late-join zero state receive one real choice before
         # its state is initialized. Retain the selected ID across later spawns.
-        eventPlayer.enhancementId = random.randint(Enhancement.BRAIN_KILLER, Enhancement.DEAD_WEIGHT)
+        eventPlayer.enhancementId = random.randint(Enhancement.BRAIN_KILLER, Enhancement.BOLT_STRIKE)
     #Zombie Hybrid
     if eventPlayer.enhancementId == Enhancement.ZOMBIE_HYBRID:
         #Enhancement: Zombie Hyrbid
@@ -118,6 +118,15 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
                 eventPlayer, iconString(Icon.TRASHCAN),
                 (f"{max(0, ceil(eventPlayer.enhancementHoldUntil - getTotalTimeElapsed()))}s | [{inputBindingString(Button.INTERACT)}] to throw" if eventPlayer.enhancementHeldZombie != null else f"Aim at a vulnerable zombie | [{inputBindingString(Button.INTERACT)}] to pick up"),
                 "Dead Weight", HudPosition.ACTUALLY_LEFT, 99, Color.PURPLE, Color.PURPLE, Color.PURPLE, HudReeval.STRING
+            )
+            break
+        case Enhancement.BOLT_STRIKE:
+            eventPlayer.enhancementBoltEnergy = 0
+            eventPlayer.enhancementBoltBurst = 0
+            hudText(
+                eventPlayer, EnhancementIcon.BOLT_STRIKE,
+                f"2 targets | 25%, max 20 | Energy: {floor(eventPlayer.enhancementBoltEnergy)}/200 | Hold [{inputBindingString(Button.MELEE)}] | Armed: {eventPlayer.enhancementBoltBurst != 0}",
+                "Bolt Strike", HudPosition.ACTUALLY_LEFT, 99, Color.YELLOW, Color.YELLOW, Color.YELLOW, HudReeval.STRING
             )
             break
         #Born to Battle
@@ -371,6 +380,60 @@ def applyBulkingSeasonStats():
     eventPlayer.setMaxHealth(min(200, 100 + eventPlayer.enhancementBulkStacks * 0.5))
     eventPlayer.sizeScale = min(1.35, 1 + eventPlayer.enhancementBulkStacks * 0.005)
     applyCurrentSizeScale()
+
+
+rule "BOLT STRIKE DAMAGE":
+    @Event playerDealtDamage
+    @Team 1
+    @Condition eventAbility != null
+    @Condition victim.getTeam() == Team.2
+    @Condition eventDamage > 0
+
+    # Keep eligibility in Actions, like Leech, to avoid adding its known UI-bug
+    # pattern to Conditions. Scripted Damage has no Event Ability: no recursion.
+    if isGameplayActive and eventPlayer.enhancementId == Enhancement.BOLT_STRIKE:
+        # Synchronous scratch, consumed before this event ends: no waits, async
+        # calls or reevaluated effects. No persistent lightning IDs need cleanup.
+        #!define boltChainTargets tmp0
+        #!define boltHealthBefore tmp1
+        #!define boltIndex tmp2
+        boltChainTargets = random.shuffle(getPlayersInRadius(victim, 10, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive()).exclude(victim)).slice(0, 2)
+        for boltIndex in range(len(boltChainTargets)):
+            boltHealthBefore = boltChainTargets[boltIndex].getHealth()
+            damage(boltChainTargets[boltIndex], eventPlayer, min(20, eventDamage * 0.25))
+            # Bank only actual health removed, including immunity/reduction/overkill.
+            eventPlayer.enhancementBoltEnergy = min(200, eventPlayer.enhancementBoltEnergy + max(0, boltHealthBefore - boltChainTargets[boltIndex].getHealth()))
+            playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, boltChainTargets[boltIndex], 0.5)
+        if eventPlayer.enhancementBoltBurst == -1:
+            eventPlayer.enhancementBoltBurst = getTotalTimeElapsed() + 0.3
+        if eventPlayer.enhancementBoltBurst > getTotalTimeElapsed():
+            victim.setStatusEffect(eventPlayer, Status.STUNNED, 2)
+            damage(victim, eventPlayer, 60)
+
+
+rule "BOLT STRIKE ARMS CHARGE":
+    @Event eachPlayer
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.enhancementId == Enhancement.BOLT_STRIKE
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
+    @Condition eventPlayer.enhancementBoltEnergy >= 200
+    @Condition eventPlayer.enhancementBoltBurst == 0
+
+    eventPlayer.enhancementBoltEnergy = 0
+    eventPlayer.enhancementBoltBurst = -1
+
+
+rule "BOLT STRIKE CLEARS CHARGE":
+    @Event eachPlayer
+    @Team 1
+    @Condition eventPlayer.enhancementId == Enhancement.BOLT_STRIKE
+    @Condition eventPlayer.enhancementBoltBurst != 0
+    @Condition (not isGameplayActive or not eventPlayer.isAlive() or eventPlayer.enhancementBoltBurst > 0 and getTotalTimeElapsed() >= eventPlayer.enhancementBoltBurst) == true
+
+    # Death/game end cancels the burst; unspent energy stays in the bank.
+    eventPlayer.enhancementBoltBurst = 0
 
 
 rule "OVERCHARGE STORES HEALING":

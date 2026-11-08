@@ -31,7 +31,7 @@ enum Challenge:
     PANDORAS_BOX = 5,
 
 # Enhancement IDs index enhancementOptionList and the start-menu tables.
-# Zero means no preference; initialization randomly selects a real ID 1-11.
+# Zero means no preference; initialization randomly selects a real ID 1-12.
 # Brain Killer remains the first explicit menu choice.
 enum Enhancement:
     NO_PREFERENCE = 0,
@@ -46,6 +46,7 @@ enum Enhancement:
     OVERCHARGE = 9,
     BULKING_SEASON = 10,
     DEAD_WEIGHT = 11,
+    BOLT_STRIKE = 12,
 
 # Independent secondary enhancement slot. IDs index the names/icons in augments.opy.
 enum Augment:
@@ -744,6 +745,9 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 # Exclusive primary enhancement; slots belong to its selected human (the healer
 # for dealt-healing events, the receiver for health packs), never an enemy target.
 #!define enhancementCapacitorEnergy actorTeamSlot22
+# Bolt Strike: actual chain health removed, capped at 200; retained on death.
+# Exclusive primary enhancement on its attacking human; no Augment owns this slot.
+#!define enhancementBoltEnergy actorTeamSlot22
 # Born to Battle unspent ability resets (0-2); retained through ability waits and reevaluated by its HUD.
 #!define enhancementBattleResetCharges actorTeamSlot22
 # Placed Charge Battery position; zero clears it.
@@ -776,6 +780,9 @@ playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateS
 # Overcharge: absolute burst deadline; zero means armed but waiting for its first hit.
 # Set once by the first hit, read by later hits, cleared with the charge on expiry/death.
 #!define enhancementCapacitorDeadline actorTeamSlot24
+# Bolt Strike: 0 inactive, -1 armed, positive absolute 0.3-second burst deadline.
+# Exclusive primary enhancement; read across damage events/HUD, with no waits/chases.
+#!define enhancementBoltBurst actorTeamSlot24
 # Full battery reuse cooldown used for progress scaling (10 seconds).
 #!define enhancementBatteryReuseDuration actorTeamSlot24
 # Current P.U.P. enemy target; null while idle.
@@ -919,8 +926,9 @@ enum EnhancementIcon:
     OVERCHARGE = iconString(Icon.MOON),
     BULKING_SEASON = "<TX C0000000002A9ED>",
     DEAD_WEIGHT = iconString(Icon.TRASHCAN),
+    BOLT_STRIKE = iconString(Icon.BOLT),
 
-globalvar enhancementIconListConst = [EnhancementIcon.NO_PREFERENCE, EnhancementIcon.BRAIN_KILLER, EnhancementIcon.ZOMBIE_HYBRID, EnhancementIcon.PYROTECHNIC, EnhancementIcon.PLAGUE_DOCTOR, EnhancementIcon.BORN_TO_BATTLE, EnhancementIcon.CHARGE_BATTERY, EnhancementIcon.HITCHHIKER, EnhancementIcon.PUP, EnhancementIcon.OVERCHARGE, EnhancementIcon.BULKING_SEASON, EnhancementIcon.DEAD_WEIGHT]
+globalvar enhancementIconListConst = [EnhancementIcon.NO_PREFERENCE, EnhancementIcon.BRAIN_KILLER, EnhancementIcon.ZOMBIE_HYBRID, EnhancementIcon.PYROTECHNIC, EnhancementIcon.PLAGUE_DOCTOR, EnhancementIcon.BORN_TO_BATTLE, EnhancementIcon.CHARGE_BATTERY, EnhancementIcon.HITCHHIKER, EnhancementIcon.PUP, EnhancementIcon.OVERCHARGE, EnhancementIcon.BULKING_SEASON, EnhancementIcon.DEAD_WEIGHT, EnhancementIcon.BOLT_STRIKE]
 
 # Immutable palette shared by the pregame menu and gameplay HUD; indexed by Augment.
 globalvar augmentColorListConst = [Color.AQUA, Color.LIGHT_GRAY, Color.YELLOW, Color.SKY_BLUE, Color.ORANGE, Color.WHITE, Color.TURQUOISE, Color.BLUE, Color.GREEN, Color.LIME_GREEN, Color.RED]

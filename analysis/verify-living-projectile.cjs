@@ -2,7 +2,7 @@
 const assert = require('node:assert/strict');
 const {files, compile, compiler} = require('./measure-further-optimizations.cjs');
 const {rules} = require('./verify-player-variables.cjs');
-const {scenario, start, actions, applies, value} = require('./verify-augments.cjs');
+const {scenario, start, actions, applies, value, enhancementCount} = require('./verify-augments.cjs');
 const {args, checkWorkshop} = require('./verify-global-temporaries.cjs');
 const slot = name => files['variables.opy'].match(new RegExp('^#!define ' + name + ' (\\w+)$', 'm'))[1];
 const held = slot('enhancementHeldZombie'), owner = slot('deadWeightZombieCarrier');
@@ -22,21 +22,21 @@ async function main() {
     const enhancementInit = compiled.get('PLAYER ENHANCEMENT INITIALIZATION');
     const selection = {...enhancementInit, body: enhancementInit.body.split('actions {\n')[0]
         + 'actions {\n' + actions(enhancementInit).slice(0, 2).join('\n') + '\n}'};
-    for (let id = 1; id <= 11; id++) for (const missing of [false, true]) {
+    for (let id = 1; id <= enhancementCount; id++) for (const missing of [false, true]) {
         const s = scenario(1, {randomRoll: id});
         if (!missing) s.player.enhancementId = 0;
         start(selection, s, compiled);
         assert.equal(s.player.enhancementId, id);
         start(selection, s, compiled);
-        assert.deepEqual(s.randomCalls, [[1, 11]], 'Enhancement rolls include Dead Weight and persist');
+        assert.deepEqual(s.randomCalls, [[1, enhancementCount]], 'Enhancement rolls include Dead Weight/Bolt Strike and persist');
     }
-    for (let id = 0; id <= 11; id++) for (const backwards of [false, true]) {
+    for (let id = 0; id <= enhancementCount; id++) for (const backwards of [false, true]) {
         const s = scenario(1, {buttons: new Set(['Melee', ...(backwards ? ['Secondary Fire'] : [])])});
         s.globals.isPregameSetup = true;
-        s.globals[slot('enhancementOptionList')] = Array(12).fill('icon');
+        s.globals[slot('enhancementOptionList')] = Array(enhancementCount + 1).fill('icon');
         s.player.enhancementId = id;
         run('PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)', s);
-        assert.equal(s.player.enhancementId, (id + (backwards ? 11 : 1)) % 12);
+        assert.equal(s.player.enhancementId, (id + (backwards ? enhancementCount : 1)) % (enhancementCount + 1));
     }
     for (let id = 0; id <= 10; id++) for (const backwards of [false, true]) {
         const s = scenario(id, {buttons: new Set(['Interact', ...(backwards ? ['Secondary Fire'] : [])])});
@@ -290,7 +290,7 @@ async function main() {
     const scratchRules = [...build.result.matchAll(/^rule \("(?:useLivingProjectile|LIVING PROJECTILE RELEASE)"\) \{\n[\s\S]*?^\}/gm)].map(match => match[0]);
     assert.equal(scratchRules.length, 2); checkWorkshop(scratchRules.join('\n'));
     console.log(JSON.stringify({elements: build.elements,
-        warnings: build.warnings, checked: 'stale shared-state initialization / idle HUD without timer / hold countdown and HUD reset / first pickup after initialization / 4m ray / primary selection forward and backward / 11 Enhancements and 10 Augments / explicit choice and late-join rolls / independent HUDs / all Augment state preserved / Laser Barricade throw priority and cooldown / boss/miniboss pickup ban / 5s hold / 6s knockdown from pickup / cleared synchronously with throw damage / eligibility / CC / input / lifetime cleanup / 50 damage after 0.75s / native Wait(0.75) / persistent credit / release before wait / pending release after wait / lethal throw cleanup / no cooldown / immediate repeat pickup / no landing rule or splash / item priority / Rider guards',
+        warnings: build.warnings, checked: 'stale shared-state initialization / idle HUD without timer / hold countdown and HUD reset / first pickup after initialization / 4m ray / primary selection forward and backward / 12 Enhancements and 10 Augments / explicit choice and late-join rolls / independent HUDs / all Augment state preserved / Laser Barricade throw priority and cooldown / boss/miniboss pickup ban / 5s hold / 6s knockdown from pickup / cleared synchronously with throw damage / eligibility / CC / input / lifetime cleanup / 50 damage after 0.75s / native Wait(0.75) / persistent credit / release before wait / pending release after wait / lethal throw cleanup / no cooldown / immediate repeat pickup / no landing rule or splash / item priority / Rider guards',
         limitation: 'Raycast geometry, attachment appearance and throw physics require Overwatch.'}, null, 2));
 }
 main().catch(e => {console.error(e); process.exitCode = 1;});
