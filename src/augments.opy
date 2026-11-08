@@ -256,14 +256,13 @@ rule "DOUBLE JUMP BONUS EXPIRES":
 rule "DOUBLE JUMP FIRST HIT BONUS":
     @Event playerDealtDamage
     @Team 1
-    @Condition isGameplayActive == true
     @Condition eventPlayer.augmentId == Augment.DOUBLE_JUMP
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.augmentJumpBonusState != null
     @Condition eventPlayer.getHero() == eventPlayer.augmentJumpBonusState[1]
     @Condition getTotalTimeElapsed() < abs(eventPlayer.augmentJumpBonusState[0])
     @Condition eventDamage >= 30
-    @Condition victim.getTeam() == Team.2
+    @Condition victim != eventPlayer
 
     # Match Brain Killer's event-damage bonus pattern. Only hits of 30+ spend it;
     # consume before Damage so supplemental damage cannot recurse.
@@ -762,18 +761,6 @@ rule "LEECH LIFESTEAL":
     @Event playerDealtDamage
     @Team 1
 
-    # Workshop workaround (map dependent): newer heroes disappear when returning
-    # from voting to hero selection if either eligibility check is in Conditions.
-    # Keep both checks in Actions instead; the engine cause is still unknown.
-    # Related failures and different workarounds:
-    # - Apothecary: "APOTHECARY ALLOW HEALTH PACK PICKUP", src/augments.opy,
-    #   reverted by ba8e70de7d4e282b2f90c8ae6c15f6d1d500a342. Grouping gameplay/alive
-    #   with And did NOT prevent the same symptom in user tests.
-    # - Scavenger: "PLAYER DROPS POWER UP (MANUAL)", src/power_ups.opy,
-    #   workaround in 1079602bbdcf12d9e989d595c315949601fd184b. Grouping gameplay/alive
-    #   with And DID prevent reproduction in user tests; preserve its compiled And.
-    # This event rule adds only an If per damage event, without polling or waits.
-    # isGameplayActive only holds boolean/default zero.
-    if isGameplayActive and eventPlayer.augmentId == Augment.LEECH:
+    if eventPlayer.augmentId == Augment.LEECH:
         # Include damage from the hero, primary enhancement and scripted powerups.
         heal(eventPlayer, eventPlayer, eventDamage * 0.15)
