@@ -1,4 +1,4 @@
-/* Element count: (total 29567)
+/* Element count: (total 29581)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
  1557: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
@@ -278,9 +278,11 @@
     8: rule "START GAME IF WAITING FOR PLAYERS" (src/global_startup.opy)
     8: rule "completeBossObjective" (src/objective_types/objective_type_bosses.opy)
     8: rule "SIERRA TRACKING SHOT HACK" (src/hero_tuning.opy)
+    8: rule "BRIGITTE SHIELD BASH STUN" (src/hero_tuning.opy)
     8: rule "startBotThrottleAtTarget" (src/zombie_types.opy)
     7: rule "applyScaledMoveSpeed" (src/subroutines.opy)
     7: rule "applyBotKnockbackScale" (src/subroutines.opy)
+    6: rule "REINHARDT SHIELD SLAM STUN" (src/hero_tuning.opy)
     6: rule "CASSIDY FLASHBANG STUN" (src/hero_tuning.opy)
     6: rule "daytakerAbortReset" (src/zombie_types.opy)
     6: rule "finishPowerUpDrop" (src/power_ups.opy)
@@ -4976,6 +4978,41 @@ rule ("SIERRA TRACKING SHOT HACK") {
     actions {
         "Match Tracking Shot's base mark duration from impact. No waits: every hit\ncan apply/refresh Hack, including when another source already hacked it."
         Set Status(Victim, Attacker, Hacked, 3); // 2 elements
+    }
+}
+
+//6 elements
+rule ("REINHARDT SHIELD SLAM STUN") {
+    event {
+        Player Dealt Damage;
+        Team 1;
+        Reinhardt;
+    }
+    conditions {
+        Is Firing Secondary(Event Player) == True; // 2 elements
+        Victim != Attacker; // 1 element
+    }
+    actions {
+        "Shield-active damage is sufficient; no perk or event-ability check."
+        Set Status(Victim, Attacker, Stunned, 0.8); // 2 elements
+    }
+}
+
+//8 elements
+rule ("BRIGITTE SHIELD BASH STUN") {
+    event {
+        Player Dealt Damage;
+        Team 1;
+        Brigitte;
+    }
+    conditions {
+        Event Ability == Button(Primary Fire); // 2 elements
+        Is Firing Secondary(Event Player) == True; // 2 elements
+        Victim != Attacker; // 1 element
+    }
+    actions {
+        "Shield Bash reports Primary Fire while Barrier Shield is active.\nThe ability filter excludes scripted damage and Whip Shot."
+        Set Status(Victim, Attacker, Stunned, 0.8); // 2 elements
     }
 }
 

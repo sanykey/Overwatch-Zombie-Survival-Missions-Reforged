@@ -85,6 +85,30 @@ rule "SIERRA TRACKING SHOT HACK":
     victim.setStatusEffect(attacker, Status.HACKED, 3)
 
 
+rule "REINHARDT SHIELD SLAM STUN":
+    @Event playerDealtDamage
+    @Team 1
+    @Hero reinhardt
+    @Condition eventPlayer.isFiringSecondaryFire() == true
+    @Condition victim != attacker
+
+    # Shield-active damage is sufficient; no perk or event-ability check.
+    victim.setStatusEffect(attacker, Status.STUNNED, 0.8)
+
+
+rule "BRIGITTE SHIELD BASH STUN":
+    @Event playerDealtDamage
+    @Team 1
+    @Hero brigitte
+    @Condition eventAbility == Button.PRIMARY_FIRE
+    @Condition eventPlayer.isFiringSecondaryFire() == true
+    @Condition victim != attacker
+
+    # Shield Bash reports Primary Fire while Barrier Shield is active.
+    # The ability filter excludes scripted damage and Whip Shot.
+    victim.setStatusEffect(attacker, Status.STUNNED, 0.8)
+
+
 rule "CASSIDY FLASHBANG STUN":
     @Event playerDealtDamage
     @Team 1
