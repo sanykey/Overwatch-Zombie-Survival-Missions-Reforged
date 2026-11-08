@@ -4,7 +4,6 @@ subroutine advanceChallengeVote
 subroutine advanceZombieVote
 subroutine advanceObjectiveVote
 subroutine advanceEnhancementChoice
-subroutine randomActions
 subroutine attachPlayerToPregameAnchor
 
 
@@ -118,7 +117,6 @@ rule "PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY)":
             eventPlayer.pregameState++
             if eventPlayer.pregameState == PregameState.READY:
                 startRule(setPrematchTimer)
-                startRule(randomActions)
                 eventPlayer.setInvisibility(Invis.NONE)
     #Not ready or change hero
     elif eventPlayer.isHoldingButton(Button.CROUCH):
@@ -230,36 +228,6 @@ rule "PREVENT PLAYERS FROM LEAVING START EARLY":
         attachPlayerToPregameAnchor()
     if ruleCondition:
         loop()
-
-
-def randomActions():
-    @Name "randomActions"
-    
-    # pregameEmoteDirection: random emote direction 1-4, to choose one communication before the next wait.
-    #!define pregameEmoteDirection tmp0
-    pregameEmoteDirection = random.randint(1, 4)
-    #Random emote
-    if pregameEmoteDirection <= 1:
-        eventPlayer.communicate(Comms.EMOTE_UP)
-    elif pregameEmoteDirection <= 2:
-        eventPlayer.communicate(Comms.EMOTE_DOWN)
-    elif pregameEmoteDirection <= 3:
-        eventPlayer.communicate(Comms.EMOTE_LEFT)
-    else:
-        eventPlayer.communicate(Comms.EMOTE_RIGHT)
-    wait(1)
-    # pregameVoiceLineDirection: random voice-line direction 1-4, to choose one communication before the next wait.
-    #!define pregameVoiceLineDirection tmp0
-    pregameVoiceLineDirection = random.randint(1, 4)
-    #Random voice line
-    if pregameVoiceLineDirection <= 1:
-        eventPlayer.communicate(Comms.VOICE_LINE_UP)
-    elif pregameVoiceLineDirection <= 2:
-        eventPlayer.communicate(Comms.VOICE_LINE_DOWN)
-    elif pregameVoiceLineDirection <= 3:
-        eventPlayer.communicate(Comms.VOICE_LINE_LEFT)
-    else:
-        eventPlayer.communicate(Comms.VOICE_LINE_RIGHT)
 
 
 def attachPlayerToPregameAnchor():

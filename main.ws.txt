@@ -1,4 +1,4 @@
-/* Element count: (total 29253)
+/* Element count: (total 29194)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
  1528: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
@@ -122,7 +122,7 @@
    71: rule "KILL BOTS THAT ARE STUCK OR ARE NOT MOVING" (src/bots_game_in_progress.opy)
    71: rule "PLAGUE DOCTOR REDUCES PLAYERS' INFECTION LEVELS" (src/enhancements.opy)
    70: rule "POWER UP EFFECT/TEXT MANAGEMENT" (src/power_ups.opy)
-   69: rule "PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY)" (src/player_start_menu.opy)
+   68: rule "PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY)" (src/player_start_menu.opy)
    68: rule "BOT TARGET VISIBLE" (src/bots_game_in_progress.opy)
    67: rule "DELETE PATH" (src/objective_types/objective_type_survivor_rescue.opy)
    67: rule "PLAYER SAYS GROUP UP TO SURVIVOR" (src/objective_types/objective_type_survivor_rescue.opy)
@@ -133,7 +133,6 @@
    63: rule "LONG REACH VENDETTA SWORD" (src/augments.opy)
    61: rule "PLAYER GETS DOWNED" (src/players_game_in_progress.opy)
    60: rule "RIDER DETATCH FROM TEAMMATES WHILE ALIVE" (src/zombie_types.opy)
-   58: rule "randomActions" (src/player_start_menu.opy)
    57: rule "PLAYERS ON OBJECTIVE CONTROL" (src/objective_types/objective_type_showdown.opy)
    57: rule "BOTS TELEPORT TO THE EGG" (src/objective_types/objective_type_zombie_egg.opy)
    56: rule "TRIGGER OVERTIME MUSIC" (src/global_game_in_progress.opy)
@@ -668,61 +667,60 @@ subroutines {
     29: advanceZombieVote
     30: advanceObjectiveVote
     31: advanceEnhancementChoice
-    32: randomActions
-    33: attachPlayerToPregameAnchor
-    34: nukeMap
-    35: startExtractionAscent
-    36: completeBossObjective
-    37: bossReturn
-    38: chaseSatelliteTarget
-    39: teleportToClosestPlayer
-    40: teleportDownedPlayerToWalkable
-    41: updateUsers
-    42: saveAlivePlayerState
-    43: removeBotSpawnPoint
-    44: enterExitTeleport
-    45: teleportBots
-    46: successfulTeleportStatus
-    47: updateBotSpawnPoints
-    48: locateAveragePlayerLocation
-    49: setClosestPlayerTeleportCenter
-    50: daytakerAbortReset
-    51: applyBriefBurnAndRoot
-    52: reenableBotWallAndJump
-    53: restoreBotThrottle
-    54: beginBotOverride
-    55: startBlasterDaytakerFacing
-    56: playReignitedWarningPair
-    57: startBotThrottleAtTarget
-    58: resumeBotFacingAndMovement
-    59: resumeBotMovementAndFacing
-    60: smolderBoost
-    61: spawnGasCloud
-    62: abilityThrowdown
-    63: entityFloat
-    64: explosionWarning
-    65: useLivingProjectile
-    66: playAquaPowerUpSound
-    67: powerUpUsage
-    68: playerForceField
-    69: noCooldowns
-    70: airStrike
-    71: instantRevive
-    72: healBeacon
-    73: sentryTurret
-    74: cloakingDevice
-    75: superNano
-    76: bouncePad
-    77: ultimateCharger
-    78: stun
-    79: finishPowerUpDrop
-    80: dropCarriedPowerUps
-    81: resetBattleAbilityCharge
-    82: checkEnhancementPlacement
-    83: startPupDefaultChase
-    84: applyBulkingSeasonStats
-    85: extendAugmentMelee
-    86: useAugmentAirAction
+    32: attachPlayerToPregameAnchor
+    33: nukeMap
+    34: startExtractionAscent
+    35: completeBossObjective
+    36: bossReturn
+    37: chaseSatelliteTarget
+    38: teleportToClosestPlayer
+    39: teleportDownedPlayerToWalkable
+    40: updateUsers
+    41: saveAlivePlayerState
+    42: removeBotSpawnPoint
+    43: enterExitTeleport
+    44: teleportBots
+    45: successfulTeleportStatus
+    46: updateBotSpawnPoints
+    47: locateAveragePlayerLocation
+    48: setClosestPlayerTeleportCenter
+    49: daytakerAbortReset
+    50: applyBriefBurnAndRoot
+    51: reenableBotWallAndJump
+    52: restoreBotThrottle
+    53: beginBotOverride
+    54: startBlasterDaytakerFacing
+    55: playReignitedWarningPair
+    56: startBotThrottleAtTarget
+    57: resumeBotFacingAndMovement
+    58: resumeBotMovementAndFacing
+    59: smolderBoost
+    60: spawnGasCloud
+    61: abilityThrowdown
+    62: entityFloat
+    63: explosionWarning
+    64: useLivingProjectile
+    65: playAquaPowerUpSound
+    66: powerUpUsage
+    67: playerForceField
+    68: noCooldowns
+    69: airStrike
+    70: instantRevive
+    71: healBeacon
+    72: sentryTurret
+    73: cloakingDevice
+    74: superNano
+    75: bouncePad
+    76: ultimateCharger
+    77: stun
+    78: finishPowerUpDrop
+    79: dropCarriedPowerUps
+    80: resetBattleAbilityCharge
+    81: checkEnhancementPlacement
+    82: startPupDefaultChase
+    83: applyBulkingSeasonStats
+    84: extendAugmentMelee
+    85: useAugmentAirAction
 }
 
 //43 elements
@@ -2549,7 +2547,7 @@ rule ("PLAYER SELECTS/RESELECTS HERO") {
     }
 }
 
-//69 elements
+//68 elements
 rule ("PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY)") {
     event {
         Ongoing - Each Player;
@@ -2569,7 +2567,6 @@ rule ("PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY)") {
                 Modify Player Variable(Event Player, pregameState, Add, True); // 1 element
                 If(Compare((Event Player).pregameState, ==, 2)); // 7 elements
                     Start Rule(setPrematchTimer, Restart Rule); // 1 element
-                    Start Rule(randomActions, Restart Rule); // 1 element
                     Set Invisible(Event Player, None); // 1 element
                 End; // 1 element
             End; // 1 element
@@ -2725,41 +2722,6 @@ rule ("PREVENT PLAYERS FROM LEAVING START EARLY") {
             Call Subroutine(attachPlayerToPregameAnchor); // 1 element
         End; // 1 element
         Loop If Condition Is True; // 1 element
-    }
-}
-
-//58 elements
-rule ("randomActions") {
-    event {
-        Subroutine;
-        randomActions;
-    }
-    actions {
-        "pregameEmoteDirection: random emote direction 1-4, to choose one communication before the next wait."
-        Set Global Variable(tmp0, Random Integer(True, 4)); // 4 elements
-        "Random emote"
-        If(Compare(Global.tmp0, <=, 1)); // 6 elements
-            Communicate(Event Player, Emote Up); // 1 element
-        Else If(Compare(Global.tmp0, <=, 2)); // 6 elements
-            Communicate(Event Player, Emote Down); // 1 element
-        Else If(Compare(Global.tmp0, <=, 3)); // 6 elements
-            Communicate(Event Player, Emote Left); // 1 element
-        Else; // 1 element
-            Communicate(Event Player, Emote Right); // 1 element
-        End; // 1 element
-        Wait(True, Ignore Condition); // 1 element
-        "pregameVoiceLineDirection: random voice-line direction 1-4, to choose one communication before the next wait."
-        Set Global Variable(tmp0, Random Integer(True, 4)); // 4 elements
-        "Random voice line"
-        If(Compare(Global.tmp0, <=, 1)); // 6 elements
-            Communicate(Event Player, Voice Line Up); // 1 element
-        Else If(Compare(Global.tmp0, <=, 2)); // 6 elements
-            Communicate(Event Player, Voice Line Down); // 1 element
-        Else If(Compare(Global.tmp0, <=, 3)); // 6 elements
-            Communicate(Event Player, Voice Line Left); // 1 element
-        Else; // 1 element
-            Communicate(Event Player, Voice Line Right); // 1 element
-        End; // 1 element
     }
 }
 
