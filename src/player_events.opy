@@ -79,7 +79,8 @@ rule "PLAYER DEALT HEALING":
                 playEffect(eventPlayer, DynamicEffect.GOOD_PICKUP_EFFECT, Color.GREEN, healee, 1)
                 smallMessage(eventPlayer, "You cured yourself!" if healee == eventPlayer else "You cured {0} {1}!".format(healee, heroIcon(healee.getHero())))
     elif eventPlayer.enhancementId == Enhancement.OVERCHARGE:
-        eventPlayer.enhancementCapacitorEnergy += eventHealing / 3
+        if healee != eventPlayer or eventAbility != null:
+            eventPlayer.enhancementCapacitorEnergy += eventHealing / 3
 
 
 rule "PLAYER DEALT DAMAGE":

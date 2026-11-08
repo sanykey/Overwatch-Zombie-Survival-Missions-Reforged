@@ -1,4 +1,4 @@
-/* Element count: (total 29538)
+/* Element count: (total 29543)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
  1557: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
@@ -41,8 +41,8 @@
   183: rule "BRUTE (REIN) SUPER SEISMIC SLAM" (src/zombie_types.opy)
   183: rule "PHASE DASH LANDING WAVE" (src/augments.opy)
   181: rule "extendAugmentMelee" (src/augments.opy)
-  181: rule "LASER BARRICADE (PLACEMENT)" (src/augments.opy)
   179: rule "STALKER (MOIRA) FADE" (src/zombie_types.opy)
+  179: rule "LASER BARRICADE (PLACEMENT)" (src/augments.opy)
   173: rule "REIGNITED (ANRAN) ABILITIES" (src/zombie_types.opy)
   170: rule "selectTarget" (src/subroutines.opy)
   166: rule "DOWNFALLEN GRABS PLAYER" (src/zombie_types.opy)
@@ -96,6 +96,7 @@
    99: rule "CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)" (src/zombie_types.opy)
    98: rule "LONG REACH QUICK MELEE" (src/augments.opy)
    97: rule "ZOMBIES SPAWN AT REIGNITED" (src/zombie_types.opy)
+   96: rule "PLAYER DEALT HEALING" (src/player_events.opy)
    94: rule "SURVIVOR REACHES EXTRACTION SITE" (src/objective_types/objective_type_survivor_rescue.opy)
    94: rule "playerForceField (10-19)" (src/supply_drops.opy)
    93: rule "LEECH GRANTS ALLY OVERHEALTH" (src/augments.opy)
@@ -104,7 +105,6 @@
    88: rule "PLAYER DEALT FINAL BLOW" (src/player_events.opy)
    87: rule "PLAYER MENU INITIALIZATION" (src/player_start_menu.opy)
    87: rule "BOT BECOMES ZOMBIE EGG" (src/objective_types/objective_type_zombie_egg.opy)
-   87: rule "PLAYER DEALT HEALING" (src/player_events.opy)
    86: rule "INCREASE OBJECTIVE CAPTURE PERCENTAGE" (src/objective_types/objective_type_showdown.opy)
    85: rule "PREGAME SPAWN ROOM ROTATION" (src/global_startup.opy)
    85: rule "determineObjectiveType" (src/global_start_menu.opy)
@@ -152,12 +152,12 @@
    52: rule "dropCarriedPowerUps" (src/power_ups.opy)
    50: rule "BOT WANDERS" (src/bots_game_in_progress.opy)
    49: rule "CREATE PATH" (src/objective_types/objective_type_survivor_rescue.opy)
+   49: rule "APOTHECARY TELEPORT" (src/augments.opy)
    48: rule "RIDER DETACH WHEN DEAD OR TARGET IS DEAD" (src/zombie_types.opy)
    48: rule "BLASTER ROCKET HITS TARGET" (src/zombie_types.opy)
    48: rule "TUNNELER (SYMMETRA) BUILDS PORTAL" (src/zombie_types.opy)
    48: rule "SMOLDER BOSS EVENT STARTS" (src/zombie_types.opy)
    48: rule "instantRevive (0-9)" (src/supply_drops.opy)
-   48: rule "APOTHECARY TELEPORT" (src/augments.opy)
    48: rule "AUGMENT AIR ACTION RECHARGE" (src/augments.opy)
    47: rule "determineZombieMode" (src/global_start_menu.opy)
    47: rule "PLAYERS AT TERMINALS CONTROLS" (src/objective_types/objective_type_satellite_uplink.opy)
@@ -169,9 +169,9 @@
    44: rule "BRUTE FIRE STRIKE (BOSS)" (src/zombie_types.opy)
    43: rule "OverPy <\ztx> / <\zfg> setup code"
    43: rule "Subroutine selectVoteWinner" (src/global_start_menu.opy)
-   42: rule "DOUBLE JUMP DOUBLE TAP" (src/augments.opy)
    41: rule "ultimateCharger (90-99)" (src/supply_drops.opy)
    40: rule "SPAWN TIME CONTROL" (src/global_startup.opy)
+   40: rule "DOUBLE JUMP DOUBLE TAP" (src/augments.opy)
    39: rule "PREGAME QUICK TIPS FOR PLAYERS" (src/global_startup.opy)
    39: rule "locateAveragePlayerLocation" (src/bots_game_in_progress.opy)
    39: rule "updateBotSpawnPoints" (src/bots_game_in_progress.opy)
@@ -202,12 +202,12 @@
    28: rule "REIGNITED USES ULTIMATE NEAR PLAYER" (src/zombie_types.opy)
    28: rule "OVERCHARGE ARMS CHARGE" (src/enhancements.opy)
    27: rule "PLAYER LEAVES THE GAME" (src/global_game_in_progress.opy)
-   27: rule "AUGMENT AIR ACTION INPUT" (src/augments.opy)
    26: rule "SURVIVOR JUMP" (src/objective_types/objective_type_survivor_rescue.opy)
    25: rule "Fix bot health" (src/bots_game_in_progress.opy)
    25: rule "applyBulkingSeasonStats" (src/enhancements.opy)
    25: rule "Subroutine checkEnhancementPlacement" (src/enhancements.opy)
    25: rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)" (src/augments.opy)
+   25: rule "AUGMENT AIR ACTION INPUT" (src/augments.opy)
    25: rule "LONG REACH CARNAGE" (src/augments.opy)
    24: rule "BOMBER (JUNKRAT) SELF DESTRUCT" (src/zombie_types.opy)
    24: rule "RIDER (WIDOWMAKER) ATTACH TO PLAYERS" (src/zombie_types.opy)
@@ -268,10 +268,10 @@
    11: rule "DOOMFIST INVIS WHILE ULTING" (src/hero_tuning.opy)
    11: rule "TRACER INVIS WHILE RECALLING" (src/hero_tuning.opy)
    11: rule "STRIKER CANCEL BALL FORM" (src/zombie_types.opy)
+   11: rule "APOTHECARY ULTIMATE RECHARGE" (src/augments.opy)
    10: rule "PREVENT MATCH TIME FROM UNPAUSING" (src/global_game_in_progress.opy)
    10: rule "startExtractionAscent" (src/objective_types/objective_type_extraction_point.opy)
    10: rule "setClosestPlayerTeleportCenter" (src/bots_game_in_progress.opy)
-   10: rule "APOTHECARY ULTIMATE RECHARGE" (src/augments.opy)
     9: rule "resolveReconnectUserIndex" (src/subroutines.opy)
     9: rule "CC COOLDOWN FROM DOWNFALLEN/BRUTE" (src/hero_tuning.opy)
     8: rule "START GAME IF WAITING FOR PLAYERS" (src/global_startup.opy)
@@ -9014,7 +9014,7 @@ rule ("PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)") {
     }
 }
 
-//10 elements
+//11 elements
 rule ("APOTHECARY ULTIMATE RECHARGE") {
     event {
         Ongoing - Each Player;
@@ -9022,17 +9022,16 @@ rule ("APOTHECARY ULTIMATE RECHARGE") {
         All;
     }
     conditions {
-        Global.isGameplayActive == True; // 2 elements
-        (Event Player).augmentId == 8; // 4 elements
         Is Using Ultimate(Event Player) == True; // 2 elements
     }
     actions {
+        Abort If(Compare((Event Player).augmentId, !=, 8)); // 7 elements
         "Activation edge only: spending during a lasting ultimate cannot recharge it."
         Set Player Variable(Event Player, augmentState1, True); // 1 element
     }
 }
 
-//48 elements
+//49 elements
 rule ("APOTHECARY TELEPORT") {
     event {
         Ongoing - Each Player;
@@ -9040,8 +9039,6 @@ rule ("APOTHECARY TELEPORT") {
         All;
     }
     conditions {
-        Global.isGameplayActive == True; // 2 elements
-        (Event Player).augmentId == 8; // 4 elements
         (Event Player).augmentState1 == True; // 3 elements
         (Event Player).augmentState0 != Null; // 3 elements
         Is Alive(Event Player) == True; // 2 elements
@@ -9052,6 +9049,7 @@ rule ("APOTHECARY TELEPORT") {
     actions {
         "Keep both buttons held for one second; interruption preserves the charge."
         Wait(True, Abort When False); // 1 element
+        Abort If(Compare((Event Player).augmentId, !=, 8)); // 7 elements
         Set Player Variable(Event Player, augmentState1, False); // 1 element
         "Play Effect snapshots departure before Teleport; no scratch or effect entity.\nBolt Strike's 1.5 flash scaled by three."
         Play Effect(All Players(All Teams), Bad Explosion, Color(Aqua), Position Of(Event Player), 4.5); // 6 elements
@@ -9086,7 +9084,7 @@ rule ("AUGMENT AIR ACTION RECHARGE") {
     }
 }
 
-//27 elements
+//25 elements
 rule ("AUGMENT AIR ACTION INPUT") {
     event {
         Ongoing - Each Player;
@@ -9094,7 +9092,6 @@ rule ("AUGMENT AIR ACTION INPUT") {
         All;
     }
     conditions {
-        Global.isGameplayActive == True; // 2 elements
         Array Contains(Array(2, 3), (Event Player).augmentId) == True; // 10 elements
         Is Alive(Event Player) == True; // 2 elements
         Is Dummy Bot(Event Player) == False; // 2 elements
@@ -9107,7 +9104,7 @@ rule ("AUGMENT AIR ACTION INPUT") {
     }
 }
 
-//42 elements
+//40 elements
 rule ("DOUBLE JUMP DOUBLE TAP") {
     event {
         Ongoing - Each Player;
@@ -9115,7 +9112,6 @@ rule ("DOUBLE JUMP DOUBLE TAP") {
         All;
     }
     conditions {
-        Global.isGameplayActive == True; // 2 elements
         (Event Player).augmentId == 3; // 4 elements
         Is Alive(Event Player) == True; // 2 elements
         Is Dummy Bot(Event Player) == False; // 2 elements
@@ -9580,7 +9576,7 @@ rule ("AMMO PACK REFILL FALLBACK") {
     }
 }
 
-//181 elements
+//179 elements
 rule ("LASER BARRICADE (PLACEMENT)") {
     event {
         Ongoing - Each Player;
@@ -9588,7 +9584,6 @@ rule ("LASER BARRICADE (PLACEMENT)") {
         All;
     }
     conditions {
-        Global.isGameplayActive == True; // 2 elements
         (Event Player).augmentId == 7; // 4 elements
         Is Button Held(Event Player, Button(Crouch)) == True; // 4 elements
         Is Button Held(Event Player, Button(Interact)) == True; // 4 elements
@@ -9964,7 +9959,7 @@ rule ("PLAYER DIED") {
     }
 }
 
-//87 elements
+//96 elements
 rule ("PLAYER DEALT HEALING") {
     event {
         Player Dealt Healing;
@@ -9988,7 +9983,8 @@ rule ("PLAYER DEALT HEALING") {
                 End; // 1 element
             End; // 1 element
         Else If(Compare((Event Player).enhancementId, ==, 9)); // 7 elements
-            Modify Player Variable(Event Player, actorTeamSlot22, Add, Divide(Event Healing, 3)); // 4 elements
+            If(Or(Compare(Healee, !=, Event Player), Compare(Event Ability, !=, Null))); // 9 elements
+                Modify Player Variable(Event Player, actorTeamSlot22, Add, Divide(Event Healing, 3)); // 4 elements
     }
 }
 

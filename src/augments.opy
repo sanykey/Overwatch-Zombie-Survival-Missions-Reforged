@@ -82,9 +82,10 @@ rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)":
 rule "APOTHECARY ULTIMATE RECHARGE":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.augmentId == Augment.APOTHECARY
     @Condition eventPlayer.isUsingUltimate() == true
+
+    if eventPlayer.augmentId != Augment.APOTHECARY:
+        return
 
     # Activation edge only: spending during a lasting ultimate cannot recharge it.
     eventPlayer.augmentApothecaryReady = true
@@ -93,8 +94,6 @@ rule "APOTHECARY ULTIMATE RECHARGE":
 rule "APOTHECARY TELEPORT":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.augmentId == Augment.APOTHECARY
     @Condition eventPlayer.augmentApothecaryReady == true
     @Condition eventPlayer.augmentApothecaryPosition != null
     @Condition eventPlayer.isAlive() == true
@@ -104,6 +103,9 @@ rule "APOTHECARY TELEPORT":
 
     # Keep both buttons held for one second; interruption preserves the charge.
     wait(1, Wait.ABORT_WHEN_FALSE)
+    if eventPlayer.augmentId != Augment.APOTHECARY:
+        return
+
     eventPlayer.augmentApothecaryReady = false
     # Play Effect snapshots departure before Teleport; no scratch or effect entity.
     # Bolt Strike's 1.5 flash scaled by three.
@@ -135,7 +137,6 @@ rule "AUGMENT AIR ACTION RECHARGE":
 rule "AUGMENT AIR ACTION INPUT":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
     @Condition eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP]
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isDummy() == false
@@ -149,7 +150,6 @@ rule "AUGMENT AIR ACTION INPUT":
 rule "DOUBLE JUMP DOUBLE TAP":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
     @Condition eventPlayer.augmentId == Augment.DOUBLE_JUMP
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isDummy() == false
@@ -584,7 +584,6 @@ rule "AMMO PACK REFILL FALLBACK":
 rule "LASER BARRICADE (PLACEMENT)":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
     @Condition eventPlayer.augmentId == Augment.LASER_BARRICADE
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
