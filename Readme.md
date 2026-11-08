@@ -16,6 +16,10 @@ The [zsmm-classic](https://github.com/sanykey/Overwatch-Zombie-Survival-Missions
 
 The `main` branch is intended for further Reforged development, including new functionality.
 
+## Hero changes
+
+- **Soldier: 76:** deals 50% more damage while Tactical Visor is active. The bonus multiplies damage alongside Super Nano and other damage boosts; Super Nano's 2× damage becomes 3× during Tactical Visor. The bonus ends when Tactical Visor ends or the player changes heroes.
+
 ## Enhancements and Augments
 
 Choose one primary **Enhancement** with **Quick Melee** and one independent **Augment** with **Interact** before the match. Hold **Secondary Fire** while choosing to cycle backwards. During gameplay, Interact handles powerups and Dead Weight. Each unselected slot receives a random real option when gameplay starts, including for players joining an ongoing match: one of twelve Enhancements and one of ten Augments. Explicit choices are preserved, and an assigned option is retained across later spawns. There are no Workshop settings for default selections.

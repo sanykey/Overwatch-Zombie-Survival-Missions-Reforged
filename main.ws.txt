@@ -1,4 +1,4 @@
-/* Element count: (total 29543)
+/* Element count: (total 29561)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
  1557: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
@@ -238,6 +238,7 @@
    19: rule "HITCHHIKER PARENT RECIEVES HEALTH POOL" (src/enhancements.opy)
    18: rule "OBJECTIVE COMPLETE" (src/global_game_in_progress.opy)
    18: rule "teleportDownedPlayerToWalkable" (src/players_game_in_progress.opy)
+   18: rule "SOLDIER TACTICAL VISOR DAMAGE BONUS" (src/hero_tuning.opy)
    18: rule "DAYTAKER ATTACKS AT HALF HEALTH (BOSS)" (src/zombie_types.opy)
    18: rule "startPupDefaultChase" (src/enhancements.opy)
    17: rule "BOSS HEALTH CONTROL (ALL BOSS OBJECTIVES)" (src/objective_types/objective_type_bosses.opy)
@@ -4939,6 +4940,24 @@ rule ("TRACER INVIS WHILE RECALLING") {
         Modify Player Variable(Event Player, invisibilityCount, Add, True); // 1 element
         Wait Until(Not(Is Using Ability 2(Event Player)), 999999999999); // 4 elements
         Modify Player Variable(Event Player, invisibilityCount, Subtract, True); // 1 element
+    }
+}
+
+//18 elements
+rule ("SOLDIER TACTICAL VISOR DAMAGE BONUS") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        Soldier: 76;
+    }
+    conditions {
+        Is Using Ultimate(Event Player) == True; // 2 elements
+    }
+    actions {
+        "Team 1 has no other Set Damage Dealt writer. Keep this multiplier separate\nfrom Super Nano's damage modification and native damage boosts."
+        Set Damage Dealt(Event Player, 150); // 2 elements
+        Wait Until(Or(Not(Is Using Ultimate(Event Player)), Compare(Hero Of(Event Player), !=, Hero(Soldier: 76))), 999999999999); // 11 elements
+        Set Damage Dealt(Event Player, 100); // 2 elements
     }
 }
 

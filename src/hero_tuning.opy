@@ -60,6 +60,19 @@ rule "TRACER INVIS WHILE RECALLING":
     eventPlayer.invisibilityCount--
 
 
+rule "SOLDIER TACTICAL VISOR DAMAGE BONUS":
+    @Event eachPlayer
+    @Team 1
+    @Hero soldier
+    @Condition eventPlayer.isUsingUltimate() == true
+
+    # Team 1 has no other Set Damage Dealt writer. Keep this multiplier separate
+    # from Super Nano's damage modification and native damage boosts.
+    eventPlayer.setDamageDealt(150)
+    waitUntil(not eventPlayer.isUsingUltimate() or eventPlayer.getHero() != Hero.SOLDIER, Math.INFINITY)
+    eventPlayer.setDamageDealt(100)
+
+
 rule "CASSIDY GRENADE HACK":
     @Event playerDealtDamage
     @Team 1
