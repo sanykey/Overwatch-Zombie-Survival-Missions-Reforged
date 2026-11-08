@@ -2,7 +2,11 @@
 
 
 rule "ASSIGN ZOMBIE TO BECOME EGG":
-    @Condition groupedConditions(((((currentObjectiveType == ObjectiveType.ZOMBIE_EGG) and (isObjectiveComplete == false)) and (entityExists(zombieEggStateList[0]) == false)) and (((getLivingPlayers(Team.2).any(lambda player: not player.botIsTeleporting and player.botTarget == null)) == true) and (len(botHeroList.filter(lambda x: getNumberOfHeroes(x, Team.2))) < uniqueSkinCap - max(getNumberOfSlots(Team.1), getNumberOfPlayers(Team.1))))))
+    @Condition currentObjectiveType == ObjectiveType.ZOMBIE_EGG
+    @Condition isObjectiveComplete == false
+    @Condition entityExists(zombieEggStateList[0]) == false
+    @Condition (getLivingPlayers(Team.2).any(lambda player: not player.botIsTeleporting and player.botTarget == null)) == true
+    @Condition len(botHeroList.filter(lambda x: getNumberOfHeroes(x, Team.2))) < uniqueSkinCap - max(getNumberOfSlots(Team.1), getNumberOfPlayers(Team.1))
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     zombieEggStateList[0] = random.choice(getLivingPlayers(Team.2).filter(lambda player: not player.botIsTeleporting and not player.isAttached and player.botTarget == null))
@@ -13,7 +17,9 @@ rule "ASSIGN ZOMBIE TO BECOME EGG":
 rule "BOT BECOMES ZOMBIE EGG":
     @Event eachPlayer
     @Team 2
-    @Condition groupedConditions((((currentObjectiveType == ObjectiveType.ZOMBIE_EGG) and (isObjectiveComplete == false)) and (zombieEggStateList[0] == eventPlayer)))
+    @Condition currentObjectiveType == ObjectiveType.ZOMBIE_EGG
+    @Condition isObjectiveComplete == false
+    @Condition zombieEggStateList[0] == eventPlayer
     
     eventPlayer.teleport(dummyHoldingPositionConst)
     while eventPlayer.isDead():
@@ -47,7 +53,15 @@ rule "BOT BECOMES ZOMBIE EGG":
 rule "BOTS TELEPORT TO THE EGG":
     @Event eachPlayer
     @Team 2
-    @Condition groupedConditions((((((currentObjectiveType == ObjectiveType.ZOMBIE_EGG) and (isObjectiveComplete != true)) and (eventPlayer.botIsInitializing != true)) and ((eventPlayer.botIsTeleporting != true) and (eventPlayer.botIsTeleportConfirmed != true))) and (((eventPlayer.isAlive() == true) and (entityExists(zombieEggStateList[0]) == true)) and ((eventPlayer in zombieEggStateList != true) and (playerTargetList.any(lambda x: distance(currentObjectivePosition, x) < 40) == true)))))
+    @Condition currentObjectiveType == ObjectiveType.ZOMBIE_EGG
+    @Condition isObjectiveComplete != true
+    @Condition eventPlayer.botIsInitializing != true
+    @Condition eventPlayer.botIsTeleporting != true
+    @Condition eventPlayer.botIsTeleportConfirmed != true
+    @Condition eventPlayer.isAlive() == true
+    @Condition entityExists(zombieEggStateList[0]) == true
+    @Condition eventPlayer in zombieEggStateList != true
+    @Condition playerTargetList.any(lambda x: distance(currentObjectivePosition, x) < 40) == true
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.botIsTeleportConfirmed = true
@@ -62,7 +76,8 @@ rule "BOTS TELEPORT TO THE EGG":
 rule "EGG SWITCHES THE POSITION FOR YOU":
     @Event playerDealtDamage
     @Team 1
-    @Condition groupedConditions(((currentObjectiveType == ObjectiveType.ZOMBIE_EGG) and (zombieEggStateList[0] == victim)))
+    @Condition currentObjectiveType == ObjectiveType.ZOMBIE_EGG
+    @Condition zombieEggStateList[0] == victim
     
     objectivePositionList[0] += directionTowards(victim, attacker) / (3.5 if attacker.isOnGround() else 9)
     refreshCurrentObjectivePosition()

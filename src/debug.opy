@@ -9,7 +9,9 @@ globalvar debugHud # ID of snky's diagnostics HUD, recreated after phase cleanup
 
 rule "[debug] snky buffs":
     @Event eachPlayer
-    @Condition groupedConditions(((("{0}".format(eventPlayer) == "snky") and (not eventPlayer.isDummy())) and (eventPlayer.hasSpawned())))
+    @Condition "{0}".format(eventPlayer) == "snky"
+    @Condition not eventPlayer.isDummy()
+    @Condition eventPlayer.hasSpawned()
 
     # Reapply after respawns, hero changes and power-ups that overwrite healing dealt.
     # eventPlayer.setDamageDealt(1000)

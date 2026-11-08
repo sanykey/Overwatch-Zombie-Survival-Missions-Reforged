@@ -69,43 +69,6 @@ After changing the source, save the root `main.opy` again to compile the updated
 
 Passive health regeneration for the zombie team is disabled under **Settings → Heroes → General → Team 2**. However, importing the source code into Workshop resets this setting, apparently due to a Workshop bug. **Manually disable passive regeneration for Team 2 after every code import**, before sharing the mod's short code.
 
-### Workshop hero-selection UI corruption
-
-During pregame voting, selecting a hero and then returning to the native hero-selection screen with Crouch can make some heroes disappear entirely, often starting with newer heroes. Reproduction depends on the map and is intermittent. On the original development branch, the user also observed extra white UI buttons and unavailable emotes. Opening and closing the lobby restores the missing hero list, but requiring every player to do this is not a usable fix.
-
-**The tested workaround is to combine separate rule Conditions into a single `And` expression.** For example, replace these separate checks:
-
-```csharp
-conditions {
-    Global.isGameplayActive == True;
-    Is Alive(Event Player) == True;
-}
-```
-
-with one condition that preserves both comparisons:
-
-```csharp
-conditions {
-    And(Compare(Global.isGameplayActive, ==, True), Compare(Is Alive(Event Player), ==, True)) == True;
-}
-```
-
-For longer lists, nest `And` expressions while preserving every comparison and its operand order. In the diagnostic build **29a**, based on build 28 (`e23f73d2ac3af65bba98d509f08625eb493b23e3`), this reduced separate condition entries from **850 to 212** across the mode. All 305 rule events and action lists were retained, with no new variables or waits. The user reported several runs without the defect in 29a, while the matching build-28 control still failed intermittently. Both exports used Malevento, Necropolis, Black Forest, Ilios Lighthouse and Colosseo. This result supports the workaround for hero selection; it does not establish that the white-button or emote symptoms are fixed.
-
-The cause remains unknown: high Server Load, a memory leak and a specific internal resource limit have not been established. The diagnostic's element count increased from **29,238 to 32,347** (+3,109); combining Conditions is not a demonstrated CPU optimization and may evaluate more inputs. Keep this tradeoff within the element budget. A successful local `And` change is not sufficient evidence for the whole mode: it helped Scavenger, but a similar local change did not help the deferred `APOTHECARY ALLOW HEALTH PACK PICKUP` rule in `src/augments.opy`, reverted by `ba8e70de7d4e282b2f90c8ae6c15f6d1d500a342`.
-
-**The normal source build now applies this workaround through `groupedConditions(...)`**, defined in [src/rule_conditions.opy](src/rule_conditions.opy). Use a single annotation for multiple predicates, retaining explicit comparisons for untyped or numeric values:
-
-```python
-@Condition groupedConditions((isGameplayActive == true) and eventPlayer.isAlive())
-```
-
-**OverPy 9.7.20 splits an unprotected `and` expression back into separate Conditions.** The macro compares the boolean conjunction with numeric `1`, preserving it as a single Condition while keeping normal optimizations enabled. Changing that comparison to `== true` lets the optimizer remove the wrapper and split the conjunction again. This use of `1` applies only to the boolean result; it does not replace a predicate's original comparison with `Null`, zero or `False`.
-
-The integrated export has **212 Conditions in 305 rules and 31,619 elements**: +2,381 versus build 28, but 728 fewer than diagnostic 29a. All original rule events/actions, variable declarations and map settings are preserved. Saving the root `main.opy` builds the fix normally; `node analysis/verify-grouped-conditions.cjs --export` checks the generated grouping and predicate equivalence and writes the export. The integrated version needs an in-game check; the successful user runs described above were on diagnostic 29a.
-
-Preserve the existing Scavenger grouping and its scoped optimization directives in `src/power_ups.opy`, and the action-body guards for Leech in `src/augments.opy` and Interact in `src/supply_drops.opy`, unless a replacement is tested in game. Moving Conditions into Actions can change ongoing-rule triggering, `Abort When False` and loop behavior; adding waits to event handlers can drop events. When changing the workaround, verify the generated Conditions and gameplay semantics, then repeat the hero-selection sequence on affected maps with an otherwise identical control. One successful attempt does not establish that an intermittent defect is gone.
-
 ## Optimization results
 
 Measured on November 4, 2026 for the Reforged working tree based on commit `d8efbdc`.

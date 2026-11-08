@@ -16,9 +16,7 @@ async function main() {
     // The grouped predicate is an engine workaround, not just a source-level style:
     // OverPy normally expands it into separate conditions and restores the defect.
     const manualConditions = compiled.get('PLAYER DROPS POWER UP (MANUAL)').body.match(/conditions \{([\s\S]*?)\}/)[1];
-    assert(manualConditions.includes('And(Global.isGameplayActive, Is Alive(Event Player))'));
-    assert.equal((manualConditions.match(/;/g) || []).length, 1,
-        'Keep the legacy gameplay/alive And inside one condition for the entire rule');
+    assert(manualConditions.includes('And(Global.isGameplayActive, Is Alive(Event Player)) == True;'));
     assert(!manualConditions.includes('Global.isGameplayActive == True;'));
     assert(!manualConditions.includes('\nIs Alive(Event Player) == True;'));
     const run = (name, state) => start(compiled.get(name), state, compiled);

@@ -68,7 +68,9 @@ rule "AUGMENT MENU":
 rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions((((isPregameSetup == true) and (eventPlayer.hasSpawned() == true)) and (eventPlayer.isHoldingButton(Button.INTERACT) == true)))
+    @Condition isPregameSetup == true
+    @Condition eventPlayer.hasSpawned() == true
+    @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
 
     eventPlayer.augmentId = (eventPlayer.augmentId + (Augment.LEECH if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else 1)) % (Augment.LEECH + 1)
 
@@ -76,7 +78,10 @@ rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)":
 rule "PLAYER AUGMENT INITIALIZATION":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions((((eventPlayer.hasSpawned() == true) and (isGameplayActive == true)) and ((eventPlayer.isDummy() == false) and (eventPlayer.isHeroSwitchRespawn == false))))
+    @Condition eventPlayer.hasSpawned() == true
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.isDummy() == false
+    @Condition eventPlayer.isHeroSwitchRespawn == false
 
     if eventPlayer.augmentId == Augment.NO_PREFERENCE:
         # Menu non-selection and late-join zero state each receive one real
@@ -141,7 +146,9 @@ rule "PLAYER AUGMENT INITIALIZATION":
 rule "APOTHECARY SPEED BONUS EXPIRES":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions((((eventPlayer.augmentId == Augment.APOTHECARY) and (eventPlayer.augmentApothecarySpeedUntil > 0)) and ((getTotalTimeElapsed() >= eventPlayer.augmentApothecarySpeedUntil or not eventPlayer.isAlive()) == true)))
+    @Condition eventPlayer.augmentId == Augment.APOTHECARY
+    @Condition eventPlayer.augmentApothecarySpeedUntil > 0
+    @Condition (getTotalTimeElapsed() >= eventPlayer.augmentApothecarySpeedUntil or not eventPlayer.isAlive()) == true
 
     eventPlayer.augmentApothecarySpeedUntil = 0
     eventPlayer.movementSpeedScale /= 1.5
@@ -151,7 +158,11 @@ rule "APOTHECARY SPEED BONUS EXPIRES":
 rule "AUGMENT AIR ACTION RECHARGE":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions(((((isGameplayActive == true) and (eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP])) and (eventPlayer.isAlive() == true)) and ((eventPlayer.isDummy() == false) and (eventPlayer.isOnGround() == false))))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP]
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isDummy() == false
+    @Condition eventPlayer.isOnGround() == false
 
     # Arm once per airborne interval, only after the takeoff button is released.
     # This avoids spending the extra jump on the game's first airborne input tick.
@@ -168,7 +179,13 @@ rule "AUGMENT AIR ACTION RECHARGE":
 rule "AUGMENT AIR ACTION INPUT":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions(((((isGameplayActive == true) and (eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP])) and ((eventPlayer.isAlive() == true) and (eventPlayer.isDummy() == false))) and (((eventPlayer.augmentIsAirActionReady == true) and (eventPlayer.isOnGround() == false)) and (eventPlayer.isHoldingButton(Button.JUMP) == true))))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP]
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isDummy() == false
+    @Condition eventPlayer.augmentIsAirActionReady == true
+    @Condition eventPlayer.isOnGround() == false
+    @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
 
     useAugmentAirAction()
 
@@ -176,7 +193,11 @@ rule "AUGMENT AIR ACTION INPUT":
 rule "DOUBLE JUMP DOUBLE TAP":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions(((((isGameplayActive == true) and (eventPlayer.augmentId == Augment.DOUBLE_JUMP)) and (eventPlayer.isAlive() == true)) and ((eventPlayer.isDummy() == false) and (eventPlayer.isHoldingButton(Button.JUMP) == true))))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.augmentId == Augment.DOUBLE_JUMP
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isDummy() == false
+    @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
 
     # Only press edges update the timestamp. A blocked native jump can leave the
     # player grounded; its second press still launches without cancelling abilities.
@@ -200,7 +221,11 @@ rule "DOUBLE JUMP RESET TAP ON DEATH":
 rule "DOUBLE JUMP BONUS ENTER FLIGHT":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions(((((eventPlayer.augmentId == Augment.DOUBLE_JUMP) and (eventPlayer.augmentJumpBonusState != null)) and (eventPlayer.augmentJumpBonusState[0] > 0)) and ((eventPlayer.augmentJumpBonusState[0] != Math.INFINITY) and (eventPlayer.isOnGround() == false))))
+    @Condition eventPlayer.augmentId == Augment.DOUBLE_JUMP
+    @Condition eventPlayer.augmentJumpBonusState != null
+    @Condition eventPlayer.augmentJumpBonusState[0] > 0
+    @Condition eventPlayer.augmentJumpBonusState[0] != Math.INFINITY
+    @Condition eventPlayer.isOnGround() == false
 
     # Positive deadline is the initial launch grace; only the first flight may
     # extend it indefinitely. Negative deadlines mean the landing window began.
@@ -210,7 +235,10 @@ rule "DOUBLE JUMP BONUS ENTER FLIGHT":
 rule "DOUBLE JUMP BONUS LANDING WINDOW":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions((((eventPlayer.augmentId == Augment.DOUBLE_JUMP) and (eventPlayer.augmentJumpBonusState != null)) and ((eventPlayer.augmentJumpBonusState[0] == Math.INFINITY) and (eventPlayer.isOnGround() == true))))
+    @Condition eventPlayer.augmentId == Augment.DOUBLE_JUMP
+    @Condition eventPlayer.augmentJumpBonusState != null
+    @Condition eventPlayer.augmentJumpBonusState[0] == Math.INFINITY
+    @Condition eventPlayer.isOnGround() == true
 
     eventPlayer.augmentJumpBonusState[0] = -(getTotalTimeElapsed() + 0.5)
 
@@ -218,7 +246,9 @@ rule "DOUBLE JUMP BONUS LANDING WINDOW":
 rule "DOUBLE JUMP BONUS EXPIRES":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions((((eventPlayer.augmentId == Augment.DOUBLE_JUMP) and (eventPlayer.augmentJumpBonusState != null)) and ((not isGameplayActive or not eventPlayer.isAlive() or eventPlayer.getHero() != eventPlayer.augmentJumpBonusState[1] or getTotalTimeElapsed() >= abs(eventPlayer.augmentJumpBonusState[0])) == true)))
+    @Condition eventPlayer.augmentId == Augment.DOUBLE_JUMP
+    @Condition eventPlayer.augmentJumpBonusState != null
+    @Condition (not isGameplayActive or not eventPlayer.isAlive() or eventPlayer.getHero() != eventPlayer.augmentJumpBonusState[1] or getTotalTimeElapsed() >= abs(eventPlayer.augmentJumpBonusState[0])) == true
 
     eventPlayer.augmentJumpBonusState = null
 
@@ -226,7 +256,14 @@ rule "DOUBLE JUMP BONUS EXPIRES":
 rule "DOUBLE JUMP FIRST HIT BONUS":
     @Event playerDealtDamage
     @Team 1
-    @Condition groupedConditions(((((isGameplayActive == true) and (eventPlayer.augmentId == Augment.DOUBLE_JUMP)) and ((eventPlayer.isAlive() == true) and (eventPlayer.augmentJumpBonusState != null))) and (((eventPlayer.getHero() == eventPlayer.augmentJumpBonusState[1]) and (getTotalTimeElapsed() < abs(eventPlayer.augmentJumpBonusState[0]))) and ((eventDamage >= 30) and (victim.getTeam() == Team.2)))))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.augmentId == Augment.DOUBLE_JUMP
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.augmentJumpBonusState != null
+    @Condition eventPlayer.getHero() == eventPlayer.augmentJumpBonusState[1]
+    @Condition getTotalTimeElapsed() < abs(eventPlayer.augmentJumpBonusState[0])
+    @Condition eventDamage >= 30
+    @Condition victim.getTeam() == Team.2
 
     # Match Brain Killer's event-damage bonus pattern. Only hits of 30+ spend it;
     # consume before Damage so supplemental damage cannot recurse.
@@ -272,7 +309,9 @@ def useAugmentAirAction():
 rule "PHASE DASH LANDING WAVE":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions((((eventPlayer.augmentId == Augment.PHASE_DASH) and (eventPlayer.augmentDashHero != null)) and ((eventPlayer.isOnGround() or not isGameplayActive or not eventPlayer.isAlive() or eventPlayer.getHero() != eventPlayer.augmentDashHero) == true)))
+    @Condition eventPlayer.augmentId == Augment.PHASE_DASH
+    @Condition eventPlayer.augmentDashHero != null
+    @Condition (eventPlayer.isOnGround() or not isGameplayActive or not eventPlayer.isAlive() or eventPlayer.getHero() != eventPlayer.augmentDashHero) == true
 
     # First landing consumes the wave independently of the phase-cleanup timer.
     # Death, hero change and game end clear it without emitting a wave.
@@ -303,7 +342,13 @@ rule "PHASE DASH LANDING WAVE":
 rule "GRAPNEL LAUNCHER":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions(((((isGameplayActive == true) and (eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER)) and ((eventPlayer.hasSpawned() == true) and (eventPlayer.isAlive() == true))) and (((eventPlayer.isDummy() == false) and (eventPlayer.isHoldingButton(Button.CROUCH) == true)) and (eventPlayer.isHoldingButton(Button.JUMP) == true))))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER
+    @Condition eventPlayer.hasSpawned() == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isDummy() == false
+    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
+    @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
 
     # Cooldown is checked on the input edge; holding the chord through expiry
     # cannot auto-launch. A miss does not consume the cooldown.
@@ -357,7 +402,8 @@ rule "GRAPNEL LAUNCHER":
 rule "GRAPNEL LAUNCHER DISCONNECT CLEANUP":
     @Event playerLeft
     @Team 1
-    @Condition groupedConditions(((eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER) and (eventPlayer.augmentGrapnelState != null)))
+    @Condition eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER
+    @Condition eventPlayer.augmentGrapnelState != null
 
     # Follow the project's supplied playerLeft cleanup pattern: consume the
     # departing player's effect ID synchronously in the departure event.
@@ -367,7 +413,16 @@ rule "GRAPNEL LAUNCHER DISCONNECT CLEANUP":
 rule "LONG REACH QUICK MELEE":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions((((((isGameplayActive == true) and (eventPlayer.augmentId == Augment.LONG_REACH)) and (eventPlayer.isAlive() == true)) and ((eventPlayer.isDummy() == false) and (eventPlayer.isMeleeing() == true))) and ((((eventPlayer.getHero() not in [Hero.REINHARDT, Hero.BRIGITTE]) and ((eventPlayer.getHero() != Hero.TORBJORN or eventPlayer.getCurrentWeapon() != 2) == true)) and ((eventPlayer.getHero() != Hero.VENDETTA or not eventPlayer.isFiringPrimaryFire()) == true)) and (((eventPlayer.getHero() != Hero.JUNKER_QUEEN or not eventPlayer.isUsingAbility2()) == true) and (eventPlayer.isUsingUltimate() == false)))))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.augmentId == Augment.LONG_REACH
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isDummy() == false
+    @Condition eventPlayer.isMeleeing() == true
+    @Condition eventPlayer.getHero() not in [Hero.REINHARDT, Hero.BRIGITTE]
+    @Condition (eventPlayer.getHero() != Hero.TORBJORN or eventPlayer.getCurrentWeapon() != 2) == true
+    @Condition (eventPlayer.getHero() != Hero.VENDETTA or not eventPlayer.isFiringPrimaryFire()) == true
+    @Condition (eventPlayer.getHero() != Hero.JUNKER_QUEEN or not eventPlayer.isUsingAbility2()) == true
+    @Condition eventPlayer.isUsingUltimate() == false
 
     eventPlayer.augmentMeleeHero = eventPlayer.getHero()
     wait(0.15, Wait.ABORT_WHEN_FALSE)
@@ -383,7 +438,19 @@ rule "LONG REACH VENDETTA SWORD":
     @Team 1
     @Hero vendetta
     # These conditions cancel a committed swing; releasing primary fire does not.
-    @Condition groupedConditions((((((eventPlayer.getHero() == Hero.VENDETTA) and (isGameplayActive == true)) and ((eventPlayer.augmentId == Augment.LONG_REACH) and (eventPlayer.isAlive() == true))) and (((eventPlayer.isDummy() == false) and (eventPlayer.isFiringSecondaryFire() == false)) and (eventPlayer.isUsingAbility1() == false))) and ((((eventPlayer.isUsingAbility2() == false) and (eventPlayer.isUsingUltimate() == false)) and (eventPlayer.hasStatus(Status.STUNNED) == false)) and (((eventPlayer.hasStatus(Status.ASLEEP) == false) and (eventPlayer.hasStatus(Status.FROZEN) == false)) and (eventPlayer.hasStatus(Status.KNOCKED_DOWN) == false)))))
+    @Condition eventPlayer.getHero() == Hero.VENDETTA
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.augmentId == Augment.LONG_REACH
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isDummy() == false
+    @Condition eventPlayer.isFiringSecondaryFire() == false
+    @Condition eventPlayer.isUsingAbility1() == false
+    @Condition eventPlayer.isUsingAbility2() == false
+    @Condition eventPlayer.isUsingUltimate() == false
+    @Condition eventPlayer.hasStatus(Status.STUNNED) == false
+    @Condition eventPlayer.hasStatus(Status.ASLEEP) == false
+    @Condition eventPlayer.hasStatus(Status.FROZEN) == false
+    @Condition eventPlayer.hasStatus(Status.KNOCKED_DOWN) == false
 
     # Trigger and windup have separate lifetimes: a short click commits one hit,
     # while held input keeps using the configured repeat timer.
@@ -408,11 +475,28 @@ rule "LONG REACH VENDETTA SWORD":
 rule "LONG REACH MELEE WEAPONS":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions(((((((isGameplayActive == true) and (eventPlayer.augmentId == Augment.LONG_REACH)) and (eventPlayer.isAlive() == true)) and ((eventPlayer.isDummy() == false) and (eventPlayer.getHero() in AUGMENT_MELEE_WEAPON_HEROES))) and ((((eventPlayer.getHero() != Hero.GENJI or eventPlayer.isUsingUltimate()) == true) and ((eventPlayer.getHero() != Hero.DMON or not eventPlayer.isInAlternateForm()) == true)) and (((eventPlayer.getHero() not in [Hero.DMON, Hero.RAMATTRA] or not eventPlayer.isMeleeing()) == true) and ((eventPlayer.getHero() != Hero.TORBJORN or eventPlayer.getCurrentWeapon() == 2) == true)))) and ((((((eventPlayer.getHero() != Hero.RAMATTRA or eventPlayer.getMaxHealthOfType(Health.ARMOR) > eventPlayer.initialMaxHealth * 0.4) == true) and (eventPlayer.isFiringSecondaryFire() == false)) and ((eventPlayer.getHero() == Hero.RAMATTRA or not eventPlayer.isUsingAbility1()) == true)) and (((eventPlayer.getHero() == Hero.TORBJORN or not eventPlayer.isUsingAbility2()) == true) and ((not eventPlayer.isUsingUltimate() or eventPlayer.getHero() in [Hero.GENJI, Hero.BRIGITTE, Hero.RAMATTRA]) == true))) and (((eventPlayer.hasStatus(Status.STUNNED) == false) and (eventPlayer.hasStatus(Status.ASLEEP) == false)) and ((eventPlayer.hasStatus(Status.FROZEN) == false) and (eventPlayer.hasStatus(Status.KNOCKED_DOWN) == false))))))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.augmentId == Augment.LONG_REACH
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isDummy() == false
+    @Condition eventPlayer.getHero() in AUGMENT_MELEE_WEAPON_HEROES
+    @Condition (eventPlayer.getHero() != Hero.GENJI or eventPlayer.isUsingUltimate()) == true
+    @Condition (eventPlayer.getHero() != Hero.DMON or not eventPlayer.isInAlternateForm()) == true
+    @Condition (eventPlayer.getHero() not in [Hero.DMON, Hero.RAMATTRA] or not eventPlayer.isMeleeing()) == true
+    @Condition (eventPlayer.getHero() != Hero.TORBJORN or eventPlayer.getCurrentWeapon() == 2) == true
     # Nemesis does not reliably report Is Using Ability 1 / Is In Alternate Form.
     # Its extra armor exceeds 40% of the spawn health in all standard queues.
     # Use the spawn snapshot so health scaling works and Hitchhiker's live health
     # pools cannot turn an active Nemesis back into a staff attack here.
+    @Condition (eventPlayer.getHero() != Hero.RAMATTRA or eventPlayer.getMaxHealthOfType(Health.ARMOR) > eventPlayer.initialMaxHealth * 0.4) == true
+    @Condition eventPlayer.isFiringSecondaryFire() == false
+    @Condition (eventPlayer.getHero() == Hero.RAMATTRA or not eventPlayer.isUsingAbility1()) == true
+    @Condition (eventPlayer.getHero() == Hero.TORBJORN or not eventPlayer.isUsingAbility2()) == true
+    @Condition (not eventPlayer.isUsingUltimate() or eventPlayer.getHero() in [Hero.GENJI, Hero.BRIGITTE, Hero.RAMATTRA]) == true
+    @Condition eventPlayer.hasStatus(Status.STUNNED) == false
+    @Condition eventPlayer.hasStatus(Status.ASLEEP) == false
+    @Condition eventPlayer.hasStatus(Status.FROZEN) == false
+    @Condition eventPlayer.hasStatus(Status.KNOCKED_DOWN) == false
 
     waitUntil((eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) or eventPlayer.getHero() in AUGMENT_MELEE_BUTTON_WEAPON_HEROES and eventPlayer.isHoldingButton(Button.MELEE)) and (eventPlayer.isFiringPrimaryFire() or eventPlayer.getHero() in AUGMENT_MELEE_BUTTON_WEAPON_HEROES and eventPlayer.isMeleeing()), Math.INFINITY)
     if not ruleCondition:
@@ -447,7 +531,16 @@ rule "LONG REACH CARNAGE":
     @Event eachPlayer
     @Team 1
     @Hero junkerQueen
-    @Condition groupedConditions((((((eventPlayer.getHero() == Hero.JUNKER_QUEEN) and (isGameplayActive == true)) and (eventPlayer.augmentId == Augment.LONG_REACH)) and ((eventPlayer.isAlive() == true) and (eventPlayer.isDummy() == false))) and ((((eventPlayer.isUsingAbility2() == true) and (eventPlayer.hasStatus(Status.STUNNED) == false)) and (eventPlayer.hasStatus(Status.ASLEEP) == false)) and ((eventPlayer.hasStatus(Status.FROZEN) == false) and (eventPlayer.hasStatus(Status.KNOCKED_DOWN) == false)))))
+    @Condition eventPlayer.getHero() == Hero.JUNKER_QUEEN
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.augmentId == Augment.LONG_REACH
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isDummy() == false
+    @Condition eventPlayer.isUsingAbility2() == true
+    @Condition eventPlayer.hasStatus(Status.STUNNED) == false
+    @Condition eventPlayer.hasStatus(Status.ASLEEP) == false
+    @Condition eventPlayer.hasStatus(Status.FROZEN) == false
+    @Condition eventPlayer.hasStatus(Status.KNOCKED_DOWN) == false
 
     # Carnage is a committed ability, not a repeating primary-fire timer.
     wait(0.75, Wait.ABORT_WHEN_FALSE)
@@ -489,7 +582,11 @@ def extendAugmentMelee():
 rule "AMMO PACK MAGAZINES":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions(((((isGameplayActive == true) and (eventPlayer.augmentId == Augment.AMMO_PACK)) and (eventPlayer.hasSpawned() == true)) and ((eventPlayer.isAlive() == true) and (eventPlayer.isDummy() == false))))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.augmentId == Augment.AMMO_PACK
+    @Condition eventPlayer.hasSpawned() == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isDummy() == false
 
     # Cache once per hero/weapon, so respawns and returning to an earlier loadout
     # cannot repeatedly double an already enlarged magazine. No polling loop.
@@ -529,7 +626,15 @@ rule "AMMO PACK MAGAZINES":
 rule "AMMO PACK REFILL FALLBACK":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions((((((isGameplayActive == true) and (eventPlayer.augmentId == Augment.AMMO_PACK)) and (eventPlayer.hasSpawned() == true)) and ((eventPlayer.isAlive() == true) and (eventPlayer.isDummy() == false))) and (((eventPlayer.getHero() == eventPlayer.augmentAmmoLoadout[0]) and (eventPlayer.getCurrentWeapon() == eventPlayer.augmentAmmoLoadout[1])) and ((eventPlayer.augmentAmmoFallbackState != null) and (((eventPlayer.getAmmo(0) < eventPlayer.getMaxAmmo(0)) != eventPlayer.augmentAmmoFallbackState[0] or (eventPlayer.getAmmo(1) < eventPlayer.getMaxAmmo(1)) != eventPlayer.augmentAmmoFallbackState[1] or eventPlayer.isReloading() != eventPlayer.augmentAmmoFallbackState[2]) == true)))))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.augmentId == Augment.AMMO_PACK
+    @Condition eventPlayer.hasSpawned() == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isDummy() == false
+    @Condition eventPlayer.getHero() == eventPlayer.augmentAmmoLoadout[0]
+    @Condition eventPlayer.getCurrentWeapon() == eventPlayer.augmentAmmoLoadout[1]
+    @Condition eventPlayer.augmentAmmoFallbackState != null
+    @Condition ((eventPlayer.getAmmo(0) < eventPlayer.getMaxAmmo(0)) != eventPlayer.augmentAmmoFallbackState[0] or (eventPlayer.getAmmo(1) < eventPlayer.getMaxAmmo(1)) != eventPlayer.augmentAmmoFallbackState[1] or eventPlayer.isReloading() != eventPlayer.augmentAmmoFallbackState[2]) == true
 
     # Some heroes (including Widowmaker) accept Set Ammo but ignore Set Max Ammo.
     # Watch only the native-full boundary and reload edges, not every fired round.
@@ -554,7 +659,13 @@ rule "AMMO PACK REFILL FALLBACK":
 rule "LASER BARRICADE (PLACEMENT)":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions(((((isGameplayActive == true) and (eventPlayer.augmentId == Augment.LASER_BARRICADE)) and ((eventPlayer.isHoldingButton(Button.CROUCH) == true) and (eventPlayer.isHoldingButton(Button.INTERACT) == true))) and (((eventPlayer.isAlive() == true) and (eventPlayer.augmentBarrierPlacementCooldown == 0)) and ((eventPlayer.enhancementId != Enhancement.DEAD_WEIGHT or eventPlayer.enhancementHeldZombie == null) == true))))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.augmentId == Augment.LASER_BARRICADE
+    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
+    @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.augmentBarrierPlacementCooldown == 0
+    @Condition (eventPlayer.enhancementId != Enhancement.DEAD_WEIGHT or eventPlayer.enhancementHeldZombie == null) == true
 
     # -1 latches aiming; Interact may reserve -2 for a consumed Dead Weight press.
     # Clear the placement latch on every exit before starting the normal cooldown.
@@ -595,12 +706,17 @@ rule "LASER BARRICADE (PLACEMENT)":
 rule "LASER BARRICADE BLOCKS ZOMBIES":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions(((((eventPlayer.augmentId == Augment.LASER_BARRICADE) and (eventPlayer.augmentBarrierHealth > 0)) and (getLivingPlayers(Team.2).any(lambda player: distance(eventPlayer.augmentBarrierPosition, vect(player.getPosition().x, eventPlayer.augmentBarrierPosition.getPosition().y, player.getPosition().z)) < 0.5 * LASER_BARRICADE_WIDTH) == true)) and (((getLivingPlayers(Team.2).any(lambda player: player.getPosition().y < eventPlayer.augmentBarrierPosition.y + LASER_BARRICADE_HEIGHT) == true) and (getLivingPlayers(Team.2).any(lambda player: player.getEyePosition().y > eventPlayer.augmentBarrierPosition.y) == true)) and (getLivingPlayers(Team.2).any(lambda player: distance(vect(player.getPosition().x, eventPlayer.augmentBarrierCorner1.y, player.getPosition().z), eventPlayer.augmentBarrierCorner1 + eventPlayer.augmentBarrierEdgeDirection * (min(LASER_BARRICADE_WIDTH, abs(dotProduct(eventPlayer.augmentBarrierEdgeDirection, vect(player.getPosition().x, eventPlayer.augmentBarrierCorner1.y, player.getPosition().z) - eventPlayer.augmentBarrierCorner1))))) < 1.5) == true))))
+    @Condition eventPlayer.augmentId == Augment.LASER_BARRICADE
     #Barrier health is greater than 0
+    @Condition eventPlayer.augmentBarrierHealth > 0
     #Horizontal distance check
+    @Condition getLivingPlayers(Team.2).any(lambda player: distance(eventPlayer.augmentBarrierPosition, vect(player.getPosition().x, eventPlayer.augmentBarrierPosition.getPosition().y, player.getPosition().z)) < 0.5 * LASER_BARRICADE_WIDTH) == true
     #If feet are below highest point of wall
+    @Condition getLivingPlayers(Team.2).any(lambda player: player.getPosition().y < eventPlayer.augmentBarrierPosition.y + LASER_BARRICADE_HEIGHT) == true
     #If eyes are above lowest point of wall
+    @Condition getLivingPlayers(Team.2).any(lambda player: player.getEyePosition().y > eventPlayer.augmentBarrierPosition.y) == true
     #Distance from wall
+    @Condition getLivingPlayers(Team.2).any(lambda player: distance(vect(player.getPosition().x, eventPlayer.augmentBarrierCorner1.y, player.getPosition().z), eventPlayer.augmentBarrierCorner1 + eventPlayer.augmentBarrierEdgeDirection * (min(LASER_BARRICADE_WIDTH, abs(dotProduct(eventPlayer.augmentBarrierEdgeDirection, vect(player.getPosition().x, eventPlayer.augmentBarrierCorner1.y, player.getPosition().z) - eventPlayer.augmentBarrierCorner1))))) < 1.5) == true
 
     stopChasing(eventPlayer.augmentBarrierHealth)
     #Filter horizontal distance, feet height, eye height and distance from wall together.
@@ -642,7 +758,10 @@ rule "LASER BARRICADE BLOCKS ZOMBIES":
 rule "SCAVENGER BOT LOOT":
     @Event playerEarnedElimination
     @Team 1
-    @Condition groupedConditions((((isGameplayActive == true) and (eventPlayer.augmentId == Augment.SCAVENGER)) and ((victim.getTeam() == Team.2) and (victim.isDummy() == true))))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.augmentId == Augment.SCAVENGER
+    @Condition victim.getTeam() == Team.2
+    @Condition victim.isDummy() == true
 
     if random.randint(1, 20) == 1:
         # One item roll per credited kill or damage participation. No waits or

@@ -17,7 +17,10 @@ subroutine applyBulkingSeasonStats
 rule "PLAYER ENHANCEMENT INITIALIZATION":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions((((eventPlayer.hasSpawned() == true) and (isGameplayActive == true)) and ((eventPlayer.isDummy() != true) and (eventPlayer.isHeroSwitchRespawn == false))))
+    @Condition eventPlayer.hasSpawned() == true
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.isDummy() != true
+    @Condition eventPlayer.isHeroSwitchRespawn == false
     
     if eventPlayer.enhancementId == Enhancement.NO_PREFERENCE:
         # No preference and late-join zero state receive one real choice before
@@ -220,7 +223,11 @@ rule "PLAYER ENHANCEMENT INITIALIZATION":
 rule "ZOMBIE HYBRID":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions(((((eventPlayer.enhancementId == Enhancement.ZOMBIE_HYBRID) and (eventPlayer.isHoldingButton(Button.MELEE) == true)) and (eventPlayer.isAlive() == true)) and ((eventPlayer.enhancementHybridCooldown <= 0) and (eventPlayer.infectionLevel >= 1))))
+    @Condition eventPlayer.enhancementId == Enhancement.ZOMBIE_HYBRID
+    @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.enhancementHybridCooldown <= 0
+    @Condition eventPlayer.infectionLevel >= 1
     
     explosionSequence()
     stopDamageOverTime(eventPlayer.infectionDamageOverTimeId)
@@ -237,7 +244,8 @@ rule "ZOMBIE HYBRID":
 rule "BRAIN KILLER EXTRA DAMAGE":
     @Event playerDealtDamage
     @Team 1
-    @Condition groupedConditions(((eventPlayer.enhancementId == Enhancement.BRAIN_KILLER) and (eventWasCriticalHit == true)))
+    @Condition eventPlayer.enhancementId == Enhancement.BRAIN_KILLER
+    @Condition eventWasCriticalHit == true
     
     #Critical hits deal 50% more damage, 20% if vicitm is a boss
     damage(victim, eventPlayer, eventDamage * (0.2 if victim in bossStateList else 0.6))
@@ -247,7 +255,10 @@ rule "BRAIN KILLER EXTRA DAMAGE":
 rule "PYROTECHNIC SETS ENEMIES ON FIRE":
     @Event playerDealtDamage
     @Team 1
-    @Condition groupedConditions((((attacker.enhancementId == Enhancement.PYROTECHNIC) and (victim != eventPlayer)) and ((eventAbility != null) and (distance(attacker, victim) < 15))))
+    @Condition attacker.enhancementId == Enhancement.PYROTECHNIC
+    @Condition victim != eventPlayer
+    @Condition eventAbility != null
+    @Condition distance(attacker, victim) < 15
     
     victim.setStatusEffect(attacker, Status.BURNING, 3)
     attacker.enhancementPyroHitList.append(victim)
@@ -256,7 +267,8 @@ rule "PYROTECHNIC SETS ENEMIES ON FIRE":
 rule "PYROTECHNIC APPLIES DAMAGE":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions(((eventPlayer.enhancementId == Enhancement.PYROTECHNIC) and (eventPlayer.enhancementPyroHitList != [])))
+    @Condition eventPlayer.enhancementId == Enhancement.PYROTECHNIC
+    @Condition eventPlayer.enhancementPyroHitList != []
     
     while eventPlayer.enhancementPyroHitList != []:
         # pyroBurnTarget: zombie to burn; consumed within this iteration before the cooldown wait.
@@ -279,7 +291,8 @@ rule "PYROTECHNIC APPLIES DAMAGE":
 rule "BORN TO BATTLE PLAYER EARNS ELIMINATION":
     @Event playerDealtFinalBlow
     @Team 1
-    @Condition groupedConditions(((eventPlayer.enhancementId == Enhancement.BORN_TO_BATTLE) and (eventPlayer.enhancementBattleResetCharges < 2)))
+    @Condition eventPlayer.enhancementId == Enhancement.BORN_TO_BATTLE
+    @Condition eventPlayer.enhancementBattleResetCharges < 2
     
     eventPlayer.enhancementBattleResetCharges += 1
 
@@ -287,7 +300,9 @@ rule "BORN TO BATTLE PLAYER EARNS ELIMINATION":
 rule "BORN TO BATTLE PLAYER USES ABILITY CHARGE":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions((((eventPlayer.enhancementId == Enhancement.BORN_TO_BATTLE) and (eventPlayer.enhancementBattleResetCharges > 0)) and ([Button.SECONDARY_FIRE, Button.ABILITY_1, Button.ABILITY_2, Button.CROUCH, Button.JUMP].any(lambda x: eventPlayer.isHoldingButton(x)) == true)))
+    @Condition eventPlayer.enhancementId == Enhancement.BORN_TO_BATTLE
+    @Condition eventPlayer.enhancementBattleResetCharges > 0
+    @Condition [Button.SECONDARY_FIRE, Button.ABILITY_1, Button.ABILITY_2, Button.CROUCH, Button.JUMP].any(lambda x: eventPlayer.isHoldingButton(x)) == true
     
     if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE):
         eventPlayer.enhancementBattleAbilityButton = Button.SECONDARY_FIRE
@@ -345,7 +360,8 @@ rule "PLAGUE DOCTOR REDUCES PLAYERS' INFECTION LEVELS":
 rule "BULKING SEASON EARNS STACKS":
     @Event playerEarnedElimination
     @Team 1
-    @Condition groupedConditions(((isGameplayActive == true) and (eventPlayer.enhancementId == Enhancement.BULKING_SEASON)))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.enhancementId == Enhancement.BULKING_SEASON
 
     # One credit for a kill or damage participation; healing/buff assists do not count.
     eventPlayer.enhancementBulkStacks += 1
@@ -355,7 +371,8 @@ rule "BULKING SEASON EARNS STACKS":
 rule "BULKING SEASON LOSES STACKS ON DEATH":
     @Event playerDied
     @Team 1
-    @Condition groupedConditions(((isGameplayActive == true) and (eventPlayer.enhancementId == Enhancement.BULKING_SEASON)))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.enhancementId == Enhancement.BULKING_SEASON
 
     eventPlayer.enhancementBulkStacks = floor(eventPlayer.enhancementBulkStacks / 2)
     applyBulkingSeasonStats()
@@ -373,7 +390,8 @@ def applyBulkingSeasonStats():
 rule "OVERCHARGE STORES HEALING":
     @Event playerDealtHealing
     @Team 1
-    @Condition groupedConditions(((isGameplayActive == true) and (eventPlayer.enhancementId == Enhancement.OVERCHARGE)))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
 
     eventPlayer.enhancementCapacitorEnergy += eventHealing / 3
 
@@ -381,7 +399,9 @@ rule "OVERCHARGE STORES HEALING":
 rule "OVERCHARGE STORES ASSISTS":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions((((isGameplayActive == true) and (eventPlayer.enhancementId == Enhancement.OVERCHARGE)) and (overchargeAssistTotal(eventPlayer) != eventPlayer.enhancementCapacitorAssistSnapshot)))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
+    @Condition overchargeAssistTotal(eventPlayer) != eventPlayer.enhancementCapacitorAssistSnapshot
 
     # No assist event exists. Only Overcharge players observe the two native counters.
     # Synchronous scratch: consumed before any wait/call/HUD reevaluation can reuse tmp0.
@@ -395,7 +415,12 @@ rule "OVERCHARGE STORES ASSISTS":
 rule "OVERCHARGE ARMS CHARGE":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions(((((isGameplayActive == true) and (eventPlayer.enhancementId == Enhancement.OVERCHARGE)) and (eventPlayer.isAlive() == true)) and (((eventPlayer.isHoldingButton(Button.MELEE) == true) and (eventPlayer.enhancementCapacitorEnergy > 0)) and (eventPlayer.enhancementCapacitorCharge == 0))))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
+    @Condition eventPlayer.enhancementCapacitorEnergy > 0
+    @Condition eventPlayer.enhancementCapacitorCharge == 0
 
     # Transfer at most 100; retain the remainder in the uncapped bank.
     # Continued healing cannot change this burst's fixed damage.
@@ -406,7 +431,9 @@ rule "OVERCHARGE ARMS CHARGE":
 rule "OVERCHARGE CLEARS CHARGE":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions((((eventPlayer.enhancementId == Enhancement.OVERCHARGE) and (eventPlayer.enhancementCapacitorCharge > 0)) and ((not isGameplayActive or not eventPlayer.isAlive() or eventPlayer.enhancementCapacitorDeadline > 0 and getTotalTimeElapsed() >= eventPlayer.enhancementCapacitorDeadline) == true)))
+    @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
+    @Condition eventPlayer.enhancementCapacitorCharge > 0
+    @Condition (not isGameplayActive or not eventPlayer.isAlive() or eventPlayer.enhancementCapacitorDeadline > 0 and getTotalTimeElapsed() >= eventPlayer.enhancementCapacitorDeadline) == true
 
     eventPlayer.enhancementCapacitorCharge = 0
     eventPlayer.enhancementCapacitorDeadline = 0
@@ -415,8 +442,13 @@ rule "OVERCHARGE CLEARS CHARGE":
 rule "OVERCHARGE BONUS DAMAGE":
     @Event playerDealtDamage
     @Team 1
-    @Condition groupedConditions(((((isGameplayActive == true) and (eventPlayer.enhancementId == Enhancement.OVERCHARGE)) and (eventPlayer.enhancementCapacitorCharge > 0)) and (((eventDamage > 0) and (victim.getTeam() == Team.2)) and (eventAbility != null))))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
+    @Condition eventPlayer.enhancementCapacitorCharge > 0
+    @Condition eventDamage > 0
+    @Condition victim.getTeam() == Team.2
     # Workshop Damage has no Event Ability; never amplify this rule's own bonus.
+    @Condition eventAbility != null
 
     if eventPlayer.enhancementCapacitorDeadline == 0:
         eventPlayer.enhancementCapacitorDeadline = getTotalTimeElapsed() + 0.3
@@ -427,7 +459,11 @@ rule "OVERCHARGE BONUS DAMAGE":
 rule "CHARGE BATTERY":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions(((((eventPlayer.isHoldingButton(Button.MELEE) == true) and (eventPlayer.enhancementId == Enhancement.CHARGE_BATTERY)) and (isGameplayActive == true)) and ((eventPlayer.isAlive() == true) and (eventPlayer.enhancementBatteryPlacementCooldown <= 0))))
+    @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
+    @Condition eventPlayer.enhancementId == Enhancement.CHARGE_BATTERY
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.enhancementBatteryPlacementCooldown <= 0
     
     wait(0.5, Wait.ABORT_WHEN_FALSE)
     playEffect(eventPlayer, DynamicEffect.GOOD_EXPLOSION, Color.YELLOW, eventPlayer.getEyePosition() + ((directionFromAngles(eventPlayer.getHorizontalFacingAngle() + random.uniform(-5, 5), eventPlayer.getVerticalFacingAngle() + random.uniform(-5, 5))) * 1.5), 0.1)
@@ -454,7 +490,10 @@ rule "CHARGE BATTERY":
 rule "CHARGE BATTERY (USAGE AND COOLDOWNS)":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions((((isGameplayActive == true) and (eventPlayer.enhancementId == Enhancement.CHARGE_BATTERY)) and (((eventPlayer.enhancementBatteryPosition) != false) and (playerTargetList.any(lambda player: isBatteryChargeEligible(player)) == true))))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.enhancementId == Enhancement.CHARGE_BATTERY
+    @Condition eventPlayer.enhancementBatteryPosition
+    @Condition playerTargetList.any(lambda player: isBatteryChargeEligible(player)) == true
     
     # batteryChargeRecipient: survivor using the battery, to play feedback and grant ultimate charge before cooldown waits.
     #!define batteryChargeRecipient tmp0
@@ -484,7 +523,9 @@ def checkEnhancementPlacement():
 rule "HITCHHIKER ATTACH/DETATCH":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions((((eventPlayer.enhancementId == Enhancement.HITCHHIKER) and ((eventPlayer.isHoldingButton(Button.CROUCH) or (eventPlayer.enhancementIsHitchhiking and (not eventPlayer.hasSpawned() or not eventPlayer.enhancementHitchhikerCarrier.hasSpawned() or eventPlayer.isDead() or eventPlayer.enhancementHitchhikerCarrier.isDead() or not entityExists(eventPlayer.enhancementHitchhikerCarrier) or eventPlayer.hasStatus(Status.KNOCKED_DOWN) or eventPlayer.enhancementHitchhikerCarrier.hasStatus(Status.KNOCKED_DOWN) or distance(eventPlayer, eventPlayer.enhancementHitchhikerCarrier) > 3 * eventPlayer.enhancementHitchhikerCarrier.sizeScale))) == true)) and (eventPlayer.getHero() != Hero.MEI)))
+    @Condition eventPlayer.enhancementId == Enhancement.HITCHHIKER
+    @Condition (eventPlayer.isHoldingButton(Button.CROUCH) or (eventPlayer.enhancementIsHitchhiking and (not eventPlayer.hasSpawned() or not eventPlayer.enhancementHitchhikerCarrier.hasSpawned() or eventPlayer.isDead() or eventPlayer.enhancementHitchhikerCarrier.isDead() or not entityExists(eventPlayer.enhancementHitchhikerCarrier) or eventPlayer.hasStatus(Status.KNOCKED_DOWN) or eventPlayer.enhancementHitchhikerCarrier.hasStatus(Status.KNOCKED_DOWN) or distance(eventPlayer, eventPlayer.enhancementHitchhikerCarrier) > 3 * eventPlayer.enhancementHitchhikerCarrier.sizeScale))) == true
+    @Condition eventPlayer.getHero() != Hero.MEI
     
     if not eventPlayer.enhancementIsHitchhiking and eventPlayer.isAlive():
         if playerTargetList.exclude(eventPlayer).any(lambda x: not x.isAttached and distance(eventPlayer, x) < 2 * x.sizeScale):
@@ -535,8 +576,12 @@ rule "HITCHHIKER PARENT RECIEVES HEALTH POOL":
 rule "HITCHHIKER LIFEBONDS":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions(((((eventPlayer.enhancementId == Enhancement.HITCHHIKER) and (eventPlayer.enhancementIsHitchhiking == true)) and (eventPlayer.isAlive() == true)) and ((eventPlayer.enhancementHitchhikerCarrier.isAlive() == true) and (abs(eventPlayer.getNormalizedHealth() - eventPlayer.enhancementHitchhikerCarrier.getNormalizedHealth()) > 0.01))))
+    @Condition eventPlayer.enhancementId == Enhancement.HITCHHIKER
+    @Condition eventPlayer.enhancementIsHitchhiking == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.enhancementHitchhikerCarrier.isAlive() == true
     #Normalized health difference
+    @Condition abs(eventPlayer.getNormalizedHealth() - eventPlayer.enhancementHitchhikerCarrier.getNormalizedHealth()) > 0.01
     
     # hitchhikerHealthTransferAmount: health to transfer this update; consumed by both setHealth actions before wait.
     #!define hitchhikerHealthTransferAmount tmp0
@@ -557,9 +602,12 @@ rule "HITCHHIKER LIFEBONDS":
 rule "P.U.P. TARGET":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions((((eventPlayer.enhancementId == Enhancement.PUP) and (eventPlayer.enhancementPupCooldown <= 0)) and ((eventPlayer.enhancementPupTarget == null) and ((getLivingPlayers(Team.2).any(lambda player: player.botTarget == eventPlayer and distance(eventPlayer, player) < 10)) == true))))
+    @Condition eventPlayer.enhancementId == Enhancement.PUP
     #Cooldown is at 0s
+    @Condition eventPlayer.enhancementPupCooldown <= 0
     #P.U.P. target
+    @Condition eventPlayer.enhancementPupTarget == null
+    @Condition (getLivingPlayers(Team.2).any(lambda player: player.botTarget == eventPlayer and distance(eventPlayer, player) < 10)) == true
     
     #Set P.U.P. target
     eventPlayer.enhancementPupTarget = (sorted(getLivingPlayers(Team.2).filter(lambda player: player.botTarget == eventPlayer), lambda x: distance(eventPlayer, x)))[0]
@@ -586,7 +634,8 @@ rule "P.U.P. TARGET":
 rule "P.U.P. CONTROL":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions(((eventPlayer.enhancementId == Enhancement.PUP) and (eventPlayer.enhancementPupTarget != null)))
+    @Condition eventPlayer.enhancementId == Enhancement.PUP
+    @Condition eventPlayer.enhancementPupTarget != null
     
     #P.U.P. attack movement
     chaseAtRate(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget.getEyePosition() + directionTowards(eventPlayer.enhancementPupTarget.getEyePosition(), eventPlayer.enhancementPupPosition) * 2, (abs(distance(eventPlayer.enhancementPupTarget.getEyePosition(), eventPlayer.enhancementPupPosition) - 2)) * 1.5)
@@ -701,7 +750,8 @@ def useLivingProjectile():
 rule "LIVING PROJECTILE RELEASE":
     @Event eachPlayer
     @Team 2
-    @Condition groupedConditions(((eventPlayer.deadWeightZombieCarrier != null) and ((eventPlayer.deadWeightZombieCarrier.enhancementHoldUntil <= getTotalTimeElapsed() or livingProjectileInterrupted(eventPlayer.deadWeightZombieCarrier)) == true)))
+    @Condition eventPlayer.deadWeightZombieCarrier != null
+    @Condition (eventPlayer.deadWeightZombieCarrier.enhancementHoldUntil <= getTotalTimeElapsed() or livingProjectileInterrupted(eventPlayer.deadWeightZombieCarrier)) == true
 
     # Release and cleanup are synchronous; only throw damage waits below.
     # Bot-owned cleanup survives carrier departure.

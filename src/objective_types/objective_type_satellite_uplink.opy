@@ -70,7 +70,10 @@ macro fireSatelliteMacro():
 
 
 rule "SET UP TERMINAL POSITIONS":
-    @Condition groupedConditions((((currentObjectiveType == ObjectiveType.SATELLITE_UPLINK) and (isGameplayActive == true)) and ((isObjectiveComplete == false) and ((len(satelliteTerminalProgressList) != len(satelliteTerminalPositionList) or satelliteTerminalPositionList.any(lambda x: x.x == null)) == true))))
+    @Condition currentObjectiveType == ObjectiveType.SATELLITE_UPLINK
+    @Condition isGameplayActive == true
+    @Condition isObjectiveComplete == false
+    @Condition (len(satelliteTerminalProgressList) != len(satelliteTerminalPositionList) or satelliteTerminalPositionList.any(lambda x: x.x == null)) == true
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
     # satelliteTerminalCandidatePositionList: grid points 10-50m from the objective, to choose a terminal location with sufficient spacing.
@@ -102,7 +105,12 @@ rule "SET UP TERMINAL POSITIONS":
 rule "PLAYERS AT TERMINALS CONTROLS":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions(((((currentObjectiveType == ObjectiveType.SATELLITE_UPLINK) and (isObjectiveComplete == false)) and (eventPlayer.isAlive() == true)) and (((eventPlayer.hasSpawned() == true) and (eventPlayer.invisibilityCount != true)) and ((satelliteTerminalPositionList.filter(lambda _, i: satelliteTerminalProgressList[i] < 100).any(lambda x: distance(x, eventPlayer) < objectiveRad and x.x != null)) == true))))
+    @Condition currentObjectiveType == ObjectiveType.SATELLITE_UPLINK
+    @Condition isObjectiveComplete == false
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.hasSpawned() == true
+    @Condition eventPlayer.invisibilityCount != true
+    @Condition (satelliteTerminalPositionList.filter(lambda _, i: satelliteTerminalProgressList[i] < 100).any(lambda x: distance(x, eventPlayer) < objectiveRad and x.x != null)) == true
     
     if not eventPlayer in objectivePlayerList:
         objectivePlayerList.append(eventPlayer)
@@ -113,7 +121,9 @@ rule "PLAYERS AT TERMINALS CONTROLS":
 
 
 rule "PLAYERS REPAIR TERMINALS":
-    @Condition groupedConditions((((currentObjectiveType == ObjectiveType.SATELLITE_UPLINK) and (isObjectiveComplete == false)) and (objectivePlayerList != [])))
+    @Condition currentObjectiveType == ObjectiveType.SATELLITE_UPLINK
+    @Condition isObjectiveComplete == false
+    @Condition objectivePlayerList != []
     
     #Check each terminal
     # satelliteRepairTerminalIndex: terminal index, to update its repair progress and announce its completion.

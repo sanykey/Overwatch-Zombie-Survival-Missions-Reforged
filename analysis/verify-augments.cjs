@@ -1568,7 +1568,7 @@ async function main() {
     assert(!files['enhancements.opy'].includes('LASER_BARRICADE'));
     for (const name of ['LASER BARRICADE (PLACEMENT)', 'LASER BARRICADE BLOCKS ZOMBIES']) {
         const body = compiled.get(name).body;
-        assert(body.includes('Compare((Event Player).augmentId, ==, 7)'));
+        assert(body.includes('(Event Player).augmentId == 7;'));
         if (name === 'LASER BARRICADE (PLACEMENT)')
             assert(body.includes('Compare((Event Player).enhancementId, !=, 11)'), 'Only Dead Weight carry reserves a ready barricade press');
         else assert(!body.includes('(Event Player).enhancementId'));

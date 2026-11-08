@@ -8,7 +8,8 @@ subroutine setObjectiveType
 subroutine selectVoteWinner
 
 rule "GLOBAL MENU INITIALIZATION":
-    @Condition groupedConditions(((isPregameSetup == true) and (mapGridList != [])))
+    @Condition isPregameSetup == true
+    @Condition mapGridList != []
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
     if isSpecialGameMode:
@@ -237,7 +238,10 @@ rule "SPECIAL EFFECT CONTROLS":
 
 
 rule "END VOTING":
-    @Condition groupedConditions((((isVoting == true) and (isPregameSetup == true)) and ((getMatchTime() < VOTING_END_TIME) and (getPlayers(Team.1).any(lambda player: player.pregameState > PregameState.SELECTING_HERO)))))
+    @Condition isVoting == true
+    @Condition isPregameSetup == true
+    @Condition getMatchTime() < VOTING_END_TIME
+    @Condition getPlayers(Team.1).any(lambda player: player.pregameState > PregameState.SELECTING_HERO)
     
     pregameCountdown = VOTING_END_TIME
     startRule(determineZombieMode)
@@ -257,7 +261,8 @@ rule "END VOTING":
 
 
 rule "MUSIC/ANNOUNCER CONTROL":
-    @Condition groupedConditions(((isVoting != true) and (isPregameSetup == true)))
+    @Condition isVoting != true
+    @Condition isPregameSetup == true
     
     if getMatchTime() < 20:
         enableMusic()

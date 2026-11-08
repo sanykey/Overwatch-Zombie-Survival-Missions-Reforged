@@ -7,7 +7,13 @@ subroutine startExtractionAscent
 rule "PLAYERS IN EXTRACTION POINT CONTROL":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions(((((isObjectiveComplete == false) and (isGameplayActive == true)) and ((eventPlayer.hasSpawned() == true) and (currentObjectiveType == ObjectiveType.SHOWDOWN))) and (((len(objectivePositionList) == 1) and (currentObjectivePosition.y - eventPlayer.getEyePosition().y < 2)) and (distance(eventPlayer, vect(currentObjectivePosition.x, eventPlayer.getPosition().y, currentObjectivePosition.z)) < objectiveRad))))
+    @Condition isObjectiveComplete == false
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.hasSpawned() == true
+    @Condition currentObjectiveType == ObjectiveType.SHOWDOWN
+    @Condition len(objectivePositionList) == 1
+    @Condition currentObjectivePosition.y - eventPlayer.getEyePosition().y < 2
+    @Condition distance(eventPlayer, vect(currentObjectivePosition.x, eventPlayer.getPosition().y, currentObjectivePosition.z)) < objectiveRad
     
     if not eventPlayer in objectivePlayerList:
         objectivePlayerList.append(eventPlayer)
@@ -22,7 +28,12 @@ rule "PLAYERS IN EXTRACTION POINT CONTROL":
 rule "EXTRACTION ZONE INFECTION INCREASE":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions(((((isGameplayActive == true) and (eventPlayer.isAlive() == true)) and (len(objectivePositionList) == 1)) and (((extractionZoneRad < 200) and (distance(currentObjectivePosition, eventPlayer) > extractionZoneRad)) and (eventPlayer in objectivePlayerList == false))))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition len(objectivePositionList) == 1
+    @Condition extractionZoneRad < 200
+    @Condition distance(currentObjectivePosition, eventPlayer) > extractionZoneRad
+    @Condition eventPlayer in objectivePlayerList == false
     
     wait(1, Wait.ABORT_WHEN_FALSE)
     eventPlayer.infectionLevel++
@@ -56,7 +67,9 @@ rule "PLAYER EXTRACTION CONTROL":
 
 
 rule "WIN/LOSS CONDITIONS":
-    @Condition groupedConditions((((isObjectiveComplete == false) and (isGameplayActive == true)) and ((len(objectivePositionList) == 1 and (len(objectivePlayerList) == (len(getPlayers(Team.1).filter(lambda player: player.hasSpawned() and player.rescueTimeRemaining > 0 and not player.isAfk)))) or (playerTargetList == [] or extractionZoneRad <= 0)) == true)))
+    @Condition isObjectiveComplete == false
+    @Condition isGameplayActive == true
+    @Condition (len(objectivePositionList) == 1 and (len(objectivePlayerList) == (len(getPlayers(Team.1).filter(lambda player: player.hasSpawned() and player.rescueTimeRemaining > 0 and not player.isAfk)))) or (playerTargetList == [] or extractionZoneRad <= 0)) == true
     
     if playerTargetList == [] and getPlayersOnHero(Hero.ANRAN, Team.1).any(lambda player: player.getUltCharge() == 100):
         wait(5.5, Wait.ABORT_WHEN_FALSE)

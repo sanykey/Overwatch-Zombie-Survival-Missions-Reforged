@@ -51,7 +51,11 @@ macro botTeleportCenterMacro():
 rule "Fix bot health":
     @Event eachPlayer
     @Team 2
-    @Condition groupedConditions(((((isGameplayActive == true) and (eventPlayer.botIsInitializing != true)) and (eventPlayer.botIsTeleporting != true)) and ((eventPlayer.getHealth() > eventPlayer.botBaseHealth + 5) and (eventPlayer in bossStateList == false))))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.botIsInitializing != true
+    @Condition eventPlayer.botIsTeleporting != true
+    @Condition eventPlayer.getHealth() > eventPlayer.botBaseHealth + 5
+    @Condition eventPlayer in bossStateList == false
     
     wait(1, Wait.ABORT_WHEN_FALSE)
     eventPlayer.setHealth(eventPlayer.botBaseHealth)
@@ -61,7 +65,8 @@ rule "Fix bot health":
 rule "BOT INITIALIZATION":
     @Event eachPlayer
     @Team 2
-    @Condition groupedConditions(((isGameInProgress() == true) and (isPregameSetup != true)))
+    @Condition isGameInProgress() == true
+    @Condition isPregameSetup != true
     
     wait(1, Wait.ABORT_WHEN_FALSE)
     eventPlayer.startHealingOverTime(null, Math.INFINITY, 9999)
@@ -93,7 +98,15 @@ rule "BOT INITIALIZATION":
 rule "KILL BOTS THAT ARE STUCK OR ARE NOT MOVING":
     @Event eachPlayer
     @Team 2
-    @Condition groupedConditions((((((isGameplayActive == true) and (eventPlayer.botIsTeleporting != true)) and (eventPlayer.botIsThrottleOverridden != true)) and ((eventPlayer.botIsAttached != true) and (eventPlayer.isCrowdControlled != true))) and (((eventPlayer.isAlive() == true) and (eventPlayer in bossStateList == false)) and (((not magnitude(eventPlayer.getThrottle()) or eventPlayer.getHorizontalSpeed() < 1 * eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale) == true) and (playerTargetList.all(lambda x: distance(eventPlayer, x) > 2.1 * eventPlayer.sizeScale) == true)))))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.botIsTeleporting != true
+    @Condition eventPlayer.botIsThrottleOverridden != true
+    @Condition eventPlayer.botIsAttached != true
+    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer in bossStateList == false
+    @Condition (not magnitude(eventPlayer.getThrottle()) or eventPlayer.getHorizontalSpeed() < 1 * eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale) == true
+    @Condition playerTargetList.all(lambda x: distance(eventPlayer, x) > 2.1 * eventPlayer.sizeScale) == true
     
     if eventPlayer.botTarget != null:
         wait(random.uniform(7.5, 12.5), Wait.ABORT_WHEN_FALSE)
@@ -107,7 +120,9 @@ rule "KILL BOTS THAT ARE STUCK OR ARE NOT MOVING":
 rule "BOT DIES":
     @Event playerDied
     @Team 2
-    @Condition groupedConditions((((isGameInProgress() == true) and (eventPlayer.isDead() == true)) and (eventPlayer in bossStateList == false)))
+    @Condition isGameInProgress() == true
+    @Condition eventPlayer.isDead() == true
+    @Condition eventPlayer in bossStateList == false
     
     if eventPlayer.botIsReigniteAttackUsed and eventPlayer.getHero() == Hero.ANRAN and not eventWasEnvironment:
         eventPlayer.setUltCharge(100)
@@ -158,7 +173,10 @@ rule "BOT DIES":
 rule "TELEPORT BOTS (GENERAL)":
     @Event eachPlayer
     @Team 2
-    @Condition groupedConditions((((isGameplayActive == true) and (eventPlayer.isAlive() == true)) and ((eventPlayer in bossStateList == false) and (getNumberOfLivingPlayers(Team.1) > 0))))
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer in bossStateList == false
+    @Condition getNumberOfLivingPlayers(Team.1) > 0
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
     teleportBots()
@@ -167,7 +185,14 @@ rule "TELEPORT BOTS (GENERAL)":
 rule "TELEPORT BOTS WHEN NOT USED FOR TOO LONG":
     @Event eachPlayer
     @Team 2
-    @Condition groupedConditions(((((eventPlayer.botIsTeleporting != true) and (isGameplayActive == true)) and ((eventPlayer.botIsAttached != true) and (eventPlayer.botIsSelectingTarget != true))) and (((eventPlayer.botTarget == null) and (eventPlayer.isAlive() == true)) and ((eventPlayer in bossStateList == false) and ((playerTargetList.filter(lambda x: x.invisibilityCount).all(lambda x: not isInLoS(x.getEyePosition(), eventPlayer.getPosition() + losOffsetConst))) == true)))))
+    @Condition eventPlayer.botIsTeleporting != true
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.botIsAttached != true
+    @Condition eventPlayer.botIsSelectingTarget != true
+    @Condition eventPlayer.botTarget == null
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer in bossStateList == false
+    @Condition (playerTargetList.filter(lambda x: x.invisibilityCount).all(lambda x: not isInLoS(x.getEyePosition(), eventPlayer.getPosition() + losOffsetConst))) == true
     
     if eventPlayer.botIsTeleportConfirmed:
         wait(5, Wait.ABORT_WHEN_FALSE)
@@ -195,7 +220,11 @@ rule "BOT STUN MANAGEMENT":
 rule "UPDATE SUCCESSFUL TELEPORT STATUS":
     @Event eachPlayer
     @Team 2
-    @Condition groupedConditions(((((eventPlayer.botTarget != null) and (eventPlayer.botIsTeleporting != true)) and (eventPlayer.botIsTeleportConfirmed != true)) and ((isPregameSetup != true) and (eventPlayer in bossStateList == false))))
+    @Condition eventPlayer.botTarget != null
+    @Condition eventPlayer.botIsTeleporting != true
+    @Condition eventPlayer.botIsTeleportConfirmed != true
+    @Condition isPregameSetup != true
+    @Condition eventPlayer in bossStateList == false
     
     wait(0.5, Wait.ABORT_WHEN_FALSE)
     if not eventPlayer.botIsTeleportConfirmed:
@@ -208,7 +237,13 @@ rule "UPDATE SUCCESSFUL TELEPORT STATUS":
 rule "BOT TARGET VISIBLE":
     @Event eachPlayer
     @Team 2
-    @Condition groupedConditions(((((isPregameSetup != true) and (eventPlayer.botIsTeleporting != true)) and ((eventPlayer.botIsInitializing != true) and (eventPlayer.isAlive() == true))) and (((eventPlayer.hasSpawned() == true) and ((eventPlayer.botTarget == null or playerTargetList.exclude(eventPlayer.botTarget).any(lambda x: not x.invisibilityCount and distance(x, eventPlayer) < 7.5)) == true)) and ((playerTargetList.any(lambda x: not x.invisibilityCount and distance(eventPlayer, x) < 150 and isInLoS(x.getEyePosition(), eventPlayer.getPosition() + losOffsetConst))) == true))))
+    @Condition isPregameSetup != true
+    @Condition eventPlayer.botIsTeleporting != true
+    @Condition eventPlayer.botIsInitializing != true
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.hasSpawned() == true
+    @Condition (eventPlayer.botTarget == null or playerTargetList.exclude(eventPlayer.botTarget).any(lambda x: not x.invisibilityCount and distance(x, eventPlayer) < 7.5)) == true
+    @Condition (playerTargetList.any(lambda x: not x.invisibilityCount and distance(eventPlayer, x) < 150 and isInLoS(x.getEyePosition(), eventPlayer.getPosition() + losOffsetConst))) == true
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
     startRule(selectTarget)
@@ -220,7 +255,10 @@ rule "BOT TARGET VISIBLE":
 rule "BOT TAKES DAMAGE AND SWITCHES TARGETS":
     @Event playerTookDamage
     @Team 2
-    @Condition groupedConditions((((eventPlayer.botTarget != null) and ((attacker != eventPlayer.botTarget or eventPlayer in miniBossList) == true)) and ((eventPlayer.isAlive() == true) and (attacker.getTeam() != victim.getTeam()))))
+    @Condition eventPlayer.botTarget != null
+    @Condition (attacker != eventPlayer.botTarget or eventPlayer in miniBossList) == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition attacker.getTeam() != victim.getTeam()
     
     startRule(selectTarget, StartRuleBehavior.NOOP)
     wait(2)
@@ -229,7 +267,9 @@ rule "BOT TAKES DAMAGE AND SWITCHES TARGETS":
 rule "DESELECT BOT TARGET":
     @Event eachPlayer
     @Team 2
-    @Condition groupedConditions((((eventPlayer.botIsTeleporting != true) and (eventPlayer.botTarget != null)) and ((eventPlayer.botTarget.invisibilityCount or not eventPlayer.botTarget in playerTargetList or not isInLoS(eventPlayer.botTarget.getEyePosition(), eventPlayer.getPosition() + losOffsetConst)) == true)))
+    @Condition eventPlayer.botIsTeleporting != true
+    @Condition eventPlayer.botTarget != null
+    @Condition (eventPlayer.botTarget.invisibilityCount or not eventPlayer.botTarget in playerTargetList or not isInLoS(eventPlayer.botTarget.getEyePosition(), eventPlayer.getPosition() + losOffsetConst)) == true
     
     deselectBotTargetMacro()
     wait(0.125, Wait.RESTART_WHEN_TRUE)
@@ -240,8 +280,14 @@ rule "DESELECT BOT TARGET":
 rule "BOT WANDERS":
     @Event eachPlayer
     @Team 2
-    @Condition groupedConditions(((((eventPlayer.botTarget == null) and (eventPlayer.botIsThrottleOverridden != true)) and ((eventPlayer.botIsFacingOverridden != true) and (eventPlayer.isCrowdControlled != true))) and (((eventPlayer.hasStatus(Status.ROOTED) == false) and (eventPlayer.getHorizontalSpeed() < eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale * 3.5)) and (isPregameSetup != true))))
+    @Condition eventPlayer.botTarget == null
+    @Condition eventPlayer.botIsThrottleOverridden != true
+    @Condition eventPlayer.botIsFacingOverridden != true
+    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.hasStatus(Status.ROOTED) == false
     #Allows if bot bumps into something
+    @Condition eventPlayer.getHorizontalSpeed() < eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale * 3.5
+    @Condition isPregameSetup != true
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.startThrottleInDirection(directionFromAngles(horizontalAngleOfDirection(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION)) + random.uniform(90, 270), 0), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
@@ -253,8 +299,18 @@ rule "BOT WANDERS":
 rule "BOTS JUMP":
     @Event eachPlayer
     @Team 2
-    @Condition groupedConditions((((((isPregameSetup != true) and (eventPlayer.botIsThrottleOverridden == false)) and (eventPlayer.botIsAttached != true)) and (((eventPlayer.isCrowdControlled != true) and (eventPlayer.isAlive() == true)) and (eventPlayer.isJumping() != true))) and ((((eventPlayer.isOnGround() == true) and (eventPlayer.hasStatus(Status.ROOTED) == false)) and (eventPlayer.isCrouching() == false)) and (((eventPlayer.botTarget == null or distance(eventPlayer, eventPlayer.botTarget) > 2) == true) and (eventPlayer.getHorizontalSpeed() < eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale * 3.5)))))
+    @Condition isPregameSetup != true
+    @Condition eventPlayer.botIsThrottleOverridden == false
+    @Condition eventPlayer.botIsAttached != true
+    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isJumping() != true
+    @Condition eventPlayer.isOnGround() == true
+    @Condition eventPlayer.hasStatus(Status.ROOTED) == false
+    @Condition eventPlayer.isCrouching() == false
+    @Condition (eventPlayer.botTarget == null or distance(eventPlayer, eventPlayer.botTarget) > 2) == true
     #Allows if bot bumps into something
+    @Condition eventPlayer.getHorizontalSpeed() < eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale * 3.5
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.JUMP)
@@ -265,9 +321,20 @@ rule "BOTS JUMP":
 rule "BOTS MOVE THROUGH SPAWN DOORS":
     @Event eachPlayer
     @Team 2
-    @Condition groupedConditions((((((eventPlayer.botTarget != null) and (eventPlayer.botIsWallCollisionEnabled == true)) and (eventPlayer.botIsWallPhaseAllowed == true)) and (((eventPlayer.botIsAttached != true) and (eventPlayer.isCrowdControlled != true)) and (eventPlayer.isAlive() == true))) and ((((eventPlayer.hasStatus(Status.ROOTED) == false) and ((magnitude(eventPlayer.getThrottle())) != false)) and ((eventPlayer.isOnGround() or eventPlayer in bossStateList and eventPlayer.getAltitude() < 10) == true)) and (((eventPlayer.getSpeedInDirection(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION)) < eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale * 3) and (eventPlayer.getSpeedInDirection(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION)) >= 0)) and (isInLoS(eventPlayer.getPosition() + offsetUpThreeQuartersConst * eventPlayer.sizeScale, eventPlayer.getPosition() + offsetUpThreeQuartersConst * eventPlayer.sizeScale + normalize(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION)) * 3 * eventPlayer.sizeScale) == true)))))
+    @Condition eventPlayer.botTarget != null
+    @Condition eventPlayer.botIsWallCollisionEnabled == true
+    @Condition eventPlayer.botIsWallPhaseAllowed == true
+    @Condition eventPlayer.botIsAttached != true
+    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.hasStatus(Status.ROOTED) == false
+    @Condition magnitude(eventPlayer.getThrottle())
+    @Condition (eventPlayer.isOnGround() or eventPlayer in bossStateList and eventPlayer.getAltitude() < 10) == true
     #Allows if bot bumps into something
+    @Condition eventPlayer.getSpeedInDirection(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION)) < eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale * 3
     #Makes sure bot is moving forward
+    @Condition eventPlayer.getSpeedInDirection(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION)) >= 0
+    @Condition isInLoS(eventPlayer.getPosition() + offsetUpThreeQuartersConst * eventPlayer.sizeScale, eventPlayer.getPosition() + offsetUpThreeQuartersConst * eventPlayer.sizeScale + normalize(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION)) * 3 * eventPlayer.sizeScale) == true
     
     wait(0.125, Wait.ABORT_WHEN_FALSE)
     eventPlayer.disableEnvironmentCollision(false)
@@ -287,7 +354,11 @@ rule "BOTS MOVE THROUGH SPAWN DOORS":
 rule "BOTS MELEE":
     @Event eachPlayer
     @Team 2
-    @Condition groupedConditions(((((eventPlayer.botTarget != null) and (eventPlayer.isCrowdControlled != true)) and (eventPlayer.isMeleeing() != true)) and ((distance(eventPlayer, eventPlayer.botTarget) < 3 * eventPlayer.sizeScale) and (eventPlayer.botTarget.getHorizontalSpeed() < 15 * eventPlayer.botTarget.movementSpeedScale))))
+    @Condition eventPlayer.botTarget != null
+    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.isMeleeing() != true
+    @Condition distance(eventPlayer, eventPlayer.botTarget) < 3 * eventPlayer.sizeScale
+    @Condition eventPlayer.botTarget.getHorizontalSpeed() < 15 * eventPlayer.botTarget.movementSpeedScale
     
     if eventPlayer.getHero() == Hero.HAZARD and not eventPlayer.botIsEnsnarerBlocking and not eventPlayer.botAbilityCooldown and eventPlayer in bossStateList:
         eventPlayer.botIsEnsnarerMeleeActive = true
@@ -318,7 +389,8 @@ rule "BOTS MELEE":
 rule "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)":
     @Event playerDealtDamage
     @Team 2
-    @Condition groupedConditions(((eventAbility == Button.MELEE) and (victim.getTeam() == Team.1)))
+    @Condition eventAbility == Button.MELEE
+    @Condition victim.getTeam() == Team.1
     
     victim.startDamageOverTime(eventPlayer, eventPlayer.botBiteDuration, eventPlayer.botBiteDamage)
     if eventPlayer.damageOverTimeRemaining < eventPlayer.botBiteDuration:
@@ -332,7 +404,12 @@ rule "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)":
 rule "BOTS RECOIL FROM DAMAGE":
     @Event playerTookDamage
     @Team 2
-    @Condition groupedConditions(((((eventDamage > 20) and (eventPlayer.isCrowdControlled != true)) and (eventPlayer.botIsAttached != true)) and (((attacker.getTeam() == Team.1) and (victim.isAlive() == true)) and (eventDamage > 0.3 * eventPlayer.botBaseHealth))))
+    @Condition eventDamage > 20
+    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsAttached != true
+    @Condition attacker.getTeam() == Team.1
+    @Condition victim.isAlive() == true
+    @Condition eventDamage > 0.3 * eventPlayer.botBaseHealth
     
     if victim.isInAir() and eventWasCriticalHit:
         victim.setStatusEffect(attacker, Status.KNOCKED_DOWN, 3)
@@ -457,7 +534,10 @@ def updateBotSpawnPoints():
 rule "MINIBOSS MESSAGE":
     @Event eachPlayer
     @Team 2
-    @Condition groupedConditions((((eventPlayer in miniBossList == true) and (currentObjectiveType != ObjectiveType.SHOWDOWN)) and ((isGameplayActive == true) and (eventPlayer.botIsInitializing != false))))
+    @Condition eventPlayer in miniBossList == true
+    @Condition currentObjectiveType != ObjectiveType.SHOWDOWN
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.botIsInitializing != false
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     bigMessage(getAllPlayers(), "A Contestor approaches")

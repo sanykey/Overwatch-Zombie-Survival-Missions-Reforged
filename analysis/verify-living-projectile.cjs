@@ -286,7 +286,7 @@ async function main() {
     const interact = actions(compiled.get('PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)'));
     assert(interact.findIndex(a => a.includes('Call Subroutine(useLivingProjectile)')) < interact.findIndex(a => a.includes('Filtered Array')));
     for (const name of ['RIDER DETACH WHEN DEAD OR TARGET IS DEAD', 'RIDER DETATCH FROM TEAMMATES WHILE ALIVE'])
-        assert(compiled.get(name).body.includes('Compare((Event Player).augmentState0, ==, Null)'));
+        assert(compiled.get(name).body.includes('augmentState0 == Null'));
     const scratchRules = [...build.result.matchAll(/^rule \("(?:useLivingProjectile|LIVING PROJECTILE RELEASE)"\) \{\n[\s\S]*?^\}/gm)].map(match => match[0]);
     assert.equal(scratchRules.length, 2); checkWorkshop(scratchRules.join('\n'));
     console.log(JSON.stringify({elements: build.elements,

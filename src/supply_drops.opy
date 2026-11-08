@@ -19,9 +19,11 @@ subroutine stun
 
 rule "GENERATE SUPPLY DROPS":
     #Only activates if last supply drop has been opened
-    @Condition groupedConditions((((isSupplyDropOpen == true) and (isGameplayActive == true)) and (len(supplyPowerUpPositionList) < 12)))
+    @Condition isSupplyDropOpen == true
     #Waits for all objectives to be determined before activating
+    @Condition isGameplayActive == true
     #Limited to 12 power ups on the ground at a time
+    @Condition len(supplyPowerUpPositionList) < 12
     
     #Standard 30 second wait
     wait(30)
@@ -80,9 +82,12 @@ rule "EFFECT/TEXT (GLOBAL)":
 rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)":
     @Event eachPlayer
     @Team 1
-    @Condition groupedConditions((((eventPlayer.isHoldingButton(Button.INTERACT) == true) and (((eventPlayer.enhancementId == Enhancement.DEAD_WEIGHT and eventPlayer.enhancementHeldZombie != null) or eventPlayer.augmentId != Augment.LASER_BARRICADE or (not eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.augmentBarrierPlacementCooldown >= 0)) == true)) and ((eventPlayer.isAlive() == true) and (eventPlayer.isDummy() == false))))
+    @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
     # Reserve Laser Barricade input until Interact is released, even after Crouch is released.
     # Throwing a carried Dead Weight target takes precedence over barricade placement.
+    @Condition ((eventPlayer.enhancementId == Enhancement.DEAD_WEIGHT and eventPlayer.enhancementHeldZombie != null) or eventPlayer.augmentId != Augment.LASER_BARRICADE or (not eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.augmentBarrierPlacementCooldown >= 0)) == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isDummy() == false
 
     # Workshop workaround (map dependent): the gameplay Condition here reproduced
     # newer heroes disappearing when returning from voting to hero selection.
