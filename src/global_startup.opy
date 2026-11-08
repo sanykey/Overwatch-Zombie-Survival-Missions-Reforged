@@ -45,7 +45,7 @@ macro botHeroRandomizationMacro():
     if isSmolderEventActive:
         botSpawnSelectedHero = Hero.WINSTON
     #Determines if count of current different zombie types is less than the maximum amount allowed
-    elif len(spawnedBotHeroList) < (uniqueSkinCap - max(getNumberOfSlots(Team.1), getNumberOfPlayers(Team.1))):
+    elif len(spawnedBotHeroList) < (UNIQUE_HERO_SKIN_CAP - max(getNumberOfSlots(Team.1), getNumberOfPlayers(Team.1))):
         # botSpawnWeightRoll: random threshold for weighted hero selection; the hero list is no longer needed.
         #!define botSpawnWeightRoll tmp0
         botSpawnWeightRoll = random.uniform(0, 100)
@@ -255,7 +255,6 @@ rule "VARIABLE ASSIGNMENT":
     customTeleportPositionList = []
     enableMutationsMacro()
     supplyDropPowerUpCount = createWorkshopSettingInt("Power Ups", "Number of Powerups Per Supply Drop", 5, 1, 10, -1)
-    uniqueSkinCap = createWorkshopSettingInt("General", "Maximum Number of Unique Hero Skins", 11, 1, 11)
     #isObjectiveComplete = false  #Uninitialized Workshop variables already compare equal to false at match start.
     numberOfBots = createWorkshopSettingInt("General", "Number of zombies", 6, 1, 23, 1)
 

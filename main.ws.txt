@@ -1,4 +1,4 @@
-/* Element count: (total 29304)
+/* Element count: (total 29288)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1535: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
@@ -24,8 +24,8 @@
   265: rule "REVIVE PLAYER OR ADVANCE DEATH TIMER" (src/players_game_in_progress.opy)
   259: rule "EFFECT/TEXT (GLOBAL)" (src/supply_drops.opy)
   249: rule "AMMO PACK REFILL FALLBACK" (src/augments.opy)
-  247: rule "VARIABLE ASSIGNMENT" (src/global_startup.opy)
   239: rule "HITCHHIKER ATTACH/DETATCH" (src/enhancements.opy)
+  231: rule "VARIABLE ASSIGNMENT" (src/global_startup.opy)
   219: rule "BOT DIES" (src/bots_game_in_progress.opy)
   214: rule "powerUpUsage" (src/supply_drops.opy)
   211: rule "P.U.P. CONTROL" (src/enhancements.opy)
@@ -465,78 +465,77 @@ variables {
         31: zombieSetting
         32: objectiveTypeSetting
         33: matchEndTime
-        34: uniqueSkinCap
-        35: numberOfBots
-        36: walkCenter
-        37: mapGridList
-        38: attackSpawnRooms
-        39: activeAttackSpawnRoom
-        40: spawnRoomIndex
-        41: botSpawnPointList
-        42: botSpawnPointTimerList
-        43: botSpawnWaypointList
-        44: customTeleportPositionList
-        45: botSpawnTimeList
-        46: startPos
-        47: startCamPos
-        48: objectivePositionList
-        49: objectiveTypeList
-        50: objectiveSpacingList
-        51: objectiveValue
-        52: objectiveProgressSlot
-        53: objectiveDescription
-        54: objectiveColor
-        55: isObjectiveComplete
-        56: objectivePlayerList
-        57: objectiveEntityIdList
-        58: objectivePositionsSlot
-        59: objectivePlacementSlot
-        60: objectiveMotionSlot
-        61: objectiveCheckpointSlot
-        62: objectiveQueueSlot
-        63: objectiveActorSlot
-        64: isBiomorphingGoalPending
-        65: biomorphingResourceTypeList
-        66: biomorphingDeferredTypeList
-        67: biomorphingDeferredPositionList
-        68: biomorphingResourceTextIdList
-        69: biomorphingResourceEffectIdList
-        70: extractionSpeedUp
-        71: evacSurvivorList
-        72: supplyDropLandingPosition
-        73: isSupplyDropOpen
-        74: supplyDropPowerUpCount
-        75: supplyPowerUpIdList
-        76: supplyPowerUpPositionList
-        77: supplyPowerUpTextIdList
-        78: supplyPowerUpEffectIdList
-        79: playerTargetList
-        80: userNameList
-        81: playerStatsList
-        82: healthpackPositionList
-        83: mustReviveTime
-        84: botHeroList
-        85: botSpawnRateList
-        86: botBiteDamageList
-        87: botBiteDurationList
-        88: botDamageDealtList
-        89: botHealthList
-        90: botThrottleSpeedList
-        91: availableMutationList
-        92: miniBossList
-        93: bossStateList
-        94: isSmolderEventActive
-        95: bossesAvailableHeroList
-        96: bossesExcludedHeroList
-        97: objectiveRad
-        98: satelliteLaserPosition
-        99: extractionZoneRad
-        100: menuFinaleMotionSlot
-        101: supplyDropPosition
-        102: augmentIconListConst
-        103: enhancementIconListConst
-        104: augmentColorListConst
-        105: numbersList
+        34: numberOfBots
+        35: walkCenter
+        36: mapGridList
+        37: attackSpawnRooms
+        38: activeAttackSpawnRoom
+        39: spawnRoomIndex
+        40: botSpawnPointList
+        41: botSpawnPointTimerList
+        42: botSpawnWaypointList
+        43: customTeleportPositionList
+        44: botSpawnTimeList
+        45: startPos
+        46: startCamPos
+        47: objectivePositionList
+        48: objectiveTypeList
+        49: objectiveSpacingList
+        50: objectiveValue
+        51: objectiveProgressSlot
+        52: objectiveDescription
+        53: objectiveColor
+        54: isObjectiveComplete
+        55: objectivePlayerList
+        56: objectiveEntityIdList
+        57: objectivePositionsSlot
+        58: objectivePlacementSlot
+        59: objectiveMotionSlot
+        60: objectiveCheckpointSlot
+        61: objectiveQueueSlot
+        62: objectiveActorSlot
+        63: isBiomorphingGoalPending
+        64: biomorphingResourceTypeList
+        65: biomorphingDeferredTypeList
+        66: biomorphingDeferredPositionList
+        67: biomorphingResourceTextIdList
+        68: biomorphingResourceEffectIdList
+        69: extractionSpeedUp
+        70: evacSurvivorList
+        71: supplyDropLandingPosition
+        72: isSupplyDropOpen
+        73: supplyDropPowerUpCount
+        74: supplyPowerUpIdList
+        75: supplyPowerUpPositionList
+        76: supplyPowerUpTextIdList
+        77: supplyPowerUpEffectIdList
+        78: playerTargetList
+        79: userNameList
+        80: playerStatsList
+        81: healthpackPositionList
+        82: mustReviveTime
+        83: botHeroList
+        84: botSpawnRateList
+        85: botBiteDamageList
+        86: botBiteDurationList
+        87: botDamageDealtList
+        88: botHealthList
+        89: botThrottleSpeedList
+        90: availableMutationList
+        91: miniBossList
+        92: bossStateList
+        93: isSmolderEventActive
+        94: bossesAvailableHeroList
+        95: bossesExcludedHeroList
+        96: objectiveRad
+        97: satelliteLaserPosition
+        98: extractionZoneRad
+        99: menuFinaleMotionSlot
+        100: supplyDropPosition
+        101: augmentIconListConst
+        102: enhancementIconListConst
+        103: augmentColorListConst
+        104: numbersList
         127: __holygrail__
     player:
         0: botBiteDamage
@@ -1772,7 +1771,7 @@ rule ("SPAWN BOTS") {
         Set Global Variable(tmp0, Filtered Array(Global.botHeroList, Number Of Heroes(Current Array Element, Team 2))); // 7 elements
         If(Global.isSmolderEventActive); // 2 elements
             Set Global Variable(tmp0, Hero(Winston)); // 2 elements
-        Else If(Compare(Count Of(Global.tmp0), <, Subtract(Global.uniqueSkinCap, Max(Number Of Slots(Team 1), Number Of Players(Team 1))))); // 15 elements
+        Else If(Compare(Count Of(Global.tmp0), <, Subtract(11, Max(Number Of Slots(Team 1), Number Of Players(Team 1))))); // 15 elements
             "botSpawnWeightRoll: random threshold for weighted hero selection; the hero list is no longer needed."
             Set Global Variable(tmp0, Random Real(0, 100)); // 5 elements
             "botSpawnCumulativeWeight: cumulative spawn weight, compared with botSpawnWeightRoll to find the selected hero."
@@ -1936,7 +1935,7 @@ rule ("PREGAME SPAWN ROOM ROTATION") {
     }
 }
 
-//247 elements
+//231 elements
 rule ("VARIABLE ASSIGNMENT") {
     event {
         Ongoing - Global;
@@ -1998,7 +1997,6 @@ rule ("VARIABLE ASSIGNMENT") {
         Set Global Variable(availableMutationList, Mapped Array(Array(Workshop Setting Toggle(Custom String("Mutations"), Custom String("Speed"), True, 0), Workshop Setting Toggle(Custom String("Mutations"), Custom String("Size Growth"), True, 1), Workshop Setting Toggle(Custom String("Mutations"), Custom String("Size Reduction"), True, 2), Workshop Setting Toggle(Custom String("Mutations"), Custom String("Radioactive"), True, 3), Workshop Setting Toggle(Custom String("Mutations"), Custom String("Heavy"), True, 4)), If-Then-Else(Current Array Element, Add(Current Array Index, True), Null))); // 79 elements
         Modify Global Variable(availableMutationList, Remove From Array By Value, Null); // 1 element
         Set Global Variable(supplyDropPowerUpCount, Workshop Setting Integer(Custom String("Power Ups"), Custom String("Number of Powerups Per Supply Drop"), 5, 1, 10, -1)); // 16 elements
-        Set Global Variable(uniqueSkinCap, Workshop Setting Integer(Custom String("General"), Custom String("Maximum Number of Unique Hero Skins"), 11, 1, 11, 0)); // 16 elements
         "isObjectiveComplete = false  #Uninitialized Workshop variables already compare equal to false at match start."
         Set Global Variable(numberOfBots, Workshop Setting Integer(Custom String("General"), Custom String("Number of zombies"), 6, 1, 23, 1)); // 16 elements
     }
@@ -3310,7 +3308,7 @@ rule ("SPAWN BOSS") {
         Is True For Any(Global.bossStateList, Entity Exists(Current Array Element)) == False; // 5 elements
         Is True For Any(All Living Players(Team 2), And(And(Has Spawned(Current Array Element), Not((Current Array Element).actorTeamSlot3)), Compare((Current Array Element).actorTeamSlot5, ==, Null))) == True; // 18 elements
         "Keeps amount of different bots within the max limit."
-        Count Of(Filtered Array(Global.botHeroList, Number Of Heroes(Current Array Element, Team 2))) < Subtract(Global.uniqueSkinCap, Max(Number Of Slots(Team 1), Number Of Players(Team 1))); // 17 elements
+        Count Of(Filtered Array(Global.botHeroList, Number Of Heroes(Current Array Element, Team 2))) < Subtract(11, Max(Number Of Slots(Team 1), Number Of Players(Team 1))); // 17 elements
     }
     actions {
         Wait(0.25, Abort When False); // 2 elements
@@ -4089,7 +4087,7 @@ rule ("ASSIGN ZOMBIE TO BECOME EGG") {
         Global.isObjectiveComplete == False; // 2 elements
         Entity Exists(First Of(Global.bossStateList)) == False; // 4 elements
         Is True For Any(All Living Players(Team 2), And(Not((Current Array Element).actorTeamSlot3), Compare((Current Array Element).actorTeamSlot5, ==, Null))) == True; // 15 elements
-        Count Of(Filtered Array(Global.botHeroList, Number Of Heroes(Current Array Element, Team 2))) < Subtract(Global.uniqueSkinCap, Max(Number Of Slots(Team 1), Number Of Players(Team 1))); // 17 elements
+        Count Of(Filtered Array(Global.botHeroList, Number Of Heroes(Current Array Element, Team 2))) < Subtract(11, Max(Number Of Slots(Team 1), Number Of Players(Team 1))); // 17 elements
     }
     actions {
         Wait(0.25, Abort When False); // 2 elements

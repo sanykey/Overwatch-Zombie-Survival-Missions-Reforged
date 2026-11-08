@@ -11,6 +11,8 @@
 #!define START_CAM_DISTANCE 6.5
 #!define START_TIME 300
 #!define VOTING_END_TIME 30
+# Unique hero-skin budget shared by players and zombies.
+#!define UNIQUE_HERO_SKIN_CAP 11
 
 # Player-count thresholds for difficultySetting; zero is the pregame reset value.
 # Keep the raw player count for scaling: 4 uses Expert stats, 6 uses Legendary stats.
@@ -222,7 +224,6 @@ globalvar challengeSetting      # Challenge ID, retained after pregame voting.
 globalvar zombieSetting         # Selected zombie roster/spawn-rate mode, retained after pregame voting.
 globalvar objectiveTypeSetting  # Selected objective mode or Mixed setting; differs from the current objective type.
 globalvar matchEndTime          # Native-gamemode timer offset: zero or 0.1, used as the match-time floor.
-globalvar uniqueSkinCap         # Configured maximum number of different hero skins shared by players and zombies.
 globalvar numberOfBots          # Configured zombie population target, including queued replacements.
 
 # Map grid and spawn-position caches.

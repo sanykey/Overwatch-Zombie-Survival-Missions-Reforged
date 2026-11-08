@@ -6,7 +6,7 @@ rule "ASSIGN ZOMBIE TO BECOME EGG":
     @Condition isObjectiveComplete == false
     @Condition entityExists(zombieEggStateList[0]) == false
     @Condition (getLivingPlayers(Team.2).any(lambda player: not player.botIsTeleporting and player.botTarget == null)) == true
-    @Condition len(botHeroList.filter(lambda x: getNumberOfHeroes(x, Team.2))) < uniqueSkinCap - max(getNumberOfSlots(Team.1), getNumberOfPlayers(Team.1))
+    @Condition len(botHeroList.filter(lambda x: getNumberOfHeroes(x, Team.2))) < UNIQUE_HERO_SKIN_CAP - max(getNumberOfSlots(Team.1), getNumberOfPlayers(Team.1))
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     zombieEggStateList[0] = random.choice(getLivingPlayers(Team.2).filter(lambda player: not player.botIsTeleporting and not player.isAttached and player.botTarget == null))
