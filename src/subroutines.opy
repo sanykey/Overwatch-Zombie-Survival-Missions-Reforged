@@ -637,7 +637,7 @@ def objectivesManagement():
                 biomorphingCapturePercent = 0
                 biomorphingResourcePositionList = []
                 getAllPlayers().biomorphingResourceAmount = 0
-                objectiveColor = rgb(135, 206, 250)
+                objectiveColor = Color.SKY_BLUE
                 objectiveRad = 3.5
                 bigMessage(getAllPlayers(), "Find the indicated material and deposit it!")
                 biomorphingResourceColorList = [Color.BLUE, Color.TURQUOISE, Color.SKY_BLUE, Color.RED]
@@ -664,7 +664,7 @@ def objectivesManagement():
                 break
             case ObjectiveType.SATELLITE_UPLINK:
                 objectiveRad = 3
-                objectiveColor = rgb(28, 169, 201)
+                objectiveColor = Color.AQUA
                 satelliteTerminalPositionList = []
                 satelliteTerminalProgressList = [0, 0, 0]
                 #Initial terminal spacing

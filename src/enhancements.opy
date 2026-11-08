@@ -43,7 +43,7 @@ rule "BRAIN KILLER EXTRA DAMAGE":
     
     #Critical hits deal 50% more damage, 20% if vicitm is a boss
     damage(victim, eventPlayer, eventDamage * (0.2 if victim in bossStateList else 0.6))
-    playEffect(eventPlayer, DynamicEffect.BAD_EXPLOSION, rgb(100, 14, 14), victim.getEyePosition() + directionTowards(eventPlayer.getEyePosition(), victim.getEyePosition()) * victim.sizeScale, 0.1 * victim.sizeScale)
+    playEffect(eventPlayer, DynamicEffect.BAD_EXPLOSION, Color.RED, victim.getEyePosition() + directionTowards(eventPlayer.getEyePosition(), victim.getEyePosition()) * victim.sizeScale, 0.1 * victim.sizeScale)
 
 
 rule "PYROTECHNIC SETS ENEMIES ON FIRE":
