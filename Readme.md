@@ -69,6 +69,36 @@ After changing the source, save the root `main.opy` again to compile the updated
 
 Passive health regeneration for the zombie team is disabled under **Settings → Heroes → General → Team 2**. However, importing the source code into Workshop resets this setting, apparently due to a Workshop bug. **Manually disable passive regeneration for Team 2 after every code import**, before sharing the mod's short code.
 
+### Workshop hero-selection UI corruption
+
+During pregame voting, selecting a hero and then returning to the native hero-selection screen with Crouch can make some heroes disappear entirely, often starting with newer heroes. Reproduction is intermittent and depends on the map. The user also observed extra white UI buttons and unavailable emotes on the original development branch. Opening and closing the lobby restores the missing hero list, but requiring this from every player is not a usable fix. Earlier diagnostics showed that the script restored the allowed-hero list even when the UI lost heroes.
+
+The problem can appear or disappear after changing rule Conditions unrelated to hero availability, including in rules whose Actions do not run during voting. The root cause remains unknown; high Server Load, a memory leak and a specific engine resource limit have not been established.
+
+**A tested workaround is to combine separate Conditions into a single nested `And` expression.** For example:
+
+```csharp
+conditions {
+    And(Compare(Global.isGameplayActive, ==, True), Compare(Is Alive(Event Player), ==, True)) == True;
+}
+```
+
+Diagnostic **29a**, based on build 28 (`e23f73d2ac3af65bba98d509f08625eb493b23e3`), reduced condition entries from **850 to 212**, retaining all 305 rule events and action lists. The user reported several runs without the defect, while the matching control still failed intermittently. Both exports used Malevento, Necropolis, Black Forest, Ilios Lighthouse and Colosseo. These results concern hero selection; the white-button and emote symptoms have not been separately verified as fixed. A local `And` change helped Scavenger but did not help the deferred `APOTHECARY ALLOW HEALTH PACK PICKUP` rule in `src/augments.opy`, reverted by `ba8e70de7d4e282b2f90c8ae6c15f6d1d500a342`.
+
+**Mode-wide grouping is currently reverted because of its element cost.** Restore functionality first, then investigate a more targeted fix. The experimental versions had the following costs:
+
+| Export | Elements | Increase over build 28 |
+|---|---:|---:|
+| Build 28 control | 29,238 | — |
+| Diagnostic 29a | 32,347 | +3,109 |
+| Source-integrated prototype | 31,619 | +2,381 (8.1%) |
+
+The complete source-integrated prototype is preserved at tag **`experiment-hero-selection-grouped-conditions`**, commit `cb2c552`. It retained the original events/actions, variables and map settings and passed static checks and scripted gameplay regression tests. It was not separately verified in game; user-confirmed successful native runs refer to diagnostic 29a. To inspect its compiler workaround: `git show experiment-hero-selection-grouped-conditions:src/rule_conditions.opy`. Its regression check is also available at that tag in `analysis/verify-grouped-conditions.cjs`; neither file is present in the current source tree.
+
+**OverPy 9.7.20 can split `and` back into separate Conditions.** The tagged prototype protected the conjunction by comparing its boolean result with numeric `1`, keeping other optimizations enabled. Comparing with `true` instead lets the optimizer remove the wrapper and split the conjunction. This technique applies only to a boolean result; preserve each predicate's explicit comparison, especially `Null`/zero versus `False`. Fewer Conditions do not prove lower CPU load: nested `And` may evaluate more inputs.
+
+Preserve the earlier local Scavenger workaround in `src/power_ups.opy` and action-body guards for Leech in `src/augments.opy` and Interact in `src/supply_drops.opy`. Moving Conditions into Actions can change ongoing-rule triggering, `Abort When False` and loops; adding waits to event handlers can drop events. For future fixes, inspect generated Workshop code, measure element cost and repeat native tests on affected maps against a matching control. One successful attempt does not establish that an intermittent defect is gone.
+
 ## Optimization results
 
 Measured on November 4, 2026 for the Reforged working tree based on commit `d8efbdc`.
