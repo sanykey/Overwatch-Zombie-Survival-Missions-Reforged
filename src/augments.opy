@@ -344,16 +344,16 @@ rule "GRAPNEL LAUNCHER DISCONNECT CLEANUP":
 rule "LONG REACH QUICK MELEE":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.augmentId == Augment.LONG_REACH
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isDummy() == false
     @Condition eventPlayer.isMeleeing() == true
     @Condition eventPlayer.getHero() not in [Hero.REINHARDT, Hero.BRIGITTE]
     @Condition (eventPlayer.getHero() != Hero.TORBJORN or eventPlayer.getCurrentWeapon() != 2) == true
     @Condition (eventPlayer.getHero() != Hero.VENDETTA or not eventPlayer.isFiringPrimaryFire()) == true
     @Condition (eventPlayer.getHero() != Hero.JUNKER_QUEEN or not eventPlayer.isUsingAbility2()) == true
     @Condition eventPlayer.isUsingUltimate() == false
+
+    if eventPlayer.augmentId != Augment.LONG_REACH:
+        return
 
     eventPlayer.augmentMeleeHero = eventPlayer.getHero()
     wait(0.15, Wait.ABORT_WHEN_FALSE)
@@ -369,11 +369,7 @@ rule "LONG REACH VENDETTA SWORD":
     @Team 1
     @Hero vendetta
     # These conditions cancel a committed swing; releasing primary fire does not.
-    @Condition eventPlayer.getHero() == Hero.VENDETTA
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.augmentId == Augment.LONG_REACH
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isDummy() == false
     @Condition eventPlayer.isFiringSecondaryFire() == false
     @Condition eventPlayer.isUsingAbility1() == false
     @Condition eventPlayer.isUsingAbility2() == false
@@ -382,6 +378,9 @@ rule "LONG REACH VENDETTA SWORD":
     @Condition eventPlayer.hasStatus(Status.ASLEEP) == false
     @Condition eventPlayer.hasStatus(Status.FROZEN) == false
     @Condition eventPlayer.hasStatus(Status.KNOCKED_DOWN) == false
+
+    if not isGameplayActive or eventPlayer.augmentId != Augment.LONG_REACH:
+        return
 
     # Trigger and windup have separate lifetimes: a short click commits one hit,
     # while held input keeps using the configured repeat timer.
@@ -406,10 +405,7 @@ rule "LONG REACH VENDETTA SWORD":
 rule "LONG REACH MELEE WEAPONS":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.augmentId == Augment.LONG_REACH
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isDummy() == false
     @Condition eventPlayer.getHero() in AUGMENT_MELEE_WEAPON_HEROES
     @Condition (eventPlayer.getHero() != Hero.GENJI or eventPlayer.isUsingUltimate()) == true
     @Condition (eventPlayer.getHero() != Hero.DMON or not eventPlayer.isInAlternateForm()) == true
@@ -428,6 +424,9 @@ rule "LONG REACH MELEE WEAPONS":
     @Condition eventPlayer.hasStatus(Status.ASLEEP) == false
     @Condition eventPlayer.hasStatus(Status.FROZEN) == false
     @Condition eventPlayer.hasStatus(Status.KNOCKED_DOWN) == false
+
+    if eventPlayer.augmentId != Augment.LONG_REACH:
+        return
 
     waitUntil((eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) or eventPlayer.getHero() in AUGMENT_MELEE_BUTTON_WEAPON_HEROES and eventPlayer.isHoldingButton(Button.MELEE)) and (eventPlayer.isFiringPrimaryFire() or eventPlayer.getHero() in AUGMENT_MELEE_BUTTON_WEAPON_HEROES and eventPlayer.isMeleeing()), Math.INFINITY)
     if not ruleCondition:
@@ -462,16 +461,13 @@ rule "LONG REACH CARNAGE":
     @Event eachPlayer
     @Team 1
     @Hero junkerQueen
-    @Condition eventPlayer.getHero() == Hero.JUNKER_QUEEN
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.augmentId == Augment.LONG_REACH
+    # @Condition isGameplayActive == true
+    # @Condition eventPlayer.augmentId == Augment.LONG_REACH
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isDummy() == false
     @Condition eventPlayer.isUsingAbility2() == true
-    @Condition eventPlayer.hasStatus(Status.STUNNED) == false
-    @Condition eventPlayer.hasStatus(Status.ASLEEP) == false
-    @Condition eventPlayer.hasStatus(Status.FROZEN) == false
-    @Condition eventPlayer.hasStatus(Status.KNOCKED_DOWN) == false
+
+    if eventPlayer.augmentId != Augment.LONG_REACH:
+        return
 
     # Carnage is a committed ability, not a repeating primary-fire timer.
     wait(0.75, Wait.ABORT_WHEN_FALSE)

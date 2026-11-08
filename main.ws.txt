@@ -1,4 +1,4 @@
-/* Element count: (total 29421)
+/* Element count: (total 29403)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1535: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
@@ -8,7 +8,7 @@
   434: rule "SKIP ASSEMBLING HEROES" (src/global_startup.opy)
   412: rule "PLAYERS REPAIR TERMINALS" (src/objective_types/objective_type_satellite_uplink.opy)
   398: rule "LASER BARRICADE BLOCKS ZOMBIES" (src/augments.opy)
-  369: rule "LONG REACH MELEE WEAPONS" (src/augments.opy)
+  368: rule "LONG REACH MELEE WEAPONS" (src/augments.opy)
   327: rule "GLOBAL MENU INITIALIZATION" (src/global_start_menu.opy)
   321: rule "DAYTAKER (ILLARI) BURST" (src/zombie_types.opy)
   320: rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)" (src/supply_drops.opy)
@@ -94,7 +94,7 @@
   100: rule "bossReturn" (src/objective_types/objective_type_bosses.opy)
   100: rule "BIOWASTE IS PICKED UP" (src/objective_types/objective_type_biomorphing.opy)
    99: rule "CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)" (src/zombie_types.opy)
-   99: rule "LONG REACH QUICK MELEE" (src/augments.opy)
+   98: rule "LONG REACH QUICK MELEE" (src/augments.opy)
    97: rule "ZOMBIES SPAWN AT REIGNITED" (src/zombie_types.opy)
    94: rule "SURVIVOR REACHES EXTRACTION SITE" (src/objective_types/objective_type_survivor_rescue.opy)
    94: rule "playerForceField (10-19)" (src/supply_drops.opy)
@@ -171,7 +171,6 @@
    42: rule "BRAIN KILLER EXTRA DAMAGE" (src/enhancements.opy)
    42: rule "DOUBLE JUMP DOUBLE TAP" (src/augments.opy)
    41: rule "ultimateCharger (90-99)" (src/supply_drops.opy)
-   41: rule "LONG REACH CARNAGE" (src/augments.opy)
    40: rule "SPAWN TIME CONTROL" (src/global_startup.opy)
    39: rule "PREGAME QUICK TIPS FOR PLAYERS" (src/global_startup.opy)
    39: rule "locateAveragePlayerLocation" (src/bots_game_in_progress.opy)
@@ -212,6 +211,7 @@
    25: rule "applyBulkingSeasonStats" (src/enhancements.opy)
    25: rule "Subroutine checkEnhancementPlacement" (src/enhancements.opy)
    25: rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)" (src/augments.opy)
+   25: rule "LONG REACH CARNAGE" (src/augments.opy)
    24: rule "BOMBER (JUNKRAT) SELF DESTRUCT" (src/zombie_types.opy)
    24: rule "RIDER (WIDOWMAKER) ATTACH TO PLAYERS" (src/zombie_types.opy)
    24: rule "TUNNELER PORTAL LETS ZOMBIES THROUGH" (src/zombie_types.opy)
@@ -9581,7 +9581,7 @@ rule ("GRAPNEL LAUNCHER DISCONNECT CLEANUP") {
     }
 }
 
-//99 elements
+//98 elements
 rule ("LONG REACH QUICK MELEE") {
     event {
         Ongoing - Each Player;
@@ -9589,10 +9589,7 @@ rule ("LONG REACH QUICK MELEE") {
         All;
     }
     conditions {
-        Global.isGameplayActive == True; // 2 elements
-        (Event Player).augmentId == 4; // 4 elements
         Is Alive(Event Player) == True; // 2 elements
-        Is Dummy Bot(Event Player) == False; // 2 elements
         Is Meleeing(Event Player) == True; // 2 elements
         Array Contains(Array(Hero(Reinhardt), Hero(Brigitte)), Hero Of(Event Player)) == False; // 10 elements
         Or(Compare(Hero Of(Event Player), !=, Hero(Torbjörn)), Compare(Weapon(Event Player), !=, 2)) == True; // 13 elements
@@ -9601,6 +9598,7 @@ rule ("LONG REACH QUICK MELEE") {
         Is Using Ultimate(Event Player) == False; // 2 elements
     }
     actions {
+        Abort If(Compare((Event Player).augmentId, !=, 4)); // 7 elements
         Set Player Variable(Event Player, augmentState1, Hero Of(Event Player)); // 2 elements
         Wait(0.15, Abort When False); // 2 elements
         Abort If(Compare(Hero Of(Event Player), !=, (Event Player).augmentState1)); // 7 elements
@@ -9619,11 +9617,7 @@ rule ("LONG REACH VENDETTA SWORD") {
     }
     conditions {
         "These conditions cancel a committed swing; releasing primary fire does not."
-        Hero Of(Event Player) == Hero(Vendetta); // 3 elements
-        Global.isGameplayActive == True; // 2 elements
-        (Event Player).augmentId == 4; // 4 elements
         Is Alive(Event Player) == True; // 2 elements
-        Is Dummy Bot(Event Player) == False; // 2 elements
         Is Firing Secondary(Event Player) == False; // 2 elements
         Is Using Ability 1(Event Player) == False; // 2 elements
         Is Using Ability 2(Event Player) == False; // 2 elements
@@ -9634,6 +9628,7 @@ rule ("LONG REACH VENDETTA SWORD") {
         Has Status(Event Player, Knocked Down) == False; // 3 elements
     }
     actions {
+        Abort If(Or(Not(Global.isGameplayActive), Compare((Event Player).augmentId, !=, 4))); // 11 elements
         "Trigger and windup have separate lifetimes: a short click commits one hit,\nwhile held input keeps using the configured repeat timer.\nThe idle wait only watches input; validate the actor before committing a hit."
         Wait Until(And(Is Button Held(Event Player, Button(Primary Fire)), Is Firing Primary(Event Player)), 999999999999); // 8 elements
         Abort If Condition Is False; // 1 element
@@ -9648,7 +9643,7 @@ rule ("LONG REACH VENDETTA SWORD") {
     }
 }
 
-//369 elements
+//368 elements
 rule ("LONG REACH MELEE WEAPONS") {
     event {
         Ongoing - Each Player;
@@ -9656,10 +9651,7 @@ rule ("LONG REACH MELEE WEAPONS") {
         All;
     }
     conditions {
-        Global.isGameplayActive == True; // 2 elements
-        (Event Player).augmentId == 4; // 4 elements
         Is Alive(Event Player) == True; // 2 elements
-        Is Dummy Bot(Event Player) == False; // 2 elements
         Array Contains(Array(Hero(Reinhardt), Hero(Brigitte), Hero(D.Mon), Hero(Genji), Hero(Ramattra), Hero(Torbjörn)), Hero Of(Event Player)) == True; // 20 elements
         Or(Compare(Hero Of(Event Player), !=, Hero(Genji)), Is Using Ultimate(Event Player)) == True; // 9 elements
         Or(Compare(Hero Of(Event Player), !=, Hero(D.Mon)), Not(Is In Alternate Form(Event Player))) == True; // 10 elements
@@ -9677,6 +9669,7 @@ rule ("LONG REACH MELEE WEAPONS") {
         Has Status(Event Player, Knocked Down) == False; // 3 elements
     }
     actions {
+        Abort If(Compare((Event Player).augmentId, !=, 4)); // 7 elements
         Wait Until(And(Or(Is Button Held(Event Player, Button(Primary Fire)), And(Array Contains(Array(Hero(Reinhardt), Hero(Brigitte), Hero(Torbjörn)), Hero Of(Event Player)), Is Button Held(Event Player, Button(Melee)))), Or(Is Firing Primary(Event Player), And(Array Contains(Array(Hero(Reinhardt), Hero(Brigitte), Hero(Torbjörn)), Hero Of(Event Player)), Is Meleeing(Event Player)))), 999999999999); // 43 elements
         Abort If Condition Is False; // 1 element
         "approximate cadence rather than polling or depending on a native hit target.\nGenji's blade cadence includes the October swing-speed increase.\nTimers do not copy native combo/perk effects."
@@ -9691,7 +9684,7 @@ rule ("LONG REACH MELEE WEAPONS") {
     }
 }
 
-//41 elements
+//25 elements
 rule ("LONG REACH CARNAGE") {
     event {
         Ongoing - Each Player;
@@ -9699,18 +9692,12 @@ rule ("LONG REACH CARNAGE") {
         Junker Queen;
     }
     conditions {
-        Hero Of(Event Player) == Hero(Junker Queen); // 3 elements
-        Global.isGameplayActive == True; // 2 elements
-        (Event Player).augmentId == 4; // 4 elements
+        "@Condition isGameplayActive == true\n@Condition eventPlayer.augmentId == Augment.LONG_REACH"
         Is Alive(Event Player) == True; // 2 elements
-        Is Dummy Bot(Event Player) == False; // 2 elements
         Is Using Ability 2(Event Player) == True; // 2 elements
-        Has Status(Event Player, Stunned) == False; // 3 elements
-        Has Status(Event Player, Asleep) == False; // 3 elements
-        Has Status(Event Player, Frozen) == False; // 3 elements
-        Has Status(Event Player, Knocked Down) == False; // 3 elements
     }
     actions {
+        Abort If(Compare((Event Player).augmentId, !=, 4)); // 7 elements
         "Carnage is a committed ability, not a repeating primary-fire timer."
         Wait(0.75, Abort When False); // 2 elements
         Set Global Variable(tmp0, Array(5, 15, 90)); // 8 elements
