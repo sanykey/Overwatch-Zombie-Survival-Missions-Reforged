@@ -8824,7 +8824,7 @@ rule ("BOLT STRIKE DAMAGE") {
                 Damage(Value In Array(Global.tmp0, Global.tmp2), Event Player, Min(20, Multiply(Event Damage, 0.25))); // 11 elements
                 "Bank only actual health removed, including immunity/reduction/overkill."
                 Set Player Variable(Event Player, actorTeamSlot22, Min(200, Add((Event Player).actorTeamSlot22, Max(False, Subtract(Global.tmp1, Health(Value In Array(Global.tmp0, Global.tmp2))))))); // 18 elements
-                Play Effect(All Players(All Teams), Bad Explosion, Color(Aqua), Value In Array(Global.tmp0, Global.tmp2), 0.5); // 9 elements
+                Play Effect(All Players(All Teams), Bad Explosion, Color(Aqua), Value In Array(Global.tmp0, Global.tmp2), 1.5); // 9 elements
             End; // 1 element
             Skip If(Compare((Event Player).actorTeamSlot24, !=, -1), True); // 7 elements
             Set Player Variable(Event Player, actorTeamSlot24, Add(Total Time Elapsed, 0.3)); // 4 elements

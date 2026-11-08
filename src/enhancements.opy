@@ -403,7 +403,7 @@ rule "BOLT STRIKE DAMAGE":
             damage(boltChainTargets[boltIndex], eventPlayer, min(20, eventDamage * 0.25))
             # Bank only actual health removed, including immunity/reduction/overkill.
             eventPlayer.enhancementBoltEnergy = min(200, eventPlayer.enhancementBoltEnergy + max(0, boltHealthBefore - boltChainTargets[boltIndex].getHealth()))
-            playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, boltChainTargets[boltIndex], 0.5)
+            playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, boltChainTargets[boltIndex], 1.5)
         if eventPlayer.enhancementBoltBurst == -1:
             eventPlayer.enhancementBoltBurst = getTotalTimeElapsed() + 0.3
         if eventPlayer.enhancementBoltBurst > getTotalTimeElapsed():
