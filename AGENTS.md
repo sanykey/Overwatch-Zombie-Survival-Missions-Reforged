@@ -31,6 +31,8 @@ Read [the symptoms, experiments and deferred workaround](Readme.md#workshop-hero
 
 ## Commit Messages
 
+Always write commit messages in English, even if the user provides the proposed commit message in another language. Translate the intended meaning into English.
+
 If the task includes creating a commit, choose a prefix based on the purpose of the change:
 
 - `fix: ` — a bug fix.
