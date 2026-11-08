@@ -59,7 +59,7 @@ rule "BOT BECOMES BOSS":
     #Health pool size as boss
     eventPlayer.botBaseHealth = 15000
     eventPlayer.botBossHealth = eventPlayer.botBaseHealth
-    eventPlayer.sizeScale = createWorkshopSettingFloat("Zombies", "Boss Size", 2.5, 0, 20)
+    eventPlayer.sizeScale = BOSS_BASE_SIZE
     eventPlayer.startScalingSize(eventPlayer.sizeScale + 1 if eventPlayer.getHero() == Hero.EMRE else eventPlayer.sizeScale, false)
     #Scale zombie voice lines with size
     eventPlayer.startModifyingVoicelinePitch(0.5 + (1 / (eventPlayer.sizeScale + 1)), false)

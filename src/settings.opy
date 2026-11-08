@@ -100,9 +100,7 @@ settings {
         }
     },
     "workshop": {
-        "Boss Size": 2.5,
         "Chance to mutate percentage": 25,
-        "Zombie Size": 1,
         "Number of Objectives": 3
     }
 }

@@ -1,6 +1,8 @@
 #!mainFile "../main.opy"
 
 #!define BOT_MAX_TELEPORT_RANGE 40
+#!define BOSS_BASE_SIZE 2.5
+#!define ZOMBIE_BASE_SIZE 1
 #!define BIOMORPHING_RESOURCE_AMOUNT 25
 #!define ELIMINATIONS_NEEDED_PER_OBJECTIVE 50
 #!define LASER_BARRICADE_HEIGHT 2
@@ -528,7 +530,7 @@ playervar candidateTargetList  # Boss target-visibility snapshot, Rescue leader 
 # Zombies crossing the player's barricade, processed synchronously.
 #!define augmentBarrierTargetList candidateTargetList
 
-playervar sizeScale  # Actor size multiplier; shared by players, zombies, Rescue, item ranges and enhancements.
+playervar sizeScale  # Current actor size multiplier, including mutations/abilities; shared by players, zombies, Rescue, item ranges and enhancements.
 
 playervar actorAbilitySlot1  # Existing per-zombie ability state or Team 1 Rescue extraction flag.
 # Generic state reset in botRespawnInitialization.

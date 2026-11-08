@@ -749,7 +749,7 @@ def botRespawnInitialization():
         eventPlayer.initialMaxHealth = eventPlayer.getMaxHealth()
     else:
         eventPlayer.enableNameplatesFor(getAllPlayers())
-        eventPlayer.sizeScale = createWorkshopSettingFloat("Zombies", "Zombie Size", 1, 0, 20)
+        eventPlayer.sizeScale = ZOMBIE_BASE_SIZE
         eventPlayer.botBaseHealth = botHealthList[botHeroList.index(eventPlayer.getHero())]
         #Scale zombie voice lines with size
         eventPlayer.startModifyingVoicelinePitch(0.5 + (1 / (eventPlayer.sizeScale + 1)) + 0.25 * (sinDeg(getTotalTimeElapsed() * evalOnce(random.uniform(360, 720)))))

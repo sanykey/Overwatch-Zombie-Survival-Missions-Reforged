@@ -1,8 +1,8 @@
-/* Element count: (total 29332)
+/* Element count: (total 29304)
 
  1634: rule "objectivesManagement" (src/subroutines.opy)
  1535: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
- 1088: rule "botRespawnInitialization" (src/subroutines.opy)
+ 1074: rule "botRespawnInitialization" (src/subroutines.opy)
   820: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
   481: rule "GRAPNEL LAUNCHER" (src/augments.opy)
   434: rule "SKIP ASSEMBLING HEROES" (src/global_startup.opy)
@@ -42,12 +42,12 @@
   181: rule "LASER BARRICADE (PLACEMENT)" (src/augments.opy)
   179: rule "STALKER (MOIRA) FADE" (src/zombie_types.opy)
   178: rule "BOSS DIES (ALL BOSS OBJECTIVES)" (src/objective_types/objective_type_bosses.opy)
-  174: rule "BOT BECOMES BOSS" (src/objective_types/objective_type_bosses.opy)
   173: rule "REIGNITED (ANRAN) ABILITIES" (src/zombie_types.opy)
   170: rule "selectTarget" (src/subroutines.opy)
   166: rule "DOWNFALLEN GRABS PLAYER" (src/zombie_types.opy)
   163: rule "SURVIVOR FOLLOW TARGET" (src/objective_types/objective_type_survivor_rescue.opy)
   163: rule "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES" (src/zombie_types.opy)
+  160: rule "BOT BECOMES BOSS" (src/objective_types/objective_type_bosses.opy)
   152: rule "SPAWN BOTS" (src/global_startup.opy)
   151: rule "setZombieMode" (src/global_start_menu.opy)
   151: rule "cloakingDevice (60-69)" (src/supply_drops.opy)
@@ -419,9 +419,7 @@ settings
 	}
 	workshop
 	{
-		Boss Size: 2.5
 		Chance to mutate percentage: 25
-		Zombie Size: 1
 		Number of Objectives: 3
 	}
 	extensions
@@ -1319,7 +1317,7 @@ rule ("restoreDefaultFacingMovement") {
     }
 }
 
-//1088 elements
+//1074 elements
 rule ("botRespawnInitialization") {
     event {
         Subroutine;
@@ -1333,7 +1331,7 @@ rule ("botRespawnInitialization") {
             Set Player Variable(Event Player, initialMaxHealth, Max Health(Event Player)); // 2 elements
         Else; // 1 element
             Enable Nameplates(Event Player, All Players(All Teams)); // 3 elements
-            Set Player Variable(Event Player, sizeScale, Workshop Setting Real(Custom String("Zombies"), Custom String("Zombie Size"), 1, 0, 20, 0)); // 16 elements
+            Set Player Variable(Event Player, sizeScale, 1); // 2 elements
             Set Player Variable(Event Player, botBaseHealth, Value In Array(Global.botHealthList, Index Of Array Value(Global.botHeroList, Hero Of(Event Player)))); // 8 elements
             "Scale zombie voice lines with size"
             Start Modifying Hero Voice Lines(Event Player, Add(Add(0.5, Divide(True, Add((Event Player).sizeScale, True))), Multiply(0.25, Sine From Degrees(Multiply(Total Time Elapsed, Evaluate Once(Random Real(360, 720)))))), True); // 24 elements
@@ -3330,7 +3328,7 @@ rule ("SPAWN BOSS") {
     }
 }
 
-//174 elements
+//160 elements
 rule ("BOT BECOMES BOSS") {
     event {
         Ongoing - Each Player;
@@ -3371,7 +3369,7 @@ rule ("BOT BECOMES BOSS") {
         "Health pool size as boss"
         Set Player Variable(Event Player, botBaseHealth, 15000); // 2 elements
         Set Player Variable(Event Player, actorTeamSlot12, (Event Player).botBaseHealth); // 3 elements
-        Set Player Variable(Event Player, sizeScale, Workshop Setting Real(Custom String("Zombies"), Custom String("Boss Size"), 2.5, 0, 20, 0)); // 16 elements
+        Set Player Variable(Event Player, sizeScale, 2.5); // 2 elements
         Start Scaling Player(Event Player, If-Then-Else(Compare(Hero Of(Event Player), ==, Hero(Emre)), Add((Event Player).sizeScale, True), (Event Player).sizeScale), False); // 15 elements
         "Scale zombie voice lines with size"
         Start Modifying Hero Voice Lines(Event Player, Add(0.5, Divide(True, Add((Event Player).sizeScale, True))), False); // 10 elements
