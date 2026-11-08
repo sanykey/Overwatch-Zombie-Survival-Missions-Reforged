@@ -45,8 +45,6 @@ rule "PLAYER INITIALIZATION":
         eventPlayer.initialMaxHealth /= min(2, 1 + eventPlayer.enhancementBulkStacks * 0.005)
     eventPlayer.invisibilityCount = false
     eventPlayer.movementSpeedScale = 1
-    if eventPlayer.augmentId == Augment.APOTHECARY:
-        eventPlayer.augmentApothecarySpeedUntil = 0
     applyScaledMoveSpeed()
     eventPlayer.isAttached = false
     eventPlayer.isAfk = false
@@ -257,14 +255,10 @@ rule "PLAYER PICKS UP HEALTH PACK":
         # Only reduce existing infection; never create or increase vaccine reserves.
         # Scripted healing is not a health-pack event, so this cannot recurse.
         heal(eventPlayer, null, eventHealing)
-        if eventPlayer.infectionLevel > 0:
+        if eventPlayer.infectionLevel > 0 and eventPlayer.enhancementId != Enhancement.ZOMBIE_HYBRID:
             eventPlayer.infectionLevel = max(0, eventPlayer.infectionLevel - 1)
-        eventPlayer.setUltCharge(eventPlayer.getUltCharge() + 7)
-        # Refresh duration without stacking; preserve other movement multipliers.
-        if eventPlayer.augmentApothecarySpeedUntil == 0:
-            eventPlayer.movementSpeedScale *= 1.5
-            applyScaledMoveSpeed()
-        eventPlayer.augmentApothecarySpeedUntil = getTotalTimeElapsed() + 5
+        eventPlayer.setUltCharge(eventPlayer.getUltCharge() + 5)
+        eventPlayer.augmentApothecaryPosition = eventPlayer.getPosition()
 
 
 rule "PLAYER CLEARS DAMAGE OVER TIME":

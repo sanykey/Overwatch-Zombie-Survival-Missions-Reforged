@@ -114,7 +114,8 @@ async function main() {
 
     for (const augment of [1, 8]) {
         const ordinary = state(1, [99], augment);
-        ordinary.buttons.add('Crouch');
+        // Apothecary reserves the crouched chord; plain Interact still picks up.
+        if (augment !== 8) ordinary.buttons.add('Crouch');
         pickup(ordinary, 4);
         assert.equal(ordinary.player[active], 4); assert.deepEqual(ordinary.globals.supplyPowerUpIdList, [1]);
         assert.deepEqual(ordinary.player[backpack], [99], 'Other augments never read/write the aliased backpack slot');

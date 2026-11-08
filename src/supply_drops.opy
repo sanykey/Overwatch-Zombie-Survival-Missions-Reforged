@@ -83,6 +83,8 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
+    # Reserve Crouch + Interact for Apothecary, even without a teleport charge.
+    @Condition ((eventPlayer.enhancementId == Enhancement.DEAD_WEIGHT and eventPlayer.enhancementHeldZombie != null) or eventPlayer.augmentId != Augment.APOTHECARY or not eventPlayer.isHoldingButton(Button.CROUCH)) == true
     # Reserve Laser Barricade input until Interact is released, even after Crouch is released.
     # Throwing a carried Dead Weight target takes precedence over barricade placement.
     @Condition ((eventPlayer.enhancementId == Enhancement.DEAD_WEIGHT and eventPlayer.enhancementHeldZombie != null) or eventPlayer.augmentId != Augment.LASER_BARRICADE or (not eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.augmentBarrierPlacementCooldown >= 0)) == true

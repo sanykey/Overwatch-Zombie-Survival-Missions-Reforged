@@ -55,7 +55,7 @@ rule "AUGMENT MENU":
             "Carry twice the ammo per full magazine; full reloads restore the bonus",
             "Crouch + Jump: grapple 7-40m; hit for 35 damage; stun grounded targets for 0.5s or knock airborne targets down for 3s. cd: 16s",
             "Hold Crouch + Interact to aim a zombie-blocking wall; release Interact to deploy. cd: 30s",
-            "Health packs: 2x healing, remove up to 1 infection even after time runs out, +7% ult, +50% speed for 5s",
+            "Health packs: 2x healing, -1 infection, +5% ult. Ultimate grants 1 teleport (hold Crouch + Interact) to the last health pack used",
             "Crouch + Interact: stash (2 slots). Interact: active slot. Hold Reload: drop all. Bot eliminations: 5% loot, backpack first",
             "Heal for 15% of damage dealt and gain 50 recoverable health"
         ][localPlayer.augmentId],
@@ -75,16 +75,36 @@ rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)":
     eventPlayer.augmentId = (eventPlayer.augmentId + (Augment.LEECH if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else 1)) % (Augment.LEECH + 1)
 
 
-rule "APOTHECARY SPEED BONUS EXPIRES":
+rule "APOTHECARY ULTIMATE RECHARGE":
     @Event eachPlayer
     @Team 1
+    @Condition isGameplayActive == true
     @Condition eventPlayer.augmentId == Augment.APOTHECARY
-    @Condition eventPlayer.augmentApothecarySpeedUntil > 0
-    @Condition (getTotalTimeElapsed() >= eventPlayer.augmentApothecarySpeedUntil or not eventPlayer.isAlive()) == true
+    @Condition eventPlayer.isUsingUltimate() == true
 
-    eventPlayer.augmentApothecarySpeedUntil = 0
-    eventPlayer.movementSpeedScale /= 1.5
-    applyScaledMoveSpeed()
+    # Activation edge only: spending during a lasting ultimate cannot recharge it.
+    eventPlayer.augmentApothecaryReady = true
+
+
+rule "APOTHECARY TELEPORT":
+    @Event eachPlayer
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.augmentId == Augment.APOTHECARY
+    @Condition eventPlayer.augmentApothecaryReady == true
+    @Condition eventPlayer.augmentApothecaryPosition != null
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
+    @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
+    @Condition (eventPlayer.enhancementId != Enhancement.DEAD_WEIGHT or eventPlayer.enhancementHeldZombie == null) == true
+
+    # Keep both buttons held for one second; interruption preserves the charge.
+    wait(1, Wait.ABORT_WHEN_FALSE)
+    eventPlayer.augmentApothecaryReady = false
+    # Play Effect snapshots departure before Teleport; no scratch or effect entity.
+    # Bolt Strike's 1.5 flash scaled by three.
+    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, eventPlayer.getPosition(), 4.5)
+    eventPlayer.teleport(eventPlayer.augmentApothecaryPosition)
 
 
 rule "AUGMENT AIR ACTION RECHARGE":

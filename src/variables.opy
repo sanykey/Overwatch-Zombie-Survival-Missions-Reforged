@@ -388,9 +388,12 @@ playervar augmentState0
 # Scavenger: up to two reserve item IDs, separate from the active powerup and primary enhancement.
 # Retained through hero switches; death/manual drop clears it synchronously. Never activated.
 #!define augmentScavengerBackpack augmentState0
-# Apothecary speed-bonus expiry (Total Time Elapsed); zero when inactive.
-# Refreshed on pickup, cleared on expiry/death and alongside movement reset on spawn.
-#!define augmentApothecarySpeedUntil augmentState0
+# Apothecary: last pack pickup position, null until first pickup; zero vector is valid.
+# Retained through death/hero switches; only this augment owns these slots.
+#!define augmentApothecaryPosition augmentState0
+# Boolean single teleport charge; refreshed on ultimate activation, spent on teleport.
+# Retained through death/hero switches; HUD reevaluates it without a chase.
+#!define augmentApothecaryReady augmentState1
 # Laser Barricade placement facing direction; persists for collision checks.
 #!define augmentBarrierFacing augmentState0
 # Shock Landing / Double Jump / Grapnel Launcher next allowed activation time; persists across landing and death, read by the HUD.
