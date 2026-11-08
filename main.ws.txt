@@ -1,4 +1,4 @@
-/* Element count: (total 29566)
+/* Element count: (total 29596)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
  1557: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
@@ -10,11 +10,11 @@
   398: rule "LASER BARRICADE BLOCKS ZOMBIES" (src/augments.opy)
   391: rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)" (src/supply_drops.opy)
   368: rule "LONG REACH MELEE WEAPONS" (src/augments.opy)
+  336: rule "PLAYER DEALT DAMAGE" (src/player_events.opy)
   327: rule "GLOBAL MENU INITIALIZATION" (src/global_start_menu.opy)
   321: rule "DAYTAKER (ILLARI) BURST" (src/zombie_types.opy)
   314: rule "BEHEMOTH (ROAD) TOXIC CLOUD" (src/zombie_types.opy)
   313: rule "SLIMER (MERCY) TENTACLE GRAB" (src/zombie_types.opy)
-  306: rule "PLAYER DEALT DAMAGE" (src/player_events.opy)
   293: rule "teleportBots" (src/bots_game_in_progress.opy)
   290: rule "sentryTurret (50-59)" (src/supply_drops.opy)
   288: rule "EFFECTS/TEXTS" (src/players_game_in_progress.opy)
@@ -10060,7 +10060,7 @@ rule ("PLAYER DEALT HEALING") {
     }
 }
 
-//306 elements
+//336 elements
 rule ("PLAYER DEALT DAMAGE") {
     event {
         Player Dealt Damage;
@@ -10082,8 +10082,8 @@ rule ("PLAYER DEALT DAMAGE") {
                 End; // 1 element
             Else If(Compare((Event Player).enhancementId, ==, 12)); // 7 elements
                 If(And(And(Global.isGameplayActive, Compare(Team Of(Victim), ==, Team 2)), Compare(Event Damage, >, Null))); // 14 elements
-                    "Synchronous scratch, consumed before this event ends: no waits, async\ncalls or reevaluated effects. No persistent lightning IDs need cleanup."
-                    Set Global Variable(tmp0, Array Slice(Randomized Array(Remove From Array(Filtered Array(Players Within Radius(Victim, 10, Team 2, Surfaces), Is Alive(Current Array Element)), Victim)), False, 2)); // 17 elements
+                    "Synchronous scratch, consumed before this event ends: no waits, async\ncalls or reevaluated effects. No persistent lightning IDs need cleanup.\nLeave warning-phase Smolders untouched by both chains and the charged discharge."
+                    Set Global Variable(tmp0, Array Slice(Randomized Array(Remove From Array(Filtered Array(Players Within Radius(Victim, 10, Team 2, Surfaces), And(Is Alive(Current Array Element), Or(Compare(Hero Of(Current Array Element), !=, Hero(Winston)), Compare((Current Array Element).actorAbilitySlot1, !=, 1)))), Victim)), False, 2)); // 32 elements
                     For Global Variable(tmp2, 0, Count Of(Global.tmp0), True); // 4 elements
                         Set Global Variable(tmp1, Health(Value In Array(Global.tmp0, Global.tmp2))); // 6 elements
                         Damage(Value In Array(Global.tmp0, Global.tmp2), Event Player, Min(15, Multiply(Event Damage, 0.25))); // 11 elements
@@ -10098,7 +10098,7 @@ rule ("PLAYER DEALT DAMAGE") {
                     If(Compare((Event Player).actorTeamSlot24, ==, -1)); // 7 elements
                         "Consume before applying damage. The chain list is no longer live;\nreuse its synchronous slot for this one-shot area discharge."
                         Set Player Variable(Event Player, actorTeamSlot24, Null); // 1 element
-                        Set Global Variable(tmp0, Filtered Array(Players Within Radius(Victim, 5, Team 2, Surfaces), Is Alive(Current Array Element))); // 10 elements
+                        Set Global Variable(tmp0, Filtered Array(Players Within Radius(Victim, 5, Team 2, Surfaces), And(Is Alive(Current Array Element), Or(Compare(Hero Of(Current Array Element), !=, Hero(Winston)), Compare((Current Array Element).actorAbilitySlot1, !=, 1))))); // 25 elements
                         Set Status(Global.tmp0, Event Player, Stunned, 2); // 3 elements
                         Damage(Global.tmp0, Event Player, 60); // 3 elements
                     End; // 1 element

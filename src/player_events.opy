@@ -105,7 +105,8 @@ rule "PLAYER DEALT DAMAGE":
                 #!define boltChainTargets tmp0
                 #!define boltHealthBefore tmp1
                 #!define boltIndex tmp2
-                boltChainTargets = random.shuffle(getPlayersInRadius(victim, 10, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive()).exclude(victim)).slice(0, 2)
+                # Leave warning-phase Smolders untouched by both chains and the charged discharge.
+                boltChainTargets = random.shuffle(getPlayersInRadius(victim, 10, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive() and (player.getHero() != Hero.WINSTON or player.botSmolderState != 1)).exclude(victim)).slice(0, 2)
                 for boltIndex in range(len(boltChainTargets)):
                     boltHealthBefore = boltChainTargets[boltIndex].getHealth()
                     damage(boltChainTargets[boltIndex], eventPlayer, min(15, eventDamage * 0.25))
@@ -121,7 +122,7 @@ rule "PLAYER DEALT DAMAGE":
                     # reuse its synchronous slot for this one-shot area discharge.
                     #!define boltDischargeTargets tmp0
                     eventPlayer.enhancementBoltBurst = 0
-                    boltDischargeTargets = getPlayersInRadius(victim, 5, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive())
+                    boltDischargeTargets = getPlayersInRadius(victim, 5, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive() and (player.getHero() != Hero.WINSTON or player.botSmolderState != 1))
                     boltDischargeTargets.setStatusEffect(eventPlayer, Status.STUNNED, 2)
                     damage(boltDischargeTargets, eventPlayer, 60)
         elif eventPlayer.enhancementId == Enhancement.OVERCHARGE:
