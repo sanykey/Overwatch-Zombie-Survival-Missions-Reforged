@@ -165,15 +165,6 @@ rule "DOUBLE JUMP DOUBLE TAP":
         eventPlayer.augmentJumpLastPressedAt = getTotalTimeElapsed()
 
 
-rule "DOUBLE JUMP RESET TAP ON DEATH":
-    @Event playerDied
-    @Team 1
-    @Condition eventPlayer.augmentId == Augment.DOUBLE_JUMP
-
-    eventPlayer.augmentJumpLastPressedAt = 0
-    eventPlayer.augmentJumpBonusState = null
-
-
 rule "DOUBLE JUMP BONUS ENTER FLIGHT":
     @Event eachPlayer
     @Team 1
@@ -207,23 +198,6 @@ rule "DOUBLE JUMP BONUS EXPIRES":
     @Condition (not isGameplayActive or not eventPlayer.isAlive() or eventPlayer.getHero() != eventPlayer.augmentJumpBonusState[1] or getTotalTimeElapsed() >= abs(eventPlayer.augmentJumpBonusState[0])) == true
 
     eventPlayer.augmentJumpBonusState = null
-
-
-rule "DOUBLE JUMP FIRST HIT BONUS":
-    @Event playerDealtDamage
-    @Team 1
-    @Condition eventPlayer.augmentId == Augment.DOUBLE_JUMP
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.augmentJumpBonusState != null
-    @Condition eventPlayer.getHero() == eventPlayer.augmentJumpBonusState[1]
-    @Condition getTotalTimeElapsed() < abs(eventPlayer.augmentJumpBonusState[0])
-    @Condition eventDamage >= 30
-    @Condition victim != eventPlayer
-
-    # Match Brain Killer's event-damage bonus pattern. Only hits of 30+ spend it;
-    # consume before Damage so supplemental damage cannot recurse.
-    eventPlayer.augmentJumpBonusState = null
-    damage(victim, eventPlayer, eventDamage * 0.5)
 
 
 def useAugmentAirAction():
@@ -709,44 +683,31 @@ rule "LASER BARRICADE BLOCKS ZOMBIES":
 # SCAVENGER BOT LOOT moved to "PLAYER EARNED ELIMINATION" in player_events.opy.
 
 
-rule "LEECH LIFESTEAL":
-    @Event playerDealtDamage
+rule "LEECH GRANTS ALLY OVERHEALTH":
+    @Event eachPlayer
     @Team 1
 
-    if eventPlayer.augmentId == Augment.LEECH:
-        # Include damage from the hero, primary enhancement and scripted powerups.
-        heal(eventPlayer, eventPlayer, eventDamage * 0.15)
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.getHealth() >= LEECH_GIFT_MIN_HEALTH
+    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
+    @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
 
-
-# rule "LEECH GRANTS ALLY OVERHEALTH":
-#     @Event eachPlayer
-#     @Team 1
-
-#     @Condition eventPlayer.isAlive() == true
-#     @Condition eventPlayer.isDummy() == false
-#     @Condition eventPlayer.getHealth() >= LEECH_GIFT_MIN_HEALTH
-#     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
-#     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
-
-#     if not isGameplayActive or eventPlayer.augmentId != Augment.LEECH or (eventPlayer.enhancementId == Enhancement.DEAD_WEIGHT and eventPlayer.enhancementHeldZombie != null):
-#         return
-
-#     wait(0.3, Wait.ABORT_WHEN_FALSE)
-#     # Action guards are not observed by Abort When False.
-#     if not isGameplayActive or eventPlayer.augmentId != Augment.LEECH or (eventPlayer.enhancementId == Enhancement.DEAD_WEIGHT and eventPlayer.enhancementHeldZombie != null):
-#         return
-#     # Query only after the hold, never each tick. This scratch target is
-#     # synchronous: no waits, subroutines, chases or reevaluated captures.
-#     # leechGiftTarget: first living player hit; enemies also block the ray.
-#     #!define leechGiftTarget tmp0
-#     leechGiftTarget = raycastHitPlayer(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * LEECH_GIFT_RANGE, getLivingPlayers().exclude(eventPlayer), eventPlayer, true)
-#     if leechGiftTarget.getTeam() == Team.1 and not leechGiftTarget.isDummy():
-#         # Replace only this source's pool, preserving other pools.
-#         # A fully consumed (already removed) pool ID is safe to remove again.
-#         if leechGiftTarget.leechGrantedHealthPoolId != 0:
-#             removeHealthPool(leechGiftTarget.leechGrantedHealthPoolId)
-#         # Set Health avoids damage modifiers, infection and lifesteal recursion.
-#         # The 175-HP hold gate preserves at least 25 HP after the fixed cost.
-#         eventPlayer.setHealth(eventPlayer.getHealth() - LEECH_GIFT_COST)
-#         leechGiftTarget.addHealthPool(Health.NORMAL, LEECH_GIFT_HEALTH, false, false)
-#         leechGiftTarget.leechGrantedHealthPoolId = getLastCreatedHealthPool()
+    wait(0.3, Wait.ABORT_WHEN_FALSE)
+    # Action guards are not observed by Abort When False.
+    if not isGameplayActive or eventPlayer.augmentId != Augment.LEECH or (eventPlayer.enhancementId == Enhancement.DEAD_WEIGHT and eventPlayer.enhancementHeldZombie != null):
+        return
+    # Query only after the hold, never each tick. This scratch target is
+    # synchronous: no waits, subroutines, chases or reevaluated captures.
+    # leechGiftTarget: first living player hit; enemies also block the ray.
+    #!define leechGiftTarget tmp0
+    leechGiftTarget = raycastHitPlayer(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * LEECH_GIFT_RANGE, getLivingPlayers().exclude(eventPlayer), eventPlayer, true)
+    if leechGiftTarget.getTeam() == Team.1 and not leechGiftTarget.isDummy():
+        # Replace only this source's pool, preserving other pools.
+        # A fully consumed (already removed) pool ID is safe to remove again.
+        if leechGiftTarget.leechGrantedHealthPoolId != 0:
+            removeHealthPool(leechGiftTarget.leechGrantedHealthPoolId)
+        # Set Health avoids damage modifiers, infection and lifesteal recursion.
+        # The 175-HP hold gate preserves at least 25 HP after the fixed cost.
+        eventPlayer.setHealth(eventPlayer.getHealth() - LEECH_GIFT_COST)
+        leechGiftTarget.addHealthPool(Health.NORMAL, LEECH_GIFT_HEALTH, false, false)
+        leechGiftTarget.leechGrantedHealthPoolId = getLastCreatedHealthPool()

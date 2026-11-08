@@ -35,29 +35,6 @@ rule "ZOMBIE HYBRID":
 # Synchronous helper output; consume immediately before any wait or asynchronous work.
 #!define isEnhancementPlacementInvalid tmp0
 
-rule "BRAIN KILLER EXTRA DAMAGE":
-    @Event playerDealtDamage
-    @Team 1
-    @Condition eventPlayer.enhancementId == Enhancement.BRAIN_KILLER
-    @Condition eventWasCriticalHit == true
-    
-    #Critical hits deal 50% more damage, 20% if vicitm is a boss
-    damage(victim, eventPlayer, eventDamage * (0.2 if victim in bossStateList else 0.6))
-    playEffect(eventPlayer, DynamicEffect.BAD_EXPLOSION, Color.RED, victim.getEyePosition() + directionTowards(eventPlayer.getEyePosition(), victim.getEyePosition()) * victim.sizeScale, 0.1 * victim.sizeScale)
-
-
-rule "PYROTECHNIC SETS ENEMIES ON FIRE":
-    @Event playerDealtDamage
-    @Team 1
-    @Condition attacker.enhancementId == Enhancement.PYROTECHNIC
-    @Condition victim != eventPlayer
-    @Condition eventAbility != null
-    @Condition distance(attacker, victim) < 15
-    
-    victim.setStatusEffect(attacker, Status.BURNING, 3)
-    attacker.enhancementPyroHitList.append(victim)
-
-
 rule "PYROTECHNIC APPLIES DAMAGE":
     @Event eachPlayer
     @Team 1
@@ -127,34 +104,7 @@ rule "BORN TO BATTLE PLAYER USES ABILITY CHARGE":
         eventPlayer.enhancementBattleResetCharges -= 1
 
 
-rule "PLAGUE DOCTOR REDUCES PLAYERS' INFECTION LEVELS":
-    @Event playerDealtHealing
-    @Team 1
-    @Condition eventPlayer.enhancementId == Enhancement.PLAGUE_DOCTOR
-    
-    if eventPlayer.isInfected:
-        eventPlayer.infectionLevel -= eventHealing / 500
-        eventPlayer.enhancementPlagueCureTotal += eventHealing / 500
-    if healee.infectionLevel >= 1 and healee.enhancementId != Enhancement.ZOMBIE_HYBRID:
-        healee.infectionLevel -= eventHealing / 275
-        eventPlayer.enhancementPlagueCureTotal += eventHealing / 275
-        if healee.infectionLevel < 1:
-            healee.infectionLevel -= 0.5
-            eventPlayer.enhancementPlagueCureTotal += 0.5
-            playEffect(eventPlayer, DynamicEffect.GOOD_PICKUP_EFFECT, Color.GREEN, healee, 1)
-            smallMessage(eventPlayer, "You cured yourself!" if healee == eventPlayer else "You cured {0} {1}!".format(healee, heroIcon(healee.getHero())))
-
-
 # BULKING SEASON EARNS STACKS moved to "PLAYER EARNED ELIMINATION" in player_events.opy.
-
-
-rule "BULKING SEASON LOSES STACKS ON DEATH":
-    @Event playerDied
-    @Team 1
-    @Condition eventPlayer.enhancementId == Enhancement.BULKING_SEASON
-
-    eventPlayer.enhancementBulkStacks = floor(eventPlayer.enhancementBulkStacks / 2)
-    applyBulkingSeasonStats()
 
 
 def applyBulkingSeasonStats():
@@ -164,42 +114,6 @@ def applyBulkingSeasonStats():
     eventPlayer.setMaxHealth(min(200, 100 + eventPlayer.enhancementBulkStacks * 0.5))
     eventPlayer.sizeScale = min(1.35, 1 + eventPlayer.enhancementBulkStacks * 0.005)
     applyCurrentSizeScale()
-
-
-rule "BOLT STRIKE DAMAGE":
-    @Event playerDealtDamage
-    @Team 1
-    @Condition eventAbility != null
-    @Condition victim.getTeam() == Team.2
-    @Condition eventDamage > 0
-
-    # Keep eligibility in Actions, like Leech, to avoid adding its known UI-bug
-    # pattern to Conditions. Scripted Damage has no Event Ability: no recursion.
-    if isGameplayActive and eventPlayer.enhancementId == Enhancement.BOLT_STRIKE:
-        # Synchronous scratch, consumed before this event ends: no waits, async
-        # calls or reevaluated effects. No persistent lightning IDs need cleanup.
-        #!define boltChainTargets tmp0
-        #!define boltHealthBefore tmp1
-        #!define boltIndex tmp2
-        boltChainTargets = random.shuffle(getPlayersInRadius(victim, 10, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive()).exclude(victim)).slice(0, 2)
-        for boltIndex in range(len(boltChainTargets)):
-            boltHealthBefore = boltChainTargets[boltIndex].getHealth()
-            damage(boltChainTargets[boltIndex], eventPlayer, min(15, eventDamage * 0.25))
-            # Bank only actual health removed, including immunity/reduction/overkill.
-            eventPlayer.enhancementBoltEnergy = min(350, eventPlayer.enhancementBoltEnergy + max(0, boltHealthBefore - boltChainTargets[boltIndex].getHealth()))
-            # Per-target gate shared by every attacker. Suppressed flashes never
-            # extend the deadline or throttle damage/energy; no polling or waits.
-            if getTotalTimeElapsed() >= boltChainTargets[boltIndex].botBoltFlashReadyAt:
-                boltChainTargets[boltIndex].botBoltFlashReadyAt = getTotalTimeElapsed() + 0.2
-                playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, boltChainTargets[boltIndex], 0.75)
-        if eventPlayer.enhancementBoltBurst == -1:
-            # Consume before applying damage. The chain list is no longer live;
-            # reuse its synchronous slot for this one-shot area discharge.
-            #!define boltDischargeTargets tmp0
-            eventPlayer.enhancementBoltBurst = 0
-            boltDischargeTargets = getPlayersInRadius(victim, 5, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive())
-            boltDischargeTargets.setStatusEffect(eventPlayer, Status.STUNNED, 2)
-            damage(boltDischargeTargets, eventPlayer, 60)
 
 
 rule "BOLT STRIKE ARMS CHARGE":
@@ -214,25 +128,6 @@ rule "BOLT STRIKE ARMS CHARGE":
 
     eventPlayer.enhancementBoltEnergy = 0
     eventPlayer.enhancementBoltBurst = -1
-
-
-rule "BOLT STRIKE CLEARS CHARGE":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.enhancementId == Enhancement.BOLT_STRIKE
-    @Condition eventPlayer.enhancementBoltBurst != 0
-    @Condition (not isGameplayActive or not eventPlayer.isAlive()) == true
-
-    # Death/game end cancels the armed discharge; unspent energy stays in the bank.
-    eventPlayer.enhancementBoltBurst = 0
-
-
-rule "OVERCHARGE STORES HEALING":
-    @Event playerDealtHealing
-    @Team 1
-    @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
-
-    eventPlayer.enhancementCapacitorEnergy += eventHealing / 3
 
 
 rule "OVERCHARGE STORES ASSISTS":
@@ -270,28 +165,14 @@ rule "OVERCHARGE ARMS CHARGE":
 rule "OVERCHARGE CLEARS CHARGE":
     @Event eachPlayer
     @Team 1
-    @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
     @Condition eventPlayer.enhancementCapacitorCharge > 0
-    @Condition (not isGameplayActive or not eventPlayer.isAlive() or eventPlayer.enhancementCapacitorDeadline > 0 and getTotalTimeElapsed() >= eventPlayer.enhancementCapacitorDeadline) == true
+    @Condition (eventPlayer.isDead() or eventPlayer.enhancementCapacitorDeadline > 0 and getTotalTimeElapsed() >= eventPlayer.enhancementCapacitorDeadline) == true
+
+    if eventPlayer.enhancementId != Enhancement.OVERCHARGE:
+        return
 
     eventPlayer.enhancementCapacitorCharge = 0
     eventPlayer.enhancementCapacitorDeadline = 0
-
-
-rule "OVERCHARGE BONUS DAMAGE":
-    @Event playerDealtDamage
-    @Team 1
-    @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
-    @Condition eventPlayer.enhancementCapacitorCharge > 0
-    @Condition eventDamage > 0
-    @Condition victim.getTeam() == Team.2
-    # Workshop Damage has no Event Ability; never amplify this rule's own bonus.
-    @Condition eventAbility != null
-
-    if eventPlayer.enhancementCapacitorDeadline == 0:
-        eventPlayer.enhancementCapacitorDeadline = getTotalTimeElapsed() + 0.3
-    if getTotalTimeElapsed() < eventPlayer.enhancementCapacitorDeadline:
-        damage(victim, eventPlayer, eventPlayer.enhancementCapacitorCharge)
 
 
 rule "CHARGE BATTERY":
