@@ -214,7 +214,7 @@ rule "EFFECTS/TEXTS":
             "Survivor is equipped with an autonomous friendly droid",
             "Store healing / 3 incl. packs, +10 per assist; uncapped. Hold Melee: spend up to 100 for bonus damage on hits for 0.3s",
             "Kills and damage participation grant +0.5% Max Life and +0.5% Hero Size per stack (caps: 200% Life, 1.35x size). Lose half on death",
-            "Interact grabs/throws zombies incl. bosses within 4m: CC except Rooted or <20% HP; take 50% less damage while holding",
+            "Interact grabs/throws zombies incl. bosses within 5m: CC except Rooted or <20% HP; take 50% less damage while holding",
             "Chain to 2 visible zombies within 10m: 25% damage (max 15). Bank 350 chain damage; hold Melee to arm: next hit deals 60 damage and stuns zombies"
         ][localPlayer.enhancementId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)),

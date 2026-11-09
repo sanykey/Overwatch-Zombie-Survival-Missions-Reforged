@@ -756,7 +756,8 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 # Exclusive primary enhancement; slots belong to its selected human (the healer
 # for dealt-healing events, the receiver for health packs), never an enemy target.
 #!define enhancementCapacitorEnergy actorTeamSlot22
-# Bolt Strike: actual chain health removed, capped at 350; retained on death.
+# Bolt Strike: actual chain health removed plus 0.3 per primary hero hit,
+# capped at 350; retained on death.
 # Exclusive primary enhancement on its attacking human; no Augment owns this slot.
 #!define enhancementBoltEnergy actorTeamSlot22
 # Born to Battle unspent ability resets (0-2); retained through ability waits and reevaluated by its HUD.

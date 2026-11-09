@@ -29,8 +29,8 @@ rule "PLAYER AUGMENT INITIALIZATION":
     assert(!compiled.has('DEAD WEIGHT LANDING'), 'Landing damage rule is removed');
     assert(!compiled.has('DEAD WEIGHT DELAYED DAMAGE'), 'No queue processor');
     const run = (name, state) => start(compiled.get(name), state, compiled);
-    assert(compiled.get('useLivingProjectile').body.includes('Multiply(Facing Direction Of(Event Player), 4)'),
-        'The emitted pickup ray extends exactly four meters');
+    assert(compiled.get('useLivingProjectile').body.includes('Multiply(Facing Direction Of(Event Player), 5)'),
+        'The emitted pickup ray extends exactly five meters');
     assert(!files['variables.opy'].match(/enum Augment:([\s\S]*?)\n\n/)[1].includes('DEAD_WEIGHT'));
     const enhancementInit = compiled.get('PLAYER ENHANCEMENT INITIALIZATION');
     const selection = {...enhancementInit, body: enhancementInit.body.split('actions {\n')[0]
@@ -316,7 +316,7 @@ rule "PLAYER AUGMENT INITIALIZATION":
     const scratchRules = [...build.result.matchAll(/^rule \("(?:useLivingProjectile|LIVING PROJECTILE RELEASE)"\) \{\n[\s\S]*?^\}/gm)].map(match => match[0]);
     assert.equal(scratchRules.length, 2); checkWorkshop(scratchRules.join('\n'));
     console.log(JSON.stringify({elements: build.elements,
-        warnings: build.warnings, checked: 'stale shared-state initialization / idle HUD without timer / hold countdown and HUD reset / first pickup after initialization / 4m ray / primary selection forward and backward / 12 Enhancements and 10 Augments / explicit choice and late-join rolls / independent HUDs / all Augment state preserved / Laser Barricade throw priority and cooldown / boss/miniboss pickup allowed / 50% carrier protection with synchronous cleanup on every release / 5s hold / 6s knockdown from pickup / cleared synchronously with throw damage / eligibility / CC / input / lifetime cleanup / 50 damage after 0.75s / native Wait(0.75) / persistent credit / release before wait / pending release after wait / lethal throw cleanup / no cooldown / immediate repeat pickup / no landing rule or splash / item priority / Rider guards',
+        warnings: build.warnings, checked: 'stale shared-state initialization / idle HUD without timer / hold countdown and HUD reset / first pickup after initialization / 5m ray / primary selection forward and backward / 12 Enhancements and 10 Augments / explicit choice and late-join rolls / independent HUDs / all Augment state preserved / Laser Barricade throw priority and cooldown / boss/miniboss pickup allowed / 50% carrier protection with synchronous cleanup on every release / 5s hold / 6s knockdown from pickup / cleared synchronously with throw damage / eligibility / CC / input / lifetime cleanup / 50 damage after 0.75s / native Wait(0.75) / persistent credit / release before wait / pending release after wait / lethal throw cleanup / no cooldown / immediate repeat pickup / no landing rule or splash / item priority / Rider guards',
         limitation: 'Raycast geometry, attachment appearance and throw physics require Overwatch.'}, null, 2));
 }
 main().catch(e => {console.error(e); process.exitCode = 1;});

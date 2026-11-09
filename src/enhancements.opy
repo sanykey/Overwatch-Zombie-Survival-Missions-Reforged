@@ -5,7 +5,7 @@ subroutine checkEnhancementPlacement
 subroutine startPupDefaultChase
 subroutine applyBulkingSeasonStats
 
-#!define DEAD_WEIGHT_RANGE 4
+#!define DEAD_WEIGHT_RANGE 5
 #!define DEAD_WEIGHT_DURATION 5
 #!define DEAD_WEIGHT_KNOCKDOWN_DURATION 6
 #!define DEAD_WEIGHT_THROW_SPEED 12.5

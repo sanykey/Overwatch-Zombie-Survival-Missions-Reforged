@@ -100,6 +100,9 @@ rule "PLAYER DEALT DAMAGE":
                 attacker.enhancementPyroHitList.append(victim)
         elif eventPlayer.enhancementId == Enhancement.BOLT_STRIKE:
             if isGameplayActive and victim.getTeam() == Team.2 and eventDamage > 0:
+                # One fixed primary-hit credit, even when no chain targets exist.
+                # Scripted chain/discharge damage has no Event Ability and cannot recurse.
+                eventPlayer.enhancementBoltEnergy = min(350, eventPlayer.enhancementBoltEnergy + 0.3)
                 # Synchronous scratch, consumed before this event ends: no waits, async
                 # calls or reevaluated effects. No persistent lightning IDs need cleanup.
                 #!define boltChainTargets tmp0
