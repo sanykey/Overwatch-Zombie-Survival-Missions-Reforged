@@ -814,7 +814,7 @@ playervar actorTeamSlot26  # Teleport permission on Team 2 or first barrier corn
 
 playervar actorTeamSlot27  # Team 2: Bolt Strike flash deadline; Team 1: second barrier corner.
 # Next allowed Bolt Strike flash time on this zombie, shared across attackers.
-# Default 0 permits its first flash; retained across respawns (at most 0.2s).
+# Default 0 permits its first flash; retained across respawns (at most 0.5s).
 # Written only on a flash; no chase, waits or reevaluated visuals own this slot.
 #!define botBoltFlashReadyAt actorTeamSlot27
 # Barrier second lower corner.

@@ -10083,8 +10083,8 @@ rule ("PLAYER DEALT DAMAGE") {
                         Set Player Variable(Event Player, actorTeamSlot22, Min(350, Add((Event Player).actorTeamSlot22, Max(False, Subtract(Global.tmp1, Health(Value In Array(Global.tmp0, Global.tmp2))))))); // 18 elements
                         "Per-target gate shared by every attacker. Suppressed flashes never\nextend the deadline or throttle damage/energy; no polling or waits."
                         If(Compare(Total Time Elapsed, >=, (Value In Array(Global.tmp0, Global.tmp2)).actorTeamSlot27)); // 10 elements
-                            Set Player Variable(Value In Array(Global.tmp0, Global.tmp2), actorTeamSlot27, Add(Total Time Elapsed, 0.2)); // 8 elements
-                            Play Effect(All Players(All Teams), Bad Explosion, Color(Aqua), Value In Array(Global.tmp0, Global.tmp2), 0.75); // 9 elements
+                            Set Player Variable(Value In Array(Global.tmp0, Global.tmp2), actorTeamSlot27, Add(Total Time Elapsed, 0.5)); // 8 elements
+                            Play Effect(All Players(All Teams), Bad Explosion, Color(Aqua), Value In Array(Global.tmp0, Global.tmp2), 0.375); // 9 elements
                         End; // 1 element
                     End; // 1 element
                     If(Compare((Event Player).actorTeamSlot24, ==, -1)); // 7 elements

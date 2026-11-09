@@ -115,8 +115,8 @@ rule "PLAYER DEALT DAMAGE":
                     # Per-target gate shared by every attacker. Suppressed flashes never
                     # extend the deadline or throttle damage/energy; no polling or waits.
                     if getTotalTimeElapsed() >= boltChainTargets[boltIndex].botBoltFlashReadyAt:
-                        boltChainTargets[boltIndex].botBoltFlashReadyAt = getTotalTimeElapsed() + 0.2
-                        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, boltChainTargets[boltIndex], 0.75)
+                        boltChainTargets[boltIndex].botBoltFlashReadyAt = getTotalTimeElapsed() + 0.5
+                        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, boltChainTargets[boltIndex], 0.375)
                 if eventPlayer.enhancementBoltBurst == -1:
                     # Consume before applying damage. The chain list is no longer live;
                     # reuse its synchronous slot for this one-shot area discharge.
