@@ -8385,7 +8385,7 @@ rule ("JETPACK FLIGHT") {
     }
     actions {
         "Require a continuous Jump hold before thrust or fuel consumption begins."
-        Wait(0.2, Abort When False); // 2 elements
+        Wait(0.125, Abort When False); // 2 elements
         Set Player Variable(Event Player, powerUpJetpackIsFlying, True); // 1 element
         Set Gravity(Event Player, False); // 1 element
         Call Subroutine(applyScaledMoveSpeed); // 1 element

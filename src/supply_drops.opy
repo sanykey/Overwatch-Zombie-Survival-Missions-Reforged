@@ -440,7 +440,7 @@ rule "JETPACK FLIGHT":
     @Condition eventPlayer.powerUpJetpackFuel > 0
 
     # Require a continuous Jump hold before thrust or fuel consumption begins.
-    wait(0.2, Wait.ABORT_WHEN_FALSE)
+    wait(0.125, Wait.ABORT_WHEN_FALSE)
     eventPlayer.powerUpJetpackIsFlying = true
     eventPlayer.setGravity(0)
     applyScaledMoveSpeed()
