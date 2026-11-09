@@ -10,10 +10,12 @@ const slot = n => files['variables.opy'].match(new RegExp('^#!define ' + n + ' (
 const ready = slot('augmentMeleePushReadyAt');
 const scale = slot('botKnockbackScale'), attached = slot('botIsAttached'), teleport = slot('botIsTeleporting');
 const zombie = (id, position, extra = {}) => ({id,team:2,position,alive:true,visible:true,health:1000,[scale]:1,...extra});
+// Compare the complete feature against its original base, including after commits.
+const baselineRef = '7c2a6f1';
 async function main() {
     await compiler.readyPromise;
     const baseline = {...files};
-    for (const p of ['augments.opy','player_initialization.opy','variables.opy']) baseline[p] = cp.execFileSync('git',['show','HEAD:src/'+p],{encoding:'utf8'}).replace(/\r\n/g,'\n');
+    for (const p of ['augments.opy','player_initialization.opy','variables.opy']) baseline[p] = cp.execFileSync('git',['show',baselineRef+':src/'+p],{encoding:'utf8'}).replace(/\r\n/g,'\n');
     const before = await compile(baseline), build = await compile(files);
     assert.deepEqual(build.warnings,[]);
     const parsed = rules(build.result), compiled = new Map(parsed.map(r => [r.name,r]));
@@ -37,7 +39,7 @@ async function main() {
             zombie('ally',[0,0,3],{team:1})
         ],{hero});
         assert(run(s).done());
-        assert.deepEqual(s.impulses.map(i=>[i.target,i.speed]),[['near',20],['far',20],['edge',10],['invincible',20]]);
+        assert.deepEqual(s.impulses.map(i=>[i.target,i.speed]),[['near',25],['far',25],['edge',12.5],['invincible',25]]);
         assert(s.impulses.every(i=>Math.abs(i.direction[1]-Math.sin(Math.PI/12))<1e-9 && Math.abs(i.direction[2]-Math.cos(Math.PI/12))<1e-9));
         assert.equal(s.player[ready],109);
         assert.equal(s.damage.length,0);

@@ -9427,7 +9427,7 @@ rule ("LONG REACH MELEE PUSH") {
         Set Player Variable(Event Player, augmentState0, Add(Total Time Elapsed, 9)); // 4 elements
         For Global Variable(tmp1, 0, Count Of(Global.tmp0), True); // 4 elements
             Set Global Variable(tmp2, Value In Array(Global.tmp0, Global.tmp1)); // 5 elements
-            Apply Impulse(Global.tmp2, Direction From Angles(Horizontal Angle From Direction(Direction Towards(Event Player, Global.tmp2)), -15), Multiply(20, (Global.tmp2).actorTeamSlot19), To World, Cancel Contrary Motion); // 15 elements
+            Apply Impulse(Global.tmp2, Direction From Angles(Horizontal Angle From Direction(Direction Towards(Event Player, Global.tmp2)), -15), Multiply(25, (Global.tmp2).actorTeamSlot19), To World, Cancel Contrary Motion); // 15 elements
             Set Environment Credit Player(Global.tmp2, Event Player); // 2 elements
         End; // 1 element
     }
