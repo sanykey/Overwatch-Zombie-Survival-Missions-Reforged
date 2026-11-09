@@ -398,6 +398,9 @@ playervar augmentState0
 #!define augmentBarrierFacing augmentState0
 # Shock Landing / Double Jump / Grapnel Launcher next allowed activation time; persists across landing and death, read by the HUD.
 #!define augmentMovementReadyAt augmentState0
+# Long Reach: next allowed Melee-button push; persists across death/hero changes.
+# Only a press with eligible targets writes it; the augment HUD reads it live.
+#!define augmentMeleePushReadyAt augmentState0
 # Shock Landing next allowed activation time; only written on a successful dash, read by input/HUD.
 #!define augmentDashReadyAt augmentState0
 # Double Jump next allowed activation time; only written on a successful extra jump.

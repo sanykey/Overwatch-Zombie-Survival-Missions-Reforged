@@ -1,7 +1,7 @@
-/* Element count: (total 29486)
+/* Element count: (total 29608)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
- 1553: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
+ 1572: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
  1074: rule "botRespawnInitialization" (src/subroutines.opy)
   813: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
   481: rule "GRAPNEL LAUNCHER" (src/augments.opy)
@@ -9,7 +9,7 @@
   412: rule "PLAYERS REPAIR TERMINALS" (src/objective_types/objective_type_satellite_uplink.opy)
   398: rule "LASER BARRICADE BLOCKS ZOMBIES" (src/augments.opy)
   393: rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)" (src/supply_drops.opy)
-  368: rule "LONG REACH MELEE WEAPONS" (src/augments.opy)
+  352: rule "LONG REACH MELEE WEAPONS" (src/augments.opy)
   336: rule "PLAYER DEALT DAMAGE" (src/player_events.opy)
   327: rule "GLOBAL MENU INITIALIZATION" (src/global_start_menu.opy)
   321: rule "DAYTAKER (ILLARI) BURST" (src/zombie_types.opy)
@@ -63,11 +63,11 @@
   137: rule "BORN TO BATTLE PLAYER USES ABILITY CHARGE" (src/enhancements.opy)
   136: rule "GENERATE SUPPLY DROPS" (src/supply_drops.opy)
   135: rule "LIVING PROJECTILE RELEASE" (src/enhancements.opy)
+  134: rule "AUGMENT MENU" (src/augments.opy)
   133: rule "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)" (src/bots_game_in_progress.opy)
   132: rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS" (src/objective_types/objective_type_biomorphing.opy)
   132: rule "STRIKER (WRECKING BALL) PILE DRIVER" (src/zombie_types.opy)
   132: rule "useAugmentAirAction" (src/augments.opy)
-  130: rule "AUGMENT MENU" (src/augments.opy)
   129: rule "BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)" (src/zombie_types.opy)
   126: rule "PLAYER DELIVERS RESOURCE VALUE" (src/objective_types/objective_type_biomorphing.opy)
   123: rule "OBJECTIVE CHANGES AND PLAYER ENTITIES UPDATE" (src/players_game_in_progress.opy)
@@ -81,6 +81,7 @@
   116: rule "BEHEMOTH GAS STREAM (BOSS)" (src/zombie_types.opy)
   115: rule "BASIC (REAPER) SHADOW STEP (BOSS)" (src/zombie_types.opy)
   115: rule "EFFECT/TEXT (PERMANENT)" (src/power_ups.opy)
+  115: rule "LONG REACH MELEE PUSH" (src/augments.opy)
   114: rule "RUSHER MOLTEN CORE (BOSS)" (src/zombie_types.opy)
   113: rule "RIDER ATTACH TO TEAMMATES" (src/zombie_types.opy)
   113: rule "CHARGE BATTERY (USAGE AND COOLDOWNS)" (src/enhancements.opy)
@@ -9055,14 +9056,14 @@ rule ("LIVING PROJECTILE RELEASE") {
     }
 }
 
-//130 elements
+//134 elements
 rule ("AUGMENT MENU") {
     event {
         Ongoing - Global;
     }
     actions {
         "Like the primary enhancement HUD, this is created once and reevaluates per viewer."
-        Create HUD Text(All Players(Team 1), Custom String("Augment: {0} {1}", Value In Array(String Split(Custom String("No Preference0Kevlar0Shock Landing0Double Jump0Long Reach0Ammo Pack0Grapnel Launcher0Laser Barricade0Apothecary0Scavenger0Leech"), First Of(Null)), (Local Player).augmentId), If-Then-Else(Compare((Local Player).augmentId, !=, Null), Value In Array(Global.augmentIconListConst, (Local Player).augmentId), Char In String(Empty Array, False))), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Custom String("Gain 75 armor that helps protect against infection"), Custom String("Press Jump again in midair: landing shockwave deals 40 damage and pushes nearby zombies; movement input adds a dash. Phased a{0}", Custom String("nd invulnerable for 0.5s. cd: 13s")), Custom String("Jump in midair / double-tap Jump. First hit of 30+ damage in flight or within 0.5s after landing: +50%. cd: 16s"), Custom String("Triple Quick Melee, melee weapon, Dragonblade and Carnage reach"), Custom String("Carry twice the ammo per full magazine; full reloads restore the bonus"), Custom String("Crouch + Jump: grapple 7-40m; hit for 35 damage; stun grounded targets for 0.5s or knock airborne targets down for 3s. cd: 16s"), Custom String("Hold Crouch + Interact to aim a zombie-blocking wall; release Interact to deploy. cd: 30s"), Custom String("Health packs: 2x healing, -1 infection, +5% ult. Ultimate grants 1 teleport (hold Crouch + Interact) to the last health pack {0}", Custom String("used")), Custom String("Crouch + Interact: stash (2 slots). Interact: active slot. Hold Reload: drop all. Bot eliminations: 5% loot, backpack first"), Custom String("15% lifesteal, +50 recoverable health")), (Local Player).augmentId), Custom String("                                                ")), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Interact))), Left, 4, Value In Array(Global.augmentColorListConst, (Local Player).augmentId), Value In Array(Global.augmentColorListConst, (Local Player).augmentId), Value In Array(Global.augmentColorListConst, (Local Player).augmentId), Visible To String and Color, Default Visibility); // 129 elements
+        Create HUD Text(All Players(Team 1), Custom String("Augment: {0} {1}", Value In Array(String Split(Custom String("No Preference0Kevlar0Shock Landing0Double Jump0Long Reach0Ammo Pack0Grapnel Launcher0Laser Barricade0Apothecary0Scavenger0Leech"), First Of(Null)), (Local Player).augmentId), If-Then-Else(Compare((Local Player).augmentId, !=, Null), Value In Array(Global.augmentIconListConst, (Local Player).augmentId), Char In String(Empty Array, False))), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Custom String("Gain 75 armor that helps protect against infection"), Custom String("Press Jump again in midair: landing shockwave deals 40 damage and pushes nearby zombies; movement input adds a dash. Phased a{0}", Custom String("nd invulnerable for 0.5s. cd: 13s")), Custom String("Jump in midair / double-tap Jump. First hit of 30+ damage in flight or within 0.5s after landing: +50%. cd: 16s"), Custom String("Triple Quick Melee, melee weapon, Dragonblade and Carnage reach. Press Melee to push visible zombies ahead within 10m; cd: 9s{0}", Custom String(" only with targets")), Custom String("Carry twice the ammo per full magazine; full reloads restore the bonus"), Custom String("Crouch + Jump: grapple 7-40m; hit for 35 damage; stun grounded targets for 0.5s or knock airborne targets down for 3s. cd: 16s"), Custom String("Hold Crouch + Interact to aim a zombie-blocking wall; release Interact to deploy. cd: 30s"), Custom String("Health packs: 2x healing, -1 infection, +5% ult. Ultimate grants 1 teleport (hold Crouch + Interact) to the last health pack {0}", Custom String("used")), Custom String("Crouch + Interact: stash (2 slots). Interact: active slot. Hold Reload: drop all. Bot eliminations: 5% loot, backpack first"), Custom String("15% lifesteal, +50 recoverable health")), (Local Player).augmentId), Custom String("                                                ")), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Interact))), Left, 4, Value In Array(Global.augmentColorListConst, (Local Player).augmentId), Value In Array(Global.augmentColorListConst, (Local Player).augmentId), Value In Array(Global.augmentColorListConst, (Local Player).augmentId), Visible To String and Color, Default Visibility); // 133 elements
     }
 }
 
@@ -9405,6 +9406,33 @@ rule ("GRAPNEL LAUNCHER DISCONNECT CLEANUP") {
     }
 }
 
+//115 elements
+rule ("LONG REACH MELEE PUSH") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        All;
+    }
+    conditions {
+        Is Alive(Event Player) == True; // 2 elements
+        Is Button Held(Event Player, Button(Melee)) == True; // 4 elements
+    }
+    actions {
+        "Button edge only: readiness/phase in Actions prevent a held press from\nautomatically firing on cooldown expiry or when a target enters range."
+        Abort If(Or(Or(Not(Global.isGameplayActive), Compare((Event Player).augmentId, !=, 4)), Compare(Total Time Elapsed, <, (Event Player).augmentState0))); // 18 elements
+        Abort If(Is True For Any(Array(Has Status(Event Player, Stunned), Has Status(Event Player, Asleep), Has Status(Event Player, Frozen), Has Status(Event Player, Knocked Down)), Current Array Element)); // 16 elements
+        "One synchronous spatial query per ready press, independent of native or\nscripted damage attribution. Existing global scratch is dead before return;\nno waits, damage, asynchronous calls or HUD/effect captures use these roles."
+        Set Global Variable(tmp0, Filtered Array(Players Within Radius(Event Player, Multiply(10, (Event Player).sizeScale), Team 2, Surfaces), And(And(And(And(Is Alive(Current Array Element), Not((Current Array Element).actorTeamSlot3)), Not((Current Array Element).isAttached)), Compare((Current Array Element).actorTeamSlot19, >, Null)), Is In View Angle(Event Player, Eye Position(Current Array Element), 30)))); // 38 elements
+        Abort If(Compare(Global.tmp0, ==, Empty Array)); // 5 elements
+        Set Player Variable(Event Player, augmentState0, Add(Total Time Elapsed, 9)); // 4 elements
+        For Global Variable(tmp1, 0, Count Of(Global.tmp0), True); // 4 elements
+            Set Global Variable(tmp2, Value In Array(Global.tmp0, Global.tmp1)); // 5 elements
+            Apply Impulse(Global.tmp2, Direction From Angles(Horizontal Angle From Direction(Direction Towards(Event Player, Global.tmp2)), -15), Multiply(20, (Global.tmp2).actorTeamSlot19), To World, Cancel Contrary Motion); // 15 elements
+            Set Environment Credit Player(Global.tmp2, Event Player); // 2 elements
+        End; // 1 element
+    }
+}
+
 //98 elements
 rule ("LONG REACH QUICK MELEE") {
     event {
@@ -9467,7 +9495,7 @@ rule ("LONG REACH VENDETTA SWORD") {
     }
 }
 
-//368 elements
+//352 elements
 rule ("LONG REACH MELEE WEAPONS") {
     event {
         Ongoing - Each Player;
@@ -9496,11 +9524,11 @@ rule ("LONG REACH MELEE WEAPONS") {
         Abort If(Compare((Event Player).augmentId, !=, 4)); // 7 elements
         Wait Until(And(Or(Is Button Held(Event Player, Button(Primary Fire)), And(Array Contains(Array(Hero(Reinhardt), Hero(Brigitte), Hero(Torbjörn)), Hero Of(Event Player)), Is Button Held(Event Player, Button(Melee)))), Or(Is Firing Primary(Event Player), And(Array Contains(Array(Hero(Reinhardt), Hero(Brigitte), Hero(Torbjörn)), Hero Of(Event Player)), Is Meleeing(Event Player)))), 999999999999); // 43 elements
         Abort If Condition Is False; // 1 element
-        "approximate cadence rather than polling or depending on a native hit target.\nGenji's blade cadence includes the October swing-speed increase.\nTimers do not copy native combo/perk effects."
-        Set Player Variable(Event Player, augmentState2, Value In Array(Array(Array(Hero(Reinhardt), 4, 100, 0.4, 0.56, 90), Array(Hero(Brigitte), 6, 45, 0.2, 0.4, 60), Array(Hero(D.Mon), 4, 60, 0.2, 0.456, 60), Array(Hero(Genji), 5, 100, 0.15, 0.458695652173913, 90), Array(Hero(Ramattra), 10, 65, 0.15, 0.45, 6), Array(Hero(Torbjörn), 2.5, 70, 0.35, 0.35, 30)), Index Of Array Value(Array(Hero(Reinhardt), Hero(Brigitte), Hero(D.Mon), Hero(Genji), Hero(Ramattra), Hero(Torbjörn)), Hero Of(Event Player)))); // 110 elements
+        "Like Vendetta, held swings use an\napproximate cadence rather than polling or depending on a native hit target.\nGenji's blade cadence includes the October swing-speed increase.\nTimers do not copy native combo/perk effects."
+        Set Player Variable(Event Player, augmentState2, Value In Array(Array(Array(Hero(Reinhardt), 4, 100, 0.4, 0.56), Array(Hero(Brigitte), 6, 45, 0.2, 0.4), Array(Hero(D.Mon), 4, 60, 0.2, 0.456), Array(Hero(Genji), 5, 100, 0.15, 0.458695652173913), Array(Hero(Ramattra), 10, 65, 0.15, 0.45), Array(Hero(Torbjörn), 2.5, 70, 0.35, 0.35)), Index Of Array Value(Array(Hero(Reinhardt), Hero(Brigitte), Hero(D.Mon), Hero(Genji), Hero(Ramattra), Hero(Torbjörn)), Hero Of(Event Player)))); // 98 elements
         Wait(Value In Array((Event Player).augmentState2, 3), Abort When False); // 6 elements
         Abort If(Compare(Hero Of(Event Player), !=, First Of((Event Player).augmentState2))); // 8 elements
-        Set Global Variable(tmp0, Array(Value In Array((Event Player).augmentState2, True), Multiply(Value In Array((Event Player).augmentState2, True), 3), Value In Array((Event Player).augmentState2, 5))); // 21 elements
+        Set Global Variable(tmp0, Array(Value In Array((Event Player).augmentState2, True), Multiply(Value In Array((Event Player).augmentState2, True), 3), 30)); // 17 elements
         Set Global Variable(tmp1, Value In Array((Event Player).augmentState2, 2)); // 6 elements
         Call Subroutine(extendAugmentMelee); // 1 element
         Wait Until(Not(Or(Is Button Held(Event Player, Button(Primary Fire)), And(Array Contains(Array(Hero(Reinhardt), Hero(Brigitte), Hero(Torbjörn)), Hero Of(Event Player)), Is Button Held(Event Player, Button(Melee))))), Value In Array((Event Player).augmentState2, 4)); // 28 elements
@@ -9524,7 +9552,7 @@ rule ("LONG REACH CARNAGE") {
         Abort If(Compare((Event Player).augmentId, !=, 4)); // 7 elements
         "Carnage is a committed ability, not a repeating primary-fire timer."
         Wait(0.75, Abort When False); // 2 elements
-        Set Global Variable(tmp0, Array(5, 15, 90)); // 8 elements
+        Set Global Variable(tmp0, Array(5, 15, 30)); // 8 elements
         Set Global Variable(tmp1, 90); // 2 elements
         Call Subroutine(extendAugmentMelee); // 1 element
     }
@@ -9756,7 +9784,7 @@ rule ("LASER BARRICADE BLOCKS ZOMBIES") {
     }
 }
 
-//1553 elements
+//1572 elements
 rule ("PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION") {
     event {
         Ongoing - Each Player;
@@ -9910,7 +9938,7 @@ rule ("PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION") {
             Create In-World Text(If-Then-Else(Compare((Event Player).augmentBarrierHealth, >, Null), All Players(All Teams), Null), Custom String("{0}HP", Round To Integer((Event Player).augmentBarrierHealth, Up)), Add((Event Player).augmentState3, Up), 1.5, Clip Against Surfaces, Visible To Position and String, Color(Blue), Default Visibility); // 25 elements
         Else; // 1 element
             "Read live owned state directly: no temporary may be captured by color reevaluation.\nPassive/no-cooldown augments stay white; Scavenger shows occupied slots.\nMatch the roster: icon, small status/instructions, then the ability name."
-            Create HUD Text(Event Player, Value In Array(Global.augmentIconListConst, (Event Player).augmentId), Custom String("{0}                                                                                                                          {1}", If-Then-Else(Array Contains(Array(2, 3, 6), (Event Player).augmentId), Custom String("{0} | {1}", If-Then-Else(Compare((Event Player).augmentId, ==, 6), Custom String("[{0}] + [{1}]", Input Binding String(Button(Crouch)), Input Binding String(Button(Jump))), If-Then-Else(Compare((Event Player).augmentId, ==, 3), Custom String("[{0}] in midair / double-tap", Input Binding String(Button(Jump))), Custom String("[{0}] in midair", Input Binding String(Button(Jump))))), If-Then-Else(Compare(Total Time Elapsed, >=, (Event Player).augmentState0), Icon String(Checkmark), Custom String("{0}s", Round To Integer(Subtract((Event Player).augmentState0, Total Time Elapsed), Up)))), If-Then-Else(Compare((Event Player).augmentId, ==, 8), If-Then-Else((Event Player).augmentState1, Custom String("Hold [{0}] + [{1}] | {2}", Input Binding String(Button(Crouch)), Input Binding String(Button(Interact)), Icon String(Checkmark)), Custom String("Use ultimate to charge teleport")), If-Then-Else(Compare((Event Player).augmentId, ==, 9), Custom String("Backpack: {0}/2 | Crouch + Interact to store | Hold [{1}] to drop all", Count Of((Event Player).augmentState0), Input Binding String(Button(Reload))), Value In Array(Array(Char In String(Empty Array, False), Custom String("+75 armor"), Char In String(Empty Array, False), Char In String(Empty Array, False), Custom String("Extended melee reach"), Custom String("Double magazine capacity"), Char In String(Empty Array, False), Char In String(Empty Array, False), Char In String(Empty Array, False), Char In String(Empty Array, False), Custom String("15% lifesteal | +50 health")), (Event Player).augmentId)))), Custom String("                                                ")), Value In Array(String Split(Custom String("No Preference0Kevlar0Shock Landing0Double Jump0Long Reach0Ammo Pack0Grapnel Launcher0Laser Barricade0Apothecary0Scavenger0Leech"), First Of(Null)), (Event Player).augmentId), Left, 100, Color(White), Color(White), If-Then-Else(Array Contains(Array(2, 3, 6), (Event Player).augmentId), If-Then-Else(Compare(Total Time Elapsed, <, (Event Player).augmentState0), Color(Red), Color(Green)), If-Then-Else(Compare((Event Player).augmentId, ==, 9), Value In Array(Array(Color(White), Color(Green), Color(Yellow)), Count Of((Event Player).augmentState0)), Color(White))), String and Color, Default Visibility); // 240 elements
+            Create HUD Text(Event Player, Value In Array(Global.augmentIconListConst, (Event Player).augmentId), Custom String("{0}                                                                                                                          {1}", If-Then-Else(Array Contains(Array(2, 3, 4, 6), (Event Player).augmentId), Custom String("{0} | {1}", If-Then-Else(Compare((Event Player).augmentId, ==, 4), Custom String("Extended reach | [{0}] knockback", Input Binding String(Button(Melee))), If-Then-Else(Compare((Event Player).augmentId, ==, 6), Custom String("[{0}] + [{1}]", Input Binding String(Button(Crouch)), Input Binding String(Button(Jump))), If-Then-Else(Compare((Event Player).augmentId, ==, 3), Custom String("[{0}] in midair / double-tap", Input Binding String(Button(Jump))), Custom String("[{0}] in midair", Input Binding String(Button(Jump)))))), If-Then-Else(Compare(Total Time Elapsed, >=, (Event Player).augmentState0), Icon String(Checkmark), Custom String("{0}s", Round To Integer(Subtract((Event Player).augmentState0, Total Time Elapsed), Up)))), If-Then-Else(Compare((Event Player).augmentId, ==, 8), If-Then-Else((Event Player).augmentState1, Custom String("Hold [{0}] + [{1}] | {2}", Input Binding String(Button(Crouch)), Input Binding String(Button(Interact)), Icon String(Checkmark)), Custom String("Use ultimate to charge teleport")), If-Then-Else(Compare((Event Player).augmentId, ==, 9), Custom String("Backpack: {0}/2 | Crouch + Interact to store | Hold [{1}] to drop all", Count Of((Event Player).augmentState0), Input Binding String(Button(Reload))), Value In Array(Array(Char In String(Empty Array, False), Custom String("+75 armor"), Char In String(Empty Array, False), Char In String(Empty Array, False), Custom String("Extended melee reach"), Custom String("Double magazine capacity"), Char In String(Empty Array, False), Char In String(Empty Array, False), Char In String(Empty Array, False), Char In String(Empty Array, False), Custom String("15% lifesteal | +50 health")), (Event Player).augmentId)))), Custom String("                                                ")), Value In Array(String Split(Custom String("No Preference0Kevlar0Shock Landing0Double Jump0Long Reach0Ammo Pack0Grapnel Launcher0Laser Barricade0Apothecary0Scavenger0Leech"), First Of(Null)), (Event Player).augmentId), Left, 100, Color(White), Color(White), If-Then-Else(Array Contains(Array(2, 3, 4, 6), (Event Player).augmentId), If-Then-Else(Compare(Total Time Elapsed, <, (Event Player).augmentState0), Color(Red), Color(Green)), If-Then-Else(Compare((Event Player).augmentId, ==, 9), Value In Array(Array(Color(White), Color(Green), Color(Yellow)), Count Of((Event Player).augmentState0)), Color(White))), String and Color, Default Visibility); // 259 elements
         End; // 1 element
         If(Array Contains(Array(1, 10), (Event Player).augmentId)); // 10 elements
             "Share the native-health readiness gate; keep both pools recoverable."

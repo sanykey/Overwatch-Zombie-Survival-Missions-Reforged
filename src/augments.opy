@@ -11,6 +11,9 @@ subroutine useAugmentAirAction
 #!define AUGMENT_JUMP_IMPULSE 14.4
 #!define AUGMENT_JUMP_TAP_WINDOW 0.3
 #!define AUGMENT_MELEE_RADIUS 2.5
+#!define AUGMENT_MELEE_PUSH_COOLDOWN 9
+#!define AUGMENT_MELEE_PUSH_IMPULSE 20
+#!define AUGMENT_MELEE_PUSH_RADIUS 10
 #!define AUGMENT_WEAPON_REACH_MULTIPLIER 3
 #!define AUGMENT_VENDETTA_RADIUS 4.3
 #!define AUGMENT_VENDETTA_WINDUP 0.15
@@ -51,7 +54,7 @@ rule "AUGMENT MENU":
             "Gain 75 armor that helps protect against infection",
             "Press Jump again in midair: landing shockwave deals 40 damage and pushes nearby zombies; movement input adds a dash. Phased and invulnerable for 0.5s. cd: 13s",
             "Jump in midair / double-tap Jump. First hit of 30+ damage in flight or within 0.5s after landing: +50%. cd: 16s",
-            "Triple Quick Melee, melee weapon, Dragonblade and Carnage reach",
+            "Triple Quick Melee, melee weapon, Dragonblade and Carnage reach. Press Melee to push visible zombies ahead within 10m; cd: 9s only with targets",
             "Carry twice the ammo per full magazine; full reloads restore the bonus",
             "Crouch + Jump: grapple 7-40m; hit for 35 damage; stun grounded targets for 0.5s or knock airborne targets down for 3s. cd: 16s",
             "Hold Crouch + Interact to aim a zombie-blocking wall; release Interact to deploy. cd: 30s",
@@ -335,6 +338,34 @@ rule "GRAPNEL LAUNCHER DISCONNECT CLEANUP":
     destroyEffect(eventPlayer.augmentGrapnelState[1])
 
 
+rule "LONG REACH MELEE PUSH":
+    @Event eachPlayer
+    @Team 1
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
+
+    # Button edge only: readiness/phase in Actions prevent a held press from
+    # automatically firing on cooldown expiry or when a target enters range.
+    if not isGameplayActive or eventPlayer.augmentId != Augment.LONG_REACH or getTotalTimeElapsed() < eventPlayer.augmentMeleePushReadyAt:
+        return
+    if [eventPlayer.hasStatus(Status.STUNNED), eventPlayer.hasStatus(Status.ASLEEP), eventPlayer.hasStatus(Status.FROZEN), eventPlayer.hasStatus(Status.KNOCKED_DOWN)].any():
+        return
+    # One synchronous spatial query per ready press, independent of native or
+    # scripted damage attribution. Existing global scratch is dead before return;
+    # no waits, damage, asynchronous calls or HUD/effect captures use these roles.
+    #!define augmentPushTargets tmp0
+    #!define augmentPushTargetIndex tmp1
+    #!define augmentPushTarget tmp2
+    augmentPushTargets = getPlayersInRadius(eventPlayer, AUGMENT_MELEE_PUSH_RADIUS * eventPlayer.sizeScale, Team.2, LosCheck.SURFACES).filter(lambda zombie: zombie.isAlive() and not zombie.botIsTeleporting and not zombie.botIsAttached and zombie.botKnockbackScale > 0 and eventPlayer.isInViewAngle(zombie.getEyePosition(), 30))
+    if augmentPushTargets == []:
+        return
+    eventPlayer.augmentMeleePushReadyAt = getTotalTimeElapsed() + AUGMENT_MELEE_PUSH_COOLDOWN
+    for augmentPushTargetIndex in range(len(augmentPushTargets)):
+        augmentPushTarget = augmentPushTargets[augmentPushTargetIndex]
+        augmentPushTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, augmentPushTarget)), -15), AUGMENT_MELEE_PUSH_IMPULSE * augmentPushTarget.botKnockbackScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+        augmentPushTarget.setEnvironmentalKillCreditor(eventPlayer)
+
+
 rule "LONG REACH QUICK MELEE":
     @Event eachPlayer
     @Team 1
@@ -428,22 +459,23 @@ rule "LONG REACH MELEE WEAPONS":
     # Build the profile after idle input, so a hero switch during the idle wait
     # cannot retain a previous hero's windup. One owner-only profile survives
     # the hit/recovery waits: [hero, native range, direct
-    # damage, windup, recovery, view angle]. Like Vendetta, held swings use an
+    # damage, windup, recovery]. All extended attacks use a 30-degree view angle.
+    # Like Vendetta, held swings use an
     # approximate cadence rather than polling or depending on a native hit target.
     # Genji's blade cadence includes the October swing-speed increase.
     # Timers do not copy native combo/perk effects.
     eventPlayer.augmentWeaponProfile = [
-        [Hero.REINHARDT, 4, 100, 0.4, 0.56, 90],
-        [Hero.BRIGITTE, 6, 45, 0.2, 0.4, 60],
-        [Hero.DMON, 4, 60, 0.2, 0.456, 60],
-        [Hero.GENJI, 5, 100, 0.15, 0.7 / 1.15 - 0.15, 90],
-        [Hero.RAMATTRA, 10, 65, 0.15, 0.45, 6],
-        [Hero.TORBJORN, 2.5, 70, 0.35, 0.35, 30]
+        [Hero.REINHARDT, 4, 100, 0.4, 0.56],
+        [Hero.BRIGITTE, 6, 45, 0.2, 0.4],
+        [Hero.DMON, 4, 60, 0.2, 0.456],
+        [Hero.GENJI, 5, 100, 0.15, 0.7 / 1.15 - 0.15],
+        [Hero.RAMATTRA, 10, 65, 0.15, 0.45],
+        [Hero.TORBJORN, 2.5, 70, 0.35, 0.35]
     ][AUGMENT_MELEE_WEAPON_HEROES.index(eventPlayer.getHero())]
     wait(eventPlayer.augmentWeaponProfile[3], Wait.ABORT_WHEN_FALSE)
     if eventPlayer.getHero() != eventPlayer.augmentWeaponProfile[0]:
         return
-    augmentMeleeBounds = [eventPlayer.augmentWeaponProfile[1], eventPlayer.augmentWeaponProfile[1] * AUGMENT_WEAPON_REACH_MULTIPLIER, eventPlayer.augmentWeaponProfile[5]]
+    augmentMeleeBounds = [eventPlayer.augmentWeaponProfile[1], eventPlayer.augmentWeaponProfile[1] * AUGMENT_WEAPON_REACH_MULTIPLIER, 30]
     augmentMeleeDamage = eventPlayer.augmentWeaponProfile[2]
     extendAugmentMelee()
     waitUntil(not eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) and not (eventPlayer.getHero() in AUGMENT_MELEE_BUTTON_WEAPON_HEROES and eventPlayer.isHoldingButton(Button.MELEE)), eventPlayer.augmentWeaponProfile[4])
@@ -465,7 +497,7 @@ rule "LONG REACH CARNAGE":
 
     # Carnage is a committed ability, not a repeating primary-fire timer.
     wait(0.75, Wait.ABORT_WHEN_FALSE)
-    augmentMeleeBounds = [5, 5 * AUGMENT_WEAPON_REACH_MULTIPLIER, 90]
+    augmentMeleeBounds = [5, 5 * AUGMENT_WEAPON_REACH_MULTIPLIER, 30]
     augmentMeleeDamage = 90
     extendAugmentMelee()
 

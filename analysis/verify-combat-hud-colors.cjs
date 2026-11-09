@@ -107,10 +107,10 @@ async function main() {
         else if (infectionLevel < 1) assert.equal(status, 'Build up infection');
         else assert(status.includes(`Press [Melee] to deal ${Math.floor(infectionLevel)}00 damage`));
     }
-    for (const augmentId of [2, 3, 6]) for (const t of [0, 99.99, 100, 100.01, 116]) {
+    for (const augmentId of [2, 3, 4, 6]) for (const t of [0, 99.99, 100, 100.01, 116]) {
         check('Augment', {augmentId, augmentMovementReadyAt: t}, t > 100 ? 'Red' : 'Green');
     }
-    for (const augmentId of [1, 4, 5, 8, 10]) check('Augment', {augmentId}, 'White');
+    for (const augmentId of [1, 5, 8, 10]) check('Augment', {augmentId}, 'White');
     for (let n = 0; n <= 2; n++) check('Augment', {augmentId: 9, augmentScavengerBackpack: Array(n).fill(1)}, ['White', 'Green', 'Yellow'][n]);
     const battle = rows.find(r => r[3] === 'Custom String("Born to Battle")');
     for (let n = 0; n <= 2; n++) {
