@@ -121,6 +121,10 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
                 eventPlayer.augmentBarrierPlacementCooldown = -2
                 waitUntil(not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead(), Math.INFINITY)
                 eventPlayer.augmentBarrierPlacementCooldown = 0
+            # Keep this player's Interact handler busy briefly after a throw request.
+            # This branch stays consumed even if bot cleanup clears the held reference.
+            if eventPlayer.enhancementHoldUntil == 0:
+                wait(0.5, Wait.IGNORE_CONDITION)
             return
 
     # Query aimed items only on interaction; reuse this scratch slot for the chosen

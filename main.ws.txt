@@ -1,4 +1,4 @@
-/* Element count: (total 29478)
+/* Element count: (total 29486)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
  1553: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
@@ -8,7 +8,7 @@
   434: rule "SKIP ASSEMBLING HEROES" (src/global_startup.opy)
   412: rule "PLAYERS REPAIR TERMINALS" (src/objective_types/objective_type_satellite_uplink.opy)
   398: rule "LASER BARRICADE BLOCKS ZOMBIES" (src/augments.opy)
-  385: rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)" (src/supply_drops.opy)
+  393: rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)" (src/supply_drops.opy)
   368: rule "LONG REACH MELEE WEAPONS" (src/augments.opy)
   336: rule "PLAYER DEALT DAMAGE" (src/player_events.opy)
   327: rule "GLOBAL MENU INITIALIZATION" (src/global_start_menu.opy)
@@ -7803,7 +7803,7 @@ rule ("EFFECT/TEXT (GLOBAL)") {
     }
 }
 
-//385 elements
+//393 elements
 rule ("PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)") {
     event {
         Ongoing - Each Player;
@@ -7830,6 +7830,9 @@ rule ("PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER U
                     Wait Until(Or(Not(Is Button Held(Event Player, Button(Interact))), Is Dead(Event Player)), 999999999999); // 9 elements
                     Set Player Variable(Event Player, augmentState2, Null); // 1 element
                 End; // 1 element
+                Skip If(Compare((Event Player).actorTeamSlot23, !=, Null), True); // 6 elements
+                Wait(0.5, Ignore Condition); // 2 elements
+                //__label_if_61__:
                 Abort; // 1 element
             End; // 1 element
         End; // 1 element
@@ -7907,7 +7910,7 @@ rule ("playerForceField (10-19)") {
         Set Player Variable(Event Player, powerUpForceFieldSphereId, Last Created Entity); // 1 element
         Create HUD Text(Event Player, Custom String("Force Field: {0}s", Round To Integer((Event Player).actorTeamSlot0, Up)), Null, Null, Right, 0.2, Color(Blue), Null, Null, Visible To and String, Default Visibility); // 11 elements
         Set Player Variable At Index(Event Player, actorTeamSlot4, 11, Last Text ID); // 2 elements
-        //__label_if_61__:
+        //__label_if_62__:
         Play Effect(All Players(All Teams), Good Explosion, Color(Blue), (Event Player).actorTeamSlot16, 3); // 7 elements
         Play Effect(All Players(All Teams), Buff Impact Sound, Color(Blue), (Event Player).actorTeamSlot16, 50); // 7 elements
         "Force field duration"
@@ -7916,7 +7919,7 @@ rule ("playerForceField (10-19)") {
             For Global Variable(tmp0, 0, Number Of Living Players(Team 2), True); // 4 elements
                 Skip If(Compare(Distance Between(Value In Array(All Living Players(Team 2), Global.tmp0), (Event Player).actorTeamSlot16), >, 7.5), True); // 14 elements
                 Apply Impulse(Value In Array(All Living Players(Team 2), Global.tmp0), Direction Towards((Event Player).actorTeamSlot16, Value In Array(All Living Players(Team 2), Global.tmp0)), 6, To World, Cancel Contrary Motion); // 16 elements
-                //__label_if_62__:
+                //__label_if_63__:
             End; // 1 element
             Wait(0.032, Ignore Condition); // 2 elements
         End; // 1 element
@@ -8018,7 +8021,7 @@ rule ("beaconofHealing (40-49)") {
         Set Player Variable At Index(Event Player, actorTeamSlot4, 42, Last Text ID); // 2 elements
         Create Effect(All Players(All Teams), Good Aura, Color(Yellow), Event Player, Multiply(Distance Between(Eye Position(Event Player), Event Player), 0.9), Visible To Position and Radius); // 10 elements
         Set Player Variable At Index(Event Player, actorTeamSlot4, 43, Last Created Entity); // 2 elements
-        //__label_if_63__:
+        //__label_if_64__:
         Play Effect(All Players(All Teams), Good Explosion, Color(Yellow), (Event Player).actorTeamSlot15, 10); // 7 elements
         Play Effect(All Players(All Teams), Buff Impact Sound, Color(Blue), (Event Player).actorTeamSlot15, 50); // 7 elements
         "Beacon adds 50 percentage points without replacing Plague Doctor's permanent +30%."
@@ -8058,7 +8061,7 @@ rule ("sentryTurret (50-59)") {
         Set Player Variable At Index(Event Player, actorTeamSlot4, 54, Last Created Entity); // 2 elements
         Create HUD Text(Event Player, Custom String("Sentry Turret: {0}s", Round To Integer((Event Player).actorTeamSlot7, Up)), Null, Null, Right, 0.2, Color(Orange), Null, Null, Visible To and String, Default Visibility); // 11 elements
         Set Player Variable At Index(Event Player, actorTeamSlot4, 55, Last Text ID); // 2 elements
-        //__label_if_64__:
+        //__label_if_65__:
         Play Effect(All Players(All Teams), Good Explosion, Color(Orange), (Event Player).actorTeamSlot13, 5); // 7 elements
         Play Effect(All Players(All Teams), Debuff Impact Sound, Color(Blue), (Event Player).actorTeamSlot13, 50); // 7 elements
         "Sentry Gun Duration"
@@ -8101,7 +8104,7 @@ rule ("cloakingDevice (60-69)") {
         End; // 1 element
         Skip If((Event Player).invisibilityCount, True); // 3 elements
         Small Message(Event Player, Custom String("Cloaking activated. You are now invisible.")); // 5 elements
-        //__label_if_65__:
+        //__label_if_66__:
         Play Effect(All Players(All Teams), Good Explosion, Color(Blue), Position Of(Event Player), Multiply(Distance Between(Eye Position(Event Player), Event Player), 0.95)); // 11 elements
         Play Effect(All Players(All Teams), Buff Impact Sound, Color(Blue), Position Of(Event Player), 50); // 6 elements
         "Cloaking Duration"
@@ -8121,7 +8124,7 @@ rule ("cloakingDevice (60-69)") {
         Set Player Variable(Event Player, powerUpCloakingDeviceSphereId, Null); // 1 element
         Skip If((Event Player).invisibilityCount, True); // 3 elements
         Small Message(Event Player, Custom String("You are now visible")); // 5 elements
-        //__label_if_66__:
+        //__label_if_67__:
         Modify Player Variable(Event Player, movementSpeedScale, Divide, 1.5); // 2 elements
         Call Subroutine(applyScaledMoveSpeed); // 1 element
     }
@@ -8193,7 +8196,7 @@ rule ("bouncePad (80-89)") {
         For Player Variable(Event Player, actorLoopSlot, 60, False, -0.125); // 3 elements
             Skip If(Modulo((Event Player).actorLoopSlot, 0.25), True); // 6 elements
             Play Effect(All Players(All Teams), Ring Explosion, Color(Purple), Add((Event Player).actorTeamSlot17, Multiply(0.125, Up)), 4); // 12 elements
-            //__label_if_67__:
+            //__label_if_68__:
             "Determine which players are on the bounce pad\nbouncePadSurvivorList: grounded survivors on this pad, to apply the bounce and play feedback for this tick."
             Set Global Variable(tmp0, Filtered Array(All Living Players(Team 1), And(Compare(Distance Between((Event Player).actorTeamSlot17, Current Array Element), <, 2), Is On Ground(Current Array Element)))); // 16 elements
             If(Compare(Global.tmp0, !=, Empty Array)); // 5 elements
@@ -8285,7 +8288,7 @@ rule ("powerUpUsage") {
     actions {
         If(True); // 1 element
             Skip(Value In Array(Array(47, Null, 10, 13, 15, 17, 23, 25, 30, 32, 34, 36, 38, 40), Add(True, Index Of Array Value(Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), (Event Player).actorTeamSlot2)))); // 64 elements
-        //__label_switch_68_0__:
+        //__label_switch_69_0__:
         Play Effect(All Players(All Teams), Good Pickup Effect, Color(Green), Event Player, 1); // 5 elements
         Set Status(Event Player, Null, Phased Out, True); // 1 element
         If(Compare((Event Player).infectionLevel, >, Null)); // 6 elements
@@ -8296,48 +8299,48 @@ rule ("powerUpUsage") {
         Small Message(Event Player, Custom String("You are cured!")); // 5 elements
         Call Subroutine(playAquaPowerUpSound); // 1 element
         Else; // 1 element
-        //__label_switch_68_1__:
+        //__label_switch_69_1__:
         Abort If(Not(Is True For Any(All Dead Players(Team 1), Compare(Distance Between(Event Player, Current Array Element), <=, 5)))); // 12 elements
         Start Rule(instantRevive, Restart Rule); // 1 element
         Else; // 1 element
-        //__label_switch_68_2__:
+        //__label_switch_69_2__:
         Start Rule(playerForceField, Restart Rule); // 1 element
         Else; // 1 element
-        //__label_switch_68_3__:
+        //__label_switch_69_3__:
         Start Rule(noCooldowns, Restart Rule); // 1 element
         Else; // 1 element
-        //__label_switch_68_4__:
+        //__label_switch_69_4__:
         If(Compare(Distance Between(Eye Position(Event Player), Ray Cast Hit Position(Eye Position(Event Player), Add(Eye Position(Event Player), Multiply(Facing Direction Of(Event Player), 41)), Null, All Players(All Teams), False)), >, 40)); // 23 elements
             Small Message(Event Player, Custom String("Aim at a surface to call in an aistrike")); // 5 elements
             Abort; // 1 element
         End; // 1 element
         Start Rule(airStrike, Restart Rule); // 1 element
         Else; // 1 element
-        //__label_switch_68_5__:
+        //__label_switch_69_5__:
         Start Rule(healBeacon, Restart Rule); // 1 element
         Else; // 1 element
-        //__label_switch_68_6__:
+        //__label_switch_69_6__:
         Play Effect(All Players(All Teams), Ring Explosion, Color(Green), Event Player, 6); // 5 elements
         Call Subroutine(playAquaPowerUpSound); // 1 element
         Small Message(Event Player, Custom String("Your infection is reduced!")); // 5 elements
         Modify Player Variable(Players Within Radius(Event Player, 3, Team 1, Surfaces), infectionLevel, Subtract, 1.5); // 8 elements
         Else; // 1 element
-        //__label_switch_68_7__:
+        //__label_switch_69_7__:
         Start Rule(sentryTurret, Restart Rule); // 1 element
         Else; // 1 element
-        //__label_switch_68_8__:
+        //__label_switch_69_8__:
         Start Rule(cloakingDevice, Restart Rule); // 1 element
         Else; // 1 element
-        //__label_switch_68_9__:
+        //__label_switch_69_9__:
         Start Rule(superNano, Restart Rule); // 1 element
         Else; // 1 element
-        //__label_switch_68_10__:
+        //__label_switch_69_10__:
         Start Rule(bouncePad, Restart Rule); // 1 element
         Else; // 1 element
-        //__label_switch_68_11__:
+        //__label_switch_69_11__:
         Start Rule(ultimateCharger, Restart Rule); // 1 element
         Else; // 1 element
-        //__label_switch_68_12__:
+        //__label_switch_69_12__:
         "Check if their are targets nearby and in view angle"
         If(Is True For Any(All Living Players(Opposite Team Of(Team Of(Event Player))), And(Compare(Distance Between(Event Player, Current Array Element), <, Multiply(15, (Event Player).sizeScale)), Compare(Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position(Current Array Element))), <, 45)))); // 29 elements
             Start Rule(stun, Restart Rule); // 1 element
@@ -8346,7 +8349,7 @@ rule ("powerUpUsage") {
             Abort; // 1 element
         End; // 1 element
         Else; // 1 element
-        //__label_switch_68_default__:
+        //__label_switch_69_default__:
         End; // 1 element
         Set Player Variable(Event Player, actorTeamSlot2, Null); // 1 element
     }
@@ -8559,7 +8562,7 @@ rule ("BORN TO BATTLE PLAYER USES ABILITY CHARGE") {
             Wait Until(Is Using Ability 2(Event Player), 0.016); // 3 elements
             Skip If(Is Using Ability 2(Event Player), True); // 2 elements
             Call Subroutine(resetBattleAbilityCharge); // 1 element
-            //__label_if_69__:
+            //__label_if_70__:
             Abort; // 1 element
         End; // 1 element
         "Temp zarya fix ability 1"
@@ -8567,7 +8570,7 @@ rule ("BORN TO BATTLE PLAYER USES ABILITY CHARGE") {
             Wait Until(Is Using Ability 1(Event Player), 0.016); // 3 elements
             Skip If(Is Using Ability 1(Event Player), True); // 2 elements
             Call Subroutine(resetBattleAbilityCharge); // 1 element
-            //__label_if_70__:
+            //__label_if_71__:
             Abort; // 1 element
         End; // 1 element
         Skip If(Compare(Hero Of(Event Player), ==, Hero(Reaper)), True); // 6 elements
@@ -8780,7 +8783,7 @@ rule ("HITCHHIKER ATTACH/DETATCH") {
                 Set Global Variable(tmp0, Local Vector Of(Global.tmp0, (Event Player).actorTeamSlot22, Rotation And Translation)); // 7 elements
                 Skip If(Compare(Z Component Of(Global.tmp0), <=, Null), True); // 6 elements
                 Modify Global Variable(tmp0, Multiply, Vector(True, True, -1)); // 5 elements
-                //__label_if_71__:
+                //__label_if_72__:
                 Modify Global Variable(tmp0, Add, Up); // 1 element
                 Set Player Variable(Event Player, isAttached, True); // 1 element
                 Attach Players(Event Player, (Event Player).actorTeamSlot22, Evaluate Once(Global.tmp0)); // 6 elements
@@ -9269,11 +9272,11 @@ rule ("useAugmentAirAction") {
                 Set Global Variable(tmp0, Vector(If-Then-Else(Compare(X Component Of(Global.tmp0), >, Null), 1, If-Then-Else(Compare(X Component Of(Global.tmp0), <, Null), -1, Null)), False, If-Then-Else(Compare(Z Component Of(Global.tmp0), >, Null), 1, If-Then-Else(Compare(Z Component Of(Global.tmp0), <, Null), -1, Null)))); // 40 elements
                 Skip If(Has Status(Event Player, Invincible), True); // 3 elements
                 Set Status(Event Player, Null, Invincible, 0.5); // 2 elements
-                //__label_if_72__:
+                //__label_if_73__:
                 Disable Movement Collision With Players(Event Player); // 1 element
                 Skip If(Compare(Global.tmp0, ==, Add(Left, Right)), True); // 7 elements
                 Apply Impulse(Event Player, Direction From Angles(Add(Horizontal Facing Angle Of(Event Player), Horizontal Angle From Direction(Global.tmp0)), -15), 25, To World, Cancel Contrary Motion XYZ); // 10 elements
-                //__label_if_73__:
+                //__label_if_74__:
                 "Readiness is already spent; cleanup must also survive landing/death/hero changes."
                 Wait(0.5, Ignore Condition); // 2 elements
                 Enable Movement Collision With Players(Event Player); // 1 element
@@ -9548,17 +9551,17 @@ rule ("extendAugmentMelee") {
                 Else If(And(Compare((Event Player).enhancementId, ==, 9), Compare((Event Player).actorTeamSlot23, >, Null))); // 14 elements
                     Skip If(Compare((Event Player).actorTeamSlot24, !=, Null), True); // 6 elements
                     Set Player Variable(Event Player, actorTeamSlot24, Add(Total Time Elapsed, 0.3)); // 4 elements
-                    //__label_if_74__:
+                    //__label_if_75__:
                     Skip If(Compare(Total Time Elapsed, >=, (Event Player).actorTeamSlot24), True); // 6 elements
                     Damage(Value In Array(Global.tmp2, (Event Player).augmentState1), Event Player, (Event Player).actorTeamSlot23); // 8 elements
-                    //__label_if_75__:
+                    //__label_if_76__:
                 End; // 1 element
             End; // 1 element
         End; // 1 element
         Skip If(Compare(Global.tmp2, ==, Empty Array), True); // 5 elements
         "One impact per swing, on the nearest hit target. Rounded from 0.3 to 0.4\n(about one third larger); Grapnel Launcher uses the same impact size."
         Play Effect(All Players(All Teams), Bad Explosion, Color(Orange), Add(Position Of(First Of(Sorted Array(Global.tmp2, Distance Between(Event Player, Current Array Element)))), Up), 0.4); // 14 elements
-        //__label_if_76__:
+        //__label_if_77__:
     }
 }
 
@@ -9581,7 +9584,7 @@ rule ("AMMO PACK MAGAZINES") {
         Set Player Variable(Event Player, augmentState2, Null); // 1 element
         Skip If((Event Player).augmentState0, True); // 3 elements
         Set Player Variable(Event Player, augmentState0, Empty Array); // 1 element
-        //__label_if_77__:
+        //__label_if_78__:
         Set Player Variable(Event Player, augmentState1, First Of(Filtered Array((Event Player).augmentState0, And(Compare(First Of(Current Array Element), ==, Hero Of(Event Player)), Compare(Value In Array(Current Array Element, True), ==, Weapon(Event Player)))))); // 19 elements
         If(Compare((Event Player).augmentState1, ==, Null)); // 6 elements
             Set Player Variable(Event Player, augmentState1, Array(Hero Of(Event Player), Weapon(Event Player), Multiply(Max Ammo(Event Player, False), 2), Multiply(Max Ammo(Event Player, True), 2))); // 18 elements
@@ -9729,7 +9732,7 @@ rule ("LASER BARRICADE BLOCKS ZOMBIES") {
             Modify Player Variable(Event Player, augmentBarrierHealth, Subtract, Multiply(Max Health(Global.tmp2), 2.5)); // 6 elements
             Set Status(Global.tmp2, Event Player, Rooted, 0.5); // 3 elements
             Damage(Global.tmp2, Event Player, 10); // 3 elements
-            //__label_if_78__:
+            //__label_if_79__:
             If(Not(Magnitude Of(Throttle Of(Global.tmp2)))); // 5 elements
                 "If bot is not throttling"
                 Apply Impulse(Global.tmp2, Direction From Angles(Horizontal Angle From Direction(Direction Towards((Event Player).augmentState3, First Of(Sorted Array(Global.tmp1, Distance Between(Global.tmp2, Current Array Element))))), Multiply(If-Then-Else(Compare(Y Component Of(Position Of(Global.tmp2)), >, Y Component Of((Event Player).augmentState3)), -1, 1), Add(90, Vertical Angle From Direction(Ray Cast Hit Normal(Position Of(Global.tmp2), Add(Position Of(Global.tmp2), Down), Null, All Players(All Teams), False))))), 1, To World, Incorporate Contrary Motion); // 50 elements
@@ -9746,7 +9749,7 @@ rule ("LASER BARRICADE BLOCKS ZOMBIES") {
             Wait(6, Restart When True); // 2 elements
             Skip If(Compare((Event Player).augmentBarrierHealth, >, Null), True); // 6 elements
             Set Player Variable(Event Player, augmentBarrierHealth, 1); // 2 elements
-            //__label_if_79__:
+            //__label_if_80__:
         End; // 1 element
         Chase Player Variable At Rate(Event Player, augmentBarrierHealth, 10000, 500, None); // 3 elements
         Loop If Condition Is True; // 1 element
@@ -9771,7 +9774,7 @@ rule ("PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION") {
         Skip If(Compare((Event Player).enhancementId, !=, Null), True); // 6 elements
         "No preference and late-join zero state receive one real choice before\nits state is initialized. Retain the selected ID across later spawns."
         Set Player Variable(Event Player, enhancementId, Random Integer(True, 12)); // 4 elements
-        //__label_if_80__:
+        //__label_if_81__:
         "Initialize the enhancement before the augment's health-readiness wait."
         If(Compare((Event Player).enhancementId, ==, 2)); // 7 elements
             "Enhancement: Zombie Hyrbid\nenhancementHybridCooldown: remaining explosion cooldown in seconds (20 on use), for activation checks and HUD."
@@ -9787,17 +9790,17 @@ rule ("PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION") {
         "Initialize the enhancement before the augment's health-readiness wait."
         If(True); // 1 element
             Skip(Value In Array(Array(56, Null, 2, 5, 10, 16, 19, 22, 26, 29, 37, 43), Add(True, Index Of Array Value(Array(1, 3, 4, 9, 10, 11, 12, 5, 6, 7, 8), (Event Player).enhancementId)))); // 56 elements
-        //__label_switch_81_0__:
+        //__label_switch_82_0__:
         "Enhancement: Brain Killer\nNo enhancement state slots: bonus damage is calculated directly from the damage event."
         Create HUD Text(Event Player, Icon String(Skull), Custom String("+60% critical damage | +20% vs bosses                                                                                        {0}", Custom String("                                                                                  ")), Custom String("Brain Killer"), Left, 99, Color(White), Color(White), Color(White), String, Default Visibility); // 18 elements
         Else; // 1 element
-        //__label_switch_81_1__:
+        //__label_switch_82_1__:
         "Enhancement: Pyrotechnic"
         Create HUD Text(Event Player, Icon String(Fire), Custom String("Ignites nearby targets                                                                                                       {0}", Custom String("                                                                   ")), Custom String("Pyrotechnic"), Left, 99, Color(White), Color(White), Color(White), String, Default Visibility); // 18 elements
         "enhancementPyroHitList: hit queue; repeated targets determine their damage per second when the queue is processed."
         Set Player Variable(Event Player, actorTeamSlot22, Empty Array); // 1 element
         Else; // 1 element
-        //__label_switch_81_2__:
+        //__label_switch_82_2__:
         "Enhancement: Plague Doctor\nenhancementPlagueCureTotal: accumulated infection levels removed, including cure bonuses, displayed in the HUD."
         Create HUD Text(Event Player, Icon String(Plus), Custom String("Infection Reduced: {0} lvls                                                                                                  {1}", (Event Player).actorTeamSlot22, Custom String("                                                                        ")), Custom String("Plague Doctor"), Left, 99, Color(White), Color(White), Color(White), String, Default Visibility); // 20 elements
         "Permanent +30% healing; infected targets receive another x1.25 (x1.625 total)."
@@ -9805,7 +9808,7 @@ rule ("PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION") {
         Start Healing Modification(Filtered Array(All Players(Team 1), (Current Array Element).isInfected), Event Player, 125, Receivers and Healers); // 8 elements
         Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
         Else; // 1 element
-        //__label_switch_81_3__:
+        //__label_switch_82_3__:
         Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
         Set Player Variable(Event Player, actorTeamSlot23, Null); // 1 element
         Set Player Variable(Event Player, actorTeamSlot24, Null); // 1 element
@@ -9813,26 +9816,26 @@ rule ("PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION") {
         Set Player Variable(Event Player, actorTeamSlot25, Add(Player Stat(Event Player, Offensive Assists), Player Stat(Event Player, Defensive Assists))); // 7 elements
         Create HUD Text(Event Player, Icon String(Moon), Custom String("Hold [{0}] to charge | Energy: {1} | Charged: {2}", Input Binding String(Button(Melee)), Round To Integer((Event Player).actorTeamSlot22, Down), Custom String("{0}                                                                                                                          {1}", Round To Integer((Event Player).actorTeamSlot23, Down), Custom String("                                                "))), Custom String("Overcharge"), Left, 99, Color(White), Color(White), If-Then-Else(Compare((Event Player).actorTeamSlot23, >, Null), Color(Yellow), If-Then-Else(Compare((Event Player).actorTeamSlot22, >=, 100), Color(Green), Color(White))), String and Color, Default Visibility); // 51 elements
         Else; // 1 element
-        //__label_switch_81_4__:
+        //__label_switch_82_4__:
         Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
         Create HUD Text(Event Player, Custom String("{0}TX C0000000002A9ED>", Global.__holygrail__), Custom String("Stacks: {0} | +{1}% Max Life | Size: {2}", (Event Player).actorTeamSlot22, Min(100, Multiply((Event Player).actorTeamSlot22, 0.5)), Custom String("{0}x                                                                                                                         {1}", Min(1.35, Add(True, Multiply((Event Player).actorTeamSlot22, 0.005))), Custom String("                                                 "))), Custom String("Bulking Season"), Left, 99, Color(White), Color(White), Color(White), String, Default Visibility); // 46 elements
         Else; // 1 element
-        //__label_switch_81_5__:
+        //__label_switch_82_5__:
         "This shared slot must start as a player reference or null, never\na previous enhancement's number/array/color. Pickup sets its deadline."
         Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
         Create HUD Text(Event Player, Icon String(Trashcan), Custom String("{0}                                                                                                                          {1}", If-Then-Else(Compare((Event Player).actorTeamSlot22, !=, Null), Custom String("{0}s | [{1}] to throw", Max(False, Round To Integer(Subtract((Event Player).actorTeamSlot23, Total Time Elapsed), Up)), Input Binding String(Button(Interact))), Custom String("Aim at a vulnerable zombie | [{0}] to pick up", Input Binding String(Button(Interact)))), Custom String("                                                ")), Custom String("Dead Weight"), Left, 99, Color(White), Color(White), Color(White), String, Default Visibility); // 46 elements
         Else; // 1 element
-        //__label_switch_81_6__:
+        //__label_switch_82_6__:
         Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
         Set Player Variable(Event Player, actorTeamSlot24, Null); // 1 element
         Create HUD Text(Event Player, Icon String(Bolt), Custom String("Energy: {0}/350 | Hold [{1}] | Armed: {2}", Round To Integer((Event Player).actorTeamSlot22, Down), Input Binding String(Button(Melee)), Custom String("{0}                                                                                                                          {1}", Compare((Event Player).actorTeamSlot24, !=, Null), Custom String("                                                "))), Custom String("Bolt Strike"), Left, 99, Color(White), Color(White), If-Then-Else(Compare((Event Player).actorTeamSlot24, !=, Null), Color(Yellow), If-Then-Else(Compare((Event Player).actorTeamSlot22, >=, 350), Color(Green), Color(White))), String and Color, Default Visibility); // 52 elements
         Else; // 1 element
-        //__label_switch_81_7__:
+        //__label_switch_82_7__:
         "Enhancement: Born to Battle\nenhancementBattleResetCharges: 0-2 earned ability resets; final blows add one and each reset consumes one.\nenhancementBattleAbilityButton: selected ability button, retained through waits to reset its charge or cooldown."
         Create HUD Text(Event Player, Custom String("{0}TX C000000000039D7>", Global.__holygrail__), Custom String("{0}/2 resets {1}                                                                                                             {2}", (Event Player).actorTeamSlot22, If-Then-Else(Compare((Event Player).actorTeamSlot22, >, Null), Icon String(Checkmark), Char In String(Empty Array, False)), Custom String("                                                             ")), Custom String("Born to Battle"), Left, 99, Color(White), Color(White), Value In Array(Array(Color(White), Color(Lime Green), Color(Green)), (Event Player).actorTeamSlot22), String and Color, Default Visibility); // 45 elements
         Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
         Else; // 1 element
-        //__label_switch_81_8__:
+        //__label_switch_82_8__:
         "enhancementBatteryReuseDuration: full battery reuse cooldown in seconds (10), used to start the timer and scale progress.\nenhancementBatteryPlacementCooldown: remaining placement cooldown in seconds (20 on placement), for placement checks and HUD."
         Create HUD Text(Event Player, Icon String(Spiral), Custom String("{0} {1}                                                                                                                      {2}", If-Then-Else(Compare((Event Player).actorTeamSlot25, <=, Null), Custom String("Hold [{0}]", Input Binding String(Button(Melee))), Empty Array), If-Then-Else(Compare((Event Player).actorTeamSlot25, >, Null), Custom String("{0}s", Round To Integer((Event Player).actorTeamSlot25, Up)), Icon String(Checkmark)), Custom String("                                                    ")), Custom String("Charge Battery"), Left, 99, Color(White), Color(White), If-Then-Else(Compare((Event Player).actorTeamSlot25, >, Null), Color(Red), Color(Green)), String and Color, Default Visibility); // 58 elements
         "Battery placement visual"
@@ -9847,7 +9850,7 @@ rule ("PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION") {
         Create Progress Bar In-World Text(Filtered Array(All Players(All Teams), And(And(Compare((Event Player).actorTeamSlot22, !=, Null), Compare((Event Player).actorTeamSlot23, >, Null)), Compare(Distance Between(Current Array Element, (Event Player).actorTeamSlot22), <, 6))), Subtract(100, Multiply(Divide((Event Player).actorTeamSlot23, (Event Player).actorTeamSlot24), 100)), Empty Array, Add((Event Player).actorTeamSlot22, Multiply(0.4, Up)), 0.5, Clip Against Surfaces, Color(White), Null, Visible To Position and Values, Default Visibility); // 48 elements
         Set Player Variable(Event Player, actorTeamSlot24, 10); // 2 elements
         Else; // 1 element
-        //__label_switch_81_9__:
+        //__label_switch_82_9__:
         "enhancementHitchhikerCarrier: carrier player reference, for attachment, shared health, assists and HUD; 0 when detached.\nenhancementHitchhikerPassengerPoolId: extra health pool ID on this passenger, retained to remove that pool when detaching."
         Create HUD Text(Event Player, Icon String(Flag), Custom String("{0}                                                                                                                          {1}", If-Then-Else((Event Player).isAttached, Custom String("Press [{0}] to dismount", Input Binding String(Button(Crouch))), If-Then-Else(Is True For Any(Remove From Array(Global.playerTargetList, Event Player), And(Not((Current Array Element).isAttached), Compare(Distance Between(Event Player, Current Array Element), <, Multiply(2, (Current Array Element).sizeScale)))), Custom String("Press [{0}] to attach", Input Binding String(Button(Crouch))), Empty Array)), Custom String("                                                ")), Custom String("Hitchhiker"), Left, 99, Color(White), Color(White), Color(White), Visible To and String, Default Visibility); // 58 elements
         Create HUD Text(Filtered Array(Event Player, (Event Player).isAttached), Null, Custom String("Attached to {0} {1}                                                                                                          {2}", Hero Icon String(Hero Of((Event Player).actorTeamSlot22)), (Event Player).actorTeamSlot22, Custom String("                                                                ")), Null, Left, 100, Null, Color(White), Null, Visible To and String, Default Visibility); // 21 elements
@@ -9855,7 +9858,7 @@ rule ("PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION") {
         Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
         Start Assist((Event Player).actorTeamSlot22, Event Player, Assisters and Targets); // 3 elements
         Else; // 1 element
-        //__label_switch_81_10__:
+        //__label_switch_82_10__:
         "enhancementPupPosition: chased drone position in world coordinates, for movement, effects and attack direction.\nenhancementPupCooldown: remaining ability cooldown in seconds (2 after freezing, 1 after laser), gating target selection."
         Create HUD Text(Event Player, Icon String(Happy), Custom String("{0}                                                                                                                          {1}", If-Then-Else(Compare((Event Player).enhancementPupCooldown, >, Null), Custom String("{0}s", Round To Integer((Event Player).enhancementPupCooldown, Up)), Icon String(Checkmark)), Custom String("                                                ")), Custom String("P.U.P."), Left, 99, Color(White), Color(White), Color(White), Visible To and String, Default Visibility); // 35 elements
         "Postion of P.U.P."
@@ -9881,15 +9884,15 @@ rule ("PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION") {
         Set Player Variable(Event Player, actorTeamSlot24, Null); // 1 element
         "Freeze aura visibility"
         Set Player Variable(Event Player, actorTeamSlot25, False); // 1 element
-        //__label_switch_81_default__:
+        //__label_switch_82_default__:
         End; // 1 element
         Skip If(Compare((Event Player).augmentId, !=, Null), True); // 6 elements
         "Menu non-selection and late-join zero state each receive one real\nrandom choice. A nonzero ID preserves explicit and previously rolled choices."
         Set Player Variable(Event Player, augmentId, Random Integer(True, 10)); // 4 elements
-        //__label_if_82__:
+        //__label_if_83__:
         Skip If(Compare((Event Player).augmentId, !=, 9), True); // 7 elements
         Set Player Variable(Event Player, augmentState0, Empty Array); // 1 element
-        //__label_if_83__:
+        //__label_if_84__:
         If(Compare((Event Player).augmentId, ==, 7)); // 7 elements
             "augmentBarrierCorner2: second lower corner in world coordinates, for beams and the along-barrier direction.\naugmentBarrierHealth: current barrier health (10000 on placement), for blocking, damage, regeneration and HUD."
             Create HUD Text(Event Player, Icon String(Diamond), Custom String("{0} {1} {2}", If-Then-Else(Compare((Event Player).augmentState2, <=, Null), Custom String("Hold [{0}] + [{1}] to place a barricade", Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Empty Array), If-Then-Else(Compare((Event Player).augmentBarrierHealth, >, Null), Custom String(" {0}HP", Round To Integer((Event Player).augmentBarrierHealth, Up)), Empty Array), Custom String("{0}                                                                                                                          {1}", If-Then-Else(Compare((Event Player).augmentState2, >, Null), Custom String("{0}s", (Event Player).augmentState2), Icon String(Checkmark)), Custom String("                                                "))), Custom String("Laser Barricade"), Left, 100, Color(White), Color(White), If-Then-Else(Compare((Event Player).augmentState2, >, Null), Color(Red), Color(Green)), Visible To String and Color, Default Visibility); // 78 elements
@@ -9930,7 +9933,7 @@ rule ("PLAYER DEALT FINAL B­LOW") {
         If(Compare((Event Player).enhancementId, ==, 5)); // 7 elements
             Skip If(Compare((Event Player).actorTeamSlot22, >=, 2), True); // 7 elements
             Modify Player Variable(Event Player, actorTeamSlot22, Add, True); // 1 element
-            //__label_if_84__:
+            //__label_if_85__:
         End; // 1 element
         Abort If(Compare(Global.phaseSlot10, !=, 5)); // 6 elements
         If(Is True For Any(Append To Array(Global.playerTargetList, Victim), Compare(Distance Between(Current Array Element, Global.objectiveMotionSlot), <, Global.objectiveRad))); // 13 elements
@@ -10068,10 +10071,10 @@ rule ("PLAYER DEALT DAMAGE") {
                 If(And(And(Compare((Event Player).actorTeamSlot23, >, Null), Compare(Event Damage, >, Null)), Compare(Victim, !=, Event Player))); // 16 elements
                     Skip If(Compare((Event Player).actorTeamSlot24, !=, Null), True); // 6 elements
                     Set Player Variable(Event Player, actorTeamSlot24, Add(Total Time Elapsed, 0.3)); // 4 elements
-                    //__label_if_85__:
+                    //__label_if_86__:
                     Skip If(Compare(Total Time Elapsed, >=, (Event Player).actorTeamSlot24), True); // 6 elements
                     Damage(Victim, Event Player, (Event Player).actorTeamSlot23); // 3 elements
-                    //__label_if_86__:
+                    //__label_if_87__:
                 End; // 1 element
             End; // 1 element
         End; // 1 element
