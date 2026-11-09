@@ -63,7 +63,6 @@ function value(expr, state, element) {
     if (expr === 'Right') return [-1, 0, 0];
     if (expr === 'Total Time Elapsed') return state.time;
     if (expr === 'Last Created Entity') return state.lastEntity;
-    if (expr === 'Last Created Health Pool') return state.lastHealthPool;
     if (expr === 'Team 2') return 2;
     if (expr === 'Team 1') return 1;
     if (expr === 'Attacker') return state.attacker ?? 0;
@@ -175,7 +174,6 @@ function value(expr, state, element) {
         case 'Eye Position': return point(v(0)).map((x, i) => x + (i === 1 ? 1.5 : 0));
         case 'Facing Direction Of': return state.facing;
         case 'All Players': return [state.player, ...state.targets];
-        case 'All Living Players': return [state.player, ...state.targets].filter(p => p === state.player ? state.alive : p.alive);
         case 'Position Of': return point(v(0));
         case 'Velocity Of': return state.velocity;
         case 'Team Of': return v(0).team ?? 2;
@@ -396,13 +394,6 @@ function* execute(rule, state, compiled) {
                 case 'Stop All Damage Over Time': state.stoppedDots = true; break;
                 case 'Clear Status': state.status.delete(a[1]); break;
                 case 'Set Ultimate Charge': state.ultCharge = Math.min(100, v(1)); break;
-                case 'Set Player Health': v(0).health = v(1); break;
-                case 'Remove Health Pool From Player': {
-                    assert(state.poolState, 'This scenario needs an explicit health-pool model');
-                    const pool = state.poolState.get(v(0));
-                    if (pool) {pool.player.health -= pool.remaining; state.poolState.delete(v(0));}
-                    break;
-                }
                 case 'Heal':
                     assert.equal(v(1), state.expectedHealer ?? 0, 'Unexpected healer attribution');
                     state.healBonus = v(2);
@@ -411,11 +402,6 @@ function* execute(rule, state, compiled) {
                 case 'Small Message': state.messages.push(v(1)); break;
                 case 'Add Health Pool To Player':
                     (state.healthPools ??= []).push({type: a[1], amount: v(2), recoverable: v(3), reevaluate: v(4)});
-                    if (state.poolState) {
-                        state.lastHealthPool = ++state.nextHealthPool;
-                        state.poolState.set(state.lastHealthPool, {player: v(0), remaining: v(2)});
-                        v(0).health += v(2);
-                    }
                     if (a[1] === 'Armor') state.armor += v(2);
                     break;
                 default: throw new Error('Unsupported action: ' + line);

@@ -82,7 +82,7 @@ rule "EFFECT/TEXT (GLOBAL)":
 # Carried Dead Weight throws take priority over augment input reservations.
 # Boolean predicate, reused after the powerup hold because these checks live in
 # Actions and are no longer observed by Abort When False.
-#!define INTERACT_AUGMENT_INPUT_ALLOWED ((eventPlayer.enhancementId == Enhancement.DEAD_WEIGHT and eventPlayer.enhancementHeldZombie != null) or ((eventPlayer.augmentId not in [Augment.APOTHECARY, Augment.LEECH] or not eventPlayer.isHoldingButton(Button.CROUCH)) and (eventPlayer.augmentId != Augment.LASER_BARRICADE or (not eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.augmentBarrierPlacementCooldown >= 0))))
+#!define INTERACT_AUGMENT_INPUT_ALLOWED ((eventPlayer.enhancementId == Enhancement.DEAD_WEIGHT and eventPlayer.enhancementHeldZombie != null) or ((eventPlayer.augmentId != Augment.APOTHECARY or not eventPlayer.isHoldingButton(Button.CROUCH)) and (eventPlayer.augmentId != Augment.LASER_BARRICADE or (not eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.augmentBarrierPlacementCooldown >= 0))))
 
 rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)":
     @Event eachPlayer
@@ -105,7 +105,7 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
     if not isGameplayActive:
         return
 
-    # Reserve Crouch + Interact for Apothecary/Leech even without a target/charge.
+    # Reserve Crouch + Interact for Apothecary even without a teleport charge.
     # Barricade keeps the reservation until Interact release, even without Crouch.
     if not INTERACT_AUGMENT_INPUT_ALLOWED:
         return

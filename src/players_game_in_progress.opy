@@ -156,10 +156,6 @@ rule "PLAYER GETS DOWNED":
     @Condition eventPlayer.isPlayerActive == true
     @Condition eventPlayer.isDummy() == false
     
-    # Clear only the recipient's Leech gift; other custom pools keep their lifecycle.
-    if eventPlayer.leechGrantedHealthPoolId != 0:
-        removeHealthPool(eventPlayer.leechGrantedHealthPoolId)
-        eventPlayer.leechGrantedHealthPoolId = 0
     wait(0.16)
     eventPlayer.reviveTimeRemaining = eventPlayer.reviveDuration / (2 if challengeSetting == Challenge.SWARM_SHOOTOUT else 1)
     eventPlayer.stopAllDamageOverTime()

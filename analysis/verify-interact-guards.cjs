@@ -20,7 +20,7 @@ async function main() {
         const s = scenario(augment, {buttons: new Set(['Interact', ...(crouch ? ['Crouch'] : [])])});
         Object.assign(s.player, {enhancementId: 11, [held]: carrying ? {} : 0, [cooldown]: cd});
         assert(applies(rule, s), 'Reservations no longer affect event Conditions');
-        const expected = (carrying || ![8, 10].includes(augment) || !crouch) &&
+        const expected = (carrying || augment !== 8 || !crouch) &&
             (carrying || augment !== 7 || (!crouch && cd >= 0));
         assert.equal(allowsInteraction(rule, s), expected, 'Preserve both original predicates');
         cases++;
@@ -41,7 +41,7 @@ async function main() {
         if (change === 'latch') s.player[cooldown] = -1;
         s.time += 0.25; task.resume(); assert(task.done());
         const blocked = ['phase', 'release', 'death'].includes(change) ||
-            (change === 'crouch' && [7, 8, 10].includes(augment)) || (change === 'latch' && augment === 7);
+            (change === 'crouch' && [7, 8].includes(augment)) || (change === 'latch' && augment === 7);
         assert.equal(s.player.powerUpItemId, blocked ? 5 : 0);
         cases++;
     }

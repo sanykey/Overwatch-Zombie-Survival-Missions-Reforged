@@ -23,10 +23,6 @@ subroutine useAugmentAirAction
 #!define AUGMENT_GRAPNEL_SPEED 40
 #!define AUGMENT_GRAPNEL_COOLDOWN 16
 #!define AUGMENT_GRAPNEL_TIMEOUT 1.5
-#!define LEECH_GIFT_HEALTH 50
-#!define LEECH_GIFT_COST 150
-#!define LEECH_GIFT_MIN_HEALTH 175
-#!define LEECH_GIFT_RANGE 30
 #!define augmentGrapnelCenter(player) ((player.getPosition() + player.getEyePosition()) * 0.5)
 #!define AUGMENT_GRAPNEL_MOVEMENT_BLOCKED (eventPlayer.isAttached or eventPlayer.hasStatus(Status.ROOTED) or eventPlayer.hasStatus(Status.STUNNED) or eventPlayer.hasStatus(Status.ASLEEP) or eventPlayer.hasStatus(Status.FROZEN) or eventPlayer.hasStatus(Status.KNOCKED_DOWN))
 #!define AUGMENT_GRAPNEL_CAN_MOVE (eventPlayer.hasSpawned() and eventPlayer.isAlive() and not AUGMENT_GRAPNEL_MOVEMENT_BLOCKED)
@@ -61,7 +57,7 @@ rule "AUGMENT MENU":
             "Hold Crouch + Interact to aim a zombie-blocking wall; release Interact to deploy. cd: 30s",
             "Health packs: 2x healing, -1 infection, +5% ult. Ultimate grants 1 teleport (hold Crouch + Interact) to the last health pack used",
             "Crouch + Interact: stash (2 slots). Interact: active slot. Hold Reload: drop all. Bot eliminations: 5% loot, backpack first",
-            "15% lifesteal, +50 recoverable health. Hold Crouch + Interact: replace an aimed ally's 50 green HP (30m); costs 150 HP, requires 175 HP"
+            "15% lifesteal, +50 recoverable health"
         ][localPlayer.augmentId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.INTERACT)),
         HudPosition.ACTUALLY_LEFT, 4, AUGMENT_COLORS[localPlayer.augmentId], AUGMENT_COLORS[localPlayer.augmentId], AUGMENT_COLORS[localPlayer.augmentId],
@@ -680,33 +676,3 @@ rule "LASER BARRICADE BLOCKS ZOMBIES":
         loop()
 
 # SCAVENGER BOT LOOT moved to "PLAYER EARNED ELIMINATION" in player_events.opy.
-
-
-rule "LEECH GRANTS ALLY OVERHEALTH":
-    @Event eachPlayer
-    @Team 1
-
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.getHealth() >= LEECH_GIFT_MIN_HEALTH
-    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
-    @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
-
-    wait(0.3, Wait.ABORT_WHEN_FALSE)
-    # Action guards are not observed by Abort When False.
-    if not isGameplayActive or eventPlayer.augmentId != Augment.LEECH or (eventPlayer.enhancementId == Enhancement.DEAD_WEIGHT and eventPlayer.enhancementHeldZombie != null):
-        return
-    # Query only after the hold, never each tick. This scratch target is
-    # synchronous: no waits, subroutines, chases or reevaluated captures.
-    # leechGiftTarget: first living player hit; enemies also block the ray.
-    #!define leechGiftTarget tmp0
-    leechGiftTarget = raycastHitPlayer(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * LEECH_GIFT_RANGE, getLivingPlayers().exclude(eventPlayer), eventPlayer, true)
-    if leechGiftTarget.getTeam() == Team.1 and not leechGiftTarget.isDummy():
-        # Replace only this source's pool, preserving other pools.
-        # A fully consumed (already removed) pool ID is safe to remove again.
-        if leechGiftTarget.leechGrantedHealthPoolId != 0:
-            removeHealthPool(leechGiftTarget.leechGrantedHealthPoolId)
-        # Set Health avoids damage modifiers, infection and lifesteal recursion.
-        # The 175-HP hold gate preserves at least 25 HP after the fixed cost.
-        eventPlayer.setHealth(eventPlayer.getHealth() - LEECH_GIFT_COST)
-        leechGiftTarget.addHealthPool(Health.NORMAL, LEECH_GIFT_HEALTH, false, false)
-        leechGiftTarget.leechGrantedHealthPoolId = getLastCreatedHealthPool()
