@@ -122,7 +122,7 @@ rule "PLAYER DEALT DAMAGE":
                     # reuse its synchronous slot for this one-shot area discharge.
                     #!define boltDischargeTargets tmp0
                     eventPlayer.enhancementBoltBurst = 0
-                    boltDischargeTargets = getPlayersInRadius(victim, 5, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive() and (player.getHero() != Hero.WINSTON or player.botSmolderState != 1))
+                    boltDischargeTargets = getPlayersInRadius(victim, 10, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive() and (player.getHero() != Hero.WINSTON or player.botSmolderState != 1))
                     boltDischargeTargets.setStatusEffect(eventPlayer, Status.STUNNED, 2)
                     damage(boltDischargeTargets, eventPlayer, 60)
         elif eventPlayer.enhancementId == Enhancement.OVERCHARGE:

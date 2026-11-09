@@ -10059,7 +10059,7 @@ rule ("PLAYER DEALT DAMAGE") {
                     If(Compare((Event Player).actorTeamSlot24, ==, -1)); // 7 elements
                         "Consume before applying damage. The chain list is no longer live;\nreuse its synchronous slot for this one-shot area discharge."
                         Set Player Variable(Event Player, actorTeamSlot24, Null); // 1 element
-                        Set Global Variable(tmp0, Filtered Array(Players Within Radius(Victim, 5, Team 2, Surfaces), And(Is Alive(Current Array Element), Or(Compare(Hero Of(Current Array Element), !=, Hero(Winston)), Compare((Current Array Element).actorAbilitySlot1, !=, 1))))); // 25 elements
+                        Set Global Variable(tmp0, Filtered Array(Players Within Radius(Victim, 10, Team 2, Surfaces), And(Is Alive(Current Array Element), Or(Compare(Hero Of(Current Array Element), !=, Hero(Winston)), Compare((Current Array Element).actorAbilitySlot1, !=, 1))))); // 25 elements
                         Set Status(Global.tmp0, Event Player, Stunned, 2); // 3 elements
                         Damage(Global.tmp0, Event Player, 60); // 3 elements
                     End; // 1 element
