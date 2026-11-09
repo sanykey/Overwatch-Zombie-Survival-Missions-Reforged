@@ -857,7 +857,8 @@ def illariUlt():
 def applyScaledMoveSpeed():
     @Name "applyScaledMoveSpeed"
 
-    eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
+    # Preserve the donor's additive +30 Jetpack bonus through other speed updates.
+    eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100 + 30 * eventPlayer.powerUpJetpackIsFlying)
 
 
 def refreshCurrentObjectivePosition():

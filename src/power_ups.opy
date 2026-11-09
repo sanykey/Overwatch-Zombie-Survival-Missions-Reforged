@@ -12,7 +12,7 @@ macro powerUpAssignmentMacro():
     groundPowerUpItemId = supplyPowerUpIdList[len(supplyPowerUpEffectIdList)]
     if groundPowerUpItemId >= 1 and groundPowerUpItemId <= 13:
         createEffect(getAllPlayers(), Effect.ORB, powerUpColorListConst[groundPowerUpItemId - 1], supplyPowerUpPositionList[len(supplyPowerUpEffectIdList)], 1, EffectReeval.VISIBILITY)
-        createInWorldText(getAllPlayers(), ["CURE", "Revive", "Force Field", "No Cooldowns", "Air Strike", "Beacon of Healing", "Vaccine", "Sentry Turret", "Cloaking Device", "Super Nano", "Bounce Pad", "Ultimate Charger", "Stun"][groundPowerUpItemId - 1], supplyPowerUpPositionList[len(supplyPowerUpTextIdList)], 1, Clip.SURFACES, WorldTextReeval.VISIBILITY)
+        createInWorldText(getAllPlayers(), ["CURE", "Revive", "Force Field", "No Cooldowns", "Air Strike", "Beacon of Healing", "Vaccine", "Sentry Turret", "Cloaking Device", "Super Nano", "Jetpack", "Ultimate Charger", "Stun"][groundPowerUpItemId - 1], supplyPowerUpPositionList[len(supplyPowerUpTextIdList)], 1, Clip.SURFACES, WorldTextReeval.VISIBILITY)
 
 
 rule "POWER UP EFFECT/TEXT MANAGEMENT":
@@ -47,7 +47,7 @@ rule "EFFECT/TEXT (PERMANENT)":
                 "Sentry Turret",
                 "Cloaking Device",
                 "Super Nano",
-                "Bounce Pad",
+                "Jetpack",
                 "Ultimate Charger",
                 "Stun"
             ][evalOnce(powerUpHudItemIndex)],
@@ -66,7 +66,7 @@ rule "EFFECT/TEXT (PERMANENT)":
                     "to place a sentry turret",
                     "to become invisible to enemies",
                     "to increase your damage and speed",
-                    "to place a bounce pad",
+                    "to refuel your jetpack; hold Jump in the air to fly",
                     "to rapidly charge your ultimate",
                     "to stun nearby enemies"
                 ][evalOnce(powerUpHudItemIndex)]

@@ -1,5 +1,9 @@
 #!mainFile "../main.opy"
 
+# Combat HUD order on the left: roster (player slot), enhancement (97),
+# augment (98), Jetpack fuel (99), carried powerup (100).
+# Attachment status belongs to the enhancement and shares its sort order.
+
 macro initializePlayerEnhancement():
     if eventPlayer.enhancementId == Enhancement.NO_PREFERENCE:
         # No preference and late-join zero state receive one real choice before
@@ -14,7 +18,7 @@ macro initializePlayerEnhancement():
             iconString(Icon.POISON),
             f"{ceil(eventPlayer.enhancementHybridCooldown)}s" if eventPlayer.enhancementHybridCooldown > 0 else f"Press [{inputBindingString(Button.MELEE)}] to deal {floor(eventPlayer.infectionLevel)}00 damage {iconString(Icon.CHECKMARK)}" if eventPlayer.infectionLevel >= 1 else "Build up infection",
             "Zombie Hybrid",
-            HudPosition.ACTUALLY_LEFT, 99, Color.WHITE, Color.WHITE, Color.RED if eventPlayer.enhancementHybridCooldown > 0 else Color.GREEN if eventPlayer.infectionLevel >= 1 else Color.WHITE, HudReeval.STRING_AND_COLOR
+            HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE, Color.RED if eventPlayer.enhancementHybridCooldown > 0 else Color.GREEN if eventPlayer.infectionLevel >= 1 else Color.WHITE, HudReeval.STRING_AND_COLOR
         )
         startDamageModification(eventPlayer, getPlayers(Team.2), 90)
         eventPlayer.explosionScale = 1.25
@@ -33,7 +37,7 @@ macro initializePlayerEnhancement():
                 iconString(Icon.SKULL),
                 "+60% critical damage | +20% vs bosses",
                 "Brain Killer",
-                HudPosition.ACTUALLY_LEFT, 99, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.STRING
+                HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.STRING
             )
             break
         #Pyrotechnic
@@ -44,7 +48,7 @@ macro initializePlayerEnhancement():
                 iconString(Icon.FIRE),
                 "Ignites nearby targets",
                 "Pyrotechnic",
-                HudPosition.ACTUALLY_LEFT, 99, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.STRING
+                HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.STRING
             )
             # enhancementPyroHitList: hit queue; repeated targets determine their damage per second when the queue is processed.
             eventPlayer.enhancementPyroHitList = []
@@ -58,7 +62,7 @@ macro initializePlayerEnhancement():
                 iconString(Icon.PLUS),
                 "Infection Reduced: {0} lvls".format(eventPlayer.enhancementPlagueCureTotal),
                 "Plague Doctor",
-                HudPosition.ACTUALLY_LEFT, 99, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.STRING
+                HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.STRING
             )
             # Permanent +30% healing; infected targets receive another x1.25 (x1.625 total).
             eventPlayer.setHealingDealt(130)
@@ -76,7 +80,7 @@ macro initializePlayerEnhancement():
                 EnhancementIcon.OVERCHARGE,
                 f"Hold [{inputBindingString(Button.MELEE)}] to charge | Energy: {floor(eventPlayer.enhancementCapacitorEnergy)} | Charged: {floor(eventPlayer.enhancementCapacitorCharge)}",
                 "Overcharge",
-                HudPosition.ACTUALLY_LEFT, 99, Color.WHITE, Color.WHITE, Color.YELLOW if eventPlayer.enhancementCapacitorCharge > 0 else Color.GREEN if eventPlayer.enhancementCapacitorEnergy >= 100 else Color.WHITE, HudReeval.STRING_AND_COLOR
+                HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE, Color.YELLOW if eventPlayer.enhancementCapacitorCharge > 0 else Color.GREEN if eventPlayer.enhancementCapacitorEnergy >= 100 else Color.WHITE, HudReeval.STRING_AND_COLOR
             )
             break
         case Enhancement.BULKING_SEASON:
@@ -86,7 +90,7 @@ macro initializePlayerEnhancement():
                 EnhancementIcon.BULKING_SEASON,
                 f"Stacks: {eventPlayer.enhancementBulkStacks} | +{min(100, eventPlayer.enhancementBulkStacks * 0.5)}% Max Life | Size: {min(1.35, 1 + eventPlayer.enhancementBulkStacks * 0.005)}x",
                 "Bulking Season",
-                HudPosition.ACTUALLY_LEFT, 99, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.STRING
+                HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.STRING
             )
             break
         case Enhancement.DEAD_WEIGHT:
@@ -96,7 +100,7 @@ macro initializePlayerEnhancement():
             hudText(
                 eventPlayer, iconString(Icon.TRASHCAN),
                 (f"{max(0, ceil(eventPlayer.enhancementHoldUntil - getTotalTimeElapsed()))}s | [{inputBindingString(Button.INTERACT)}] to throw" if eventPlayer.enhancementHeldZombie != null else f"Aim at a vulnerable zombie | [{inputBindingString(Button.INTERACT)}] to pick up"),
-                "Dead Weight", HudPosition.ACTUALLY_LEFT, 99, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.STRING
+                "Dead Weight", HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.STRING
             )
             break
         case Enhancement.BOLT_STRIKE:
@@ -105,7 +109,7 @@ macro initializePlayerEnhancement():
             hudText(
                 eventPlayer, EnhancementIcon.BOLT_STRIKE,
                 f"Energy: {floor(eventPlayer.enhancementBoltEnergy)}/350 | Hold [{inputBindingString(Button.MELEE)}] | Armed: {eventPlayer.enhancementBoltBurst != 0}",
-                "Bolt Strike", HudPosition.ACTUALLY_LEFT, 99, Color.WHITE, Color.WHITE, Color.YELLOW if eventPlayer.enhancementBoltBurst != 0 else Color.GREEN if eventPlayer.enhancementBoltEnergy >= 350 else Color.WHITE, HudReeval.STRING_AND_COLOR
+                "Bolt Strike", HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE, Color.YELLOW if eventPlayer.enhancementBoltBurst != 0 else Color.GREEN if eventPlayer.enhancementBoltEnergy >= 350 else Color.WHITE, HudReeval.STRING_AND_COLOR
             )
             break
         #Born to Battle
@@ -118,7 +122,7 @@ macro initializePlayerEnhancement():
                 EnhancementIcon.BORN_TO_BATTLE,
                 f"{eventPlayer.enhancementBattleResetCharges}/2 resets {iconString(Icon.CHECKMARK) if eventPlayer.enhancementBattleResetCharges > 0 else ''}",
                 "Born to Battle",
-                HudPosition.ACTUALLY_LEFT, 99, Color.WHITE, Color.WHITE, [Color.WHITE, Color.LIME_GREEN, Color.GREEN][eventPlayer.enhancementBattleResetCharges], HudReeval.STRING_AND_COLOR
+                HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE, [Color.WHITE, Color.LIME_GREEN, Color.GREEN][eventPlayer.enhancementBattleResetCharges], HudReeval.STRING_AND_COLOR
             )
             eventPlayer.enhancementBattleResetCharges = 0
             break
@@ -134,7 +138,7 @@ macro initializePlayerEnhancement():
                 iconString(Icon.SPIRAL),
                 "{1} {0}".format(f"{ceil(eventPlayer.enhancementBatteryPlacementCooldown)}s" if eventPlayer.enhancementBatteryPlacementCooldown > 0 else iconString(Icon.CHECKMARK), "Hold [{0}]".format(inputBindingString(Button.MELEE)) if eventPlayer.enhancementBatteryPlacementCooldown <= 0 else []),
                 "Charge Battery",
-                HudPosition.ACTUALLY_LEFT, 99, Color.WHITE, Color.WHITE, Color.RED if eventPlayer.enhancementBatteryPlacementCooldown > 0 else Color.GREEN, HudReeval.STRING_AND_COLOR
+                HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE, Color.RED if eventPlayer.enhancementBatteryPlacementCooldown > 0 else Color.GREEN, HudReeval.STRING_AND_COLOR
             )
             #Battery placement visual
             createEffect(eventPlayer.filter(lambda _: eventPlayer.isHoldingButton(Button.MELEE) and eventPlayer.enhancementBatteryPlacementCooldown <= 0 and distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) <= 30), Effect.RING, Color.GREEN, worldVector(0.1 * Vector.UP, eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), 0.45, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -158,12 +162,12 @@ macro initializePlayerEnhancement():
                 iconString(Icon.FLAG),
                 "Press [{0}] to dismount".format(inputBindingString(Button.CROUCH)) if eventPlayer.enhancementIsHitchhiking else "Press [{0}] to attach".format(inputBindingString(Button.CROUCH)) if playerTargetList.exclude(eventPlayer).any(lambda x: not x.isAttached and distance(eventPlayer, x) < 2 * x.sizeScale) else [],
                 "Hitchhiker",
-                HudPosition.ACTUALLY_LEFT, 99, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING
+                HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING
             )
             #Shared Health Bar Rider
-            hudSubheader(eventPlayer.filter(lambda _: eventPlayer.enhancementIsHitchhiking), "Attached to {0} {1}".format(heroIcon(eventPlayer.enhancementHitchhikerCarrier.getHero()), eventPlayer.enhancementHitchhikerCarrier), HudPosition.ACTUALLY_LEFT, 100, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+            hudSubheader(eventPlayer.filter(lambda _: eventPlayer.enhancementIsHitchhiking), "Attached to {0} {1}".format(heroIcon(eventPlayer.enhancementHitchhikerCarrier.getHero()), eventPlayer.enhancementHitchhikerCarrier), HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
             #Shared Health Bar Runner
-            hudSubheader(eventPlayer.enhancementHitchhikerCarrier.filter(lambda _: eventPlayer.enhancementIsHitchhiking), "{0} {1} is attached".format(heroIcon(eventPlayer.getHero()), eventPlayer), HudPosition.ACTUALLY_LEFT, 100, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+            hudSubheader(eventPlayer.enhancementHitchhikerCarrier.filter(lambda _: eventPlayer.enhancementIsHitchhiking), "{0} {1} is attached".format(heroIcon(eventPlayer.getHero()), eventPlayer), HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
             eventPlayer.enhancementHitchhikerCarrier = 0
             eventPlayer.enhancementHitchhikerCarrier.startGrantingAssistFor(eventPlayer)
             break
@@ -181,7 +185,7 @@ macro initializePlayerEnhancement():
                 iconString(Icon.HAPPY),
                 f"{ceil(eventPlayer.enhancementPupCooldown)}s" if eventPlayer.enhancementPupCooldown > 0 else iconString(Icon.CHECKMARK),
                 "P.U.P.",
-                HudPosition.ACTUALLY_LEFT, 99, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING
+                HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING
             )
             #Postion of P.U.P.
             eventPlayer.enhancementPupPosition = eventPlayer.getPosition() + 200 * Vector.UP
@@ -229,7 +233,7 @@ macro initializePlayerAugment():
             iconString(Icon.DIAMOND),
             "{2} {1} {0}".format(f"{eventPlayer.augmentBarrierPlacementCooldown}s" if eventPlayer.augmentBarrierPlacementCooldown > 0 else iconString(Icon.CHECKMARK), " {0}HP".format(ceil(eventPlayer.augmentBarrierHealth)) if eventPlayer.augmentBarrierHealth > 0 else [], f"Hold [{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.INTERACT)}] to place a barricade" if eventPlayer.augmentBarrierPlacementCooldown <= 0 else []),
             "Laser Barricade",
-            HudPosition.ACTUALLY_LEFT, 100, Color.WHITE, Color.WHITE, Color.RED if eventPlayer.augmentBarrierPlacementCooldown > 0 else Color.GREEN, HudReeval.VISIBILITY_STRING_AND_COLOR
+            HudPosition.ACTUALLY_LEFT, 98, Color.WHITE, Color.WHITE, Color.RED if eventPlayer.augmentBarrierPlacementCooldown > 0 else Color.GREEN, HudReeval.VISIBILITY_STRING_AND_COLOR
         )
         #Barricade placement visual
         createBeam(eventPlayer.filter(lambda _: eventPlayer.augmentBarrierPlacementCooldown == -1 and eventPlayer.isHoldingButton(Button.INTERACT) and distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) <= 30), Beam.BAD, worldVector(vect(-0.5 * LASER_BARRICADE_WIDTH, 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), worldVector(vect(0.5 * LASER_BARRICADE_WIDTH, 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), Color.GREEN, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -255,7 +259,7 @@ macro initializePlayerAugment():
                 f"Extended reach | [{inputBindingString(Button.MELEE)}] knockback" if eventPlayer.augmentId == Augment.LONG_REACH else f"[{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.JUMP)}]" if eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER else f"[{inputBindingString(Button.JUMP)}] in midair / double-tap" if eventPlayer.augmentId == Augment.DOUBLE_JUMP else f"[{inputBindingString(Button.JUMP)}] in midair"
             ) if eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP, Augment.LONG_REACH, Augment.GRAPNEL_LAUNCHER] else (f"Hold [{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.INTERACT)}] | {iconString(Icon.CHECKMARK)}" if eventPlayer.augmentApothecaryReady else "Use ultimate to charge teleport") if eventPlayer.augmentId == Augment.APOTHECARY else f"Backpack: {len(eventPlayer.augmentScavengerBackpack)}/2 | Crouch + Interact to store | Hold [{inputBindingString(Button.RELOAD)}] to drop all" if eventPlayer.augmentId == Augment.SCAVENGER else ["", "+75 armor", "", "", "Extended melee reach", "Double magazine capacity", "", "", "", "", "15% lifesteal | +50 health"][eventPlayer.augmentId],
             AUGMENT_NAMES[eventPlayer.augmentId],
-            HudPosition.ACTUALLY_LEFT, 100, Color.WHITE, Color.WHITE,
+            HudPosition.ACTUALLY_LEFT, 98, Color.WHITE, Color.WHITE,
             (Color.RED if getTotalTimeElapsed() < eventPlayer.augmentMovementReadyAt else Color.GREEN) if eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP, Augment.LONG_REACH, Augment.GRAPNEL_LAUNCHER] else ([Color.WHITE, Color.GREEN, Color.YELLOW][len(eventPlayer.augmentScavengerBackpack)] if eventPlayer.augmentId == Augment.SCAVENGER else Color.WHITE),
             HudReeval.STRING_AND_COLOR
         )

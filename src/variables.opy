@@ -130,7 +130,8 @@ enum PowerUpEntitySlot:
     SUPER_NANO_BAD_AURA = 72,
     SUPER_NANO_DAMAGE_DEALT_MODIFICATION = 73,
     SUPER_NANO_DAMAGE_RECEIVED_MODIFICATION = 74,
-    BOUNCE_PAD_HUD = 81,
+    JETPACK_FUEL_HUD = 81,
+    JETPACK_FLIGHT_EFFECT = 82,
 
 # Global variables
 
@@ -587,11 +588,9 @@ playervar visualEntityIdList  # Zombie effects or Team 1 objective icons retaine
 
 playervar visualCleanupIndex  # Per-actor effect/icon cleanup index; the loops yield and cannot use global scratch.
 
-playervar actorLoopSlot  # Existing Ensnarer melee loop index / Bounce Pad duration.
+playervar actorLoopSlot  # Ensnarer melee loop index.
 # Repeated Hazard boss ultimate index.
 #!define botEnsnarerUltimateIndex actorLoopSlot
-# Remaining Bounce Pad seconds.
-#!define powerUpBouncePadTimeRemaining actorLoopSlot
 
 playervar abilityTargetList  # Zombie special-ability targets or common zombie/Hybrid explosion targets.
 # Targets affected by zombie grabs, clouds, flight and slam abilities.
@@ -642,7 +641,7 @@ playervar powerUpNoCooldownsHudId
 playervar powerUpAirStrikeRingId
 playervar powerUpCloakingDeviceSphereId
 playervar powerUpSuperNanoGoodAuraId
-playervar powerUpBouncePadRingId
+playervar powerUpJetpackIsFlying  # Dedicated boolean; also read by shared movement-speed updates on both teams.
 playervar powerUpUltimateChargerHudId
 playervar powerUpStunBeamId
 
@@ -712,11 +711,12 @@ playervar actorTeamSlot16  # Team 2: botConfiguredHero; Team 1: powerUpForceFiel
 # Placed Force Field position; zero clears it.
 #!define powerUpForceFieldPosition actorTeamSlot16
 
-playervar actorTeamSlot17  # Team 2: botMutationId; Team 1: powerUpBouncePadPosition. Receivers, not rule teams, own the storage.
+playervar actorTeamSlot17  # Team 2: botMutationId; Team 1: powerUpJetpackFuel. Receivers own storage.
 # Selected mutation ID; zero means no mutation.
 #!define botMutationId actorTeamSlot17
-# Placed Bounce Pad ground position.
-#!define powerUpBouncePadPosition actorTeamSlot17
+# Jetpack fuel, 0..200; chased only on Team 1 during flight; item 11 adds up to 100.
+# Retained between flights/respawns and read by the fuel HUD; never use as scratch.
+#!define powerUpJetpackFuel actorTeamSlot17
 
 playervar actorTeamSlot18  # Team 2: botIsInitializing; Team 1: powerUpStunOrigin. Receivers, not rule teams, own the storage.
 # Zombie respawn/stat initialization is in progress; spawn/teleport/objective rules wait for it.

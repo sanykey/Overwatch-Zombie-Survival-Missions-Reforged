@@ -33,6 +33,16 @@ Ana's ally check uses the donor mod's approximate 41m radius, 10-degree view ang
 
 Carrion has approximately 2.91% spawn weight in All Zombies (equal to Reinhardt), 20% in New Blood, and 5% in What'll it be?; the other eligible heroes retain their relative weights. It has no boss variation. Validate tables and compile with `node analysis/verify-carrion.cjs`; add `--write` to regenerate `main.ws.txt`. Native gameplay still needs verification.
 
+## Jetpack powerup
+
+Item 11 is now **Jetpack**, retaining its purple pickup orb. Use it with Interact to add 100 fuel, up to a maximum of 200. At 200 fuel, using the item leaves it in the inventory. Fuel does not regenerate automatically, and unused fuel survives death. Hold Jump continuously for 0.2 seconds to fly, including from the ground (releasing Jump cancels the wait without spending fuel): zero gravity, upward acceleration 10 with maximum speed 4, and an additive 30 percentage point movement-speed bonus, as in Brigitte's Jetpack in `workshop-snapshots/Jazzy's New Abilities.opy`. Consumption matches the original rate: 40 fuel/s (2.5 seconds of thrust per item, 5 seconds per full 200-fuel tank).
+
+The white subheader `jetpack fuel: <number>` sits above the carried powerup HUD and disappears at zero fuel; there is no bar. A small standard purple Bad Aura at the feet appears only during thrust. The donor's visual effects and automatic recharge are omitted. The former Bounce Pad mechanics, state aliases and subroutine are removed.
+
+Run `node analysis/verify-jetpack.cjs` to compile and inspect flight, fuel and cleanup contracts; add `--write` to regenerate `main.ws.txt`. The final replacement adds 35 compiled elements (29,969 → 30,004), excluding debug rules, with no extra variable slots and one fewer subroutine. Fuel uses a chase instead of the old pad's repeating radius checks and impulses; the shared speed helper now calculates the additive flight bonus. Native testing is still required: release/repress Jump, landing, emptying/refilling the tank during flight, death/respawn, HUD ordering, the standard effect, and overlapping Cloaking Device/Super Nano speed bonuses.
+
+For debugging, `[debug] snky buffs` grants snky 100 fuel and a Jetpack item after a 5-second wait when its gameplay/spawn conditions become true; it does not loop. `debug.opy` is currently included. Pharah and Jetpack Cat cannot refuel using the item; rejected uses preserve it.
+
 ## Enhancements and Augments
 
 Choose one primary **Enhancement** with **Quick Melee** and one independent **Augment** with **Interact** before the match. Hold **Secondary Fire** while choosing to cycle backwards. During gameplay, Interact handles powerups and Dead Weight. Each unselected slot receives a random real option when gameplay starts, including for players joining an ongoing match: one of twelve Enhancements and one of ten Augments. Explicit choices are preserved, and an assigned option is retained across later spawns. There are no Workshop settings for default selections.

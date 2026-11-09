@@ -11,7 +11,6 @@ subroutine instantRevive
 subroutine healBeacon
 subroutine sentryTurret
 subroutine cloakingDevice
-subroutine bouncePad
 subroutine ultimateCharger
 subroutine stun
 
@@ -420,34 +419,43 @@ def superNano():
     applyScaledMoveSpeed()
 
 
-def bouncePad():
-    @Name "bouncePad (80-89)"
-    
-    eventPlayer.powerUpBouncePadPosition = eventPlayer.getPosition() if eventPlayer.isOnGround() else nearestWalkablePosition(eventPlayer.getPosition())
-    if eventPlayer.powerUpBouncePadRingId == 0:
-        createEffect(getAllPlayers(), Effect.RING, Color.PURPLE, eventPlayer.powerUpBouncePadPosition, 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpBouncePadRingId = getLastCreatedEntity()
-        hudHeader(eventPlayer, "Bounce Pad: {0}s".format(ceil(eventPlayer.powerUpBouncePadTimeRemaining)), HudPosition.RIGHT, 0.2, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING)
-        eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.BOUNCE_PAD_HUD] = getLastCreatedText()
-    playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.PURPLE, eventPlayer.powerUpBouncePadPosition, 2)
-    playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, Color.PURPLE, eventPlayer.powerUpBouncePadPosition, 50)
-    wait(1)
-    #Bounce pad duration
-    for eventPlayer.powerUpBouncePadTimeRemaining in range(60, 0, -0.125):
-        if not (eventPlayer.powerUpBouncePadTimeRemaining % 0.25):
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.PURPLE, eventPlayer.powerUpBouncePadPosition + 0.125 * Vector.UP, 4)
-        #Determine which players are on the bounce pad
-        # bouncePadSurvivorList: grounded survivors on this pad, to apply the bounce and play feedback for this tick.
-        #!define bouncePadSurvivorList tmp0
-        bouncePadSurvivorList = getLivingPlayers(Team.1).filter(lambda player: distance(eventPlayer.powerUpBouncePadPosition, player) < 2 and player.isOnGround())
-        if bouncePadSurvivorList != []:
-            bouncePadSurvivorList.applyImpulse(Vector.UP, 22, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
-            playEffect(bouncePadSurvivorList, DynamicEffect.RING_EXPLOSION_SOUND, Color.WHITE, eventPlayer.powerUpBouncePadPosition, 50)
-        wait(0.125)
-    wait(0.25)
-    destroyEffect(eventPlayer.powerUpBouncePadRingId)
-    destroyHudText(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.BOUNCE_PAD_HUD])
-    eventPlayer.powerUpBouncePadRingId = 0
+rule "JETPACK FUEL HUD":
+    @Event eachPlayer
+    @Team 1
+    @Condition eventPlayer.powerUpJetpackFuel > 0
+
+    # One HUD per fueled player; sort 99 places fuel immediately above item HUD (100).
+    hudSubheader(eventPlayer if eventPlayer.isAlive() else null, f"jetpack fuel: {ceil(eventPlayer.powerUpJetpackFuel)}", HudPosition.ACTUALLY_LEFT, 99, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+    eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.JETPACK_FUEL_HUD] = getLastCreatedText()
+    waitUntil(eventPlayer.powerUpJetpackFuel <= 0, Math.INFINITY)
+    destroyHudText(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.JETPACK_FUEL_HUD])
+
+
+rule "JETPACK FLIGHT":
+    @Event eachPlayer
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
+    @Condition eventPlayer.powerUpJetpackFuel > 0
+
+    # Require a continuous Jump hold before thrust or fuel consumption begins.
+    wait(0.2, Wait.ABORT_WHEN_FALSE)
+    eventPlayer.powerUpJetpackIsFlying = true
+    eventPlayer.setGravity(0)
+    applyScaledMoveSpeed()
+    eventPlayer.startAcceleration(Vector.UP, 10, 4, Relativity.TO_WORLD)
+    chaseAtRate(eventPlayer.powerUpJetpackFuel, 0, 40)
+    # Single standard effect at the feet, replacing both donor hero-specific beams.
+    createEffect(getAllPlayers(), Effect.BAD_AURA, Color.PURPLE, eventPlayer.getPosition() + 0.3 * Vector.UP, 0.35, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.JETPACK_FLIGHT_EFFECT] = getLastCreatedEntity()
+    waitUntil(not ruleCondition, Math.INFINITY)
+    stopChasing(eventPlayer.powerUpJetpackFuel)
+    eventPlayer.stopAcceleration()
+    eventPlayer.setGravity(100)
+    eventPlayer.powerUpJetpackIsFlying = false
+    applyScaledMoveSpeed()
+    destroyEffect(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.JETPACK_FLIGHT_EFFECT])
 
 
 def ultimateCharger():
@@ -457,7 +465,7 @@ def ultimateCharger():
         hudHeader(eventPlayer, "Ultimate Charger: {0}s".format(ceil(eventPlayer.powerUpUltimateTimeRemaining)), HudPosition.RIGHT, 0.2, Color.RED, HudReeval.VISIBILITY_AND_STRING)
         eventPlayer.powerUpUltimateChargerHudId = getLastCreatedText()
     playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.RED, eventPlayer.getPosition(), 50)
-    #Bounce pad duration
+    #Ultimate charger duration
     for eventPlayer.powerUpUltimateTimeRemaining in range(20, 0, -0.125):
         eventPlayer.setUltCharge(eventPlayer.getUltCharge() + 2)
         wait(0.125)
@@ -560,9 +568,16 @@ def powerUpUsage():
         case 10:
             startRule(superNano)
             break
-        #Bounce Pad
+        #Jetpack: add 100 fuel up to 200, including during an active flight chase.
         case 11:
-            startRule(bouncePad)
+            if eventPlayer.getHero() in [Hero.JETPACK_CAT, Hero.PHARAH]:
+                smallMessage(eventPlayer, "Your hero cannot use Jetpack")
+                return
+            if eventPlayer.powerUpJetpackFuel >= 200:
+                smallMessage(eventPlayer, "Jetpack fuel is full")
+                return
+            eventPlayer.powerUpJetpackFuel = min(200, eventPlayer.powerUpJetpackFuel + 100)
+            playAquaPowerUpSound()
             break
         #Ultimate Charger
         case 12:
