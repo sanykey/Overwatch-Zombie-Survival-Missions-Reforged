@@ -447,7 +447,7 @@ def useLivingProjectile():
     livingProjectileCandidate = raycastHitPlayer(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * DEAD_WEIGHT_RANGE, getAllPlayers(), eventPlayer, false)
     if livingProjectileCandidate == null:
         return
-    if [livingProjectileCandidate.getTeam() != Team.2, not livingProjectileCandidate.isDummy(), not livingProjectileCandidate.isAlive(), livingProjectileCandidate in bossStateList.concat(miniBossList), livingProjectileCandidate.botIsInitializing, livingProjectileCandidate.botIsTeleporting, livingProjectileCandidate.botIsAttached].any():
+    if [livingProjectileCandidate.getTeam() != Team.2, not livingProjectileCandidate.isDummy(), not livingProjectileCandidate.isAlive(), livingProjectileCandidate.botIsInitializing, livingProjectileCandidate.botIsTeleporting, livingProjectileCandidate.botIsAttached].any():
         return
     # Inspect native statuses directly: the cached bot CC flag can lag by 0.125s.
     # Rooted alone never qualifies; Rooted plus low health or another CC still does.
@@ -457,6 +457,9 @@ def useLivingProjectile():
     eventPlayer.enhancementHoldUntil = getTotalTimeElapsed() + DEAD_WEIGHT_DURATION
     livingProjectileCandidate.deadWeightCarryHero = eventPlayer.getHero()
     livingProjectileCandidate.deadWeightZombieCarrier = eventPlayer
+    # Independent of Super Nano's damage-received settings; bot owns cleanup.
+    startDamageModification(eventPlayer, getAllPlayers(), 50)
+    livingProjectileCandidate.deadWeightProtectionId = getLastDamageModification()
     livingProjectileCandidate.botIsAttached = true
     # Knockdown begins at pickup and outlasts the hold limit by one second.
     # Clearing it early interrupts the carry; throw damage clears it explicitly.
@@ -485,6 +488,7 @@ rule "LIVING PROJECTILE RELEASE":
     deadWeightShouldThrow = deadWeightCarrier.enhancementHoldUntil == 0 and not livingProjectileInterrupted(deadWeightCarrier)
     eventPlayer.detach()
     eventPlayer.botIsAttached = false
+    stopDamageModification(eventPlayer.deadWeightProtectionId)
     deadWeightCarrier.enhancementHeldZombie = null
     eventPlayer.deadWeightZombieCarrier = null
     if deadWeightShouldThrow:

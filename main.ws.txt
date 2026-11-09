@@ -1,4 +1,4 @@
-/* Element count: (total 29608)
+/* Element count: (total 29610)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
  1572: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
@@ -58,11 +58,11 @@
   144: rule "SMOLDER SUPER SLAM" (src/zombie_types.opy)
   140: rule "generateMapGrid" (src/global_startup.opy)
   140: rule "beaconofHealing (40-49)" (src/supply_drops.opy)
-  138: rule "useLivingProjectile" (src/enhancements.opy)
+  138: rule "LIVING PROJECTILE RELEASE" (src/enhancements.opy)
   137: rule "explosionSequence" (src/subroutines.opy)
   137: rule "BORN TO BATTLE PLAYER USES ABILITY CHARGE" (src/enhancements.opy)
   136: rule "GENERATE SUPPLY DROPS" (src/supply_drops.opy)
-  135: rule "LIVING PROJECTILE RELEASE" (src/enhancements.opy)
+  136: rule "useLivingProjectile" (src/enhancements.opy)
   134: rule "AUGMENT MENU" (src/augments.opy)
   133: rule "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)" (src/bots_game_in_progress.opy)
   132: rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS" (src/objective_types/objective_type_biomorphing.opy)
@@ -151,8 +151,8 @@
    52: rule "BOTS RECOIL FROM DAMAGE" (src/bots_game_in_progress.opy)
    52: rule "dropCarriedPowerUps" (src/power_ups.opy)
    50: rule "BOT WANDERS" (src/bots_game_in_progress.opy)
+   50: rule "APOTHECARY TELEPORT" (src/augments.opy)
    49: rule "CREATE PATH" (src/objective_types/objective_type_survivor_rescue.opy)
-   49: rule "APOTHECARY TELEPORT" (src/augments.opy)
    48: rule "RIDER DETACH WHEN DEAD OR TARGET IS DEAD" (src/zombie_types.opy)
    48: rule "BLASTER ROCKET HITS TARGET" (src/zombie_types.opy)
    48: rule "TUNNELER (SYMMETRA) BUILDS PORTAL" (src/zombie_types.opy)
@@ -2177,7 +2177,7 @@ rule ("EFFECTS/TEXTS") {
         Create HUD Text(All Players(Team 1), Value In Array(Array(Custom String("Objective Type: No Preference"), Custom String("Objective Type: Showdown {0}", Ability Icon String(Hero(Brigitte), Button(Ultimate))), Custom String("Objective Type: Bosses {0}", Icon String(Warning)), Null, Null, Custom String("Objective Type: Kill Zone {0}", If-Then-Else(Modulo(Round To Integer(Multiply(Total Time Elapsed, 1.25), Up), 2), Icon String(Ring Thin), Icon String(Ring Thick))), Custom String("Objective Type: Zombie Egg {0}", Icon String(Radioactive)), Custom String("Objective Type: Satellite Uplink {0}", Icon String(Moon)), Null, Custom String("Objective Type: Mixed Objectives {0}", Icon String(Spiral))), (Local Player).actorTeamSlot21), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Custom String("Players must contest a point against zombies"), Custom String("Spawns giant versions of zombies"), Null, Null, Custom String("Clear zombies from a designated area"), Custom String("Survivors must destroy an object that is spawning zombies"), Custom String("Survivors must repair terminals to communicate with a satellite"), Null, Custom String("Randomly assigns all types of objectives")), (Local Player).actorTeamSlot21), Custom String("                                                ")), If-Then-Else(Or(Global.isVoting, Compare((Local Player).actorTeamSlot21, ==, Null)), Custom String("Change Vote (Press [{0}])", Input Binding String(Button(Ability 2))), Empty Array), Left, 2, Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Visible To String and Color, Default Visibility); // 149 elements
         "Enhancement"
         Set Global Variable(phaseSlot2, Array(Color(Aqua), Color(Red), Color(Gray), Color(Orange), Color(Green), Color(Gray), Color(White), Color(Purple), Color(Blue), Color(Turquoise), Color(Lime Green), Color(Purple), Color(Yellow))); // 28 elements
-        Create HUD Text(All Players(Team 1), Custom String("Enhancement: {0}{1}", Value In Array(String Split(Custom String("No Preference0Brain Killer 0Zombie Hybrid 0Pyrotechnic 0Plague Doctor 0Born to Battle 0Charge Battery 0Hitchhiker 0P.U.P. 0Ov{0}", Custom String("ercharge 0Bulking Season 0Dead Weight 0Bolt Strike ")), First Of(Null)), (Local Player).enhancementId), If-Then-Else(Compare((Local Player).enhancementId, >, Null), Value In Array(Global.phaseSlot9, (Local Player).enhancementId), Char In String(Empty Array, False))), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Custom String("+60% critical damage | +20% vs bosses"), Custom String("Get infected faster, and convert it to explosive damage"), Custom String("Dealing damage, within 15 meters, sets enemies on fire"), Custom String("Deal 30% more healing, plus another 25% to infected players while reducing their infection level"), Custom String("Final blows grant a cooldown reset on the next ability use, storing up to 2 charges"), Custom String("Survivor can place a battery that gives ultimate charge"), Custom String("Survivor can attach to a teammate and fuse their health."), Custom String("Survivor is equipped with an autonomous friendly droid"), Custom String("Store healing / 3 incl. packs, +10 per assist; uncapped. Hold Melee: spend up to 100 for bonus damage on hits for 0.3s"), Custom String("Kills and damage participation grant +0.5% Max Life and +0.5% Hero Size per stack (caps: 200% Life, 1.35x size). Lose half on{0}", Custom String(" death")), Custom String("Interact grabs/throws non-bosses within 4m: CC except Rooted or <20% HP"), Custom String("Chain to 2 visible zombies within 10m: 25% damage (max 15). Bank 350 chain damage; hold Melee to arm: next hit deals 60 damag{0}", Custom String("e and stuns zombies"))), (Local Player).enhancementId), Custom String("                                                ")), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Melee))), Left, 3, Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Visible To String and Color, Default Visibility); // 143 elements
+        Create HUD Text(All Players(Team 1), Custom String("Enhancement: {0}{1}", Value In Array(String Split(Custom String("No Preference0Brain Killer 0Zombie Hybrid 0Pyrotechnic 0Plague Doctor 0Born to Battle 0Charge Battery 0Hitchhiker 0P.U.P. 0Ov{0}", Custom String("ercharge 0Bulking Season 0Dead Weight 0Bolt Strike ")), First Of(Null)), (Local Player).enhancementId), If-Then-Else(Compare((Local Player).enhancementId, >, Null), Value In Array(Global.phaseSlot9, (Local Player).enhancementId), Char In String(Empty Array, False))), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Custom String("+60% critical damage | +20% vs bosses"), Custom String("Get infected faster, and convert it to explosive damage"), Custom String("Dealing damage, within 15 meters, sets enemies on fire"), Custom String("Deal 30% more healing, plus another 25% to infected players while reducing their infection level"), Custom String("Final blows grant a cooldown reset on the next ability use, storing up to 2 charges"), Custom String("Survivor can place a battery that gives ultimate charge"), Custom String("Survivor can attach to a teammate and fuse their health."), Custom String("Survivor is equipped with an autonomous friendly droid"), Custom String("Store healing / 3 incl. packs, +10 per assist; uncapped. Hold Melee: spend up to 100 for bonus damage on hits for 0.3s"), Custom String("Kills and damage participation grant +0.5% Max Life and +0.5% Hero Size per stack (caps: 200% Life, 1.35x size). Lose half on{0}", Custom String(" death")), Custom String("Interact grabs/throws zombies incl. bosses within 4m: CC except Rooted or <20% HP; take 50% less damage while holding"), Custom String("Chain to 2 visible zombies within 10m: 25% damage (max 15). Bank 350 chain damage; hold Melee to arm: next hit deals 60 damag{0}", Custom String("e and stuns zombies"))), (Local Player).enhancementId), Custom String("                                                ")), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Melee))), Left, 3, Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Visible To String and Color, Default Visibility); // 143 elements
     }
 }
 
@@ -8995,7 +8995,7 @@ rule ("resetBattleAbilityCharge") {
     }
 }
 
-//138 elements
+//136 elements
 rule ("useLivingProjectile") {
     event {
         Subroutine;
@@ -9010,13 +9010,16 @@ rule ("useLivingProjectile") {
         "One raycast per press, against all players so intervening actors block pickup.\nSynchronous scratch only: the candidate is committed to both actors before returning."
         Set Global Variable(tmp0, Ray Cast Hit Player(Eye Position(Event Player), Add(Eye Position(Event Player), Multiply(Facing Direction Of(Event Player), 4)), All Players(All Teams), Event Player, False)); // 16 elements
         Abort If(Compare(Global.tmp0, ==, Null)); // 5 elements
-        Abort If(Is True For Any(Array(Compare(Team Of(Global.tmp0), !=, Team 2), Not(Is Dummy Bot(Global.tmp0)), Is Dead(Global.tmp0), Array Contains(Append To Array(Global.bossStateList, Global.miniBossList), Global.tmp0), (Global.tmp0).actorTeamSlot18, (Global.tmp0).actorTeamSlot3, (Global.tmp0).isAttached), Current Array Element)); // 38 elements
+        Abort If(Is True For Any(Array(Compare(Team Of(Global.tmp0), !=, Team 2), Not(Is Dummy Bot(Global.tmp0)), Is Dead(Global.tmp0), (Global.tmp0).actorTeamSlot18, (Global.tmp0).actorTeamSlot3, (Global.tmp0).isAttached), Current Array Element)); // 30 elements
         "Inspect native statuses directly: the cached bot CC flag can lag by 0.125s.\nRooted alone never qualifies; Rooted plus low health or another CC still does."
         Abort If(Not(Or(Or(Or(Or(Compare(Normalized Health(Global.tmp0), <, 0.2), Has Status(Global.tmp0, Stunned)), Has Status(Global.tmp0, Asleep)), Has Status(Global.tmp0, Frozen)), Has Status(Global.tmp0, Knocked Down)))); // 28 elements
         Set Player Variable(Event Player, actorTeamSlot22, Global.tmp0); // 2 elements
         Set Player Variable(Event Player, actorTeamSlot23, Add(Total Time Elapsed, 5)); // 4 elements
         Set Player Variable(Global.tmp0, augmentState2, Hero Of(Event Player)); // 3 elements
         Set Player Variable(Global.tmp0, augmentState0, Event Player); // 2 elements
+        "Independent of Super Nano's damage-received settings; bot owns cleanup."
+        Start Damage Modification(Event Player, All Players(All Teams), 50, Receivers Damagers and Damage Percent); // 4 elements
+        Set Player Variable(Global.tmp0, augmentState1, Last Damage Modification ID); // 2 elements
         Set Player Variable(Global.tmp0, isAttached, True); // 2 elements
         "Knockdown begins at pickup and outlasts the hold limit by one second.\nClearing it early interrupts the carry; throw damage clears it explicitly."
         Set Status(Global.tmp0, Event Player, Knocked Down, 6); // 3 elements
@@ -9024,7 +9027,7 @@ rule ("useLivingProjectile") {
     }
 }
 
-//135 elements
+//138 elements
 rule ("LIVING PROJECTILE RELEASE") {
     event {
         Ongoing - Each Player;
@@ -9042,6 +9045,7 @@ rule ("LIVING PROJECTILE RELEASE") {
         Set Global Variable(tmp1, And(Compare((Global.tmp0).actorTeamSlot23, ==, Null), Not(Is True For Any(Array(Not(Global.isGameplayActive), Not(Entity Exists(Global.tmp0)), Is Dead(Global.tmp0), (Global.tmp0).isAttached, Compare(Hero Of(Global.tmp0), !=, (Event Player).augmentState2), Is Dead(Event Player), (Event Player).actorTeamSlot18, (Event Player).actorTeamSlot3, Not((Event Player).isAttached), Not(Has Status(Event Player, Knocked Down))), Current Array Element)))); // 51 elements
         Detach Players(Event Player); // 1 element
         Set Player Variable(Event Player, isAttached, False); // 1 element
+        Stop Damage Modification((Event Player).augmentState1); // 3 elements
         Set Player Variable(Global.tmp0, actorTeamSlot22, Null); // 2 elements
         Set Player Variable(Event Player, augmentState0, Null); // 1 element
         If(Global.tmp1); // 2 elements
@@ -9101,7 +9105,7 @@ rule ("APOTHECARY ULTIMATE RECHARGE") {
     }
 }
 
-//49 elements
+//50 elements
 rule ("APOTHECARY TELEPORT") {
     event {
         Ongoing - Each Player;
@@ -9117,8 +9121,8 @@ rule ("APOTHECARY TELEPORT") {
         Or(Compare((Event Player).enhancementId, !=, 11), Compare((Event Player).actorTeamSlot22, ==, Null)) == True; // 14 elements
     }
     actions {
-        "Keep both buttons held for one second; interruption preserves the charge."
-        Wait(True, Abort When False); // 1 element
+        "Keep both buttons held for 0.2 seconds; interruption preserves the charge."
+        Wait(0.2, Abort When False); // 2 elements
         Abort If(Compare((Event Player).augmentId, !=, 8)); // 7 elements
         Set Player Variable(Event Player, augmentState1, False); // 1 element
         "Play Effect snapshots departure before Teleport; no scratch or effect entity.\nBolt Strike's 1.5 flash scaled by three."

@@ -8,11 +8,24 @@ const slot = name => files['variables.opy'].match(new RegExp('^#!define ' + name
 const held = slot('enhancementHeldZombie'), owner = slot('deadWeightZombieCarrier');
 const until = slot('enhancementHoldUntil'), attached = slot('botIsAttached');
 const credit = slot('deadWeightThrowDamageCredit');
+const protection = slot('deadWeightProtectionId');
 async function main() {
     await compiler.readyPromise;
     const build = await compile(files);
     assert.deepEqual(build.warnings, []);
     const compiled = new Map(rules(build.result).map(r => [r.name, r]));
+    // Initialization now shares one production rule. Compile macro entry points
+    // in memory so the selection/HUD scenarios can still exercise each half.
+    const initBuild = await compile({...files, 'player_initialization.opy': files['player_initialization.opy'] + `
+rule "PLAYER ENHANCEMENT INITIALIZATION":
+    @Event eachPlayer
+    initializePlayerEnhancement()
+rule "PLAYER AUGMENT INITIALIZATION":
+    @Event eachPlayer
+    initializePlayerAugment()
+`});
+    for (const rule of rules(initBuild.result).filter(r => ['PLAYER ENHANCEMENT INITIALIZATION', 'PLAYER AUGMENT INITIALIZATION'].includes(r.name)))
+        compiled.set(rule.name, rule);
     assert(!compiled.has('DEAD WEIGHT LANDING'), 'Landing damage rule is removed');
     assert(!compiled.has('DEAD WEIGHT DELAYED DAMAGE'), 'No queue processor');
     const run = (name, state) => start(compiled.get(name), state, compiled);
@@ -131,6 +144,7 @@ async function main() {
         assert(!applies(compiled.get(placementName), s), 'Bot cleanup must not enable placement on the throwing press');
         assert.equal(s.player[cooldown], cooldownBefore || -2);
         s.buttons.delete('Interact'); inputTask.resume();
+        s.time += 0.5; inputTask.resume(); // Throw input remains consumed for the debounce wait.
         assert(inputTask.done());
         assert.equal(s.player[cooldown], cooldownBefore, 'Throw spends no barricade cooldown');
         bs.time += 0.75; release.resume();
@@ -167,18 +181,21 @@ async function main() {
     }
     const carriedCarrier = setup(); carriedCarrier.s.player.isAttached = true;
     run('useLivingProjectile', carriedCarrier.s); assert(!carriedCarrier.s.player[held]);
-    for (const list of ['bossStateList', 'miniBossList']) for (const status of ['Stunned', 'Knocked Down']) {
-        const {s, bot} = setup(100, [status]); s.globals[list] = [bot];
+    for (const list of ['bossStateList', 'miniBossList']) for (const health of [199, 200, 1000]) for (const status of [null, 'Rooted', 'Stunned', 'Knocked Down']) {
+        const {s, bot} = setup(health, status ? [status] : []); s.globals[list] = [bot];
         run('useLivingProjectile', s);
-        assert(!s.player[held], `${list} cannot be picked up even with low HP and CC`);
-        assert.equal(s.statusWrites.length, 0);
+        const qualifies = health < 200 || ['Stunned', 'Knocked Down'].includes(status);
+        assert.equal(s.player[held] === bot, qualifies, `${list}: same health/CC requirements as ordinary zombies`);
+        if (qualifies) assert.equal(bot[owner], s.player);
     }
     const miss = setup(); miss.s.raycastTarget = 0; run('useLivingProjectile', miss.s);
     assert(!miss.s.player[held]);
     const input = setup(); input.s.buttons.add('Interact');
     assert(run(interactName, input.s).done());
     assert.equal(input.s.player[held], input.bot, 'Pickup consumes the press before item queries');
-    assert(run(interactName, input.s).done());
+    const throwInput = run(interactName, input.s);
+    assert(!throwInput.done(), 'Throw press remains consumed during debounce');
+    input.s.time += 0.5; throwInput.resume(); assert(throwInput.done());
     assert.equal(input.s.player[until], 0, 'Next press requests throw before item queries');
     const scavenger = setup(); scavenger.s.player.augmentId = 9;
     const backpack = slot('augmentScavengerBackpack'), active = slot('powerUpItemId');
@@ -194,7 +211,14 @@ async function main() {
     run('useLivingProjectile', competing.s);
     assert(!competing.s.player[held], 'Another player cannot steal the held zombie');
     for (const reason of ['throw', 'timeout', 'carrier death', 'disconnect', 'hero switch', 'bot death', 'game end', 'cleansed', 'teleport', 'carrier attached']) {
-        const {s, bot} = setup(); run('useLivingProjectile', s);
+        const {s, bot} = setup();
+        const nano = {receivers: [s.player], damagers: [bot], percent: 50};
+        s.damageModifications = {next: 1, active: new Map([[1, nano]])};
+        run('useLivingProjectile', s);
+        const modifier = s.damageModifications.active.get(bot[protection]);
+        assert.deepEqual(modifier.receivers, [s.player]);
+        assert.equal(modifier.percent, 50, 'Carrier receives half damage while holding');
+        assert(modifier.damagers.includes(bot));
         const bs = botState(s, bot);
         // Other rules may reuse global scratch before a carry transition occurs.
         bs.globals.tmp0 = {id: 'unrelated scratch writer'};
@@ -212,6 +236,8 @@ async function main() {
         if (reason === 'teleport') bot[slot('botIsTeleporting')] = true;
         if (reason === 'carrier attached') s.player.isAttached = true;
         const task = run('LIVING PROJECTILE RELEASE', bs);
+        assert(!s.damageModifications.active.has(bot[protection]), `${reason} removes protection before the damage wait`);
+        assert.deepEqual([...s.damageModifications.active.values()], [nano], 'Releasing preserves Super Nano or any other modifier');
         if (reason === 'throw') {
             assert(!task.done()); assert.equal(bs.damage.length, 0, 'Only damage waits; cleanup is already complete');
             assert.equal(bot[credit], s.player);
@@ -290,7 +316,7 @@ async function main() {
     const scratchRules = [...build.result.matchAll(/^rule \("(?:useLivingProjectile|LIVING PROJECTILE RELEASE)"\) \{\n[\s\S]*?^\}/gm)].map(match => match[0]);
     assert.equal(scratchRules.length, 2); checkWorkshop(scratchRules.join('\n'));
     console.log(JSON.stringify({elements: build.elements,
-        warnings: build.warnings, checked: 'stale shared-state initialization / idle HUD without timer / hold countdown and HUD reset / first pickup after initialization / 4m ray / primary selection forward and backward / 12 Enhancements and 10 Augments / explicit choice and late-join rolls / independent HUDs / all Augment state preserved / Laser Barricade throw priority and cooldown / boss/miniboss pickup ban / 5s hold / 6s knockdown from pickup / cleared synchronously with throw damage / eligibility / CC / input / lifetime cleanup / 50 damage after 0.75s / native Wait(0.75) / persistent credit / release before wait / pending release after wait / lethal throw cleanup / no cooldown / immediate repeat pickup / no landing rule or splash / item priority / Rider guards',
+        warnings: build.warnings, checked: 'stale shared-state initialization / idle HUD without timer / hold countdown and HUD reset / first pickup after initialization / 4m ray / primary selection forward and backward / 12 Enhancements and 10 Augments / explicit choice and late-join rolls / independent HUDs / all Augment state preserved / Laser Barricade throw priority and cooldown / boss/miniboss pickup allowed / 50% carrier protection with synchronous cleanup on every release / 5s hold / 6s knockdown from pickup / cleared synchronously with throw damage / eligibility / CC / input / lifetime cleanup / 50 damage after 0.75s / native Wait(0.75) / persistent credit / release before wait / pending release after wait / lethal throw cleanup / no cooldown / immediate repeat pickup / no landing rule or splash / item priority / Rider guards',
         limitation: 'Raycast geometry, attachment appearance and throw physics require Overwatch.'}, null, 2));
 }
 main().catch(e => {console.error(e); process.exitCode = 1;});

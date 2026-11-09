@@ -100,8 +100,8 @@ rule "APOTHECARY TELEPORT":
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
     @Condition (eventPlayer.enhancementId != Enhancement.DEAD_WEIGHT or eventPlayer.enhancementHeldZombie == null) == true
 
-    # Keep both buttons held for one second; interruption preserves the charge.
-    wait(1, Wait.ABORT_WHEN_FALSE)
+    # Keep both buttons held for 0.2 seconds; interruption preserves the charge.
+    wait(0.2, Wait.ABORT_WHEN_FALSE)
     if eventPlayer.augmentId != Augment.APOTHECARY:
         return
 

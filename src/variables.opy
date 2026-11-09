@@ -409,6 +409,10 @@ playervar augmentState0
 #!define augmentAmmoLoadoutList augmentState0
 
 playervar augmentState1
+# Team 2 Dead Weight: carrier's 50% damage modifier, from pickup to synchronous
+# release cleanup, before any throw-damage wait. Overwritten on each pickup.
+# No bot Augment owns this slot; independent of all human powerup/augment state.
+#!define deadWeightProtectionId augmentState1
 # Laser Barricade unit edge direction; persists for collision checks.
 #!define augmentBarrierEdgeDirection augmentState1
 # Shock Landing / Double Jump is armed after releasing Jump in midair; consumed once, cleared on landing/death.

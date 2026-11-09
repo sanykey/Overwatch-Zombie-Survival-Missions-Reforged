@@ -63,6 +63,7 @@ function value(expr, state, element) {
     if (expr === 'Right') return [-1, 0, 0];
     if (expr === 'Total Time Elapsed') return state.time;
     if (expr === 'Last Created Entity') return state.lastEntity;
+    if (expr === 'Last Damage Modification ID') return state.lastDamageModification;
     if (expr === 'Team 2') return 2;
     if (expr === 'Team 1') return 1;
     if (expr === 'Attacker') return state.attacker ?? 0;
@@ -391,6 +392,13 @@ function* execute(rule, state, compiled) {
                     break;
                 case 'Teleport': state.player.position = v(1); break;
                 case 'Set Move Speed': state.moveSpeed = v(1); break;
+                case 'Start Damage Modification': {
+                    const registry = state.damageModifications ??= {next: 0, active: new Map()};
+                    state.lastDamageModification = ++registry.next;
+                    registry.active.set(state.lastDamageModification, {receivers: array(v(0)), damagers: array(v(1)), percent: v(2)});
+                    break;
+                }
+                case 'Stop Damage Modification': state.damageModifications.active.delete(v(0)); break;
                 case 'Stop All Damage Over Time': state.stoppedDots = true; break;
                 case 'Clear Status': state.status.delete(a[1]); break;
                 case 'Set Ultimate Charge': state.ultCharge = Math.min(100, v(1)); break;
@@ -532,7 +540,7 @@ async function main() {
         state.buttons = new Set(['Crouch', 'Interact']);
         const task = run(teleportRule.name, state);
         assert(!task.done());
-        state.time += 0.99;
+        state.time += 0.19;
         task.resume();
         assert.deepEqual(state.player.position, [20, 2, 8]);
         state.time += 0.01;
@@ -572,7 +580,7 @@ async function main() {
         const hud = actions(compiled.get('PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION')).find(line => line.startsWith('Create HUD Text(') && line.includes('augmentState1'));
         assert(hud && hud.includes('If-Then-Else((Event Player).augmentState1, Custom String("Hold [{0}] + [{1}] | {2}"'), 'The complete Apothecary button hint is conditional on its charge');
         const emitted = teleportRule.body;
-        assert(emitted.includes('Wait(True, Abort When False)')); // OverPy emits numeric 1 as True.
+        assert.match(emitted, /Wait\(0\.20*, Abort When False\)/);
         assert(emitted.includes('(Event Player).augmentState0 != Null'), 'Position must not compile to a truthiness check');
         if (process.argv.includes('--export')) {
             const exported = await compiler.compile(fs.readFileSync(path.join(root, 'main.opy'), 'utf8'),
@@ -583,7 +591,7 @@ async function main() {
             fs.writeFileSync(path.join(root, 'main.ws.txt'), exported.result);
         }
         console.log(JSON.stringify({elements: build.elements, warnings: build.warnings, pickupCases, packChargeCases,
-            checked: 'pack healing/infection/ult preserved; Zombie Hybrid excluded from Apothecary cure; speed removed; pickup position including origin; nonstacking charge; 1s hold; interrupted hold preserves charge; departure flash; Interact exclusion; Dead Weight guard; HUD; emitted null comparison',
+            checked: 'pack healing/infection/ult preserved; Zombie Hybrid excluded from Apothecary cure; speed removed; pickup position including origin; nonstacking charge; 0.2s hold; interrupted hold preserves charge; departure flash; Interact exclusion; Dead Weight guard; HUD; emitted null comparison',
             exported: process.argv.includes('--export')}, null, 2));
         return;
     }
