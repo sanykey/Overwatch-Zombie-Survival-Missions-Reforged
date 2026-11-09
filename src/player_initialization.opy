@@ -85,10 +85,11 @@ macro initializePlayerEnhancement():
             break
         case Enhancement.BULKING_SEASON:
             eventPlayer.enhancementBulkStacks = 0
+            eventPlayer.enhancementBulkNormalSize = false
             hudText(
                 eventPlayer,
                 EnhancementIcon.BULKING_SEASON,
-                f"Stacks: {eventPlayer.enhancementBulkStacks} | +{min(100, eventPlayer.enhancementBulkStacks * 0.5)}% Max Life | Size: {min(1.35, 1 + eventPlayer.enhancementBulkStacks * 0.005)}x",
+                f"Stacks: {eventPlayer.enhancementBulkStacks} | +{min(100, eventPlayer.enhancementBulkStacks * 0.5)}% Max Life | Size: {eventPlayer.sizeScale}x | Hold [{inputBindingString(Button.MELEE)}] to toggle size",
                 "Bulking Season",
                 HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.STRING
             )

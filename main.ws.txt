@@ -1,7 +1,7 @@
-/* Element count: (total 30081)
+/* Element count: (total 30111)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
- 1572: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
+ 1567: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
  1074: rule "botRespawnInitialization" (src/subroutines.opy)
   813: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
   481: rule "GRAPNEL LAUNCHER" (src/augments.opy)
@@ -177,6 +177,7 @@
    43: rule "Subroutine selectVoteWinner" (src/global_start_menu.opy)
    41: rule "ultimateCharger (90-99)" (src/supply_drops.opy)
    40: rule "SPAWN TIME CONTROL" (src/global_startup.opy)
+   40: rule "applyBulkingSeasonStats" (src/enhancements.opy)
    40: rule "DOUBLE JUMP DOUBLE TAP" (src/augments.opy)
    39: rule "locateAveragePlayerLocation" (src/bots_game_in_progress.opy)
    39: rule "updateBotSpawnPoints" (src/bots_game_in_progress.opy)
@@ -211,7 +212,6 @@
    27: rule "CARRION (JETPACK CAT) TRANSPORT" (src/zombie_types.opy)
    26: rule "SURVIVOR JUMP" (src/objective_types/objective_type_survivor_rescue.opy)
    25: rule "Fix bot health" (src/bots_game_in_progress.opy)
-   25: rule "applyBulkingSeasonStats" (src/enhancements.opy)
    25: rule "Subroutine checkEnhancementPlacement" (src/enhancements.opy)
    25: rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)" (src/augments.opy)
    25: rule "AUGMENT AIR ACTION INPUT" (src/augments.opy)
@@ -239,6 +239,7 @@
    20: rule "PLAYER SWITCHES HERO" (src/players_game_in_progress.opy)
    20: rule "PLAYER TARGET (ADD)" (src/players_game_in_progress.opy)
    20: rule "STALKER KNOCKBACK BLAST (BOSS)" (src/zombie_types.opy)
+   20: rule "BULKING SEASON TOGGLES SIZE" (src/enhancements.opy)
    19: rule "enableDisableAbilities" (src/subroutines.opy)
    19: rule "ZOMBIE SHUFFLE" (src/global_game_in_progress.opy)
    19: rule "BIOWASTE HOLDER DIES, ORB IS QUEUED AND RESOURCE AMOUNT REMOVED" (src/objective_types/objective_type_biomorphing.opy)
@@ -2229,7 +2230,7 @@ rule ("EFFECTS/TEXTS") {
         Create HUD Text(All Players(Team 1), Value In Array(Array(Custom String("Objective Type: No Preference"), Custom String("Objective Type: Showdown {0}", Ability Icon String(Hero(Brigitte), Button(Ultimate))), Custom String("Objective Type: Bosses {0}", Icon String(Warning)), Null, Null, Custom String("Objective Type: Kill Zone {0}", If-Then-Else(Modulo(Round To Integer(Multiply(Total Time Elapsed, 1.25), Up), 2), Icon String(Ring Thin), Icon String(Ring Thick))), Custom String("Objective Type: Zombie Egg {0}", Icon String(Radioactive)), Custom String("Objective Type: Satellite Uplink {0}", Icon String(Moon)), Null, Custom String("Objective Type: Mixed Objectives {0}", Icon String(Spiral))), (Local Player).actorTeamSlot21), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Custom String("Players must contest a point against zombies"), Custom String("Spawns giant versions of zombies"), Null, Null, Custom String("Clear zombies from a designated area"), Custom String("Survivors must destroy an object that is spawning zombies"), Custom String("Survivors must repair terminals to communicate with a satellite"), Null, Custom String("Randomly assigns all types of objectives")), (Local Player).actorTeamSlot21), Custom String("                                                ")), If-Then-Else(Or(Global.isVoting, Compare((Local Player).actorTeamSlot21, ==, Null)), Custom String("Change Vote (Press [{0}])", Input Binding String(Button(Ability 2))), Empty Array), Left, 2, Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Value In Array(Global.phaseSlot1, (Local Player).actorTeamSlot21), Visible To String and Color, Default Visibility); // 149 elements
         "Enhancement"
         Set Global Variable(phaseSlot2, Array(Color(Aqua), Color(Red), Color(Gray), Color(Orange), Color(Green), Color(Gray), Color(White), Color(Purple), Color(Blue), Color(Turquoise), Color(Lime Green), Color(Purple), Color(Yellow))); // 28 elements
-        Create HUD Text(All Players(Team 1), Custom String("Enhancement: {0}{1}", Value In Array(String Split(Custom String("No Preference0Brain Killer 0Zombie Hybrid 0Pyrotechnic 0Plague Doctor 0Born to Battle 0Charge Battery 0Hitchhiker 0P.U.P. 0Ov{0}", Custom String("ercharge 0Bulking Season 0Dead Weight 0Bolt Strike ")), First Of(Null)), (Local Player).enhancementId), If-Then-Else(Compare((Local Player).enhancementId, >, Null), Value In Array(Global.phaseSlot9, (Local Player).enhancementId), Char In String(Empty Array, False))), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Custom String("+60% critical damage | +20% vs bosses"), Custom String("Get infected faster, and convert it to explosive damage"), Custom String("Dealing damage, within 15 meters, sets enemies on fire"), Custom String("Deal 30% more healing, plus another 25% to infected players while reducing their infection level"), Custom String("Final blows grant a cooldown reset on the next ability use, storing up to 2 charges"), Custom String("Survivor can place a battery that gives ultimate charge"), Custom String("Survivor can attach to a teammate and fuse their health."), Custom String("Survivor is equipped with an autonomous friendly droid"), Custom String("Store healing / 3 incl. packs, +10 per assist; uncapped. Hold Melee: spend up to 100 for bonus damage on hits for 0.3s"), Custom String("Kills and damage participation grant +0.5% Max Life and +0.5% Hero Size per stack (caps: 200% Life, 1.35x size). Lose half on{0}", Custom String(" death")), Custom String("Interact grabs/throws zombies incl. bosses within 5m: CC except Rooted or <20% HP; take 50% less damage while holding"), Custom String("Chain to 2 visible zombies within 10m: 25% damage (max 15). Bank 350 chain damage; hold Melee to arm: next hit deals 60 damag{0}", Custom String("e and stuns zombies"))), (Local Player).enhancementId), Custom String("                                                ")), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Melee))), Left, 3, Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Visible To String and Color, Default Visibility); // 143 elements
+        Create HUD Text(All Players(Team 1), Custom String("Enhancement: {0}{1}", Value In Array(String Split(Custom String("No Preference0Brain Killer 0Zombie Hybrid 0Pyrotechnic 0Plague Doctor 0Born to Battle 0Charge Battery 0Hitchhiker 0P.U.P. 0Ov{0}", Custom String("ercharge 0Bulking Season 0Dead Weight 0Bolt Strike ")), First Of(Null)), (Local Player).enhancementId), If-Then-Else(Compare((Local Player).enhancementId, >, Null), Value In Array(Global.phaseSlot9, (Local Player).enhancementId), Char In String(Empty Array, False))), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Custom String("+60% critical damage | +20% vs bosses"), Custom String("Get infected faster, and convert it to explosive damage"), Custom String("Dealing damage, within 15 meters, sets enemies on fire"), Custom String("Deal 30% more healing, plus another 25% to infected players while reducing their infection level"), Custom String("Final blows grant a cooldown reset on the next ability use, storing up to 2 charges"), Custom String("Survivor can place a battery that gives ultimate charge"), Custom String("Survivor can attach to a teammate and fuse their health."), Custom String("Survivor is equipped with an autonomous friendly droid"), Custom String("Store healing / 3 incl. packs, +10 per assist; uncapped. Hold Melee: spend up to 100 for bonus damage on hits for 0.3s"), Custom String("Each elimination: +0.5% Max Life (cap 200%), +0.75% size (cap 2.5x). Voice pitch falls to 0.5x over 200 stacks. Hold Melee: t{0}", Custom String("oggle size/pitch. Lose half of stacks on death")), Custom String("Interact grabs/throws zombies incl. bosses within 5m: CC except Rooted or <20% HP; take 50% less damage while holding"), Custom String("Chain to 2 visible zombies within 10m: 25% damage (max 15). Bank 350 chain damage; hold Melee to arm: next hit deals 60 damag{0}", Custom String("e and stuns zombies"))), (Local Player).enhancementId), Custom String("                                                ")), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Melee))), Left, 3, Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Value In Array(Global.phaseSlot2, (Local Player).enhancementId), Visible To String and Color, Default Visibility); // 143 elements
     }
 }
 
@@ -8786,7 +8787,7 @@ rule ("BORN TO BATTLE PLAYER USES ABILITY CHARGE") {
     }
 }
 
-//25 elements
+//40 elements
 rule ("applyBulkingSeasonStats") {
     event {
         Subroutine;
@@ -8795,8 +8796,31 @@ rule ("applyBulkingSeasonStats") {
     actions {
         "Additive percentages from the native hero baseline; never compound live max health."
         Set Max Health(Event Player, Min(200, Add(100, Multiply((Event Player).actorTeamSlot22, 0.5)))); // 12 elements
-        Set Player Variable(Event Player, sizeScale, Min(1.35, Add(True, Multiply((Event Player).actorTeamSlot22, 0.005)))); // 11 elements
+        Set Player Variable(Event Player, sizeScale, If-Then-Else((Event Player).actorTeamSlot23, 1, Min(2.5, Add(True, Multiply((Event Player).actorTeamSlot22, 0.0075))))); // 17 elements
         Call Subroutine(applyCurrentSizeScale); // 1 element
+        "Map capped size 1..2.5 linearly to pitch 1..0.5 (200 stacks).\nReuse the current size so native-size mode also restores native pitch."
+        Start Modifying Hero Voice Lines(Event Player, Divide(Subtract(4, (Event Player).sizeScale), 3), False); // 9 elements
+    }
+}
+
+//20 elements
+rule ("BULKING SEASON TOGGLES SIZE") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        All;
+    }
+    conditions {
+        Global.isGameplayActive == True; // 2 elements
+        (Event Player).enhancementId == 10; // 4 elements
+        Is Alive(Event Player) == True; // 2 elements
+        Is Button Held(Event Player, Button(Melee)) == True; // 4 elements
+    }
+    actions {
+        "One toggle per hold; releasing before 0.5s cancels it. No repeating loop."
+        Wait(0.5, Abort When False); // 2 elements
+        Set Player Variable(Event Player, actorTeamSlot23, Not((Event Player).actorTeamSlot23)); // 4 elements
+        Call Subroutine(applyBulkingSeasonStats); // 1 element
     }
 }
 
@@ -9987,7 +10011,7 @@ rule ("LASER BARRICADE BLOCKS ZOMBIES") {
     }
 }
 
-//1572 elements
+//1567 elements
 rule ("PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION") {
     event {
         Ongoing - Each Player;
@@ -10020,7 +10044,7 @@ rule ("PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION") {
         End; // 1 element
         "Initialize the enhancement before the augment's health-readiness wait."
         If(True); // 1 element
-            Skip(Value In Array(Array(56, Null, 2, 5, 10, 16, 19, 22, 26, 29, 37, 43), Add(True, Index Of Array Value(Array(1, 3, 4, 9, 10, 11, 12, 5, 6, 7, 8), (Event Player).enhancementId)))); // 56 elements
+            Skip(Value In Array(Array(57, Null, 2, 5, 10, 16, 20, 23, 27, 30, 38, 44), Add(True, Index Of Array Value(Array(1, 3, 4, 9, 10, 11, 12, 5, 6, 7, 8), (Event Player).enhancementId)))); // 56 elements
         //__label_switch_81_0__:
         "Enhancement: Brain Killer\nNo enhancement state slots: bonus damage is calculated directly from the damage event."
         Create HUD Text(Event Player, Icon String(Skull), Custom String("+60% critical damage | +20% vs bosses                                                                                        {0}", Custom String("                                                                                  ")), Custom String("Brain Killer"), Left, 97, Color(White), Color(White), Color(White), String, Default Visibility); // 18 elements
@@ -10049,7 +10073,8 @@ rule ("PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION") {
         Else; // 1 element
         //__label_switch_81_4__:
         Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
-        Create HUD Text(Event Player, Custom String("{0}TX C0000000002A9ED>", Global.__holygrail__), Custom String("Stacks: {0} | +{1}% Max Life | Size: {2}", (Event Player).actorTeamSlot22, Min(100, Multiply((Event Player).actorTeamSlot22, 0.5)), Custom String("{0}x                                                                                                                         {1}", Min(1.35, Add(True, Multiply((Event Player).actorTeamSlot22, 0.005))), Custom String("                                                 "))), Custom String("Bulking Season"), Left, 97, Color(White), Color(White), Color(White), String, Default Visibility); // 46 elements
+        Set Player Variable(Event Player, actorTeamSlot23, False); // 1 element
+        Create HUD Text(Event Player, Custom String("{0}TX C0000000002A9ED>", Global.__holygrail__), Custom String("Stacks: {0} | +{1}% Max Life | Size: {2}", (Event Player).actorTeamSlot22, Min(100, Multiply((Event Player).actorTeamSlot22, 0.5)), Custom String("{0}x | Hold [{1}] to toggle size                                                                                             {2}", (Event Player).sizeScale, Input Binding String(Button(Melee)), Custom String("                                                                             "))), Custom String("Bulking Season"), Left, 97, Color(White), Color(White), Color(White), String, Default Visibility); // 40 elements
         Else; // 1 element
         //__label_switch_81_5__:
         "This shared slot must start as a player reference or null, never\na previous enhancement's number/array/color. Pickup sets its deadline."

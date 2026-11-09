@@ -112,8 +112,25 @@ def applyBulkingSeasonStats():
 
     # Additive percentages from the native hero baseline; never compound live max health.
     eventPlayer.setMaxHealth(min(200, 100 + eventPlayer.enhancementBulkStacks * 0.5))
-    eventPlayer.sizeScale = min(1.35, 1 + eventPlayer.enhancementBulkStacks * 0.005)
+    eventPlayer.sizeScale = 1 if eventPlayer.enhancementBulkNormalSize else min(2.5, 1 + eventPlayer.enhancementBulkStacks * 0.0075)
     applyCurrentSizeScale()
+    # Map capped size 1..2.5 linearly to pitch 1..0.5 (200 stacks).
+    # Reuse the current size so native-size mode also restores native pitch.
+    eventPlayer.startModifyingVoicelinePitch((4 - eventPlayer.sizeScale) / 3, false)
+
+
+rule "BULKING SEASON TOGGLES SIZE":
+    @Event eachPlayer
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.enhancementId == Enhancement.BULKING_SEASON
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
+
+    # One toggle per hold; releasing before 0.5s cancels it. No repeating loop.
+    wait(0.5, Wait.ABORT_WHEN_FALSE)
+    eventPlayer.enhancementBulkNormalSize = not eventPlayer.enhancementBulkNormalSize
+    applyBulkingSeasonStats()
 
 
 rule "BOLT STRIKE ARMS CHARGE":

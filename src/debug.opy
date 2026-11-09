@@ -22,6 +22,10 @@ rule "[debug] snky buffs":
     wait(5)
     eventPlayer.powerUpJetpackFuel = 100
     eventPlayer.powerUpItemId = 11
+    # The stack slot belongs to other state when a different enhancement is selected.
+    # if eventPlayer.enhancementId == Enhancement.BULKING_SEASON:
+    #     eventPlayer.enhancementBulkStacks = 300
+    #     applyBulkingSeasonStats()
     # wait(0.5, Wait.ABORT_WHEN_FALSE)
     # if ruleCondition:
     #     loop()

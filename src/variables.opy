@@ -783,6 +783,10 @@ playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateS
 #!define enhancementHoldUntil actorTeamSlot23
 # Overcharge: energy spent on the armed/active burst, retained across damage events and HUD reevaluation.
 #!define enhancementCapacitorCharge actorTeamSlot23
+# Bulking Season: persistent size/pitch toggle on its human; false means stacked
+# size (default), true means native size/pitch. Exclusive primary enhancement;
+# no chase or asynchronous writer; retained across deaths and hero switches.
+#!define enhancementBulkNormalSize actorTeamSlot23
 # Born to Battle button whose charge/cooldown is reset.
 #!define enhancementBattleAbilityButton actorTeamSlot23
 # Battery remaining reuse cooldown.
