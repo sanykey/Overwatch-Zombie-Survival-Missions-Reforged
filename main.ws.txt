@@ -1,4 +1,4 @@
-/* Element count: (total 29896)
+/* Element count: (total 29969)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
  1572: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
@@ -118,6 +118,7 @@
    74: rule "restoreDefaultFacingMovement" (src/subroutines.opy)
    74: rule "enterExitTeleport" (src/bots_game_in_progress.opy)
    74: rule "P.U.P. TARGET" (src/enhancements.opy)
+   73: rule "ANA SELF SUPER NANO" (src/hero_tuning.opy)
    73: rule "DESELECT BOT TARGET" (src/bots_game_in_progress.opy)
    73: rule "BRUTE, GLADIATOR, AND SMOLDER ALTERNATE ATTACK CONTROL" (src/zombie_types.opy)
    73: rule "DOWNFALLEN (SIGMA) FIRES" (src/zombie_types.opy)
@@ -722,39 +723,39 @@ subroutines {
     40: teleportDownedPlayerToWalkable
     41: updateUsers
     42: saveAlivePlayerState
-    43: removeBotSpawnPoint
-    44: enterExitTeleport
-    45: teleportBots
-    46: successfulTeleportStatus
-    47: updateBotSpawnPoints
-    48: locateAveragePlayerLocation
-    49: setClosestPlayerTeleportCenter
-    50: daytakerAbortReset
-    51: applyBriefBurnAndRoot
-    52: reenableBotWallAndJump
-    53: restoreBotThrottle
-    54: beginBotOverride
-    55: startBlasterDaytakerFacing
-    56: playReignitedWarningPair
-    57: startBotThrottleAtTarget
-    58: resumeBotFacingAndMovement
-    59: resumeBotMovementAndFacing
-    60: smolderBoost
-    61: spawnGasCloud
-    62: abilityThrowdown
-    63: entityFloat
-    64: explosionWarning
-    65: useLivingProjectile
-    66: playAquaPowerUpSound
-    67: powerUpUsage
-    68: playerForceField
-    69: noCooldowns
-    70: airStrike
-    71: instantRevive
-    72: healBeacon
-    73: sentryTurret
-    74: cloakingDevice
-    75: superNano
+    43: superNano
+    44: removeBotSpawnPoint
+    45: enterExitTeleport
+    46: teleportBots
+    47: successfulTeleportStatus
+    48: updateBotSpawnPoints
+    49: locateAveragePlayerLocation
+    50: setClosestPlayerTeleportCenter
+    51: daytakerAbortReset
+    52: applyBriefBurnAndRoot
+    53: reenableBotWallAndJump
+    54: restoreBotThrottle
+    55: beginBotOverride
+    56: startBlasterDaytakerFacing
+    57: playReignitedWarningPair
+    58: startBotThrottleAtTarget
+    59: resumeBotFacingAndMovement
+    60: resumeBotMovementAndFacing
+    61: smolderBoost
+    62: spawnGasCloud
+    63: abilityThrowdown
+    64: entityFloat
+    65: explosionWarning
+    66: useLivingProjectile
+    67: playAquaPowerUpSound
+    68: powerUpUsage
+    69: playerForceField
+    70: noCooldowns
+    71: airStrike
+    72: instantRevive
+    73: healBeacon
+    74: sentryTurret
+    75: cloakingDevice
     76: bouncePad
     77: ultimateCharger
     78: stun
@@ -4938,6 +4939,36 @@ rule ("Subroutine saveAlivePlayerState") {
     actions {
         "Synchronous record write using the caller's eventPlayer and reconnectUserIndex; no scratch or waits.\nCallers keep their original lifecycle checks and timer/index initialization before this call.\nSave row in ReconnectField order."
         Set Global Variable At Index(playerStatsList, (Event Player).reconnectUserIndex, Array(Null, (Event Player).rescueTimeRemaining, (Event Player).recoveryTimeSlot, (Event Player).reviveDuration, Position Of(Event Player))); // 16 elements
+    }
+}
+
+//73 elements
+rule ("ANA SELF SUPER NANO") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        Ana;
+    }
+    conditions {
+        Is Button Held(Event Player, Button(Ultimate)) == True; // 4 elements
+        Ultimate Charge Percent(Event Player) >= 100; // 3 elements
+    }
+    actions {
+        "Give native ally Nano priority. Ignore button release so a quick tap works."
+        Wait(0.128, Ignore Condition); // 2 elements
+        "Revalidate after the wait; Team 1's isCrowdControlled variable is not a\nnative status tracker. Never spend charge while casting or incapacitated."
+        Abort If(Is True For Any(Array(Is Dead(Event Player), Is Using Ultimate(Event Player), Is Using Ability 1(Event Player), Is Using Ability 2(Event Player), Has Status(Event Player, Hacked), Has Status(Event Player, Stunned), Has Status(Event Player, Asleep), Has Status(Event Player, Frozen), Has Status(Event Player, Knocked Down)), Current Array Element)); // 27 elements
+        "Retain the donor's approximate 41m/10-degree ally check for pending target\nconfirmation. Scan only on a charged ultimate press, not continuously."
+        Abort If(Is True For Any(Players Within Radius(Event Player, 41, Team 1, Surfaces), And(And(Compare(Current Array Element, !=, Event Player), Is Alive(Current Array Element)), Is In View Angle(Event Player, Current Array Element, 10)))); // 21 elements
+        Set Ultimate Charge(Event Player, False); // 1 element
+        Set Ultimate Ability Enabled(Event Player, False); // 1 element
+        "Same refresh/cleanup behavior as the pickup; leave inventory untouched."
+        Start Rule(superNano, Restart Rule); // 1 element
+        "Let the asynchronous effect initialize before checking its entity ID."
+        Wait(False, Ignore Condition); // 1 element
+        "Clear charge on death or effect cleanup, capped at the shared duration."
+        Wait Until(Or(Is Dead(Event Player), Compare((Event Player).powerUpSuperNanoGoodAuraId, ==, Null)), 20); // 10 elements
+        Set Ultimate Ability Enabled(Event Player, True); // 1 element
     }
 }
 

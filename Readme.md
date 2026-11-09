@@ -18,11 +18,14 @@ The `main` branch is intended for further Reforged development, including new fu
 
 ## Hero changes
 
+- **Ana:** pressing Ultimate with at least 100 charge and without an ally target sets ultimate charge to zero and applies the existing 20-second Super Nano effect directly to Ana, including its healing and refresh behavior. The carried power-up is preserved. After allowing the effect to initialize, the self-cast rule waits for death or effect cleanup, with a 20-second timeout. Ultimate use is disabled during this wait and enabled afterward; pickup refreshes do not extend this timeout. A 0.128-second grace period gives native ally Nano priority; self-casting is blocked while incapacitated or using another ability.
 - **Brigitte:** Shield Bash damage stuns the target for 0.8 seconds, including outside Rally.
 - **Cassidy:** Flashbang damage stuns the target for 0.8 seconds instead of applying Hack. Each hit applies or refreshes the stun, including against hacked targets.
 - **Reinhardt:** damage dealt while Barrier Field is active stuns the target for 0.8 seconds, supporting Shield Slam. Any damage source qualifies while the shield is active.
 - **Sierra:** hitting an enemy with Tracking Shot applies Hack for 3 seconds, matching the mark's base duration. This timer is independent of early mark cancellation/removal; another Tracking Shot hit refreshes Hack.
 - **Soldier: 76:** deals 50% more damage while Tactical Visor is active. The bonus multiplies damage alongside Super Nano and other damage boosts; Super Nano's 2× damage becomes 3× during Tactical Visor. The bonus ends when Tactical Visor ends or the player changes heroes.
+
+Ana's ally check uses the donor mod's approximate 41m radius, 10-degree view angle and surface line of sight to protect pending target confirmation. It does not read the native selected target. Native testing is still required with confirmation on/off and different Nano targeting sensitivities, including allies near the angle/range boundary or behind cover, quick taps, crowd control, and refreshing an active Super Nano. Compile and check unchanged existing rules with `node analysis/verify-ana-self-nano.cjs`; add `--write` to regenerate the export. The feature adds 73 compiled elements (29,896 → 29,969), with no new variables or subroutines. The compact boolean-array guard saves elements versus chained `or`; it builds a small temporary array once per attempt.
 
 ## Zombie changes
 

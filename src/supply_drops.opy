@@ -11,7 +11,6 @@ subroutine instantRevive
 subroutine healBeacon
 subroutine sentryTurret
 subroutine cloakingDevice
-subroutine superNano
 subroutine bouncePad
 subroutine ultimateCharger
 subroutine stun
@@ -404,7 +403,7 @@ def superNano():
     eventPlayer.setDamageReceived(50)
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.RED, eventPlayer.getPosition(), distance(eventPlayer.getEyePosition(), eventPlayer) * 0.95)
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.RED, eventPlayer.getPosition(), 50)
-    for eventPlayer.powerUpSuperNanoTimeRemaining in range(20, 0, -1):
+    for eventPlayer.powerUpSuperNanoTimeRemaining in range(SUPER_NANO_DURATION, 0, -1):
         if eventPlayer.isDead():
             break
         wait(1)

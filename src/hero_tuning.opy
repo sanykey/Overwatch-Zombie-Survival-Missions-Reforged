@@ -1,5 +1,45 @@
 #!mainFile "../main.opy"
 
+# Shared pickup effect, declared here before hero tuning uses it.
+subroutine superNano
+
+
+rule "ANA SELF SUPER NANO":
+    @Event eachPlayer
+    @Team 1
+    @Hero ana
+    @Condition eventPlayer.isHoldingButton(Button.ULTIMATE) == true
+    @Condition eventPlayer.getUltCharge() >= 100
+
+    # Give native ally Nano priority. Ignore button release so a quick tap works.
+    wait(0.128)
+    # Revalidate after the wait; Team 1's isCrowdControlled variable is not a
+    # native status tracker. Never spend charge while casting or incapacitated.
+    if [
+        eventPlayer.isDead(),
+        eventPlayer.isUsingUltimate(),
+        eventPlayer.isUsingAbility1(),
+        eventPlayer.isUsingAbility2(),
+        eventPlayer.hasStatus(Status.HACKED),
+        eventPlayer.hasStatus(Status.STUNNED),
+        eventPlayer.hasStatus(Status.ASLEEP),
+        eventPlayer.hasStatus(Status.FROZEN),
+        eventPlayer.hasStatus(Status.KNOCKED_DOWN),
+    ].any():
+        return
+    # Retain the donor's approximate 41m/10-degree ally check for pending target
+    # confirmation. Scan only on a charged ultimate press, not continuously.
+    if getPlayersInRadius(eventPlayer, 41, Team.1, LosCheck.SURFACES).any(lambda player: player != eventPlayer and player.isAlive() and eventPlayer.isInViewAngle(player, 10)):
+        return
+    eventPlayer.setUltCharge(0)
+    eventPlayer.setUltEnabled(false)
+    # Same refresh/cleanup behavior as the pickup; leave inventory untouched.
+    startRule(superNano)
+    # Let the asynchronous effect initialize before checking its entity ID.
+    wait()
+    # Clear charge on death or effect cleanup, capped at the shared duration.
+    waitUntil(eventPlayer.isDead() or eventPlayer.powerUpSuperNanoGoodAuraId == 0, SUPER_NANO_DURATION)
+    eventPlayer.setUltEnabled(true)
 
 rule "CC COOLDOWN FROM DOWNFALLEN/BRUTE":
     @Event eachPlayer
