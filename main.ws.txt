@@ -1043,7 +1043,7 @@ rule ("objectivesManagement") {
             Else; // 1 element
             //__label_switch_3_6__:
             Set Global Variable(objectiveRad, 3); // 2 elements
-            Set Global Variable(objectiveColor, Color(Aqua)); // 2 elements
+            Set Global Variable(objectiveColor, Color(Blue)); // 2 elements
             Set Global Variable(objectivePositionsSlot, Empty Array); // 1 element
             Set Global Variable(objectiveProgressSlot, Array(Null, Null, Null)); // 5 elements
             "Initial terminal spacing"

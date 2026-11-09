@@ -664,7 +664,7 @@ def objectivesManagement():
                 break
             case ObjectiveType.SATELLITE_UPLINK:
                 objectiveRad = 3
-                objectiveColor = Color.AQUA
+                objectiveColor = Color.BLUE
                 satelliteTerminalPositionList = []
                 satelliteTerminalProgressList = [0, 0, 0]
                 #Initial terminal spacing
