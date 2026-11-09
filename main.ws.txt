@@ -323,14 +323,21 @@ settings
 	}
 	modes
 	{
-		disabled Assault
+		Assault
 		{
+			Capture Speed Modifier: 10%
+			Tank Role Passive Health Bonus: Always Enabled
 		}
 		Capture The Flag
 		{
-			enabled maps
+			disabled maps
 			{
-				Ilios Lighthouse
+				Busan Sanctuary Lunar New Year
+				Lijiang Control Center Lunar New Year
+				Lijiang Garden Lunar New Year
+				Oasis City Center
+				Oasis Gardens
+				Oasis University
 			}
 			Damage Interrupts Flag Interaction: On
 			Enable Perks: On
@@ -341,11 +348,22 @@ settings
 			Flag Score Respawn Time: 20
 			Tank Role Passive Health Bonus: Always Enabled
 		}
-		disabled Clash
+		Clash
 		{
+			Capture Speed Modifier: 10%
+			Tank Role Passive Health Bonus: Always Enabled
 		}
-		disabled Control
+		Control
 		{
+			enabled maps
+			{
+				Antarctic Peninsula 972777519512068154
+				Oasis
+				Samoa
+			}
+			Capture Speed Modifier: 10%
+			Scoring Speed Modifier: 10%
+			Tank Role Passive Health Bonus: Always Enabled
 		}
 		disabled Control Balanced Overwatch
 		{
@@ -353,20 +371,39 @@ settings
 		disabled Elimination
 		{
 		}
-		disabled Escort
+		Escort
 		{
+			disabled maps
+			{
+				Watchpoint: Gibraltar
+			}
+			Payload Speed Modifier: 10%
+			Tank Role Passive Health Bonus: Always Enabled
 		}
 		disabled Escort Balanced Overwatch
 		{
 		}
-		disabled Flashpoint
+		Flashpoint
 		{
+			Capture Speed Modifier: 10%
+			Score To Win: 10
+			Scoring Speed Modifier: 10%
+			Tank Role Passive Health Bonus: Always Enabled
 		}
 		disabled Hybrid Balanced Overwatch
 		{
 		}
-		disabled Hybrid
+		Hybrid
 		{
+			disabled maps
+			{
+				Eichenwalde
+				King's Row
+				Paraíso
+			}
+			Capture Speed Modifier: 10%
+			Payload Speed Modifier: 10%
+			Tank Role Passive Health Bonus: Always Enabled
 		}
 		disabled Practice Range
 		{
@@ -376,10 +413,6 @@ settings
 		}
 		Push
 		{
-			enabled maps
-			{
-				Colosseo
-			}
 			Tank Role Passive Health Bonus: Always Enabled
 			TS-1 Push Speed Modifier: 10%
 			TS-1 Walk Speed Modifier: 10%
@@ -391,9 +424,17 @@ settings
 		{
 			enabled maps
 			{
+				Black Forest
+				Black Forest Winter
+				Castillo
+				Château Guillard
+				Château Guillard Halloween
+				Ecopoint: Antarctica
+				Ecopoint: Antarctica Winter
+				Kanezaka
 				Malevento
 				Necropolis
-				Black Forest
+				Petra
 			}
 			Enable Perks: On
 			Tank Role Passive Health Bonus: Always Enabled
@@ -417,7 +458,8 @@ settings
 	workshop
 	{
 		Chance to mutate percentage: 25
-		Number of Objectives: 3
+		Number of Objectives: 5
+		Number of zombies: 7
 	}
 	extensions
 	{
