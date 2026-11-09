@@ -14,7 +14,7 @@ rule "EFFECTS/TEXTS":
     createInWorldText(getPlayers(Team.1).filter(lambda player: player.enhancementId != Enhancement.ZOMBIE_HYBRID and healthpackPositionList != [] and player.isInfected and getMatchTime() > matchEndTime), "Cure: {0}m".format(distance(localPlayer, sorted(healthpackPositionList, lambda x: angleBetweenVectors(localPlayer.getFacingDirection(), directionTowards(localPlayer.getEyePosition(), x)))[0])), sorted(healthpackPositionList, lambda x: angleBetweenVectors(localPlayer.getFacingDirection(), directionTowards(localPlayer.getEyePosition(), x)))[0], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.GREEN, SpecVisibility.NEVER)
     #Nearest health pack icon
     createIcon(getPlayers(Team.1).filter(lambda player: player.enhancementId != Enhancement.ZOMBIE_HYBRID and healthpackPositionList != [] and player.isInfected and getMatchTime() > matchEndTime), sorted(healthpackPositionList, lambda x: angleBetweenVectors(localPlayer.getFacingDirection(), directionTowards(localPlayer.getEyePosition(), x)))[0] + offsetUpThreeQuartersConst + offsetUpHalfConst, Icon.POISON, IconReeval.VISIBILITY_AND_POSITION, Color.GREEN)
-    hudSubtext(getAllPlayers(), "Modified version. workshop.codes/786tw", HudPosition.RIGHT, 0.1, Color.TEAM_1, HudReeval.VISIBILITY_AND_STRING)
+    hudSubheader(getAllPlayers(), f"3D camera: {CAMERA_HOTKEY}\nworkshop.codes/45N5D", HudPosition.RIGHT, 0.1, Color.TEAM_1, HudReeval.VISIBILITY_AND_STRING)
     hudSubtext(getAllPlayers().filter(lambda _: challengeSetting >= Challenge.SWARM_SHOOTOUT), "Challenge round!", HudPosition.RIGHT, 0.2, Color.TEAM_1, HudReeval.VISIBILITY_AND_STRING)
 
 

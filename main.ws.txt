@@ -1,9 +1,9 @@
-/* Element count: (total 30111)
+/* Element count: (total 30087)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
  1567: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
  1074: rule "botRespawnInitialization" (src/subroutines.opy)
-  813: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
+  783: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
   481: rule "GRAPNEL LAUNCHER" (src/augments.opy)
   434: rule "SKIP ASSEMBLING HEROES" (src/global_startup.opy)
   412: rule "PLAYERS REPAIR TERMINALS" (src/objective_types/objective_type_satellite_uplink.opy)
@@ -21,7 +21,7 @@
   288: rule "EFFECTS/TEXTS" (src/players_game_in_progress.opy)
   286: rule "INITIALIZE SURVIVOR TO BE RESCUED" (src/objective_types/objective_type_survivor_rescue.opy)
   281: rule "WIN/LOSS CONDITIONS" (src/objective_types/objective_type_extraction_point.opy)
-  266: rule "EFFECTS/TEXTS" (src/global_game_in_progress.opy)
+  272: rule "EFFECTS/TEXTS" (src/global_game_in_progress.opy)
   265: rule "REVIVE PLAYER OR ADVANCE DEATH TIMER" (src/players_game_in_progress.opy)
   259: rule "EFFECT/TEXT (GLOBAL)" (src/supply_drops.opy)
   254: rule "powerUpUsage" (src/supply_drops.opy)
@@ -2198,7 +2198,7 @@ rule ("GLOBAL MENU INITIALIZATION") {
     }
 }
 
-//813 elements
+//783 elements
 rule ("EFFECTS/TEXTS") {
     event {
         Ongoing - Global;
@@ -2207,11 +2207,11 @@ rule ("EFFECTS/TEXTS") {
         "Pre game objective description and match timer"
         Create HUD Text(All Players(All Teams), Null, Null, Custom String("{0}fgD7D7D7FF>{1} | {2}s{0}/fg>", Global.__holygrail__, If-Then-Else(Global.isVoting, Custom String("Voting will end in {0}s", Round To Integer(Subtract(Match Time, 30), Up)), Custom String("Select your hero")), Round To Integer(Match Time, Up)), Top, -1, Null, Null, Color(White), Visible To and String, Default Visibility); // 29 elements
         "Creator/Game Code Promo"
-        Create HUD Text(All Players(All Teams), Null, Null, If-Then-Else(Modulo(Round To Integer(Multiply(Total Time Elapsed, 0.2), Up), 2), Custom String("Game Mode Creator: Mazattack#1183"), Custom String("Original Game Code: MPJFR")), Right, False, Null, Null, Color(Blue), Visible To and String, Visible Always); // 23 elements
+        Create HUD Text(All Players(All Teams), Null, Null, Custom String("ZSM Reforged (45N5D)"), Right, False, Null, Null, Color(Blue), Visible To and String, Visible Always); // 8 elements
         "Creator/Game Code Promo"
-        Create HUD Text(All Players(All Teams), Null, Null, If-Then-Else(Modulo(Round To Integer(Multiply(Total Time Elapsed, 0.2), Up), 2), Custom String("Modified by: KamenRider#11346"), Custom String("This is a modified version: 786TW")), Right, False, Null, Null, Color(Blue), Visible To and String, Visible Always); // 23 elements
+        Create HUD Text(All Players(All Teams), Null, Null, Custom String("Game Mode Creator: snky#21990"), Right, False, Null, Null, Color(Blue), Visible To and String, Visible Always); // 8 elements
         "Workshop.codes"
-        Create In-World Text(Filtered Array(All Players(All Teams), Compare((Current Array Element).pregameState, <, 2)), Custom String("For information on changes: workshop.codes/786TW"), Add(Global.startCamPos, Direction From Angles(Horizontal Angle From Direction(Direction Towards(Global.startCamPos, Global.startPos)), 30)), 3, Do Not Clip, Visible To Position String and Color, Color(Orange), Visible Never); // 28 elements
+        Create In-World Text(Filtered Array(All Players(All Teams), Compare((Current Array Element).pregameState, <, 2)), Custom String("For information on changes: workshop.codes/45N5D"), Add(Global.startCamPos, Direction From Angles(Horizontal Angle From Direction(Direction Towards(Global.startCamPos, Global.startPos)), 30)), 3, Do Not Clip, Visible To Position String and Color, Color(Orange), Visible Never); // 28 elements
         "Voting options reminder"
         Create In-World Text(Filtered Array(All Players(All Teams), Compare((Current Array Element).pregameState, ==, 2)), If-Then-Else(Global.isVoting, Custom String("Voting options are available in the top left corner of your screen"), Custom String("Voting is complete. Difficulty is actively scaled by amount of players.")), Add(Global.startCamPos, Direction From Angles(Horizontal Angle From Direction(Direction Towards(Global.startCamPos, Global.startPos)), 30)), 2, Do Not Clip, Visible To Position String and Color, If-Then-Else(Global.isVoting, Color(Aqua), Color(Purple)), Visible Never); // 41 elements
         "Ready In World Text"
@@ -2875,7 +2875,7 @@ rule ("CYCLE PLAYER CAMERA") {
     }
 }
 
-//266 elements
+//272 elements
 rule ("EFFECTS/TEXTS") {
     event {
         Ongoing - Global;
@@ -2894,7 +2894,7 @@ rule ("EFFECTS/TEXTS") {
         Create In-World Text(Filtered Array(All Players(Team 1), And(And(And(Compare((Current Array Element).enhancementId, !=, 2), Compare(Global.healthpackPositionList, !=, Empty Array)), (Current Array Element).isInfected), Compare(Match Time, >, Global.matchEndTime))), Custom String("Cure: {0}m", Distance Between(Local Player, First Of(Sorted Array(Global.healthpackPositionList, Angle Between Vectors(Facing Direction Of(Local Player), Direction Towards(Eye Position(Local Player), Current Array Element)))))), First Of(Sorted Array(Global.healthpackPositionList, Angle Between Vectors(Facing Direction Of(Local Player), Direction Towards(Eye Position(Local Player), Current Array Element)))), True, Do Not Clip, Visible To Position and String, Color(Green), Visible Never); // 54 elements
         "Nearest health pack icon"
         Create Icon(Filtered Array(All Players(Team 1), And(And(And(Compare((Current Array Element).enhancementId, !=, 2), Compare(Global.healthpackPositionList, !=, Empty Array)), (Current Array Element).isInfected), Compare(Match Time, >, Global.matchEndTime))), Add(Add(First Of(Sorted Array(Global.healthpackPositionList, Angle Between Vectors(Facing Direction Of(Local Player), Direction Towards(Eye Position(Local Player), Current Array Element)))), Global.offsetUpThreeQuartersConst), Global.offsetUpHalfConst), Poison, Visible To and Position, Color(Green), True); // 44 elements
-        Create HUD Text(All Players(All Teams), Null, Null, Custom String("Modified version. workshop.codes/786tw"), Right, 0.1, Null, Null, Color(Team 1), Visible To and String, Default Visibility); // 9 elements
+        Create HUD Text(All Players(All Teams), Null, Custom String("3D camera: [{0}] + [{1}] + [{2}]\nworkshop.codes/45N5D", Input Binding String(Button(Reload)), Input Binding String(Button(Crouch)), Input Binding String(Button(Jump))), Null, Right, 0.1, Null, Color(Team 1), Null, Visible To and String, Default Visibility); // 15 elements
         Create HUD Text(Filtered Array(All Players(All Teams), Compare(Global.challengeSetting, >=, 2)), Null, Null, Custom String("Challenge round!"), Right, 0.2, Null, Null, Color(Team 1), Visible To and String, Default Visibility); // 16 elements
     }
 }

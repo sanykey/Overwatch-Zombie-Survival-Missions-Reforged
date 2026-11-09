@@ -80,11 +80,11 @@ rule "EFFECTS/TEXTS":
     #Pre game objective description and match timer
     hudSubtext(getAllPlayers(), "<fgD7D7D7FF>{0} | {1}s</fg>".format("Voting will end in {0}s".format(ceil(getMatchTime() - VOTING_END_TIME)) if isVoting else "Select your hero", ceil(getMatchTime())), HudPosition.TOP, -1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
     #Creator/Game Code Promo
-    hudSubtext(getAllPlayers(), "Original Game Code: MPJFR" if not (ceil(getTotalTimeElapsed() * 0.2) % 2) else "Game Mode Creator: Mazattack#1183", HudPosition.RIGHT, 0, Color.BLUE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
+    hudSubtext(getAllPlayers(), "ZSM Reforged (45N5D)", HudPosition.RIGHT, 0, Color.BLUE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
     #Creator/Game Code Promo
-    hudSubtext(getAllPlayers(), "This is a modified version: 786TW" if not (ceil(getTotalTimeElapsed() * 0.2) % 2) else "Modified by: KamenRider#11346", HudPosition.RIGHT, 0, Color.BLUE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
+    hudSubtext(getAllPlayers(), "Game Mode Creator: snky#21990", HudPosition.RIGHT, 0, Color.BLUE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
     #Workshop.codes
-    createInWorldText(getAllPlayers().filter(lambda player: player.pregameState < PregameState.READY), "For information on changes: workshop.codes/786TW", startCamPos + directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)), 30), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.ORANGE, SpecVisibility.NEVER)
+    createInWorldText(getAllPlayers().filter(lambda player: player.pregameState < PregameState.READY), "For information on changes: workshop.codes/45N5D", startCamPos + directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)), 30), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.ORANGE, SpecVisibility.NEVER)
     #Voting options reminder
     createInWorldText(getAllPlayers().filter(lambda player: player.pregameState == PregameState.READY), "Voting options are available in the top left corner of your screen" if isVoting else "Voting is complete. Difficulty is actively scaled by amount of players.", startCamPos + directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)), 30), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.AQUA if isVoting else Color.PURPLE, SpecVisibility.NEVER)
     #Ready In World Text
