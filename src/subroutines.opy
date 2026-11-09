@@ -436,9 +436,9 @@ def setDifficulty():
         botBiteDurationList = numbersList.slice(NL_BITE_DURATIONS_INSANITY_OFFSET, NL_BITE_DURATIONS_INSANITY_LEN)
         #Bot throttle speeds
         botThrottleSpeedList = []
-        # insanityThrottleHeroIndex: hero-entry counter, to fill all 21 Insanity throttle speeds with 1.
+        # insanityThrottleHeroIndex: hero-entry counter, to fill all 22 Insanity throttle speeds with 1.
         #!define insanityThrottleHeroIndex tmp0
-        for insanityThrottleHeroIndex in range(21):
+        for insanityThrottleHeroIndex in range(22):
             botThrottleSpeedList.append(1)
         #Bot damage dealt
         botDamageDealtList = numbersList.slice(NL_DAMAGE_DEALT_INSANITY_OFFSET, NL_DAMAGE_DEALT_INSANITY_LEN)

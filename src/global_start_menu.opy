@@ -294,17 +294,19 @@ def setZombieMode():
     @Name "setZombieMode"
     
     #Bot available hero list
-    botHeroList = [Hero.REAPER, Hero.JUNKRAT, Hero.TORBJORN, Hero.ROADHOG, Hero.REINHARDT, Hero.ANRAN, Hero.WIDOWMAKER, Hero.MAUGA, Hero.MERCY, Hero.WRECKING_BALL, Hero.MOIRA, Hero.PHARAH, Hero.SIGMA, Hero.JUNKER_QUEEN, Hero.ILLARI, Hero.HAZARD, Hero.SYMMETRA, Hero.ANA, Hero.WINSTON, Hero.DOOMFIST, Hero.KIRIKO]
+    botHeroList = [Hero.REAPER, Hero.JUNKRAT, Hero.TORBJORN, Hero.ROADHOG, Hero.REINHARDT, Hero.ANRAN, Hero.WIDOWMAKER, Hero.MAUGA, Hero.MERCY, Hero.WRECKING_BALL, Hero.MOIRA, Hero.PHARAH, Hero.SIGMA, Hero.JUNKER_QUEEN, Hero.ILLARI, Hero.HAZARD, Hero.SYMMETRA, Hero.ANA, Hero.WINSTON, Hero.DOOMFIST, Hero.KIRIKO, Hero.JETPACK_CAT]
     #Zombie types without a boss variation
-    bossesExcludedHeroList = [Hero.JUNKRAT, Hero.ANRAN, Hero.WIDOWMAKER, Hero.JUNKER_QUEEN, Hero.SYMMETRA, Hero.ANA, Hero.DOOMFIST, Hero.KIRIKO, Hero.MAUGA, Hero.SIGMA, Hero.WRECKING_BALL]
+    bossesExcludedHeroList = [Hero.JUNKRAT, Hero.ANRAN, Hero.WIDOWMAKER, Hero.JUNKER_QUEEN, Hero.SYMMETRA, Hero.ANA, Hero.DOOMFIST, Hero.KIRIKO, Hero.MAUGA, Hero.SIGMA, Hero.WRECKING_BALL, Hero.JETPACK_CAT]
     #What'll it be?
     if zombieSetting == 3:
         #Bot respawn probablities
         botSpawnRateList = []
-        # equalSpawnWeightHeroIndex: hero-entry counter, to append 19 equal spawn weights for this zombie mode.
+        # Keep the original 19 eligible heroes; Carrion is the twentieth at index 21.
+        # equalSpawnWeightHeroIndex: hero-entry counter, to append the original heroes' equal spawn weights.
         #!define equalSpawnWeightHeroIndex tmp0
         for equalSpawnWeightHeroIndex in range(19):
-            botSpawnRateList.append(5.263)
+            botSpawnRateList.append(5)
+        botSpawnRateList[21] = 5
     elif zombieSetting in [1, 2, 4, 5, 6]:
         # Mode 3 has no compressed table. Other mode offsets and lengths retain their original order.
         botSpawnRateList = numbersList.slice([NL_SPAWN_RATES_ALL_ZOMBIES_OFFSET, NL_SPAWN_RATES_NEW_BLOOD_OFFSET, 0, NL_SPAWN_RATES_SHUFFLE_OFFSET, NL_SPAWN_RATES_DINNER_RUSH_OFFSET, NL_SPAWN_RATES_HAM_N_HAMMER_OFFSET][zombieSetting - 1], [NL_SPAWN_RATES_ALL_ZOMBIES_LEN, NL_SPAWN_RATES_NEW_BLOOD_LEN, 0, NL_SPAWN_RATES_SHUFFLE_LEN, NL_SPAWN_RATES_DINNER_RUSH_LEN, NL_SPAWN_RATES_HAM_N_HAMMER_LEN][zombieSetting - 1])

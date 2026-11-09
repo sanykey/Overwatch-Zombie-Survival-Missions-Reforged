@@ -24,6 +24,12 @@ The `main` branch is intended for further Reforged development, including new fu
 - **Sierra:** hitting an enemy with Tracking Shot applies Hack for 3 seconds, matching the mark's base duration. This timer is independent of early mark cancellation/removal; another Tracking Shot hit refreshes Hack.
 - **Soldier: 76:** deals 50% more damage while Tactical Visor is active. The bonus multiplies damage alongside Super Nano and other damage boosts; Super Nano's 2× damage becomes 3× during Tactical Visor. The bonus ends when Tactical Visor ends or the player changes heroes.
 
+## Zombie changes
+
+**Carrion (Jetpack Cat)** is a regular zombie ported from the ZSMM-remixed snapshot, with its difficulty stats and ability sequence. At 4–15m times its size, it presses Ability 1, has a 40% chance to charge and use its ultimate (followed by Primary Fire), then holds Secondary Fire for 2s. Other regular zombies with a target farther than 4m times their size press Interact while a cat is present to request transport. These sequences rearm when their conditions become false, as in Remix.
+
+Carrion has approximately 2.91% spawn weight in All Zombies (equal to Reinhardt), 20% in New Blood, and 5% in What'll it be?; the other eligible heroes retain their relative weights. It has no boss variation. Validate tables and compile with `node analysis/verify-carrion.cjs`; add `--write` to regenerate `main.ws.txt`. Native gameplay still needs verification.
+
 ## Enhancements and Augments
 
 Choose one primary **Enhancement** with **Quick Melee** and one independent **Augment** with **Interact** before the match. Hold **Secondary Fire** while choosing to cycle backwards. During gameplay, Interact handles powerups and Dead Weight. Each unselected slot receives a random real option when gameplay starts, including for players joining an ongoing match: one of twelve Enhancements and one of ten Augments. Explicit choices are preserved, and an assigned option is retained across later spawns. There are no Workshop settings for default selections.
