@@ -91,6 +91,11 @@ enum PregameState:
     HERO_SELECTED = 1,
     READY = 2,
 
+enum CameraMode:
+    NORMAL = 0,
+    PRECISE = 1,
+    SMOOTH = 2,
+
 # Fields of playerStatsList[user index] and reconnectRowSnapshot; full-row writes follow this order.
 enum ReconnectField:
     STATUS = 0,
@@ -825,9 +830,13 @@ playervar actorTeamSlot27  # Team 2: Bolt Strike flash deadline; Team 1: second 
 # Barrier second lower corner.
 #!define augmentBarrierCorner2 actorTeamSlot27
 
-playervar actorTeamSlot28  # Zombie Biomorphing resource icon IDs.
+playervar actorTeamSlot28  # Team 2: Biomorphing resource icon IDs; Team 1 humans: camera mode.
 # Zombie Biomorphing resource icon IDs; separate from the zombie visual-effect list.
 #!define botResourceIconIdList actorTeamSlot28
+# Human camera preference (0/1/2), retained across respawns and hero changes.
+# Only Team 1 humans write/read this role; bot icon cleanup owns Team 2 receivers.
+# Start Camera reevaluates player geometry, not this slot; no wait/chase owns it.
+#!define cameraMode actorTeamSlot28
 
 playervar team1PositionSlot  # Pregame position -> final extraction destination on humans; Rescue NPC path origin on its own actor. No chase owns this slot.
 # Per-player position in the pregame hero-selection scene.

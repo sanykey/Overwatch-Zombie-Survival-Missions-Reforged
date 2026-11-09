@@ -2,7 +2,7 @@
 
 settings {
     "main": {
-        "description": "Community ZSM Discord: https://discord.gg/3BhYtNfwMj\r\n\r\nCreated by snky#21990",
+        "description": "Crouch + Jump + Reload: Normal / Precise / Smooth camera.\r\n\r\nCommunity ZSM Discord: https://discord.gg/3BhYtNfwMj\r\n\r\nCreated by snky#21990",
         "modeName": "Zombie Survival Missions Experiments"
     },
     "lobby": {

@@ -1,4 +1,4 @@
-/* Element count: (total 29619)
+/* Element count: (total 29788)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
  1572: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
@@ -91,6 +91,7 @@
   108: rule "ENSNARER (HAZARD) BLOCKS PLAYERS" (src/zombie_types.opy)
   107: rule "SET UP TERMINAL POSITIONS" (src/objective_types/objective_type_satellite_uplink.opy)
   107: rule "CHARGE BATTERY" (src/enhancements.opy)
+  101: rule "APPLY PLAYER CAMERA" (src/player_camera.opy)
   100: rule "nukeMap" (src/objective_types/objective_type_extraction_point.opy)
   100: rule "bossReturn" (src/objective_types/objective_type_bosses.opy)
   100: rule "BIOWASTE IS PICKED UP" (src/objective_types/objective_type_biomorphing.opy)
@@ -134,6 +135,7 @@
    63: rule "LONG REACH VENDETTA SWORD" (src/augments.opy)
    61: rule "PLAYER GETS DOWNED" (src/players_game_in_progress.opy)
    60: rule "RIDER DETATCH FROM TEAMMATES WHILE ALIVE" (src/zombie_types.opy)
+   57: rule "CYCLE PLAYER CAMERA" (src/player_camera.opy)
    57: rule "PLAYERS ON OBJECTIVE CONTROL" (src/objective_types/objective_type_showdown.opy)
    57: rule "BOTS TELEPORT TO THE EGG" (src/objective_types/objective_type_zombie_egg.opy)
    56: rule "TRIGGER OVERTIME MUSIC" (src/global_game_in_progress.opy)
@@ -150,6 +152,7 @@
    52: rule "PLAYERS IN EXTRACTION POINT CONTROL" (src/objective_types/objective_type_extraction_point.opy)
    52: rule "BOTS RECOIL FROM DAMAGE" (src/bots_game_in_progress.opy)
    52: rule "dropCarriedPowerUps" (src/power_ups.opy)
+   50: rule "PREGAME QUICK TIPS FOR PLAYERS" (src/global_startup.opy)
    50: rule "BOT WANDERS" (src/bots_game_in_progress.opy)
    50: rule "APOTHECARY TELEPORT" (src/augments.opy)
    49: rule "CREATE PATH" (src/objective_types/objective_type_survivor_rescue.opy)
@@ -172,7 +175,6 @@
    41: rule "ultimateCharger (90-99)" (src/supply_drops.opy)
    40: rule "SPAWN TIME CONTROL" (src/global_startup.opy)
    40: rule "DOUBLE JUMP DOUBLE TAP" (src/augments.opy)
-   39: rule "PREGAME QUICK TIPS FOR PLAYERS" (src/global_startup.opy)
    39: rule "locateAveragePlayerLocation" (src/bots_game_in_progress.opy)
    39: rule "updateBotSpawnPoints" (src/bots_game_in_progress.opy)
    39: rule "BRUTE KNOCKDOWN" (src/zombie_types.opy)
@@ -308,7 +310,7 @@ settings
 {
 	main
 	{
-		Description: "Community ZSM Discord: https://discord.gg/3BhYtNfwMj\r\n\r\nCreated by snky#21990"
+		Description: "Crouch + Jump + Reload: Normal / Precise / Smooth camera.\r\n\r\nCommunity ZSM Discord: https://discord.gg/3BhYtNfwMj\r\n\r\nCreated by snky#21990"
 		Mode Name: "Zombie Survival Missions Experiments"
 	}
 	lobby
@@ -708,59 +710,60 @@ subroutines {
     30: advanceObjectiveVote
     31: advanceEnhancementChoice
     32: attachPlayerToPregameAnchor
-    33: nukeMap
-    34: startExtractionAscent
-    35: completeBossObjective
-    36: bossReturn
-    37: chaseSatelliteTarget
-    38: teleportToClosestPlayer
-    39: teleportDownedPlayerToWalkable
-    40: updateUsers
-    41: saveAlivePlayerState
-    42: removeBotSpawnPoint
-    43: enterExitTeleport
-    44: teleportBots
-    45: successfulTeleportStatus
-    46: updateBotSpawnPoints
-    47: locateAveragePlayerLocation
-    48: setClosestPlayerTeleportCenter
-    49: daytakerAbortReset
-    50: applyBriefBurnAndRoot
-    51: reenableBotWallAndJump
-    52: restoreBotThrottle
-    53: beginBotOverride
-    54: startBlasterDaytakerFacing
-    55: playReignitedWarningPair
-    56: startBotThrottleAtTarget
-    57: resumeBotFacingAndMovement
-    58: resumeBotMovementAndFacing
-    59: smolderBoost
-    60: spawnGasCloud
-    61: abilityThrowdown
-    62: entityFloat
-    63: explosionWarning
-    64: useLivingProjectile
-    65: playAquaPowerUpSound
-    66: powerUpUsage
-    67: playerForceField
-    68: noCooldowns
-    69: airStrike
-    70: instantRevive
-    71: healBeacon
-    72: sentryTurret
-    73: cloakingDevice
-    74: superNano
-    75: bouncePad
-    76: ultimateCharger
-    77: stun
-    78: finishPowerUpDrop
-    79: dropCarriedPowerUps
-    80: resetBattleAbilityCharge
-    81: checkEnhancementPlacement
-    82: startPupDefaultChase
-    83: applyBulkingSeasonStats
-    84: extendAugmentMelee
-    85: useAugmentAirAction
+    33: applyPlayerCamera
+    34: nukeMap
+    35: startExtractionAscent
+    36: completeBossObjective
+    37: bossReturn
+    38: chaseSatelliteTarget
+    39: teleportToClosestPlayer
+    40: teleportDownedPlayerToWalkable
+    41: updateUsers
+    42: saveAlivePlayerState
+    43: removeBotSpawnPoint
+    44: enterExitTeleport
+    45: teleportBots
+    46: successfulTeleportStatus
+    47: updateBotSpawnPoints
+    48: locateAveragePlayerLocation
+    49: setClosestPlayerTeleportCenter
+    50: daytakerAbortReset
+    51: applyBriefBurnAndRoot
+    52: reenableBotWallAndJump
+    53: restoreBotThrottle
+    54: beginBotOverride
+    55: startBlasterDaytakerFacing
+    56: playReignitedWarningPair
+    57: startBotThrottleAtTarget
+    58: resumeBotFacingAndMovement
+    59: resumeBotMovementAndFacing
+    60: smolderBoost
+    61: spawnGasCloud
+    62: abilityThrowdown
+    63: entityFloat
+    64: explosionWarning
+    65: useLivingProjectile
+    66: playAquaPowerUpSound
+    67: powerUpUsage
+    68: playerForceField
+    69: noCooldowns
+    70: airStrike
+    71: instantRevive
+    72: healBeacon
+    73: sentryTurret
+    74: cloakingDevice
+    75: superNano
+    76: bouncePad
+    77: ultimateCharger
+    78: stun
+    79: finishPowerUpDrop
+    80: dropCarriedPowerUps
+    81: resetBattleAbilityCharge
+    82: checkEnhancementPlacement
+    83: startPupDefaultChase
+    84: applyBulkingSeasonStats
+    85: extendAugmentMelee
+    86: useAugmentAirAction
 }
 
 //43 elements
@@ -1778,7 +1781,7 @@ rule ("resolveReconnectUserIndex") {
     }
 }
 
-//39 elements
+//50 elements
 rule ("PREGAME QUICK TIPS FOR PLAYERS") {
     event {
         Ongoing - Global;
@@ -1788,7 +1791,7 @@ rule ("PREGAME QUICK TIPS FOR PLAYERS") {
     }
     actions {
         Wait(10, Abort When False); // 2 elements
-        Small Message(All Players(All Teams), Custom String("Quick Tip: {0}", Random Value In Array(Array(Custom String("Hold [{0}] while voting to cycle backwards.", Input Binding String(Button(Secondary Fire))), Custom String("Hold [{0}] for 5 seconds to switch heroes while in game.", Input Binding String(Button(Reload))), Custom String("Hacked zombies cannot infect players."), Custom String("Overheal abilities protect players from infection."))))); // 33 elements
+        Small Message(All Players(All Teams), Custom String("Quick Tip: {0}", Random Value In Array(Array(Custom String("Hold [{0}] while voting to cycle backwards.", Input Binding String(Button(Secondary Fire))), Custom String("Hold [{0}] for 5 seconds to switch heroes while in game.", Input Binding String(Button(Reload))), Custom String("Hacked zombies cannot infect players."), Custom String("Overheal abilities protect players from infection."), Custom String("Switch cameras: [{0}] + [{1}] + [{2}] (Normal / Precise / Smooth).", Input Binding String(Button(Crouch)), Input Binding String(Button(Jump)), Input Binding String(Button(Reload))))))); // 44 elements
         Loop; // 1 element
     }
 }
@@ -2817,6 +2820,49 @@ rule ("advanceEnhancementChoice") {
     }
     actions {
         Set Player Variable(Event Player, enhancementId, Modulo(Add((Event Player).enhancementId, Global.tmp0), Count Of(Global.phaseSlot9))); // 10 elements
+    }
+}
+
+//101 elements
+rule ("APPLY PLAYER CAMERA") {
+    event {
+        Subroutine;
+        applyPlayerCamera;
+    }
+    actions {
+        If(Compare((Event Player).actorTeamSlot28, ==, 1)); // 7 elements
+            "ZSMM-remixed: preserve both nested wall rays and the fast tracking speed.\nExpression alias only: position must keep reevaluating, never capture a scratch slot."
+            Start Camera(Event Player, Ray Cast Hit Position(Add(Event Player, Multiply(Up, Add(Distance Between(Eye Position(Event Player), Event Player), 0.5))), Ray Cast Hit Position(Add(Event Player, Multiply(Up, Add(Distance Between(Eye Position(Event Player), Event Player), 0.5))), Add(Add(Event Player, Multiply(Up, Add(Distance Between(Eye Position(Event Player), Event Player), 0.5))), Multiply(Facing Direction Of(Event Player), -3)), Null, Event Player, True), Null, Event Player, True), Add(Event Player, Multiply(Facing Direction Of(Event Player), 100)), 100); // 54 elements
+        Else If(Compare((Event Player).actorTeamSlot28, ==, 2)); // 7 elements
+            "OW2ZombieAndAbilities FAR: inline VL_CAMERA_FAR instead of importing its vector table.\nOmitted blend speed intentionally uses the donor's Start Camera default."
+            Start Camera(Event Player, Add(Add(Add(Event Player, World Vector Of(Vector(-0.3, True, -0.5), Event Player, Rotation)), Multiply(1.45, Up)), Multiply(Facing Direction Of(Event Player), -1.9)), Add(Event Player, Multiply(Facing Direction Of(Event Player), 60)), 0); // 29 elements
+        Else; // 1 element
+            Stop Camera(Event Player); // 1 element
+        End; // 1 element
+    }
+}
+
+//57 elements
+rule ("CYCLE PLAYER CAMERA") {
+    event {
+        Ongoing - Each Player;
+        Team 1;
+        All;
+    }
+    conditions {
+        Global.isGameplayActive == True; // 2 elements
+        (Event Player).isPlayerActive == True; // 3 elements
+        Is Dummy Bot(Event Player) == False; // 2 elements
+        Is Alive(Event Player) == True; // 2 elements
+        Is Button Held(Event Player, Button(Reload)) == True; // 4 elements
+        Is Button Held(Event Player, Button(Crouch)) == True; // 4 elements
+        Is Button Held(Event Player, Button(Jump)) == True; // 4 elements
+    }
+    actions {
+        "Ongoing rule retriggers only after a condition becomes false and true again."
+        Set Player Variable(Event Player, actorTeamSlot28, Modulo(Add((Event Player).actorTeamSlot28, True), 3)); // 8 elements
+        Call Subroutine(applyPlayerCamera); // 1 element
+        Small Message(Event Player, Custom String("Camera: {0} | Switch: [{1}] + [{2}", Value In Array(String Split(Custom String("Normal0Precise0Smooth"), First Of(Null)), (Event Player).actorTeamSlot28), Input Binding String(Button(Reload)), Custom String("{0}] + [{1}]", Input Binding String(Button(Crouch)), Input Binding String(Button(Jump))))); // 26 elements
     }
 }
 
@@ -4458,7 +4504,7 @@ rule ("PLAYER INITIALIZATION") {
             Call Subroutine(updateUsers); // 1 element
         End; // 1 element
         "Release the pregame camera only after placement and facing, as in the original transition."
-        Stop Camera(Event Player); // 1 element
+        Call Subroutine(applyPlayerCamera); // 1 element
         Clear Status(Event Player, Rooted); // 1 element
         Set Invisible(Event Player, None); // 1 element
     }

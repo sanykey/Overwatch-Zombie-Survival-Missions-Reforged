@@ -82,7 +82,7 @@ rule "PREGAME QUICK TIPS FOR PLAYERS":
     @Condition isPregameSetup == true
     
     wait(10, Wait.ABORT_WHEN_FALSE)
-    smallMessage(getAllPlayers(), "Quick Tip: {0}".format(random.choice(["Hold [{0}] while voting to cycle backwards.".format(inputBindingString(Button.SECONDARY_FIRE)), "Hold [{0}] for 5 seconds to switch heroes while in game.".format(inputBindingString(Button.RELOAD)), "Hacked zombies cannot infect players.", "Overheal abilities protect players from infection."])))
+    smallMessage(getAllPlayers(), "Quick Tip: {0}".format(random.choice(["Hold [{0}] while voting to cycle backwards.".format(inputBindingString(Button.SECONDARY_FIRE)), "Hold [{0}] for 5 seconds to switch heroes while in game.".format(inputBindingString(Button.RELOAD)), "Hacked zombies cannot infect players.", "Overheal abilities protect players from infection.", f"Switch cameras: [{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.JUMP)}] + [{inputBindingString(Button.RELOAD)}] (Normal / Precise / Smooth)."])))
     loop()
 
 

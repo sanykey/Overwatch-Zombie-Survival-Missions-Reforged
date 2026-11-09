@@ -22,6 +22,7 @@
 #!include "global_startup.opy"
 #!include "global_start_menu.opy"
 #!include "player_start_menu.opy"
+#!include "player_camera.opy"
 #!include "global_game_in_progress.opy"
 #!include "objective_types/objective_type_extraction_point.opy"
 #!include "objective_types/objective_type_showdown.opy"
