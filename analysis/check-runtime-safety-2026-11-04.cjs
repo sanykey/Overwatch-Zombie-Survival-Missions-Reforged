@@ -39,7 +39,7 @@ async function main() {
     const roll = 99.999;
     assert(sum < roll && roll < 100);
 
-    assert(files['global_startup.opy'].includes('"Number of Powerups Per Supply Drop", 5, 1, 10'));
+    assert(files['global_startup.opy'].includes('"Number of Powerups Per Supply Drop", 7, 1, 10'));
     const singleCount = {...files};
     assert(singleCount['supply_drops.opy'].includes('120 / (supplyDropPowerUpCount - 1)'));
     singleCount['supply_drops.opy'] = singleCount['supply_drops.opy'].replace('120 / (supplyDropPowerUpCount - 1)', '120 / (1 - 1)');

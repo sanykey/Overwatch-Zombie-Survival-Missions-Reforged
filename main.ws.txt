@@ -1992,9 +1992,9 @@ rule ("VARIABLE ASSIGNMENT") {
         Set Global Variable(customTeleportPositionList, Empty Array); // 1 element
         Set Global Variable(availableMutationList, Mapped Array(Array(Workshop Setting Toggle(Custom String("Mutations"), Custom String("Speed"), True, 0), Workshop Setting Toggle(Custom String("Mutations"), Custom String("Size Growth"), True, 1), Workshop Setting Toggle(Custom String("Mutations"), Custom String("Size Reduction"), True, 2), Workshop Setting Toggle(Custom String("Mutations"), Custom String("Radioactive"), True, 3), Workshop Setting Toggle(Custom String("Mutations"), Custom String("Heavy"), True, 4)), If-Then-Else(Current Array Element, Add(Current Array Index, True), Null))); // 79 elements
         Modify Global Variable(availableMutationList, Remove From Array By Value, Null); // 1 element
-        Set Global Variable(supplyDropPowerUpCount, Workshop Setting Integer(Custom String("Power Ups"), Custom String("Number of Powerups Per Supply Drop"), 5, 1, 10, -1)); // 16 elements
+        Set Global Variable(supplyDropPowerUpCount, Workshop Setting Integer(Custom String("Power Ups"), Custom String("Number of Powerups Per Supply Drop"), 7, 1, 10, -1)); // 16 elements
         "isObjectiveComplete = false  #Uninitialized Workshop variables already compare equal to false at match start."
-        Set Global Variable(numberOfBots, Workshop Setting Integer(Custom String("General"), Custom String("Number of zombies"), 6, 1, 23, 1)); // 16 elements
+        Set Global Variable(numberOfBots, Workshop Setting Integer(Custom String("General"), Custom String("Number of zombies"), 8, 1, 23, 1)); // 16 elements
     }
 }
 
