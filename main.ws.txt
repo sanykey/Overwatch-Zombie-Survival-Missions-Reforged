@@ -1,4 +1,4 @@
-/* Element count: (total 30087)
+/* Element count: (total 30071)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
  1567: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
@@ -135,6 +135,7 @@
    65: rule "noCooldowns (20-29)" (src/supply_drops.opy)
    63: rule "LONG REACH VENDETTA SWORD" (src/augments.opy)
    61: rule "PLAYER GETS DOWNED" (src/players_game_in_progress.opy)
+   61: rule "[debug] Resource usage and server load" (src/debug.opy)
    60: rule "RIDER DETATCH FROM TEAMMATES WHILE ALIVE" (src/zombie_types.opy)
    57: rule "CYCLE PLAYER CAMERA" (src/player_camera.opy)
    57: rule "PLAYERS ON OBJECTIVE CONTROL" (src/objective_types/objective_type_showdown.opy)
@@ -143,7 +144,6 @@
    56: rule "PYROTECHNIC APPLIES DAMAGE" (src/enhancements.opy)
    55: rule "BOTS JUMP" (src/bots_game_in_progress.opy)
    55: rule "abilityThrowdown" (src/zombie_types.opy)
-   55: rule "[debug] Resource usage and server load" (src/debug.opy)
    54: rule "shortenPrematchTimer" (src/subroutines.opy)
    54: rule "END VOTING" (src/global_start_menu.opy)
    54: rule "EXTRACTION ZONE INFECTION INCREASE" (src/objective_types/objective_type_extraction_point.opy)
@@ -229,7 +229,6 @@
    22: rule "MINIBOSS MESSAGE" (src/bots_game_in_progress.opy)
    22: rule "Subroutine smolderBoost" (src/zombie_types.opy)
    22: rule "DOUBLE JUMP BONUS LANDING WINDOW" (src/augments.opy)
-   22: rule "[debug] snky buffs" (src/debug.opy)
    21: rule "EGG SWITCHES THE POSITION FOR YOU" (src/objective_types/objective_type_zombie_egg.opy)
    21: rule "MOIRA & VENTURE INVIS WHILE USING SKILL" (src/hero_tuning.opy)
    21: rule "BOT STUN MANAGEMENT" (src/bots_game_in_progress.opy)
@@ -10349,28 +10348,7 @@ rule ("PLAYER DEALT DAMAGE") {
     }
 }
 
-//22 elements
-rule ("[debug] snky buffs") {
-    event {
-        Ongoing - Each Player;
-        All;
-        All;
-    }
-    conditions {
-        Custom String("{0}", Event Player) == Custom String("snky"); // 9 elements
-        Is Dummy Bot(Event Player) == False; // 2 elements
-        Has Spawned(Event Player) == True; // 2 elements
-        Global.isGameplayActive != False; // 2 elements
-    }
-    actions {
-        "Reapply after respawns, hero changes and power-ups that overwrite healing dealt.\neventPlayer.setDamageDealt(1000)\neventPlayer.setHealingDealt(10000)\neventPlayer.setMaxHealth(10000)\nRefuel during gameplay only: menu HUD cleanup runs before gameplay begins."
-        Wait(5, Ignore Condition); // 2 elements
-        Set Player Variable(Event Player, actorTeamSlot17, 100); // 2 elements
-        Set Player Variable(Event Player, actorTeamSlot2, 11); // 2 elements
-    }
-}
-
-//55 elements
+//61 elements
 rule ("[debug] Resource usage and server load") {
     event {
         Ongoing - Global;
@@ -10378,7 +10356,7 @@ rule ("[debug] Resource usage and server load") {
     actions {
         "START GAME and WIN/LOSS CONDITIONS destroy all HUD texts. Recreate this one\nafter either phase changes, allowing their cleanup actions to finish first."
         Wait(0.5, Ignore Condition); // 2 elements
-        Create HUD Text(Filtered Array(All Players(All Teams), And(Not(Is Dummy Bot(Current Array Element)), Compare(Custom String("{0}", Current Array Element), ==, Custom String("snky")))), Null, Custom String("Texts: {0}/128 | Effects: {1}/256\nServer load: {2}", Text Count, Entity Count, Custom String("{0} | Avg (2s): {1} | Peak (2s): {2}", Server Load, Server Load Average, Server Load Peak)), Null, Right, -10, Null, Color(White), Null, Visible To and String, Visible Never); // 30 elements
+        Create HUD Text(Filtered Array(All Players(All Teams), And(Not(Is Dummy Bot(Current Array Element)), Compare(Custom String("{0}", Current Array Element), ==, Custom String("snky")))), Null, Custom String("Texts: {0}/128 | Effects: {1}/256\nServer load: {2}", Text Count, Entity Count, Custom String("{0} | Avg (2s): {1} | Peak (2s): {2}", Server Load, Server Load Average, Custom String("{0}\nMap grid: {1}/900", Server Load Peak, Count Of(Global.mapGridList)))), Null, Right, -10, Null, Color(White), Null, Visible To and String, Visible Never); // 36 elements
         Set Global Variable(debugHud, Last Text ID); // 1 element
         "evalOnce captures the phase at HUD creation; the other operands keep updating."
         Wait Until(Or(Compare(Global.isPregameSetup, !=, Evaluate Once(Global.isPregameSetup)), Compare(Global.isGameplayActive, !=, Evaluate Once(Global.isGameplayActive))), 999999999999); // 18 elements
