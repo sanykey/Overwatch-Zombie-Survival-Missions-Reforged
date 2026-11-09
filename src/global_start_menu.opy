@@ -204,7 +204,7 @@ rule "EFFECTS/TEXTS":
         ),
         [
             "",
-            "Critical hits do more damage",
+            "+60% critical damage | +20% vs bosses",
             "Get infected faster, and convert it to explosive damage",
             "Dealing damage, within 15 meters, sets enemies on fire",
             "Deal 30% more healing, plus another 25% to infected players while reducing their infection level",

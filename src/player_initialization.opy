@@ -31,7 +31,7 @@ macro initializePlayerEnhancement():
             hudText(
                 eventPlayer,
                 iconString(Icon.SKULL),
-                "Bonus critical damage",
+                "+60% critical damage | +20% vs bosses",
                 "Brain Killer",
                 HudPosition.ACTUALLY_LEFT, 99, Color.RED, Color.RED, Color.RED, HudReeval.STRING
             )
