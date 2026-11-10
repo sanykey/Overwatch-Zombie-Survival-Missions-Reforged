@@ -27,7 +27,7 @@ subroutine useAugmentAirAction
 #!define AUGMENT_GRAPNEL_COOLDOWN 16
 #!define AUGMENT_GRAPNEL_TIMEOUT 1.5
 #!define augmentGrapnelCenter(player) ((player.getPosition() + player.getEyePosition()) * 0.5)
-#!define AUGMENT_GRAPNEL_MOVEMENT_BLOCKED (eventPlayer.isAttached or eventPlayer.hasStatus(Status.ROOTED) or eventPlayer.hasStatus(Status.STUNNED) or eventPlayer.hasStatus(Status.ASLEEP) or eventPlayer.hasStatus(Status.FROZEN) or eventPlayer.hasStatus(Status.KNOCKED_DOWN))
+#!define AUGMENT_GRAPNEL_MOVEMENT_BLOCKED (eventPlayer.isAttached or eventPlayer.hasStatus(Status.ROOTED) or eventPlayer.isCrowdControlled)
 #!define AUGMENT_GRAPNEL_CAN_MOVE (eventPlayer.hasSpawned() and eventPlayer.isAlive() and not AUGMENT_GRAPNEL_MOVEMENT_BLOCKED)
 
 # Only synchronous melee query inputs use global scratch storage. Callers set
@@ -206,7 +206,7 @@ def useAugmentAirAction():
     # Check the timestamp on this press; expiry alone must not trigger a held Jump.
     # Double Jump has no waits, so competing airborne / double-tap handlers share
     # one atomic cooldown gate and cannot produce two impulses for the same press.
-    if getTotalTimeElapsed() >= eventPlayer.augmentMovementReadyAt and not (eventPlayer.hasStatus(Status.ROOTED) or eventPlayer.hasStatus(Status.STUNNED) or eventPlayer.hasStatus(Status.ASLEEP) or eventPlayer.hasStatus(Status.FROZEN) or eventPlayer.hasStatus(Status.KNOCKED_DOWN)) and not eventPlayer.isAttached:
+    if getTotalTimeElapsed() >= eventPlayer.augmentMovementReadyAt and not (eventPlayer.hasStatus(Status.ROOTED) or eventPlayer.isCrowdControlled) and not eventPlayer.isAttached:
         eventPlayer.augmentIsAirActionReady = false
         if eventPlayer.augmentId == Augment.PHASE_DASH:
             eventPlayer.augmentMovementReadyAt = getTotalTimeElapsed() + AUGMENT_DASH_COOLDOWN
@@ -349,7 +349,7 @@ rule "LONG REACH MELEE PUSH":
     # automatically firing on cooldown expiry or when a target enters range.
     if not isGameplayActive or eventPlayer.augmentId != Augment.LONG_REACH or getTotalTimeElapsed() < eventPlayer.augmentMeleePushReadyAt:
         return
-    if [eventPlayer.hasStatus(Status.STUNNED), eventPlayer.hasStatus(Status.ASLEEP), eventPlayer.hasStatus(Status.FROZEN), eventPlayer.hasStatus(Status.KNOCKED_DOWN)].any():
+    if eventPlayer.isCrowdControlled:
         return
     # One synchronous spatial query per ready press, independent of native or
     # scripted damage attribution. Existing global scratch is dead before return;
@@ -400,10 +400,7 @@ rule "LONG REACH VENDETTA SWORD":
     @Condition eventPlayer.isUsingAbility1() == false
     @Condition eventPlayer.isUsingAbility2() == false
     @Condition eventPlayer.isUsingUltimate() == false
-    @Condition eventPlayer.hasStatus(Status.STUNNED) == false
-    @Condition eventPlayer.hasStatus(Status.ASLEEP) == false
-    @Condition eventPlayer.hasStatus(Status.FROZEN) == false
-    @Condition eventPlayer.hasStatus(Status.KNOCKED_DOWN) == false
+    @Condition eventPlayer.isCrowdControlled == false
 
     if not isGameplayActive or eventPlayer.augmentId != Augment.LONG_REACH:
         return
@@ -446,10 +443,7 @@ rule "LONG REACH MELEE WEAPONS":
     @Condition (eventPlayer.getHero() == Hero.RAMATTRA or not eventPlayer.isUsingAbility1()) == true
     @Condition (eventPlayer.getHero() == Hero.TORBJORN or not eventPlayer.isUsingAbility2()) == true
     @Condition (not eventPlayer.isUsingUltimate() or eventPlayer.getHero() in [Hero.GENJI, Hero.BRIGITTE, Hero.RAMATTRA]) == true
-    @Condition eventPlayer.hasStatus(Status.STUNNED) == false
-    @Condition eventPlayer.hasStatus(Status.ASLEEP) == false
-    @Condition eventPlayer.hasStatus(Status.FROZEN) == false
-    @Condition eventPlayer.hasStatus(Status.KNOCKED_DOWN) == false
+    @Condition eventPlayer.isCrowdControlled == false
 
     if eventPlayer.augmentId != Augment.LONG_REACH:
         return

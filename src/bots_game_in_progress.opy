@@ -214,13 +214,14 @@ rule "TELEPORT BOTS WHEN NOT USED FOR TOO LONG":
 rule "BOT STUN MANAGEMENT":
     @Event eachPlayer
     @Team 2
-    @Condition (eventPlayer.hasStatus(Status.KNOCKED_DOWN) or eventPlayer.hasStatus(Status.ASLEEP) or eventPlayer.hasStatus(Status.FROZEN) or eventPlayer.hasStatus(Status.STUNNED)) == true
+    @Condition eventPlayer.isCrowdControlled == true
     
-    eventPlayer.isCrowdControlled = true
+    # Preserve the bot flag's polling window and restore it after bot initialization.
+    eventPlayer.botIsCrowdControlled = true
     wait(0.125)
     if ruleCondition:
         loop()
-    eventPlayer.isCrowdControlled = false
+    eventPlayer.botIsCrowdControlled = false
 
 
 rule "UPDATE SUCCESSFUL TELEPORT STATUS":
@@ -378,7 +379,7 @@ rule "BOTS MELEE":
             eventPlayer.clearStatusEffect(Status.HACKED)
             eventPlayer.forceButtonPress(Button.ULTIMATE)
             wait(0.8)
-            if eventPlayer.isCrowdControlled or eventPlayer.hasStatus(Status.HACKED):
+            if eventPlayer.botIsCrowdControlled or eventPlayer.hasStatus(Status.HACKED):
                 break
             waitUntil(not eventPlayer.isUsingUltimate(), Math.INFINITY)
         eventPlayer.botIsFacingOverridden = false

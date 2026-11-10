@@ -461,7 +461,7 @@ def useLivingProjectile():
     if eventPlayer.enhancementHeldZombie != null:
         eventPlayer.enhancementHoldUntil = 0
         return
-    if [eventPlayer.isAttached, eventPlayer.hasStatus(Status.STUNNED), eventPlayer.hasStatus(Status.ASLEEP), eventPlayer.hasStatus(Status.FROZEN), eventPlayer.hasStatus(Status.KNOCKED_DOWN)].any():
+    if eventPlayer.isAttached or eventPlayer.isCrowdControlled:
         return
     # One raycast per press, against all players so intervening actors block pickup.
     # Synchronous scratch only: the candidate is committed to both actors before returning.
@@ -471,9 +471,8 @@ def useLivingProjectile():
         return
     if [livingProjectileCandidate.getTeam() != Team.2, not livingProjectileCandidate.isDummy(), not livingProjectileCandidate.isAlive(), livingProjectileCandidate.botIsInitializing, livingProjectileCandidate.botIsTeleporting, livingProjectileCandidate.botIsAttached].any():
         return
-    # Inspect native statuses directly: the cached bot CC flag can lag by 0.125s.
-    # Rooted alone never qualifies; Rooted plus low health or another CC still does.
-    if not (livingProjectileCandidate.getNormalizedHealth() < 0.2 or livingProjectileCandidate.hasStatus(Status.STUNNED) or livingProjectileCandidate.hasStatus(Status.ASLEEP) or livingProjectileCandidate.hasStatus(Status.FROZEN) or livingProjectileCandidate.hasStatus(Status.KNOCKED_DOWN)):
+    # Shared CC status excludes Rooted; low health still qualifies independently.
+    if not (livingProjectileCandidate.getNormalizedHealth() < 0.2 or livingProjectileCandidate.isCrowdControlled):
         return
     eventPlayer.enhancementHeldZombie = livingProjectileCandidate
     eventPlayer.enhancementHoldUntil = getTotalTimeElapsed() + DEAD_WEIGHT_DURATION

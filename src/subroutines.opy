@@ -762,7 +762,7 @@ def botRespawnInitialization():
     eventPlayer.botIsFacingOverridden = false
     eventPlayer.botIsThrottleOverridden = false
     eventPlayer.botIsWallPhaseAllowed = true
-    eventPlayer.isCrowdControlled = false
+    eventPlayer.botIsCrowdControlled = false
     eventPlayer.botAbilityState = null
     eventPlayer.botAuxiliaryState = null
     eventPlayer.botAbilityTarget = null
@@ -790,7 +790,7 @@ def abilityPlacement():
     @Name "abilityPlacement"
     
     wait(0.5)
-    if eventPlayer.isCrowdControlled == true:
+    if eventPlayer.botIsCrowdControlled == true:
         return
     eventPlayer.forceButtonPress(Button.PRIMARY_FIRE)
     eventPlayer.setStatusEffect(null, Status.ROOTED, 1.6)

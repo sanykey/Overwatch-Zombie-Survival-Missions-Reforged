@@ -509,7 +509,11 @@ playervar recoveryTimeSlot  # Existing Team 1 revive countdown / Team 2 replacem
 # Delay assigned to the next zombie replacement; bosses, objectives and air strike may change it.
 #!define botRespawnDelay recoveryTimeSlot
 
-playervar isCrowdControlled  # Set/reset on zombies by stun management; also queried on Team 1 Hitchhiker carriers (default false).
+playervar isCrowdControlled  # Boolean for both teams, set/reset by CROWD CONTROL STATUS. Excludes Rooted.
+# Only sampled ability-cancellation checks use this delayed flag; live gates,
+# facing reevaluation, recovery waits and cleanse targeting use isCrowdControlled.
+# The 0.125s polling window can retain recent CC, but is not a full event history.
+playervar botIsCrowdControlled  # BOT STUN MANAGEMENT refreshes it; botRespawnInitialization resets it.
 
 playervar actorCountdownSlot  # Existing Team 1 item countdown / Team 2 Charger windup progression.
 # No Cooldowns remaining seconds (15 down to 0).

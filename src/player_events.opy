@@ -1,6 +1,15 @@
 #!mainFile "../main.opy"
 
 
+rule "CROWD CONTROL STATUS":
+    @Event eachPlayer
+    @Condition (eventPlayer.hasStatus(Status.KNOCKED_DOWN) or eventPlayer.hasStatus(Status.ASLEEP) or eventPlayer.hasStatus(Status.FROZEN) or eventPlayer.hasStatus(Status.STUNNED)) == true
+
+    eventPlayer.isCrowdControlled = true
+    waitUntil(not ruleCondition, Math.INFINITY)
+    eventPlayer.isCrowdControlled = false
+
+
 rule "PLAYER DEALT FINAL BLOW":
     @Event playerDealtFinalBlow
     @Team 1

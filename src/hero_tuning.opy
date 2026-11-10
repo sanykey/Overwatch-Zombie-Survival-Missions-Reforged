@@ -13,18 +13,14 @@ rule "ANA SELF SUPER NANO":
 
     # Give native ally Nano priority. Ignore button release so a quick tap works.
     wait(0.128)
-    # Revalidate after the wait; Team 1's isCrowdControlled variable is not a
-    # native status tracker. Never spend charge while casting or incapacitated.
+    # Revalidate after the wait. Never spend charge while casting or incapacitated.
     if [
         eventPlayer.isDead(),
         eventPlayer.isUsingUltimate(),
         eventPlayer.isUsingAbility1(),
         eventPlayer.isUsingAbility2(),
         eventPlayer.hasStatus(Status.HACKED),
-        eventPlayer.hasStatus(Status.STUNNED),
-        eventPlayer.hasStatus(Status.ASLEEP),
-        eventPlayer.hasStatus(Status.FROZEN),
-        eventPlayer.hasStatus(Status.KNOCKED_DOWN),
+        eventPlayer.isCrowdControlled,
     ].any():
         return
     # Retain the donor's approximate 41m/10-degree ally check for pending target

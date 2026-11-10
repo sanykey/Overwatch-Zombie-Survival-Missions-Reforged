@@ -302,7 +302,7 @@ rule "BRUTE (REIN) SUPER SEISMIC SLAM":
         wait(0.016, Wait.RESTART_WHEN_TRUE)
         if eventPlayer.isDead():
             return
-        if eventPlayer.isCrowdControlled:
+        if eventPlayer.botIsCrowdControlled:
             return
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION), 20 * eventPlayer.sizeScale)
     (getLivingPlayers(Team.ALL).filter(lambda x: distance(eventPlayer, x) < 20 * eventPlayer.sizeScale and distance(worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION), x) > 1.5 * eventPlayer.sizeScale and isInLoS(eventPlayer.getEyePosition(), x.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) and x != eventPlayer and abs(eventPlayer.getPosition().y - x.getPosition().y) < 2 * eventPlayer.sizeScale)).applyImpulse(Vector.UP, 15 * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
@@ -386,14 +386,14 @@ rule "REIGNITED (ANRAN) ABILITIES":
     wait(0.5)
     eventPlayer.stopForcingButton(Button.CROUCH)
     waitUntil(not eventPlayer.isUsingUltimate(), Math.INFINITY)
-    if not eventPlayer.isCrowdControlled:
+    if not eventPlayer.botIsCrowdControlled:
         eventPlayer.forceButtonPress(Button.ABILITY_1)
         eventPlayer.stopThrottleInDirection()
         eventPlayer.applyImpulse(Vector.UP, 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
         wait(0.5)
         eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition()), 10000)
         eventPlayer.cancelPrimaryAction()
-        if not eventPlayer.isCrowdControlled and eventPlayer.botTarget != null:
+        if not eventPlayer.botIsCrowdControlled and eventPlayer.botTarget != null:
             eventPlayer.forceButtonPress(Button.ABILITY_1)
             eventPlayer.applyImpulse(normalize(directionTowards(eventPlayer, eventPlayer.botTarget) + offsetUpQuarterConst), eventPlayer.sizeScale * (15 + 25 * abs(cosDeg(verticalAngleOfDirection(directionTowards(eventPlayer, eventPlayer.botTarget))))), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
             eventPlayer.botIsThrottleOverridden = false
@@ -583,8 +583,9 @@ rule "CHARGER (MAUGA) CHARGE":
     eventPlayer.botIsThrottleOverridden = true
     eventPlayer.startThrottleInDirection(Vector.BACKWARD, 0.35, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
     #Charger walk backwards duration
+    # Keep recent CC visible between the 0.064s windup samples.
     for eventPlayer.botChargerWindupProgress in range(0, 1, 0.064):
-        if eventPlayer.isCrowdControlled or eventPlayer.isDead():
+        if eventPlayer.botIsCrowdControlled or eventPlayer.isDead():
             resumeBotFacingAndMovement()
             return
         wait(0.064)
@@ -638,7 +639,7 @@ rule "SLIMER (MERCY) TENTACLE GRAB":
     #Tentacle extends
     chaseAtRate(eventPlayer.botTentaclePosition, eventPlayer.botTentacleTargetPosition, 50)
     wait()
-    while eventPlayer.isAlive() and not eventPlayer.isCrowdControlled and distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.botTentacleTargetPosition, getLivingPlayers(Team.1), getAllPlayers(), true)) > distance(eventPlayer.getEyePosition(), eventPlayer.botTentaclePosition):
+    while eventPlayer.isAlive() and not eventPlayer.botIsCrowdControlled and distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.botTentacleTargetPosition, getLivingPlayers(Team.1), getAllPlayers(), true)) > distance(eventPlayer.getEyePosition(), eventPlayer.botTentaclePosition):
         if playerTargetList.any(lambda x: not x.hasStatus(Status.PHASED_OUT) and distance(eventPlayer.botTentaclePosition, x.getEyePosition()) < 1 and isInLoS(eventPlayer.botTentaclePosition, x.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS)):
             eventPlayer.botAbilityTarget = (playerTargetList.filter(lambda x: not x.hasStatus(Status.PHASED_OUT) and distance(eventPlayer.botTentaclePosition, x.getEyePosition()) < 1 and isInLoS(eventPlayer.botTentaclePosition, eventPlayer.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS)))[0]
             eventPlayer.botTentacleTargetPosition = eventPlayer.botAbilityTarget.getEyePosition()
@@ -647,7 +648,7 @@ rule "SLIMER (MERCY) TENTACLE GRAB":
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.LIME_GREEN, eventPlayer.botTentaclePosition, 0.25)
     #Tentacle retract
     chaseAtRate(eventPlayer.botTentaclePosition, eventPlayer.getEyePosition() + offsetUpHalfConst * eventPlayer.sizeScale if eventPlayer.isInAir() else eventPlayer.getEyePosition(), 50)
-    if eventPlayer.isAlive() and not eventPlayer.isCrowdControlled and eventPlayer.botAbilityTarget != null:
+    if eventPlayer.isAlive() and not eventPlayer.botIsCrowdControlled and eventPlayer.botAbilityTarget != null:
         #Knocks target down if facing away from Mercy
         if abs(angleDifference(eventPlayer.botAbilityTarget.getHorizontalFacingAngle(), horizontalAngleOfDirection(directionTowards(eventPlayer, eventPlayer.botAbilityTarget)))) < 75:
             eventPlayer.botAbilityTarget.setStatusEffect(null, Status.KNOCKED_DOWN, 0.35)
@@ -698,7 +699,7 @@ rule "PRIME SLIMER (EMRE) FLIGHT (BOSS)":
         eventPlayer.botIsThrottleOverridden = true
         eventPlayer.botIsFacingOverridden = true
         eventPlayer.stopThrottleInDirection()
-        while eventPlayer.botTarget != null and eventPlayer.isUsingUltimate() and not eventPlayer.isCrowdControlled:
+        while eventPlayer.botTarget != null and eventPlayer.isUsingUltimate() and not eventPlayer.botIsCrowdControlled:
             eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition() + evalOnce(directionFromAngles(random.uniform(0, 360), random.uniform(-90, 90))) * 1), 0 if eventPlayer.isCrowdControlled else 200)
             eventPlayer.forceButtonPress(Button.SECONDARY_FIRE)
             #Altitude too low
@@ -814,7 +815,7 @@ rule "STALKER (MOIRA) FADE":
         eventPlayer.setAbilityCooldown(Button.ABILITY_1, 0)
         eventPlayer.movementSpeedScale /= 2
         applyScaledMoveSpeed()
-        if eventPlayer.isDead() or eventPlayer.isCrowdControlled or eventPlayer.hasStatus(Status.HACKED):
+        if eventPlayer.isDead() or eventPlayer.botIsCrowdControlled or eventPlayer.hasStatus(Status.HACKED):
             break
         if eventPlayer in bossStateList:
             wait(0.125)
@@ -966,7 +967,8 @@ rule "DOWNFALLEN GRABS PLAYER":
     eventPlayer.applyImpulse(vect(0, 5, -3), 5 * eventPlayer.sizeScale, Relativity.TO_PLAYER, Impulse.CANCEL_CONTRARY_MOTION)
     waitUntil(not eventPlayer.isUsingUltimate(), 1.25)
     eventPlayer.cancelPrimaryAction()
-    if eventPlayer.isCrowdControlled or distance(eventPlayer.getEyePosition(), eventPlayer.botAbilityTarget.getEyePosition()) > 4 * eventPlayer.sizeScale or eventPlayer.hasStatus(Status.HACKED) or eventPlayer.isDead():
+    # A recent interruption must still cancel the grab when native ult ends.
+    if eventPlayer.botIsCrowdControlled or distance(eventPlayer.getEyePosition(), eventPlayer.botAbilityTarget.getEyePosition()) > 4 * eventPlayer.sizeScale or eventPlayer.hasStatus(Status.HACKED) or eventPlayer.isDead():
         eventPlayer.botAbilityTarget.stopFacing()
         eventPlayer.botAbilityTarget.detach()
     else:
@@ -1039,10 +1041,11 @@ rule "DAYTAKER (ILLARI) BURST":
     eventPlayer.botAbilityTarget.isAttached = true
     eventPlayer.botAbilityTarget.attachTo(eventPlayer, vect(0, 0.65 * eventPlayer.sizeScale, 0.5 * eventPlayer.sizeScale))
     waitUntil(eventPlayer.isDead() or eventPlayer.botTarget == null or angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 10, 10)
-    waitUntil(eventPlayer.isDead() or eventPlayer.isCrowdControlled == true or eventPlayer.botDaytakerCharge >= 2, Math.INFINITY)
+    # Use the same delayed flag for waking and classifying the interruption.
+    waitUntil(eventPlayer.isDead() or eventPlayer.botIsCrowdControlled == true or eventPlayer.botDaytakerCharge >= 2, Math.INFINITY)
     #Finish charging
     stopChasing(eventPlayer.botDaytakerCharge)
-    if eventPlayer.isCrowdControlled == true:
+    if eventPlayer.botIsCrowdControlled == true:
         lbl_0:
         stopChasing(eventPlayer.botDaytakerCharge)
         eventPlayer.botDaytakerCharge = 0
@@ -1178,7 +1181,7 @@ rule "ENSNARER (HAZARD) BLOCKS PLAYERS":
             wait(0.1)
             eventPlayer.forceButtonPress(Button.ABILITY_2)
             wait(0.5)
-            if eventPlayer.isCrowdControlled or eventPlayer.hasStatus(Status.HACKED):
+            if eventPlayer.botIsCrowdControlled or eventPlayer.hasStatus(Status.HACKED):
                 break
         eventPlayer.botIsFacingOverridden = false
         restoreDefaultFacingMovement()
@@ -1277,7 +1280,7 @@ rule "SMOLDER BOSS SLAM":
         eventPlayer.botSmolderState = 1
         eventPlayer.enableEnvironmentCollision()
         waitUntil(not eventPlayer.isUsingAbility1(), 1)
-        if not eventPlayer.isCrowdControlled and not eventPlayer.hasStatus(Status.HACKED):
+        if not eventPlayer.botIsCrowdControlled and not eventPlayer.hasStatus(Status.HACKED):
             eventPlayer.applyImpulse(Vector.DOWN, 4, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
             waitUntil(eventPlayer.isOnGround(), 2)
     wait(0.25)
@@ -1464,7 +1467,7 @@ def abilityThrowdown():
     restoreDefaultFacingMovement()
     if eventPlayer.getHero() == Hero.HAZARD:
         wait(0.25)
-        if eventPlayer.isCrowdControlled or eventPlayer.hasStatus(Status.HACKED):
+        if eventPlayer.botIsCrowdControlled or eventPlayer.hasStatus(Status.HACKED):
             return
         (getPlayersInRadius(eventPlayer, 2, Team.2, LosCheck.SURFACES).filter(lambda player: player != eventPlayer)).applyImpulse(Vector.UP, 3, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
         eventPlayer.applyImpulse(Vector.UP, distance(eventPlayer.botTarget, eventPlayer) * (2 / eventPlayer.sizeScale), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
