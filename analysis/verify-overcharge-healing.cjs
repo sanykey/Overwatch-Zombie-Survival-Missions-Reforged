@@ -17,7 +17,14 @@ async function main() {
     assert(healing.body.includes('Player Dealt Healing;\nTeam 1;'));
     assert(!healing.body.includes('conditions {'), 'Keep eligibility in the combined event Actions');
     const energy = slot('Energy'), charge = slot('Charge'), deadline = slot('Deadline'), snapshot = slot('StatsSnapshot');
-    const run = (name, state) => assert(start(compiled.get(name), state, compiled).done());
+    const run = (name, state) => {
+        const task = start(compiled.get(name), state, compiled);
+        if (name === 'OVERCHARGE ARMS CHARGE') {
+            state.time = task.deadline();
+            task.resume();
+        }
+        assert(task.done());
+    };
     let healingCases = 0, packCases = 0;
     for (const hero of ['Brigitte', 'Soldier: 76'])
     for (const enhancement of [0, 1, 9]) for (const amount of [0, 0.75, 30, 750])

@@ -1,4 +1,4 @@
-/* Element count: (total 30140)
+/* Element count: (total 30144)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
  1581: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
@@ -204,14 +204,15 @@
    33: rule "SMOLDER ACTIVATES FROM DAMAGE" (src/zombie_types.opy)
    33: rule "PROTECTOR (KIRIKO) USES CLEANSE" (src/zombie_types.opy)
    31: rule "PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)" (src/player_start_menu.opy)
+   30: rule "OVERCHARGE ARMS CHARGE" (src/enhancements.opy)
    29: rule "OVERCHARGE CLEARS CHARGE" (src/enhancements.opy)
    28: rule "SOMBRA USES TRANSLOCATOR" (src/hero_tuning.opy)
    28: rule "REIGNITED USES ULTIMATE NEAR PLAYER" (src/zombie_types.opy)
-   28: rule "OVERCHARGE ARMS CHARGE" (src/enhancements.opy)
    27: rule "PLAYER LEAVES THE GAME" (src/global_game_in_progress.opy)
    27: rule "CARRION (JETPACK CAT) TRANSPORT" (src/zombie_types.opy)
    26: rule "SURVIVOR JUMP" (src/objective_types/objective_type_survivor_rescue.opy)
    25: rule "Fix bot health" (src/bots_game_in_progress.opy)
+   25: rule "BOLT STRIKE ARMS CHARGE" (src/enhancements.opy)
    25: rule "Subroutine checkEnhancementPlacement" (src/enhancements.opy)
    25: rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)" (src/augments.opy)
    25: rule "AUGMENT AIR ACTION INPUT" (src/augments.opy)
@@ -224,7 +225,6 @@
    23: rule "UPDATE PREGAME VOTING STATUS" (src/player_start_menu.opy)
    23: rule "BOT TAKES DAMAGE AND SWITCHES TARGETS" (src/bots_game_in_progress.opy)
    23: rule "Subroutine spawnGasCloud" (src/zombie_types.opy)
-   23: rule "BOLT STRIKE ARMS CHARGE" (src/enhancements.opy)
    22: rule "PLAYER AUTOMATIC RELOAD" (src/players_game_in_progress.opy)
    22: rule "MINIBOSS MESSAGE" (src/bots_game_in_progress.opy)
    22: rule "Subroutine smolderBoost" (src/zombie_types.opy)
@@ -8826,7 +8826,7 @@ rule ("BULKING SEASON TOGGLES SIZE") {
     }
 }
 
-//23 elements
+//25 elements
 rule ("BOLT STRIKE ARMS CHARGE") {
     event {
         Ongoing - Each Player;
@@ -8842,6 +8842,8 @@ rule ("BOLT STRIKE ARMS CHARGE") {
         (Event Player).actorTeamSlot24 == Null; // 3 elements
     }
     actions {
+        "Match inventory powerup activation; releasing Melee early preserves the bank."
+        Wait(0.25, Abort When False); // 2 elements
         Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
         Set Player Variable(Event Player, actorTeamSlot24, -1); // 2 elements
     }
@@ -8868,7 +8870,7 @@ rule ("OVERCHARGE STORES HEALING AND ASSISTS") {
     }
 }
 
-//28 elements
+//30 elements
 rule ("OVERCHARGE ARMS CHARGE") {
     event {
         Ongoing - Each Player;
@@ -8884,6 +8886,8 @@ rule ("OVERCHARGE ARMS CHARGE") {
         (Event Player).actorTeamSlot23 == Null; // 3 elements
     }
     actions {
+        "Match inventory powerup activation; releasing Melee early preserves the bank."
+        Wait(0.25, Abort When False); // 2 elements
         "Transfer at most 100; retain the remainder in the uncapped bank.\nContinued healing cannot change this burst's fixed damage."
         Set Player Variable(Event Player, actorTeamSlot23, Min((Event Player).actorTeamSlot22, 100)); // 6 elements
         Modify Player Variable(Event Player, actorTeamSlot22, Subtract, (Event Player).actorTeamSlot23); // 3 elements

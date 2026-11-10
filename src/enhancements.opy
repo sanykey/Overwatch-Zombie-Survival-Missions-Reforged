@@ -143,6 +143,8 @@ rule "BOLT STRIKE ARMS CHARGE":
     @Condition eventPlayer.enhancementBoltEnergy >= 350
     @Condition eventPlayer.enhancementBoltBurst == 0
 
+    # Match inventory powerup activation; releasing Melee early preserves the bank.
+    wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.enhancementBoltEnergy = 0
     eventPlayer.enhancementBoltBurst = -1
 
@@ -174,6 +176,8 @@ rule "OVERCHARGE ARMS CHARGE":
     @Condition eventPlayer.enhancementCapacitorEnergy > 0
     @Condition eventPlayer.enhancementCapacitorCharge == 0
 
+    # Match inventory powerup activation; releasing Melee early preserves the bank.
+    wait(0.25, Wait.ABORT_WHEN_FALSE)
     # Transfer at most 100; retain the remainder in the uncapped bank.
     # Continued healing cannot change this burst's fixed damage.
     eventPlayer.enhancementCapacitorCharge = min(eventPlayer.enhancementCapacitorEnergy, 100)
