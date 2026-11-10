@@ -21,6 +21,8 @@ Adapt borrowed code to the project's architecture and review it for these optimi
 
 ## Commit Messages
 
+Never commit changes to git unless the user explicitly asks for it. Only create a commit when the user directly requests one.
+
 Always write commit messages in English, even if the user provides the proposed commit message in another language. Translate the intended meaning into English.
 
 If the task includes creating a commit, choose a prefix based on the purpose of the change:
