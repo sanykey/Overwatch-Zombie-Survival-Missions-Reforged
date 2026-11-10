@@ -51,7 +51,7 @@ For debugging, `[debug] snky buffs` grants snky 100 fuel and a Jetpack item afte
 
 ## Enhancements and Augments
 
-Choose one primary **Enhancement** with **Quick Melee** and one independent **Augment** with **Interact** before the match. Hold **Secondary Fire** while choosing to cycle backwards. During gameplay, Interact handles powerups and Dead Weight. Each unselected slot receives a random real option when gameplay starts, including for players joining an ongoing match: one of twelve Enhancements and one of ten Augments. Explicit choices are preserved, and an assigned option is retained across later spawns. There are no Workshop settings for default selections.
+Choose one primary **Enhancement** with **Quick Melee** and one independent **Augment** with **Interact** before the match. Menu choices cycle forwards only. During gameplay, Interact handles powerups and Dead Weight. Each unselected slot receives a random real option when gameplay starts, including for players joining an ongoing match: one of twelve Enhancements and one of ten Augments. Explicit choices are preserved, and an assigned option is retained across later spawns. There are no Workshop settings for default selections.
 
 Brain Killer is the first primary Enhancement in the voting list. Kevlar has moved from the primary slot to Augments and can now accompany any primary enhancement. Born to Battle stores up to two ability resets, earning one per final blow and spending one per reset.
 

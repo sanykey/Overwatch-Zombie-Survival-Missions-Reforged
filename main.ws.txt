@@ -1,4 +1,4 @@
-/* Element count: (total 30144)
+/* Element count: (total 30053)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
  1581: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
@@ -156,7 +156,6 @@
    52: rule "PLAYERS IN EXTRACTION POINT CONTROL" (src/objective_types/objective_type_extraction_point.opy)
    52: rule "BOTS RECOIL FROM DAMAGE" (src/bots_game_in_progress.opy)
    52: rule "dropCarriedPowerUps" (src/power_ups.opy)
-   50: rule "PREGAME QUICK TIPS FOR PLAYERS" (src/global_startup.opy)
    50: rule "BOT WANDERS" (src/bots_game_in_progress.opy)
    50: rule "CARRION (JETPACK CAT) ABILITIES" (src/zombie_types.opy)
    49: rule "CREATE PATH" (src/objective_types/objective_type_survivor_rescue.opy)
@@ -175,6 +174,7 @@
    45: rule "PLAYER INFECTION DAMAGE MANAGEMENT" (src/players_game_in_progress.opy)
    44: rule "BRUTE FIRE STRIKE (BOSS)" (src/zombie_types.opy)
    43: rule "OverPy <\ztx> / <\zfg> setup code"
+   43: rule "PREGAME QUICK TIPS FOR PLAYERS" (src/global_startup.opy)
    43: rule "Subroutine selectVoteWinner" (src/global_start_menu.opy)
    41: rule "ultimateCharger (90-99)" (src/supply_drops.opy)
    40: rule "SPAWN TIME CONTROL" (src/global_startup.opy)
@@ -190,9 +190,6 @@
    38: rule "PLAYER DROPS POWER UP (DEATH)" (src/power_ups.opy)
    37: rule "MUSIC/ANNOUNCER CONTROL" (src/global_start_menu.opy)
    36: rule "DAYTAKER'S REVENGE (BOSS)" (src/subroutines.opy)
-   36: rule "PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)" (src/player_start_menu.opy)
-   36: rule "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)" (src/player_start_menu.opy)
-   36: rule "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)" (src/player_start_menu.opy)
    36: rule "UPDATE SUCCESSFUL TELEPORT STATUS" (src/bots_game_in_progress.opy)
    35: rule "PREVENT PLAYERS FROM LEAVING START EARLY" (src/player_start_menu.opy)
    35: rule "PLAYER DROPS POWER UP (MANUAL)" (src/power_ups.opy)
@@ -203,7 +200,6 @@
    34: rule "DOUBLE JUMP BONUS EXPIRES" (src/augments.opy)
    33: rule "SMOLDER ACTIVATES FROM DAMAGE" (src/zombie_types.opy)
    33: rule "PROTECTOR (KIRIKO) USES CLEANSE" (src/zombie_types.opy)
-   31: rule "PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)" (src/player_start_menu.opy)
    30: rule "OVERCHARGE ARMS CHARGE" (src/enhancements.opy)
    29: rule "OVERCHARGE CLEARS CHARGE" (src/enhancements.opy)
    28: rule "SOMBRA USES TRANSLOCATOR" (src/hero_tuning.opy)
@@ -214,9 +210,11 @@
    25: rule "Fix bot health" (src/bots_game_in_progress.opy)
    25: rule "BOLT STRIKE ARMS CHARGE" (src/enhancements.opy)
    25: rule "Subroutine checkEnhancementPlacement" (src/enhancements.opy)
-   25: rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)" (src/augments.opy)
    25: rule "AUGMENT AIR ACTION INPUT" (src/augments.opy)
    25: rule "LONG REACH CARNAGE" (src/augments.opy)
+   24: rule "PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)" (src/player_start_menu.opy)
+   24: rule "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)" (src/player_start_menu.opy)
+   24: rule "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)" (src/player_start_menu.opy)
    24: rule "BOMBER (JUNKRAT) SELF DESTRUCT" (src/zombie_types.opy)
    24: rule "RIDER (WIDOWMAKER) ATTACH TO PLAYERS" (src/zombie_types.opy)
    24: rule "TUNNELER PORTAL LETS ZOMBIES THROUGH" (src/zombie_types.opy)
@@ -244,17 +242,20 @@
    19: rule "BIOWASTE HOLDER DIES, ORB IS QUEUED AND RESOURCE AMOUNT REMOVED" (src/objective_types/objective_type_biomorphing.opy)
    19: rule "STRIKER NORMAL PILE DRIVER" (src/zombie_types.opy)
    19: rule "HITCHHIKER PARENT RECIEVES HEALTH POOL" (src/enhancements.opy)
+   18: rule "advanceMenuChoice" (src/player_start_menu.opy)
    18: rule "OBJECTIVE COMPLETE" (src/global_game_in_progress.opy)
    18: rule "teleportDownedPlayerToWalkable" (src/players_game_in_progress.opy)
    18: rule "SOLDIER TACTICAL VISOR DAMAGE BONUS" (src/hero_tuning.opy)
    18: rule "DAYTAKER ATTACKS AT HALF HEALTH (BOSS)" (src/zombie_types.opy)
    18: rule "startPupDefaultChase" (src/enhancements.opy)
+   17: rule "PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)" (src/player_start_menu.opy)
    17: rule "BOSS HEALTH CONTROL (ALL BOSS OBJECTIVES)" (src/objective_types/objective_type_bosses.opy)
    17: rule "PLAYER CLEARS DAMAGE OVER TIME" (src/players_game_in_progress.opy)
    17: rule "PLAYER TARGET (REMOVE)" (src/players_game_in_progress.opy)
    17: rule "updateUsers" (src/players_game_in_progress.opy)
    17: rule "Subroutine saveAlivePlayerState" (src/players_game_in_progress.opy)
    17: rule "SUCCESSOR (DOOMFIST) HOLDS BLOCK IF TARGET USE ULTIMATE" (src/zombie_types.opy)
+   17: rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)" (src/augments.opy)
    16: rule "SURVIVOR FOLLOW TARGET LETS GO" (src/objective_types/objective_type_survivor_rescue.opy)
    15: rule "chaseSatelliteTarget" (src/objective_types/objective_type_satellite_uplink.opy)
    15: rule "playReignitedWarningPair" (src/zombie_types.opy)
@@ -271,10 +272,6 @@
    13: rule "explosionWarning" (src/zombie_types.opy)
    13: rule "GRAPNEL LAUNCHER DISCONNECT CLEANUP" (src/augments.opy)
    12: rule "SUCCESSOR PUNCHES IN RETALIATION" (src/zombie_types.opy)
-   11: rule "advanceChallengeVote" (src/player_start_menu.opy)
-   11: rule "advanceZombieVote" (src/player_start_menu.opy)
-   11: rule "advanceObjectiveVote" (src/player_start_menu.opy)
-   11: rule "advanceEnhancementChoice" (src/player_start_menu.opy)
    11: rule "DOOMFIST INVIS WHILE ULTING" (src/hero_tuning.opy)
    11: rule "TRACER INVIS WHILE RECALLING" (src/hero_tuning.opy)
    11: rule "STRIKER CANCEL BALL FORM" (src/zombie_types.opy)
@@ -712,64 +709,61 @@ subroutines {
     25: determineObjectiveType
     26: setObjectiveType
     27: selectVoteWinner
-    28: advanceChallengeVote
-    29: advanceZombieVote
-    30: advanceObjectiveVote
-    31: advanceEnhancementChoice
-    32: attachPlayerToPregameAnchor
-    33: applyPlayerCamera
-    34: nukeMap
-    35: startExtractionAscent
-    36: completeBossObjective
-    37: bossReturn
-    38: chaseSatelliteTarget
-    39: teleportToClosestPlayer
-    40: teleportDownedPlayerToWalkable
-    41: updateUsers
-    42: saveAlivePlayerState
-    43: superNano
-    44: removeBotSpawnPoint
-    45: enterExitTeleport
-    46: teleportBots
-    47: successfulTeleportStatus
-    48: updateBotSpawnPoints
-    49: locateAveragePlayerLocation
-    50: setClosestPlayerTeleportCenter
-    51: daytakerAbortReset
-    52: applyBriefBurnAndRoot
-    53: reenableBotWallAndJump
-    54: restoreBotThrottle
-    55: beginBotOverride
-    56: startBlasterDaytakerFacing
-    57: playReignitedWarningPair
-    58: startBotThrottleAtTarget
-    59: resumeBotFacingAndMovement
-    60: resumeBotMovementAndFacing
-    61: smolderBoost
-    62: spawnGasCloud
-    63: abilityThrowdown
-    64: entityFloat
-    65: explosionWarning
-    66: useLivingProjectile
-    67: playAquaPowerUpSound
-    68: powerUpUsage
-    69: playerForceField
-    70: noCooldowns
-    71: airStrike
-    72: instantRevive
-    73: healBeacon
-    74: sentryTurret
-    75: cloakingDevice
-    76: ultimateCharger
-    77: stun
-    78: finishPowerUpDrop
-    79: dropCarriedPowerUps
-    80: resetBattleAbilityCharge
-    81: checkEnhancementPlacement
-    82: startPupDefaultChase
-    83: applyBulkingSeasonStats
-    84: extendAugmentMelee
-    85: useAugmentAirAction
+    28: advanceMenuChoice
+    29: attachPlayerToPregameAnchor
+    30: applyPlayerCamera
+    31: nukeMap
+    32: startExtractionAscent
+    33: completeBossObjective
+    34: bossReturn
+    35: chaseSatelliteTarget
+    36: teleportToClosestPlayer
+    37: teleportDownedPlayerToWalkable
+    38: updateUsers
+    39: saveAlivePlayerState
+    40: superNano
+    41: removeBotSpawnPoint
+    42: enterExitTeleport
+    43: teleportBots
+    44: successfulTeleportStatus
+    45: updateBotSpawnPoints
+    46: locateAveragePlayerLocation
+    47: setClosestPlayerTeleportCenter
+    48: daytakerAbortReset
+    49: applyBriefBurnAndRoot
+    50: reenableBotWallAndJump
+    51: restoreBotThrottle
+    52: beginBotOverride
+    53: startBlasterDaytakerFacing
+    54: playReignitedWarningPair
+    55: startBotThrottleAtTarget
+    56: resumeBotFacingAndMovement
+    57: resumeBotMovementAndFacing
+    58: smolderBoost
+    59: spawnGasCloud
+    60: abilityThrowdown
+    61: entityFloat
+    62: explosionWarning
+    63: useLivingProjectile
+    64: playAquaPowerUpSound
+    65: powerUpUsage
+    66: playerForceField
+    67: noCooldowns
+    68: airStrike
+    69: instantRevive
+    70: healBeacon
+    71: sentryTurret
+    72: cloakingDevice
+    73: ultimateCharger
+    74: stun
+    75: finishPowerUpDrop
+    76: dropCarriedPowerUps
+    77: resetBattleAbilityCharge
+    78: checkEnhancementPlacement
+    79: startPupDefaultChase
+    80: applyBulkingSeasonStats
+    81: extendAugmentMelee
+    82: useAugmentAirAction
 }
 
 //43 elements
@@ -1788,7 +1782,7 @@ rule ("resolveReconnectUserIndex") {
     }
 }
 
-//50 elements
+//43 elements
 rule ("PREGAME QUICK TIPS FOR PLAYERS") {
     event {
         Ongoing - Global;
@@ -1798,7 +1792,7 @@ rule ("PREGAME QUICK TIPS FOR PLAYERS") {
     }
     actions {
         Wait(10, Abort When False); // 2 elements
-        Small Message(All Players(All Teams), Custom String("Quick Tip: {0}", Random Value In Array(Array(Custom String("Hold [{0}] while voting to cycle backwards.", Input Binding String(Button(Secondary Fire))), Custom String("Hold [{0}] for 5 seconds to switch heroes while in game.", Input Binding String(Button(Reload))), Custom String("Hacked zombies cannot infect players."), Custom String("Overheal abilities protect players from infection."), Custom String("Switch cameras: [{0}] + [{1}] + [{2}] (Normal / Precise / Smooth).", Input Binding String(Button(Crouch)), Input Binding String(Button(Jump)), Input Binding String(Button(Reload))))))); // 44 elements
+        Small Message(All Players(All Teams), Custom String("Quick Tip: {0}", Random Value In Array(Array(Custom String("Hold [{0}] for 5 seconds to switch heroes while in game.", Input Binding String(Button(Reload))), Custom String("Hacked zombies cannot infect players."), Custom String("Overheal abilities protect players from infection."), Custom String("Switch cameras: [{0}] + [{1}] + [{2}] (Normal / Precise / Smooth).", Input Binding String(Button(Crouch)), Input Binding String(Button(Jump)), Input Binding String(Button(Reload))))))); // 37 elements
         Loop; // 1 element
     }
 }
@@ -2637,7 +2631,7 @@ rule ("PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY)") {
     }
 }
 
-//36 elements
+//24 elements
 rule ("PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)") {
     event {
         Ongoing - Each Player;
@@ -2653,15 +2647,15 @@ rule ("PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)") {
     actions {
         "Update player voting status"
         Set Player Variable(Event Player, isPregameVoting, True); // 1 element
-        Set Global Variable(tmp0, If-Then-Else(Is Button Held(Event Player, Button(Secondary Fire)), Subtract(Count Of(Global.phaseSlot3), True), 1)); // 12 elements
-        Call Subroutine(advanceChallengeVote); // 1 element
-        While(Not(Value In Array(Value In Array(Global.phaseSlot3, (Event Player).actorTeamSlot3), True))); // 9 elements
-            Call Subroutine(advanceChallengeVote); // 1 element
-        End; // 1 element
+        "Scratch is consumed by advanceMenuChoice and copied back before any yield."
+        Set Global Variable(tmp0, (Event Player).actorTeamSlot3); // 3 elements
+        Set Global Variable(tmp1, Mapped Array(Global.phaseSlot3, Value In Array(Current Array Element, True))); // 6 elements
+        Call Subroutine(advanceMenuChoice); // 1 element
+        Set Player Variable(Event Player, actorTeamSlot3, Global.tmp0); // 2 elements
     }
 }
 
-//36 elements
+//24 elements
 rule ("PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)") {
     event {
         Ongoing - Each Player;
@@ -2677,15 +2671,14 @@ rule ("PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)") {
     actions {
         "Update player voting status"
         Set Player Variable(Event Player, isPregameVoting, True); // 1 element
-        Set Global Variable(tmp0, If-Then-Else(Is Button Held(Event Player, Button(Secondary Fire)), Subtract(Count Of(Global.phaseSlot5), True), 1)); // 12 elements
-        Call Subroutine(advanceZombieVote); // 1 element
-        While(Not(Value In Array(Value In Array(Global.phaseSlot5, (Event Player).menuTradeItemSlot), True))); // 9 elements
-            Call Subroutine(advanceZombieVote); // 1 element
-        End; // 1 element
+        Set Global Variable(tmp0, (Event Player).menuTradeItemSlot); // 3 elements
+        Set Global Variable(tmp1, Mapped Array(Global.phaseSlot5, Value In Array(Current Array Element, True))); // 6 elements
+        Call Subroutine(advanceMenuChoice); // 1 element
+        Set Player Variable(Event Player, menuTradeItemSlot, Global.tmp0); // 2 elements
     }
 }
 
-//36 elements
+//24 elements
 rule ("PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)") {
     event {
         Ongoing - Each Player;
@@ -2701,15 +2694,14 @@ rule ("PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)") {
     actions {
         "Update player voting status"
         Set Player Variable(Event Player, isPregameVoting, True); // 1 element
-        Set Global Variable(tmp0, If-Then-Else(Is Button Held(Event Player, Button(Secondary Fire)), Subtract(Count Of(Global.phaseSlot4), True), 1)); // 12 elements
-        Call Subroutine(advanceObjectiveVote); // 1 element
-        While(Not(Value In Array(Value In Array(Global.phaseSlot4, (Event Player).actorTeamSlot21), True))); // 9 elements
-            Call Subroutine(advanceObjectiveVote); // 1 element
-        End; // 1 element
+        Set Global Variable(tmp0, (Event Player).actorTeamSlot21); // 3 elements
+        Set Global Variable(tmp1, Mapped Array(Global.phaseSlot4, Value In Array(Current Array Element, True))); // 6 elements
+        Call Subroutine(advanceMenuChoice); // 1 element
+        Set Player Variable(Event Player, actorTeamSlot21, Global.tmp0); // 2 elements
     }
 }
 
-//31 elements
+//17 elements
 rule ("PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)") {
     event {
         Ongoing - Each Player;
@@ -2722,11 +2714,10 @@ rule ("PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)") {
         Is Button Held(Event Player, Button(Melee)) == True; // 4 elements
     }
     actions {
-        Set Global Variable(tmp0, If-Then-Else(Is Button Held(Event Player, Button(Secondary Fire)), Subtract(Count Of(Global.phaseSlot9), True), 1)); // 12 elements
-        Call Subroutine(advanceEnhancementChoice); // 1 element
-        While(Not(Value In Array(Global.phaseSlot9, (Event Player).enhancementId))); // 7 elements
-            Call Subroutine(advanceEnhancementChoice); // 1 element
-        End; // 1 element
+        Set Global Variable(tmp0, (Event Player).enhancementId); // 3 elements
+        Set Global Variable(tmp1, Global.phaseSlot9); // 2 elements
+        Call Subroutine(advanceMenuChoice); // 1 element
+        Set Player Variable(Event Player, enhancementId, Global.tmp0); // 2 elements
     }
 }
 
@@ -2787,47 +2778,19 @@ rule ("attachPlayerToPregameAnchor") {
     }
 }
 
-//11 elements
-rule ("advanceChallengeVote") {
+//18 elements
+rule ("advanceMenuChoice") {
     event {
         Subroutine;
-        advanceChallengeVote;
+        advanceMenuChoice;
     }
     actions {
-        Set Player Variable(Event Player, actorTeamSlot3, Modulo(Add((Event Player).actorTeamSlot3, Global.tmp0), Count Of(Global.phaseSlot3))); // 10 elements
-    }
-}
-
-//11 elements
-rule ("advanceZombieVote") {
-    event {
-        Subroutine;
-        advanceZombieVote;
-    }
-    actions {
-        Set Player Variable(Event Player, menuTradeItemSlot, Modulo(Add((Event Player).menuTradeItemSlot, Global.tmp0), Count Of(Global.phaseSlot5))); // 10 elements
-    }
-}
-
-//11 elements
-rule ("advanceObjectiveVote") {
-    event {
-        Subroutine;
-        advanceObjectiveVote;
-    }
-    actions {
-        Set Player Variable(Event Player, actorTeamSlot21, Modulo(Add((Event Player).actorTeamSlot21, Global.tmp0), Count Of(Global.phaseSlot4))); // 10 elements
-    }
-}
-
-//11 elements
-rule ("advanceEnhancementChoice") {
-    event {
-        Subroutine;
-        advanceEnhancementChoice;
-    }
-    actions {
-        Set Player Variable(Event Player, enhancementId, Modulo(Add((Event Player).enhancementId, Global.tmp0), Count Of(Global.phaseSlot9))); // 10 elements
+        While(True); // 1 element
+            Set Global Variable(tmp0, Modulo(Add(Global.tmp0, True), Count Of(Global.tmp1))); // 8 elements
+            If(Value In Array(Global.tmp1, Global.tmp0)); // 5 elements
+                Break; // 1 element
+            End; // 1 element
+        End; // 1 element
     }
 }
 
@@ -9300,7 +9263,7 @@ rule ("AUGMENT MENU") {
     }
 }
 
-//25 elements
+//17 elements
 rule ("PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)") {
     event {
         Ongoing - Each Player;
@@ -9313,7 +9276,7 @@ rule ("PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)") {
         Is Button Held(Event Player, Button(Interact)) == True; // 4 elements
     }
     actions {
-        Set Player Variable(Event Player, augmentId, Modulo(Add((Event Player).augmentId, If-Then-Else(Is Button Held(Event Player, Button(Secondary Fire)), 10, 1)), 11)); // 16 elements
+        Set Player Variable(Event Player, augmentId, Modulo(Add((Event Player).augmentId, True), 11)); // 8 elements
     }
 }
 

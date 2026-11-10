@@ -1,10 +1,14 @@
 #!mainFile "../main.opy"
 
-subroutine advanceChallengeVote
-subroutine advanceZombieVote
-subroutine advanceObjectiveVote
-subroutine advanceEnhancementChoice
+subroutine advanceMenuChoice
+
 subroutine attachPlayerToPregameAnchor
+
+# Synchronous menu helper contract: caller sets the current index and enabled/icon
+# array, then copies the returned index to its own player field. No waits, async
+# calls, nested helpers or reevaluated captures may occur while these slots are live.
+#!define menuChoiceIndex tmp0
+#!define menuChoiceOptions tmp1
 
 
 rule "PLAYER MENU INITIALIZATION":
@@ -143,11 +147,11 @@ rule "PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)":
     
     #Update player voting status
     eventPlayer.isPregameVoting = true
-    #!define pregameChallengeVoteOffset tmp0
-    pregameChallengeVoteOffset = 1 if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else len(challengeVoteList) - 1
-    advanceChallengeVote()
-    while not challengeVoteList[eventPlayer.pregameChallengeVote][1]:
-        advanceChallengeVote()
+    # Scratch is consumed by advanceMenuChoice and copied back before any yield.
+    menuChoiceIndex = eventPlayer.pregameChallengeVote
+    menuChoiceOptions = challengeVoteList.map(lambda option: option[1])
+    advanceMenuChoice()
+    eventPlayer.pregameChallengeVote = menuChoiceIndex
 
 
 rule "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)":
@@ -160,11 +164,10 @@ rule "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)":
     
     #Update player voting status
     eventPlayer.isPregameVoting = true
-    #!define pregameZombieVoteOffset tmp0
-    pregameZombieVoteOffset = 1 if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else len(zombieVoteList) - 1
-    advanceZombieVote()
-    while not zombieVoteList[eventPlayer.pregameZombieVote][1]:
-        advanceZombieVote()
+    menuChoiceIndex = eventPlayer.pregameZombieVote
+    menuChoiceOptions = zombieVoteList.map(lambda option: option[1])
+    advanceMenuChoice()
+    eventPlayer.pregameZombieVote = menuChoiceIndex
 
 
 rule "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)":
@@ -177,11 +180,10 @@ rule "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)":
     
     #Update player voting status
     eventPlayer.isPregameVoting = true
-    #!define pregameObjectiveVoteOffset tmp0
-    pregameObjectiveVoteOffset = 1 if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else len(objectiveTypeVoteList) - 1
-    advanceObjectiveVote()
-    while not objectiveTypeVoteList[eventPlayer.pregameObjectiveVote][1]:
-        advanceObjectiveVote()
+    menuChoiceIndex = eventPlayer.pregameObjectiveVote
+    menuChoiceOptions = objectiveTypeVoteList.map(lambda option: option[1])
+    advanceMenuChoice()
+    eventPlayer.pregameObjectiveVote = menuChoiceIndex
 
 
 rule "PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)":
@@ -191,11 +193,10 @@ rule "PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)":
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
     
-    #!define enhancementIdOffset tmp0
-    enhancementIdOffset = 1 if not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else len(enhancementOptionList) - 1
-    advanceEnhancementChoice()
-    while not enhancementOptionList[eventPlayer.enhancementId]:
-        advanceEnhancementChoice()
+    menuChoiceIndex = eventPlayer.enhancementId
+    menuChoiceOptions = enhancementOptionList
+    advanceMenuChoice()
+    eventPlayer.enhancementId = menuChoiceIndex
 
 
 rule "UPDATE PREGAME VOTING STATUS":
@@ -236,25 +237,10 @@ def attachPlayerToPregameAnchor():
     eventPlayer.attachTo(getPlayers(Team.2)[0], localVector(eventPlayer.pregamePosition, getPlayers(Team.2)[0], Transform.ROTATION_AND_TRANSLATION))
 
 
-def advanceChallengeVote():
-    @Name "advanceChallengeVote"
+def advanceMenuChoice():
+    @Name "advanceMenuChoice"
 
-    eventPlayer.pregameChallengeVote = (eventPlayer.pregameChallengeVote + pregameChallengeVoteOffset) % len(challengeVoteList)
-
-
-def advanceZombieVote():
-    @Name "advanceZombieVote"
-
-    eventPlayer.pregameZombieVote = (eventPlayer.pregameZombieVote + pregameZombieVoteOffset) % len(zombieVoteList)
-
-
-def advanceObjectiveVote():
-    @Name "advanceObjectiveVote"
-
-    eventPlayer.pregameObjectiveVote = (eventPlayer.pregameObjectiveVote + pregameObjectiveVoteOffset) % len(objectiveTypeVoteList)
-
-
-def advanceEnhancementChoice():
-    @Name "advanceEnhancementChoice"
-
-    eventPlayer.enhancementId = (eventPlayer.enhancementId + enhancementIdOffset) % len(enhancementOptionList)
+    while true:
+        menuChoiceIndex = (menuChoiceIndex + 1) % len(menuChoiceOptions)
+        if menuChoiceOptions[menuChoiceIndex]:
+            break
