@@ -1,10 +1,10 @@
-/* Element count: (total 29987)
+/* Element count: (total 29975)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
  1581: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
  1074: rule "botRespawnInitialization" (src/subroutines.opy)
   783: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
-  445: rule "GRAPNEL LAUNCHER" (src/augments.opy)
+  443: rule "GRAPNEL LAUNCHER" (src/augments.opy)
   434: rule "SKIP ASSEMBLING HEROES" (src/global_startup.opy)
   412: rule "PLAYERS REPAIR TERMINALS" (src/objective_types/objective_type_satellite_uplink.opy)
   398: rule "LASER BARRICADE BLOCKS ZOMBIES" (src/augments.opy)
@@ -25,13 +25,13 @@
   265: rule "REVIVE PLAYER OR ADVANCE DEATH TIMER" (src/players_game_in_progress.opy)
   259: rule "EFFECT/TEXT (GLOBAL)" (src/supply_drops.opy)
   254: rule "powerUpUsage" (src/supply_drops.opy)
-  249: rule "AMMO PACK REFILL FALLBACK" (src/augments.opy)
+  247: rule "AMMO PACK REFILL FALLBACK" (src/augments.opy)
   239: rule "BOT DIES" (src/bots_game_in_progress.opy)
   239: rule "HITCHHIKER ATTACH/DETATCH" (src/enhancements.opy)
   231: rule "VARIABLE ASSIGNMENT" (src/global_startup.opy)
   211: rule "P.U.P. CONTROL" (src/enhancements.opy)
   208: rule "setDifficulty" (src/subroutines.opy)
-  203: rule "AMMO PACK MAGAZINES" (src/augments.opy)
+  201: rule "AMMO PACK MAGAZINES" (src/augments.opy)
   200: rule "stun (100-109)" (src/supply_drops.opy)
   197: rule "EFFECTS/TEXT" (src/player_start_menu.opy)
   195: rule "setObjectiveType" (src/global_start_menu.opy)
@@ -165,12 +165,12 @@
    48: rule "TUNNELER (SYMMETRA) BUILDS PORTAL" (src/zombie_types.opy)
    48: rule "SMOLDER BOSS EVENT STARTS" (src/zombie_types.opy)
    48: rule "instantRevive (0-9)" (src/supply_drops.opy)
-   48: rule "AUGMENT AIR ACTION RECHARGE" (src/augments.opy)
    47: rule "determineZombieMode" (src/global_start_menu.opy)
    47: rule "PLAYERS AT TERMINALS CONTROLS" (src/objective_types/objective_type_satellite_uplink.opy)
    46: rule "DOWNFALLEN PULLS PLAYERS" (src/zombie_types.opy)
    46: rule "GLADIATOR (JUNKERQUEEN) COMMAND SHOUT" (src/zombie_types.opy)
    46: rule "CADAVER (ANA) DETONATION" (src/zombie_types.opy)
+   46: rule "AUGMENT AIR ACTION RECHARGE" (src/augments.opy)
    45: rule "BIOWASTE MANAGEMENT" (src/objective_types/objective_type_biomorphing.opy)
    45: rule "PLAYER INFECTION DAMAGE MANAGEMENT" (src/players_game_in_progress.opy)
    44: rule "BRUTE FIRE STRIKE (BOSS)" (src/zombie_types.opy)
@@ -179,7 +179,6 @@
    41: rule "ultimateCharger (90-99)" (src/supply_drops.opy)
    40: rule "SPAWN TIME CONTROL" (src/global_startup.opy)
    40: rule "applyBulkingSeasonStats" (src/enhancements.opy)
-   40: rule "DOUBLE JUMP DOUBLE TAP" (src/augments.opy)
    39: rule "locateAveragePlayerLocation" (src/bots_game_in_progress.opy)
    39: rule "updateBotSpawnPoints" (src/bots_game_in_progress.opy)
    39: rule "BRUTE KNOCKDOWN" (src/zombie_types.opy)
@@ -188,6 +187,7 @@
    38: rule "ENSNARER LUNGE" (src/zombie_types.opy)
    38: rule "JETPACK FUEL HUD" (src/supply_drops.opy)
    38: rule "PLAYER DROPS POWER UP (DEATH)" (src/power_ups.opy)
+   38: rule "DOUBLE JUMP DOUBLE TAP" (src/augments.opy)
    37: rule "MUSIC/ANNOUNCER CONTROL" (src/global_start_menu.opy)
    36: rule "DAYTAKER'S REVENGE (BOSS)" (src/subroutines.opy)
    36: rule "UPDATE SUCCESSFUL TELEPORT STATUS" (src/bots_game_in_progress.opy)
@@ -213,7 +213,6 @@
    25: rule "BOLT STRIKE ARMS CHARGE" (src/enhancements.opy)
    25: rule "Subroutine checkEnhancementPlacement" (src/enhancements.opy)
    25: rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)" (src/augments.opy)
-   25: rule "AUGMENT AIR ACTION INPUT" (src/augments.opy)
    25: rule "LONG REACH CARNAGE" (src/augments.opy)
    24: rule "PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)" (src/player_start_menu.opy)
    24: rule "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)" (src/player_start_menu.opy)
@@ -226,6 +225,7 @@
    23: rule "UPDATE PREGAME VOTING STATUS" (src/player_start_menu.opy)
    23: rule "BOT TAKES DAMAGE AND SWITCHES TARGETS" (src/bots_game_in_progress.opy)
    23: rule "Subroutine spawnGasCloud" (src/zombie_types.opy)
+   23: rule "AUGMENT AIR ACTION INPUT" (src/augments.opy)
    22: rule "PLAYER AUTOMATIC RELOAD" (src/players_game_in_progress.opy)
    22: rule "MINIBOSS MESSAGE" (src/bots_game_in_progress.opy)
    22: rule "Subroutine smolderBoost" (src/zombie_types.opy)
@@ -9329,7 +9329,7 @@ rule ("APOTHECARY TELEPORT") {
     }
 }
 
-//48 elements
+//46 elements
 rule ("AUGMENT AIR ACTION RECHARGE") {
     event {
         Ongoing - Each Player;
@@ -9340,7 +9340,6 @@ rule ("AUGMENT AIR ACTION RECHARGE") {
         Global.isGameplayActive == True; // 2 elements
         Array Contains(Array(2, 3), (Event Player).augmentId) == True; // 10 elements
         Is Alive(Event Player) == True; // 2 elements
-        Is Dummy Bot(Event Player) == False; // 2 elements
         Is On Ground(Event Player) == False; // 2 elements
     }
     actions {
@@ -9356,7 +9355,7 @@ rule ("AUGMENT AIR ACTION RECHARGE") {
     }
 }
 
-//25 elements
+//23 elements
 rule ("AUGMENT AIR ACTION INPUT") {
     event {
         Ongoing - Each Player;
@@ -9366,7 +9365,6 @@ rule ("AUGMENT AIR ACTION INPUT") {
     conditions {
         Array Contains(Array(2, 3), (Event Player).augmentId) == True; // 10 elements
         Is Alive(Event Player) == True; // 2 elements
-        Is Dummy Bot(Event Player) == False; // 2 elements
         (Event Player).augmentState1 == True; // 3 elements
         Is On Ground(Event Player) == False; // 2 elements
         Is Button Held(Event Player, Button(Jump)) == True; // 4 elements
@@ -9376,7 +9374,7 @@ rule ("AUGMENT AIR ACTION INPUT") {
     }
 }
 
-//40 elements
+//38 elements
 rule ("DOUBLE JUMP DOUBLE TAP") {
     event {
         Ongoing - Each Player;
@@ -9386,7 +9384,6 @@ rule ("DOUBLE JUMP DOUBLE TAP") {
     conditions {
         (Event Player).augmentId == 3; // 4 elements
         Is Alive(Event Player) == True; // 2 elements
-        Is Dummy Bot(Event Player) == False; // 2 elements
         Is Button Held(Event Player, Button(Jump)) == True; // 4 elements
     }
     actions {
@@ -9530,7 +9527,7 @@ rule ("PHASE DASH LANDING WAVE") {
     }
 }
 
-//445 elements
+//443 elements
 rule ("GRAPNEL LAUNCHER") {
     event {
         Ongoing - Each Player;
@@ -9542,7 +9539,6 @@ rule ("GRAPNEL LAUNCHER") {
         (Event Player).augmentId == 6; // 4 elements
         Has Spawned(Event Player) == True; // 2 elements
         Is Alive(Event Player) == True; // 2 elements
-        Is Dummy Bot(Event Player) == False; // 2 elements
         Is Button Held(Event Player, Button(Crouch)) == True; // 4 elements
         Is Button Held(Event Player, Button(Jump)) == True; // 4 elements
     }
@@ -9789,7 +9785,7 @@ rule ("extendAugmentMelee") {
     }
 }
 
-//203 elements
+//201 elements
 rule ("AMMO PACK MAGAZINES") {
     event {
         Ongoing - Each Player;
@@ -9801,7 +9797,6 @@ rule ("AMMO PACK MAGAZINES") {
         (Event Player).augmentId == 5; // 4 elements
         Has Spawned(Event Player) == True; // 2 elements
         Is Alive(Event Player) == True; // 2 elements
-        Is Dummy Bot(Event Player) == False; // 2 elements
     }
     actions {
         "Cache once per hero/weapon, so respawns and returning to an earlier loadout\ncannot repeatedly double an already enlarged magazine. No polling loop.\nDisarm the previous loadout's refill snapshot during the initialization wait."
@@ -9833,7 +9828,7 @@ rule ("AMMO PACK MAGAZINES") {
     }
 }
 
-//249 elements
+//247 elements
 rule ("AMMO PACK REFILL FALLBACK") {
     event {
         Ongoing - Each Player;
@@ -9845,7 +9840,6 @@ rule ("AMMO PACK REFILL FALLBACK") {
         (Event Player).augmentId == 5; // 4 elements
         Has Spawned(Event Player) == True; // 2 elements
         Is Alive(Event Player) == True; // 2 elements
-        Is Dummy Bot(Event Player) == False; // 2 elements
         Hero Of(Event Player) == First Of((Event Player).augmentState1); // 5 elements
         Weapon(Event Player) == Value In Array((Event Player).augmentState1, True); // 6 elements
         (Event Player).augmentState2 != Null; // 3 elements

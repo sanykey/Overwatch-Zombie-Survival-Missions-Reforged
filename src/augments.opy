@@ -119,7 +119,6 @@ rule "AUGMENT AIR ACTION RECHARGE":
     @Condition isGameplayActive == true
     @Condition eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP]
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isDummy() == false
     @Condition eventPlayer.isOnGround() == false
 
     # Arm once per airborne interval, only after the takeoff button is released.
@@ -139,7 +138,6 @@ rule "AUGMENT AIR ACTION INPUT":
     @Team 1
     @Condition eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP]
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isDummy() == false
     @Condition eventPlayer.augmentIsAirActionReady == true
     @Condition eventPlayer.isOnGround() == false
     @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
@@ -152,7 +150,6 @@ rule "DOUBLE JUMP DOUBLE TAP":
     @Team 1
     @Condition eventPlayer.augmentId == Augment.DOUBLE_JUMP
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isDummy() == false
     @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
 
     # Only press edges update the timestamp. A blocked native jump can leave the
@@ -275,7 +272,6 @@ rule "GRAPNEL LAUNCHER":
     @Condition eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isDummy() == false
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
     @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
 
@@ -534,7 +530,6 @@ rule "AMMO PACK MAGAZINES":
     @Condition eventPlayer.augmentId == Augment.AMMO_PACK
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isDummy() == false
 
     # Cache once per hero/weapon, so respawns and returning to an earlier loadout
     # cannot repeatedly double an already enlarged magazine. No polling loop.
@@ -578,7 +573,6 @@ rule "AMMO PACK REFILL FALLBACK":
     @Condition eventPlayer.augmentId == Augment.AMMO_PACK
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isDummy() == false
     @Condition eventPlayer.getHero() == eventPlayer.augmentAmmoLoadout[0]
     @Condition eventPlayer.getCurrentWeapon() == eventPlayer.augmentAmmoLoadout[1]
     @Condition eventPlayer.augmentAmmoFallbackState != null

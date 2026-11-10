@@ -10,7 +10,6 @@ globalvar debugHud # ID of snky's diagnostics HUD, recreated after phase cleanup
 # rule "[debug] snky buffs":
 #     @Event eachPlayer
 #     @Condition "{0}".format(eventPlayer) == "snky"
-#     @Condition not eventPlayer.isDummy()
 #     @Condition eventPlayer.hasSpawned()
 #     @Condition isGameplayActive
 
