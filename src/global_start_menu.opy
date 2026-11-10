@@ -109,8 +109,8 @@ rule "EFFECTS/TEXTS":
             "Challenge: Pandora's Box"
         ][localPlayer.pregameChallengeVote],
         [
-            "",
-            "",
+            " ",
+            " ",
             "Zombies fire their guns!",
             "Non-boss zombies use abilities",
             "Faster, stronger, and deadlier",
@@ -171,15 +171,15 @@ rule "EFFECTS/TEXTS":
             "Objective Type: Mixed Objectives {0}".format(iconString(Icon.SPIRAL))
         ][localPlayer.pregameObjectiveVote],
         [
-            "",
+            " ",
             "Players must contest a point against zombies",
             "Spawns giant versions of zombies",
-            null,
-            null,
+            " ",
+            " ",
             "Clear zombies from a designated area",
             "Survivors must destroy an object that is spawning zombies",
             "Survivors must repair terminals to communicate with a satellite",
-            null,
+            " ",
             "Randomly assigns all types of objectives"
         ][localPlayer.pregameObjectiveVote],
         "Change Vote (Press [{0}])".format(inputBindingString(Button.ABILITY_2)) if isVoting or localPlayer.pregameObjectiveVote == 0 else [],
@@ -203,7 +203,7 @@ rule "EFFECTS/TEXTS":
             enhancementOptionList[localPlayer.enhancementId] if localPlayer.enhancementId > Enhancement.NO_PREFERENCE else ""
         ),
         [
-            "",
+            " ",
             "+60% critical damage | +20% vs bosses",
             "Get infected faster, and convert it to explosive damage",
             "Dealing damage, within 15 meters, sets enemies on fire",
