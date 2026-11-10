@@ -201,6 +201,11 @@ rule "PREGAME SPAWN ROOM ROTATION":
 
 
 rule "VARIABLE ASSIGNMENT":
+    #Augment name and melee-hero tables live in a rule assignment, not a module-level
+    #initializer: the optimizer folds module-level string tables back into use sites.
+    augmentNameListConst = ["No Preference", "Kevlar", "Shock Landing", "Double Jump", "Long Reach", "Ammo Pack", "Grapnel Launcher", "Laser Barricade", "Apothecary", "Scavenger", "Survivalist"]
+    augmentMeleeWeaponHeroListConst = [Hero.REINHARDT, Hero.BRIGITTE, Hero.DMON, Hero.GENJI, Hero.RAMATTRA, Hero.TORBJORN]
+    augmentMeleeButtonWeaponHeroListConst = [Hero.REINHARDT, Hero.BRIGITTE, Hero.TORBJORN]
     if getCurrentGamemode() == Gamemode.CTF:
         attackSpawnRooms = sorted(getSpawnPoints(Team.2), lambda x: distance(x, getFlagPosition(Team.2)))[0]
     elif getCurrentGamemode() == Gamemode.TDM:

@@ -3,7 +3,6 @@
 subroutine extendAugmentMelee
 subroutine useAugmentAirAction
 
-#!define AUGMENT_NAMES ["No Preference", "Kevlar", "Shock Landing", "Double Jump", "Long Reach", "Ammo Pack", "Grapnel Launcher", "Laser Barricade", "Apothecary", "Scavenger", "Survivalist"]
 #!define AUGMENT_DASH_PHASE_DURATION 0.5
 #!define AUGMENT_DASH_COOLDOWN 13
 #!define AUGMENT_DASH_WAVE_RADIUS 6
@@ -19,8 +18,6 @@ subroutine useAugmentAirAction
 #!define AUGMENT_VENDETTA_WINDUP 0.15
 #!define AUGMENT_VENDETTA_INTERVAL 0.6
 #!define AUGMENT_IMPACT_SIZE 0.4
-#!define AUGMENT_MELEE_WEAPON_HEROES [Hero.REINHARDT, Hero.BRIGITTE, Hero.DMON, Hero.GENJI, Hero.RAMATTRA, Hero.TORBJORN]
-#!define AUGMENT_MELEE_BUTTON_WEAPON_HEROES [Hero.REINHARDT, Hero.BRIGITTE, Hero.TORBJORN]
 #!define AUGMENT_GRAPNEL_RANGE 40
 #!define AUGMENT_GRAPNEL_MIN_RANGE 7
 #!define AUGMENT_GRAPNEL_SPEED 40

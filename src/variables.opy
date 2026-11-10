@@ -54,7 +54,7 @@ enum Enhancement:
     DEAD_WEIGHT = 11,
     BOLT_STRIKE = 12,
 
-# Independent secondary enhancement slot. IDs index the names/icons in augments.opy.
+# Independent secondary enhancement slot. IDs index the augment name, icon and color tables.
 enum Augment:
     NO_PREFERENCE = 0,
     KEVLAR = 1,
@@ -72,6 +72,10 @@ enum Augment:
 #!define ENHANCEMENT_ICONS enhancementIconListConst
 #!define AUGMENT_ICONS augmentIconListConst
 #!define AUGMENT_COLORS augmentColorListConst
+# Augment name table, indexed by selection ID; melee-augment hero tables, checked by hero.
+#!define AUGMENT_NAMES augmentNameListConst
+#!define AUGMENT_MELEE_WEAPON_HEROES augmentMeleeWeaponHeroListConst
+#!define AUGMENT_MELEE_BUTTON_WEAPON_HEROES augmentMeleeButtonWeaponHeroListConst
 
 # Objective IDs also index objectiveTypeVoteList and identify entries in objectiveTypeList.
 # Biomorphing and Survivor Rescue are only selectable through the mixed pool.
@@ -967,3 +971,11 @@ globalvar enhancementIconListConst = [EnhancementIcon.NO_PREFERENCE, Enhancement
 
 # Immutable palette shared by the pregame menu and gameplay HUD; indexed by Augment.
 globalvar augmentColorListConst = [Color.AQUA, Color.LIGHT_GRAY, Color.YELLOW, Color.SKY_BLUE, Color.ORANGE, Color.WHITE, Color.TURQUOISE, Color.BLUE, Color.GREEN, Color.LIME_GREEN, Color.RED]
+
+# Immutable augment names, indexed by selection ID; shared by the augment menu and combat HUD.
+# Melee-augment hero tables; the extended list also provides the index for per-hero melee values.
+# Initialized in VARIABLE ASSIGNMENT, not here: module-level initializers let the optimizer
+# fold the string table back into its use sites and drop the assignment as dead code.
+globalvar augmentNameListConst
+globalvar augmentMeleeWeaponHeroListConst
+globalvar augmentMeleeButtonWeaponHeroListConst
