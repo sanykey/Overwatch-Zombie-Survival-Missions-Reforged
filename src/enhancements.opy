@@ -12,7 +12,7 @@ subroutine applyBulkingSeasonStats
 #!define DEAD_WEIGHT_THROW_DAMAGE 50
 #!define DEAD_WEIGHT_DAMAGE_DELAY 0.75
 
-#!define overchargeAssistTotal(player) (player.getStatistic(Stat.OFFENSIVE_ASSISTS) + player.getStatistic(Stat.DEFENSIVE_ASSISTS))
+#!define overchargeEarnedEnergyTotal(player) (player.getStatistic(Stat.HEALING_DEALT) / 3 + 10 * (player.getStatistic(Stat.OFFENSIVE_ASSISTS) + player.getStatistic(Stat.DEFENSIVE_ASSISTS)))
 
 rule "ZOMBIE HYBRID":
     @Event eachPlayer
@@ -147,20 +147,21 @@ rule "BOLT STRIKE ARMS CHARGE":
     eventPlayer.enhancementBoltBurst = -1
 
 
-rule "OVERCHARGE STORES ASSISTS":
+rule "OVERCHARGE STORES HEALING AND ASSISTS":
     @Event eachPlayer
     @Team 1
     @Condition isGameplayActive == true
     @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
-    @Condition overchargeAssistTotal(eventPlayer) != eventPlayer.enhancementCapacitorAssistSnapshot
+    @Condition overchargeEarnedEnergyTotal(eventPlayer) != eventPlayer.enhancementCapacitorStatsSnapshot
 
-    # No assist event exists. Only Overcharge players observe the two native counters.
+    # Native Healing Dealt is the only healing source; event healing can include passive regeneration.
+    # Combine healing and weighted assists so one existing snapshot covers all earned energy.
     # Synchronous scratch: consumed before any wait/call/HUD reevaluation can reuse tmp0.
-    #!define overchargeCurrentAssists tmp0
-    overchargeCurrentAssists = overchargeAssistTotal(eventPlayer)
-    eventPlayer.enhancementCapacitorEnergy += max(0, overchargeCurrentAssists - eventPlayer.enhancementCapacitorAssistSnapshot) * 10
+    #!define overchargeCurrentEarnedEnergy tmp0
+    overchargeCurrentEarnedEnergy = overchargeEarnedEnergyTotal(eventPlayer)
+    eventPlayer.enhancementCapacitorEnergy += max(0, overchargeCurrentEarnedEnergy - eventPlayer.enhancementCapacitorStatsSnapshot)
     # Resync on a stat reset too, without subtracting energy or paying twice.
-    eventPlayer.enhancementCapacitorAssistSnapshot = overchargeCurrentAssists
+    eventPlayer.enhancementCapacitorStatsSnapshot = overchargeCurrentEarnedEnergy
 
 
 rule "OVERCHARGE ARMS CHARGE":

@@ -758,9 +758,9 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 # Bulking Season: retained stacks; each credited elimination (kill/damage participation) adds one; death halves it (rounded down).
 # Exclusive primary enhancement, owned by this human; safe alongside all independent Augments.
 #!define enhancementBulkStacks actorTeamSlot22
-# Overcharge: unspent energy (actual healing 1:1, +10 per offensive/defensive assist), independent of an armed burst.
-# Exclusive primary enhancement; slots belong to its selected human (the healer
-# for dealt-healing events, the receiver for health packs), never an enemy target.
+# Overcharge: unspent energy (native Healing Dealt 1:3, +10 per offensive/defensive assist), independent of an armed burst.
+# Exclusive primary enhancement; its selected human owns the native-stat earnings,
+# charge spending and persistent balance; never write it on an enemy target.
 #!define enhancementCapacitorEnergy actorTeamSlot22
 # Bolt Strike: actual chain health removed plus 0.3 per primary hero hit,
 # capped at 350; retained on death.
@@ -813,9 +813,9 @@ playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateS
 playervar actorTeamSlot25  # Team 2: botCandidateTarget; Team 1: enhancementStateSlot4. Receivers, not rule teams, own the storage.
 # First candidate that passed line of sight in selectTarget; null when none passed.
 #!define botCandidateTarget actorTeamSlot25
-# Overcharge: last credited offensive + defensive assist total for this human.
+# Overcharge: last credited native Healing Dealt / 3 + 10 * (offensive + defensive assists).
 # Exclusive primary enhancement; retained across death/hero changes, no wait/chase/HUD ownership.
-#!define enhancementCapacitorAssistSnapshot actorTeamSlot25
+#!define enhancementCapacitorStatsSnapshot actorTeamSlot25
 # Battery remaining placement cooldown.
 #!define enhancementBatteryPlacementCooldown actorTeamSlot25
 # P.U.P. freezing aura is visible.

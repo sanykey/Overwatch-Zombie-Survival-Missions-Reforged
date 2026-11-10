@@ -73,8 +73,8 @@ macro initializePlayerEnhancement():
             eventPlayer.enhancementCapacitorEnergy = 0
             eventPlayer.enhancementCapacitorCharge = 0
             eventPlayer.enhancementCapacitorDeadline = 0
-            # Baseline existing match stats; do not pay for assists before selection/join.
-            eventPlayer.enhancementCapacitorAssistSnapshot = overchargeAssistTotal(eventPlayer)
+            # Baseline existing match stats; do not pay for healing/assists before selection/join.
+            eventPlayer.enhancementCapacitorStatsSnapshot = overchargeEarnedEnergyTotal(eventPlayer)
             hudText(
                 eventPlayer,
                 EnhancementIcon.OVERCHARGE,

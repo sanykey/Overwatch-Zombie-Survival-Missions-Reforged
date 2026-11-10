@@ -86,6 +86,7 @@ function value(expr, state, element) {
     const name = expr.slice(0, expr.indexOf('(')), a = args(expr);
     const v = i => value(a[i], state, element);
     switch (name) {
+        case 'Player Stat': return v(0).stats?.[a[1]] ?? 0;
         case 'Button': case 'Hero': return a[0];
         case 'Icon String': assert.equal(a[0], 'Checkmark'); return '✓';
         case 'Array': return a.map(item => value(item, state, element));

@@ -78,10 +78,6 @@ rule "PLAYER DEALT HEALING":
                 eventPlayer.enhancementPlagueCureTotal += 0.5
                 playEffect(eventPlayer, DynamicEffect.GOOD_PICKUP_EFFECT, Color.GREEN, healee, 1)
                 smallMessage(eventPlayer, "You cured yourself!" if healee == eventPlayer else "You cured {0} {1}!".format(healee, heroIcon(healee.getHero())))
-    elif eventPlayer.enhancementId == Enhancement.OVERCHARGE:
-        # Event Ability can be Null for hero self-healing (including Inspire).
-        # Credit actual healing without filtering it by ability attribution.
-        eventPlayer.enhancementCapacitorEnergy += eventHealing
 
 
 rule "PLAYER DEALT DAMAGE":

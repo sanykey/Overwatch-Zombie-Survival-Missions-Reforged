@@ -401,7 +401,7 @@ rule "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)":
     victim.startDamageOverTime(eventPlayer, eventPlayer.botBiteDuration, eventPlayer.botBiteDamage)
     if eventPlayer.damageOverTimeRemaining < eventPlayer.botBiteDuration:
         eventPlayer.damageOverTimeRemaining = eventPlayer.botBiteDuration
-    if createWorkshopSettingBool("Infection", "Melee Infection Enabled", true) and not eventPlayer.hasStatus(Status.HACKED) and not victim.isDummy() and (victim.getHealth() <= (victim.getMaxHealth() if victim.enhancementHitchhikerPassenger != null else victim.initialMaxHealth)):
+    if createWorkshopSettingBool("Infection", "Melee Infection Enabled", true) and not eventPlayer.hasStatus(Status.HACKED) and not victim.isDummy() and not victim.isUsingUltimate() and (victim.getHealth() <= (victim.getMaxHealth() if victim.enhancementHitchhikerPassenger != null else victim.initialMaxHealth)):
         victim.infectionLevel += (2 if eventPlayer in bossStateList or eventPlayer in miniBossList or eventPlayer.botMutationId == 4 else 1) / ((3 if not victim.isInfected and victim.getHero() in [Hero.REINHARDT, Hero.HAZARD, Hero.VENDETTA, Hero.DMON] else 2) if victim.enhancementId != Enhancement.ZOMBIE_HYBRID else 1)
         if not victim.isInfected and victim.infectionLevel >= 1:
             victim.isInfected = true

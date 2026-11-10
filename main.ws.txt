@@ -1,7 +1,7 @@
-/* Element count: (total 30071)
+/* Element count: (total 30113)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
- 1567: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
+ 1577: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
  1074: rule "botRespawnInitialization" (src/subroutines.opy)
   783: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
   481: rule "GRAPNEL LAUNCHER" (src/augments.opy)
@@ -60,11 +60,12 @@
   140: rule "beaconofHealing (40-49)" (src/supply_drops.opy)
   138: rule "LIVING PROJECTILE RELEASE" (src/enhancements.opy)
   137: rule "explosionSequence" (src/subroutines.opy)
+  137: rule "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)" (src/bots_game_in_progress.opy)
   137: rule "BORN TO BATTLE PLAYER USES ABILITY CHARGE" (src/enhancements.opy)
   136: rule "GENERATE SUPPLY DROPS" (src/supply_drops.opy)
   136: rule "useLivingProjectile" (src/enhancements.opy)
   134: rule "AUGMENT MENU" (src/augments.opy)
-  133: rule "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)" (src/bots_game_in_progress.opy)
+  133: rule "PLAYER PICKS UP HEALTH PACK" (src/players_game_in_progress.opy)
   132: rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS" (src/objective_types/objective_type_biomorphing.opy)
   132: rule "STRIKER (WRECKING BALL) PILE DRIVER" (src/zombie_types.opy)
   132: rule "useAugmentAirAction" (src/augments.opy)
@@ -84,7 +85,6 @@
   114: rule "RUSHER MOLTEN CORE (BOSS)" (src/zombie_types.opy)
   113: rule "RIDER ATTACH TO TEAMMATES" (src/zombie_types.opy)
   113: rule "CHARGE BATTERY (USAGE AND COOLDOWNS)" (src/enhancements.opy)
-  112: rule "PLAYER PICKS UP HEALTH PACK" (src/players_game_in_progress.opy)
   111: rule "SPAWN BOSS" (src/objective_types/objective_type_bosses.opy)
   110: rule "RIDER USE GRAPPLING HOOK" (src/zombie_types.opy)
   108: rule "ENSNARER (HAZARD) BLOCKS PLAYERS" (src/zombie_types.opy)
@@ -108,7 +108,6 @@
    85: rule "PREGAME SPAWN ROOM ROTATION" (src/global_startup.opy)
    85: rule "determineObjectiveType" (src/global_start_menu.opy)
    85: rule "DECREASES CAPTURE PERCENTAGE" (src/objective_types/objective_type_showdown.opy)
-   84: rule "PLAYER DEALT HEALING" (src/player_events.opy)
    83: rule "SMOLDER (WINSTON) SEES PLAYER" (src/zombie_types.opy)
    80: rule "HITCHHIKER LIFEBONDS" (src/enhancements.opy)
    77: rule "RANDOM ABILITIES" (src/global_game_in_progress.opy)
@@ -117,6 +116,7 @@
    74: rule "restoreDefaultFacingMovement" (src/subroutines.opy)
    74: rule "enterExitTeleport" (src/bots_game_in_progress.opy)
    74: rule "P.U.P. TARGET" (src/enhancements.opy)
+   74: rule "PLAYER DEALT HEALING" (src/player_events.opy)
    73: rule "ANA SELF SUPER NANO" (src/hero_tuning.opy)
    73: rule "DESELECT BOT TARGET" (src/bots_game_in_progress.opy)
    73: rule "BRUTE, GLADIATOR, AND SMOLDER ALTERNATE ATTACK CONTROL" (src/zombie_types.opy)
@@ -150,6 +150,7 @@
    54: rule "PLAYER EARNED ELIMINATION" (src/player_events.opy)
    53: rule "ATTACK SPAWN ROOM CONTROL" (src/global_game_in_progress.opy)
    53: rule "BOSS TELEPORT TO TARGET IF NOT USED" (src/objective_types/objective_type_bosses.opy)
+   53: rule "OVERCHARGE STORES HEALING AND ASSISTS" (src/enhancements.opy)
    52: rule "START GAME" (src/global_startup.opy)
    52: rule "PLAYERS IN EXTRACTION POINT CONTROL" (src/objective_types/objective_type_extraction_point.opy)
    52: rule "BOTS RECOIL FROM DAMAGE" (src/bots_game_in_progress.opy)
@@ -193,7 +194,6 @@
    36: rule "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)" (src/player_start_menu.opy)
    36: rule "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)" (src/player_start_menu.opy)
    36: rule "UPDATE SUCCESSFUL TELEPORT STATUS" (src/bots_game_in_progress.opy)
-   36: rule "OVERCHARGE STORES ASSISTS" (src/enhancements.opy)
    35: rule "PREVENT PLAYERS FROM LEAVING START EARLY" (src/player_start_menu.opy)
    35: rule "PLAYER DROPS POWER UP (MANUAL)" (src/power_ups.opy)
    35: rule "ZOMBIE HYBRID" (src/enhancements.opy)
@@ -4646,7 +4646,7 @@ rule ("REVIVE PLAYER OR ADVANCE DEATH TIMER") {
     }
 }
 
-//112 elements
+//133 elements
 rule ("PLAYER PICKS UP HEALTH PACK") {
     event {
         Player Received Healing;
@@ -4658,9 +4658,8 @@ rule ("PLAYER PICKS UP HEALTH PACK") {
     }
     actions {
         Start Heal Over Time(Event Player, Null, 5, 20); // 3 elements
-        "Self-attributed packs already charge Overcharge through playerDealtHealing."
-        If(And(And(Global.isGameplayActive, Compare((Event Player).enhancementId, ==, 9)), Compare(Healer, !=, Event Player))); // 15 elements
-            Modify Player Variable(Event Player, actorTeamSlot22, Add, Event Healing); // 1 element
+        If(And(Global.isGameplayActive, Compare((Event Player).enhancementId, ==, 9))); // 10 elements
+            Modify Player Variable(Event Player, actorTeamSlot22, Add, Divide(Event Healing, 3)); // 4 elements
         End; // 1 element
         If(Or(Compare(Global.difficultySetting, <, 3), Compare(Match Time, >, Global.matchEndTime))); // 12 elements
             "Update known health pack positions"
@@ -4677,8 +4676,12 @@ rule ("PLAYER PICKS UP HEALTH PACK") {
             Small Message(Event Player, Custom String("Match time has reached 0. Health packs no longer cure infection.")); // 5 elements
         End; // 1 element
         If(Compare((Event Player).augmentId, ==, 8)); // 7 elements
-            "Only reduce existing infection; never create or increase vaccine reserves.\nScripted healing is not a health-pack event, so this cannot recurse."
+            "Scripted healing is not a health-pack event, so this cannot recurse.\nSynchronous scratch: consumed immediately after Heal, with no waits/calls.\nNo healer is attributed, so no dealt-healing handler can overwrite this slot."
+            Set Global Variable(tmp0, Health(Event Player)); // 2 elements
             Heal(Event Player, Null, Event Healing); // 1 element
+            If(And(Global.isGameplayActive, Compare((Event Player).enhancementId, ==, 9))); // 10 elements
+                Modify Player Variable(Event Player, actorTeamSlot22, Add, Divide(Max(False, Subtract(Health(Event Player), Global.tmp0)), 3)); // 10 elements
+            End; // 1 element
             If(And(Compare((Event Player).infectionLevel, >, Null), Compare((Event Player).enhancementId, !=, 2))); // 14 elements
                 Set Player Variable(Event Player, infectionLevel, Max(False, Subtract((Event Player).infectionLevel, True))); // 7 elements
             End; // 1 element
@@ -5616,7 +5619,7 @@ rule ("BOTS MELEE") {
     }
 }
 
-//133 elements
+//137 elements
 rule ("BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)") {
     event {
         Player Dealt Damage;
@@ -5632,7 +5635,7 @@ rule ("BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)") {
         Skip If(Compare((Event Player).damageOverTimeRemaining, >=, (Event Player).actorTeamSlot6), True); // 8 elements
         Set Player Variable(Event Player, damageOverTimeRemaining, (Event Player).actorTeamSlot6); // 3 elements
         //__label_if_49__:
-        If(And(And(And(Workshop Setting Toggle(Custom String("Infection"), Custom String("Melee Infection Enabled"), True, 0), Not(Has Status(Event Player, Hacked))), Not(Is Dummy Bot(Victim))), Compare(Health(Victim), <=, If-Then-Else(Compare((Victim).enhancementHitchhikerPassenger, !=, Null), Max Health(Victim), (Victim).initialMaxHealth)))); // 40 elements
+        If(And(And(And(And(Workshop Setting Toggle(Custom String("Infection"), Custom String("Melee Infection Enabled"), True, 0), Not(Has Status(Event Player, Hacked))), Not(Is Dummy Bot(Victim))), Not(Is Using Ultimate(Victim))), Compare(Health(Victim), <=, If-Then-Else(Compare((Victim).enhancementHitchhikerPassenger, !=, Null), Max Health(Victim), (Victim).initialMaxHealth)))); // 44 elements
             Modify Player Variable(Victim, infectionLevel, Add, Divide(If-Then-Else(Or(Or(Array Contains(Global.bossStateList, Event Player), Array Contains(Global.miniBossList, Event Player)), Compare((Event Player).actorTeamSlot17, ==, 4)), 2, 1), If-Then-Else(Compare((Victim).enhancementId, !=, 2), If-Then-Else(And(Not((Victim).isInfected), Array Contains(Array(Hero(Reinhardt), Hero(Hazard), Hero(Vendetta), Hero(D.Mon)), Hero Of(Victim))), 3, 2), 1))); // 58 elements
             If(And(Not((Victim).isInfected), Compare((Victim).infectionLevel, >=, 1))); // 12 elements
                 Set Player Variable(Victim, isInfected, True); // 1 element
@@ -8844,8 +8847,8 @@ rule ("BOLT STRIKE ARMS CHARGE") {
     }
 }
 
-//36 elements
-rule ("OVERCHARGE STORES ASSISTS") {
+//53 elements
+rule ("OVERCHARGE STORES HEALING AND ASSISTS") {
     event {
         Ongoing - Each Player;
         Team 1;
@@ -8854,12 +8857,12 @@ rule ("OVERCHARGE STORES ASSISTS") {
     conditions {
         Global.isGameplayActive == True; // 2 elements
         (Event Player).enhancementId == 9; // 4 elements
-        Add(Player Stat(Event Player, Offensive Assists), Player Stat(Event Player, Defensive Assists)) != (Event Player).actorTeamSlot25; // 9 elements
+        Add(Divide(Player Stat(Event Player, Healing Dealt), 3), Multiply(10, Add(Player Stat(Event Player, Offensive Assists), Player Stat(Event Player, Defensive Assists)))) != (Event Player).actorTeamSlot25; // 19 elements
     }
     actions {
-        "No assist event exists. Only Overcharge players observe the two native counters.\nSynchronous scratch: consumed before any wait/call/HUD reevaluation can reuse tmp0."
-        Set Global Variable(tmp0, Add(Player Stat(Event Player, Offensive Assists), Player Stat(Event Player, Defensive Assists))); // 7 elements
-        Modify Player Variable(Event Player, actorTeamSlot22, Add, Multiply(Max(False, Subtract(Global.tmp0, (Event Player).actorTeamSlot25)), 10)); // 11 elements
+        "Combine healing and weighted assists so one existing snapshot covers all earned energy.\nSynchronous scratch: consumed before any wait/call/HUD reevaluation can reuse tmp0."
+        Set Global Variable(tmp0, Add(Divide(Player Stat(Event Player, Healing Dealt), 3), Multiply(10, Add(Player Stat(Event Player, Offensive Assists), Player Stat(Event Player, Defensive Assists))))); // 17 elements
+        Modify Player Variable(Event Player, actorTeamSlot22, Add, Max(False, Subtract(Global.tmp0, (Event Player).actorTeamSlot25))); // 8 elements
         "Resync on a stat reset too, without subtracting energy or paying twice."
         Set Player Variable(Event Player, actorTeamSlot25, Global.tmp0); // 2 elements
     }
@@ -10010,7 +10013,7 @@ rule ("LASER BARRICADE BLOCKS ZOMBIES") {
     }
 }
 
-//1567 elements
+//1577 elements
 rule ("PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION") {
     event {
         Ongoing - Each Player;
@@ -10066,8 +10069,8 @@ rule ("PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION") {
         Set Player Variable(Event Player, actorTeamSlot22, Null); // 1 element
         Set Player Variable(Event Player, actorTeamSlot23, Null); // 1 element
         Set Player Variable(Event Player, actorTeamSlot24, Null); // 1 element
-        "Baseline existing match stats; do not pay for assists before selection/join."
-        Set Player Variable(Event Player, actorTeamSlot25, Add(Player Stat(Event Player, Offensive Assists), Player Stat(Event Player, Defensive Assists))); // 7 elements
+        "Baseline existing match stats; do not pay for healing/assists before selection/join."
+        Set Player Variable(Event Player, actorTeamSlot25, Add(Divide(Player Stat(Event Player, Healing Dealt), 3), Multiply(10, Add(Player Stat(Event Player, Offensive Assists), Player Stat(Event Player, Defensive Assists))))); // 17 elements
         Create HUD Text(Event Player, Icon String(Moon), Custom String("Hold [{0}] to charge | Energy: {1} | Charged: {2}", Input Binding String(Button(Melee)), Round To Integer((Event Player).actorTeamSlot22, Down), Custom String("{0}                                                                                                                          {1}", Round To Integer((Event Player).actorTeamSlot23, Down), Custom String("                                                "))), Custom String("Overcharge"), Left, 97, Color(White), Color(White), If-Then-Else(Compare((Event Player).actorTeamSlot23, >, Null), Color(Yellow), If-Then-Else(Compare((Event Player).actorTeamSlot22, >=, 100), Color(Green), Color(White))), String and Color, Default Visibility); // 51 elements
         Else; // 1 element
         //__label_switch_81_4__:
@@ -10251,7 +10254,7 @@ rule ("PLAYER DIED") {
     }
 }
 
-//84 elements
+//74 elements
 rule ("PLAYER DEALT HEALING") {
     event {
         Player Dealt Healing;
@@ -10272,10 +10275,6 @@ rule ("PLAYER DEALT HEALING") {
                     Modify Player Variable(Event Player, actorTeamSlot22, Add, 0.5); // 2 elements
                     Play Effect(Event Player, Good Pickup Effect, Color(Green), Healee, 1); // 3 elements
                     Small Message(Event Player, If-Then-Else(Compare(Healee, ==, Event Player), Custom String("You cured yourself!"), Custom String("You cured {0} {1}!", Healee, Hero Icon String(Hero Of(Healee))))); // 17 elements
-                End; // 1 element
-            End; // 1 element
-        Else If(Compare((Event Player).enhancementId, ==, 9)); // 7 elements
-            Modify Player Variable(Event Player, actorTeamSlot22, Add, Event Healing); // 1 element
     }
 }
 

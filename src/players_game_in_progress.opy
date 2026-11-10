@@ -237,9 +237,9 @@ rule "PLAYER PICKS UP HEALTH PACK":
     @Condition eventWasHealthPack == true
     
     eventPlayer.startHealingOverTime(null, 5, 20)
-    # Self-attributed packs already charge Overcharge through playerDealtHealing.
-    if isGameplayActive and eventPlayer.enhancementId == Enhancement.OVERCHARGE and healer != eventPlayer:
-        eventPlayer.enhancementCapacitorEnergy += eventHealing
+    if isGameplayActive and eventPlayer.enhancementId == Enhancement.OVERCHARGE:
+        # Credit the actual pack healing; Apothecary's additional healing is measured below.
+        eventPlayer.enhancementCapacitorEnergy += eventHealing / 3
     if difficultySetting < Difficulty.EXPERT or getMatchTime() > matchEndTime:
         #Update known health pack positions
         if healthpackPositionList.all(lambda x: distance(x, eventPlayer) > 5):
@@ -254,7 +254,13 @@ rule "PLAYER PICKS UP HEALTH PACK":
     if eventPlayer.augmentId == Augment.APOTHECARY:
         # Only reduce existing infection; never create or increase vaccine reserves.
         # Scripted healing is not a health-pack event, so this cannot recurse.
+        # Synchronous scratch: consumed immediately after Heal, with no waits/calls.
+        # No healer is attributed, so no dealt-healing handler can overwrite this slot.
+        #!define apothecaryHealthBefore tmp0
+        apothecaryHealthBefore = eventPlayer.getHealth()
         heal(eventPlayer, null, eventHealing)
+        if isGameplayActive and eventPlayer.enhancementId == Enhancement.OVERCHARGE:
+            eventPlayer.enhancementCapacitorEnergy += max(0, eventPlayer.getHealth() - apothecaryHealthBefore) / 3
         if eventPlayer.infectionLevel > 0 and eventPlayer.enhancementId != Enhancement.ZOMBIE_HYBRID:
             eventPlayer.infectionLevel = max(0, eventPlayer.infectionLevel - 1)
         eventPlayer.setUltCharge(eventPlayer.getUltCharge() + 5)
