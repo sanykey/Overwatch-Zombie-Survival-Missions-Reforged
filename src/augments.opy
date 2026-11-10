@@ -3,7 +3,7 @@
 subroutine extendAugmentMelee
 subroutine useAugmentAirAction
 
-#!define AUGMENT_NAMES ["No Preference", "Kevlar", "Shock Landing", "Double Jump", "Long Reach", "Ammo Pack", "Grapnel Launcher", "Laser Barricade", "Apothecary", "Scavenger", "Leech"]
+#!define AUGMENT_NAMES ["No Preference", "Kevlar", "Shock Landing", "Double Jump", "Long Reach", "Ammo Pack", "Grapnel Launcher", "Laser Barricade", "Apothecary", "Scavenger", "Survivalist"]
 #!define AUGMENT_DASH_PHASE_DURATION 0.5
 #!define AUGMENT_DASH_COOLDOWN 13
 #!define AUGMENT_DASH_WAVE_RADIUS 6
@@ -649,7 +649,7 @@ rule "LASER BARRICADE (PLACEMENT)":
     playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, Color.BLUE, eventPlayer.augmentBarrierPosition, 50)
     smallMessage(eventPlayer, "  Barricade placed!")
     #Laser Barrier cooldown
-    eventPlayer.augmentBarrierPlacementCooldown = 30
+    eventPlayer.augmentBarrierPlacementCooldown = 25
     while eventPlayer.augmentBarrierPlacementCooldown > 0:
         wait(1)
         eventPlayer.augmentBarrierPlacementCooldown += -1

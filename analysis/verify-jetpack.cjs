@@ -34,7 +34,7 @@ async function main() {
         '(Event Player).actorTeamSlot17 > Null'
     ]) assert(flight.includes(condition), condition);
     assert(!/Altitude Of|Is On Ground|Is In Air/.test(flight));
-    assert.match(flight, /actions \{\nWait\(0\.2(?:08)?, Abort When False\);\nSet Player Variable\(Event Player, powerUpJetpackIsFlying, True\);/);
+    assert.match(flight, /actions \{\nWait\(0\.125, Abort When False\);\nSet Player Variable\(Event Player, powerUpJetpackIsFlying, True\);/);
     assert.match(flight, /Start Accelerating\(Event Player, Up, 10, 4, To World/);
     assert.match(flight, /Chase Player Variable At Rate\(Event Player, actorTeamSlot17, False, 40,/);
     // Every start predicate must also stop flight; this prevents stuck gravity,

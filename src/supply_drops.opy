@@ -554,7 +554,7 @@ def powerUpUsage():
             playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.GREEN, eventPlayer, 6)
             playAquaPowerUpSound()
             smallMessage(eventPlayer, "Your infection is reduced!")
-            getPlayersInRadius(eventPlayer, 3, Team.1, LosCheck.SURFACES).infectionLevel -= 1.5
+            getPlayersInRadius(eventPlayer, 6, Team.1, LosCheck.SURFACES).infectionLevel -= 1.5
             break
         #Sentry Turret
         case 8:
