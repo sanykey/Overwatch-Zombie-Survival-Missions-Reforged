@@ -621,17 +621,18 @@ def objectivesManagement():
         # Keep the previous description for unsupported objective IDs, as the switch did.
         if currentObjectiveType >= ObjectiveType.SHOWDOWN and currentObjectiveType <= ObjectiveType.SATELLITE_UPLINK:
             objectiveDescription = ["Keep zombies away in the Showdown!", "Eliminate the boss", "Convert biowaste into powerups!", "Rescue survivors", "Clear the kill zone", "Destroy the egg", "Repair satellite control terminals"][currentObjectiveType - 1]
+        # Objective IDs 1..7 are contiguous; unsupported IDs previously produced no start message.
+        if currentObjectiveType >= ObjectiveType.SHOWDOWN and currentObjectiveType <= ObjectiveType.SATELLITE_UPLINK:
+            bigMessage(getAllPlayers(), ["Proceed to the Showdown!", "Eliminate the giant zombie!", "Find the indicated material and deposit it!", "Locate survivors and bring them to the extraction site!", "Get to the kill zone and clear zombies!", "Destroy the zombie egg!", "Repair the satellite control terminals!"][currentObjectiveType - 1])
         switch currentObjectiveType:
             case ObjectiveType.SHOWDOWN:
                 showdownCapturePercent = 0
                 chaseAtRate(objectiveRad, max(5, showdownCapturePercent / 4), 1)
                 objectiveColor = Color.ORANGE
-                bigMessage(getAllPlayers(), "Proceed to the Showdown!")
                 showdownNextCheckpoint = 25
                 showdownContestingZombieList = []
                 break
             case ObjectiveType.BOSSES:
-                bigMessage(getAllPlayers(), "Eliminate the giant zombie!")
                 break
             case ObjectiveType.BIOMORPHING:
                 biomorphingCapturePercent = 0
@@ -639,7 +640,6 @@ def objectivesManagement():
                 getAllPlayers().biomorphingResourceAmount = 0
                 objectiveColor = Color.SKY_BLUE
                 objectiveRad = 3.5
-                bigMessage(getAllPlayers(), "Find the indicated material and deposit it!")
                 biomorphingResourceColorList = [Color.BLUE, Color.TURQUOISE, Color.SKY_BLUE, Color.RED]
                 biomorphingResourceNameList = ["Head", "Arm", "Leg"]
                 biomorphingGoalQueueList = random.shuffle([0, 1, 2, 3])
@@ -650,17 +650,14 @@ def objectivesManagement():
                 rescueSurvivor = null
                 objectiveRad = 10
                 rescueSavedRadius = objectiveRad
-                bigMessage(getAllPlayers(), "Locate survivors and bring them to the extraction site!")
                 break
             case ObjectiveType.KILL_ZONE:
                 objectiveRad = 20
                 killZoneCenter = currentObjectivePosition
-                bigMessage(getAllPlayers(), "Get to the kill zone and clear zombies!")
                 killZoneEliminationScore = 0
                 break
             case ObjectiveType.ZOMBIE_EGG:
                 objectiveRad = 0
-                bigMessage(getAllPlayers(), "Destroy the zombie egg!")
                 break
             case ObjectiveType.SATELLITE_UPLINK:
                 objectiveRad = 3
@@ -669,7 +666,6 @@ def objectivesManagement():
                 satelliteTerminalProgressList = [0, 0, 0]
                 #Initial terminal spacing
                 satelliteMinTerminalSpacing = 50
-                bigMessage(getAllPlayers(), "Repair the satellite control terminals!")
     #Updates global objective entities
     globalObjectiveEntityManagementMacro()
     isObjectiveComplete = false

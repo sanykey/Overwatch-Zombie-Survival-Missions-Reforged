@@ -1,6 +1,6 @@
-/* Element count: (total 29975)
+/* Element count: (total 29963)
 
- 1620: rule "objectivesManagement" (src/subroutines.opy)
+ 1608: rule "objectivesManagement" (src/subroutines.opy)
  1581: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
  1074: rule "botRespawnInitialization" (src/subroutines.opy)
   783: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
@@ -980,7 +980,7 @@ rule ("enableDisableAbilities") {
     }
 }
 
-//1620 elements
+//1608 elements
 rule ("objectivesManagement") {
     event {
         Subroutine;
@@ -1047,18 +1047,20 @@ rule ("objectivesManagement") {
             If(And(Compare(Global.phaseSlot10, >=, 1), Compare(Global.phaseSlot10, <=, 7))); // 13 elements
                 Set Global Variable(objectiveDescription, Value In Array(String Split(Custom String("Keep zombies away in the Showdown!0Eliminate the boss0Convert biowaste into powerups!0Rescue survivors0Clear the kill zone0De{0}", Custom String("stroy the egg0Repair satellite control terminals")), First Of(Null)), Subtract(Global.phaseSlot10, True))); // 17 elements
             End; // 1 element
+            "Objective IDs 1..7 are contiguous; unsupported IDs previously produced no start message."
+            If(And(Compare(Global.phaseSlot10, >=, 1), Compare(Global.phaseSlot10, <=, 7))); // 13 elements
+                Big Message(All Players(All Teams), Value In Array(String Split(Custom String("Proceed to the Showdown!0Eliminate the giant zombie!0Find the indicated material and deposit it!0Locate survivors and bring t{0}", Custom String("hem to the extraction site!0Get to the kill zone and clear zombies!0Destroy the zombie egg!0Repair the satellite control term{0}", Custom String("inals!"))), First Of(Null)), Subtract(Global.phaseSlot10, True))); // 23 elements
+            End; // 1 element
             If(True); // 1 element
-                Skip(Value In Array(Array(40, Null, 7, 9, 21, 26, 31, 34), Add(True, Index Of Array Value(Array(1, 2, 3, 4, 5, 6, 7), Global.phaseSlot10)))); // 39 elements
+                Skip(Value In Array(Array(33, Null, 6, 7, 18, 22, 26, 28), Add(True, Index Of Array Value(Array(1, 2, 3, 4, 5, 6, 7), Global.phaseSlot10)))); // 39 elements
             //__label_switch_3_0__:
             Set Global Variable(objectiveProgressSlot, Null); // 1 element
             Chase Global Variable At Rate(objectiveRad, Max(5, Divide(Global.objectiveProgressSlot, 4)), True, Destination and Rate); // 8 elements
             Set Global Variable(objectiveColor, Color(Orange)); // 2 elements
-            Big Message(All Players(All Teams), Custom String("Proceed to the Showdown!")); // 7 elements
             Set Global Variable(objectiveCheckpointSlot, 25); // 2 elements
             Set Global Variable(objectiveQueueSlot, Empty Array); // 1 element
             Else; // 1 element
             //__label_switch_3_1__:
-            Big Message(All Players(All Teams), Custom String("Eliminate the giant zombie!")); // 7 elements
             Else; // 1 element
             //__label_switch_3_2__:
             Set Global Variable(objectiveProgressSlot, Null); // 1 element
@@ -1066,7 +1068,6 @@ rule ("objectivesManagement") {
             Set Player Variable(All Players(All Teams), biomorphingResourceAmount, Null); // 3 elements
             Set Global Variable(objectiveColor, Color(Sky Blue)); // 2 elements
             Set Global Variable(objectiveRad, 3.5); // 2 elements
-            Big Message(All Players(All Teams), Custom String("Find the indicated material and deposit it!")); // 7 elements
             Set Global Variable(phaseSlot4, Array(Color(Blue), Color(Turquoise), Color(Sky Blue), Color(Red))); // 10 elements
             Set Global Variable(phaseSlot3, String Split(Custom String("Head0Arm0Leg"), First Of(Null))); // 8 elements
             Set Global Variable(objectiveQueueSlot, Randomized Array(Array(Null, 1, 2, 3))); // 10 elements
@@ -1077,17 +1078,14 @@ rule ("objectivesManagement") {
             Set Global Variable(objectiveActorSlot, Null); // 1 element
             Set Global Variable(objectiveRad, 10); // 2 elements
             Set Global Variable(objectiveMotionSlot, Global.objectiveRad); // 2 elements
-            Big Message(All Players(All Teams), Custom String("Locate survivors and bring them to the extraction site!")); // 7 elements
             Else; // 1 element
             //__label_switch_3_4__:
             Set Global Variable(objectiveRad, 20); // 2 elements
             Set Global Variable(objectiveMotionSlot, Global.currentObjectivePosition); // 2 elements
-            Big Message(All Players(All Teams), Custom String("Get to the kill zone and clear zombies!")); // 7 elements
             Set Global Variable(objectiveProgressSlot, Null); // 1 element
             Else; // 1 element
             //__label_switch_3_5__:
             Set Global Variable(objectiveRad, Null); // 1 element
-            Big Message(All Players(All Teams), Custom String("Destroy the zombie egg!")); // 7 elements
             Else; // 1 element
             //__label_switch_3_6__:
             Set Global Variable(objectiveRad, 3); // 2 elements
@@ -1096,7 +1094,6 @@ rule ("objectivesManagement") {
             Set Global Variable(objectiveProgressSlot, Array(Null, Null, Null)); // 5 elements
             "Initial terminal spacing"
             Set Global Variable(phaseSlot2, 50); // 2 elements
-            Big Message(All Players(All Teams), Custom String("Repair the satellite control terminals!")); // 7 elements
             //__label_switch_3_default__:
             End; // 1 element
         End; // 1 element
