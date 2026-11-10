@@ -1,6 +1,7 @@
 #!mainFile "../main.opy"
 
 #!define BOT_MAX_TELEPORT_RANGE 40
+#!define AUGMENT_APOTHECARY_ULT_CHARGE 7
 #!define BOSS_BASE_SIZE 2.5
 #!define ZOMBIE_BASE_SIZE 1
 #!define BIOMORPHING_RESOURCE_AMOUNT 25
@@ -323,7 +324,7 @@ globalvar supplyPowerUpEffectIdList  # Effect IDs for removing item orbs on pick
 globalvar playerTargetList        # Active zombie targets; can temporarily include the NPC being rescued.
 globalvar userNameList            # Recorded player names used to restore state when a user rejoins.
 globalvar playerStatsList         # Per-user death status, timers and last position, indexed with userNameList.
-globalvar healthpackPositionList  # Discovered health-pack positions used by infection-cure indicators.
+globalvar healthpackPositionList  # Discovered health-pack positions for cure indicators and Apothecary's fallback teleport.
 globalvar mustReviveTime          # Allowed rescue time; starts at 60 and decreases after permanent player deaths.
 
 # Shared zombie stats, mutations and boss state.

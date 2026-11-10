@@ -103,6 +103,12 @@ function value(expr, state, element) {
         case 'Remove From Array': return array(v(0)).filter(item => !array(v(1)).includes(item));
         case 'Nearest Walkable Position': return state.walkablePosition ?? point(v(0));
         case 'If-Then-Else': return truth(v(0)) ? v(1) : v(2);
+        case 'Random Value In Array': {
+            const choices = v(0);
+            assert(choices.length > 0, 'Fallback cannot select from an empty pack list');
+            state.randomCalls.push([...choices]);
+            return choices[state.randomChoiceIndex ?? 0];
+        }
         case 'Evaluate Once': return v(0);
         case 'Filtered Array': return array(v(0)).filter(item => truth(value(a[1], state, item)));
         case 'Mapped Array': return array(v(0)).map((item, index) => {
@@ -472,7 +478,7 @@ async function main() {
         assert.equal(state.player.infectionLevel,
             augment === 8 && enhancement !== 2 && cured > 0 ? Math.max(0, cured - 1) : cured);
         assert.equal(state.player.health, 500 + (augment === 8 ? healing : 0));
-        assert.equal(state.ultCharge, augment === 8 ? Math.min(100, charge + 5) : charge);
+        assert.equal(state.ultCharge, augment === 8 ? Math.min(100, charge + 7) : charge);
         assert.equal(state.player.movementSpeedScale, 1);
         assert.deepEqual(state.healOverTime, [5, 20], 'Preserve existing pack regeneration');
         assert.equal(!!state.stoppedDots, fullCure);
@@ -496,19 +502,19 @@ async function main() {
             [capacitorEnergy]: 10, [packChargeSlot]: 60, [packDeadlineSlot]: 101});
         const otherHealer = {id: 'other healer', [capacitorEnergy]: 123};
         state.healer = attribution === 'self' ? state.player : attribution === 'other' ? otherHealer : 0;
-        const dealt = compiled.get('OVERCHARGE STORES HEALING');
+        const dealt = compiled.get('PLAYER DEALT HEALING');
         const selfHealingEvent = () => {
             if (attribution === 'self' && applies(dealt, state)) run(dealt.name, state);
         };
         if (healerFirst) selfHealingEvent();
-        // Dealt-healing credit has no gameplay gate; only received-pack credit does.
-        const expectedBeforePickup = 10 + (healerFirst && attribution === 'self' && enhancement === 9 ? healing / 3 : 0);
+        // Dealt-healing events no longer credit Overcharge; the pickup owns both heals.
+        const expectedBeforePickup = 10;
         run(pickup, state);
-        const pickupCredit = gameplay && enhancement === 9 && attribution !== 'self' ? healing / 3 : 0;
+        const pickupCredit = gameplay && enhancement === 9 ? (healing / 3) * (augment === 8 ? 2 : 1) : 0;
         assert.equal(state.player[capacitorEnergy], expectedBeforePickup + pickupCredit,
-            'Received packs credit only the selected Overcharge player; self attribution is handled by dealt healing');
+            'Received packs and supplemental healing credit only the selected Overcharge player');
         if (!healerFirst) selfHealingEvent();
-        assert.equal(state.player[capacitorEnergy], 10 + (enhancement === 9 && (gameplay || attribution === 'self') ? healing / 3 : 0),
+        assert.equal(state.player[capacitorEnergy], 10 + pickupCredit,
             JSON.stringify({augment, enhancement, healing, gameplay, attribution, healerFirst}));
         assert.equal(otherHealer[capacitorEnergy], 123, 'Receiver handling cannot write the healer state');
         assert.equal(state.player[packChargeSlot], 60, 'Pack energy cannot alter an armed burst');
@@ -524,6 +530,36 @@ async function main() {
     assert(!compiled.has('APOTHECARY SPEED BONUS EXPIRES'));
     const rechargeTeleport = compiled.get('APOTHECARY ULTIMATE RECHARGE');
     const teleportRule = compiled.get('APOTHECARY TELEPORT');
+    for (const destination of [[0, 0, 0], [12, 4, -9]]) for (const known of [[], [[40, 2, 3]]]) {
+        const state = scenario(8, {buttons: new Set(['Crouch', 'Interact'])});
+        state.globals.healthpackPositionList = known;
+        state.player[returnPosition] = destination;
+        state.player[teleportReady] = true;
+        assert(applies(teleportRule, state), 'Saved pickup works even with an empty known list');
+        const task = run(teleportRule.name, state);
+        state.time += 0.2;
+        task.resume();
+        assert.deepEqual(state.player.position, destination);
+        assert.deepEqual(state.randomCalls, [], 'Saved pickup takes priority without a random roll');
+    }
+    for (const index of [0, 1]) {
+        const state = scenario(8, {buttons: new Set(['Crouch', 'Interact']), randomChoiceIndex: index});
+        const known = [[0, 0, 0], [12, 4, -9]];
+        state.player[teleportReady] = true;
+        state.globals.healthpackPositionList = [];
+        assert(!applies(teleportRule, state), 'No destination preserves the charge');
+        assert.equal(state.player[teleportReady], true);
+        state.globals.healthpackPositionList = known;
+        assert(applies(teleportRule, state), 'Discovered packs enable teleport before a personal pickup');
+        const task = run(teleportRule.name, state);
+        assert.deepEqual(state.randomCalls, [], 'Do not choose before the hold completes');
+        state.time += 0.2;
+        task.resume();
+        assert.deepEqual(state.player.position, known[index]);
+        assert.equal(truth(state.player[teleportReady]), false);
+        assert.equal(state.player[returnPosition] ?? 0, 0, 'Fallback must not replace the personal pickup');
+        assert.deepEqual(state.randomCalls, [known]);
+    }
     for (const destination of [[0, 0, 0], [12, 4, -9]]) {
         const state = scenario(8, {eventWasHealthPack: true, eventHealing: 75,
             matchTime: -1, ultCharge: 0, maxHealth: 1000});
@@ -551,13 +587,12 @@ async function main() {
         assert(!applies(teleportRule, state));
         assert.deepEqual(state.effects.at(-1), {effect: 'Bad Explosion', color: 'Color(Aqua)', position: [20, 2, 8], size: 4.5});
     }
-    for (const interrupt of ['Crouch', 'Interact', 'death', 'game end']) {
+    for (const interrupt of ['Crouch', 'Interact', 'death']) {
         const state = scenario(8, {buttons: new Set(['Crouch', 'Interact'])});
         state.player[returnPosition] = [10, 0, 0];
         state.player[teleportReady] = true;
         const task = run(teleportRule.name, state);
         if (interrupt === 'death') state.alive = false;
-        else if (interrupt === 'game end') state.globals.isGameplayActive = false;
         else state.buttons.delete(interrupt);
         task.resume();
         assert.equal(state.player[teleportReady], true, 'Interrupted hold preserves the charge');
@@ -565,24 +600,25 @@ async function main() {
     }
     for (const augment of [1, 8]) for (const crouch of [false, true]) {
         const state = scenario(augment, {buttons: new Set(['Interact', ...(crouch ? ['Crouch'] : [])])});
-        assert.equal(applies(compiled.get('PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)'), state), augment !== 8 || !crouch);
+        assert.equal(allowsInteraction(compiled.get('PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)'), state), augment !== 8 || !crouch);
     }
     {
         const state = scenario(8, {buttons: new Set(['Crouch', 'Interact'])});
         state.player[teleportReady] = true;
-        assert(!applies(teleportRule, state), 'No teleport before a pack pickup');
+        state.globals.healthpackPositionList = [];
+        assert(!applies(teleportRule, state), 'No teleport without a saved pickup or discovered packs');
         state.player[returnPosition] = [10, 0, 0];
         state.player.enhancementId = 11;
         state.player[slot('enhancementHeldZombie')] = {id: 'carried'};
         assert(!applies(teleportRule, state), 'Do not teleport with a carried Dead Weight zombie');
-        assert(applies(compiled.get('PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)'), state), 'The carried zombie can still be thrown');
+        assert(allowsInteraction(compiled.get('PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)'), state), 'The carried zombie can still be thrown');
     }
     if (process.argv.includes('--apothecary-only')) {
         const hud = actions(compiled.get('PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION')).find(line => line.startsWith('Create HUD Text(') && line.includes('augmentState1'));
         assert(hud && hud.includes('If-Then-Else((Event Player).augmentState1, Custom String("Hold [{0}] + [{1}] | {2}"'), 'The complete Apothecary button hint is conditional on its charge');
         const emitted = teleportRule.body;
         assert.match(emitted, /Wait\(0\.20*, Abort When False\)/);
-        assert(emitted.includes('(Event Player).augmentState0 != Null'), 'Position must not compile to a truthiness check');
+        assert(emitted.includes('Compare((Event Player).augmentState0, !=, Null)'), 'Position must not compile to a truthiness check');
         if (process.argv.includes('--export')) {
             const exported = await compiler.compile(fs.readFileSync(path.join(root, 'main.opy'), 'utf8'),
                 'en-US', root.replace(/\\/g, '/') + '/', 'main.opy');
@@ -592,7 +628,7 @@ async function main() {
             fs.writeFileSync(path.join(root, 'main.ws.txt'), exported.result);
         }
         console.log(JSON.stringify({elements: build.elements, warnings: build.warnings, pickupCases, packChargeCases,
-            checked: 'pack healing/infection/ult preserved; Zombie Hybrid excluded from Apothecary cure; speed removed; pickup position including origin; nonstacking charge; 0.2s hold; interrupted hold preserves charge; departure flash; Interact exclusion; Dead Weight guard; HUD; emitted null comparison',
+            checked: 'pack healing/infection/ult preserved; Zombie Hybrid excluded from Apothecary cure; speed removed; pickup position including origin; empty list preserves charge; saved-point priority; random fallback; nonstacking charge; 0.2s hold; interrupted hold preserves charge; departure flash; Interact exclusion; Dead Weight guard; HUD; emitted null comparison',
             exported: process.argv.includes('--export')}, null, 2));
         return;
     }

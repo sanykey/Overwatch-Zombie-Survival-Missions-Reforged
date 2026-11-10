@@ -263,7 +263,7 @@ rule "PLAYER PICKS UP HEALTH PACK":
             eventPlayer.enhancementCapacitorEnergy += max(0, eventPlayer.getHealth() - apothecaryHealthBefore) / 3
         if eventPlayer.infectionLevel > 0 and eventPlayer.enhancementId != Enhancement.ZOMBIE_HYBRID:
             eventPlayer.infectionLevel = max(0, eventPlayer.infectionLevel - 1)
-        eventPlayer.setUltCharge(eventPlayer.getUltCharge() + 5)
+        eventPlayer.setUltCharge(eventPlayer.getUltCharge() + AUGMENT_APOTHECARY_ULT_CHARGE)
         eventPlayer.augmentApothecaryPosition = eventPlayer.getPosition()
 
 

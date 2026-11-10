@@ -1,4 +1,4 @@
-/* Element count: (total 30121)
+/* Element count: (total 30140)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
  1581: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
@@ -125,6 +125,7 @@
    71: rule "KILL BOTS THAT ARE STUCK OR ARE NOT MOVING" (src/bots_game_in_progress.opy)
    70: rule "POWER UP EFFECT/TEXT MANAGEMENT" (src/power_ups.opy)
    69: rule "JETPACK FLIGHT" (src/supply_drops.opy)
+   69: rule "APOTHECARY TELEPORT" (src/augments.opy)
    68: rule "PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY)" (src/player_start_menu.opy)
    68: rule "BOT TARGET VISIBLE" (src/bots_game_in_progress.opy)
    67: rule "DELETE PATH" (src/objective_types/objective_type_survivor_rescue.opy)
@@ -158,7 +159,6 @@
    50: rule "PREGAME QUICK TIPS FOR PLAYERS" (src/global_startup.opy)
    50: rule "BOT WANDERS" (src/bots_game_in_progress.opy)
    50: rule "CARRION (JETPACK CAT) ABILITIES" (src/zombie_types.opy)
-   50: rule "APOTHECARY TELEPORT" (src/augments.opy)
    49: rule "CREATE PATH" (src/objective_types/objective_type_survivor_rescue.opy)
    48: rule "RIDER DETACH WHEN DEAD OR TARGET IS DEAD" (src/zombie_types.opy)
    48: rule "BLASTER ROCKET HITS TARGET" (src/zombie_types.opy)
@@ -4685,7 +4685,7 @@ rule ("PLAYER PICKS UP HEALTH PACK") {
             If(And(Compare((Event Player).infectionLevel, >, Null), Compare((Event Player).enhancementId, !=, 2))); // 14 elements
                 Set Player Variable(Event Player, infectionLevel, Max(False, Subtract((Event Player).infectionLevel, True))); // 7 elements
             End; // 1 element
-            Set Ultimate Charge(Event Player, Add(Ultimate Charge Percent(Event Player), 5)); // 5 elements
+            Set Ultimate Charge(Event Player, Add(Ultimate Charge Percent(Event Player), 7)); // 5 elements
             Set Player Variable(Event Player, augmentState0, Position Of(Event Player)); // 2 elements
     }
 }
@@ -9292,7 +9292,7 @@ rule ("AUGMENT MENU") {
     }
     actions {
         "Like the primary enhancement HUD, this is created once and reevaluates per viewer."
-        Create HUD Text(All Players(Team 1), Custom String("Augment: {0} {1}", Value In Array(String Split(Custom String("No Preference0Kevlar0Shock Landing0Double Jump0Long Reach0Ammo Pack0Grapnel Launcher0Laser Barricade0Apothecary0Scavenger0Sur{0}", Custom String("vivalist")), First Of(Null)), (Local Player).augmentId), If-Then-Else(Compare((Local Player).augmentId, !=, Null), Value In Array(Global.augmentIconListConst, (Local Player).augmentId), Char In String(Empty Array, False))), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Custom String("Gain 75 armor that helps protect against infection"), Custom String("Press Jump again in midair: landing shockwave deals 40 damage and pushes nearby zombies; movement input adds a dash. Phased a{0}", Custom String("nd invulnerable for 0.5s. cd: 13s")), Custom String("Jump in midair / double-tap Jump. First hit of 30+ damage in flight or within 0.5s after landing: +50%. cd: 16s"), Custom String("Triple Quick Melee, melee weapon, Dragonblade and Carnage reach. Press Melee to push visible zombies ahead within 10m; cd: 9s{0}", Custom String(" only with targets")), Custom String("Carry twice the ammo per full magazine; full reloads restore the bonus"), Custom String("Crouch + Jump: grapple 7-40m; hit for 35 damage; stun grounded targets for 0.5s or knock airborne targets down for 3s. cd: 16s"), Custom String("Hold Crouch + Interact to aim a zombie-blocking wall; release Interact to deploy. cd: 30s"), Custom String("Health packs: 2x healing, -1 infection, +5% ult. Ultimate grants 1 teleport (hold Crouch + Interact) to the last health pack {0}", Custom String("used")), Custom String("Crouch + Interact: stash (2 slots). Interact: active slot. Hold Reload: drop all. Bot eliminations: 5% loot, backpack first"), Custom String("15% lifesteal, +50 recoverable health")), (Local Player).augmentId), Custom String("                                                ")), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Interact))), Left, 4, Value In Array(Global.augmentColorListConst, (Local Player).augmentId), Value In Array(Global.augmentColorListConst, (Local Player).augmentId), Value In Array(Global.augmentColorListConst, (Local Player).augmentId), Visible To String and Color, Default Visibility); // 137 elements
+        Create HUD Text(All Players(Team 1), Custom String("Augment: {0} {1}", Value In Array(String Split(Custom String("No Preference0Kevlar0Shock Landing0Double Jump0Long Reach0Ammo Pack0Grapnel Launcher0Laser Barricade0Apothecary0Scavenger0Sur{0}", Custom String("vivalist")), First Of(Null)), (Local Player).augmentId), If-Then-Else(Compare((Local Player).augmentId, !=, Null), Value In Array(Global.augmentIconListConst, (Local Player).augmentId), Char In String(Empty Array, False))), Custom String("{0}                                                                                                                          {1}", Value In Array(Array(Char In String(Empty Array, False), Custom String("Gain 75 armor that helps protect against infection"), Custom String("Press Jump again in midair: landing shockwave deals 40 damage and pushes nearby zombies; movement input adds a dash. Phased a{0}", Custom String("nd invulnerable for 0.5s. cd: 13s")), Custom String("Jump in midair / double-tap Jump. First hit of 30+ damage in flight or within 0.5s after landing: +50%. cd: 16s"), Custom String("Triple Quick Melee, melee weapon, Dragonblade and Carnage reach. Press Melee to push visible zombies ahead within 10m; cd: 9s{0}", Custom String(" only with targets")), Custom String("Carry twice the ammo per full magazine; full reloads restore the bonus"), Custom String("Crouch + Jump: grapple 7-40m; hit for 35 damage; stun grounded targets for 0.5s or knock airborne targets down for 3s. cd: 16s"), Custom String("Hold Crouch + Interact to aim a zombie-blocking wall; release Interact to deploy. cd: 30s"), Custom String("Health packs: 2x healing, -1 infection, +7% ult. Ultimate grants 1 teleport (hold Crouch + Interact) to the last pack used, o{0}", Custom String("r a random known pack if none used")), Custom String("Crouch + Interact: stash (2 slots). Interact: active slot. Hold Reload: drop all. Bot eliminations: 5% loot, backpack first"), Custom String("15% lifesteal, +50 recoverable health")), (Local Player).augmentId), Custom String("                                                ")), Custom String("Change Selection (Press [{0}])", Input Binding String(Button(Interact))), Left, 4, Value In Array(Global.augmentColorListConst, (Local Player).augmentId), Value In Array(Global.augmentColorListConst, (Local Player).augmentId), Value In Array(Global.augmentColorListConst, (Local Player).augmentId), Visible To String and Color, Default Visibility); // 137 elements
     }
 }
 
@@ -9330,7 +9330,7 @@ rule ("APOTHECARY ULTIMATE RECHARGE") {
     }
 }
 
-//50 elements
+//69 elements
 rule ("APOTHECARY TELEPORT") {
     event {
         Ongoing - Each Player;
@@ -9339,7 +9339,7 @@ rule ("APOTHECARY TELEPORT") {
     }
     conditions {
         (Event Player).augmentState1 == True; // 3 elements
-        (Event Player).augmentState0 != Null; // 3 elements
+        Or(Compare((Event Player).augmentState0, !=, Null), Compare(Global.healthpackPositionList, !=, Empty Array)) == True; // 12 elements
         Is Alive(Event Player) == True; // 2 elements
         Is Button Held(Event Player, Button(Crouch)) == True; // 4 elements
         Is Button Held(Event Player, Button(Interact)) == True; // 4 elements
@@ -9352,7 +9352,8 @@ rule ("APOTHECARY TELEPORT") {
         Set Player Variable(Event Player, augmentState1, False); // 1 element
         "Play Effect snapshots departure before Teleport; no scratch or effect entity.\nBolt Strike's 1.5 flash scaled by three."
         Play Effect(All Players(All Teams), Bad Explosion, Color(Aqua), Position Of(Event Player), 4.5); // 6 elements
-        Teleport(Event Player, (Event Player).augmentState0); // 3 elements
+        "Choose only when teleporting; keep the saved point reserved for actual pickups."
+        Teleport(Event Player, If-Then-Else(Compare((Event Player).augmentState0, !=, Null), (Event Player).augmentState0, Random Value In Array(Global.healthpackPositionList))); // 13 elements
     }
 }
 

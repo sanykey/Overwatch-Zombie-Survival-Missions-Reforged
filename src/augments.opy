@@ -58,7 +58,7 @@ rule "AUGMENT MENU":
             "Carry twice the ammo per full magazine; full reloads restore the bonus",
             "Crouch + Jump: grapple 7-40m; hit for 35 damage; stun grounded targets for 0.5s or knock airborne targets down for 3s. cd: 16s",
             "Hold Crouch + Interact to aim a zombie-blocking wall; release Interact to deploy. cd: 30s",
-            "Health packs: 2x healing, -1 infection, +5% ult. Ultimate grants 1 teleport (hold Crouch + Interact) to the last health pack used",
+            f"Health packs: 2x healing, -1 infection, +{AUGMENT_APOTHECARY_ULT_CHARGE}% ult. Ultimate grants 1 teleport (hold Crouch + Interact) to the last pack used, or a random known pack if none used",
             "Crouch + Interact: stash (2 slots). Interact: active slot. Hold Reload: drop all. Bot eliminations: 5% loot, backpack first",
             "15% lifesteal, +50 recoverable health"
         ][localPlayer.augmentId],
@@ -94,7 +94,7 @@ rule "APOTHECARY TELEPORT":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.augmentApothecaryReady == true
-    @Condition eventPlayer.augmentApothecaryPosition != null
+    @Condition (eventPlayer.augmentApothecaryPosition != null or healthpackPositionList != []) == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
@@ -109,7 +109,8 @@ rule "APOTHECARY TELEPORT":
     # Play Effect snapshots departure before Teleport; no scratch or effect entity.
     # Bolt Strike's 1.5 flash scaled by three.
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, eventPlayer.getPosition(), 4.5)
-    eventPlayer.teleport(eventPlayer.augmentApothecaryPosition)
+    # Choose only when teleporting; keep the saved point reserved for actual pickups.
+    eventPlayer.teleport(eventPlayer.augmentApothecaryPosition if eventPlayer.augmentApothecaryPosition != null else random.choice(healthpackPositionList))
 
 
 rule "AUGMENT AIR ACTION RECHARGE":
