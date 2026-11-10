@@ -241,6 +241,6 @@ def advanceMenuChoice():
     @Name "advanceMenuChoice"
 
     while true:
-        menuChoiceIndex = (menuChoiceIndex + 1) % len(menuChoiceOptions)
+        menuChoiceIndex = (menuChoiceIndex + (len(menuChoiceOptions) - 1 if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else 1)) % len(menuChoiceOptions)
         if menuChoiceOptions[menuChoiceIndex]:
             break

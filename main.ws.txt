@@ -1,4 +1,4 @@
-/* Element count: (total 30053)
+/* Element count: (total 30079)
 
  1620: rule "objectivesManagement" (src/subroutines.opy)
  1581: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
@@ -156,6 +156,7 @@
    52: rule "PLAYERS IN EXTRACTION POINT CONTROL" (src/objective_types/objective_type_extraction_point.opy)
    52: rule "BOTS RECOIL FROM DAMAGE" (src/bots_game_in_progress.opy)
    52: rule "dropCarriedPowerUps" (src/power_ups.opy)
+   50: rule "PREGAME QUICK TIPS FOR PLAYERS" (src/global_startup.opy)
    50: rule "BOT WANDERS" (src/bots_game_in_progress.opy)
    50: rule "CARRION (JETPACK CAT) ABILITIES" (src/zombie_types.opy)
    49: rule "CREATE PATH" (src/objective_types/objective_type_survivor_rescue.opy)
@@ -174,7 +175,6 @@
    45: rule "PLAYER INFECTION DAMAGE MANAGEMENT" (src/players_game_in_progress.opy)
    44: rule "BRUTE FIRE STRIKE (BOSS)" (src/zombie_types.opy)
    43: rule "OverPy <\ztx> / <\zfg> setup code"
-   43: rule "PREGAME QUICK TIPS FOR PLAYERS" (src/global_startup.opy)
    43: rule "Subroutine selectVoteWinner" (src/global_start_menu.opy)
    41: rule "ultimateCharger (90-99)" (src/supply_drops.opy)
    40: rule "SPAWN TIME CONTROL" (src/global_startup.opy)
@@ -201,6 +201,7 @@
    33: rule "SMOLDER ACTIVATES FROM DAMAGE" (src/zombie_types.opy)
    33: rule "PROTECTOR (KIRIKO) USES CLEANSE" (src/zombie_types.opy)
    30: rule "OVERCHARGE ARMS CHARGE" (src/enhancements.opy)
+   29: rule "advanceMenuChoice" (src/player_start_menu.opy)
    29: rule "OVERCHARGE CLEARS CHARGE" (src/enhancements.opy)
    28: rule "SOMBRA USES TRANSLOCATOR" (src/hero_tuning.opy)
    28: rule "REIGNITED USES ULTIMATE NEAR PLAYER" (src/zombie_types.opy)
@@ -210,6 +211,7 @@
    25: rule "Fix bot health" (src/bots_game_in_progress.opy)
    25: rule "BOLT STRIKE ARMS CHARGE" (src/enhancements.opy)
    25: rule "Subroutine checkEnhancementPlacement" (src/enhancements.opy)
+   25: rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)" (src/augments.opy)
    25: rule "AUGMENT AIR ACTION INPUT" (src/augments.opy)
    25: rule "LONG REACH CARNAGE" (src/augments.opy)
    24: rule "PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)" (src/player_start_menu.opy)
@@ -242,7 +244,6 @@
    19: rule "BIOWASTE HOLDER DIES, ORB IS QUEUED AND RESOURCE AMOUNT REMOVED" (src/objective_types/objective_type_biomorphing.opy)
    19: rule "STRIKER NORMAL PILE DRIVER" (src/zombie_types.opy)
    19: rule "HITCHHIKER PARENT RECIEVES HEALTH POOL" (src/enhancements.opy)
-   18: rule "advanceMenuChoice" (src/player_start_menu.opy)
    18: rule "OBJECTIVE COMPLETE" (src/global_game_in_progress.opy)
    18: rule "teleportDownedPlayerToWalkable" (src/players_game_in_progress.opy)
    18: rule "SOLDIER TACTICAL VISOR DAMAGE BONUS" (src/hero_tuning.opy)
@@ -255,7 +256,6 @@
    17: rule "updateUsers" (src/players_game_in_progress.opy)
    17: rule "Subroutine saveAlivePlayerState" (src/players_game_in_progress.opy)
    17: rule "SUCCESSOR (DOOMFIST) HOLDS BLOCK IF TARGET USE ULTIMATE" (src/zombie_types.opy)
-   17: rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)" (src/augments.opy)
    16: rule "SURVIVOR FOLLOW TARGET LETS GO" (src/objective_types/objective_type_survivor_rescue.opy)
    15: rule "chaseSatelliteTarget" (src/objective_types/objective_type_satellite_uplink.opy)
    15: rule "playReignitedWarningPair" (src/zombie_types.opy)
@@ -1782,7 +1782,7 @@ rule ("resolveReconnectUserIndex") {
     }
 }
 
-//43 elements
+//50 elements
 rule ("PREGAME QUICK TIPS FOR PLAYERS") {
     event {
         Ongoing - Global;
@@ -1792,7 +1792,7 @@ rule ("PREGAME QUICK TIPS FOR PLAYERS") {
     }
     actions {
         Wait(10, Abort When False); // 2 elements
-        Small Message(All Players(All Teams), Custom String("Quick Tip: {0}", Random Value In Array(Array(Custom String("Hold [{0}] for 5 seconds to switch heroes while in game.", Input Binding String(Button(Reload))), Custom String("Hacked zombies cannot infect players."), Custom String("Overheal abilities protect players from infection."), Custom String("Switch cameras: [{0}] + [{1}] + [{2}] (Normal / Precise / Smooth).", Input Binding String(Button(Crouch)), Input Binding String(Button(Jump)), Input Binding String(Button(Reload))))))); // 37 elements
+        Small Message(All Players(All Teams), Custom String("Quick Tip: {0}", Random Value In Array(Array(Custom String("Hold [{0}] while voting to cycle backwards.", Input Binding String(Button(Secondary Fire))), Custom String("Hold [{0}] for 5 seconds to switch heroes while in game.", Input Binding String(Button(Reload))), Custom String("Hacked zombies cannot infect players."), Custom String("Overheal abilities protect players from infection."), Custom String("Switch cameras: [{0}] + [{1}] + [{2}] (Normal / Precise / Smooth).", Input Binding String(Button(Crouch)), Input Binding String(Button(Jump)), Input Binding String(Button(Reload))))))); // 44 elements
         Loop; // 1 element
     }
 }
@@ -2778,7 +2778,7 @@ rule ("attachPlayerToPregameAnchor") {
     }
 }
 
-//18 elements
+//29 elements
 rule ("advanceMenuChoice") {
     event {
         Subroutine;
@@ -2786,7 +2786,7 @@ rule ("advanceMenuChoice") {
     }
     actions {
         While(True); // 1 element
-            Set Global Variable(tmp0, Modulo(Add(Global.tmp0, True), Count Of(Global.tmp1))); // 8 elements
+            Set Global Variable(tmp0, Modulo(Add(Global.tmp0, If-Then-Else(Is Button Held(Event Player, Button(Secondary Fire)), Subtract(Count Of(Global.tmp1), True), 1)), Count Of(Global.tmp1))); // 19 elements
             If(Value In Array(Global.tmp1, Global.tmp0)); // 5 elements
                 Break; // 1 element
             End; // 1 element
@@ -9263,7 +9263,7 @@ rule ("AUGMENT MENU") {
     }
 }
 
-//17 elements
+//25 elements
 rule ("PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)") {
     event {
         Ongoing - Each Player;
@@ -9276,7 +9276,7 @@ rule ("PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)") {
         Is Button Held(Event Player, Button(Interact)) == True; // 4 elements
     }
     actions {
-        Set Player Variable(Event Player, augmentId, Modulo(Add((Event Player).augmentId, True), 11)); // 8 elements
+        Set Player Variable(Event Player, augmentId, Modulo(Add((Event Player).augmentId, If-Then-Else(Is Button Held(Event Player, Button(Secondary Fire)), 10, 1)), 11)); // 16 elements
     }
 }
 
