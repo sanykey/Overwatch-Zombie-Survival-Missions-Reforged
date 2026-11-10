@@ -11,6 +11,7 @@
 | Изучить дефекты и предложения | [CODE_REVIEW_REPORT.ru.md](../CODE_REVIEW_REPORT.ru.md): общая классификация, основания и происхождение; учитывать базу аудита |
 | Проверить происхождение находок | `node analysis/audit-original-provenance-2026-11-04.cjs`; [сохранённые доказательства](original-provenance-2026-11-04.json) |
 | Получить диагностику предупреждений текущего кода | `node analysis/audit-compiler-warnings-2026-11-04.cjs`; без `--write` исторический JSON не заменяется |
+| Измерить кандидаты дальнейшей оптимизации | `node analysis/measure-idea-candidates.cjs`; [отчёт с результатами](element-optimization-ideas-2026-11-10.md) |
 | Изучить ограничения scratch / общих полей | [глобальные временные](global-temporaries-review-2026-10-31.md), [поля игрока](player-slot-sharing-review-2026-11-02.md), [переход камеры](pregame-camera-transition-validation.json), комментарии в `src/variables.opy` |
 | Спланировать игровую проверку | [docs/testing.md](../docs/testing.md) |
 
