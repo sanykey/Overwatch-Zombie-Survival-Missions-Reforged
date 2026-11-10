@@ -4,13 +4,16 @@
 //   C1 strip "@Condition ... == true" (342 occurrences)      => 29,972 (-3): not worth it,
 //      the compiler counts literal comparisons in conditions as nearly free.
 //   C4 hoist AUGMENT_NAMES and both melee hero lists into
-//      runtime global constants (6 use sites, +3 globalvar)   => 29,948 (-27); also removes
-//      per-frame array construction in the LONG REACH MELEE WEAPONS condition.
+//      runtime global constants (6 use sites, +3 globalvar)   => measured -27 at the pre-C5
+//      baseline. IMPLEMENTED 2026-11-10 with rule-based initialization in VARIABLE ASSIGNMENT:
+//      actual delta -34 (29,963 -> 29,929). Module-level `globalvar x = [...]` initializers
+//      let #!optimizeForSizeAggressive fold the string table back into its use sites and drop
+//      the assignment as dead code, so the initializers must stay inside the rule.
 //   C5 merge the 7 setup bigMessage calls in objectivesManagement
 //      into one indexed call with the existing ID range guard => 29,963 (-12).
 //      IMPLEMENTED 2026-11-10; the transform now reports "already implemented".
 //   Combined C1+C4+C5                                        => 29,933 (-42), 0 warnings.
-// The live baseline after the C5 implementation is 29,963; skips a candidate when
+// The live baseline after the C5/C4 implementations is 29,929; skips a candidate when
 // its source pattern is no longer present. Read-only with respect to src/.
 const fs = require('fs');
 const path = require('path');
@@ -61,11 +64,13 @@ function stripCondTrue(f, onlyMethodCalls) {
     return { files: out, count: n };
 }
 
-// C4': hoist AUGMENT_NAMES + melee hero lists into runtime globals (icons/colors already hoisted)
+// C4: hoist AUGMENT_NAMES + melee hero lists into runtime globals (icons/colors already hoisted).
+// Returns null when the candidate is already implemented in the source.
 function hoistAugmentTables(f) {
     const out = clone(f);
     const names = ['AUGMENT_NAMES', 'AUGMENT_MELEE_WEAPON_HEROES', 'AUGMENT_MELEE_BUTTON_WEAPON_HEROES'];
-    const globals = { AUGMENT_NAMES: 'augmentNameListConst', AUGMENT_MELEE_WEAPON_HEROES: 'augmentMeleeWeaponHeroListConst', AUGMENT_MELEE_BUTTON_WEAPON_HEROES: 'augmentMeleeButtonHeroListConst' };
+    const globals = { AUGMENT_NAMES: 'augmentNameListConst', AUGMENT_MELEE_WEAPON_HEROES: 'augmentMeleeWeaponHeroListConst', AUGMENT_MELEE_BUTTON_WEAPON_HEROES: 'augmentMeleeButtonWeaponHeroListConst' };
+    if (!out['augments.opy'].includes('#!define AUGMENT_NAMES [')) return null;
     let uses = 0;
     const ordered = ['AUGMENT_MELEE_BUTTON_WEAPON_HEROES', 'AUGMENT_MELEE_WEAPON_HEROES', 'AUGMENT_NAMES'];
     for (const [name, text] of Object.entries(out)) {
@@ -128,14 +133,15 @@ async function main() {
         const r1 = stripCondTrue(base, false);
         variants.push(['C1 strip @Condition "== true" (all ' + r1.count + ')', r1.files]);
         const r4 = hoistAugmentTables(base);
-        variants.push(['C4 hoist augment name/hero tables (' + r4.count + ' uses)', r4.files]);
+        variants.push(['C4 hoist augment name/hero tables' + (r4 ? ' (' + r4.count + ' uses)' : ' (already implemented)'), r4 && r4.files]);
         const c5 = bigMessageArray(base);
         variants.push(['C5 setup bigMessage array', c5 && c5.files]);
         let rc = stripCondTrue(base, false).files;
-        rc = hoistAugmentTables(rc).files;
+        const r4c = hoistAugmentTables(rc);
+        if (r4c) rc = r4c.files;
         const c5c = bigMessageArray(rc);
         if (c5c) rc = c5c.files;
-        variants.push(['combined C1+C4' + (c5c ? '+C5' : ' (C5 already implemented)'), rc]);
+        variants.push(['combined C1' + (r4c ? '+C4' : '') + (c5c ? '+C5' : '') + ' (unimplemented candidates only)', rc]);
     }
     for (const [label, files] of variants) {
         if (!files) { console.log(`${label} => skipped: already implemented`); continue; }
