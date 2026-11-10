@@ -101,7 +101,7 @@ macro initializePlayerEnhancement():
             hudText(
                 eventPlayer, iconString(Icon.TRASHCAN),
                 (f"{max(0, ceil(eventPlayer.enhancementHoldUntil - getTotalTimeElapsed()))}s | [{inputBindingString(Button.INTERACT)}] to throw" if eventPlayer.enhancementHeldZombie != null else f"Aim at a vulnerable zombie | [{inputBindingString(Button.INTERACT)}] to pick up"),
-                "Dead Weight", HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.STRING
+                "Wrestler", HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.STRING
             )
             break
         case Enhancement.BOLT_STRIKE:

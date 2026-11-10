@@ -191,14 +191,14 @@ rule "EFFECTS/TEXTS":
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Enhancement
-    startMenuEnhancementColorList = [Color.AQUA, Color.RED, Color.GRAY, Color.ORANGE, Color.GREEN, Color.GRAY, Color.WHITE, Color.PURPLE, Color.BLUE, Color.TURQUOISE, Color.LIME_GREEN, Color.PURPLE, Color.YELLOW]
+    startMenuEnhancementColorList = [Color.AQUA, Color.RED, Color.GRAY, Color.ORANGE, Color.GREEN, Color.GRAY, Color.WHITE, Color.PURPLE, Color.BLUE, Color.TURQUOISE, Color.LIME_GREEN, Color.SKY_BLUE, Color.YELLOW]
     hudText(
         getPlayers(Team.1),
         "Enhancement: {0}{1}".format(
             [
                 "No Preference", "Brain Killer ", "Zombie Hybrid ",
                 "Pyrotechnic ", "Plague Doctor ", "Born to Battle ",
-                "Charge Battery ", "Hitchhiker ", "P.U.P. ", "Overcharge ", "Bulking Season ", "Dead Weight ", "Bolt Strike "
+                "Charge Battery ", "Hitchhiker ", "P.U.P. ", "Overcharge ", "Bulking Season ", "Wrestler ", "Bolt Strike "
             ][localPlayer.enhancementId],
             enhancementOptionList[localPlayer.enhancementId] if localPlayer.enhancementId > Enhancement.NO_PREFERENCE else ""
         ),

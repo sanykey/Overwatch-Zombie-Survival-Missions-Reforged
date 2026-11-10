@@ -80,7 +80,7 @@ rule "PLAYER AUGMENT INITIALIZATION":
         return {...s, player: bot, expectedDamager: s.player, targets: [s.player], status: bot.status,
             dummy: true, hero: 'Ana'};
     }
-    const hudAction = actions(enhancementInit).find(line => line.startsWith('Create HUD Text(') && line.includes('Custom String("Dead Weight")'));
+    const hudAction = actions(enhancementInit).find(line => line.startsWith('Create HUD Text(') && line.includes('Custom String("Wrestler")'));
     const hudStatus = args(hudAction)[2].replaceAll('Input Binding String(Button(Interact))', '"Interact"');
     // A shared enhancement slot may retain a previous role's value. Numeric,
     // array and entity values must all become idle before the HUD/input reads it.
