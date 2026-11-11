@@ -3,9 +3,9 @@
 subroutine extendAugmentMelee
 subroutine useAugmentAirAction
 
-#!define AUGMENT_DASH_COOLDOWN 15
+#!define AUGMENT_DASH_COOLDOWN 14
 #!define AUGMENT_DASH_MAX_CHARGES 2
-#!define AUGMENT_DASH_PHASE_DURATION 1.5
+#!define AUGMENT_DASH_PHASE_DURATION 1.7
 #!define AUGMENT_JUMP_IMPULSE 14.4
 #!define AUGMENT_JUMP_TAP_WINDOW 0.3
 #!define AUGMENT_MELEE_RADIUS 2.5
@@ -208,6 +208,8 @@ rule "DASH SMOKE FADE":
     # Clearing the handle also rearms this rule for the next window.
     destroyEffect(eventPlayer.augmentDashSmokeEntity)
     eventPlayer.augmentDashSmokeEntity = null
+    # Restore normal damage intake exactly with the aura's removal.
+    eventPlayer.setDamageReceived(100)
 
 
 rule "DOUBLE JUMP AIRBORNE DAMAGE":
@@ -246,9 +248,12 @@ def useAugmentAirAction():
                 # diagonal, independent of their relative strength. Opposite inputs
                 # cancel in Workshop's movement vector; zero input grants protection only.
                 augmentDashDirection = vect(1 if augmentDashDirection.x > 0 else -1 if augmentDashDirection.x < 0 else 0, 0, 1 if augmentDashDirection.z > 0 else -1 if augmentDashDirection.z < 0 else 0)
-                # Every successful dash immediately starts a fresh 1.5s status,
-                # including while already invincible. Do not defer renewal to expiry.
-                eventPlayer.setStatusEffect(null, Status.INVINCIBLE, AUGMENT_DASH_PHASE_DURATION)
+                # Every successful dash immediately starts a fresh 1.5s resist,
+                # including while already protected. Do not defer renewal to expiry.
+                # 100% damage resist instead of the INVINCIBLE status: that status keys
+                # the DoT-clearing rule, which must not purge infection DoT/burning.
+                # The resist is set and cleared together with the smoke aura window.
+                eventPlayer.setDamageReceived(0)
                 # Keep one aura for overlapping dashes; only its deadline changes.
                 # augmentIsAirActionReady shares this entity slot: only Double Jump
                 # may write that alias, including on failed/cooldown activations.

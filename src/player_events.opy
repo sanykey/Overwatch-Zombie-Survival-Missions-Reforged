@@ -87,6 +87,13 @@ rule "PLAYER DIED":
 
     if eventPlayer.augmentId == Augment.DOUBLE_JUMP:
         eventPlayer.augmentJumpLastPressedAt = 0
+    if eventPlayer.augmentId == Augment.DASH:
+        # A death inside the resist window must not carry the 0% damage intake
+        # into the next life before the deadline passes.
+        if eventPlayer.augmentDashSmokeEntity != null:
+            destroyEffect(eventPlayer.augmentDashSmokeEntity)
+            eventPlayer.augmentDashSmokeEntity = null
+        eventPlayer.setDamageReceived(100)
 
 
 rule "PLAYER DEALT HEALING":
