@@ -144,9 +144,7 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         #!define supplyDropItemAngleOffset tmp0
         for supplyDropItemAngleOffset in range(-60, 61, 120 / (supplyDropPowerUpCount - 1)):
             supplyPowerUpPositionList.append(supplyDropLandingPosition + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(supplyDropLandingPosition, eventPlayer)) + supplyDropItemAngleOffset, 0)) * 2))
-    elif len(aimedPowerUpPositions) > 0:
-        if eventPlayer.augmentId == Augment.SCAVENGER and eventPlayer.isHoldingButton(Button.CROUCH) and len(eventPlayer.augmentScavengerBackpack) >= 2:
-            return
+    elif len(aimedPowerUpPositions) > 0 and not (eventPlayer.augmentId == Augment.SCAVENGER and eventPlayer.isHoldingButton(Button.CROUCH) and len(eventPlayer.augmentScavengerBackpack) >= 2):
         # Commit pickup and all four aligned ground lists without waits: another
         # player's pickup or a Reload drop must never observe a half-finished trade.
         # Synchronous scratch; no subroutine calls or reevaluated captures here.
@@ -170,6 +168,20 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         if tradedPowerUpItemId != 0:
             supplyPowerUpIdList.append(tradedPowerUpItemId)
             supplyPowerUpPositionList.append(pickedPowerUpPosition)
+    # Scavenger backpack cycling: Crouch + Interact with nothing to store swaps
+    # the first reserve with the active slot; an empty backpack stows the active
+    # item, an empty slot pulls the first reserve. Reuses the aimed-items scratch.
+    #!define scavCycleItemId tmp0
+    elif eventPlayer.augmentId == Augment.SCAVENGER and eventPlayer.isHoldingButton(Button.CROUCH):
+        scavCycleItemId = eventPlayer.powerUpItemId
+        if len(eventPlayer.augmentScavengerBackpack) > 0:
+            eventPlayer.powerUpItemId = eventPlayer.augmentScavengerBackpack[0]
+            del eventPlayer.augmentScavengerBackpack[0]
+            if scavCycleItemId != 0:
+                eventPlayer.augmentScavengerBackpack.append(scavCycleItemId)
+        elif scavCycleItemId != 0:
+            eventPlayer.augmentScavengerBackpack.append(scavCycleItemId)
+            eventPlayer.powerUpItemId = 0
     elif eventPlayer.powerUpItemId:
         wait(0.25, Wait.ABORT_WHEN_FALSE)
         # Phase/input guards are in Actions, outside Abort When False checks.
