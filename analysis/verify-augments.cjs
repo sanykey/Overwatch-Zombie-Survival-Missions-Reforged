@@ -81,7 +81,20 @@ function value(expr, state, element) {
     if (expr === 'Current Array Index') return state.arrayIndex;
     if (expr.startsWith('Global.')) return state.globals[expr.slice(7)] ?? 0;
     const field = expr.match(/^\((.+)\)\.(\w+)$/);
-    if (field) return value(field[1], state, element)[field[2]] ?? 0;
+    if (field) {
+        const target = value(field[1], state, element);
+        // Shared CC flags are derived, not stored: CROWD CONTROL STATUS sets the
+        // live one from native statuses (Rooted/Hacked excluded) and BOT STUN
+        // MANAGEMENT mirrors it on bots with a 0.125s polling window. An unset
+        // property therefore resolves from the status set; an explicit value
+        // (including the delayed window model) always wins.
+        if (typeof target === 'object' && target !== null && !(field[2] in target)
+            && (field[2] === 'isCrowdControlled' || field[2] === 'botIsCrowdControlled')) {
+            const status = target === state.player ? state.status : target.status ?? state.status;
+            return ['Stunned', 'Asleep', 'Frozen', 'Knocked Down'].some(name => status.has(name));
+        }
+        return target[field[2]] ?? 0;
+    }
     if (expr.startsWith('"')) return JSON.parse(expr);
     const name = expr.slice(0, expr.indexOf('(')), a = args(expr);
     const v = i => value(a[i], state, element);

@@ -471,8 +471,12 @@ def useLivingProjectile():
         return
     if [livingProjectileCandidate.getTeam() != Team.2, not livingProjectileCandidate.isDummy(), not livingProjectileCandidate.isAlive(), livingProjectileCandidate.botIsInitializing, livingProjectileCandidate.botIsTeleporting, livingProjectileCandidate.botIsAttached].any():
         return
-    # Shared CC status excludes Rooted; low health still qualifies independently.
-    if not (livingProjectileCandidate.getNormalizedHealth() < 0.2 or livingProjectileCandidate.isCrowdControlled):
+    # Either CC flag qualifies: the live status excludes Rooted, and the delayed
+    # bot flag keeps a zombie grabbable for up to 0.125s after CC exits, matching
+    # the zombie-side checks; low health still qualifies independently. The
+    # candidate is already a Team 2 dummy, so BOT STUN MANAGEMENT maintains its
+    # delayed flag.
+    if not (livingProjectileCandidate.getNormalizedHealth() < 0.2 or livingProjectileCandidate.isCrowdControlled or livingProjectileCandidate.botIsCrowdControlled):
         return
     eventPlayer.enhancementHeldZombie = livingProjectileCandidate
     eventPlayer.enhancementHoldUntil = getTotalTimeElapsed() + DEAD_WEIGHT_DURATION

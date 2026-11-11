@@ -1,4 +1,4 @@
-/* Element count: (total 29857)
+/* Element count: (total 29862)
 
  1608: rule "objectivesManagement" (src/subroutines.opy)
  1571: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
@@ -81,11 +81,11 @@
   115: rule "BASIC (REAPER) SHADOW STEP (BOSS)" (src/zombie_types.opy)
   115: rule "EFFECT/TEXT (PERMANENT)" (src/power_ups.opy)
   114: rule "RUSHER MOLTEN CORE (BOSS)" (src/zombie_types.opy)
+  114: rule "useLivingProjectile" (src/enhancements.opy)
   113: rule "RIDER ATTACH TO TEAMMATES" (src/zombie_types.opy)
   113: rule "CHARGE BATTERY (USAGE AND COOLDOWNS)" (src/enhancements.opy)
   111: rule "SPAWN BOSS" (src/objective_types/objective_type_bosses.opy)
   110: rule "RIDER USE GRAPPLING HOOK" (src/zombie_types.opy)
-  109: rule "useLivingProjectile" (src/enhancements.opy)
   108: rule "ENSNARER (HAZARD) BLOCKS PLAYERS" (src/zombie_types.opy)
   107: rule "SET UP TERMINAL POSITIONS" (src/objective_types/objective_type_satellite_uplink.opy)
   107: rule "CHARGE BATTERY" (src/enhancements.opy)
@@ -9196,7 +9196,7 @@ rule ("resetBattleAbilityCharge") {
     }
 }
 
-//109 elements
+//114 elements
 rule ("useLivingProjectile") {
     event {
         Subroutine;
@@ -9212,8 +9212,8 @@ rule ("useLivingProjectile") {
         Set Global Variable(tmp0, Ray Cast Hit Player(Eye Position(Event Player), Add(Eye Position(Event Player), Multiply(Facing Direction Of(Event Player), 5)), All Players(All Teams), Event Player, False)); // 16 elements
         Abort If(Compare(Global.tmp0, ==, Null)); // 5 elements
         Abort If(Is True For Any(Array(Compare(Team Of(Global.tmp0), !=, Team 2), Not(Is Dummy Bot(Global.tmp0)), Is Dead(Global.tmp0), (Global.tmp0).actorTeamSlot18, (Global.tmp0).actorTeamSlot3, (Global.tmp0).isAttached), Current Array Element)); // 30 elements
-        "Shared CC status excludes Rooted; low health still qualifies independently."
-        Abort If(Not(Or(Compare(Normalized Health(Global.tmp0), <, 0.2), (Global.tmp0).isCrowdControlled))); // 13 elements
+        "bot flag keeps a zombie grabbable for up to 0.125s after CC exits, matching\nthe zombie-side checks; low health still qualifies independently. The\ncandidate is already a Team 2 dummy, so BOT STUN MANAGEMENT maintains its\ndelayed flag."
+        Abort If(Not(Or(Or(Compare(Normalized Health(Global.tmp0), <, 0.2), (Global.tmp0).isCrowdControlled), (Global.tmp0).botIsCrowdControlled))); // 18 elements
         Set Player Variable(Event Player, actorTeamSlot22, Global.tmp0); // 2 elements
         Set Player Variable(Event Player, actorTeamSlot23, Add(Total Time Elapsed, 5)); // 4 elements
         Set Player Variable(Global.tmp0, augmentState2, Hero Of(Event Player)); // 3 elements

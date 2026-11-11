@@ -33,7 +33,7 @@ assert(lines(subroutines, 'botIsCrowdControlled = false').length === 1,
 
 // Live flag on the shared tracker and Team 1 consumers; they never use the delayed flag.
 assert.equal(liveReads(read('player_events.opy')), 2, 'CROWD CONTROL STATUS must set/reset the live flag');
-for (const [name, live, delayed] of [['augments.opy', 5, 0], ['enhancements.opy', 3, 0], ['hero_tuning.opy', 1, 0]]) {
+for (const [name, live, delayed] of [['augments.opy', 5, 0], ['enhancements.opy', 3, 1], ['hero_tuning.opy', 1, 0]]) {
     const text = read(name);
     assert.equal(liveReads(text), live, `Unexpected live-read count in ${name}`);
     assert.equal(delayedReads(text), delayed, `Unexpected delayed-read count in ${name}`);

@@ -175,6 +175,18 @@ rule "PLAYER AUGMENT INITIALIZATION":
         const {s, bot} = setup(); change(bot); run('useLivingProjectile', s);
         assert(!s.player[held]);
     }
+    // Either CC flag alone qualifies a full-health zombie: the live flag, or the
+    // delayed bot flag that lingers up to 0.125s after CC exits.
+    for (const flag of ['isCrowdControlled', 'botIsCrowdControlled']) {
+        const {s, bot} = setup(1000); bot[flag] = true; run('useLivingProjectile', s);
+        assert.equal(s.player[held], bot, `${flag} alone qualifies the grab`);
+    }
+    const recent = setup(1000); recent.bot.isCrowdControlled = false; recent.bot.botIsCrowdControlled = true;
+    run('useLivingProjectile', recent.s);
+    assert.equal(recent.s.player[held], recent.bot, 'A zombie inside the delayed window stays grabbable');
+    const idle = setup(1000); idle.bot.isCrowdControlled = false; idle.bot.botIsCrowdControlled = false;
+    run('useLivingProjectile', idle.s);
+    assert(!idle.s.player[held], 'Without either flag a full-health zombie cannot be grabbed');
     for (const status of ['Stunned', 'Asleep', 'Frozen', 'Knocked Down']) {
         const {s} = setup(); s.status.add(status); run('useLivingProjectile', s);
         assert(!s.player[held]); assert.equal(s.raycastCalls ?? 0, 0, 'Blocked carriers must not query a target');
