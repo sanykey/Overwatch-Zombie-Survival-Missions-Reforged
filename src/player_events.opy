@@ -1,5 +1,20 @@
 #!mainFile "../main.opy"
 
+def enqueuePyroBurn():
+    @Name "enqueuePyroBurn"
+
+    # One shared Pyrotechnic enqueue for native and scripted hits. Inputs:
+    # pyroBurnVictim (tmp3) and pyroBurnHealthBefore (tmp2), the victim's health
+    # before the scripted hit; null skips the health gate for native-event hits,
+    # which are always real. Script hits have no Event Ability, so enqueueing
+    # here cannot recurse through PLAYER DEALT DAMAGE. The 15m range is enforced
+    # for every caller; current scripted call sites are all well inside it.
+    # Both slots are consumed synchronously; no scratch value is written.
+    if eventPlayer.enhancementId == Enhancement.PYROTECHNIC:
+        if pyroBurnVictim != eventPlayer and distance(eventPlayer, pyroBurnVictim) < 15 and (pyroBurnHealthBefore == null or pyroBurnVictim.getHealth() < pyroBurnHealthBefore):
+            pyroBurnVictim.setStatusEffect(eventPlayer, Status.BURNING, 3)
+            eventPlayer.enhancementPyroHitList.append(pyroBurnVictim)
+
 
 rule "CROWD CONTROL STATUS":
     @Event eachPlayer
@@ -103,9 +118,10 @@ rule "PLAYER DEALT DAMAGE":
             playEffect(eventPlayer, DynamicEffect.BAD_EXPLOSION, Color.RED, victim.getEyePosition() + directionTowards(eventPlayer.getEyePosition(), victim.getEyePosition()) * victim.sizeScale, 0.1 * victim.sizeScale)
     elif eventAbility != null:
         if eventPlayer.enhancementId == Enhancement.PYROTECHNIC:
-            if victim != eventPlayer and distance(attacker, victim) < 15:
-                victim.setStatusEffect(attacker, Status.BURNING, 3)
-                attacker.enhancementPyroHitList.append(victim)
+            # A native event hit is always real: skip the health gate.
+            pyroBurnHealthBefore = null
+            pyroBurnVictim = victim
+            enqueuePyroBurn()
         elif eventPlayer.enhancementId == Enhancement.BOLT_STRIKE:
             if isGameplayActive and victim.getTeam() == Team.2 and eventDamage > 0:
                 # One fixed primary-hit credit, even when no chain targets exist.

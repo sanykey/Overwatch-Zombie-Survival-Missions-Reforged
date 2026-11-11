@@ -23,6 +23,7 @@ subroutine explosionSequence
 subroutine illariUlt
 subroutine abilityPlacement
 subroutine createRemainingObjectivesHud
+subroutine enqueuePyroBurn
 
 
 macro minibossMutationMacro():

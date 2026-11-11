@@ -3,10 +3,9 @@
 subroutine extendAugmentMelee
 subroutine useAugmentAirAction
 
-#!define AUGMENT_DASH_PHASE_DURATION 0.5
-#!define AUGMENT_DASH_COOLDOWN 13
-#!define AUGMENT_DASH_WAVE_RADIUS 6
-#!define AUGMENT_DASH_WAVE_IMPULSE 32
+#!define AUGMENT_DASH_COOLDOWN 15
+#!define AUGMENT_DASH_MAX_CHARGES 2
+#!define AUGMENT_DASH_PHASE_DURATION 1.5
 #!define AUGMENT_JUMP_IMPULSE 14.4
 #!define AUGMENT_JUMP_TAP_WINDOW 0.3
 #!define AUGMENT_MELEE_RADIUS 2.5
@@ -31,13 +30,15 @@ subroutine useAugmentAirAction
 # these AFTER their windup wait; the helper consumes them without yielding or HUD capture.
 # [native radius, augmented radius, view angle].
 #!define augmentMeleeBounds tmp0
-# Native radius is dead after the query; reuse that array entry for health.
-#!define augmentMeleeHealthBeforeDamage augmentMeleeBounds[0]
-#!define augmentMeleeDamage tmp1
 # The helper snapshots targets once, then deals damage per player without yielding.
-#!define augmentMeleeTargets tmp2
-# Shock Landing samples movement on the second Jump press. This scratch vector is
-# consumed by the impulse before the collision-cleanup wait; it has no live captures.
+# The bounds array is dead after the query, so both roles share the slot.
+#!define augmentMeleeTargets tmp0
+#!define augmentMeleeDamage tmp1
+# Health gate for the shared Pyrotechnic enqueue, which reads but never writes
+# this slot; the target list (tmp0) survives the call across every hit.
+#!define augmentMeleeHealthBeforeDamage pyroBurnHealthBefore
+# Dash samples movement on the second Jump press. This scratch vector is
+# consumed by the impulse immediately; it has no waits or live captures.
 #!define augmentDashDirection tmp0
 
 
@@ -49,7 +50,7 @@ rule "AUGMENT MENU":
         [
             "",
             "Gain 75 armor that helps protect against infection",
-            "Press Jump again in midair: landing shockwave deals 40 damage and pushes nearby zombies; movement input adds a dash. Phased and invulnerable for 0.5s. cd: 13s",
+            f"Double-tap Jump: dash; movement input steers. {AUGMENT_DASH_MAX_CHARGES} charges, one restores every {AUGMENT_DASH_COOLDOWN}s. {AUGMENT_DASH_PHASE_DURATION}s invulnerability on activation",
             "Jump in midair / double-tap Jump. +20% damage from activation until you land. cd: 16s",
             "Triple Quick Melee, melee weapon, Dragonblade and Carnage reach. Press Melee to push visible zombies ahead within 10m; cd: 9s only with targets",
             "Carry twice the ammo per full magazine; full reloads restore the bonus",
@@ -111,11 +112,25 @@ rule "APOTHECARY TELEPORT":
     eventPlayer.teleport(eventPlayer.augmentApothecaryPosition if eventPlayer.augmentApothecaryPosition != null else random.choice(healthpackPositionList))
 
 
-rule "AUGMENT AIR ACTION RECHARGE":
+rule "DASH CHARGE RECHARGE":
+    @Event eachPlayer
+    @Team 1
+    @Condition eventPlayer.augmentId == Augment.DASH
+    @Condition eventPlayer.augmentDashCharges < AUGMENT_DASH_MAX_CHARGES
+    @Condition getTotalTimeElapsed() >= eventPlayer.augmentDashReadyAt
+
+    # The timer runs from the first spend below full (2 -> 1); spending the last
+    # charge keeps it, so a fully spent meter resumes without a new dash.
+    eventPlayer.augmentDashCharges += 1
+    if eventPlayer.augmentDashCharges < AUGMENT_DASH_MAX_CHARGES:
+        eventPlayer.augmentDashReadyAt = getTotalTimeElapsed() + AUGMENT_DASH_COOLDOWN
+
+
+rule "DOUBLE JUMP RECHARGE":
     @Event eachPlayer
     @Team 1
     @Condition isGameplayActive == true
-    @Condition eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP]
+    @Condition eventPlayer.augmentId == Augment.DOUBLE_JUMP
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isOnGround() == false
 
@@ -131,10 +146,10 @@ rule "AUGMENT AIR ACTION RECHARGE":
         loop()
 
 
-rule "AUGMENT AIR ACTION INPUT":
+rule "DOUBLE JUMP AIR ACTION INPUT":
     @Event eachPlayer
     @Team 1
-    @Condition eventPlayer.augmentId in [Augment.PHASE_DASH, Augment.DOUBLE_JUMP]
+    @Condition eventPlayer.augmentId == Augment.DOUBLE_JUMP
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.augmentIsAirActionReady == true
     @Condition eventPlayer.isOnGround() == false
@@ -160,6 +175,45 @@ rule "DOUBLE JUMP DOUBLE TAP":
         eventPlayer.augmentJumpLastPressedAt = getTotalTimeElapsed()
 
 
+rule "DASH DOUBLE TAP":
+    @Event eachPlayer
+    @Team 1
+    @Condition eventPlayer.augmentId == Augment.DASH
+    @Condition eventPlayer.isAlive() == true
+
+    # Uniform press-release-press trigger on the ground and airborne: both gaps
+    # use the shared tap window. Holding past a timeout restarts the sequence, so
+    # a held button cannot re-fire; the charges gate lives in the dash action.
+    # After a dash, the triggering press is fully consumed: the sequence waits for
+    # its release and restarts from scratch, so a third quick press is only the
+    # FIRST press of the next pair and cannot spend a second charge by itself.
+    waitUntil(eventPlayer.isHoldingButton(Button.JUMP), Math.INFINITY)
+    waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), AUGMENT_JUMP_TAP_WINDOW)
+    if not eventPlayer.isHoldingButton(Button.JUMP):
+        waitUntil(eventPlayer.isHoldingButton(Button.JUMP), AUGMENT_JUMP_TAP_WINDOW)
+        if eventPlayer.isHoldingButton(Button.JUMP):
+            useAugmentAirAction()
+            waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), Math.INFINITY)
+    loop()
+
+
+rule "DASH SMOKE FADE":
+    @Event eachPlayer
+    @Team 1
+    @Condition eventPlayer.augmentId == Augment.DASH
+
+    # One permanent per-player instance: waits for a window, then for its deadline
+    # (read live, so a re-dash slides the wait to the newest window), destroys the
+    # aura and restarts. No rule re-entry is involved, so consecutive dashes can
+    # never strand an aura.
+    waitUntil(eventPlayer.augmentDashSmokeEntity != null, Math.INFINITY)
+    waitUntil(getTotalTimeElapsed() >= eventPlayer.augmentDashSmokeDeadline or eventPlayer.augmentDashSmokeEntity == null, Math.INFINITY)
+    if getTotalTimeElapsed() >= eventPlayer.augmentDashSmokeDeadline and eventPlayer.augmentDashSmokeEntity != null:
+        destroyEffect(eventPlayer.augmentDashSmokeEntity)
+        eventPlayer.augmentDashSmokeEntity = null
+    loop()
+
+
 rule "DOUBLE JUMP AIRBORNE DAMAGE":
     @Event eachPlayer
     @Team 1
@@ -180,69 +234,47 @@ rule "DOUBLE JUMP AIRBORNE DAMAGE":
 def useAugmentAirAction():
     @Name "useAugmentAirAction"
 
-    # Check the timestamp on this press; expiry alone must not trigger a held Jump.
-    # Double Jump has no waits, so competing airborne / double-tap handlers share
-    # one atomic cooldown gate and cannot produce two impulses for the same press.
-    if getTotalTimeElapsed() >= eventPlayer.augmentMovementReadyAt and not (eventPlayer.hasStatus(Status.ROOTED) or eventPlayer.isCrowdControlled) and not eventPlayer.isAttached:
+    # Competing handlers cannot produce two impulses for one input: Dash is only
+    # called from the tap sequence, Double Jump checks its cooldown timestamp on
+    # this press (expiry alone must not trigger).
+    if not (eventPlayer.hasStatus(Status.ROOTED) or eventPlayer.isCrowdControlled) and not eventPlayer.isAttached:
         eventPlayer.augmentIsAirActionReady = false
-        if eventPlayer.augmentId == Augment.PHASE_DASH:
-            eventPlayer.augmentMovementReadyAt = getTotalTimeElapsed() + AUGMENT_DASH_COOLDOWN
-            # Pending landing hero survives the phase and subsequent flight;
-            # scratch direction is consumed before the phase-cleanup wait.
-            eventPlayer.augmentDashHero = eventPlayer.getHero()
-            augmentDashDirection = eventPlayer.getThrottle()
-            # Reduce each axis to -1/0/1: adjacent inputs always make a 45-degree
-            # diagonal, independent of their relative strength. Opposite inputs
-            # cancel in Workshop's movement vector; zero input arms only the wave.
-            augmentDashDirection = vect(1 if augmentDashDirection.x > 0 else -1 if augmentDashDirection.x < 0 else 0, 0, 1 if augmentDashDirection.z > 0 else -1 if augmentDashDirection.z < 0 else 0)
-            # Preserve longer protection already granted by revival or late joining.
-            if not eventPlayer.hasStatus(Status.INVINCIBLE):
-                eventPlayer.setStatusEffect(null, Status.INVINCIBLE, AUGMENT_DASH_PHASE_DURATION)
-            eventPlayer.disablePlayerCollision()
-            if augmentDashDirection != vect(0, 0, 0):
-                eventPlayer.applyImpulse(directionFromAngles(eventPlayer.getHorizontalFacingAngle() + horizontalAngleOfDirection(augmentDashDirection), -15), 25, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
-            # Readiness is already spent; cleanup must also survive landing/death/hero changes.
-            wait(AUGMENT_DASH_PHASE_DURATION, Wait.IGNORE_CONDITION)
-            eventPlayer.enablePlayerCollision()
-        else:
+        if eventPlayer.augmentId == Augment.DASH:
+            if eventPlayer.augmentDashCharges > 0:
+                # The recharge timer starts when the meter first drops below full;
+                # spending the last charge leaves the pending timer untouched.
+                if eventPlayer.augmentDashCharges == AUGMENT_DASH_MAX_CHARGES:
+                    eventPlayer.augmentDashReadyAt = getTotalTimeElapsed() + AUGMENT_DASH_COOLDOWN
+                eventPlayer.augmentDashCharges += -1
+                augmentDashDirection = eventPlayer.getThrottle()
+                # Reduce each axis to -1/0/1: adjacent inputs always make a 45-degree
+                # diagonal, independent of their relative strength. Opposite inputs
+                # cancel in Workshop's movement vector; zero input dashes forward.
+                augmentDashDirection = vect(1 if augmentDashDirection.x > 0 else -1 if augmentDashDirection.x < 0 else 0, 0, 1 if augmentDashDirection.z > 0 else -1 if augmentDashDirection.z < 0 else 0)
+                # Preserve longer protection already granted by revival or late joining.
+                if not eventPlayer.hasStatus(Status.INVINCIBLE):
+                    eventPlayer.setStatusEffect(null, Status.INVINCIBLE, AUGMENT_DASH_PHASE_DURATION)
+                # The blue smoke always matches the fresh invulnerability window: a
+                # re-dash destroys the old aura, then replaces both the entity and the
+                # deadline, so DASH SMOKE FADE slides to the newest window and no
+                # aura can outlive or leak past its own 1.5s.
+                if eventPlayer.augmentDashSmokeEntity != null:
+                    destroyEffect(eventPlayer.augmentDashSmokeEntity)
+                createEffect(getAllPlayers(), Effect.BAD_AURA, Color.BLUE, eventPlayer, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                eventPlayer.augmentDashSmokeEntity = getLastCreatedEntity()
+                eventPlayer.augmentDashSmokeDeadline = getTotalTimeElapsed() + AUGMENT_DASH_PHASE_DURATION
+                # Zero movement input grants only the invulnerability: no impulse.
+                # Otherwise a flat horizontal push: a downward pitch would fight the
+                # floor when grounded and cancel the rising jump's momentum
+                # (CANCEL_CONTRARY_MOTION), leaving an in-place dash without push.
+                if augmentDashDirection != vect(0, 0, 0):
+                    eventPlayer.applyImpulse(directionFromAngles(eventPlayer.getHorizontalFacingAngle() + horizontalAngleOfDirection(augmentDashDirection), 0), 21.25, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
+        elif getTotalTimeElapsed() >= eventPlayer.augmentMovementReadyAt:
             eventPlayer.augmentMovementReadyAt = getTotalTimeElapsed() + 16
             eventPlayer.applyImpulse(Vector.UP, AUGMENT_JUMP_IMPULSE, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
             # Arm the airborne damage bonus; the flight rule keeps it active
             # until this impulse's liftoff ends in a landing.
             eventPlayer.augmentJumpDamageActive = true
-
-
-rule "PHASE DASH LANDING WAVE":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.augmentId == Augment.PHASE_DASH
-    @Condition eventPlayer.augmentDashHero != null
-    @Condition (eventPlayer.isOnGround() or not isGameplayActive or not eventPlayer.isAlive() or eventPlayer.getHero() != eventPlayer.augmentDashHero) == true
-
-    # First landing consumes the wave independently of the phase-cleanup timer.
-    # Death, hero change and game end clear it without emitting a wave.
-    if isGameplayActive and eventPlayer.isAlive() and eventPlayer.getHero() == eventPlayer.augmentDashHero:
-        # Query once at the landing position. All scratch slots are synchronous;
-        # no target list, index or health snapshot survives another wait.
-        #!define augmentDashWaveTargets tmp0
-        #!define augmentDashWaveTargetIndex tmp1
-        # Actual health loss gates Pyrotechnic, as in the other scripted attacks.
-        #!define augmentDashHealthBeforeDamage tmp2
-        augmentDashWaveTargets = getPlayersInRadius(eventPlayer.getEyePosition(), AUGMENT_DASH_WAVE_RADIUS * eventPlayer.sizeScale + 2, Team.2, LosCheck.SURFACES).filter(lambda zombie: zombie.isAlive() and not zombie.botIsTeleporting and distance(eventPlayer, zombie) <= AUGMENT_DASH_WAVE_RADIUS * eventPlayer.sizeScale)
-        # Keep the 32-strength push, halving the former 13-degree upward angle.
-        for augmentDashWaveTargetIndex in range(len(augmentDashWaveTargets)):
-            if not augmentDashWaveTargets[augmentDashWaveTargetIndex].botIsAttached and augmentDashWaveTargets[augmentDashWaveTargetIndex].botKnockbackScale > 0:
-                augmentDashWaveTargets[augmentDashWaveTargetIndex].applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, augmentDashWaveTargets[augmentDashWaveTargetIndex])), -6.5), AUGMENT_DASH_WAVE_IMPULSE * augmentDashWaveTargets[augmentDashWaveTargetIndex].botKnockbackScale, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
-                augmentDashWaveTargets[augmentDashWaveTargetIndex].setEnvironmentalKillCreditor(eventPlayer)
-            # Push before damage so lethal hits keep the existing impulse/kill credit.
-            augmentDashHealthBeforeDamage = augmentDashWaveTargets[augmentDashWaveTargetIndex].getHealth()
-            damage(augmentDashWaveTargets[augmentDashWaveTargetIndex], eventPlayer, 40)
-            # Script damage has no Event Ability: enqueue only real hits, keeping
-            # the existing burn stacking/cap and preventing periodic-damage recursion.
-            if eventPlayer.enhancementId == Enhancement.PYROTECHNIC and augmentDashWaveTargets[augmentDashWaveTargetIndex].getHealth() < augmentDashHealthBeforeDamage and distance(eventPlayer, augmentDashWaveTargets[augmentDashWaveTargetIndex]) < 15:
-                augmentDashWaveTargets[augmentDashWaveTargetIndex].setStatusEffect(eventPlayer, Status.BURNING, 3)
-                eventPlayer.enhancementPyroHitList.append(augmentDashWaveTargets[augmentDashWaveTargetIndex])
-    eventPlayer.augmentDashHero = null
 
 
 rule "GRAPNEL LAUNCHER":
@@ -275,14 +307,12 @@ rule "GRAPNEL LAUNCHER":
         if distance(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(eventPlayer.augmentGrapnelTarget)) <= 1.5 * eventPlayer.sizeScale + 0.5 * eventPlayer.augmentGrapnelTarget.sizeScale:
             # Pull velocity scratch is dead on contact. Read health synchronously;
             # no scratch value survives a wait or is captured by the cable.
-            #!define augmentGrapnelHealthBeforeDamage tmp0
-            augmentGrapnelHealthBeforeDamage = eventPlayer.augmentGrapnelTarget.getHealth()
+            pyroBurnHealthBefore = eventPlayer.augmentGrapnelTarget.getHealth()
             damage(eventPlayer.augmentGrapnelTarget, eventPlayer, 35)
             # Script hits have no Event Ability. Like Long Reach, feed actual
-            # Pyrotechnic hits to the existing burn worker without enabling DoT recursion.
-            if eventPlayer.enhancementId == Enhancement.PYROTECHNIC and eventPlayer.augmentGrapnelTarget.getHealth() < augmentGrapnelHealthBeforeDamage and distance(eventPlayer, eventPlayer.augmentGrapnelTarget) < 15:
-                eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.BURNING, 3)
-                eventPlayer.enhancementPyroHitList.append(eventPlayer.augmentGrapnelTarget)
+            # Pyrotechnic hits to the existing burn worker without DoT recursion.
+            pyroBurnVictim = eventPlayer.augmentGrapnelTarget
+            enqueuePyroBurn()
             if eventPlayer.augmentGrapnelTarget.isOnGround():
                 eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.STUNNED, 0.5)
             else:
@@ -480,17 +510,14 @@ def extendAugmentMelee():
     # The caller's hero snapshot is no longer read after the windup; reuse its
     # owner-only slot as a synchronous index. Each Damage receives one player.
     for eventPlayer.augmentMeleeTargetIndex in range(len(augmentMeleeTargets)):
-        # Reuse the dead native-radius entry, preserving the other query metadata.
         augmentMeleeHealthBeforeDamage = augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex].getHealth()
         damage(augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex], eventPlayer, augmentMeleeDamage)
-        # Script Damage has no Event Ability, so the native-hit Pyrotechnic rule
-        # deliberately ignores it. Queue only hits which actually removed health;
-        # the existing burn worker keeps its stacking/cap/boss behavior and cannot recurse.
-        if augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex].getHealth() < augmentMeleeHealthBeforeDamage:
-            if eventPlayer.enhancementId == Enhancement.PYROTECHNIC and distance(eventPlayer, augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex]) < 15:
-                augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex].setStatusEffect(eventPlayer, Status.BURNING, 3)
-                eventPlayer.enhancementPyroHitList.append(augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex])
-            elif eventPlayer.enhancementId == Enhancement.OVERCHARGE and eventPlayer.enhancementCapacitorCharge > 0:
+        # Script Damage has no Event Ability; the shared enqueue gates on the
+        # health snapshot already in its slot and keeps the burn worker's
+        # stacking/cap/boss behavior without recursing.
+        pyroBurnVictim = augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex]
+        enqueuePyroBurn()
+        if eventPlayer.enhancementId == Enhancement.OVERCHARGE and eventPlayer.enhancementCapacitorCharge > 0:
                 # Extended hits have no Event Ability; apply the armed bonus here.
                 # The native-event rule excludes scripted damage, preventing recursion.
                 if eventPlayer.enhancementCapacitorDeadline == 0:

@@ -58,7 +58,7 @@ enum Enhancement:
 enum Augment:
     NO_PREFERENCE = 0,
     KEVLAR = 1,
-    PHASE_DASH = 2,
+    DASH = 2,
     DOUBLE_JUMP = 3,
     LONG_REACH = 4,
     AMMO_PACK = 5,
@@ -153,8 +153,12 @@ enum PowerUpEntitySlot:
 globalvar tmp0  # Synchronous scratch, including Rescue path index and Anran spawn source; assign before use, never retain across waits/async work.
 globalvar tmp1  # Second synchronous scratch value, including bot teleport pivot, selectTarget candidates and barricade push geometry; never retain across waits/async work.
 #!define botTeleportPivot tmp1
-globalvar tmp2  # Third synchronous scratch value, including barricade's current target and mutation color captured with evalOnce for the outline; no live reads across waits/async work.
-globalvar tmp3  # Fourth synchronous scratch value, barricade impulse vertical angle; assigned and consumed within the same loop iteration, no reads across waits/async work.
+globalvar tmp2  # Third synchronous scratch value, including barricade's current target, mutation color captured with evalOnce for the outline, and the Pyrotechnic enqueue's health gate; no live reads across waits/async work.
+globalvar tmp3  # Fourth synchronous scratch value, including barricade impulse vertical angle and the Pyrotechnic enqueue's victim; assigned and consumed within the same loop iteration, no reads across waits/async work.
+# enqueuePyroBurn parameters: victim's health before the scripted hit (null skips
+# the health gate for native-event hits) and the victim itself.
+#!define pyroBurnHealthBefore tmp2
+#!define pyroBurnVictim tmp3
 
 # Phase-owned storage, NOT scratch: values may survive waits and reevaluation.
 # START GAME removes all pregame HUD/world text before mission generation can resume.
@@ -408,12 +412,13 @@ playervar augmentState0
 #!define augmentApothecaryReady augmentState1
 # Laser Barricade placement facing direction; persists for collision checks.
 #!define augmentBarrierFacing augmentState0
-# Shock Landing / Double Jump / Grapnel Launcher next allowed activation time; persists across landing and death, read by the HUD.
+# Double Jump / Grapnel Launcher next allowed activation time; persists across landing and death, read by the HUD.
 #!define augmentMovementReadyAt augmentState0
 # Long Reach: next allowed Melee-button push; persists across death/hero changes.
 # Only a press with eligible targets writes it; the augment HUD reads it live.
 #!define augmentMeleePushReadyAt augmentState0
-# Shock Landing next allowed activation time; only written on a successful dash, read by input/HUD.
+# Dash next charge recharge time; set when the meter first drops below full and
+# advanced by each refill below max, read by the HUD countdown.
 #!define augmentDashReadyAt augmentState0
 # Double Jump next allowed activation time; only written on a successful extra jump.
 #!define augmentJumpReadyAt augmentState0
@@ -421,13 +426,16 @@ playervar augmentState0
 #!define augmentAmmoLoadoutList augmentState0
 
 playervar augmentState1
+# Dash smoke effect entity; set at the exact dash invulnerability grant, null
+# again after DASH SMOKE FADE removes it. Null gates the next aura creation.
+#!define augmentDashSmokeEntity augmentState1
 # Team 2 Dead Weight: carrier's 50% damage modifier, from pickup to synchronous
 # release cleanup, before any throw-damage wait. Overwritten on each pickup.
 # No bot Augment owns this slot; independent of all human powerup/augment state.
 #!define deadWeightProtectionId augmentState1
 # Laser Barricade unit edge direction; persists for collision checks.
 #!define augmentBarrierEdgeDirection augmentState1
-# Shock Landing / Double Jump is armed after releasing Jump in midair; consumed once, cleared on landing/death.
+# Double Jump is armed after releasing Jump in midair; consumed once, cleared on landing/death.
 #!define augmentIsAirActionReady augmentState1
 # Ammo Pack current cached entry, retained through the hero/weapon/respawn wait.
 #!define augmentAmmoLoadout augmentState1
@@ -452,9 +460,9 @@ playervar augmentState2
 # D.Mon / Ramattra quick melee cancels the primary windup; other quick-melee users do not
 # enter that controller. The helper does not modify this retained profile.
 #!define augmentWeaponProfile augmentState2
-# Shock Landing's launch hero while its first landing wave is pending. Landing
-# consumes it; death/hero change/game end cancel it. Independent of phase cleanup.
-#!define augmentDashHero augmentState2
+# Dash's current charges; refilled by the recharge rule, spent only in the dash
+# action. Reset to full on augment initialization (each non-hero-switch spawn).
+#!define augmentDashCharges augmentState2
 # Double Jump's last first-tap timestamp; zero means no pending tap. Only its
 # Jump-press handler writes it; death clears it. The cooldown remains in state0.
 #!define augmentJumpLastPressedAt augmentState2
@@ -474,6 +482,9 @@ playervar augmentState3
 # the following landing. Cleared by the flight rule on landing/death; only the
 # activation write and the flight rule own this slot.
 #!define augmentJumpDamageActive augmentState3
+# Dash smoke fade deadline; set with the aura entity on every dash so DASH SMOKE
+# FADE always tracks the newest invulnerability window. No other Dash use.
+#!define augmentDashSmokeDeadline augmentState3
 
 playervar enhancementHitchhikerPassenger  # Passenger attached to this carrier; null when absent. Infection rules also query it.
 
@@ -937,7 +948,7 @@ playervar augmentBarrierHealth  # Chased Laser Barricade health; placement, dama
 enum AugmentIcon:
     NO_PREFERENCE = iconString(Icon.QUESTION_MARK),
     KEVLAR = "<TX C0000000004F73E>",
-    PHASE_DASH = iconString(Icon.ARROW_RIGHT),
+    DASH = iconString(Icon.ARROW_RIGHT),
     DOUBLE_JUMP = iconString(Icon.ARROW_UP),
     LONG_REACH = abilityIconString(Hero.DOOMFIST, Button.SECONDARY_FIRE),
     AMMO_PACK = "<TX C0000000004F73A>",
@@ -947,7 +958,7 @@ enum AugmentIcon:
     SCAVENGER = iconString(Icon.RECYCLE),
     LEECH = iconString(Icon.ASTERISK),
 
-globalvar augmentIconListConst = [AugmentIcon.NO_PREFERENCE, AugmentIcon.KEVLAR, AugmentIcon.PHASE_DASH, AugmentIcon.DOUBLE_JUMP, AugmentIcon.LONG_REACH, AugmentIcon.AMMO_PACK, AugmentIcon.GRAPNEL_LAUNCHER, AugmentIcon.LASER_BARRICADE, AugmentIcon.APOTHECARY, AugmentIcon.SCAVENGER, AugmentIcon.LEECH]
+globalvar augmentIconListConst = [AugmentIcon.NO_PREFERENCE, AugmentIcon.KEVLAR, AugmentIcon.DASH, AugmentIcon.DOUBLE_JUMP, AugmentIcon.LONG_REACH, AugmentIcon.AMMO_PACK, AugmentIcon.GRAPNEL_LAUNCHER, AugmentIcon.LASER_BARRICADE, AugmentIcon.APOTHECARY, AugmentIcon.SCAVENGER, AugmentIcon.LEECH]
 
 # Immutable Enhancement icons, indexed by selection ID; shared by pregame options and roster.
 # Keep a dedicated slot: enhancementOptionList becomes Biomorphing text after menu cleanup.
