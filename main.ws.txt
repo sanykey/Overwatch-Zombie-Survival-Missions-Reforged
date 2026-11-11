@@ -1,4 +1,4 @@
-/* Element count: (total 29862)
+/* Element count: (total 29823)
 
  1608: rule "objectivesManagement" (src/subroutines.opy)
  1571: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
@@ -7,8 +7,8 @@
   443: rule "GRAPNEL LAUNCHER" (src/augments.opy)
   434: rule "SKIP ASSEMBLING HEROES" (src/global_startup.opy)
   412: rule "PLAYERS REPAIR TERMINALS" (src/objective_types/objective_type_satellite_uplink.opy)
-  398: rule "LASER BARRICADE BLOCKS ZOMBIES" (src/augments.opy)
   393: rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)" (src/supply_drops.opy)
+  359: rule "LASER BARRICADE BLOCKS ZOMBIES" (src/augments.opy)
   345: rule "PLAYER DEALT DAMAGE" (src/player_events.opy)
   327: rule "GLOBAL MENU INITIALIZATION" (src/global_start_menu.opy)
   321: rule "DAYTAKER (ILLARI) BURST" (src/zombie_types.opy)
@@ -479,112 +479,113 @@ variables {
         0: tmp0
         1: tmp1
         2: tmp2
-        3: phaseSlot0
-        4: phaseSlot1
-        5: phaseSlot2
-        6: phaseSlot3
-        7: phaseSlot4
-        8: phaseSlot5
-        9: phaseSlot6
-        10: phaseSlot7
-        11: phaseSlot8
-        12: phaseSlot9
-        13: phaseSlot10
-        14: biomorphingGoalColor
-        15: currentObjectivePosition
-        16: offsetUpThreeQuartersConst
-        17: offsetUpHalfConst
-        18: losOffsetConst
-        19: dummyHoldingPositionConst
-        20: offsetDownHundredConst
-        21: offsetUpOneAndHalfConst
-        22: offsetUpQuarterConst
-        23: powerUpColorListConst
-        24: isPregameSetup
-        25: isSpecialGameMode
-        26: isGameplayActive
-        27: isOvertimeActive
-        28: isVoting
-        29: difficultySetting
-        30: challengeSetting
-        31: zombieSetting
-        32: objectiveTypeSetting
-        33: matchEndTime
-        34: numberOfBots
-        35: walkCenter
-        36: mapGridList
-        37: attackSpawnRooms
-        38: activeAttackSpawnRoom
-        39: spawnRoomIndex
-        40: botSpawnPointList
-        41: botSpawnPointTimerList
-        42: botSpawnWaypointList
-        43: customTeleportPositionList
-        44: botSpawnTimeList
-        45: startPos
-        46: startCamPos
-        47: objectivePositionList
-        48: objectiveTypeList
-        49: objectiveSpacingList
-        50: objectiveValue
-        51: objectiveProgressSlot
-        52: objectiveDescription
-        53: objectiveColor
-        54: isObjectiveComplete
-        55: objectivePlayerList
-        56: objectiveEntityIdList
-        57: objectivePositionsSlot
-        58: objectivePlacementSlot
-        59: objectiveMotionSlot
-        60: objectiveCheckpointSlot
-        61: objectiveQueueSlot
-        62: objectiveActorSlot
-        63: isBiomorphingGoalPending
-        64: biomorphingResourceTypeList
-        65: biomorphingDeferredTypeList
-        66: biomorphingDeferredPositionList
-        67: biomorphingResourceTextIdList
-        68: biomorphingResourceEffectIdList
-        69: extractionSpeedUp
-        70: evacSurvivorList
-        71: supplyDropLandingPosition
-        72: isSupplyDropOpen
-        73: supplyDropPowerUpCount
-        74: supplyPowerUpIdList
-        75: supplyPowerUpPositionList
-        76: supplyPowerUpTextIdList
-        77: supplyPowerUpEffectIdList
-        78: playerTargetList
-        79: userNameList
-        80: playerStatsList
-        81: healthpackPositionList
-        82: mustReviveTime
-        83: botHeroList
-        84: botSpawnRateList
-        85: botBiteDamageList
-        86: botBiteDurationList
-        87: botDamageDealtList
-        88: botHealthList
-        89: botThrottleSpeedList
-        90: availableMutationList
-        91: miniBossList
-        92: bossStateList
-        93: isSmolderEventActive
-        94: bossesAvailableHeroList
-        95: bossesExcludedHeroList
-        96: objectiveRad
-        97: satelliteLaserPosition
-        98: extractionZoneRad
-        99: menuFinaleMotionSlot
-        100: supplyDropPosition
-        101: augmentIconListConst
-        102: enhancementIconListConst
-        103: augmentColorListConst
-        104: augmentNameListConst
-        105: augmentMeleeWeaponHeroListConst
-        106: augmentMeleeButtonWeaponHeroListConst
-        107: numbersList
-        108: debugHud
+        3: tmp3
+        4: phaseSlot0
+        5: phaseSlot1
+        6: phaseSlot2
+        7: phaseSlot3
+        8: phaseSlot4
+        9: phaseSlot5
+        10: phaseSlot6
+        11: phaseSlot7
+        12: phaseSlot8
+        13: phaseSlot9
+        14: phaseSlot10
+        15: biomorphingGoalColor
+        16: currentObjectivePosition
+        17: offsetUpThreeQuartersConst
+        18: offsetUpHalfConst
+        19: losOffsetConst
+        20: dummyHoldingPositionConst
+        21: offsetDownHundredConst
+        22: offsetUpOneAndHalfConst
+        23: offsetUpQuarterConst
+        24: powerUpColorListConst
+        25: isPregameSetup
+        26: isSpecialGameMode
+        27: isGameplayActive
+        28: isOvertimeActive
+        29: isVoting
+        30: difficultySetting
+        31: challengeSetting
+        32: zombieSetting
+        33: objectiveTypeSetting
+        34: matchEndTime
+        35: numberOfBots
+        36: walkCenter
+        37: mapGridList
+        38: attackSpawnRooms
+        39: activeAttackSpawnRoom
+        40: spawnRoomIndex
+        41: botSpawnPointList
+        42: botSpawnPointTimerList
+        43: botSpawnWaypointList
+        44: customTeleportPositionList
+        45: botSpawnTimeList
+        46: startPos
+        47: startCamPos
+        48: objectivePositionList
+        49: objectiveTypeList
+        50: objectiveSpacingList
+        51: objectiveValue
+        52: objectiveProgressSlot
+        53: objectiveDescription
+        54: objectiveColor
+        55: isObjectiveComplete
+        56: objectivePlayerList
+        57: objectiveEntityIdList
+        58: objectivePositionsSlot
+        59: objectivePlacementSlot
+        60: objectiveMotionSlot
+        61: objectiveCheckpointSlot
+        62: objectiveQueueSlot
+        63: objectiveActorSlot
+        64: isBiomorphingGoalPending
+        65: biomorphingResourceTypeList
+        66: biomorphingDeferredTypeList
+        67: biomorphingDeferredPositionList
+        68: biomorphingResourceTextIdList
+        69: biomorphingResourceEffectIdList
+        70: extractionSpeedUp
+        71: evacSurvivorList
+        72: supplyDropLandingPosition
+        73: isSupplyDropOpen
+        74: supplyDropPowerUpCount
+        75: supplyPowerUpIdList
+        76: supplyPowerUpPositionList
+        77: supplyPowerUpTextIdList
+        78: supplyPowerUpEffectIdList
+        79: playerTargetList
+        80: userNameList
+        81: playerStatsList
+        82: healthpackPositionList
+        83: mustReviveTime
+        84: botHeroList
+        85: botSpawnRateList
+        86: botBiteDamageList
+        87: botBiteDurationList
+        88: botDamageDealtList
+        89: botHealthList
+        90: botThrottleSpeedList
+        91: availableMutationList
+        92: miniBossList
+        93: bossStateList
+        94: isSmolderEventActive
+        95: bossesAvailableHeroList
+        96: bossesExcludedHeroList
+        97: objectiveRad
+        98: satelliteLaserPosition
+        99: extractionZoneRad
+        100: menuFinaleMotionSlot
+        101: supplyDropPosition
+        102: augmentIconListConst
+        103: enhancementIconListConst
+        104: augmentColorListConst
+        105: augmentNameListConst
+        106: augmentMeleeWeaponHeroListConst
+        107: augmentMeleeBtnHeroListConst
+        108: numbersList
+        109: debugHud
         127: __holygrail__
     player:
         0: botBiteDamage
@@ -1988,7 +1989,7 @@ rule ("VARIABLE ASSIGNMENT") {
         "Augment name and melee-hero tables live in a rule assignment, not a module-level\ninitializer: the optimizer folds module-level string tables back into use sites."
         Set Global Variable(augmentNameListConst, String Split(Custom String("No Preference0Kevlar0Shock Landing0Double Jump0Long Reach0Ammo Pack0Grapnel Launcher0Laser Barricade0Apothecary0Scavenger0Sur{0}", Custom String("vivalist")), First Of(Null))); // 12 elements
         Set Global Variable(augmentMeleeWeaponHeroListConst, Array(Hero(Reinhardt), Hero(Brigitte), Hero(D.Mon), Hero(Genji), Hero(Ramattra), Hero(Torbjörn))); // 17 elements
-        Set Global Variable(augmentMeleeButtonWeaponHeroListConst, Array(Hero(Reinhardt), Hero(Brigitte), Hero(Torbjörn))); // 9 elements
+        Set Global Variable(augmentMeleeBtnHeroListConst, Array(Hero(Reinhardt), Hero(Brigitte), Hero(Torbjörn))); // 9 elements
         If(Compare(Current Game Mode, ==, Game Mode(Capture The Flag))); // 5 elements
             Set Global Variable(attackSpawnRooms, First Of(Sorted Array(Spawn Points(Team 2), Distance Between(Current Array Element, Flag Position(Team 2))))); // 10 elements
         Else If(Compare(Current Game Mode, ==, Game Mode(Team Deathmatch))); // 5 elements
@@ -9718,7 +9719,7 @@ rule ("LONG REACH MELEE WEAPONS") {
     }
     actions {
         Abort If(Compare((Event Player).augmentId, !=, 4)); // 7 elements
-        Wait Until(And(Or(Is Button Held(Event Player, Button(Primary Fire)), And(Array Contains(Global.augmentMeleeButtonWeaponHeroListConst, Hero Of(Event Player)), Is Button Held(Event Player, Button(Melee)))), Or(Is Firing Primary(Event Player), And(Array Contains(Global.augmentMeleeButtonWeaponHeroListConst, Hero Of(Event Player)), Is Meleeing(Event Player)))), 999999999999); // 28 elements
+        Wait Until(And(Or(Is Button Held(Event Player, Button(Primary Fire)), And(Array Contains(Global.augmentMeleeBtnHeroListConst, Hero Of(Event Player)), Is Button Held(Event Player, Button(Melee)))), Or(Is Firing Primary(Event Player), And(Array Contains(Global.augmentMeleeBtnHeroListConst, Hero Of(Event Player)), Is Meleeing(Event Player)))), 999999999999); // 28 elements
         Abort If Condition Is False; // 1 element
         "Like Vendetta, held swings use an\napproximate cadence rather than polling or depending on a native hit target.\nGenji's blade cadence includes the October swing-speed increase.\nTimers do not copy native combo/perk effects."
         Set Player Variable(Event Player, augmentState2, Value In Array(Array(Array(Hero(Reinhardt), 4, 100, 0.4, 0.56), Array(Hero(Brigitte), 6, 45, 0.2, 0.4), Array(Hero(D.Mon), 4, 60, 0.2, 0.456), Array(Hero(Genji), 5, 100, 0.15, 0.458695652173913), Array(Hero(Ramattra), 10, 65, 0.15, 0.45), Array(Hero(Torbjörn), 2.5, 70, 0.35, 0.35)), Index Of Array Value(Global.augmentMeleeWeaponHeroListConst, Hero Of(Event Player)))); // 83 elements
@@ -9727,7 +9728,7 @@ rule ("LONG REACH MELEE WEAPONS") {
         Set Global Variable(tmp0, Array(Value In Array((Event Player).augmentState2, True), Multiply(Value In Array((Event Player).augmentState2, True), 3), 30)); // 17 elements
         Set Global Variable(tmp1, Value In Array((Event Player).augmentState2, 2)); // 6 elements
         Call Subroutine(extendAugmentMelee); // 1 element
-        Wait Until(Not(Or(Is Button Held(Event Player, Button(Primary Fire)), And(Array Contains(Global.augmentMeleeButtonWeaponHeroListConst, Hero Of(Event Player)), Is Button Held(Event Player, Button(Melee))))), Value In Array((Event Player).augmentState2, 4)); // 21 elements
+        Wait Until(Not(Or(Is Button Held(Event Player, Button(Primary Fire)), And(Array Contains(Global.augmentMeleeBtnHeroListConst, Hero Of(Event Player)), Is Button Held(Event Player, Button(Melee))))), Value In Array((Event Player).augmentState2, 4)); // 21 elements
         Loop If Condition Is True; // 1 element
     }
 }
@@ -9920,7 +9921,7 @@ rule ("LASER BARRICADE (PLACEMENT)") {
     }
 }
 
-//398 elements
+//359 elements
 rule ("LASER BARRICADE BLOCKS ZOMBIES") {
     event {
         Ongoing - Each Player;
@@ -9931,14 +9932,8 @@ rule ("LASER BARRICADE BLOCKS ZOMBIES") {
         (Event Player).augmentId == 7; // 4 elements
         "Barrier health is greater than 0"
         (Event Player).augmentBarrierHealth > Null; // 3 elements
-        "Horizontal distance check"
-        Is True For Any(All Living Players(Team 2), Compare(Distance Between((Event Player).augmentState3, Vector(X Component Of(Position Of(Current Array Element)), Y Component Of(Position Of((Event Player).augmentState3)), Z Component Of(Position Of(Current Array Element)))), <, 2.5)) == True; // 24 elements
-        "If feet are below highest point of wall"
-        Is True For Any(All Living Players(Team 2), Compare(Y Component Of(Position Of(Current Array Element)), <, Add(Y Component Of((Event Player).augmentState3), 2))) == True; // 16 elements
-        "If eyes are above lowest point of wall"
-        Is True For Any(All Living Players(Team 2), Compare(Y Component Of(Eye Position(Current Array Element)), >, Y Component Of((Event Player).augmentState3))) == True; // 13 elements
-        "Distance from wall"
-        Is True For Any(All Living Players(Team 2), Compare(Distance Between(Vector(X Component Of(Position Of(Current Array Element)), Y Component Of((Event Player).actorTeamSlot26), Z Component Of(Position Of(Current Array Element))), Add((Event Player).actorTeamSlot26, Multiply((Event Player).augmentState1, Min(5, Absolute Value(Dot Product((Event Player).augmentState1, Subtract(Vector(X Component Of(Position Of(Current Array Element)), Y Component Of((Event Player).actorTeamSlot26), Z Component Of(Position Of(Current Array Element))), (Event Player).actorTeamSlot26))))))), <, 1.5)) == True; // 51 elements
+        "Blocked zombie: horizontal band, feet below wall top, eyes above wall base and distance from\nthe wall, all checked on the same zombie (separate gates could be satisfied by four different zombies)."
+        Is True For Any(All Living Players(Team 2), And(And(And(Compare(Distance Between((Event Player).augmentState3, Vector(X Component Of(Position Of(Current Array Element)), Y Component Of(Position Of((Event Player).augmentState3)), Z Component Of(Position Of(Current Array Element)))), <, 2.5), Compare(Y Component Of(Position Of(Current Array Element)), <, Add(Y Component Of((Event Player).augmentState3), 2))), Compare(Y Component Of(Eye Position(Current Array Element)), >, Y Component Of((Event Player).augmentState3))), Compare(Distance Between(Vector(X Component Of(Position Of(Current Array Element)), Y Component Of((Event Player).actorTeamSlot26), Z Component Of(Position Of(Current Array Element))), Add((Event Player).actorTeamSlot26, Multiply((Event Player).augmentState1, Min(5, Absolute Value(Dot Product((Event Player).augmentState1, Subtract(Vector(X Component Of(Position Of(Current Array Element)), Y Component Of((Event Player).actorTeamSlot26), Z Component Of(Position Of(Current Array Element))), (Event Player).actorTeamSlot26))))))), <, 1.5))) == True; // 95 elements
     }
     actions {
         Stop Chasing Player Variable(Event Player, augmentBarrierHealth); // 1 element
@@ -9955,12 +9950,14 @@ rule ("LASER BARRICADE BLOCKS ZOMBIES") {
             Set Status(Global.tmp2, Event Player, Rooted, 0.5); // 3 elements
             Damage(Global.tmp2, Event Player, 10); // 3 elements
             //__label_if_78__:
+            "barrierImpulseVertical: shared vertical angle component of both impulse directions."
+            Set Global Variable(tmp3, Multiply(If-Then-Else(Compare(Y Component Of(Position Of(Global.tmp2)), >, Y Component Of((Event Player).augmentState3)), -1, 1), Add(90, Vertical Angle From Direction(Ray Cast Hit Normal(Position Of(Global.tmp2), Add(Position Of(Global.tmp2), Down), Null, All Players(All Teams), False))))); // 34 elements
             If(Not(Magnitude Of(Throttle Of(Global.tmp2)))); // 5 elements
                 "If bot is not throttling"
-                Apply Impulse(Global.tmp2, Direction From Angles(Horizontal Angle From Direction(Direction Towards((Event Player).augmentState3, First Of(Sorted Array(Global.tmp1, Distance Between(Global.tmp2, Current Array Element))))), Multiply(If-Then-Else(Compare(Y Component Of(Position Of(Global.tmp2)), >, Y Component Of((Event Player).augmentState3)), -1, 1), Add(90, Vertical Angle From Direction(Ray Cast Hit Normal(Position Of(Global.tmp2), Add(Position Of(Global.tmp2), Down), Null, All Players(All Teams), False))))), 1, To World, Incorporate Contrary Motion); // 50 elements
+                Apply Impulse(Global.tmp2, Direction From Angles(Horizontal Angle From Direction(Direction Towards((Event Player).augmentState3, First Of(Sorted Array(Global.tmp1, Distance Between(Global.tmp2, Current Array Element))))), Global.tmp3), 1, To World, Incorporate Contrary Motion); // 18 elements
             Else; // 1 element
                 "If bot is throttling"
-                Apply Impulse(Global.tmp2, Direction From Angles(Horizontal Angle From Direction(Direction Towards((Event Player).augmentState3, Last Of(Sorted Array(Global.tmp1, Angle Between Vectors(World Vector Of(Throttle Of(Global.tmp2), Global.tmp2, Rotation), Direction Towards((Event Player).augmentState3, Current Array Element)))))), Multiply(If-Then-Else(Compare(Y Component Of(Position Of(Global.tmp2)), >, Y Component Of((Event Player).augmentState3)), -1, 1), Add(90, Vertical Angle From Direction(Ray Cast Hit Normal(Position Of(Global.tmp2), Add(Position Of(Global.tmp2), Down), Null, All Players(All Teams), False))))), 10, To World, Cancel Contrary Motion); // 59 elements
+                Apply Impulse(Global.tmp2, Direction From Angles(Horizontal Angle From Direction(Direction Towards((Event Player).augmentState3, Last Of(Sorted Array(Global.tmp1, Angle Between Vectors(World Vector Of(Throttle Of(Global.tmp2), Global.tmp2, Rotation), Direction Towards((Event Player).augmentState3, Current Array Element)))))), Global.tmp3), 10, To World, Cancel Contrary Motion); // 27 elements
             End; // 1 element
         End; // 1 element
         Wait(False, Ignore Condition); // 1 element

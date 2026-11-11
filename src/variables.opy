@@ -75,7 +75,7 @@ enum Augment:
 # Augment name table, indexed by selection ID; melee-augment hero tables, checked by hero.
 #!define AUGMENT_NAMES augmentNameListConst
 #!define AUGMENT_MELEE_WEAPON_HEROES augmentMeleeWeaponHeroListConst
-#!define AUGMENT_MELEE_BUTTON_WEAPON_HEROES augmentMeleeButtonWeaponHeroListConst
+#!define AUGMENT_MELEE_BUTTON_WEAPON_HEROES augmentMeleeBtnHeroListConst
 
 # Objective IDs also index objectiveTypeVoteList and identify entries in objectiveTypeList.
 # Biomorphing and Survivor Rescue are only selectable through the mixed pool.
@@ -155,6 +155,7 @@ globalvar tmp0  # Synchronous scratch, including Rescue path index and Anran spa
 globalvar tmp1  # Second synchronous scratch value, including bot teleport pivot, selectTarget candidates and barricade push geometry; never retain across waits/async work.
 #!define botTeleportPivot tmp1
 globalvar tmp2  # Third synchronous scratch value, including barricade's current target and mutation color captured with evalOnce for the outline; no live reads across waits/async work.
+globalvar tmp3  # Fourth synchronous scratch value, barricade impulse vertical angle; assigned and consumed within the same loop iteration, no reads across waits/async work.
 
 # Phase-owned storage, NOT scratch: values may survive waits and reevaluation.
 # START GAME removes all pregame HUD/world text before mission generation can resume.
@@ -978,4 +979,4 @@ globalvar augmentColorListConst = [Color.AQUA, Color.LIGHT_GRAY, Color.YELLOW, C
 # fold the string table back into its use sites and drop the assignment as dead code.
 globalvar augmentNameListConst
 globalvar augmentMeleeWeaponHeroListConst
-globalvar augmentMeleeButtonWeaponHeroListConst
+globalvar augmentMeleeBtnHeroListConst
