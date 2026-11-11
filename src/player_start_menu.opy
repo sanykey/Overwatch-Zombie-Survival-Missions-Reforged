@@ -149,7 +149,7 @@ rule "PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)":
     eventPlayer.isPregameVoting = true
     # Scratch is consumed by advanceMenuChoice and copied back before any yield.
     menuChoiceIndex = eventPlayer.pregameChallengeVote
-    menuChoiceOptions = challengeVoteList.map(lambda option: option[1])
+    menuChoiceOptions = challengeVoteList
     advanceMenuChoice()
     eventPlayer.pregameChallengeVote = menuChoiceIndex
 
@@ -165,7 +165,7 @@ rule "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)":
     #Update player voting status
     eventPlayer.isPregameVoting = true
     menuChoiceIndex = eventPlayer.pregameZombieVote
-    menuChoiceOptions = zombieVoteList.map(lambda option: option[1])
+    menuChoiceOptions = zombieVoteList
     advanceMenuChoice()
     eventPlayer.pregameZombieVote = menuChoiceIndex
 
@@ -181,7 +181,7 @@ rule "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)":
     #Update player voting status
     eventPlayer.isPregameVoting = true
     menuChoiceIndex = eventPlayer.pregameObjectiveVote
-    menuChoiceOptions = objectiveTypeVoteList.map(lambda option: option[1])
+    menuChoiceOptions = objectiveTypeVoteList
     advanceMenuChoice()
     eventPlayer.pregameObjectiveVote = menuChoiceIndex
 

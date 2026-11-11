@@ -4,19 +4,19 @@ subroutine generateMapGrid
 
 macro setAvailableObjectivesMacro():
     #Set objective type votes empty
-    objectiveTypeVoteList[ObjectiveType.NO_PREFERENCE] = [null, true]
+    objectiveTypeVoteList[ObjectiveType.NO_PREFERENCE] = true
     #Set objective type votes empty
-    objectiveTypeVoteList[ObjectiveType.SHOWDOWN] = [null, createWorkshopSettingBool("Available Objective Types", "Showdown", true)]
+    objectiveTypeVoteList[ObjectiveType.SHOWDOWN] = createWorkshopSettingBool("Available Objective Types", "Showdown", true)
     #Set objective type votes empty
-    objectiveTypeVoteList[ObjectiveType.BOSSES] = [null, createWorkshopSettingBool("Available Objective Types", "Bosses", true, 1)]
+    objectiveTypeVoteList[ObjectiveType.BOSSES] = createWorkshopSettingBool("Available Objective Types", "Bosses", true, 1)
     #Set objective type votes empty
-    objectiveTypeVoteList[ObjectiveType.KILL_ZONE] = [null, createWorkshopSettingBool("Available Objective Types", "Kill Zone", true, 4)]
+    objectiveTypeVoteList[ObjectiveType.KILL_ZONE] = createWorkshopSettingBool("Available Objective Types", "Kill Zone", true, 4)
     #Set objective type votes empty
-    objectiveTypeVoteList[ObjectiveType.ZOMBIE_EGG] = [null, createWorkshopSettingBool("Available Objective Types", "Zombie Egg", true, 5)]
+    objectiveTypeVoteList[ObjectiveType.ZOMBIE_EGG] = createWorkshopSettingBool("Available Objective Types", "Zombie Egg", true, 5)
     #Set objective type votes empty
-    objectiveTypeVoteList[ObjectiveType.SATELLITE_UPLINK] = [null, createWorkshopSettingBool("Available Objective Types", "Satellite Uplink", true, 6)]
+    objectiveTypeVoteList[ObjectiveType.SATELLITE_UPLINK] = createWorkshopSettingBool("Available Objective Types", "Satellite Uplink", true, 6)
     #Set objective type votes empty
-    objectiveTypeVoteList[ObjectiveType.MIXED_OBJECTIVES] = [null, createWorkshopSettingBool("Available Objective Types", "Mixed Objectives", true, 8)]
+    objectiveTypeVoteList[ObjectiveType.MIXED_OBJECTIVES] = createWorkshopSettingBool("Available Objective Types", "Mixed Objectives", true, 8)
     #Mixed Objectives pool
     # These objective IDs are consecutive (1-7), so each enabled setting uses its index plus one.
     mixedObjectiveTypeList = [
@@ -140,9 +140,9 @@ rule "SKIP ASSEMBLING HEROES":
     isVoting = true
     enableEnhancementsMacro()
     #Set difficulty votes empty
-    challengeVoteList = [true, true, createWorkshopSettingBool("Challenge Toggle", "Swarm Shootout", true, 1), createWorkshopSettingBool("Challenge Toggle", "Random Abilities", true, 2), createWorkshopSettingBool("Challenge Toggle", "Insanity", true, 3), createWorkshopSettingBool("Challenge Toggle", "Pandora's Box", true, 4)].map(lambda enabled: [null, enabled])
+    challengeVoteList = [true, true, createWorkshopSettingBool("Challenge Toggle", "Swarm Shootout", true, 1), createWorkshopSettingBool("Challenge Toggle", "Random Abilities", true, 2), createWorkshopSettingBool("Challenge Toggle", "Insanity", true, 3), createWorkshopSettingBool("Challenge Toggle", "Pandora's Box", true, 4)]
     #Set zombie modes empty
-    zombieVoteList = [true, "All Zombies", createWorkshopSettingBool("Zombie Mode Toggle", "New Blood", true, 1), createWorkshopSettingBool("Zombie Mode Toggle", "What'll it be?", true, 2), createWorkshopSettingBool("Zombie Mode Toggle", "Zombie Shuffle", true, 3), createWorkshopSettingBool("Zombie Mode Toggle", "Dinner Rush!", true, 4), createWorkshopSettingBool("Zombie Mode Toggle", "Ham N' Hammer!", true, 5)].map(lambda enabled: [null, enabled])
+    zombieVoteList = [true, "All Zombies", createWorkshopSettingBool("Zombie Mode Toggle", "New Blood", true, 1), createWorkshopSettingBool("Zombie Mode Toggle", "What'll it be?", true, 2), createWorkshopSettingBool("Zombie Mode Toggle", "Zombie Shuffle", true, 3), createWorkshopSettingBool("Zombie Mode Toggle", "Dinner Rush!", true, 4), createWorkshopSettingBool("Zombie Mode Toggle", "Ham N' Hammer!", true, 5)]
     setAvailableObjectivesMacro()
     #Set/Reset to default 0
     difficultySetting = Difficulty.UNSET

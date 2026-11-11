@@ -1,4 +1,4 @@
-/* Element count: (total 29684)
+/* Element count: (total 29635)
 
  1608: rule "objectivesManagement" (src/subroutines.opy)
  1074: rule "botRespawnInitialization" (src/subroutines.opy)
@@ -6,8 +6,8 @@
   711: rule "EFFECTS/TEXTS" (src/global_start_menu.opy)
   681: rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION" (src/player_initialization.opy)
   443: rule "GRAPNEL LAUNCHER" (src/augments.opy)
-  434: rule "SKIP ASSEMBLING HEROES" (src/global_startup.opy)
   412: rule "PLAYERS REPAIR TERMINALS" (src/objective_types/objective_type_satellite_uplink.opy)
+  403: rule "SKIP ASSEMBLING HEROES" (src/global_startup.opy)
   393: rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)" (src/supply_drops.opy)
   359: rule "LASER BARRICADE BLOCKS ZOMBIES" (src/augments.opy)
   345: rule "PLAYER DEALT DAMAGE" (src/player_events.opy)
@@ -71,9 +71,9 @@
   128: rule "AUGMENT MENU" (src/augments.opy)
   126: rule "PLAYER DELIVERS RESOURCE VALUE" (src/objective_types/objective_type_biomorphing.opy)
   123: rule "OBJECTIVE CHANGES AND PLAYER ENTITIES UPDATE" (src/players_game_in_progress.opy)
-  121: rule "determineChallenge" (src/global_start_menu.opy)
   121: rule "superNano (70-79)" (src/supply_drops.opy)
   120: rule "useAugmentAirAction" (src/augments.opy)
+  119: rule "determineChallenge" (src/global_start_menu.opy)
   119: rule "BOTS MELEE" (src/bots_game_in_progress.opy)
   118: rule "BOT INITIALIZATION" (src/bots_game_in_progress.opy)
   117: rule "PLAYER SELECTS/RESELECTS HERO" (src/player_start_menu.opy)
@@ -107,8 +107,8 @@
    87: rule "BOT BECOMES ZOMBIE EGG" (src/objective_types/objective_type_zombie_egg.opy)
    86: rule "INCREASE OBJECTIVE CAPTURE PERCENTAGE" (src/objective_types/objective_type_showdown.opy)
    85: rule "PREGAME SPAWN ROOM ROTATION" (src/global_startup.opy)
-   85: rule "determineObjectiveType" (src/global_start_menu.opy)
    85: rule "DECREASES CAPTURE PERCENTAGE" (src/objective_types/objective_type_showdown.opy)
+   83: rule "determineObjectiveType" (src/global_start_menu.opy)
    83: rule "SMOLDER (WINSTON) SEES PLAYER" (src/zombie_types.opy)
    80: rule "HITCHHIKER LIFEBONDS" (src/enhancements.opy)
    77: rule "RANDOM ABILITIES" (src/global_game_in_progress.opy)
@@ -166,12 +166,12 @@
    48: rule "TUNNELER (SYMMETRA) BUILDS PORTAL" (src/zombie_types.opy)
    48: rule "SMOLDER BOSS EVENT STARTS" (src/zombie_types.opy)
    48: rule "instantRevive (0-9)" (src/supply_drops.opy)
-   47: rule "determineZombieMode" (src/global_start_menu.opy)
    47: rule "PLAYERS AT TERMINALS CONTROLS" (src/objective_types/objective_type_satellite_uplink.opy)
    46: rule "DOWNFALLEN PULLS PLAYERS" (src/zombie_types.opy)
    46: rule "GLADIATOR (JUNKERQUEEN) COMMAND SHOUT" (src/zombie_types.opy)
    46: rule "CADAVER (ANA) DETONATION" (src/zombie_types.opy)
    46: rule "AUGMENT AIR ACTION RECHARGE" (src/augments.opy)
+   45: rule "determineZombieMode" (src/global_start_menu.opy)
    45: rule "BIOWASTE MANAGEMENT" (src/objective_types/objective_type_biomorphing.opy)
    45: rule "PLAYER INFECTION DAMAGE MANAGEMENT" (src/players_game_in_progress.opy)
    44: rule "BRUTE FIRE STRIKE (BOSS)" (src/zombie_types.opy)
@@ -215,9 +215,6 @@
    25: rule "Subroutine checkEnhancementPlacement" (src/enhancements.opy)
    25: rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)" (src/augments.opy)
    25: rule "LONG REACH CARNAGE" (src/augments.opy)
-   24: rule "PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)" (src/player_start_menu.opy)
-   24: rule "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)" (src/player_start_menu.opy)
-   24: rule "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)" (src/player_start_menu.opy)
    24: rule "BOMBER (JUNKRAT) SELF DESTRUCT" (src/zombie_types.opy)
    24: rule "RIDER (WIDOWMAKER) ATTACH TO PLAYERS" (src/zombie_types.opy)
    24: rule "TUNNELER PORTAL LETS ZOMBIES THROUGH" (src/zombie_types.opy)
@@ -236,6 +233,9 @@
    21: rule "RUSHER MOLTEN CORE BURNS PLAYERS (BOSS)" (src/zombie_types.opy)
    21: rule "SMOLDER ACTIVATED FROM BOSS EVENT" (src/zombie_types.opy)
    21: rule "DOUBLE JUMP BONUS ENTER FLIGHT" (src/augments.opy)
+   20: rule "PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)" (src/player_start_menu.opy)
+   20: rule "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)" (src/player_start_menu.opy)
+   20: rule "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)" (src/player_start_menu.opy)
    20: rule "PLAYER SWITCHES HERO" (src/players_game_in_progress.opy)
    20: rule "PLAYER TARGET (ADD)" (src/players_game_in_progress.opy)
    20: rule "STALKER KNOCKBACK BLAST (BOSS)" (src/zombie_types.opy)
@@ -1887,7 +1887,7 @@ rule ("START GAME IF WAITING FOR PLAYERS") {
     }
 }
 
-//434 elements
+//403 elements
 rule ("SKIP ASSEMBLING HEROES") {
     event {
         Ongoing - Global;
@@ -1900,16 +1900,16 @@ rule ("SKIP ASSEMBLING HEROES") {
         Set Global Variable(isVoting, True); // 1 element
         Set Global Variable(phaseSlot9, Global.enhancementIconListConst); // 2 elements
         "Set difficulty votes empty"
-        Set Global Variable(phaseSlot3, Mapped Array(Array(True, True, Workshop Setting Toggle(Custom String("Challenge Toggle"), Custom String("Swarm Shootout"), True, 1), Workshop Setting Toggle(Custom String("Challenge Toggle"), Custom String("Random Abilities"), True, 2), Workshop Setting Toggle(Custom String("Challenge Toggle"), Custom String("Insanity"), True, 3), Workshop Setting Toggle(Custom String("Challenge Toggle"), Custom String("Pandora's Box"), True, 4)), Array(Null, Current Array Element))); // 65 elements
+        Set Global Variable(phaseSlot3, Array(True, True, Workshop Setting Toggle(Custom String("Challenge Toggle"), Custom String("Swarm Shootout"), True, 1), Workshop Setting Toggle(Custom String("Challenge Toggle"), Custom String("Random Abilities"), True, 2), Workshop Setting Toggle(Custom String("Challenge Toggle"), Custom String("Insanity"), True, 3), Workshop Setting Toggle(Custom String("Challenge Toggle"), Custom String("Pandora's Box"), True, 4))); // 60 elements
         "Set zombie modes empty"
-        Set Global Variable(phaseSlot5, Mapped Array(Array(True, Custom String("All Zombies"), Workshop Setting Toggle(Custom String("Zombie Mode Toggle"), Custom String("New Blood"), True, 1), Workshop Setting Toggle(Custom String("Zombie Mode Toggle"), Custom String("What'll it be?"), True, 2), Workshop Setting Toggle(Custom String("Zombie Mode Toggle"), Custom String("Zombie Shuffle"), True, 3), Workshop Setting Toggle(Custom String("Zombie Mode Toggle"), Custom String("Dinner Rush!"), True, 4), Workshop Setting Toggle(Custom String("Zombie Mode Toggle"), Custom String("Ham N' Hammer!"), True, 5)), Array(Null, Current Array Element))); // 83 elements
-        Set Global Variable At Index(phaseSlot4, False, Array(Null, True)); // 4 elements
-        Set Global Variable At Index(phaseSlot4, True, Array(Null, Workshop Setting Toggle(Custom String("Available Objective Types"), Custom String("Showdown"), True, 0))); // 17 elements
-        Set Global Variable At Index(phaseSlot4, 2, Array(Null, Workshop Setting Toggle(Custom String("Available Objective Types"), Custom String("Bosses"), True, 1))); // 18 elements
-        Set Global Variable At Index(phaseSlot4, 5, Array(Null, Workshop Setting Toggle(Custom String("Available Objective Types"), Custom String("Kill Zone"), True, 4))); // 18 elements
-        Set Global Variable At Index(phaseSlot4, 6, Array(Null, Workshop Setting Toggle(Custom String("Available Objective Types"), Custom String("Zombie Egg"), True, 5))); // 18 elements
-        Set Global Variable At Index(phaseSlot4, 7, Array(Null, Workshop Setting Toggle(Custom String("Available Objective Types"), Custom String("Satellite Uplink"), True, 6))); // 18 elements
-        Set Global Variable At Index(phaseSlot4, 9, Array(Null, Workshop Setting Toggle(Custom String("Available Objective Types"), Custom String("Mixed Objectives"), True, 8))); // 18 elements
+        Set Global Variable(phaseSlot5, Array(True, Custom String("All Zombies"), Workshop Setting Toggle(Custom String("Zombie Mode Toggle"), Custom String("New Blood"), True, 1), Workshop Setting Toggle(Custom String("Zombie Mode Toggle"), Custom String("What'll it be?"), True, 2), Workshop Setting Toggle(Custom String("Zombie Mode Toggle"), Custom String("Zombie Shuffle"), True, 3), Workshop Setting Toggle(Custom String("Zombie Mode Toggle"), Custom String("Dinner Rush!"), True, 4), Workshop Setting Toggle(Custom String("Zombie Mode Toggle"), Custom String("Ham N' Hammer!"), True, 5))); // 78 elements
+        Set Global Variable At Index(phaseSlot4, False, True); // 1 element
+        Set Global Variable At Index(phaseSlot4, True, Workshop Setting Toggle(Custom String("Available Objective Types"), Custom String("Showdown"), True, 0)); // 14 elements
+        Set Global Variable At Index(phaseSlot4, 2, Workshop Setting Toggle(Custom String("Available Objective Types"), Custom String("Bosses"), True, 1)); // 15 elements
+        Set Global Variable At Index(phaseSlot4, 5, Workshop Setting Toggle(Custom String("Available Objective Types"), Custom String("Kill Zone"), True, 4)); // 15 elements
+        Set Global Variable At Index(phaseSlot4, 6, Workshop Setting Toggle(Custom String("Available Objective Types"), Custom String("Zombie Egg"), True, 5)); // 15 elements
+        Set Global Variable At Index(phaseSlot4, 7, Workshop Setting Toggle(Custom String("Available Objective Types"), Custom String("Satellite Uplink"), True, 6)); // 15 elements
+        Set Global Variable At Index(phaseSlot4, 9, Workshop Setting Toggle(Custom String("Available Objective Types"), Custom String("Mixed Objectives"), True, 8)); // 15 elements
         Set Global Variable(phaseSlot8, Mapped Array(Array(Workshop Setting Toggle(Custom String("Mixed Objectives Pool"), Custom String("Standoff."), True, 1), Workshop Setting Toggle(Custom String("Mixed Objectives Pool"), Custom String("Bosses."), True, 2), Workshop Setting Toggle(Custom String("Mixed Objectives Pool"), Custom String("Biomorphing."), True, 3), Workshop Setting Toggle(Custom String("Mixed Objectives Pool"), Custom String("Survivor Rescue."), True, 4), Workshop Setting Toggle(Custom String("Mixed Objectives Pool"), Custom String("Kill Zone."), True, 5), Workshop Setting Toggle(Custom String("Mixed Objectives Pool"), Custom String("Zombie Egg."), True, 6), Workshop Setting Toggle(Custom String("Mixed Objectives Pool"), Custom String("Satellite Uplink."), True, 7)), If-Then-Else(Current Array Element, Add(Current Array Index, True), Null))); // 107 elements
         Modify Global Variable(phaseSlot8, Remove From Array By Value, Null); // 1 element
         "Set/Reset to default 0"
@@ -2287,7 +2287,7 @@ rule ("MUSIC/ANNOUNCER CONTROL") {
     }
 }
 
-//47 elements
+//45 elements
 rule ("determineZombieMode") {
     event {
         Subroutine;
@@ -2297,7 +2297,7 @@ rule ("determineZombieMode") {
         Set Global Variable(zombieSetting, Null); // 1 element
         "zombieModeVoteIndex: zombie-mode vote index, to count active players voting for each enabled mode."
         For Global Variable(tmp0, 1, Count Of(Global.phaseSlot5), True); // 4 elements
-            Set Global Variable At Index(phaseSlot5, Global.tmp0, If-Then-Else(Value In Array(Value In Array(Global.phaseSlot5, Global.tmp0), True), Count Of(Filtered Array(All Players(Team 1), And((Current Array Element).isPlayerActive, Compare((Current Array Element).menuTradeItemSlot, ==, Global.tmp0)))), -1)); // 27 elements
+            Set Global Variable At Index(phaseSlot5, Global.tmp0, If-Then-Else(Value In Array(Global.phaseSlot5, Global.tmp0), Count Of(Filtered Array(All Players(Team 1), And((Current Array Element).isPlayerActive, Compare((Current Array Element).menuTradeItemSlot, ==, Global.tmp0)))), -1)); // 25 elements
         End; // 1 element
         Set Global Variable(tmp1, Global.phaseSlot5); // 2 elements
         Set Global Variable(tmp2, Global.zombieSetting); // 2 elements
@@ -2339,7 +2339,7 @@ rule ("setZombieMode") {
     }
 }
 
-//121 elements
+//119 elements
 rule ("determineChallenge") {
     event {
         Subroutine;
@@ -2349,7 +2349,7 @@ rule ("determineChallenge") {
         Set Global Variable(challengeSetting, Null); // 1 element
         "challengeVoteIndex: challenge vote index, to count active players voting for each enabled challenge."
         For Global Variable(tmp0, 1, Count Of(Global.phaseSlot3), True); // 4 elements
-            Set Global Variable At Index(phaseSlot3, Global.tmp0, If-Then-Else(Value In Array(Value In Array(Global.phaseSlot3, Global.tmp0), True), Count Of(Filtered Array(All Players(Team 1), And((Current Array Element).isPlayerActive, Compare((Current Array Element).actorTeamSlot3, ==, Global.tmp0)))), -1)); // 27 elements
+            Set Global Variable At Index(phaseSlot3, Global.tmp0, If-Then-Else(Value In Array(Global.phaseSlot3, Global.tmp0), Count Of(Filtered Array(All Players(Team 1), And((Current Array Element).isPlayerActive, Compare((Current Array Element).actorTeamSlot3, ==, Global.tmp0)))), -1)); // 25 elements
         End; // 1 element
         "challengeWeightedVoteSum: sum of challenge IDs weighted by votes, to calculate the average challenge vote."
         Set Global Variable(tmp1, Null); // 1 element
@@ -2378,7 +2378,7 @@ rule ("determineChallenge") {
     }
 }
 
-//85 elements
+//83 elements
 rule ("determineObjectiveType") {
     event {
         Subroutine;
@@ -2388,7 +2388,7 @@ rule ("determineObjectiveType") {
         Set Global Variable(objectiveTypeSetting, Null); // 1 element
         "objectiveTypeVoteIndex: objective-type vote index, to count active players voting for each enabled objective type."
         For Global Variable(tmp0, 1, Count Of(Global.phaseSlot4), True); // 4 elements
-            Set Global Variable At Index(phaseSlot4, Global.tmp0, If-Then-Else(Value In Array(Value In Array(Global.phaseSlot4, Global.tmp0), True), Count Of(Filtered Array(All Players(Team 1), And((Current Array Element).isPlayerActive, Compare((Current Array Element).actorTeamSlot21, ==, Global.tmp0)))), -1)); // 27 elements
+            Set Global Variable At Index(phaseSlot4, Global.tmp0, If-Then-Else(Value In Array(Global.phaseSlot4, Global.tmp0), Count Of(Filtered Array(All Players(Team 1), And((Current Array Element).isPlayerActive, Compare((Current Array Element).actorTeamSlot21, ==, Global.tmp0)))), -1)); // 25 elements
         End; // 1 element
         Set Global Variable(tmp1, Global.phaseSlot4); // 2 elements
         Set Global Variable(tmp2, Global.objectiveTypeSetting); // 2 elements
@@ -2639,7 +2639,7 @@ rule ("PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY)") {
     }
 }
 
-//24 elements
+//20 elements
 rule ("PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)") {
     event {
         Ongoing - Each Player;
@@ -2657,13 +2657,13 @@ rule ("PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)") {
         Set Player Variable(Event Player, isPregameVoting, True); // 1 element
         "Scratch is consumed by advanceMenuChoice and copied back before any yield."
         Set Global Variable(tmp0, (Event Player).actorTeamSlot3); // 3 elements
-        Set Global Variable(tmp1, Mapped Array(Global.phaseSlot3, Value In Array(Current Array Element, True))); // 6 elements
+        Set Global Variable(tmp1, Global.phaseSlot3); // 2 elements
         Call Subroutine(advanceMenuChoice); // 1 element
         Set Player Variable(Event Player, actorTeamSlot3, Global.tmp0); // 2 elements
     }
 }
 
-//24 elements
+//20 elements
 rule ("PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)") {
     event {
         Ongoing - Each Player;
@@ -2680,13 +2680,13 @@ rule ("PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)") {
         "Update player voting status"
         Set Player Variable(Event Player, isPregameVoting, True); // 1 element
         Set Global Variable(tmp0, (Event Player).menuTradeItemSlot); // 3 elements
-        Set Global Variable(tmp1, Mapped Array(Global.phaseSlot5, Value In Array(Current Array Element, True))); // 6 elements
+        Set Global Variable(tmp1, Global.phaseSlot5); // 2 elements
         Call Subroutine(advanceMenuChoice); // 1 element
         Set Player Variable(Event Player, menuTradeItemSlot, Global.tmp0); // 2 elements
     }
 }
 
-//24 elements
+//20 elements
 rule ("PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)") {
     event {
         Ongoing - Each Player;
@@ -2703,7 +2703,7 @@ rule ("PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)") {
         "Update player voting status"
         Set Player Variable(Event Player, isPregameVoting, True); // 1 element
         Set Global Variable(tmp0, (Event Player).actorTeamSlot21); // 3 elements
-        Set Global Variable(tmp1, Mapped Array(Global.phaseSlot4, Value In Array(Current Array Element, True))); // 6 elements
+        Set Global Variable(tmp1, Global.phaseSlot4); // 2 elements
         Call Subroutine(advanceMenuChoice); // 1 element
         Set Player Variable(Event Player, actorTeamSlot21, Global.tmp0); // 2 elements
     }
