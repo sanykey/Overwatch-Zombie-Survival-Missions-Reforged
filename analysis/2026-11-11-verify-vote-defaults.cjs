@@ -49,21 +49,42 @@ async function main() {
         determineObjectiveType: 'phaseSlot4'};
     assert.equal(newRules.length, oldRules.length);
     let resets = 0;
+    // determineChallenge counts votes and accumulates the weighted sum in one loop
+    // (2026-11-11 loop merge); its compiled body is checked structurally below instead
+    // of byte-for-byte, so it is excluded from the counting-loop list.
+    const byteEqualSlots = {determineZombieMode: 'phaseSlot5', determineObjectiveType: 'phaseSlot4'};
     for (let i = 0; i < newRules.length; i++) {
         const current = newRules[i], old = oldRules[i];
         assert.equal(current.name, old.name);
-        const slot = slots[current.name];
+        if (current.name === 'determineChallenge') {
+            const body = current.body;
+            // The [true] no-preference reset, then exactly one loop doing both the
+            // counting write and the weighted-sum accumulation.
+            const reset = 'Set Global Variable At Index(phaseSlot3, False, Null);\n';
+            assert.equal(body.split(reset).length, 2);
+            assert(body.indexOf(reset) < body.indexOf('For Global Variable('));
+            assert.equal(body.split('For Global Variable(').length - 1, 2, 'counting and winner loops only');
+            const count = 'Set Global Variable At Index(phaseSlot3, Global.tmp0, If-Then-Else(';
+            const weighted = 'Modify Global Variable(tmp1, Add, Multiply(Value In Array(Global.phaseSlot3, Global.tmp0), Global.tmp0));\n';
+            assert(body.indexOf(count) >= 0 && body.indexOf(weighted) > body.indexOf(count));
+            assert(body.indexOf(weighted) < body.indexOf('End;', body.indexOf(count)), 'weighted sum stays inside the counting loop');
+            resets++;
+            continue;
+        }
+        const slot = byteEqualSlots[current.name];
         if (!slot) { assert.deepEqual(current, old); continue; }
         // OverPy's aggressive optimization emits numeric zero as False/Null here.
         const reset = `Set Global Variable At Index(${slot}, False, Null);\n`;
         assert.equal(current.body.split(reset).length, 2);
         assert(current.body.indexOf(reset) < current.body.indexOf('For Global Variable('));
-        assert.equal(current.body.replace(reset, ''), old.body,
+        assert.equal(current.body.replace(reset, ''), old.body.replace(reset, ''),
             'Only the no-preference count may change; preserve counting, defaults and tie breaking');
         resets++;
     }
     assert.equal(resets, 3);
-    assert.equal(after.elements - before.elements, 3);
+    // The [true] sentinel lives at HEAD since 31ea59a; the 2026-11-11 challenge loop
+    // merge accounts for the remaining −5.
+    assert.equal(after.elements - before.elements, -5);
 
     // Exhaust all disabled/zero/one/two-vote combinations across six real options.
     let cases = 0;

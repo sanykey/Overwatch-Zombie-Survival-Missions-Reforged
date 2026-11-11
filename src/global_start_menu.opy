@@ -322,13 +322,11 @@ def determineChallenge():
     challengeVoteList[Challenge.NO_PREFERENCE] = 0
     # challengeVoteIndex: challenge vote index, to count active players voting for each enabled challenge.
     #!define challengeVoteIndex tmp0
-    for challengeVoteIndex in range(Challenge.NONE, len(challengeVoteList)):
-        challengeVoteList[challengeVoteIndex] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameChallengeVote == challengeVoteIndex)) if challengeVoteList[challengeVoteIndex] else -1
     # challengeWeightedVoteSum: sum of challenge IDs weighted by votes, to calculate the average challenge vote.
     #!define challengeWeightedVoteSum tmp1
     challengeWeightedVoteSum = 0
-    # challengeVoteIndex: challenge index, to include each challenge's weighted votes in challengeWeightedVoteSum.
     for challengeVoteIndex in range(Challenge.NONE, len(challengeVoteList)):
+        challengeVoteList[challengeVoteIndex] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameChallengeVote == challengeVoteIndex)) if challengeVoteList[challengeVoteIndex] else -1
         # challengeWeightedVoteSum: running weighted sum including this challenge, for the average used to break ties.
         challengeWeightedVoteSum += challengeVoteList[challengeVoteIndex] * challengeVoteIndex
     # challengeAverageVote: average challenge vote, to choose the closer challenge when vote counts tie.
