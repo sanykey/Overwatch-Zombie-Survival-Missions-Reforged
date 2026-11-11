@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-11",
+  "beforeElements": 29592,
+  "afterElements": 29595,
+  "addedElements": 3,
+  "compiledResetActions": 3,
+  "allOtherCompiledActionsUnchanged": true,
+  "modeledVoteCombinations": 4096,
+  "defaults": {
+    "zombieMode": "All Zombies",
+    "challenge": "None",
+    "objectiveType": "Mixed Objectives"
+  },
+  "warnings": [],
+  "inGameValidated": false
+}

@@ -275,6 +275,8 @@ def determineZombieMode():
     @Name "determineZombieMode"
     
     zombieSetting = 0
+    # The no-preference menu entry is enabled, but must count as zero votes.
+    zombieVoteList[0] = 0
     # zombieModeVoteIndex: zombie-mode vote index, to count active players voting for each enabled mode.
     #!define zombieModeVoteIndex tmp0
     for zombieModeVoteIndex in range(1, len(zombieVoteList)):
@@ -283,7 +285,7 @@ def determineZombieMode():
     voteWinnerResult = zombieSetting
     selectVoteWinner()
     zombieSetting = voteWinnerResult
-    #If all players choose no preference, randomize
+    # Default to All Zombies when no enabled mode received votes.
     if not zombieSetting:
         zombieSetting = 1
     startRule(determineChallenge)
@@ -316,6 +318,8 @@ def determineChallenge():
     @Name "determineChallenge"
     
     challengeSetting = Challenge.NO_PREFERENCE
+    # Exclude no-preference votes from the winner comparison.
+    challengeVoteList[Challenge.NO_PREFERENCE] = 0
     # challengeVoteIndex: challenge vote index, to count active players voting for each enabled challenge.
     #!define challengeVoteIndex tmp0
     for challengeVoteIndex in range(Challenge.NONE, len(challengeVoteList)):
@@ -349,6 +353,8 @@ def determineObjectiveType():
     @Name "determineObjectiveType"
     
     objectiveTypeSetting = ObjectiveType.NO_PREFERENCE
+    # The no-preference menu entry is enabled, but must count as zero votes.
+    objectiveTypeVoteList[ObjectiveType.NO_PREFERENCE] = 0
     # objectiveTypeVoteIndex: objective-type vote index, to count active players voting for each enabled objective type.
     #!define objectiveTypeVoteIndex tmp0
     for objectiveTypeVoteIndex in range(ObjectiveType.SHOWDOWN, len(objectiveTypeVoteList)):
@@ -357,7 +363,7 @@ def determineObjectiveType():
     voteWinnerResult = objectiveTypeSetting
     selectVoteWinner()
     objectiveTypeSetting = voteWinnerResult
-    #If all players choose no preference, randomize
+    # Default to Mixed Objectives when enabled; otherwise pick an enabled type.
     if objectiveTypeSetting == ObjectiveType.NO_PREFERENCE:
         if objectiveTypeVoteList[ObjectiveType.MIXED_OBJECTIVES] != -1:
             objectiveTypeSetting = ObjectiveType.MIXED_OBJECTIVES
