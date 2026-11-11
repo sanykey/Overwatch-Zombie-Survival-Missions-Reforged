@@ -1330,7 +1330,7 @@ rule ("selectTarget") {
                 Start Throttle In Direction(Event Player, Direction Towards(Event Player, Add(Position Of((Event Player).actorTeamSlot21), Multiply(Normalize(World Vector Of(Throttle Of((Event Player).actorTeamSlot21), (Event Player).actorTeamSlot21, Rotation)), -2))), (Event Player).aiThrottleSpeedSlot, To World, Replace existing throttle, None); // 22 elements
                 //__label_if_4__:
                 Skip If((Event Player).actorTeamSlot14, True); // 3 elements
-                Start Facing(Event Player, Throttle Of(Event Player), If-Then-Else((Event Player).isCrowdControlled, Null, 100), To Player, Direction and Turn Rate); // 8 elements
+                Start Facing(Event Player, Throttle Of(Event Player), If-Then-Else((Event Player).botIsCrowdControlled, Null, 100), To Player, Direction and Turn Rate); // 8 elements
                 //__label_if_5__:
             End; // 1 element
         End; // 1 element
@@ -1347,7 +1347,7 @@ rule ("restoreDefaultFacingMovement") {
     actions {
         If(Compare((Event Player).actorTeamSlot5, !=, Null)); // 6 elements
             Skip If((Event Player).actorTeamSlot14, True); // 3 elements
-            Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position((Event Player).actorTeamSlot5)), If-Then-Else((Event Player).isAttached, 1500, If-Then-Else((Event Player).isCrowdControlled, Null, 100)), To World, Direction and Turn Rate); // 19 elements
+            Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position((Event Player).actorTeamSlot5)), If-Then-Else((Event Player).isAttached, 1500, If-Then-Else((Event Player).botIsCrowdControlled, Null, 100)), To World, Direction and Turn Rate); // 19 elements
             //__label_if_6__:
             Skip If((Event Player).actorTeamSlot15, True); // 3 elements
             Start Throttle In Direction(Event Player, Direction Towards(Event Player, (Event Player).actorTeamSlot5), If-Then-Else(Compare(Distance Between(Event Player, Vector(X Component Of(Position Of((Event Player).actorTeamSlot5)), Y Component Of(Position Of(Event Player)), Z Component Of(Position Of((Event Player).actorTeamSlot5)))), >, Multiply(2, Min(True, (Event Player).sizeScale))), (Event Player).aiThrottleSpeedSlot, Null), To World, Replace existing throttle, Direction and Magnitude); // 35 elements
@@ -5199,7 +5199,7 @@ rule ("KILL BOTS THAT ARE STUCK OR ARE NOT MOVING") {
         (Event Player).actorTeamSlot3 != True; // 3 elements
         (Event Player).actorTeamSlot15 != True; // 3 elements
         (Event Player).isAttached != True; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         Is Alive(Event Player) == True; // 2 elements
         Array Contains(Global.bossStateList, Event Player) == False; // 4 elements
         Or(Not(Magnitude Of(Throttle Of(Event Player))), Compare(Horizontal Speed Of(Event Player), <, Multiply((Event Player).aiThrottleSpeedSlot, (Event Player).movementSpeedScale))) == True; // 16 elements
@@ -5444,7 +5444,7 @@ rule ("DESELECT BOT TARGET") {
         Start Throttle In Direction(Event Player, Direction Towards(Event Player, Add(Position Of((Event Player).actorTeamSlot21), Multiply(Normalize(World Vector Of(Throttle Of((Event Player).actorTeamSlot21), (Event Player).actorTeamSlot21, Rotation)), -2))), (Event Player).aiThrottleSpeedSlot, To World, Replace existing throttle, None); // 22 elements
         //__label_if_46__:
         Skip If((Event Player).actorTeamSlot14, True); // 3 elements
-        Start Facing(Event Player, Throttle Of(Event Player), If-Then-Else((Event Player).isCrowdControlled, Null, 100), To Player, Direction and Turn Rate); // 8 elements
+        Start Facing(Event Player, Throttle Of(Event Player), If-Then-Else((Event Player).botIsCrowdControlled, Null, 100), To Player, Direction and Turn Rate); // 8 elements
         //__label_if_47__:
         Wait(0.125, Restart When True); // 2 elements
         Loop If Condition Is True; // 1 element
@@ -5462,7 +5462,7 @@ rule ("BOT WANDERS") {
         (Event Player).actorTeamSlot5 == Null; // 3 elements
         (Event Player).actorTeamSlot15 != True; // 3 elements
         (Event Player).actorTeamSlot14 != True; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         Has Status(Event Player, Rooted) == False; // 3 elements
         "Allows if bot bumps into something"
         Horizontal Speed Of(Event Player) < Multiply(Multiply((Event Player).aiThrottleSpeedSlot, (Event Player).movementSpeedScale), 3.5); // 11 elements
@@ -5487,7 +5487,7 @@ rule ("BOTS JUMP") {
         Global.isPregameSetup != True; // 2 elements
         (Event Player).actorTeamSlot15 == False; // 3 elements
         (Event Player).isAttached != True; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         Is Alive(Event Player) == True; // 2 elements
         Is Jumping(Event Player) == False; // 2 elements
         Is On Ground(Event Player) == True; // 2 elements
@@ -5516,7 +5516,7 @@ rule ("BOTS MOVE THROUGH SPAWN DOORS") {
         (Event Player).actorTeamSlot13 == True; // 3 elements
         (Event Player).actorTeamSlot9 == True; // 3 elements
         (Event Player).isAttached != True; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         Is Alive(Event Player) == True; // 2 elements
         Has Status(Event Player, Rooted) == False; // 3 elements
         Magnitude Of(Throttle Of(Event Player)) != False; // 3 elements
@@ -5554,7 +5554,7 @@ rule ("BOTS MELEE") {
     }
     conditions {
         (Event Player).actorTeamSlot5 != Null; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         Is Meleeing(Event Player) == False; // 2 elements
         Distance Between(Event Player, (Event Player).actorTeamSlot5) < Multiply(3, (Event Player).sizeScale); // 10 elements
         Horizontal Speed Of((Event Player).actorTeamSlot5) < Multiply(15, ((Event Player).actorTeamSlot5).movementSpeedScale); // 11 elements
@@ -5621,7 +5621,7 @@ rule ("BOTS RECOIL FROM DAMAGE") {
     }
     conditions {
         Event Damage > 20; // 2 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         (Event Player).isAttached != True; // 3 elements
         Team Of(Attacker) == Team 1; // 3 elements
         Is Alive(Victim) == True; // 2 elements
@@ -5915,7 +5915,7 @@ rule ("BASIC (REAPER) SHADOW STEP (BOSS)") {
     }
     conditions {
         (Event Player).actorTeamSlot5 != Null; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         Array Contains(Global.bossStateList, Event Player) == True; // 4 elements
         Ability Cooldown(Event Player, Button(Ability 2)) == False; // 4 elements
         Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position((Event Player).actorTeamSlot5))) < 20; // 11 elements
@@ -5967,7 +5967,7 @@ rule ("BOMBER (JUNKRAT) SELF DESTRUCT") {
     }
     conditions {
         (Event Player).actorTeamSlot5 != Null; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         Is Alive(Event Player) == True; // 2 elements
         "Scaled"
         Distance Between(Event Player, (Event Player).actorTeamSlot5) <= Multiply(2.75, (Event Player).sizeScale); // 10 elements
@@ -5989,7 +5989,7 @@ rule ("RUSHER (TORB) SPEED MECHANICS") {
     }
     conditions {
         (Event Player).actorTeamSlot5 != Null; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         Is Alive(Event Player) == True; // 2 elements
         Is On Ground(Event Player) == True; // 2 elements
         Magnitude Of(Throttle Of(Event Player)) != False; // 3 elements
@@ -6012,7 +6012,7 @@ rule ("RUSHER MOLTEN CORE (BOSS)") {
     }
     conditions {
         (Event Player).actorTeamSlot5 != Null; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         Ability Cooldown(Event Player, Button(Ability 2)) == False; // 4 elements
         Is Alive(Event Player) == True; // 2 elements
         Array Contains(Global.bossStateList, Event Player) == True; // 4 elements
@@ -6022,7 +6022,7 @@ rule ("RUSHER MOLTEN CORE (BOSS)") {
         Wait(0.25, Abort When False); // 2 elements
         Set Ultimate Charge(Event Player, 100); // 2 elements
         While(Not(Is Using Ability 2(Event Player))); // 3 elements
-            Wait Until(Not(Or(Is Meleeing(Event Player), (Event Player).isCrowdControlled)), 999999999999); // 8 elements
+            Wait Until(Not(Or(Is Meleeing(Event Player), (Event Player).botIsCrowdControlled)), 999999999999); // 8 elements
             Press Button(Event Player, Button(Ability 2)); // 2 elements
             Wait(0.25, Ignore Condition); // 2 elements
             Abort If(Is Dead(Event Player)); // 2 elements
@@ -6033,9 +6033,9 @@ rule ("RUSHER MOLTEN CORE (BOSS)") {
         Stop Throttle In Direction(Event Player); // 1 element
         Wait(True, Ignore Condition); // 1 element
         Set Player Variable(Event Player, actorTeamSlot14, True); // 1 element
-        Start Facing(Event Player, Direction From Angles(Evaluate Once(Random Real(0, 360)), Evaluate Once(Random Real(-80, -87))), If-Then-Else((Event Player).isCrowdControlled, Null, 144), To Player, Direction and Turn Rate); // 21 elements
+        Start Facing(Event Player, Direction From Angles(Evaluate Once(Random Real(0, 360)), Evaluate Once(Random Real(-80, -87))), If-Then-Else((Event Player).botIsCrowdControlled, Null, 144), To Player, Direction and Turn Rate); // 21 elements
         While(And(Not(Is Using Ultimate(Event Player)), Is Alive(Event Player))); // 6 elements
-            Wait Until(Not(Or(Is Meleeing(Event Player), (Event Player).isCrowdControlled)), 999999999999); // 8 elements
+            Wait Until(Not(Or(Is Meleeing(Event Player), (Event Player).botIsCrowdControlled)), 999999999999); // 8 elements
             Press Button(Event Player, Button(Ultimate)); // 2 elements
             Wait(0.25, Ignore Condition); // 2 elements
         End; // 1 element
@@ -6116,12 +6116,12 @@ rule ("BEHEMOTH (ROAD) TOXIC CLOUD") {
         If(And(Array Contains(Global.bossStateList, Event Player), Compare(Ultimate Charge Percent(Event Player), >=, 100))); // 11 elements
             Set Ultimate Charge(Event Player, False); // 1 element
             Call Subroutine(beginBotOverride); // 1 element
-            Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position((Event Player).actorTeamSlot21)), If-Then-Else((Event Player).isAttached, 1500, If-Then-Else(Or((Event Player).isCrowdControlled, Compare((Event Player).actorTeamSlot5, ==, Null)), Null, 100)), To World, Direction and Turn Rate); // 26 elements
+            Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position((Event Player).actorTeamSlot21)), If-Then-Else((Event Player).isAttached, 1500, If-Then-Else(Or((Event Player).botIsCrowdControlled, Compare((Event Player).actorTeamSlot5, ==, Null)), Null, 100)), To World, Direction and Turn Rate); // 26 elements
             Wait(True, Ignore Condition); // 1 element
             Wait Until(Compare(Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position((Event Player).actorTeamSlot21))), <, 5), 5); // 15 elements
             Stop Facing(Event Player); // 1 element
             Set Status(Event Player, Null, Stunned, True); // 1 element
-            Wait Until(Not((Event Player).isCrowdControlled), 2); // 5 elements
+            Wait Until(Not((Event Player).botIsCrowdControlled), 2); // 5 elements
             Set Player Variable(Event Player, actorMotionSlot1, Eye Position(Event Player)); // 2 elements
             Set Player Variable(Event Player, actorAbilitySlot1, Ray Cast Hit Position(Eye Position(Event Player), Add(Eye Position(Event Player), Multiply(Multiply(Facing Direction Of(Event Player), 20), (Event Player).sizeScale)), Null, All Players(All Teams), False)); // 20 elements
             "Launch Gas Projectile"
@@ -6387,7 +6387,7 @@ rule ("ZOMBIES SPAWN AT REIGNITED") {
         Array Contains(Global.miniBossList, Event Player) == False; // 4 elements
         Is True For Any(Players On Hero(Hero(Anran), Team 2), (Current Array Element).actorAbilitySlot2) == True; // 9 elements
         Is Alive(Event Player) == True; // 2 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         Has Status(Event Player, Hacked) == False; // 3 elements
         (Event Player).actorTeamSlot8 == False; // 3 elements
     }
@@ -6439,7 +6439,7 @@ rule ("RIDER DETACH WHEN DEAD OR TARGET IS DEAD") {
         (Event Player).augmentState0 == Null; // 3 elements
         (Event Player).isAttached == True; // 3 elements
         (Event Player).actorTeamSlot10 != Null; // 3 elements
-        Or(Or(Or(Or(Or(Or((Event Player).isCrowdControlled, ((Event Player).actorTeamSlot10).invisibilityCount), Is Dead(Event Player)), Is Dead((Event Player).actorTeamSlot10)), Has Status((Event Player).actorTeamSlot10, Phased Out)), Has Status((Event Player).actorTeamSlot10, Invincible)), Not(Entity Exists((Event Player).actorTeamSlot10))) == True; // 35 elements
+        Or(Or(Or(Or(Or(Or((Event Player).botIsCrowdControlled, ((Event Player).actorTeamSlot10).invisibilityCount), Is Dead(Event Player)), Is Dead((Event Player).actorTeamSlot10)), Has Status((Event Player).actorTeamSlot10, Phased Out)), Has Status((Event Player).actorTeamSlot10, Invincible)), Not(Entity Exists((Event Player).actorTeamSlot10))) == True; // 35 elements
     }
     actions {
         Set Player Variable(Event Player, actorTeamSlot10, Null); // 1 element
@@ -6512,7 +6512,7 @@ rule ("RIDER USE GRAPPLING HOOK") {
         Set Player Variable(Event Player, actorTeamSlot14, True); // 1 element
         Set Player Variable(Event Player, actorAbilitySlot1, Ray Cast Hit Position(Eye Position(Event Player), Position Of((Event Player).actorTeamSlot5), Null, Event Player, False)); // 10 elements
         Stop Facing(Event Player); // 1 element
-        Wait Until(Not((Event Player).isCrowdControlled), 2); // 5 elements
+        Wait Until(Not((Event Player).botIsCrowdControlled), 2); // 5 elements
         Set Facing(Event Player, Direction Towards(Eye Position(Event Player), (Event Player).actorAbilitySlot1), To World); // 6 elements
         Press Button(Event Player, Button(Ability 1)); // 2 elements
         Wait Until(Is Using Ability 1(Event Player), 1); // 3 elements
@@ -6540,7 +6540,7 @@ rule ("CHARGER (MAUGA) CHARGE") {
     }
     conditions {
         (Event Player).actorTeamSlot5 != Null; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         (Event Player).actorTeamSlot15 != True; // 3 elements
         Is On Ground(Event Player) == True; // 2 elements
         Ability Cooldown(Event Player, Button(Ability 1)) == False; // 4 elements
@@ -6555,7 +6555,7 @@ rule ("CHARGER (MAUGA) CHARGE") {
         Enable Movement Collision With Environment(Event Player); // 1 element
         Set Player Variable(Event Player, actorTeamSlot13, True); // 1 element
         Set Player Variable(Event Player, actorTeamSlot14, True); // 1 element
-        Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position((Event Player).actorTeamSlot21)), If-Then-Else((Event Player).isAttached, 1500, If-Then-Else((Event Player).isCrowdControlled, Null, 100)), To World, Direction and Turn Rate); // 19 elements
+        Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position((Event Player).actorTeamSlot21)), If-Then-Else((Event Player).isAttached, 1500, If-Then-Else((Event Player).botIsCrowdControlled, Null, 100)), To World, Direction and Turn Rate); // 19 elements
         Set Player Variable(Event Player, actorTeamSlot15, True); // 1 element
         Start Throttle In Direction(Event Player, Backward, 0.35, To Player, Replace existing throttle, None); // 2 elements
         "Charger walk backwards duration\nKeep recent CC visible between the 0.064s windup samples."
@@ -6611,7 +6611,7 @@ rule ("SLIMER (MERCY) TENTACLE GRAB") {
     conditions {
         (Event Player).actorTeamSlot5 != Null; // 3 elements
         (Event Player).actorAbilitySlot1 == Null; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         (Event Player).actorTeamSlot15 != True; // 3 elements
         Is Using Ultimate(Event Player) == False; // 2 elements
         Distance Between(Eye Position(Event Player), Eye Position((Event Player).actorTeamSlot5)) < Multiply(20, (Event Player).sizeScale); // 12 elements
@@ -6674,7 +6674,7 @@ rule ("PRIME SLIMER (EMRE) FLIGHT (BOSS)") {
         (Event Player).actorTeamSlot5 != Null; // 3 elements
         (Event Player).actorAbilitySlot1 == Null; // 3 elements
         (Event Player).actorTeamSlot15 != True; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         Is On Ground(Event Player) == True; // 2 elements
         Array Contains(Global.bossStateList, Event Player) == True; // 4 elements
         Distance Between(Event Player, (Event Player).actorTeamSlot5) < 15; // 6 elements
@@ -6699,7 +6699,7 @@ rule ("PRIME SLIMER (EMRE) FLIGHT (BOSS)") {
             Set Player Variable(Event Player, actorTeamSlot14, True); // 1 element
             Stop Throttle In Direction(Event Player); // 1 element
             While(And(And(Compare((Event Player).actorTeamSlot5, !=, Null), Is Using Ultimate(Event Player)), Not((Event Player).botIsCrowdControlled))); // 14 elements
-                Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Add(Eye Position((Event Player).actorTeamSlot5), Evaluate Once(Direction From Angles(Random Real(0, 360), Random Real(-90, 90))))), If-Then-Else((Event Player).isCrowdControlled, Null, 200), To World, Direction and Turn Rate); // 27 elements
+                Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Add(Eye Position((Event Player).actorTeamSlot5), Evaluate Once(Direction From Angles(Random Real(0, 360), Random Real(-90, 90))))), If-Then-Else((Event Player).botIsCrowdControlled, Null, 200), To World, Direction and Turn Rate); // 27 elements
                 Press Button(Event Player, Button(Secondary Fire)); // 2 elements
                 Skip If(Compare(Altitude Of(Event Player), >=, 3), True); // 6 elements
                 Call Subroutine(reenableBotWallAndJump); // 1 element
@@ -6737,7 +6737,7 @@ rule ("STRIKER (WRECKING BALL) PILE DRIVER") {
     }
     conditions {
         (Event Player).actorTeamSlot5 != Null; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         (Event Player).actorTeamSlot15 != True; // 3 elements
         Has Status(Event Player, Rooted) == False; // 3 elements
         Ability Cooldown(Event Player, Button(Crouch)) == False; // 4 elements
@@ -6763,7 +6763,7 @@ rule ("STRIKER (WRECKING BALL) PILE DRIVER") {
             Wait Until(Compare(Y Component Of(Velocity Of(Event Player)), <=, Null), 3); // 7 elements
         End; // 1 element
         Press Button(Event Player, Button(Crouch)); // 2 elements
-        Wait Until(Or(Not(Is Using Ability 1(Event Player)), (Event Player).isCrowdControlled), 5); // 8 elements
+        Wait Until(Or(Not(Is Using Ability 1(Event Player)), (Event Player).botIsCrowdControlled), 5); // 8 elements
         Set Ability Cooldown(Event Player, Button(Crouch), 3); // 3 elements
         Set Player Variable(Event Player, actorAbilitySlot1, Null); // 1 element
         Set Player Variable(Event Player, actorTeamSlot9, True); // 1 element
@@ -6813,7 +6813,7 @@ rule ("STALKER (MOIRA) FADE") {
     }
     conditions {
         (Event Player).actorTeamSlot5 != Null; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         (Event Player).actorTeamSlot13 == True; // 3 elements
         Ability Cooldown(Event Player, Button(Ability 1)) == False; // 4 elements
         Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position((Event Player).actorTeamSlot5))) < 45; // 11 elements
@@ -6822,7 +6822,7 @@ rule ("STALKER (MOIRA) FADE") {
         Wait(0.25, Abort When False); // 2 elements
         Set Player Variable(Event Player, actorTeamSlot14, True); // 1 element
         Disable Movement Collision With Players(Event Player); // 1 element
-        Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position((Event Player).actorTeamSlot21)), If-Then-Else(Or((Event Player).isCrowdControlled, Is Using Ultimate(Event Player)), Null, If-Then-Else(Is Using Ability 1(Event Player), 75, 1500)), To World, Direction and Turn Rate); // 21 elements
+        Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position((Event Player).actorTeamSlot21)), If-Then-Else(Or((Event Player).botIsCrowdControlled, Is Using Ultimate(Event Player)), Null, If-Then-Else(Is Using Ability 1(Event Player), 75, 1500)), To World, Direction and Turn Rate); // 21 elements
         Set Player Variable(Event Player, actorTeamSlot15, True); // 1 element
         Start Throttle In Direction(Event Player, Facing Direction Of(Event Player), (Event Player).aiThrottleSpeedSlot, To World, Replace existing throttle, Direction and Magnitude); // 4 elements
         For Player Variable(Event Player, actorTeamSlot4, 0, If-Then-Else(Array Contains(Global.bossStateList, Event Player), 5, 3), True); // 10 elements
@@ -6831,7 +6831,7 @@ rule ("STALKER (MOIRA) FADE") {
             Enable Movement Collision With Environment(Event Player); // 1 element
             "Final fade"
             If(And(Compare((Event Player).actorTeamSlot4, >=, 2), Not(Array Contains(Global.bossStateList, Event Player)))); // 13 elements
-                Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position((Event Player).actorTeamSlot21)), If-Then-Else((Event Player).isCrowdControlled, Null, 100), To World, Direction and Turn Rate); // 13 elements
+                Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position((Event Player).actorTeamSlot21)), If-Then-Else((Event Player).botIsCrowdControlled, Null, 100), To World, Direction and Turn Rate); // 13 elements
                 Start Throttle In Direction(Event Player, Direction Towards(Event Player, (Event Player).actorTeamSlot21), If-Then-Else(And(Compare(Distance Between(Event Player, (Event Player).actorTeamSlot21), <, 3), Is Using Ability 1(Event Player)), Null, (Event Player).aiThrottleSpeedSlot), To World, Replace existing throttle, Direction and Magnitude); // 21 elements
             End; // 1 element
             Modify Player Variable(Event Player, movementSpeedScale, Multiply, 2); // 2 elements
@@ -6891,7 +6891,7 @@ rule ("BLASTER (PHARAH) CHARGES ROCKET THEN FIRES") {
     }
     conditions {
         (Event Player).actorTeamSlot5 != Null; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         Ability Cooldown(Event Player, Button(Ability 1)) == False; // 4 elements
     }
     actions {
@@ -6921,7 +6921,7 @@ rule ("BLASTER (PHARAH) CHARGES ROCKET THEN FIRES") {
             Abort; // 1 element
         End; // 1 element
         If(And(Is In Line of Sight(Position Of(Event Player), Add(Eye Position(Event Player), World Vector Of(Vector(False, 11, 5), Event Player, Rotation)), Barriers Do Not Block LOS), Is In Line of Sight(Eye Position((Event Player).actorTeamSlot21), Add(Eye Position(Event Player), World Vector Of(Vector(False, 11, 5), Event Player, Rotation)), Barriers Do Not Block LOS))); // 35 elements
-            Wait Until(Not((Event Player).isCrowdControlled), 999999999999); // 5 elements
+            Wait Until(Not((Event Player).botIsCrowdControlled), 999999999999); // 5 elements
             Start Throttle In Direction(Event Player, Forward, 1, To Player, Replace existing throttle, None); // 2 elements
             Press Button(Event Player, Button(Ability 1)); // 2 elements
             Set Ammo(Event Player, False, Max Ammo(Event Player, False)); // 3 elements
@@ -6981,7 +6981,7 @@ rule ("DOWNFALLEN (SIGMA) FIRES") {
     }
     conditions {
         (Event Player).actorTeamSlot5 != Null; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         (Event Player).actorAbilitySlot1 != True; // 3 elements
         Is Using Ability 1(Event Player) == False; // 2 elements
         Is Using Ultimate(Event Player) == False; // 2 elements
@@ -7011,7 +7011,7 @@ rule ("DOWNFALLEN GRABS PLAYER") {
     }
     conditions {
         (Event Player).actorTeamSlot5 != Null; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         Distance Between(Event Player, (Event Player).actorTeamSlot5) <= Multiply(If-Then-Else(Array Contains(Global.bossStateList, Event Player), 2.5, 3), (Event Player).sizeScale); // 17 elements
         Has Status(Event Player, Hacked) == False; // 3 elements
         (Event Player).actorAbilitySlot1 != True; // 3 elements
@@ -7107,7 +7107,7 @@ rule ("DAYTAKER (ILLARI) BURST") {
     }
     conditions {
         (Event Player).actorTeamSlot5 != Null; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         Ability Cooldown(Event Player, Button(Ability 1)) == False; // 4 elements
         Is True For Any(Remove From Array(All Living Players(Team 2), Event Player), Compare(Distance Between(Event Player, Current Array Element), <, Multiply(2.5, (Event Player).sizeScale))) == True; // 17 elements
     }
@@ -7151,7 +7151,7 @@ rule ("DAYTAKER (ILLARI) BURST") {
             Call Subroutine(daytakerAbortReset); // 1 element
             Abort; // 1 element
         End; // 1 element
-        Wait Until(Not((Event Player).isCrowdControlled), 999999999999); // 5 elements
+        Wait Until(Not((Event Player).botIsCrowdControlled), 999999999999); // 5 elements
         Start Throttle In Direction(Event Player, Forward, 1, To Player, Replace existing throttle, None); // 2 elements
         "Eject zombies"
         If(And(Is Alive(Event Player), Is Alive((Event Player).actorTeamSlot10))); // 7 elements
@@ -7197,7 +7197,7 @@ rule ("DAYTAKER ATTACKS AT HALF HEALTH (BOSS)") {
     conditions {
         Array Contains(Global.bossStateList, Event Player) == True; // 4 elements
         Normalized Health(Event Player) < 0.5; // 3 elements
-        (Event Player).isCrowdControlled == False; // 3 elements
+        (Event Player).botIsCrowdControlled == False; // 3 elements
         Has Status(Event Player, Hacked) == False; // 3 elements
     }
     actions {
@@ -7257,7 +7257,7 @@ rule ("CADAVER (ANA) DETONATION") {
     }
     conditions {
         (Event Player).actorTeamSlot5 != Null; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         Is Alive(Event Player) == True; // 2 elements
         Has Status(Event Player, Hacked) == False; // 3 elements
         "Scaled"
@@ -7381,7 +7381,7 @@ rule ("SMOLDER ACTIVATES FROM DAMAGE") {
     conditions {
         Array Contains(Global.bossStateList, Event Player) == False; // 4 elements
         (Event Player).actorAbilitySlot1 == 1; // 4 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
     }
     actions {
         Set Player Variable(Event Player, actorAbilitySlot1, 2); // 2 elements
@@ -7409,7 +7409,7 @@ rule ("SMOLDER BOSS SLAM") {
         (Event Player).actorAbilitySlot1 == Null; // 3 elements
         Global.isSmolderEventActive != True; // 2 elements
         (Event Player).actorTeamSlot21 != Null; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         Has Status(Event Player, Hacked) == False; // 3 elements
         Array Contains(Global.bossStateList, Event Player) == True; // 4 elements
         Distance Between(Event Player, (Event Player).actorTeamSlot5) < Multiply(15, (Event Player).sizeScale); // 10 elements
@@ -7445,7 +7445,7 @@ rule ("SMOLDER SUPER SLAM") {
     }
     conditions {
         (Event Player).actorAbilitySlot1 != Null; // 3 elements
-        (Event Player).isCrowdControlled != True; // 3 elements
+        (Event Player).botIsCrowdControlled != True; // 3 elements
         Is Alive(Event Player) == True; // 2 elements
         Is On Ground(Event Player) == True; // 2 elements
         Array Contains(Global.bossStateList, Event Player) == True; // 4 elements
@@ -7545,7 +7545,7 @@ rule ("PROTECTOR (KIRIKO) USES CLEANSE") {
     }
     conditions {
         Array Contains(Global.miniBossList, Event Player) == True; // 4 elements
-        Is True For Any(Players Within Radius(Event Player, 5, Team 2, Surfaces And Enemy Barriers), Or(Or((Current Array Element).isCrowdControlled, Has Status(Current Array Element, Hacked)), Compare(Normalized Health(Current Array Element), <, 0.5))) == True; // 22 elements
+        Is True For Any(Players Within Radius(Event Player, 5, Team 2, Surfaces And Enemy Barriers), Or(Or((Current Array Element).botIsCrowdControlled, Has Status(Current Array Element, Hacked)), Compare(Normalized Health(Current Array Element), <, 0.5))) == True; // 22 elements
         Has Status(Event Player, Hacked) == False; // 3 elements
     }
     actions {
@@ -7788,7 +7788,7 @@ rule ("startBlasterDaytakerFacing") {
         startBlasterDaytakerFacing;
     }
     actions {
-        Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position((Event Player).actorTeamSlot21)), If-Then-Else(Or((Event Player).isCrowdControlled, And(Is On Ground(Event Player), Compare((Event Player).actorTeamSlot5, ==, Null))), Null, 100), To World, Direction and Turn Rate); // 23 elements
+        Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position((Event Player).actorTeamSlot21)), If-Then-Else(Or((Event Player).botIsCrowdControlled, And(Is On Ground(Event Player), Compare((Event Player).actorTeamSlot5, ==, Null))), Null, 100), To World, Direction and Turn Rate); // 23 elements
     }
 }
 

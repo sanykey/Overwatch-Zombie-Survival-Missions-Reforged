@@ -676,7 +676,7 @@ macro deselectBotTargetMacro():
     if not eventPlayer.botIsThrottleOverridden:
         eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.botLastTarget.getPosition() + normalize(worldVector(eventPlayer.botLastTarget.getThrottle(), eventPlayer.botLastTarget, Transform.ROTATION)) * -2), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
     if not eventPlayer.botIsFacingOverridden:
-        eventPlayer.startFacing(eventPlayer.getThrottle(), 0 if eventPlayer.isCrowdControlled else 100, Relativity.TO_PLAYER)
+        eventPlayer.startFacing(eventPlayer.getThrottle(), 0 if eventPlayer.botIsCrowdControlled else 100, Relativity.TO_PLAYER)
 
 
 def selectTarget():
@@ -727,7 +727,7 @@ def restoreDefaultFacingMovement():
     
     if eventPlayer.botTarget != null:
         if not eventPlayer.botIsFacingOverridden:
-            eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()), 1500 if eventPlayer.botIsAttached else 0 if eventPlayer.isCrowdControlled else 100)
+            eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()), 1500 if eventPlayer.botIsAttached else 0 if eventPlayer.botIsCrowdControlled else 100)
         if not eventPlayer.botIsThrottleOverridden:
             eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.botTarget), eventPlayer.botThrottleSpeed if distance(eventPlayer, vect(eventPlayer.botTarget.getPosition().x, eventPlayer.getPosition().y, eventPlayer.botTarget.getPosition().z)) > 2 * min(1, eventPlayer.sizeScale) else 0, Relativity.TO_WORLD)
     else:

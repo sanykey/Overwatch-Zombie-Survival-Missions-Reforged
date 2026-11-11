@@ -102,7 +102,7 @@ rule "KILL BOTS THAT ARE STUCK OR ARE NOT MOVING":
     @Condition eventPlayer.botIsTeleporting != true
     @Condition eventPlayer.botIsThrottleOverridden != true
     @Condition eventPlayer.botIsAttached != true
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer in bossStateList == false
     @Condition (not magnitude(eventPlayer.getThrottle()) or eventPlayer.getHorizontalSpeed() < 1 * eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale) == true
@@ -290,7 +290,7 @@ rule "BOT WANDERS":
     @Condition eventPlayer.botTarget == null
     @Condition eventPlayer.botIsThrottleOverridden != true
     @Condition eventPlayer.botIsFacingOverridden != true
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition eventPlayer.hasStatus(Status.ROOTED) == false
     #Allows if bot bumps into something
     @Condition eventPlayer.getHorizontalSpeed() < eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale * 3.5
@@ -309,7 +309,7 @@ rule "BOTS JUMP":
     @Condition isPregameSetup != true
     @Condition eventPlayer.botIsThrottleOverridden == false
     @Condition eventPlayer.botIsAttached != true
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isJumping() != true
     @Condition eventPlayer.isOnGround() == true
@@ -332,7 +332,7 @@ rule "BOTS MOVE THROUGH SPAWN DOORS":
     @Condition eventPlayer.botIsWallCollisionEnabled == true
     @Condition eventPlayer.botIsWallPhaseAllowed == true
     @Condition eventPlayer.botIsAttached != true
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.hasStatus(Status.ROOTED) == false
     @Condition magnitude(eventPlayer.getThrottle())
@@ -362,7 +362,7 @@ rule "BOTS MELEE":
     @Event eachPlayer
     @Team 2
     @Condition eventPlayer.botTarget != null
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition eventPlayer.isMeleeing() != true
     @Condition distance(eventPlayer, eventPlayer.botTarget) < 3 * eventPlayer.sizeScale
     @Condition eventPlayer.botTarget.getHorizontalSpeed() < 15 * eventPlayer.botTarget.movementSpeedScale
@@ -412,7 +412,7 @@ rule "BOTS RECOIL FROM DAMAGE":
     @Event playerTookDamage
     @Team 2
     @Condition eventDamage > 20
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition eventPlayer.botIsAttached != true
     @Condition attacker.getTeam() == Team.1
     @Condition victim.isAlive() == true

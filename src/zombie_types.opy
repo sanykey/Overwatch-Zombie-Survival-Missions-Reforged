@@ -66,7 +66,7 @@ rule "BASIC (REAPER) SHADOW STEP (BOSS)":
     @Team 2
     @Hero reaper
     @Condition eventPlayer.botTarget != null
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition eventPlayer in bossStateList == true
     @Condition not eventPlayer.getAbilityCooldown(Button.ABILITY_2)
     @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 20
@@ -108,7 +108,7 @@ rule "BOMBER (JUNKRAT) SELF DESTRUCT":
     @Team 2
     @Hero junkrat
     @Condition eventPlayer.botTarget != null
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition eventPlayer.isAlive() == true
     #Scaled
     @Condition distance(eventPlayer, eventPlayer.botTarget) <= 2.75 * eventPlayer.sizeScale
@@ -125,7 +125,7 @@ rule "RUSHER (TORB) SPEED MECHANICS":
     @Team 2
     @Hero torbjorn
     @Condition eventPlayer.botTarget != null
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isOnGround() == true
     @Condition magnitude(eventPlayer.getThrottle())
@@ -143,7 +143,7 @@ rule "RUSHER MOLTEN CORE (BOSS)":
     @Team 2
     @Hero torbjorn
     @Condition eventPlayer.botTarget != null
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition not eventPlayer.getAbilityCooldown(Button.ABILITY_2)
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer in bossStateList == true
@@ -152,7 +152,7 @@ rule "RUSHER MOLTEN CORE (BOSS)":
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.setUltCharge(100)
     while not eventPlayer.isUsingAbility2():
-        waitUntil(not eventPlayer.isMeleeing() and not eventPlayer.isCrowdControlled, Math.INFINITY)
+        waitUntil(not eventPlayer.isMeleeing() and not eventPlayer.botIsCrowdControlled, Math.INFINITY)
         eventPlayer.forceButtonPress(Button.ABILITY_2)
         wait(0.25)
         if eventPlayer.isDead():
@@ -163,9 +163,9 @@ rule "RUSHER MOLTEN CORE (BOSS)":
     eventPlayer.stopThrottleInDirection()
     wait(1)
     eventPlayer.botIsFacingOverridden = true
-    eventPlayer.startFacing(directionFromAngles(evalOnce(random.uniform(0, 360)), evalOnce(random.uniform(-80, -87))), 0 if eventPlayer.isCrowdControlled else 144, Relativity.TO_PLAYER)
+    eventPlayer.startFacing(directionFromAngles(evalOnce(random.uniform(0, 360)), evalOnce(random.uniform(-80, -87))), 0 if eventPlayer.botIsCrowdControlled else 144, Relativity.TO_PLAYER)
     while not eventPlayer.isUsingUltimate() and eventPlayer.isAlive():
-        waitUntil(not eventPlayer.isMeleeing() and not eventPlayer.isCrowdControlled, Math.INFINITY)
+        waitUntil(not eventPlayer.isMeleeing() and not eventPlayer.botIsCrowdControlled, Math.INFINITY)
         eventPlayer.forceButtonPress(Button.ULTIMATE)
         wait(0.25)
     wait(1)
@@ -230,12 +230,12 @@ rule "BEHEMOTH (ROAD) TOXIC CLOUD":
     if eventPlayer in bossStateList and eventPlayer.getUltCharge() >= 100:
         eventPlayer.setUltCharge(0)
         beginBotOverride()
-        eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition()), 1500 if eventPlayer.botIsAttached else 0 if eventPlayer.isCrowdControlled or eventPlayer.botTarget == null else 100)
+        eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition()), 1500 if eventPlayer.botIsAttached else 0 if eventPlayer.botIsCrowdControlled or eventPlayer.botTarget == null else 100)
         wait(1)
         waitUntil(angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition())) < 5, 5)
         eventPlayer.stopFacing()
         eventPlayer.setStatusEffect(null, Status.STUNNED, 1)
-        waitUntil(not eventPlayer.isCrowdControlled, 2)
+        waitUntil(not eventPlayer.botIsCrowdControlled, 2)
         eventPlayer.botGasProjectilePosition = eventPlayer.getEyePosition()
         eventPlayer.botGasAimPosition = raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 20 * eventPlayer.sizeScale, null, getAllPlayers(), false)
         #Launch Gas Projectile
@@ -447,7 +447,7 @@ rule "ZOMBIES SPAWN AT REIGNITED":
     @Condition eventPlayer in miniBossList != true
     @Condition getPlayersOnHero(Hero.ANRAN, Team.2).any(lambda player: player.botIsReigniteActive)
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition eventPlayer.hasStatus(Status.HACKED) != true
     @Condition eventPlayer.botReigniteDestination == false
     
@@ -488,7 +488,7 @@ rule "RIDER DETACH WHEN DEAD OR TARGET IS DEAD":
     @Hero widowmaker
     @Condition eventPlayer.botIsAttached == true
     @Condition eventPlayer.botAbilityTarget != null
-    @Condition (eventPlayer.isCrowdControlled or eventPlayer.botAbilityTarget.invisibilityCount or eventPlayer.isDead() or eventPlayer.botAbilityTarget.isDead() or eventPlayer.botAbilityTarget.hasStatus(Status.PHASED_OUT) or eventPlayer.botAbilityTarget.hasStatus(Status.INVINCIBLE) or not entityExists(eventPlayer.botAbilityTarget)) == true
+    @Condition (eventPlayer.botIsCrowdControlled or eventPlayer.botAbilityTarget.invisibilityCount or eventPlayer.isDead() or eventPlayer.botAbilityTarget.isDead() or eventPlayer.botAbilityTarget.hasStatus(Status.PHASED_OUT) or eventPlayer.botAbilityTarget.hasStatus(Status.INVINCIBLE) or not entityExists(eventPlayer.botAbilityTarget)) == true
     
     eventPlayer.botAbilityTarget = null
     eventPlayer.botIsAttached = false
@@ -542,7 +542,7 @@ rule "RIDER USE GRAPPLING HOOK":
     eventPlayer.botIsFacingOverridden = true
     eventPlayer.botRiderGrapplePosition = raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.botTarget.getPosition(), null, eventPlayer, false)
     eventPlayer.stopFacing()
-    waitUntil(not eventPlayer.isCrowdControlled, 2)
+    waitUntil(not eventPlayer.botIsCrowdControlled, 2)
     eventPlayer.setFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botRiderGrapplePosition), Relativity.TO_WORLD)
     eventPlayer.forceButtonPress(Button.ABILITY_1)
     waitUntil(eventPlayer.isUsingAbility1(), 1)
@@ -565,7 +565,7 @@ rule "CHARGER (MAUGA) CHARGE":
     @Team 2
     @Hero mauga
     @Condition eventPlayer.botTarget != null
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition eventPlayer.botIsThrottleOverridden != true
     @Condition eventPlayer.isOnGround() == true
     @Condition not eventPlayer.getAbilityCooldown(Button.ABILITY_1)
@@ -579,7 +579,7 @@ rule "CHARGER (MAUGA) CHARGE":
     eventPlayer.enableEnvironmentCollision()
     eventPlayer.botIsWallCollisionEnabled = true
     eventPlayer.botIsFacingOverridden = true
-    eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition()), 1500 if eventPlayer.botIsAttached else 0 if eventPlayer.isCrowdControlled else 100)
+    eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition()), 1500 if eventPlayer.botIsAttached else 0 if eventPlayer.botIsCrowdControlled else 100)
     eventPlayer.botIsThrottleOverridden = true
     eventPlayer.startThrottleInDirection(Vector.BACKWARD, 0.35, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
     #Charger walk backwards duration
@@ -624,7 +624,7 @@ rule "SLIMER (MERCY) TENTACLE GRAB":
     @Hero mercy
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer.botTentacleTargetPosition == null
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition eventPlayer.botIsThrottleOverridden != true
     @Condition eventPlayer.isUsingUltimate() != true
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()) < 20 * eventPlayer.sizeScale
@@ -677,7 +677,7 @@ rule "PRIME SLIMER (EMRE) FLIGHT (BOSS)":
     @Condition eventPlayer.botTarget != null
     @Condition eventPlayer.botTentacleTargetPosition == null
     @Condition eventPlayer.botIsThrottleOverridden != true
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition eventPlayer.isOnGround() == true
     @Condition eventPlayer in bossStateList == true
     @Condition distance(eventPlayer, eventPlayer.botTarget) < 15
@@ -700,7 +700,7 @@ rule "PRIME SLIMER (EMRE) FLIGHT (BOSS)":
         eventPlayer.botIsFacingOverridden = true
         eventPlayer.stopThrottleInDirection()
         while eventPlayer.botTarget != null and eventPlayer.isUsingUltimate() and not eventPlayer.botIsCrowdControlled:
-            eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition() + evalOnce(directionFromAngles(random.uniform(0, 360), random.uniform(-90, 90))) * 1), 0 if eventPlayer.isCrowdControlled else 200)
+            eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition() + evalOnce(directionFromAngles(random.uniform(0, 360), random.uniform(-90, 90))) * 1), 0 if eventPlayer.botIsCrowdControlled else 200)
             eventPlayer.forceButtonPress(Button.SECONDARY_FIRE)
             #Altitude too low
             if eventPlayer.getAltitude() < 3:
@@ -731,7 +731,7 @@ rule "STRIKER (WRECKING BALL) PILE DRIVER":
     @Team 2
     @Hero wreckingBall
     @Condition eventPlayer.botTarget != null
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition eventPlayer.botIsThrottleOverridden != true
     @Condition eventPlayer.hasStatus(Status.ROOTED) == false
     @Condition not eventPlayer.getAbilityCooldown(Button.CROUCH)
@@ -754,7 +754,7 @@ rule "STRIKER (WRECKING BALL) PILE DRIVER":
         wait(0.25)
         waitUntil(eventPlayer.getVelocity().y <= 0, 3)
     eventPlayer.forceButtonPress(Button.CROUCH)
-    waitUntil(not eventPlayer.isUsingAbility1() or eventPlayer.isCrowdControlled, 5)
+    waitUntil(not eventPlayer.isUsingAbility1() or eventPlayer.botIsCrowdControlled, 5)
     eventPlayer.setAbilityCooldown(Button.CROUCH, 3)
     eventPlayer.botIsStrikerStrikeActive = null
     eventPlayer.botIsWallPhaseAllowed = true
@@ -788,7 +788,7 @@ rule "STALKER (MOIRA) FADE":
     @Team 2
     @Hero moira
     @Condition eventPlayer.botTarget != null
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition eventPlayer.botIsWallCollisionEnabled == true
     @Condition not eventPlayer.getAbilityCooldown(Button.ABILITY_1)
     @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 45
@@ -796,7 +796,7 @@ rule "STALKER (MOIRA) FADE":
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.botIsFacingOverridden = true
     eventPlayer.disablePlayerCollision()
-    eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition()), 0 if eventPlayer.isCrowdControlled or eventPlayer.isUsingUltimate() else 75 if eventPlayer.isUsingAbility1() else 1500)
+    eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition()), 0 if eventPlayer.botIsCrowdControlled or eventPlayer.isUsingUltimate() else 75 if eventPlayer.isUsingAbility1() else 1500)
     eventPlayer.botIsThrottleOverridden = true
     eventPlayer.startThrottleInDirection(eventPlayer.getFacingDirection(), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD)
     for eventPlayer.botStalkerFadeIndex in range(5 if eventPlayer in bossStateList else 3):
@@ -805,7 +805,7 @@ rule "STALKER (MOIRA) FADE":
         eventPlayer.enableEnvironmentCollision()
         #Final fade
         if eventPlayer.botStalkerFadeIndex >= 2 and not eventPlayer in bossStateList:
-            eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition()), 0 if eventPlayer.isCrowdControlled else 100)
+            eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition()), 0 if eventPlayer.botIsCrowdControlled else 100)
             eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.botLastTarget), 0 if distance(eventPlayer, eventPlayer.botLastTarget) < 3 and eventPlayer.isUsingAbility1() else eventPlayer.botThrottleSpeed, Relativity.TO_WORLD)
         eventPlayer.movementSpeedScale *= 2
         applyScaledMoveSpeed()
@@ -849,7 +849,7 @@ rule "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES":
     @Team 2
     @Hero pharah
     @Condition eventPlayer.botTarget != null
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition not eventPlayer.getAbilityCooldown(Button.ABILITY_1)
     
     beginBotOverride()
@@ -876,7 +876,7 @@ rule "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES":
         eventPlayer.botIsFacingOverridden = false
         return
     if isInLoS(eventPlayer.getPosition(), eventPlayer.getEyePosition() + worldVector(vect(0, 11, 5), eventPlayer, Transform.ROTATION)) and isInLoS(eventPlayer.botLastTarget.getEyePosition(), eventPlayer.getEyePosition() + worldVector(vect(0, 11, 5), eventPlayer, Transform.ROTATION)):
-        waitUntil(not eventPlayer.isCrowdControlled, Math.INFINITY)
+        waitUntil(not eventPlayer.botIsCrowdControlled, Math.INFINITY)
         eventPlayer.startThrottleInDirection(Vector.FORWARD, 1, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
         eventPlayer.forceButtonPress(Button.ABILITY_1)
         eventPlayer.setAmmo(0, eventPlayer.getMaxAmmo())
@@ -923,7 +923,7 @@ rule "DOWNFALLEN (SIGMA) FIRES":
     @Team 2
     @Hero sigma
     @Condition eventPlayer.botTarget != null
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition eventPlayer.botIsDownfallenGrabbing != true
     @Condition eventPlayer.isUsingAbility1() != true
     @Condition eventPlayer.isUsingUltimate() != true
@@ -946,7 +946,7 @@ rule "DOWNFALLEN GRABS PLAYER":
     @Team 2
     @Hero sigma
     @Condition eventPlayer.botTarget != null
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition distance(eventPlayer, eventPlayer.botTarget) <= ((2.5 if eventPlayer in bossStateList else 3) * eventPlayer.sizeScale)
     @Condition eventPlayer.hasStatus(Status.HACKED) != true
     @Condition eventPlayer.botIsDownfallenGrabbing != true
@@ -1023,7 +1023,7 @@ rule "DAYTAKER (ILLARI) BURST":
     @Team 2
     @Hero illari
     @Condition eventPlayer.botTarget != null
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition not eventPlayer.getAbilityCooldown(Button.ABILITY_1)
     @Condition getLivingPlayers(Team.2).exclude(eventPlayer).any(lambda x: distance(eventPlayer, x) < 2.5 * eventPlayer.sizeScale) == true
     
@@ -1064,7 +1064,7 @@ rule "DAYTAKER (ILLARI) BURST":
     if eventPlayer.isDead():
         daytakerAbortReset()
         return
-    waitUntil(not eventPlayer.isCrowdControlled, Math.INFINITY)
+    waitUntil(not eventPlayer.botIsCrowdControlled, Math.INFINITY)
     eventPlayer.startThrottleInDirection(Vector.FORWARD, 1, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
     #Eject zombies
     if eventPlayer.isAlive() and eventPlayer.botAbilityTarget.isAlive():
@@ -1101,7 +1101,7 @@ rule "DAYTAKER ATTACKS AT HALF HEALTH (BOSS)":
     @Hero illari
     @Condition eventPlayer in bossStateList == true
     @Condition eventPlayer.getNormalizedHealth() < 0.5
-    @Condition eventPlayer.isCrowdControlled == false
+    @Condition eventPlayer.botIsCrowdControlled == false
     @Condition eventPlayer.hasStatus(Status.HACKED) == false
     
     illariUlt()
@@ -1143,7 +1143,7 @@ rule "CADAVER (ANA) DETONATION":
     @Team 2
     @Hero ana
     @Condition eventPlayer.botTarget != null
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.hasStatus(Status.HACKED) == false
     #Scaled
@@ -1243,7 +1243,7 @@ rule "SMOLDER ACTIVATES FROM DAMAGE":
     @Hero winston
     @Condition eventPlayer in bossStateList != true
     @Condition eventPlayer.botSmolderState == 1
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     
     eventPlayer.botSmolderState = 2
     stopChasing(eventPlayer.botSmolderAnger)
@@ -1265,7 +1265,7 @@ rule "SMOLDER BOSS SLAM":
     @Condition eventPlayer.botSmolderState == 0
     @Condition isSmolderEventActive != true
     @Condition eventPlayer.botLastTarget != null
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition eventPlayer.hasStatus(Status.HACKED) != true
     @Condition eventPlayer in bossStateList == true
     @Condition distance(eventPlayer, eventPlayer.botTarget) < 15 * eventPlayer.sizeScale
@@ -1293,7 +1293,7 @@ rule "SMOLDER SUPER SLAM":
     @Team 2
     @Hero winston
     @Condition eventPlayer.botSmolderState != 0
-    @Condition eventPlayer.isCrowdControlled != true
+    @Condition eventPlayer.botIsCrowdControlled != true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isOnGround() == true
     @Condition eventPlayer in bossStateList == true
@@ -1363,7 +1363,7 @@ rule "PROTECTOR (KIRIKO) USES CLEANSE":
     @Team 2
     @Hero kiriko
     @Condition eventPlayer in miniBossList == true
-    @Condition (getPlayersInRadius(eventPlayer, 5, Team.2, LosCheck.SURFACES_AND_ENEMY_BARRIERS).any(lambda player: player.isCrowdControlled or player.hasStatus(Status.HACKED) or player.getNormalizedHealth() < 0.5)) == true
+    @Condition (getPlayersInRadius(eventPlayer, 5, Team.2, LosCheck.SURFACES_AND_ENEMY_BARRIERS).any(lambda player: player.botIsCrowdControlled or player.hasStatus(Status.HACKED) or player.getNormalizedHealth() < 0.5)) == true
     @Condition eventPlayer.hasStatus(Status.HACKED) == false
     
     abilityThrowdown()
@@ -1530,7 +1530,7 @@ def resumeBotFacingAndMovement():
 def startBlasterDaytakerFacing():
     @Name "startBlasterDaytakerFacing"
 
-    eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition()), 0 if eventPlayer.isCrowdControlled or eventPlayer.isOnGround() and eventPlayer.botTarget == null else 100)
+    eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition()), 0 if eventPlayer.botIsCrowdControlled or eventPlayer.isOnGround() and eventPlayer.botTarget == null else 100)
 
 
 def startBotThrottleAtTarget():
