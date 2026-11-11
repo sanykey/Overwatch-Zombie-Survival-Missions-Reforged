@@ -266,7 +266,6 @@ rule "HITCHHIKER ATTACH/DETATCH":
     @Team 1
     @Condition eventPlayer.enhancementId == Enhancement.HITCHHIKER
     @Condition (eventPlayer.isHoldingButton(Button.CROUCH) or (eventPlayer.enhancementIsHitchhiking and (not eventPlayer.hasSpawned() or not eventPlayer.enhancementHitchhikerCarrier.hasSpawned() or eventPlayer.isDead() or eventPlayer.enhancementHitchhikerCarrier.isDead() or not entityExists(eventPlayer.enhancementHitchhikerCarrier) or eventPlayer.hasStatus(Status.KNOCKED_DOWN) or eventPlayer.enhancementHitchhikerCarrier.hasStatus(Status.KNOCKED_DOWN) or distance(eventPlayer, eventPlayer.enhancementHitchhikerCarrier) > 3 * eventPlayer.enhancementHitchhikerCarrier.sizeScale))) == true
-    @Condition eventPlayer.getHero() != Hero.MEI
     
     if not eventPlayer.enhancementIsHitchhiking and eventPlayer.isAlive():
         if playerTargetList.exclude(eventPlayer).any(lambda x: not x.isAttached and distance(eventPlayer, x) < 2 * x.sizeScale):
@@ -285,6 +284,9 @@ rule "HITCHHIKER ATTACH/DETATCH":
             # hitchhikerLocalAttachmentOffset: raise the final local offset before capturing it in attachTo.
             hitchhikerLocalAttachmentOffset += Vector.UP
             eventPlayer.enhancementIsHitchhiking = true
+            # Cryo-Freeze while attached breaks the attachment, so Mei may not use Ability 1 while hitchhiking.
+            if eventPlayer.getHero() == Hero.MEI:
+                eventPlayer.disallowButton(Button.ABILITY_1)
             eventPlayer.attachTo(eventPlayer.enhancementHitchhikerCarrier, evalOnce(hitchhikerLocalAttachmentOffset))
             smallMessage(eventPlayer, "You are attached")
             eventPlayer.addHealthPool(Health.NORMAL, eventPlayer.enhancementHitchhikerCarrier.initialMaxHealth, true, false)
@@ -298,6 +300,8 @@ rule "HITCHHIKER ATTACH/DETATCH":
         smallMessage(eventPlayer, "You have detached")
         eventPlayer.enhancementHitchhikerCarrier.enhancementHitchhikerPassenger = null
         eventPlayer.enhancementIsHitchhiking = false
+        if eventPlayer.getHero() == Hero.MEI:
+            eventPlayer.allowButton(Button.ABILITY_1)
         eventPlayer.enhancementHitchhikerCarrier = 0
         removeHealthPool(eventPlayer.enhancementHitchhikerPassengerPoolId)
         wait(1.5)
