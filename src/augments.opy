@@ -201,17 +201,13 @@ rule "DASH SMOKE FADE":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.augmentId == Augment.DASH
+    @Condition eventPlayer.augmentDashSmokeEntity != null
+    @Condition getTotalTimeElapsed() >= eventPlayer.augmentDashSmokeDeadline
 
-    # One permanent per-player instance: waits for a window, then for its deadline
-    # (read live, so a re-dash slides the wait to the newest window), destroys the
-    # aura and restarts. No rule re-entry is involved, so consecutive dashes can
-    # never strand an aura.
-    waitUntil(eventPlayer.augmentDashSmokeEntity != null, Math.INFINITY)
-    waitUntil(getTotalTimeElapsed() >= eventPlayer.augmentDashSmokeDeadline or eventPlayer.augmentDashSmokeEntity == null, Math.INFINITY)
-    if getTotalTimeElapsed() >= eventPlayer.augmentDashSmokeDeadline and eventPlayer.augmentDashSmokeEntity != null:
-        destroyEffect(eventPlayer.augmentDashSmokeEntity)
-        eventPlayer.augmentDashSmokeEntity = null
-    loop()
+    # No waits: cleanup and activation cannot retain a stale entity/deadline.
+    # Clearing the handle also rearms this rule for the next window.
+    destroyEffect(eventPlayer.augmentDashSmokeEntity)
+    eventPlayer.augmentDashSmokeEntity = null
 
 
 rule "DOUBLE JUMP AIRBORNE DAMAGE":
@@ -238,7 +234,6 @@ def useAugmentAirAction():
     # called from the tap sequence, Double Jump checks its cooldown timestamp on
     # this press (expiry alone must not trigger).
     if not (eventPlayer.hasStatus(Status.ROOTED) or eventPlayer.isCrowdControlled) and not eventPlayer.isAttached:
-        eventPlayer.augmentIsAirActionReady = false
         if eventPlayer.augmentId == Augment.DASH:
             if eventPlayer.augmentDashCharges > 0:
                 # The recharge timer starts when the meter first drops below full;
@@ -249,19 +244,17 @@ def useAugmentAirAction():
                 augmentDashDirection = eventPlayer.getThrottle()
                 # Reduce each axis to -1/0/1: adjacent inputs always make a 45-degree
                 # diagonal, independent of their relative strength. Opposite inputs
-                # cancel in Workshop's movement vector; zero input dashes forward.
+                # cancel in Workshop's movement vector; zero input grants protection only.
                 augmentDashDirection = vect(1 if augmentDashDirection.x > 0 else -1 if augmentDashDirection.x < 0 else 0, 0, 1 if augmentDashDirection.z > 0 else -1 if augmentDashDirection.z < 0 else 0)
-                # Preserve longer protection already granted by revival or late joining.
-                if not eventPlayer.hasStatus(Status.INVINCIBLE):
-                    eventPlayer.setStatusEffect(null, Status.INVINCIBLE, AUGMENT_DASH_PHASE_DURATION)
-                # The blue smoke always matches the fresh invulnerability window: a
-                # re-dash destroys the old aura, then replaces both the entity and the
-                # deadline, so DASH SMOKE FADE slides to the newest window and no
-                # aura can outlive or leak past its own 1.5s.
-                if eventPlayer.augmentDashSmokeEntity != null:
-                    destroyEffect(eventPlayer.augmentDashSmokeEntity)
-                createEffect(getAllPlayers(), Effect.BAD_AURA, Color.BLUE, eventPlayer, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-                eventPlayer.augmentDashSmokeEntity = getLastCreatedEntity()
+                # Every successful dash immediately starts a fresh 1.5s status,
+                # including while already invincible. Do not defer renewal to expiry.
+                eventPlayer.setStatusEffect(null, Status.INVINCIBLE, AUGMENT_DASH_PHASE_DURATION)
+                # Keep one aura for overlapping dashes; only its deadline changes.
+                # augmentIsAirActionReady shares this entity slot: only Double Jump
+                # may write that alias, including on failed/cooldown activations.
+                if eventPlayer.augmentDashSmokeEntity == null:
+                    createEffect(getAllPlayers(), Effect.BAD_AURA, Color.BLUE, eventPlayer, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+                    eventPlayer.augmentDashSmokeEntity = getLastCreatedEntity()
                 eventPlayer.augmentDashSmokeDeadline = getTotalTimeElapsed() + AUGMENT_DASH_PHASE_DURATION
                 # Zero movement input grants only the invulnerability: no impulse.
                 # Otherwise a flat horizontal push: a downward pitch would fight the
@@ -269,12 +262,14 @@ def useAugmentAirAction():
                 # (CANCEL_CONTRARY_MOTION), leaving an in-place dash without push.
                 if augmentDashDirection != vect(0, 0, 0):
                     eventPlayer.applyImpulse(directionFromAngles(eventPlayer.getHorizontalFacingAngle() + horizontalAngleOfDirection(augmentDashDirection), 0), 21.25, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
-        elif getTotalTimeElapsed() >= eventPlayer.augmentMovementReadyAt:
-            eventPlayer.augmentMovementReadyAt = getTotalTimeElapsed() + 16
-            eventPlayer.applyImpulse(Vector.UP, AUGMENT_JUMP_IMPULSE, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
-            # Arm the airborne damage bonus; the flight rule keeps it active
-            # until this impulse's liftoff ends in a landing.
-            eventPlayer.augmentJumpDamageActive = true
+        else:
+            eventPlayer.augmentIsAirActionReady = false
+            if getTotalTimeElapsed() >= eventPlayer.augmentMovementReadyAt:
+                eventPlayer.augmentMovementReadyAt = getTotalTimeElapsed() + 16
+                eventPlayer.applyImpulse(Vector.UP, AUGMENT_JUMP_IMPULSE, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
+                # Arm the airborne damage bonus; the flight rule keeps it active
+                # until this impulse's liftoff ends in a landing.
+                eventPlayer.augmentJumpDamageActive = true
 
 
 rule "GRAPNEL LAUNCHER":

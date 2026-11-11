@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-12",
+  "baseline": "a08da83",
+  "beforeElements": 29632,
+  "afterElements": 29599,
+  "savedElements": 33,
+  "warnings": [],
+  "changedRules": [
+    "DASH SMOKE FADE",
+    "useAugmentAirAction"
+  ],
+  "unchangedCompiledRules": 309,
+  "modeledScenarios": 25,
+  "originalLeakReproduced": true,
+  "method": "Execute emitted actions in a limited evaluator; compare all other compiled rules. No in-game run or performance profiling."
+}

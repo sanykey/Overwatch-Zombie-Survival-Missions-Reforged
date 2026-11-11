@@ -426,8 +426,8 @@ playervar augmentState0
 #!define augmentAmmoLoadoutList augmentState0
 
 playervar augmentState1
-# Dash smoke effect entity; set at the exact dash invulnerability grant, null
-# again after DASH SMOKE FADE removes it. Null gates the next aura creation.
+# Dash smoke effect entity; retained across overlapping dashes, null after DASH
+# SMOKE FADE removes it. Never write augmentIsAirActionReady for Dash: same slot.
 #!define augmentDashSmokeEntity augmentState1
 # Team 2 Dead Weight: carrier's 50% damage modifier, from pickup to synchronous
 # release cleanup, before any throw-damage wait. Overwritten on each pickup.
@@ -435,7 +435,8 @@ playervar augmentState1
 #!define deadWeightProtectionId augmentState1
 # Laser Barricade unit edge direction; persists for collision checks.
 #!define augmentBarrierEdgeDirection augmentState1
-# Double Jump is armed after releasing Jump in midair; consumed once, cleared on landing/death.
+# Double Jump ONLY: armed after releasing Jump in midair; consumed once, cleared
+# on landing/death. Writing this alias for Dash loses its live smoke entity.
 #!define augmentIsAirActionReady augmentState1
 # Ammo Pack current cached entry, retained through the hero/weapon/respawn wait.
 #!define augmentAmmoLoadout augmentState1
@@ -482,8 +483,8 @@ playervar augmentState3
 # the following landing. Cleared by the flight rule on landing/death; only the
 # activation write and the flight rule own this slot.
 #!define augmentJumpDamageActive augmentState3
-# Dash smoke fade deadline; set with the aura entity on every dash so DASH SMOKE
-# FADE always tracks the newest invulnerability window. No other Dash use.
+# Dash smoke deadline; refreshed on every successful dash and read live by
+# smoke cleanup. Invulnerability renews directly on activation; no other Dash use.
 #!define augmentDashSmokeDeadline augmentState3
 
 playervar enhancementHitchhikerPassenger  # Passenger attached to this carrier; null when absent. Infection rules also query it.
