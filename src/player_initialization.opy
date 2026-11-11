@@ -27,7 +27,8 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             f"Hold [{inputBindingString(Button.MELEE)}] to charge | Energy: {floor(localPlayer.enhancementCapacitorEnergy)} | Charged: {floor(localPlayer.enhancementCapacitorCharge)}",
             f"Stacks: {localPlayer.enhancementBulkStacks} | +{min(100, localPlayer.enhancementBulkStacks * 0.5)}% Max Life | Size: {localPlayer.sizeScale}x | Hold [{inputBindingString(Button.MELEE)}] to toggle size",
             f"{max(0, ceil(localPlayer.enhancementHoldUntil - getTotalTimeElapsed()))}s | [{inputBindingString(Button.INTERACT)}] to throw" if localPlayer.enhancementHeldZombie != null else f"Aim at a vulnerable zombie | [{inputBindingString(Button.INTERACT)}] to pick up",
-            f"Energy: {floor(localPlayer.enhancementBoltEnergy)}/350 | Hold [{inputBindingString(Button.MELEE)}] | Armed: {localPlayer.enhancementBoltBurst != 0}"
+            # Armed replaces the charge hint: arming zeroes energy and requires burst == 0, so the states are exclusive.
+            "{1}{0}".format(" | Armed" if localPlayer.enhancementBoltBurst != 0 else " | Hold [{0}] to charge next attack".format(inputBindingString(Button.MELEE)) if localPlayer.enhancementBoltEnergy >= 350 else "", f"Energy: {floor(localPlayer.enhancementBoltEnergy)}/350")
         ][localPlayer.enhancementId],
         [" ", "Brain Killer", "Zombie Hybrid", "Pyrotechnic", "Plague Doctor", "Born to Battle", "Charge Battery", "Hitchhiker", "P.U.P.", "Overcharge", "Bulking Season", "Wrestler", "Bolt Strike"][localPlayer.enhancementId],
         HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE,
