@@ -10,12 +10,23 @@ def applyPlayerCamera():
         # Expression alias only: position must keep reevaluating, never capture a scratch slot.
         #!define CAMERA_ORIGIN (eventPlayer + Vector.UP * (distance(eventPlayer.getEyePosition(), eventPlayer) + 0.5))
         eventPlayer.startCamera(raycastHitPosition(CAMERA_ORIGIN, raycastHitPosition(CAMERA_ORIGIN, CAMERA_ORIGIN + eventPlayer.getFacingDirection() * -3, null, eventPlayer, true), null, eventPlayer, true), eventPlayer + eventPlayer.getFacingDirection() * 100, 100)
-    elif eventPlayer.cameraMode == CameraMode.SMOOTH:
-        # OW2ZombieAndAbilities FAR: inline VL_CAMERA_FAR instead of importing its vector table.
-        # Omitted blend speed intentionally uses the donor's Start Camera default.
-        eventPlayer.startCamera(eventPlayer + worldVector(vect(-0.3, 1, -0.5), eventPlayer, Transform.ROTATION) + Vector.UP * 1.45 + eventPlayer.getFacingDirection() * -1.9, eventPlayer + eventPlayer.getFacingDirection() * 60)
     else:
         eventPlayer.stopCamera()
+
+
+# Scoped aiming (Ana, Ashe, Widowmaker, Emre) needs the native zoom camera:
+# stop the 3D camera while secondary fire is held, then restore the current mode.
+rule "DISABLE PLAYER CAMERA WHILE AIMING":
+    @Event eachPlayer
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.cameraMode == CameraMode.PRECISE
+    @Condition eventPlayer.getHero() in [Hero.ANA, Hero.ASHE, Hero.WIDOWMAKER, Hero.EMRE]
+    @Condition eventPlayer.isFiringSecondaryFire() == true
+
+    eventPlayer.stopCamera()
+    waitUntil(eventPlayer.isFiringSecondaryFire() == false, Math.INFINITY)
+    applyPlayerCamera()
 
 
 rule "CYCLE PLAYER CAMERA":
@@ -30,6 +41,6 @@ rule "CYCLE PLAYER CAMERA":
     @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
 
     # Ongoing rule retriggers only after a condition becomes false and true again.
-    eventPlayer.cameraMode = (eventPlayer.cameraMode + 1) % 3
+    eventPlayer.cameraMode = (eventPlayer.cameraMode + 1) % 2
     applyPlayerCamera()
-    smallMessage(eventPlayer, f"Camera: {['Normal', 'Precise', 'Smooth'][eventPlayer.cameraMode]} | Switch: {CAMERA_HOTKEY}")
+    smallMessage(eventPlayer, f"Camera: {['Normal', 'Precise'][eventPlayer.cameraMode]} | Switch: {CAMERA_HOTKEY}")
