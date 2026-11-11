@@ -68,7 +68,6 @@ rule "PLAYER DIED":
 
     if eventPlayer.augmentId == Augment.DOUBLE_JUMP:
         eventPlayer.augmentJumpLastPressedAt = 0
-        eventPlayer.augmentJumpBonusState = null
 
 
 rule "PLAYER DEALT HEALING":
@@ -140,13 +139,9 @@ rule "PLAYER DEALT DAMAGE":
                 if getTotalTimeElapsed() < eventPlayer.enhancementCapacitorDeadline:
                     damage(victim, eventPlayer, eventPlayer.enhancementCapacitorCharge)
 
-    # Independent Augment: retain its bonus alongside any primary enhancement.
-    if eventPlayer.augmentId == Augment.DOUBLE_JUMP:
-        if eventPlayer.isAlive() == true and eventPlayer.augmentJumpBonusState != null and eventPlayer.getHero() == eventPlayer.augmentJumpBonusState[1] and getTotalTimeElapsed() < abs(eventPlayer.augmentJumpBonusState[0]) and eventDamage >= 30 and victim != eventPlayer:
-            # Match Brain Killer's event-damage bonus pattern. Only hits of 30+ spend it;
-            # consume before Damage so supplemental damage cannot recurse.
-            eventPlayer.augmentJumpBonusState = null
-            damage(victim, eventPlayer, eventDamage * 0.5)
-    elif eventPlayer.augmentId == Augment.LEECH:
+    # Augments: Leech includes damage from the hero, primary enhancement and
+    # scripted powerups. The Double Jump airborne bonus is a Set Damage Dealt
+    # multiplier, so it stacks with every source already applied above.
+    if eventPlayer.augmentId == Augment.LEECH:
         # Include damage from the hero, primary enhancement and scripted powerups.
         heal(eventPlayer, eventPlayer, eventDamage * 0.15)

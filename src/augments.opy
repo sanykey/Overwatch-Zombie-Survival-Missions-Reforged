@@ -50,7 +50,7 @@ rule "AUGMENT MENU":
             "",
             "Gain 75 armor that helps protect against infection",
             "Press Jump again in midair: landing shockwave deals 40 damage and pushes nearby zombies; movement input adds a dash. Phased and invulnerable for 0.5s. cd: 13s",
-            "Jump in midair / double-tap Jump. First hit of 30+ damage in flight or within 0.5s after landing: +50%. cd: 16s",
+            "Jump in midair / double-tap Jump. +20% damage from activation until you land. cd: 16s",
             "Triple Quick Melee, melee weapon, Dragonblade and Carnage reach. Press Melee to push visible zombies ahead within 10m; cd: 9s only with targets",
             "Carry twice the ammo per full magazine; full reloads restore the bonus",
             "Crouch + Jump: grapple 7-40m; hit for 35 damage; stun grounded targets for 0.5s or knock airborne targets down for 3s. cd: 16s",
@@ -159,39 +159,21 @@ rule "DOUBLE JUMP DOUBLE TAP":
         eventPlayer.augmentJumpLastPressedAt = getTotalTimeElapsed()
 
 
-rule "DOUBLE JUMP BONUS ENTER FLIGHT":
+rule "DOUBLE JUMP AIRBORNE DAMAGE":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.augmentId == Augment.DOUBLE_JUMP
-    @Condition eventPlayer.augmentJumpBonusState != null
-    @Condition eventPlayer.augmentJumpBonusState[0] > 0
-    @Condition eventPlayer.augmentJumpBonusState[0] != Math.INFINITY
-    @Condition eventPlayer.isOnGround() == false
+    @Condition eventPlayer.augmentJumpDamageActive == true
+    @Condition eventPlayer.isAlive() == true
 
-    # Positive deadline is the initial launch grace; only the first flight may
-    # extend it indefinitely. Negative deadlines mean the landing window began.
-    eventPlayer.augmentJumpBonusState[0] = Math.INFINITY
-
-
-rule "DOUBLE JUMP BONUS LANDING WINDOW":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.augmentId == Augment.DOUBLE_JUMP
-    @Condition eventPlayer.augmentJumpBonusState != null
-    @Condition eventPlayer.augmentJumpBonusState[0] == Math.INFINITY
-    @Condition eventPlayer.isOnGround() == true
-
-    eventPlayer.augmentJumpBonusState[0] = -(getTotalTimeElapsed() + 0.5)
-
-
-rule "DOUBLE JUMP BONUS EXPIRES":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.augmentId == Augment.DOUBLE_JUMP
-    @Condition eventPlayer.augmentJumpBonusState != null
-    @Condition (not isGameplayActive or not eventPlayer.isAlive() or eventPlayer.getHero() != eventPlayer.augmentJumpBonusState[1] or getTotalTimeElapsed() >= abs(eventPlayer.augmentJumpBonusState[0])) == true
-
-    eventPlayer.augmentJumpBonusState = null
+    # Armed on activation. A grounded activation still lifts off from its own
+    # impulse, so hold for that liftoff first; the bonus then lasts to landing.
+    # Death breaks out of both waits and clears it.
+    waitUntil(eventPlayer.isOnGround() == false or not eventPlayer.isAlive(), Math.INFINITY)
+    applyDamageDealtModifier()
+    waitUntil(eventPlayer.isOnGround() or not eventPlayer.isAlive(), Math.INFINITY)
+    eventPlayer.augmentJumpDamageActive = false
+    applyDamageDealtModifier()
 
 
 def useAugmentAirAction():
@@ -224,9 +206,9 @@ def useAugmentAirAction():
         else:
             eventPlayer.augmentMovementReadyAt = getTotalTimeElapsed() + 16
             eventPlayer.applyImpulse(Vector.UP, AUGMENT_JUMP_IMPULSE, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
-            # Initial grace also expires if a native ability prevents liftoff.
-            # Once airborne, its first landing starts the final 0.5-second window.
-            eventPlayer.augmentJumpBonusState = [getTotalTimeElapsed() + 0.5, eventPlayer.getHero()]
+            # Arm the airborne damage bonus; the flight rule keeps it active
+            # until this impulse's liftoff ends in a landing.
+            eventPlayer.augmentJumpDamageActive = true
 
 
 rule "PHASE DASH LANDING WAVE":

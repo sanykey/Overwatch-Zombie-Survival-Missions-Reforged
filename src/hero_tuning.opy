@@ -96,17 +96,24 @@ rule "TRACER INVIS WHILE RECALLING":
     eventPlayer.invisibilityCount--
 
 
+def applyDamageDealtModifier():
+    @Name "applyDamageDealtModifier"
+    # The only Team 1 Set Damage Dealt writers are the Soldier ultimate and the
+    # Double Jump airborne bonus. Recompute their product at every state edge so
+    # the multipliers stack instead of overwriting each other. Native damage
+    # boosts and supplemental scripted damage apply on top of this multiplier.
+    eventPlayer.setDamageDealt(100 * (1.5 if eventPlayer.getHero() == Hero.SOLDIER and eventPlayer.isUsingUltimate() else 1) * (1.2 if eventPlayer.augmentId == Augment.DOUBLE_JUMP and eventPlayer.isAlive() and eventPlayer.augmentJumpDamageActive == true else 1))
+
+
 rule "SOLDIER TACTICAL VISOR DAMAGE BONUS":
     @Event eachPlayer
     @Team 1
     @Hero soldier
     @Condition eventPlayer.isUsingUltimate() == true
 
-    # Team 1 has no other Set Damage Dealt writer. Keep this multiplier separate
-    # from Super Nano's damage modification and native damage boosts.
-    eventPlayer.setDamageDealt(150)
+    applyDamageDealtModifier()
     waitUntil(not eventPlayer.isUsingUltimate() or eventPlayer.getHero() != Hero.SOLDIER, Math.INFINITY)
-    eventPlayer.setDamageDealt(100)
+    applyDamageDealtModifier()
 
 
 rule "SIERRA TRACKING SHOT HACK":

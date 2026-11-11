@@ -470,11 +470,10 @@ playervar augmentState3
 #!define deadWeightThrowDamageCredit augmentState3
 # Laser Barricade center; retained across waits and reevaluated by live effects.
 #!define augmentBarrierPosition augmentState3
-# Double Jump only: [signed bonus deadline, launch hero], null when spent/expired.
-# Positive deadline: launch grace before first liftoff; infinity: first flight;
-# negative deadline: final landing grace. Read by damage-hit and lifecycle rules;
-# the first hit of 30+/death/hero change/game end/expiry clears it. No waits or HUD captures.
-#!define augmentJumpBonusState augmentState3
+# Double Jump: the +20% damage bonus was armed by an activation and lasts until
+# the following landing. Cleared by the flight rule on landing/death; only the
+# activation write and the flight rule own this slot.
+#!define augmentJumpDamageActive augmentState3
 
 playervar enhancementHitchhikerPassenger  # Passenger attached to this carrier; null when absent. Infection rules also query it.
 
