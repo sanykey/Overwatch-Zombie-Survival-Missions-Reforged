@@ -1,8 +1,8 @@
 {
   "date": "2026-11-11",
-  "beforeElements": 29592,
-  "afterElements": 29595,
-  "addedElements": 3,
+  "beforeElements": 29595,
+  "afterElements": 29590,
+  "addedElements": -5,
   "compiledResetActions": 3,
   "allOtherCompiledActionsUnchanged": true,
   "modeledVoteCombinations": 4096,
