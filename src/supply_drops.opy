@@ -448,7 +448,7 @@ rule "JETPACK FUEL HUD":
     @Condition eventPlayer.powerUpJetpackFuel > 0
 
     # One HUD per fueled player; sort 99 places fuel immediately above item HUD (100).
-    hudSubheader(eventPlayer if eventPlayer.isAlive() else null, f"jetpack fuel: {ceil(eventPlayer.powerUpJetpackFuel)}", HudPosition.ACTUALLY_LEFT, 99, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+    hudSubheader(eventPlayer if eventPlayer.isAlive() else null, f"jetpack fuel: {ceil(eventPlayer.powerUpJetpackFuel)}/{POWERUP_JETPACK_FUEL_MAX}", HudPosition.ACTUALLY_LEFT, 99, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
     eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.JETPACK_FUEL_HUD] = getLastCreatedText()
     waitUntil(eventPlayer.powerUpJetpackFuel <= 0, Math.INFINITY)
     destroyHudText(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.JETPACK_FUEL_HUD])
@@ -591,15 +591,15 @@ def powerUpUsage():
         case 10:
             startRule(superNano)
             break
-        #Jetpack: add 100 fuel up to 200, including during an active flight chase.
+        #Jetpack: add 100 fuel up to POWERUP_JETPACK_FUEL_MAX, including during an active flight chase.
         case 11:
             if eventPlayer.getHero() in [Hero.JETPACK_CAT, Hero.PHARAH]:
                 smallMessage(eventPlayer, "Your hero cannot use Jetpack")
                 return
-            if eventPlayer.powerUpJetpackFuel >= 200:
+            if eventPlayer.powerUpJetpackFuel >= POWERUP_JETPACK_FUEL_MAX:
                 smallMessage(eventPlayer, "Jetpack fuel is full")
                 return
-            eventPlayer.powerUpJetpackFuel = min(200, eventPlayer.powerUpJetpackFuel + 100)
+            eventPlayer.powerUpJetpackFuel = min(POWERUP_JETPACK_FUEL_MAX, eventPlayer.powerUpJetpackFuel + 100)
             playAquaPowerUpSound()
             break
         #Ultimate Charger

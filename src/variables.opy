@@ -30,6 +30,7 @@
 #!define START_CAM_DISTANCE 6.5
 #!define START_TIME 300
 #!define SUPER_NANO_DURATION 20
+#!define POWERUP_JETPACK_FUEL_MAX 200
 #!define VOTING_END_TIME 30
 # Unique hero-skin budget shared by players and zombies.
 #!define UNIQUE_HERO_SKIN_CAP 11
@@ -763,7 +764,7 @@ playervar actorTeamSlot16  # Team 2: botConfiguredHero; Team 1: powerUpForceFiel
 playervar actorTeamSlot17  # Team 2: botMutationId; Team 1: powerUpJetpackFuel. Receivers own storage.
 # Selected mutation ID; zero means no mutation.
 #!define botMutationId actorTeamSlot17
-# Jetpack fuel, 0..200; chased only on Team 1 during flight; item 11 adds up to 100.
+# Jetpack fuel, 0..POWERUP_JETPACK_FUEL_MAX; chased only on Team 1 during flight; item 11 adds up to 100.
 # Retained between flights/respawns and read by the fuel HUD; never use as scratch.
 #!define powerUpJetpackFuel actorTeamSlot17
 
