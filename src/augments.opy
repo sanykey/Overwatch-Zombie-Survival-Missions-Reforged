@@ -56,7 +56,7 @@ rule "AUGMENT MENU":
             "Jump in midair / double-tap Jump. +20% damage from activation until you land. cd: 16s",
             "Triple Quick Melee, melee weapon, Dragonblade and Carnage reach. Press Melee to push visible zombies ahead within 10m; cd: 9s only with targets",
             "Carry twice the ammo per full magazine; full reloads restore the bonus",
-            "Crouch + Jump: grapple 7-40m; hit for 35 damage; stun grounded targets for 0.5s or knock airborne targets down for 3s. cd: 16s",
+            "Crouch + Jump: grapple 7-40m; enemies hit for 35 damage; stun grounded 0.5s / knock airborne down 3s; allies unharmed. cd: 16s",
             "Hold Crouch + Interact to aim a zombie-blocking wall; release Interact to deploy. cd: 30s",
             f"Health packs: 2x healing, -1 infection, +{AUGMENT_APOTHECARY_ULT_CHARGE}% ult. Ultimate grants 1 teleport (hold Crouch + Interact) to the last pack used, or a random known pack if none used",
             "Crouch + Interact: stash (2 slots). Interact: active slot. Hold Reload: drop all. Bot eliminations: 5% loot, backpack first",
@@ -330,7 +330,9 @@ rule "GRAPNEL LAUNCHER":
     # cannot auto-launch. A miss does not consume the cooldown.
     if getTotalTimeElapsed() < eventPlayer.augmentMovementReadyAt or AUGMENT_GRAPNEL_MOVEMENT_BLOCKED:
         return
-    eventPlayer.augmentGrapnelTarget = sorted(getPlayersInRadius(eventPlayer.getEyePosition(), AUGMENT_GRAPNEL_RANGE + 2, Team.2, LosCheck.SURFACES).filter(lambda zombie: zombie.isAlive() and not zombie.botIsTeleporting and distance(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(zombie)) >= AUGMENT_GRAPNEL_MIN_RANGE and distance(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(zombie)) <= AUGMENT_GRAPNEL_RANGE and eventPlayer.isInViewAngle(augmentGrapnelCenter(zombie), 8) and isInLoS(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(zombie))), lambda zombie: distance(eventPlayer, zombie))[0]
+    # Zombies and allies are both valid anchors; the closest candidate in the
+    # aim cone wins. The all-team query includes this player, so self must go.
+    eventPlayer.augmentGrapnelTarget = sorted(getPlayersInRadius(eventPlayer.getEyePosition(), AUGMENT_GRAPNEL_RANGE + 2, Team.ALL, LosCheck.SURFACES).filter(lambda target: target != eventPlayer and target.isAlive() and not target.botIsTeleporting and distance(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(target)) >= AUGMENT_GRAPNEL_MIN_RANGE and distance(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(target)) <= AUGMENT_GRAPNEL_RANGE and eventPlayer.isInViewAngle(augmentGrapnelCenter(target), 8) and isInLoS(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(target))), lambda target: distance(eventPlayer, target))[0]
     if eventPlayer.augmentGrapnelTarget == null:
         return
     eventPlayer.augmentMovementReadyAt = getTotalTimeElapsed() + AUGMENT_GRAPNEL_COOLDOWN
@@ -342,21 +344,25 @@ rule "GRAPNEL LAUNCHER":
     playEffect(getAllPlayers(), DynamicEffect.DEBUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.getPosition(), 25)
     # Keep world/player collisions and attack inputs intact. Only an active pull
     # updates movement; every exit reaches cleanup, even after releasing the chord.
-    while isGameplayActive and AUGMENT_GRAPNEL_CAN_MOVE and eventPlayer.getHero() == eventPlayer.augmentGrapnelState[0] and eventPlayer.augmentGrapnelTarget.isAlive() and eventPlayer.augmentGrapnelTarget.getTeam() == Team.2 and not eventPlayer.augmentGrapnelTarget.botIsTeleporting and isInLoS(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(eventPlayer.augmentGrapnelTarget)) and getTotalTimeElapsed() < eventPlayer.augmentMovementReadyAt - (AUGMENT_GRAPNEL_COOLDOWN - AUGMENT_GRAPNEL_TIMEOUT):
+    # Teams are fixed for the match, so the locked target's team cannot change.
+    while isGameplayActive and AUGMENT_GRAPNEL_CAN_MOVE and eventPlayer.getHero() == eventPlayer.augmentGrapnelState[0] and eventPlayer.augmentGrapnelTarget.isAlive() and not eventPlayer.augmentGrapnelTarget.botIsTeleporting and isInLoS(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(eventPlayer.augmentGrapnelTarget)) and getTotalTimeElapsed() < eventPlayer.augmentMovementReadyAt - (AUGMENT_GRAPNEL_COOLDOWN - AUGMENT_GRAPNEL_TIMEOUT):
         if distance(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(eventPlayer.augmentGrapnelTarget)) <= 1.5 * eventPlayer.sizeScale + 0.5 * eventPlayer.augmentGrapnelTarget.sizeScale:
-            # Pull velocity scratch is dead on contact. Read health synchronously;
-            # no scratch value survives a wait or is captured by the cable.
-            pyroBurnHealthBefore = eventPlayer.augmentGrapnelTarget.getHealth()
-            damage(eventPlayer.augmentGrapnelTarget, eventPlayer, 35)
-            # Script hits have no Event Ability. Like Long Reach, feed actual
-            # Pyrotechnic hits to the existing burn worker without DoT recursion.
-            pyroBurnVictim = eventPlayer.augmentGrapnelTarget
-            enqueuePyroBurn()
-            if eventPlayer.augmentGrapnelTarget.isOnGround():
-                eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.STUNNED, 0.5)
-            else:
-                eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 3)
-            playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer.augmentGrapnelTarget.getPosition() + Vector.UP, AUGMENT_IMPACT_SIZE)
+            # Allies are harmless anchors: the pull simply ends there. Only
+            # zombies take the impact damage, burn, crowd control and blast.
+            if eventPlayer.augmentGrapnelTarget.getTeam() == Team.2:
+                # Pull velocity scratch is dead on contact. Read health synchronously;
+                # no scratch value survives a wait or is captured by the cable.
+                pyroBurnHealthBefore = eventPlayer.augmentGrapnelTarget.getHealth()
+                damage(eventPlayer.augmentGrapnelTarget, eventPlayer, 35)
+                # Script hits have no Event Ability. Like Long Reach, feed actual
+                # Pyrotechnic hits to the existing burn worker without DoT recursion.
+                pyroBurnVictim = eventPlayer.augmentGrapnelTarget
+                enqueuePyroBurn()
+                if eventPlayer.augmentGrapnelTarget.isOnGround():
+                    eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.STUNNED, 0.5)
+                else:
+                    eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 3)
+                playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer.augmentGrapnelTarget.getPosition() + Vector.UP, AUGMENT_IMPACT_SIZE)
             break
         # Synchronous scratch: correct current velocity to the desired velocity,
         # rather than stacking 40-speed impulses every frame. Consumed before wait.

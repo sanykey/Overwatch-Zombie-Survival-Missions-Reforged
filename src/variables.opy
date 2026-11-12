@@ -486,9 +486,9 @@ playervar augmentState2
 # Double Jump's last first-tap timestamp; zero means no pending tap. Only its
 # Jump-press handler writes it; death clears it. The cooldown remains in state0.
 #!define augmentJumpLastPressedAt augmentState2
-# Grapnel Launcher alone owns a locked target and [launch hero, beam entity ID]
-# across its pull waits. The live beam reads the target until it is destroyed;
-# cleanup then clears both slots.
+# Grapnel Launcher alone owns a locked target (zombie or ally) and [launch
+# hero, beam entity ID] across its pull waits. The live beam reads the target
+# until it is destroyed; cleanup then clears both slots.
 #!define augmentGrapnelTarget augmentState1
 #!define augmentGrapnelState augmentState2
 
