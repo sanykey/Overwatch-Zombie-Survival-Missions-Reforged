@@ -3,6 +3,8 @@
 subroutine extendAugmentMelee
 subroutine useAugmentAirAction
 
+#!define AUGMENT_KEVLAR_ARMOR 75
+#!define AUGMENT_KEVLAR_RANGED_DMG_RESIST 50
 #!define AUGMENT_DASH_COOLDOWN 14
 #!define AUGMENT_DASH_MAX_CHARGES 2
 #!define AUGMENT_DASH_PHASE_DURATION 1.7
@@ -49,7 +51,7 @@ rule "AUGMENT MENU":
         f"Augment: {AUGMENT_NAMES[localPlayer.augmentId]} {AUGMENT_ICONS[localPlayer.augmentId] if localPlayer.augmentId != Augment.NO_PREFERENCE else ''}",
         [
             "",
-            "Gain 75 armor that helps protect against infection",
+            f"Gain {AUGMENT_KEVLAR_ARMOR} armor. Incoming ranged and ability damage reduced by {AUGMENT_KEVLAR_RANGED_DMG_RESIST}%",
             f"Double-tap Jump: dash; movement input steers. {AUGMENT_DASH_MAX_CHARGES} charges, one restores every {AUGMENT_DASH_COOLDOWN}s. {AUGMENT_DASH_PHASE_DURATION}s invulnerability on activation",
             "Jump in midair / double-tap Jump. +20% damage from activation until you land. cd: 16s",
             "Triple Quick Melee, melee weapon, Dragonblade and Carnage reach. Press Melee to push visible zombies ahead within 10m; cd: 9s only with targets",
@@ -210,6 +212,43 @@ rule "DASH SMOKE FADE":
     eventPlayer.augmentDashSmokeEntity = null
     # Restore normal damage intake exactly with the aura's removal.
     eventPlayer.setDamageReceived(100)
+
+
+rule "KEVLAR RANGED DAMAGE COMPENSATION":
+    @Event playerTookDamage
+    @Team 1
+    @Condition eventPlayer.augmentId == Augment.KEVLAR
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventDamage > 0
+    @Condition attacker != null
+    @Condition attacker.getTeam() == Team.2
+
+    # Refund half of the damage actually taken instead of a Set Damage Received
+    # resist, so melee hits stay full-damage without proximity guesswork.
+    # Scripted damage() has no ability (boss specials, DoT) and stays untouched.
+    # Quick melee, zombie bites included, registers as Button.MELEE.
+    if eventAbility == null or eventAbility == Button.MELEE:
+        return
+
+    # Native melee weapons pierce the compensation: they read as full damage
+    # while their swing state is still active at the moment of impact.
+    if attacker.getHero() == Hero.REINHARDT:
+        if attacker.isFiringPrimaryFire():
+            return
+    elif attacker.getHero() == Hero.JUNKER_QUEEN:
+        if attacker.isFiringSecondaryFire():
+            return
+    # elif attacker.getHero() == Hero.BRIGITTE:
+    #     if attacker.isFiringPrimaryFire() or attacker.isMeleeing():
+    #         return
+    # elif attacker.getHero() == Hero.VENDETTA:
+    #     if attacker.isFiringPrimaryFire():
+    #         return
+    # elif attacker.getHero() == Hero.TORBJORN:
+    #     if attacker.getCurrentWeapon() == 2 and (attacker.isFiringPrimaryFire() or attacker.isMeleeing()):
+    #         return
+
+    heal(eventPlayer, null, eventDamage * (1 - AUGMENT_KEVLAR_RANGED_DMG_RESIST / 100))
 
 
 rule "DOUBLE JUMP AIRBORNE DAMAGE":
