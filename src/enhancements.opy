@@ -604,7 +604,10 @@ rule "ENGINEER ARMOR TRANSFER":
     scrapArmorGrantTarget.scrapArmorAmount = min(ENGINEER_ARMOR_MAX, scrapArmorGrantTarget.scrapArmorAmount + ENGINEER_ARMOR_STACK)
     # Received-armor feedback: the transfer-beam-colored ring plus the turret
     # freeze sound, on the grant target (self or ally). One-shot; no scratch or
-    # entity to clean up.
+    # entity to clean up. The message quotes the full stack constant, so a
+    # partial top-up near the cap still announces ENGINEER_ARMOR_STACK armor;
+    # an ally transfer names the donor, self-armor stays nameless.
+    smallMessage(scrapArmorGrantTarget, f"+{ENGINEER_ARMOR_STACK} armor" if scrapArmorGrantTarget == eventPlayer else f"+{ENGINEER_ARMOR_STACK} armor from {eventPlayer}")
     playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, scrapArmorGrantTarget, 4)
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, scrapArmorGrantTarget, ENGINEER_TRANSFER_RANGE)
     # Self-armor creates no beam. A transfer moves the single beam to the new
