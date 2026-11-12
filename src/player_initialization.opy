@@ -28,9 +28,10 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             f"Stacks: {localPlayer.enhancementBulkStacks} | +{min(100, localPlayer.enhancementBulkStacks * 0.5)}% Max Life | Size: {localPlayer.sizeScale}x | Hold [{inputBindingString(Button.MELEE)}] to toggle size",
             f"{max(0, ceil(localPlayer.enhancementHoldUntil - getTotalTimeElapsed()))}s | [{inputBindingString(Button.INTERACT)}] to throw" if localPlayer.enhancementHeldZombie != null else f"Aim at a vulnerable zombie | [{inputBindingString(Button.INTERACT)}] to pick up",
             # Armed replaces the charge hint: arming zeroes energy and requires burst == 0, so the states are exclusive.
-            "{1}{0}".format(" | Armed" if localPlayer.enhancementBoltBurst != 0 else " | Hold [{0}] to charge next attack".format(inputBindingString(Button.MELEE)) if localPlayer.enhancementBoltEnergy >= 350 else "", f"Energy: {floor(localPlayer.enhancementBoltEnergy)}/350")
+            "{1}{0}".format(" | Armed" if localPlayer.enhancementBoltBurst != 0 else " | Hold [{0}] to charge next attack".format(inputBindingString(Button.MELEE)) if localPlayer.enhancementBoltEnergy >= 350 else "", f"Energy: {floor(localPlayer.enhancementBoltEnergy)}/350"),
+            f"Scrap: {floor(localPlayer.enhancementScrap)}/{ENGINEER_SCRAP_MAX} | Hold [{inputBindingString(Button.CROUCH)}] ({ENGINEER_ARMOR_HOLD_DURATION}s): {ENGINEER_ARMOR_STACK} armor ({ENGINEER_ARMOR_COST}) | Hold [{inputBindingString(Button.MELEE)}]: turret ({ENGINEER_TURRET_COST})"
         ][localPlayer.enhancementId],
-        [" ", "Brain Killer", "Zombie Hybrid", "Pyrotechnic", "Plague Doctor", "Born to Battle", "Charge Battery", "Hitchhiker", "P.U.P.", "Overcharge", "Bulking Season", "Wrestler", "Bolt Strike"][localPlayer.enhancementId],
+        [" ", "Brain Killer", "Zombie Hybrid", "Pyrotechnic", "Plague Doctor", "Born to Battle", "Charge Battery", "Hitchhiker", "P.U.P.", "Overcharge", "Bulking Season", "Wrestler", "Bolt Strike", "Engineer"][localPlayer.enhancementId],
         HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE,
         [
             Color.WHITE, Color.WHITE,
@@ -41,7 +42,10 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             Color.WHITE, Color.WHITE,
             Color.YELLOW if localPlayer.enhancementCapacitorCharge > 0 else Color.GREEN if localPlayer.enhancementCapacitorEnergy >= 100 else Color.WHITE,
             Color.WHITE, Color.WHITE,
-            Color.YELLOW if localPlayer.enhancementBoltBurst != 0 else Color.GREEN if localPlayer.enhancementBoltEnergy >= 350 else Color.WHITE
+            Color.YELLOW if localPlayer.enhancementBoltBurst != 0 else Color.GREEN if localPlayer.enhancementBoltEnergy >= 350 else Color.WHITE,
+            # Engineer's name reads gray until the scrap balance covers the cost
+            # of one armor throw, then green.
+            Color.GRAY if localPlayer.enhancementScrap < ENGINEER_ARMOR_COST else Color.GREEN
         ][localPlayer.enhancementId],
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
@@ -84,7 +88,7 @@ macro initializePlayerEnhancement():
     if eventPlayer.enhancementId == Enhancement.NO_PREFERENCE:
         # No preference and late-join zero state receive one real choice before
         # its state is initialized. Retain the selected ID across later spawns.
-        eventPlayer.enhancementId = random.randint(Enhancement.BRAIN_KILLER, Enhancement.BOLT_STRIKE)
+        eventPlayer.enhancementId = random.randint(Enhancement.BRAIN_KILLER, Enhancement.ENGINEER)
     #Zombie Hybrid
     if eventPlayer.enhancementId == Enhancement.ZOMBIE_HYBRID:
         # enhancementHybridCooldown: remaining explosion cooldown in seconds (20 on use), for activation checks and HUD.
@@ -132,6 +136,16 @@ macro initializePlayerEnhancement():
         case Enhancement.BOLT_STRIKE:
             eventPlayer.enhancementBoltEnergy = 0
             eventPlayer.enhancementBoltBurst = 0
+            break
+        #Engineer
+        case Enhancement.ENGINEER:
+            # Scrap storage stays untouched here: it starts at zero, survives
+            # death and hero switches, and is swept per match by START GAME.
+            # Only beam state is re-cleaned; death cleanup already destroyed it.
+            # Baseline existing match assists; do not pay for pre-selection ones.
+            eventPlayer.enhancementScrapBeamEntity = null
+            eventPlayer.enhancementScrapBeamTarget = null
+            eventPlayer.engineerScrapAssistSnapshot = earnedAssists(eventPlayer)
             break
         #Born to Battle
         case Enhancement.BORN_TO_BATTLE:

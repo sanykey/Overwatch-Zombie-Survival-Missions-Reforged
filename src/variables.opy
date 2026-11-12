@@ -8,6 +8,24 @@
 #!define ELIMINATIONS_NEEDED_PER_OBJECTIVE 50
 #!define LASER_BARRICADE_HEIGHT 2
 #!define LASER_BARRICADE_WIDTH 5
+# Engineer constants live here (not enhancements.opy): BOT DIES collects scrap
+# before enhancements.opy is included.
+#!define ENGINEER_SCRAP_MAX 500
+#!define ENGINEER_SCRAP_PASSIVE_RATE 1
+#!define ENGINEER_COLLECTION_RANGE 15
+#!define ENGINEER_COLLECTION_REWARD 10
+#!define ENGINEER_ASSIST_SCRAP 15
+#!define ENGINEER_ARMOR_COST 50
+#!define ENGINEER_ARMOR_STACK 50
+#!define ENGINEER_ARMOR_MAX 100
+#!define ENGINEER_ARMOR_HOLD_DURATION 2
+#!define ENGINEER_TURRET_COST 200
+#!define ENGINEER_BEAM_DURATION 1.4
+#!define ENGINEER_TRANSFER_RANGE 15
+#!define ENGINEER_TRANSFER_ANGLE 10
+# Native offensive + defensive assist count; shared by Overcharge's earned-energy
+# formula and Engineer's assist-scrap snapshot.
+#!define earnedAssists(player) (player.getStatistic(Stat.OFFENSIVE_ASSISTS) + player.getStatistic(Stat.DEFENSIVE_ASSISTS))
 #!define REVIVE_RADIUS 5
 #!define START_CAM_DISTANCE 6.5
 #!define START_TIME 300
@@ -37,7 +55,7 @@ enum Challenge:
     PANDORAS_BOX = 5,
 
 # Enhancement IDs index enhancementOptionList and the start-menu tables.
-# Zero means no preference; initialization randomly selects a real ID 1-12.
+# Zero means no preference; initialization randomly selects a real ID 1-13.
 # Brain Killer remains the first explicit menu choice.
 enum Enhancement:
     NO_PREFERENCE = 0,
@@ -53,6 +71,7 @@ enum Enhancement:
     BULKING_SEASON = 10,
     DEAD_WEIGHT = 11,
     BOLT_STRIKE = 12,
+    ENGINEER = 13,
 
 # Independent secondary enhancement slot. IDs index the augment name, icon and color tables.
 enum Augment:
@@ -469,7 +488,7 @@ playervar augmentState2
 #!define augmentJumpLastPressedAt augmentState2
 # Grapnel Launcher alone owns a locked target and [launch hero, beam entity ID]
 # across its pull waits. The live beam reads the target until it is destroyed;
-# cleanup then clears both slots. Movement cooldown remains in augmentState0.
+# cleanup then clears both slots.
 #!define augmentGrapnelTarget augmentState1
 #!define augmentGrapnelState augmentState2
 
@@ -491,6 +510,16 @@ playervar enhancementHitchhikerPassenger  # Passenger attached to this carrier; 
 
 playervar enhancementCarrierPoolId  # Extra health-pool ID granted to a Hitchhiker carrier, retained for removal. Exported names must fit 32 characters.
 #!define enhancementHitchhikerCarrierPoolId enhancementCarrierPoolId
+
+# Engineer: an armor grant may target any Team 1 player, so target-side
+# state cannot live in slots owned by the target's own enhancement or augment.
+playervar scrapArmorAmount  # Modeled remaining scrap armor 0-80, topped up toward the cap by grants (at most one 40-armor pool per throw), decremented by damage events (scrap absorbs before the older Kevlar pool, so the decrement is exact). Cleared on death.
+
+# Engineer: baseline of the native offensive + defensive assist count; assists
+# earned above it pay scrap. Seeded on each spawn initialization like
+# Overcharge's stat snapshot, resynced on every payout; native stats persist
+# through death, so death clears nothing.
+playervar engineerScrapAssistSnapshot
 
 # Supply power-ups only (powerUp prefix).
 # Team 1 pregame selection and voting.
@@ -794,6 +823,10 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 #!define enhancementHitchhikerCarrier actorTeamSlot22
 # P.U.P. mode color.
 #!define enhancementPupColor actorTeamSlot22
+# Engineer: scrap balance 0-300, earned from eliminations and the income
+# rule, spent on armor grants and turret deployment. Survives death and hero
+# switches; reset to 0 by START GAME, never per spawn.
+#!define enhancementScrap actorTeamSlot22
 
 playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateSlot2. Receivers, not rule teams, own the storage.
 # Boss Behemoth gas-cloud radii, aligned with botGasPositionList.
@@ -815,6 +848,9 @@ playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateS
 #!define enhancementHitchhikerPassengerPoolId actorTeamSlot23
 # P.U.P. attack beam is active.
 #!define enhancementIsPupBeamActive actorTeamSlot23
+# Engineer's transfer beam entity; null after BEAM FADE, death and
+# disconnect cleanup. Beam state re-cleans on every non-hero-switch spawn.
+#!define enhancementScrapBeamEntity actorTeamSlot23
 
 playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateSlot3. Receivers, not rule teams, own the storage.
 # Movement waypoint associated with the accepted zombie spawn point.
@@ -829,6 +865,10 @@ playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateS
 #!define enhancementBatteryReuseDuration actorTeamSlot24
 # Current P.U.P. enemy target; null while idle.
 #!define enhancementPupTarget actorTeamSlot24
+# Engineer's live beam endpoint; the reevaluating beam reads this slot
+# until the beam is destroyed. Set synchronously before each beam (re)creation,
+# cleared by BEAM FADE and spawn initialization.
+#!define enhancementScrapBeamTarget actorTeamSlot24
 
 playervar actorTeamSlot25  # Team 2: botCandidateTarget; Team 1: enhancementStateSlot4. Receivers, not rule teams, own the storage.
 # First candidate that passed line of sight in selectTarget; null when none passed.
@@ -840,6 +880,9 @@ playervar actorTeamSlot25  # Team 2: botCandidateTarget; Team 1: enhancementStat
 #!define enhancementBatteryPlacementCooldown actorTeamSlot25
 # P.U.P. freezing aura is visible.
 #!define enhancementIsPupFreezeAuraActive actorTeamSlot25
+# Engineer beam deadline; refreshed on every armor transfer and read live
+# by BEAM FADE. No other Engineer use of this slot.
+#!define enhancementScrapBeamDeadline actorTeamSlot25
 
 playervar actorTeamSlot26  # Teleport permission on Team 2 or first barrier corner on Team 1.
 # Zombie initialization has enabled teleport processing.
@@ -977,8 +1020,9 @@ enum EnhancementIcon:
     BULKING_SEASON = "<TX C0000000002A9ED>",
     DEAD_WEIGHT = iconString(Icon.TRASHCAN),
     BOLT_STRIKE = iconString(Icon.BOLT),
+    ENGINEER = "<TX C0000000005FA7F>",
 
-globalvar enhancementIconListConst = [EnhancementIcon.NO_PREFERENCE, EnhancementIcon.BRAIN_KILLER, EnhancementIcon.ZOMBIE_HYBRID, EnhancementIcon.PYROTECHNIC, EnhancementIcon.PLAGUE_DOCTOR, EnhancementIcon.BORN_TO_BATTLE, EnhancementIcon.CHARGE_BATTERY, EnhancementIcon.HITCHHIKER, EnhancementIcon.PUP, EnhancementIcon.OVERCHARGE, EnhancementIcon.BULKING_SEASON, EnhancementIcon.DEAD_WEIGHT, EnhancementIcon.BOLT_STRIKE]
+globalvar enhancementIconListConst = [EnhancementIcon.NO_PREFERENCE, EnhancementIcon.BRAIN_KILLER, EnhancementIcon.ZOMBIE_HYBRID, EnhancementIcon.PYROTECHNIC, EnhancementIcon.PLAGUE_DOCTOR, EnhancementIcon.BORN_TO_BATTLE, EnhancementIcon.CHARGE_BATTERY, EnhancementIcon.HITCHHIKER, EnhancementIcon.PUP, EnhancementIcon.OVERCHARGE, EnhancementIcon.BULKING_SEASON, EnhancementIcon.DEAD_WEIGHT, EnhancementIcon.BOLT_STRIKE, EnhancementIcon.ENGINEER]
 
 # Immutable palette shared by the pregame menu and gameplay HUD; indexed by Augment.
 globalvar augmentColorListConst = [Color.AQUA, Color.LIGHT_GRAY, Color.YELLOW, Color.SKY_BLUE, Color.ORANGE, Color.WHITE, Color.TURQUOISE, Color.BLUE, Color.GREEN, Color.LIME_GREEN, Color.RED]

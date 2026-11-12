@@ -84,6 +84,10 @@ rule "PLAYER DIED":
     elif eventPlayer.enhancementId == Enhancement.BULKING_SEASON:
         eventPlayer.enhancementBulkStacks = floor(eventPlayer.enhancementBulkStacks / 2)
         applyBulkingSeasonStats()
+    elif eventPlayer.enhancementId == Enhancement.ENGINEER and eventPlayer.enhancementScrapBeamEntity != null:
+        # Scrap itself survives death; only the transfer beam is torn down.
+        destroyEffect(eventPlayer.enhancementScrapBeamEntity)
+        eventPlayer.enhancementScrapBeamEntity = null
 
     if eventPlayer.augmentId == Augment.DOUBLE_JUMP:
         eventPlayer.augmentJumpLastPressedAt = 0
@@ -94,6 +98,10 @@ rule "PLAYER DIED":
             destroyEffect(eventPlayer.augmentDashSmokeEntity)
             eventPlayer.augmentDashSmokeEntity = null
         eventPlayer.setDamageReceived(100)
+    # Health pools vanish with death, so any player's scrap-armor stacks must
+    # go with them, whatever their enhancement or augment.
+    if eventPlayer.scrapArmorAmount > 0:
+        eventPlayer.scrapArmorAmount = 0
 
 
 rule "PLAYER DEALT HEALING":

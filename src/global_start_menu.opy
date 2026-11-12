@@ -191,14 +191,14 @@ rule "EFFECTS/TEXTS":
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Enhancement
-    startMenuEnhancementColorList = [Color.AQUA, Color.RED, Color.GRAY, Color.ORANGE, Color.GREEN, Color.GRAY, Color.WHITE, Color.PURPLE, Color.BLUE, Color.TURQUOISE, Color.LIME_GREEN, Color.SKY_BLUE, Color.YELLOW]
+    startMenuEnhancementColorList = [Color.AQUA, Color.RED, Color.GRAY, Color.ORANGE, Color.GREEN, Color.GRAY, Color.WHITE, Color.PURPLE, Color.BLUE, Color.TURQUOISE, Color.LIME_GREEN, Color.SKY_BLUE, Color.YELLOW, Color.ROSE]
     hudText(
         getPlayers(Team.1),
         "Enhancement: {0}{1}".format(
             [
                 "No Preference", "Brain Killer ", "Zombie Hybrid ",
                 "Pyrotechnic ", "Plague Doctor ", "Born to Battle ",
-                "Charge Battery ", "Hitchhiker ", "P.U.P. ", "Overcharge ", "Bulking Season ", "Wrestler ", "Bolt Strike "
+                "Charge Battery ", "Hitchhiker ", "P.U.P. ", "Overcharge ", "Bulking Season ", "Wrestler ", "Bolt Strike ", "Engineer "
             ][localPlayer.enhancementId],
             enhancementOptionList[localPlayer.enhancementId] if localPlayer.enhancementId > Enhancement.NO_PREFERENCE else ""
         ),
@@ -213,9 +213,10 @@ rule "EFFECTS/TEXTS":
             "Survivor can attach to a teammate and fuse their health.",
             "Survivor is equipped with an autonomous friendly droid",
             "Store healing / 3 incl. packs, +10 per assist; uncapped. Hold Melee: spend up to 100 for bonus damage on hits for 0.3s",
-            "Each elimination: +0.5% Max Life (cap 200%), +0.75% size (cap 2.5x). Voice pitch falls to 0.5x over 200 stacks. Hold Melee: toggle size/pitch. Lose half of stacks on death",
+            "Each elimination: +0.5% Max Life (cap 200%), +0.75% size (cap 2.5x). Hold Melee: toggle size/pitch. Lose half of stacks on death",
             "Interact grabs/throws zombies incl. bosses within 5m: CC except Rooted or <20% HP; take 50% less damage while holding",
-            "Chain to 2 visible zombies within 10m: 25% damage (max 15). Bank 350 chain damage; hold Melee to arm: next hit deals 60 damage and stuns zombies"
+            "Chain to 2 visible zombies within 10m: 25% damage (max 15). Bank 350 chain damage; hold Melee to arm: next hit deals 60 damage and stuns zombies",
+            f"Earn scrap: +{ENGINEER_COLLECTION_REWARD} per bot death within {ENGINEER_COLLECTION_RANGE}m, +{ENGINEER_ASSIST_SCRAP} per assist, +{ENGINEER_SCRAP_PASSIVE_RATE}/s passive. Craft armor that tops you and your allies up to {ENGINEER_ARMOR_MAX} and freezing sentry turrets"
         ][localPlayer.enhancementId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)),
         HudPosition.ACTUALLY_LEFT,

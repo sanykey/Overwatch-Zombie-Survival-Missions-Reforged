@@ -7,6 +7,7 @@ subroutine successfulTeleportStatus
 subroutine updateBotSpawnPoints
 subroutine locateAveragePlayerLocation
 subroutine setClosestPlayerTeleportCenter
+subroutine collectEngineerScrap
 
 
 macro botTeleportCenterMacro():
@@ -129,6 +130,8 @@ rule "BOT DIES":
     if eventWasEnvironment and attacker.getTeam() == Team.1:
         if attacker.augmentId == Augment.LEECH:
             heal(attacker, attacker, eventDamage * 0.15)
+    # Engineer scrap collection: synchronous, before any death-handler waits.
+    collectEngineerScrap()
 
     if eventPlayer.botIsReigniteAttackUsed and eventPlayer.getHero() == Hero.ANRAN and not eventWasEnvironment:
         eventPlayer.setUltCharge(100)
@@ -558,3 +561,18 @@ def removeBotSpawnPoint():
     del botSpawnWaypointList[removedBotSpawnPointIndex]
     del botSpawnPointTimerList[removedBotSpawnPointIndex]
     botSpawnPointList.remove(eventPlayer.botTeleportPosition)
+
+
+def collectEngineerScrap():
+    @Name "collectEngineerScrap"
+
+    # Called synchronously from BOT DIES: victim is the dead zombie bot. Pays
+    # every living Engineer within range; no waits, so the tmp slots are
+    # consumed before any bot-handler scratch reuse.
+    #!define engineerScrapCollectorList tmp0
+    #!define engineerScrapCollector tmp1
+    #!define engineerScrapCollectorListIndex tmp2
+    engineerScrapCollectorList = getLivingPlayers(Team.1).filter(lambda player: player.enhancementId == Enhancement.ENGINEER and distance(player, victim) < ENGINEER_COLLECTION_RANGE)
+    for engineerScrapCollectorListIndex in range(len(engineerScrapCollectorList)):
+        engineerScrapCollector = engineerScrapCollectorList[engineerScrapCollectorListIndex]
+        engineerScrapCollector.enhancementScrap = min(ENGINEER_SCRAP_MAX, engineerScrapCollector.enhancementScrap + ENGINEER_COLLECTION_REWARD)

@@ -277,6 +277,16 @@ rule "START GAME":
     pauseMatchTime()
     walkCenter = nearestWalkablePosition(walkCenter)
     isPregameSetup = false
+    # Engineer scrap and scrap-armor trackers start each match at zero;
+    # they survive death, so this sweep is their only reset point. The beam
+    # slots must not hold stale handles or targets across matches either.
+    # Enhancement-owned slots are all unset before spawn initialization, so the
+    # blanket Team 1 sweep is safe. Late joiners keep the uninitialized zero.
+    getPlayers(Team.1).enhancementScrap = 0
+    getPlayers(Team.1).enhancementScrapBeamEntity = null
+    getPlayers(Team.1).enhancementScrapBeamTarget = null
+    getPlayers(Team.1).enhancementScrapBeamDeadline = 0
+    getPlayers(Team.1).scrapArmorAmount = 0
     enableMusic()
     disableInspector()
     #enableInspector()
