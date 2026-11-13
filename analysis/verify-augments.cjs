@@ -390,7 +390,14 @@ function* execute(rule, state, compiled) {
                     state.playerCollisionEnabled = name === 'Enable Movement Collision With Players';
                     state.collisionWrites.push({enabled: state.playerCollisionEnabled, time: state.time});
                     break;
-                case 'Call Subroutine': yield* execute(compiled.get(a[0]), state, compiled); break;
+                case 'Call Subroutine': {
+                    // Workshop calls use the subroutine ID; its rule display name may differ.
+                    const callee = [...compiled.values()].find(rule =>
+                        rule.body.match(/^event \{\nSubroutine;\n([^;]+);\n\}/)?.[1] === a[0]);
+                    assert(callee, 'Missing subroutine: ' + a[0]);
+                    yield* execute(callee, state, compiled);
+                    break;
+                }
                 case 'Damage': {
                     const target = v(0);
                     if (state.expectedDamager !== undefined) assert.equal(v(1), state.expectedDamager);
@@ -649,7 +656,7 @@ async function main() {
         return;
     }
     const dash = 'AUGMENT AIR ACTION INPUT', jump = dash, recharge = 'AUGMENT AIR ACTION RECHARGE';
-    const ammo = 'AMMO PACK MAGAZINES', quick = 'LONG REACH QUICK MELEE', sword = 'LONG REACH VENDETTA SWORD';
+    const ammo = 'AMMO PACK MAGAZINES', quick = '[LONG_REACH] QUICK MELEE', sword = '[LONG_REACH] MELEE WEAPONS';
     const readyAt = slot('augmentDashReadyAt'), jumpReady = slot('augmentIsAirActionReady');
     const jumpReadyAt = slot('augmentJumpReadyAt');
     assert.notEqual(jumpReady, jumpReadyAt, 'Landing/death must not overwrite the cooldown timestamp');
@@ -666,7 +673,7 @@ async function main() {
         // The helper reuses the native-radius entry for health; each caller
         // supplies a fresh query before a synchronous swing.
         Object.assign(state.globals, {tmp0: 2.5, tmp1: 40});
-        run('extendAugmentMelee', state);
+        run('[LONG_REACH] extendAugmentMelee', state);
     };
     const meleeTargets = invincible => [4, 6].map((z, id) =>
         ({id, position: [0, 0, z], alive: true, visible: true, health: 1000, invincible}));
@@ -1445,7 +1452,7 @@ async function main() {
         assert.deepEqual(state.statusWrites.map(write => write.target), expected);
         assert(state.statusWrites.every(write => write.status === 'Burning' && write.duration === 3));
     }
-    const weapons = 'LONG REACH MELEE WEAPONS', carnage = 'LONG REACH CARNAGE';
+    const weapons = '[LONG_REACH] MELEE WEAPONS', carnage = '[LONG_REACH] CARNAGE';
     const weaponCases = [
         ['Reinhardt', 4, 75, 0.4, 0.96, {}],
         ['Brigitte', 6, 33.75, 0.2, 0.6, {}],

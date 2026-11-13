@@ -1,0 +1,17 @@
+{
+  "before": 30029,
+  "after": 30029,
+  "unchangedCompiledRuleBodies": 320,
+  "movedRules": [
+    "[LONG_REACH] MELEE PUSH",
+    "[LONG_REACH] QUICK MELEE",
+    "[LONG_REACH] MELEE WEAPONS",
+    "[LONG_REACH] CARNAGE",
+    "[LONG_REACH] extendAugmentMelee"
+  ],
+  "hudSourceUnchanged": true,
+  "variableContractsUnchanged": true,
+  "pushCooldownVisibleToHud": 9,
+  "warnings": [],
+  "exported": true
+}

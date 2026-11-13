@@ -1,0 +1,17 @@
+{
+  "baselineRef": "3b5b9918b417c1ace2f2189d2b20aae504e1aa72",
+  "before": 30064,
+  "after": 30033,
+  "saving": 31,
+  "checks": 73,
+  "changedRules": [
+    "Initialize global variables",
+    "VARIABLE ASSIGNMENT",
+    "[LONG_REACH] VENDETTA SWORD",
+    "[LONG_REACH] MELEE WEAPONS"
+  ],
+  "warnings": [],
+  "behavior": "All supported weapons share recovery across hero changes; a hero change during windup cancels the pending hit.",
+  "limitation": "Compiled action interpreter checks; native animation and Workshop scheduling need in-game validation.",
+  "exported": true
+}

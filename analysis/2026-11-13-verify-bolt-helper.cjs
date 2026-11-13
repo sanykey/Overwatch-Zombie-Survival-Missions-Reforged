@@ -106,7 +106,7 @@ const summary = s => ({energy: s.player[energy], burst: s.player[burst],
     const melee = setup(40, true, 2, false);
     Object.assign(melee.globals, {tmp0: 2.5, tmp1: 40});
     melee.targets[1].position = [0, 0, 5]; melee.targets[2].position = [0, 0, 6];
-    run(compiled, 'extendAugmentMelee', melee);
+    run(compiled, '[LONG_REACH] extendAugmentMelee', melee);
     assert.equal(melee.damage.filter(h => h.amount === 40).length, 3, 'All outer-loop targets survive chain scratch use');
     assert.equal(melee.damage.filter(h => h.amount === 60).length, 1, 'Discharge is consumed once per multi-target swing');
     assert.equal(melee.globals.tmp1, 40); checks++;
@@ -130,7 +130,7 @@ const summary = s => ({energy: s.player[energy], burst: s.player[burst],
     checks++;
     if (before) {
         const replaced = new Set(['applyPyrotechnicBurn', 'applyOvercharge', 'applyBoltStrike', 'applyHitEnhancements',
-            'GRAPNEL LAUNCHER', 'extendAugmentMelee', 'PLAYER DEALT DAMAGE']);
+            'GRAPNEL LAUNCHER', '[LONG_REACH] extendAugmentMelee', 'PLAYER DEALT DAMAGE']);
         assert.deepEqual(rules(build.result).filter(r => !replaced.has(r.name)),
             rules(before.result).filter(r => !replaced.has(r.name)), 'Unrelated rules stay identical');
         assert.deepEqual([...compiled.keys()].filter(n => !old.has(n)), old.has('applyHitEnhancements') ? [] : ['applyHitEnhancements']);
@@ -147,7 +147,7 @@ const summary = s => ({energy: s.player[energy], burst: s.player[burst],
                     s.player[slot('enhancementCapacitorDeadline')] = 0;
                 }
                 Object.assign(s.globals, {tmp0: 2.5, tmp1: 40});
-                run(map, 'extendAugmentMelee', s);
+                run(map, '[LONG_REACH] extendAugmentMelee', s);
                 return summary(s);
             };
             assert.deepEqual(swing(compiled), swing(old)); checks++;

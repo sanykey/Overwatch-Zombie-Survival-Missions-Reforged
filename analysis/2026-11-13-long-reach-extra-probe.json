@@ -1,0 +1,95 @@
+{
+  "baseline": 30064,
+  "warnings": [],
+  "rules": [
+    {
+      "name": "LONG REACH MELEE PUSH",
+      "elements": 102
+    },
+    {
+      "name": "LONG REACH QUICK MELEE",
+      "elements": 92
+    },
+    {
+      "name": "LONG REACH VENDETTA SWORD",
+      "elements": 44
+    },
+    {
+      "name": "LONG REACH MELEE WEAPONS",
+      "elements": 213
+    },
+    {
+      "name": "LONG REACH CARNAGE",
+      "elements": 19
+    },
+    {
+      "name": "extendAugmentMelee",
+      "elements": 87
+    }
+  ],
+  "candidates": [
+    {
+      "name": "mergeVendetta",
+      "total": 30033,
+      "saving": 31,
+      "warnings": [],
+      "rules": [
+        {
+          "name": "LONG REACH MELEE PUSH",
+          "elements": 102
+        },
+        {
+          "name": "LONG REACH QUICK MELEE",
+          "elements": 92
+        },
+        {
+          "name": "LONG REACH MELEE WEAPONS",
+          "elements": 224
+        },
+        {
+          "name": "LONG REACH CARNAGE",
+          "elements": 19
+        },
+        {
+          "name": "extendAugmentMelee",
+          "elements": 87
+        }
+      ]
+    },
+    {
+      "name": "pushGuard",
+      "total": 30065,
+      "saving": -1,
+      "warnings": [],
+      "rules": [
+        {
+          "name": "LONG REACH MELEE PUSH",
+          "elements": 103
+        },
+        {
+          "name": "LONG REACH QUICK MELEE",
+          "elements": 92
+        },
+        {
+          "name": "LONG REACH VENDETTA SWORD",
+          "elements": 44
+        },
+        {
+          "name": "LONG REACH MELEE WEAPONS",
+          "elements": 213
+        },
+        {
+          "name": "LONG REACH CARNAGE",
+          "elements": 19
+        },
+        {
+          "name": "extendAugmentMelee",
+          "elements": 87
+        }
+      ]
+    }
+  ],
+  "recoveryLoopAlreadyOptimized": true,
+  "stableHeroParityCases": 42,
+  "mergeLimitations": "Cross-hero scheduling/recovery is not equivalent by construction and is not validated in game; this is an exploratory candidate."
+}

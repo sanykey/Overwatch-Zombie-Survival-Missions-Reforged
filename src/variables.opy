@@ -94,8 +94,8 @@ enum Augment:
 #!define AUGMENT_COLORS augmentColorListConst
 # Augment name table, indexed by selection ID; melee-augment hero tables, checked by hero.
 #!define AUGMENT_NAMES augmentNameListConst
-#!define AUGMENT_MELEE_WEAPON_HEROES augmentMeleeWeaponHeroListConst
-#!define AUGMENT_MELEE_BUTTON_WEAPON_HEROES augmentMeleeBtnHeroListConst
+#!define LONG_REACH_MELEE_WEAPON_HEROES augmentMeleeWeaponHeroListConst
+#!define LONG_REACH_MELEE_BUTTON_WEAPON_HEROES augmentMeleeBtnHeroListConst
 
 # Objective IDs also index objectiveTypeVoteList and identify entries in objectiveTypeList.
 # Biomorphing and Survivor Rescue are only selectable through the mixed pool.

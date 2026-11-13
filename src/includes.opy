@@ -27,6 +27,7 @@
 #!include "supply_drops.opy"
 #!include "power_ups.opy"
 #!include "enhancements.opy"
+#!include "long_reach.opy"
 #!include "augments.opy"
 #!include "player_initialization.opy"
 #!include "player_events.opy"

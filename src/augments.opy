@@ -1,6 +1,5 @@
 #!mainFile "../main.opy"
 
-subroutine extendAugmentMelee
 subroutine useAugmentAirAction
 
 #!define AUGMENT_KEVLAR_ARMOR 75
@@ -10,20 +9,6 @@ subroutine useAugmentAirAction
 #!define AUGMENT_DASH_PHASE_DURATION 1.7
 #!define AUGMENT_JUMP_IMPULSE 14.4
 #!define AUGMENT_JUMP_TAP_WINDOW 0.3
-#!define AUGMENT_MELEE_RADIUS 2.5
-#!define AUGMENT_MELEE_PUSH_COOLDOWN 9
-#!define AUGMENT_MELEE_PUSH_IMPULSE 25
-#!define AUGMENT_MELEE_PUSH_RADIUS 10
-#!define AUGMENT_WEAPON_REACH_MULTIPLIER 3
-#!define AUGMENT_VENDETTA_DAMAGE 33.75
-# Original damage 45; 75% = 33.75 (Vendetta sword).
-#!define AUGMENT_CARNAGE_RADIUS 4.5
-#!define AUGMENT_CARNAGE_DAMAGE 78.75
-# Original damage 105; 75% = 78.75 (Carnage).
-#!define AUGMENT_VENDETTA_RADIUS 4.3
-#!define AUGMENT_VENDETTA_WINDUP 0.15
-#!define AUGMENT_VENDETTA_INTERVAL 0.6
-#!define AUGMENT_IMPACT_SIZE 0.4
 #!define AUGMENT_GRAPNEL_RANGE 40
 #!define AUGMENT_GRAPNEL_MIN_RANGE 7
 #!define AUGMENT_GRAPNEL_SPEED 40
@@ -33,24 +18,9 @@ subroutine useAugmentAirAction
 #!define AUGMENT_GRAPNEL_MOVEMENT_BLOCKED (eventPlayer.isAttached or eventPlayer.hasStatus(Status.ROOTED) or eventPlayer.isCrowdControlled)
 #!define AUGMENT_GRAPNEL_CAN_MOVE (eventPlayer.hasSpawned() and eventPlayer.isAlive() and not AUGMENT_GRAPNEL_MOVEMENT_BLOCKED)
 
-# Only synchronous melee query inputs use global scratch storage. Callers set
-# these AFTER their windup wait; the helper consumes them without yielding or HUD capture.
-# Native radius; every attack uses the same reach multiplier and 30-degree cone.
-#!define augmentMeleeRadius tmp0
-# The helper snapshots targets once, then deals damage per player without yielding.
-# The radius is dead after the query, so both roles share the slot.
-#!define augmentMeleeTargets tmp0
-#!define augmentMeleeDamage tmp1
 # Dash samples movement on the second Jump press. This scratch vector is
 # consumed by the impulse immediately; it has no waits or live captures.
 #!define augmentDashDirection tmp0
-
-
-macro extendAugmentMeleeMacro(radius, damage):
-    # Set synchronous scratch inputs after the caller's windup; no waits.
-    augmentMeleeRadius = radius
-    augmentMeleeDamage = damage
-    extendAugmentMelee()
 
 
 rule "AUGMENT MENU":
@@ -63,7 +33,7 @@ rule "AUGMENT MENU":
             f"Gain {AUGMENT_KEVLAR_ARMOR} armor. Incoming ranged and ability damage reduced by {AUGMENT_KEVLAR_RANGED_DMG_RESIST}%",
             f"Double-tap Jump: dash; movement input steers. {AUGMENT_DASH_MAX_CHARGES} charges, one restores every {AUGMENT_DASH_COOLDOWN}s. {AUGMENT_DASH_PHASE_DURATION}s invulnerability on activation",
             "Jump in midair / double-tap Jump. +20% damage from activation until you land. cd: 16s",
-            "Triple Quick Melee, melee weapon, Dragonblade and Carnage reach. Press Melee to push visible zombies ahead within 10m; cd: 9s only with targets",
+            "Triple Quick Melee, melee weapon (75% dmg) reach. Press Melee to push visible zombies ahead within 10m; cd: 9s",
             "Carry twice the ammo per full magazine; full reloads restore the bonus",
             "Crouch + Jump: grapple 7-40m; enemies hit for 35 damage; stun grounded 0.5s / knock airborne down 3s; allies unharmed. cd: 16s",
             "Hold Crouch + Interact to aim a zombie-blocking wall; release Interact to deploy. cd: 30s",
@@ -376,7 +346,7 @@ rule "GRAPNEL LAUNCHER":
                     eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.STUNNED, 0.5)
                 else:
                     eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 3)
-                playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer.augmentGrapnelTarget.getPosition() + Vector.UP, AUGMENT_IMPACT_SIZE)
+                playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer.augmentGrapnelTarget.getPosition() + Vector.UP, LONG_REACH_IMPACT_SIZE)
             break
         # Synchronous scratch: correct current velocity to the desired velocity,
         # rather than stacking 40-speed impulses every frame. Consumed before wait.
@@ -402,172 +372,6 @@ rule "GRAPNEL LAUNCHER DISCONNECT CLEANUP":
     # Follow the project's supplied playerLeft cleanup pattern: consume the
     # departing player's effect ID synchronously in the departure event.
     destroyEffect(eventPlayer.augmentGrapnelState[1])
-
-
-rule "LONG REACH MELEE PUSH":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
-
-    # Button edge only: readiness/phase in Actions prevent a held press from
-    # automatically firing on cooldown expiry or when a target enters range.
-    if not isGameplayActive or eventPlayer.augmentId != Augment.LONG_REACH or getTotalTimeElapsed() < eventPlayer.augmentMeleePushReadyAt:
-        return
-    if eventPlayer.isCrowdControlled:
-        return
-    # One synchronous spatial query per ready press, independent of native or
-    # scripted damage attribution. Existing global scratch is dead before return;
-    # no waits, damage, asynchronous calls or HUD/effect captures use these roles.
-    #!define augmentPushTargets tmp0
-    #!define augmentPushTargetIndex tmp1
-    #!define augmentPushTarget tmp2
-    augmentPushTargets = getPlayersInRadius(eventPlayer, AUGMENT_MELEE_PUSH_RADIUS * eventPlayer.sizeScale, Team.2, LosCheck.SURFACES).filter(lambda zombie: zombie.isAlive() and not zombie.botIsTeleporting and not zombie.botIsAttached and zombie.botKnockbackScale > 0 and eventPlayer.isInViewAngle(zombie.getEyePosition(), 30))
-    if augmentPushTargets == []:
-        return
-    eventPlayer.augmentMeleePushReadyAt = getTotalTimeElapsed() + AUGMENT_MELEE_PUSH_COOLDOWN
-    for augmentPushTargetIndex in range(len(augmentPushTargets)):
-        augmentPushTarget = augmentPushTargets[augmentPushTargetIndex]
-        augmentPushTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, augmentPushTarget)), -15), AUGMENT_MELEE_PUSH_IMPULSE * augmentPushTarget.botKnockbackScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
-        augmentPushTarget.setEnvironmentalKillCreditor(eventPlayer)
-
-
-rule "LONG REACH QUICK MELEE":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isMeleeing() == true
-    @Condition eventPlayer.getHero() not in [Hero.REINHARDT, Hero.BRIGITTE]
-    @Condition (eventPlayer.getHero() != Hero.TORBJORN or eventPlayer.getCurrentWeapon() != 2) == true
-    @Condition (eventPlayer.getHero() != Hero.VENDETTA or not eventPlayer.isFiringPrimaryFire()) == true
-    @Condition (eventPlayer.getHero() != Hero.JUNKER_QUEEN or not eventPlayer.isUsingAbility2()) == true
-    @Condition eventPlayer.isUsingUltimate() == false
-
-    if eventPlayer.augmentId != Augment.LONG_REACH:
-        return
-
-    eventPlayer.augmentMeleeHero = eventPlayer.getHero()
-    wait(0.15, Wait.ABORT_WHEN_FALSE)
-    if eventPlayer.getHero() != eventPlayer.augmentMeleeHero:
-        return
-    extendAugmentMeleeMacro(AUGMENT_MELEE_RADIUS, 60 if eventPlayer.getHero() == Hero.ZENYATTA else 70 if eventPlayer.getHero() == Hero.VENTURE else 40)
-
-
-rule "LONG REACH VENDETTA SWORD":
-    @Event eachPlayer
-    @Team 1
-    @Hero vendetta
-    # These conditions cancel a committed swing; releasing primary fire does not.
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isFiringSecondaryFire() == false
-    @Condition eventPlayer.isUsingAbility1() == false
-    @Condition eventPlayer.isUsingAbility2() == false
-    @Condition eventPlayer.isUsingUltimate() == false
-    @Condition eventPlayer.isCrowdControlled == false
-
-    if not isGameplayActive or eventPlayer.augmentId != Augment.LONG_REACH:
-        return
-
-    # Trigger and windup have separate lifetimes: a short click commits one hit,
-    # while held input keeps using the configured repeat timer.
-    # The idle wait only watches input; validate the actor before committing a hit.
-    waitUntil(eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) and eventPlayer.isFiringPrimaryFire(), Math.INFINITY)
-    if not ruleCondition:
-        return
-    # Adapted from the supplied Vendetta implementation: extend only the outer
-    # annulus, retain windup/LoS/cone checks, and leave energy/other abilities alone.
-    wait(AUGMENT_VENDETTA_WINDUP, Wait.ABORT_WHEN_FALSE)
-    extendAugmentMeleeMacro(AUGMENT_VENDETTA_RADIUS, AUGMENT_VENDETTA_DAMAGE)
-    # Native primary-fire state can remain true through a held attack series.
-    # Recovery is mandatory even on release, death or crowd control: clicks and
-    # condition edges cannot restart this rule early after a successful swing.
-    # Scratch query values are consumed before this wait and rebuilt on every hit.
-    wait(AUGMENT_VENDETTA_INTERVAL - AUGMENT_VENDETTA_WINDUP, Wait.IGNORE_CONDITION)
-    if ruleCondition:
-        loop()
-
-
-rule "LONG REACH MELEE WEAPONS":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.getHero() in AUGMENT_MELEE_WEAPON_HEROES
-    @Condition (eventPlayer.getHero() != Hero.GENJI or eventPlayer.isUsingUltimate()) == true
-    @Condition (eventPlayer.getHero() != Hero.DMON or not eventPlayer.isInAlternateForm()) == true
-    @Condition (eventPlayer.getHero() not in [Hero.DMON, Hero.RAMATTRA] or not eventPlayer.isMeleeing()) == true
-    @Condition (eventPlayer.getHero() != Hero.TORBJORN or eventPlayer.getCurrentWeapon() == 2) == true
-    # Nemesis does not reliably report Is Using Ability 1 / Is In Alternate Form.
-    # Its extra armor exceeds 40% of the spawn health in all standard queues.
-    # Use the spawn snapshot so health scaling works and Hitchhiker's live health
-    # pools cannot turn an active Nemesis back into a staff attack here.
-    @Condition (eventPlayer.getHero() != Hero.RAMATTRA or eventPlayer.getMaxHealthOfType(Health.ARMOR) > eventPlayer.initialMaxHealth * 0.4) == true
-    @Condition eventPlayer.isFiringSecondaryFire() == false
-    @Condition (eventPlayer.getHero() == Hero.RAMATTRA or not eventPlayer.isUsingAbility1()) == true
-    @Condition (eventPlayer.getHero() == Hero.TORBJORN or not eventPlayer.isUsingAbility2()) == true
-    @Condition (not eventPlayer.isUsingUltimate() or eventPlayer.getHero() in [Hero.GENJI, Hero.BRIGITTE, Hero.RAMATTRA]) == true
-    @Condition eventPlayer.isCrowdControlled == false
-
-    if eventPlayer.augmentId != Augment.LONG_REACH:
-        return
-
-    waitUntil((eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) or eventPlayer.getHero() in AUGMENT_MELEE_BUTTON_WEAPON_HEROES and eventPlayer.isHoldingButton(Button.MELEE)) and (eventPlayer.isFiringPrimaryFire() or eventPlayer.getHero() in AUGMENT_MELEE_BUTTON_WEAPON_HEROES and eventPlayer.isMeleeing()), Math.INFINITY)
-    if not ruleCondition:
-        return
-    # Build the profile after idle input, so a hero switch during the idle wait
-    # cannot retain a previous hero's windup. One owner-only profile survives
-    # the hit/recovery waits: [hero, native range, direct
-    # damage, windup, recovery]. All extended attacks use a 30-degree view angle.
-    # Like Vendetta, held swings use an
-    # approximate cadence rather than polling or depending on a native hit target.
-    # Genji's blade cadence includes the October swing-speed increase.
-    # Timers do not copy native combo/perk effects.
-    # The numeric rows live in create numbers.js, in the same hero-list order.
-    # Keep the hero snapshot in the retained player slot across both waits.
-    eventPlayer.augmentWeaponProfile = [eventPlayer.getHero()].concat(numbersList.slice(NL_LONG_REACH_PROFILE_OFFSET + AUGMENT_MELEE_WEAPON_HEROES.index(eventPlayer.getHero()) * 4, 4))
-    wait(eventPlayer.augmentWeaponProfile[3], Wait.ABORT_WHEN_FALSE)
-    if eventPlayer.getHero() != eventPlayer.augmentWeaponProfile[0]:
-        return
-    extendAugmentMeleeMacro(eventPlayer.augmentWeaponProfile[1], eventPlayer.augmentWeaponProfile[2])
-    # Do not let releasing either attack binding shorten recovery. Ignore rule
-    # condition changes until it expires, then validate the actor at the loop gate.
-    # compressed() rounds to three decimals; retain Genji's exact recovery here.
-    wait(0.7 / 1.15 - 0.15 if eventPlayer.augmentWeaponProfile[0] == Hero.GENJI else eventPlayer.augmentWeaponProfile[4], Wait.IGNORE_CONDITION)
-    if ruleCondition:
-        loop()
-
-
-rule "LONG REACH CARNAGE":
-    @Event eachPlayer
-    @Team 1
-    @Hero junkerQueen
-    # @Condition isGameplayActive == true
-    # @Condition eventPlayer.augmentId == Augment.LONG_REACH
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isUsingAbility2() == true
-
-    if eventPlayer.augmentId != Augment.LONG_REACH:
-        return
-
-    # Carnage is a committed ability, not a repeating primary-fire timer.
-    wait(0.75, Wait.ABORT_WHEN_FALSE)
-    extendAugmentMeleeMacro(AUGMENT_CARNAGE_RADIUS, AUGMENT_CARNAGE_DAMAGE)
-
-
-def extendAugmentMelee():
-    @Name "extendAugmentMelee"
-
-    # Scale the scalar scratch once before the query, rather than per candidate.
-    augmentMeleeRadius *= eventPlayer.sizeScale
-    augmentMeleeTargets = getPlayersInRadius(eventPlayer.getEyePosition(), augmentMeleeRadius * AUGMENT_WEAPON_REACH_MULTIPLIER + 2, Team.2, LosCheck.SURFACES).filter(lambda target: target.isAlive() and distance(eventPlayer, target) > augmentMeleeRadius and distance(eventPlayer, target) <= augmentMeleeRadius * AUGMENT_WEAPON_REACH_MULTIPLIER and eventPlayer.isInViewAngle(target.getEyePosition(), 30))
-    # The caller's hero snapshot is no longer read after the windup; reuse its
-    # owner-only slot as a synchronous index. Each Damage receives one player.
-    for eventPlayer.augmentMeleeTargetIndex in range(len(augmentMeleeTargets)):
-        # Shared on-hit helpers preserve the target list (tmp0) and damage (tmp1).
-        damageWithEnhancements(augmentMeleeDamage, augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex])
-    if augmentMeleeTargets != []:
-        # One impact per swing, on the nearest hit target. Rounded from 0.3 to 0.4
-        # (about one third larger); Grapnel Launcher uses the same impact size.
-        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, sorted(augmentMeleeTargets, lambda target: distance(eventPlayer, target))[0].getPosition() + Vector.UP, AUGMENT_IMPACT_SIZE)
 
 
 rule "AMMO PACK MAGAZINES":
