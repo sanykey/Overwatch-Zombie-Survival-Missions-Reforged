@@ -191,12 +191,22 @@ enum PowerUpEntitySlot:
 globalvar tmp0  # Synchronous scratch, including Rescue path index and Anran spawn source; assign before use, never retain across waits/async work.
 globalvar tmp1  # Second synchronous scratch value, including bot teleport pivot, selectTarget candidates and barricade push geometry; never retain across waits/async work.
 #!define botTeleportPivot tmp1
-globalvar tmp2  # Third synchronous scratch value, including barricade's current target, mutation color captured with evalOnce for the outline, and the Pyrotechnic enqueue's health gate; no live reads across waits/async work.
-globalvar tmp3  # Fourth synchronous scratch value, including barricade impulse vertical angle and the Pyrotechnic enqueue's victim; assigned and consumed within the same loop iteration, no reads across waits/async work.
-# enqueuePyroBurn parameters: victim's health before the scripted hit (null skips
-# the health gate for native-event hits) and the victim itself.
-#!define pyroBurnHealthBefore tmp2
-#!define pyroBurnVictim tmp3
+globalvar tmp2  # Third synchronous scratch value, including barricade's current target, mutation color captured with evalOnce for the outline, and the on-hit enhancements' health gate; no live reads across waits/async work.
+globalvar tmp3  # Fourth synchronous scratch value, including barricade impulse vertical angle and the on-hit enhancements' victim; assigned and consumed within the same loop iteration, no reads across waits/async work.
+# Shared synchronous on-hit inputs for Pyrotechnic, Overcharge and Bolt Strike.
+# Health before the scripted hit; null skips the health gate for native hits.
+# Native Overcharge/Bolt Strike callers must check eventDamage > 0 before null.
+# Pyro/Overcharge preserve inputs; Bolt consumes tmp2/tmp3 for chain damage/targets.
+# All three preserve tmp0/tmp1; consume before waits/async calls.
+#!define enhancementHitHealthBefore tmp2
+#!define enhancementHitVictim tmp3
+# Native Bolt hit damage only; assigned in PLAYER DEALT DAMAGE and consumed
+# synchronously before the first chain Damage. Scripted hits derive damage from
+# tmp2's health snapshot instead and never read/write this alias, preserving the
+# Long Reach target list in tmp0. No waits, async calls, chase or live HUD reads.
+#!define boltNativeDamage tmp0
+#!define pyroBurnHealthBefore enhancementHitHealthBefore
+#!define pyroBurnVictim enhancementHitVictim
 
 # Phase-owned storage, NOT scratch: values may survive waits and reevaluation.
 # START GAME removes all pregame HUD/world text before mission generation can resume.
@@ -881,6 +891,9 @@ playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateS
 # Engineer's transfer beam entity; null after BEAM FADE, death and
 # disconnect cleanup. Beam state re-cleans on every non-hero-switch spawn.
 #!define enhancementScrapBeamEntity actorTeamSlot23
+# Bolt Strike's synchronous original-hit victim, owned by the attacking
+# human only. No other Bolt state, Augment, wait/chase or HUD reads this slot.
+#!define enhancementBoltVictim actorTeamSlot23
 
 playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateSlot3. Receivers, not rule teams, own the storage.
 # Movement waypoint associated with the accepted zombie spawn point.
@@ -913,6 +926,9 @@ playervar actorTeamSlot25  # Team 2: botCandidateTarget; Team 1: enhancementStat
 # Engineer beam deadline; refreshed on every armor transfer and read live
 # by BEAM FADE. No other Engineer use of this slot.
 #!define enhancementScrapBeamDeadline actorTeamSlot25
+# Bolt Strike's synchronous chain-target health snapshot. Owned by the attacking
+# human; no other Bolt state, Augment, wait/chase or HUD reads this slot.
+#!define enhancementBoltHealthBefore actorTeamSlot25
 
 playervar actorTeamSlot26  # Teleport permission on Team 2 or first barrier corner on Team 1.
 # Zombie initialization has enabled teleport processing.

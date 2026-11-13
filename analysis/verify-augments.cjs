@@ -72,6 +72,7 @@ function value(expr, state, element) {
     if (expr === 'Victim') return state.victim;
     if (expr === 'Event Ability') return state.eventAbility ?? 0;
     if (expr === 'Event Damage') return state.eventDamage ?? 0;
+    if (expr === 'Event Was Critical Hit') return state.eventWasCriticalHit ?? false;
     if (expr === 'Event Healing') return state.eventHealing;
     if (expr === 'Healer') return state.healer ?? 0;
     if (expr === 'Healee') return state.healee ?? state.player;

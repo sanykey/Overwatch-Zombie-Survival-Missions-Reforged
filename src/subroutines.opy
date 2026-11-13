@@ -24,6 +24,21 @@ subroutine illariUlt
 subroutine abilityPlacement
 subroutine createRemainingObjectivesHud
 subroutine enqueuePyroBurn
+subroutine applyOvercharge
+subroutine applyBoltStrike
+
+
+macro damageWithEnhancements(amount, target):
+    # Single target; eventPlayer owns the damage and on-hit enhancements.
+    # Consumes tmp2/tmp3 synchronously without waits; preserves tmp0/tmp1.
+    # Arguments must not depend on the overwritten slots. Pyro/Overcharge
+    # read the snapshot first; Bolt Strike then reuses tmp2/tmp3 for chain work.
+    enhancementHitVictim = target
+    enhancementHitHealthBefore = enhancementHitVictim.getHealth()
+    damage(enhancementHitVictim, eventPlayer, amount)
+    enqueuePyroBurn()
+    applyOvercharge()
+    applyBoltStrike()
 
 
 macro minibossMutationMacro():

@@ -36,9 +36,6 @@ subroutine useAugmentAirAction
 # The radius is dead after the query, so both roles share the slot.
 #!define augmentMeleeTargets tmp0
 #!define augmentMeleeDamage tmp1
-# Health gate for the shared Pyrotechnic enqueue, which reads but never writes
-# this slot; the target list (tmp0) survives the call across every hit.
-#!define augmentMeleeHealthBeforeDamage pyroBurnHealthBefore
 # Dash samples movement on the second Jump press. This scratch vector is
 # consumed by the impulse immediately; it has no waits or live captures.
 #!define augmentDashDirection tmp0
@@ -362,12 +359,7 @@ rule "GRAPNEL LAUNCHER":
             if eventPlayer.augmentGrapnelTarget.getTeam() == Team.2:
                 # Pull velocity scratch is dead on contact. Read health synchronously;
                 # no scratch value survives a wait or is captured by the cable.
-                pyroBurnHealthBefore = eventPlayer.augmentGrapnelTarget.getHealth()
-                damage(eventPlayer.augmentGrapnelTarget, eventPlayer, 35)
-                # Script hits have no Event Ability. Like Long Reach, feed actual
-                # Pyrotechnic hits to the existing burn worker without DoT recursion.
-                pyroBurnVictim = eventPlayer.augmentGrapnelTarget
-                enqueuePyroBurn()
+                damageWithEnhancements(35, eventPlayer.augmentGrapnelTarget)
                 if eventPlayer.augmentGrapnelTarget.isOnGround():
                     eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.STUNNED, 0.5)
                 else:
@@ -566,22 +558,8 @@ def extendAugmentMelee():
     # The caller's hero snapshot is no longer read after the windup; reuse its
     # owner-only slot as a synchronous index. Each Damage receives one player.
     for eventPlayer.augmentMeleeTargetIndex in range(len(augmentMeleeTargets)):
-        # tmp3 is the shared enqueue's read-only victim input; it stays valid
-        # through this synchronous iteration, including the Overcharge bonus.
-        pyroBurnVictim = augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex]
-        augmentMeleeHealthBeforeDamage = pyroBurnVictim.getHealth()
-        damage(pyroBurnVictim, eventPlayer, augmentMeleeDamage)
-        # Script Damage has no Event Ability; the shared enqueue gates on the
-        # health snapshot already in its slot and keeps the burn worker's
-        # stacking/cap/boss behavior without recursing.
-        enqueuePyroBurn()
-        if eventPlayer.enhancementId == Enhancement.OVERCHARGE and eventPlayer.enhancementCapacitorCharge > 0:
-                # Extended hits have no Event Ability; apply the armed bonus here.
-                # The native-event rule excludes scripted damage, preventing recursion.
-                if eventPlayer.enhancementCapacitorDeadline == 0:
-                    eventPlayer.enhancementCapacitorDeadline = getTotalTimeElapsed() + 0.3
-                if getTotalTimeElapsed() < eventPlayer.enhancementCapacitorDeadline:
-                    damage(pyroBurnVictim, eventPlayer, eventPlayer.enhancementCapacitorCharge)
+        # Shared on-hit helpers preserve the target list (tmp0) and damage (tmp1).
+        damageWithEnhancements(augmentMeleeDamage, augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex])
     if augmentMeleeTargets != []:
         # One impact per swing, on the nearest hit target. Rounded from 0.3 to 0.4
         # (about one third larger); Grapnel Launcher uses the same impact size.
