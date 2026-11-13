@@ -1,14 +1,11 @@
 #!mainFile "../main.opy"
 
-subroutine useAugmentAirAction
-
 #!define AUGMENT_KEVLAR_ARMOR 75
 #!define AUGMENT_KEVLAR_RANGED_DMG_RESIST 50
 #!define AUGMENT_DASH_COOLDOWN 14
 #!define AUGMENT_DASH_MAX_CHARGES 2
 #!define AUGMENT_DASH_PHASE_DURATION 1.7
-#!define AUGMENT_JUMP_IMPULSE 14.4
-#!define AUGMENT_JUMP_TAP_WINDOW 0.3
+#!define AUGMENT_DASH_TAP_WINDOW 0.3
 #!define AUGMENT_GRAPNEL_RANGE 40
 #!define AUGMENT_GRAPNEL_MIN_RANGE 7
 #!define AUGMENT_GRAPNEL_SPEED 40
@@ -107,55 +104,6 @@ rule "DASH CHARGE RECHARGE":
         eventPlayer.augmentDashReadyAt = getTotalTimeElapsed() + AUGMENT_DASH_COOLDOWN
 
 
-rule "DOUBLE JUMP RECHARGE":
-    @Event eachPlayer
-    @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.augmentId == Augment.DOUBLE_JUMP
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isOnGround() == false
-
-    # Arm once per airborne interval, only after the takeoff button is released.
-    # This avoids spending the extra jump on the game's first airborne input tick.
-    eventPlayer.augmentIsAirActionReady = false
-    waitUntil(not eventPlayer.isHoldingButton(Button.JUMP) or eventPlayer.isOnGround() or not eventPlayer.isAlive(), Math.INFINITY)
-    if eventPlayer.isAlive() and not eventPlayer.isOnGround():
-        eventPlayer.augmentIsAirActionReady = true
-    waitUntil(eventPlayer.isOnGround() or not eventPlayer.isAlive(), Math.INFINITY)
-    eventPlayer.augmentIsAirActionReady = false
-    if ruleCondition:
-        loop()
-
-
-rule "DOUBLE JUMP AIR ACTION INPUT":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.augmentId == Augment.DOUBLE_JUMP
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.augmentIsAirActionReady == true
-    @Condition eventPlayer.isOnGround() == false
-    @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
-
-    useAugmentAirAction()
-
-
-rule "DOUBLE JUMP DOUBLE TAP":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.augmentId == Augment.DOUBLE_JUMP
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
-
-    # Only press edges update the timestamp. A blocked native jump can leave the
-    # player grounded; its second press still launches without cancelling abilities.
-    if eventPlayer.augmentJumpLastPressedAt > 0 and getTotalTimeElapsed() - eventPlayer.augmentJumpLastPressedAt <= AUGMENT_JUMP_TAP_WINDOW:
-        eventPlayer.augmentJumpLastPressedAt = 0
-        if eventPlayer.isOnGround() or eventPlayer.augmentIsAirActionReady:
-            useAugmentAirAction()
-    else:
-        eventPlayer.augmentJumpLastPressedAt = getTotalTimeElapsed()
-
-
 rule "DASH DOUBLE TAP":
     @Event eachPlayer
     @Team 1
@@ -163,15 +111,15 @@ rule "DASH DOUBLE TAP":
     @Condition eventPlayer.isAlive() == true
 
     # Uniform press-release-press trigger on the ground and airborne: both gaps
-    # use the shared tap window. Holding past a timeout restarts the sequence, so
+    # use the Dash tap window. Holding past a timeout restarts the sequence, so
     # a held button cannot re-fire; the charges gate lives in the dash action.
     # After a dash, the triggering press is fully consumed: the sequence waits for
     # its release and restarts from scratch, so a third quick press is only the
     # FIRST press of the next pair and cannot spend a second charge by itself.
     waitUntil(eventPlayer.isHoldingButton(Button.JUMP), Math.INFINITY)
-    waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), AUGMENT_JUMP_TAP_WINDOW)
+    waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), AUGMENT_DASH_TAP_WINDOW)
     if not eventPlayer.isHoldingButton(Button.JUMP):
-        waitUntil(eventPlayer.isHoldingButton(Button.JUMP), AUGMENT_JUMP_TAP_WINDOW)
+        waitUntil(eventPlayer.isHoldingButton(Button.JUMP), AUGMENT_DASH_TAP_WINDOW)
         if eventPlayer.isHoldingButton(Button.JUMP):
             useAugmentAirAction()
             waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), Math.INFINITY)
@@ -235,28 +183,11 @@ rule "KEVLAR RANGED DAMAGE COMPENSATION":
     heal(eventPlayer, null, eventDamage * (1 - AUGMENT_KEVLAR_RANGED_DMG_RESIST / 100))
 
 
-rule "DOUBLE JUMP AIRBORNE DAMAGE":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.augmentId == Augment.DOUBLE_JUMP
-    @Condition eventPlayer.augmentJumpDamageActive == true
-    @Condition eventPlayer.isAlive() == true
-
-    # Armed on activation. A grounded activation still lifts off from its own
-    # impulse, so hold for that liftoff first; the bonus then lasts to landing.
-    # Death breaks out of both waits and clears it.
-    waitUntil(eventPlayer.isOnGround() == false or not eventPlayer.isAlive(), Math.INFINITY)
-    applyDamageDealtModifier()
-    waitUntil(eventPlayer.isOnGround() or not eventPlayer.isAlive(), Math.INFINITY)
-    eventPlayer.augmentJumpDamageActive = false
-    applyDamageDealtModifier()
-
-
 def useAugmentAirAction():
     @Name "useAugmentAirAction"
 
     # Competing handlers cannot produce two impulses for one input: Dash is only
-    # called from the tap sequence, Double Jump checks its cooldown timestamp on
+    # called from the tap sequence, HIGHRISE checks its cooldown timestamp on
     # this press (expiry alone must not trigger).
     if not (eventPlayer.hasStatus(Status.ROOTED) or eventPlayer.isCrowdControlled) and not eventPlayer.isAttached:
         if eventPlayer.augmentId == Augment.DASH:
@@ -279,7 +210,7 @@ def useAugmentAirAction():
                 # the recompute pick the strongest active protection (0 beats the
                 # Super Nano / ultimate 50; it still clears together with the aura).
                 # Keep one aura for overlapping dashes; only its deadline changes.
-                # augmentIsAirActionReady shares this entity slot: only Double Jump
+                # augmentIsAirActionReady shares this entity slot: only HIGHRISE
                 # may write that alias, including on failed/cooldown activations.
                 if eventPlayer.augmentDashSmokeEntity == null:
                     createEffect(getAllPlayers(), Effect.BAD_AURA, Color.BLUE, eventPlayer, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -295,14 +226,8 @@ def useAugmentAirAction():
                 # (CANCEL_CONTRARY_MOTION), leaving an in-place dash without push.
                 if augmentDashDirection != vect(0, 0, 0):
                     eventPlayer.applyImpulse(directionFromAngles(eventPlayer.getHorizontalFacingAngle() + horizontalAngleOfDirection(augmentDashDirection), 0), 21.25, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
-        elif eventPlayer.augmentId == Augment.DOUBLE_JUMP:
-            eventPlayer.augmentIsAirActionReady = false
-            if getTotalTimeElapsed() >= eventPlayer.augmentMovementReadyAt:
-                eventPlayer.augmentMovementReadyAt = getTotalTimeElapsed() + 16
-                eventPlayer.applyImpulse(Vector.UP, AUGMENT_JUMP_IMPULSE, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
-                # Arm the airborne damage bonus; the flight rule keeps it active
-                # until this impulse's liftoff ends in a landing.
-                eventPlayer.augmentJumpDamageActive = true
+        elif eventPlayer.augmentId == Augment.HIGHRISE:
+            useHighriseAirActionMacro()
 
 
 rule "GRAPNEL LAUNCHER":

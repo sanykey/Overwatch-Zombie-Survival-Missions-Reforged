@@ -80,7 +80,7 @@ enum Augment:
     NO_PREFERENCE = 0,
     KEVLAR = 1,
     DASH = 2,
-    DOUBLE_JUMP = 3,
+    HIGHRISE = 3,
     LONG_REACH = 4,
     AMMO_PACK = 5,
     GRAPNEL_LAUNCHER = 6,
@@ -454,7 +454,7 @@ playervar augmentState0
 #!define augmentApothecaryReady augmentState1
 # Laser Barricade placement facing direction; persists for collision checks.
 #!define augmentBarrierFacing augmentState0
-# Double Jump / Grapnel Launcher next allowed activation time; persists across landing and death, read by the HUD.
+# HIGHRISE / Grapnel Launcher next allowed activation time; persists across landing and death, read by the HUD.
 #!define augmentMovementReadyAt augmentState0
 # Long Reach: next allowed Melee-button push; persists across death/hero changes.
 # Only a press with eligible targets writes it; the augment HUD reads it live.
@@ -462,7 +462,7 @@ playervar augmentState0
 # Dash next charge recharge time; set when the meter first drops below full and
 # advanced by each refill below max, read by the HUD countdown.
 #!define augmentDashReadyAt augmentState0
-# Double Jump next allowed activation time; only written on a successful extra jump.
+# HIGHRISE next allowed activation time; only written on a successful extra jump.
 #!define augmentJumpReadyAt augmentState0
 # Ammo Pack cached [hero, weapon, doubled clip 0, doubled clip 1] entries; persists across respawns.
 #!define augmentAmmoLoadoutList augmentState0
@@ -477,7 +477,7 @@ playervar augmentState1
 #!define deadWeightProtectionId augmentState1
 # Laser Barricade unit edge direction; persists for collision checks.
 #!define augmentBarrierEdgeDirection augmentState1
-# Double Jump ONLY: armed after releasing Jump in midair; consumed once, cleared
+# HIGHRISE ONLY: armed after releasing Jump in midair; consumed once, cleared
 # on landing/death. Writing this alias for Dash loses its live smoke entity.
 #!define augmentIsAirActionReady augmentState1
 # Ammo Pack current cached entry, retained through the hero/weapon/respawn wait.
@@ -506,7 +506,7 @@ playervar augmentState2
 # Dash's current charges; refilled by the recharge rule, spent only in the dash
 # action. Reset to full on augment initialization (each non-hero-switch spawn).
 #!define augmentDashCharges augmentState2
-# Double Jump's last first-tap timestamp; zero means no pending tap. Only its
+# HIGHRISE's last first-tap timestamp; zero means no pending tap. Only its
 # Jump-press handler writes it; death clears it. The cooldown remains in state0.
 #!define augmentJumpLastPressedAt augmentState2
 # Grapnel Launcher alone owns a locked target (zombie or ally) and [launch
@@ -521,7 +521,7 @@ playervar augmentState3
 #!define deadWeightThrowDamageCredit augmentState3
 # Laser Barricade center; retained across waits and reevaluated by live effects.
 #!define augmentBarrierPosition augmentState3
-# Double Jump: the +20% damage bonus was armed by an activation and lasts until
+# HIGHRISE: the +20% damage bonus was armed by an activation and lasts until
 # the following landing. Cleared by the flight rule on landing/death; only the
 # activation write and the flight rule own this slot.
 #!define augmentJumpDamageActive augmentState3
@@ -1033,7 +1033,7 @@ enum AugmentIcon:
     NO_PREFERENCE = iconString(Icon.QUESTION_MARK),
     KEVLAR = "<TX C0000000004F73E>", # <TX C00000000004120>
     DASH = iconString(Icon.ARROW_RIGHT),
-    DOUBLE_JUMP = iconString(Icon.ARROW_UP),
+    HIGHRISE = iconString(Icon.ARROW_UP),
     LONG_REACH = abilityIconString(Hero.DOOMFIST, Button.SECONDARY_FIRE),
     AMMO_PACK = "<TX C0000000004F73A>",
     GRAPNEL_LAUNCHER = iconString(Icon.DIZZY),
@@ -1042,7 +1042,7 @@ enum AugmentIcon:
     SCAVENGER = iconString(Icon.RECYCLE),
     LEECH = iconString(Icon.ASTERISK),
 
-globalvar augmentIconListConst = [AugmentIcon.NO_PREFERENCE, AugmentIcon.KEVLAR, AugmentIcon.DASH, AugmentIcon.DOUBLE_JUMP, AugmentIcon.LONG_REACH, AugmentIcon.AMMO_PACK, AugmentIcon.GRAPNEL_LAUNCHER, AugmentIcon.LASER_BARRICADE, AugmentIcon.APOTHECARY, AugmentIcon.SCAVENGER, AugmentIcon.LEECH]
+globalvar augmentIconListConst = [AugmentIcon.NO_PREFERENCE, AugmentIcon.KEVLAR, AugmentIcon.DASH, AugmentIcon.HIGHRISE, AugmentIcon.LONG_REACH, AugmentIcon.AMMO_PACK, AugmentIcon.GRAPNEL_LAUNCHER, AugmentIcon.LASER_BARRICADE, AugmentIcon.APOTHECARY, AugmentIcon.SCAVENGER, AugmentIcon.LEECH]
 
 # Immutable Enhancement icons, indexed by selection ID; shared by pregame options and roster.
 # Keep a dedicated slot: enhancementOptionList becomes Biomorphing text after menu cleanup.

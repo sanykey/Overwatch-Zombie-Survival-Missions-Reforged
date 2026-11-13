@@ -203,7 +203,7 @@ rule "PREGAME SPAWN ROOM ROTATION":
 rule "VARIABLE ASSIGNMENT":
     #Augment name and melee-hero tables live in a rule assignment, not a module-level
     #initializer: the optimizer folds module-level string tables back into use sites.
-    augmentNameListConst = ["No Preference", "Kevlar", "Dash", "Double Jump", "Long Reach", "Ammo Pack", "Grapnel Launcher", "Laser Barricade", "Apothecary", "Scavenger", "Survivalist"]
+    augmentNameListConst = ["No Preference", "Kevlar", "Dash", "HIGHRISE", "Long Reach", "Ammo Pack", "Grapnel Launcher", "Laser Barricade", "Apothecary", "Scavenger", "Survivalist"]
     augmentMeleeWeaponHeroListConst = [Hero.REINHARDT, Hero.BRIGITTE, Hero.DMON, Hero.GENJI, Hero.RAMATTRA, Hero.TORBJORN, Hero.VENDETTA]
     augmentMeleeBtnHeroListConst = [Hero.REINHARDT, Hero.BRIGITTE, Hero.TORBJORN]
     if getCurrentGamemode() == Gamemode.CTF:

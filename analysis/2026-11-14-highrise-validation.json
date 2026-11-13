@@ -1,0 +1,11 @@
+{
+  "beforeElements": 30014,
+  "afterElements": 30014,
+  "elementDelta": 0,
+  "rulesChecked": 319,
+  "compiledRuleBodies": "identical except HUD name",
+  "variables": "identical",
+  "warnings": [],
+  "rootBuild": "matches",
+  "limitation": "No in-game run; rule order changed by file extraction."
+}

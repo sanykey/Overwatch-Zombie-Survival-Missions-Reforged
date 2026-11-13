@@ -122,7 +122,7 @@ rule "PLAYER DIED":
         destroyEffect(eventPlayer.enhancementScrapBeamEntity)
         eventPlayer.enhancementScrapBeamEntity = null
 
-    if eventPlayer.augmentId == Augment.DOUBLE_JUMP:
+    if eventPlayer.augmentId == Augment.HIGHRISE:
         eventPlayer.augmentJumpLastPressedAt = 0
     if eventPlayer.augmentId == Augment.DASH:
         # A death inside the resist window must not carry the 0% damage intake
@@ -176,7 +176,7 @@ rule "PLAYER DEALT DAMAGE":
         applyHitEnhancements()
 
     # Augments: Leech includes damage from the hero, primary enhancement and
-    # scripted powerups. The Double Jump airborne bonus is a Set Damage Dealt
+    # scripted powerups. The HIGHRISE airborne bonus is a Set Damage Dealt
     # multiplier, so it stacks with every source already applied above.
     if eventPlayer.augmentId == Augment.LEECH:
         # Include damage from the hero, primary enhancement and scripted powerups.

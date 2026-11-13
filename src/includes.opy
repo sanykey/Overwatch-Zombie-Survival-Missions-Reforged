@@ -29,6 +29,7 @@
 #!include "power_ups.opy"
 #!include "enhancements.opy"
 #!include "long_reach.opy"
+#!include "highrise.opy"
 #!include "augments.opy"
 #!include "player_initialization.opy"
 #!include "player_events.opy"

@@ -99,10 +99,10 @@ rule "TRACER INVIS WHILE RECALLING":
 def applyDamageDealtModifier():
     @Name "applyDamageDealtModifier"
     # The only Team 1 Set Damage Dealt writers are the Soldier ultimate and the
-    # Double Jump airborne bonus. Recompute their product at every state edge so
+    # HIGHRISE airborne bonus. Recompute their product at every state edge so
     # the multipliers stack instead of overwriting each other. Native damage
     # boosts and supplemental scripted damage apply on top of this multiplier.
-    eventPlayer.setDamageDealt(100 * (1.5 if eventPlayer.getHero() == Hero.SOLDIER and eventPlayer.isUsingUltimate() else 1) * (1.2 if eventPlayer.augmentId == Augment.DOUBLE_JUMP and eventPlayer.isAlive() and eventPlayer.augmentJumpDamageActive == true else 1))
+    eventPlayer.setDamageDealt(100 * (1.5 if eventPlayer.getHero() == Hero.SOLDIER and eventPlayer.isUsingUltimate() else 1) * (1.2 if eventPlayer.augmentId == Augment.HIGHRISE and eventPlayer.isAlive() and eventPlayer.augmentJumpDamageActive == true else 1))
 
 
 rule "SOLDIER TACTICAL VISOR DAMAGE BONUS":
