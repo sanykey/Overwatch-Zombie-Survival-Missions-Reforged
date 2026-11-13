@@ -1,0 +1,29 @@
+/* Element count: (total 43)
+
+   43: rule "OverPy <\ztx> / <\zfg> setup code"
+
+*/
+
+variables {
+    global:
+        127: __holygrail__
+}
+
+//43 elements
+rule ("OverPy <­tx> / <­fg> setup code") {
+    event {
+        Ongoing - Global;
+    }
+    actions {
+        "By Zezombye"
+        Create Dummy Bot(All Heroes, If-Then-Else(Number Of Slots(Team 1), Team 1, If-Then-Else(Number Of Slots(Team 2), Team 2, True)), False, Null, Null); // 13 elements
+        "More info: https://workshop.codes/wiki/articles/tx-reference-sheet"
+        Start Forcing Dummy Bot Name(Last Created Entity, Custom String("______________________________________________________________________________________________________________________________〼")); // 5 elements
+        Set Global Variable(__holygrail__, String Split(First Of(Last Created Entity), Empty Array)); // 4 elements
+        Start Forcing Dummy Bot Name(Last Created Entity, Custom String("______________________________________________________________________________________________________________________________ࡀ")); // 5 elements
+        Set Global Variable(__holygrail__, String Slice(String Replace(Custom String("______________________________________________________________________________________________________________________________〼"), Global.__holygrail__, First Of(Last Created Entity)), 126, True)); // 14 elements
+        Destroy All Dummy Bots; // 1 element
+    }
+}
+
+//Optimize for size enabled

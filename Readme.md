@@ -117,6 +117,21 @@ Compile the source into Workshop code using [OverPy](https://github.com/Zezombye
 
 After changing the source, save the root `main.opy` again to compile the updated mod.
 
+### Switching map pools
+
+In [src/includes.opy](src/includes.opy), select one map pool with the include near the top:
+
+```py
+#!include "map_pools/release.opy"
+```
+
+Replace `release.opy` with `test.opy` for the regression pool, then save the root `main.opy` and import the resulting `main.ws.txt` into Workshop. Switch back to `release.opy` and rebuild before publishing a release.
+
+- [Release pool](src/map_pools/release.opy): the existing map rotation, selected by default.
+- [Test pool](src/map_pools/test.opy): Shambali Monastery (Escort), Colosseo (Push), and Malevento, Necropolis, Black Forest and Ilios Lighthouse (Team Deathmatch). Other modes are disabled.
+
+The pool files provide settings fragments through text macros; only one can be included at a time. Shared lobby, hero and mode settings stay in `src/settings.opy`. Switching happens at compile time and adds no Workshop elements or variables.
+
 ### Passive regeneration issue
 
 Passive health regeneration for the zombie team is disabled under **Settings → Heroes → General → Team 2**. However, importing the source code into Workshop resets this setting, apparently due to a Workshop bug. **Manually disable passive regeneration for Team 2 after every code import**, before sharing the mod's short code.

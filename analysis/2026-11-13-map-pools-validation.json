@@ -1,0 +1,10 @@
+{
+  "compiler": "9.7.21",
+  "releaseWorkshopUnchanged": true,
+  "gameplayUnchanged": true,
+  "beforeElements": 30292,
+  "releaseElements": 30292,
+  "testElements": 30292,
+  "warnings": [],
+  "existingExportMatches": true
+}
