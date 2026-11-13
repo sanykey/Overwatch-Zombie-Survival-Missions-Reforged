@@ -105,5 +105,5 @@ rule "[DASH] SMOKE FADE":
     # Recompute intake exactly with the aura's removal: a Super Nano or
     # ultimate resist active underneath must survive the dash window.
     applyDamageReceivedModifier()
-    # Knockback immunity has no underlying source to fall back to.
+    # Dash and Kevlar are mutually exclusive; Dash restores normal knockback.
     eventPlayer.setKnockbackReceived(100)

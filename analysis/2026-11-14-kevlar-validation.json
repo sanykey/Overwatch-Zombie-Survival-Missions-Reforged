@@ -1,0 +1,12 @@
+{
+  "beforeElements": 30043,
+  "afterElements": 30045,
+  "elementDelta": 2,
+  "changedRules": [
+    "AUGMENT MENU",
+    "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION"
+  ],
+  "unchangedRules": 317,
+  "warnings": [],
+  "limitation": "Compiled output checked; no in-game run. Native knockback only; scripted Apply Impulse is unchanged."
+}

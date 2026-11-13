@@ -259,6 +259,9 @@ macro initializePlayerAugment():
         # Share the native-health readiness gate; keep both pools recoverable.
         waitUntil(eventPlayer.initialMaxHealth > 0, Math.INFINITY)
         if eventPlayer.augmentId == Augment.KEVLAR:
+            # Reapply on each life. Dash is a different augment, so its temporary
+            # knockback immunity and cleanup never overwrite a Kevlar player's resist.
+            eventPlayer.setKnockbackReceived(100 - AUGMENT_KEVLAR_KNOCKBACK_RESIST)
             eventPlayer.addHealthPool(Health.ARMOR, AUGMENT_KEVLAR_ARMOR, true, false)
         else:
             eventPlayer.addHealthPool(Health.NORMAL, 50, true, false)

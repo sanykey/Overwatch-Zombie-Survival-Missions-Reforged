@@ -2,6 +2,7 @@
 
 #!define AUGMENT_KEVLAR_ARMOR 75
 #!define AUGMENT_KEVLAR_RANGED_DMG_RESIST 50
+#!define AUGMENT_KEVLAR_KNOCKBACK_RESIST 50
 #!define AUGMENT_GRAPNEL_RANGE 40
 #!define AUGMENT_GRAPNEL_MIN_RANGE 7
 #!define AUGMENT_GRAPNEL_SPEED 40
@@ -19,7 +20,7 @@ rule "AUGMENT MENU":
         f"Augment: {AUGMENT_NAMES[localPlayer.augmentId]} {AUGMENT_ICONS[localPlayer.augmentId] if localPlayer.augmentId != Augment.NO_PREFERENCE else ''}",
         [
             "",
-            f"Gain {AUGMENT_KEVLAR_ARMOR} armor. Incoming ranged and ability damage reduced by {AUGMENT_KEVLAR_RANGED_DMG_RESIST}%",
+            f"Gain {AUGMENT_KEVLAR_ARMOR} armor. Incoming ranged and ability damage reduced by {AUGMENT_KEVLAR_RANGED_DMG_RESIST}%. {AUGMENT_KEVLAR_KNOCKBACK_RESIST}% knockback resistance",
             f"Double-tap Jump: dash; movement input steers. {DASH_MAX_CHARGES} charges, one restores every {DASH_COOLDOWN}s. {DASH_PHASE_DURATION}s invulnerability on activation",
             "Jump in midair / double-tap Jump. +20% damage from activation until you land. cd: 16s",
             "Triple Quick Melee, melee weapon (75% dmg) reach. Press Melee to push visible zombies ahead within 10m; cd: 9s",
