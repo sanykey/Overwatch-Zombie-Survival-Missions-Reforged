@@ -46,7 +46,7 @@ const diedCall = died.indexOf('Call Subroutine(applyDamageReceivedModifier)');
 assert(diedCall > died.indexOf('Set Player Variable(Event Player, augmentState1, Null)'), 'PLAYER DIED must clear the dash smoke first');
 assert(diedCall < died.indexOf('If(Compare((Event Player).scrapArmorAmount'), 'PLAYER DIED recompute must stay unconditional (outside the Dash block)');
 
-const nano = out.slice(out.indexOf('rule ("superNano (70-79)")'), out.indexOf('rule ("JETPACK FUEL HUD")'));
+const nano = out.slice(out.indexOf('rule ("superNano (70-79)")'), out.indexOf('rule ("JETPACK FLIGHT")'));
 assert(nano.indexOf('Call Subroutine(applyDamageReceivedModifier)') > nano.indexOf('Heal(Event Player, Null, 100)'), 'nano start must set the aura handle first');
 assert(nano.indexOf('Set Player Variable(Event Player, powerUpSuperNanoGoodAuraId, Null)') < nano.lastIndexOf('Call Subroutine(applyDamageReceivedModifier)'), 'nano cleanup must clear the handle before recomputing');
 assert(!nano.includes('Set Damage Received(Event Player, 50)'), 'nano must not write a direct 50 intake anymore');

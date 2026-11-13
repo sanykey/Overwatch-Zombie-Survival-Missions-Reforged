@@ -69,6 +69,13 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
 
+    # One persistent fuel HUD for all viewers; sort 99 stays above item HUD (100).
+    hudSubheader(
+        localPlayer if localPlayer.powerUpJetpackFuel > 0 else null,
+        f"jetpack fuel: {ceil(localPlayer.powerUpJetpackFuel)}/{POWERUP_JETPACK_FUEL_MAX}",
+        HudPosition.ACTUALLY_LEFT, 99, Color.WHITE, HudReeval.VISIBILITY_AND_STRING
+    )
+
     # Attachment status subheaders: one persistent call each for the passenger
     # and the carrier, reevaluated per viewer; the carrier-side text reads the
     # passenger back-reference instead of scanning for it.
