@@ -57,6 +57,18 @@ Choose one primary **Enhancement** with **Quick Melee** and one independent **Au
 
 Brain Killer is the first primary Enhancement in the voting list. Kevlar has moved from the primary slot to Augments and can now accompany any primary enhancement. Born to Battle stores up to two ability resets, earning one per final blow and spending one per reset.
 
+Plague Doctor (`Enhancement.PLAGUE_DOCTOR`) grants **+30% outgoing healing**, with another **×1.25 to infected players**: **162.5% of normal healing** in total. Beacon of Healing raises outgoing healing to 180%, or **225% against infected players**, then restores the permanent 130% when it ends.
+
+Every `PLAYER DEALT HEALING` event applies the following infection reductions in order, using `eventHealing` (actual healing received after modifiers and the maximum-health cap):
+
+1. If the doctor is infected (`isInfected`), reduce their own infection by `eventHealing / 500`, even when healing an uninfected ally.
+2. If the recipient still has infection level **≥1** and is not Zombie Hybrid, reduce their infection by `eventHealing / 275`. Reductions are fractional and happen on every healing event, without waiting to accumulate 275 or 500 healing.
+3. If the second reduction takes the recipient below level 1, remove another **0.5 level**, show a cure effect and display a cure message. Infection below 1 ends the infected state through the infection rule. These subtractions are not clamped to zero; negative infection represents vaccination.
+
+The **Infection Reduced** HUD counter sums both reductions and the 0.5 cure bonuses. For example, 550 actual healing removes 2 levels from an eligible infected ally and 1.1 from an infected doctor, before any cure bonus.
+
+**Synergy with Survivalist (formerly Leech, `Augment.LEECH`):** its `heal(eventPlayer, eventPlayer, eventDamage * 0.15)` credits the doctor as both healer and recipient, triggering one `PLAYER DEALT HEALING` event. Both independent checks above can therefore reduce the same player's infection. The second check uses the level **after the first reduction**: if the first already takes it below 1, the second reduction, 0.5 bonus and cure message are skipped. With enough missing health and no other modifiers, lifesteal restores **19.5% of damage dealt** while uninfected, or **24.375% while infected** (`0.15 × 1.3 × 1.25`). Only actual restored HP contributes to cleansing; unused healing at full health does not provide extra cleansing. Implementation: [healing and Leech handlers](src/player_events.opy), [healing bonuses](src/player_initialization.opy), [Beacon of Healing](src/supply_drops.opy).
+
 Zombie Hybrid gains infection stacks from zombie melee hits even with temporary health or armor above its normal health threshold. The other infection restrictions still apply, including ultimate and Dash protection, hacked attackers, and the Melee Infection Enabled setting.
 
 The Apothecary rule for health-pack pickup at full health remains deferred. This version uses standard beams without the Beam Effects extension. The [feature-port audit](analysis/feature-port-audit.json) records the earlier rebuild before Bolt Strike was restored; see the [Bolt Strike validation](analysis/bolt-strike-validation.json) for the restoration.
