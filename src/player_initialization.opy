@@ -1,8 +1,7 @@
 #!mainFile "../main.opy"
 
 # Combat HUD order on the left: roster (player slot), enhancement (97),
-# augment (98), Jetpack fuel (99), carried powerup (100).
-# Attachment status belongs to the enhancement and shares its sort order.
+# augment (98), attachment status (98.5), Jetpack fuel (99), carried powerup (100).
 
 rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
     @Condition isGameplayActive == true
@@ -82,12 +81,12 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
     hudSubheader(
         getPlayers(Team.1).filter(lambda player: player.enhancementIsHitchhiking),
         "Attached to {0} {1}".format(heroIcon(localPlayer.enhancementHitchhikerCarrier.getHero()), localPlayer.enhancementHitchhikerCarrier),
-        HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, HudReeval.VISIBILITY_AND_STRING
+        HudPosition.ACTUALLY_LEFT, 98.5, Color.WHITE, HudReeval.VISIBILITY_AND_STRING
     )
     hudSubheader(
         getPlayers(Team.1).filter(lambda player: player.enhancementHitchhikerPassenger != null and player.enhancementHitchhikerPassenger.enhancementIsHitchhiking),
         "{0} {1} is attached".format(heroIcon(localPlayer.enhancementHitchhikerPassenger.getHero()), localPlayer.enhancementHitchhikerPassenger),
-        HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, HudReeval.VISIBILITY_AND_STRING
+        HudPosition.ACTUALLY_LEFT, 98.5, Color.WHITE, HudReeval.VISIBILITY_AND_STRING
     )
 
 
