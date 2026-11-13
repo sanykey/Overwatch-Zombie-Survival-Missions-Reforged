@@ -213,6 +213,8 @@ rule "DASH SMOKE FADE":
     # Recompute intake exactly with the aura's removal: a Super Nano or
     # ultimate resist active underneath must survive the dash window.
     applyDamageReceivedModifier()
+    # Knockback immunity has no underlying source to fall back to.
+    eventPlayer.setKnockbackReceived(100)
 
 
 rule "KEVLAR RANGED DAMAGE COMPENSATION":
@@ -303,6 +305,9 @@ def useAugmentAirAction():
                     eventPlayer.augmentDashSmokeEntity = getLastCreatedEntity()
                 eventPlayer.augmentDashSmokeDeadline = getTotalTimeElapsed() + AUGMENT_DASH_PHASE_DURATION
                 applyDamageReceivedModifier()
+                # The window also nulls knockback received. Set Knockback Received
+                # ignores scripted Apply Impulse pushes, which keep their own scaling.
+                eventPlayer.setKnockbackReceived(0)
                 # Zero movement input grants only the invulnerability: no impulse.
                 # Otherwise a flat horizontal push: a downward pitch would fight the
                 # floor when grounded and cancel the rising jump's momentum

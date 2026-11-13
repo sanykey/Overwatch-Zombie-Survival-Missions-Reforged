@@ -93,10 +93,11 @@ rule "PLAYER DIED":
         eventPlayer.augmentJumpLastPressedAt = 0
     if eventPlayer.augmentId == Augment.DASH:
         # A death inside the resist window must not carry the 0% damage intake
-        # into the next life before the deadline passes.
+        # or the knockback immunity into the next life before the deadline passes.
         if eventPlayer.augmentDashSmokeEntity != null:
             destroyEffect(eventPlayer.augmentDashSmokeEntity)
             eventPlayer.augmentDashSmokeEntity = null
+            eventPlayer.setKnockbackReceived(100)
     # Death ends the ultimate resist with the ultimate itself, and Super Nano
     # cleans up on its own thread (~1.25s, always before any respawn), so the
     # recompute restores the normal intake for the next life.
