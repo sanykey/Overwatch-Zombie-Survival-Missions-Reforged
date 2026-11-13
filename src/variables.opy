@@ -690,7 +690,7 @@ playervar powerUpHealBeaconLightShaftId
 playervar powerUpNoCooldownsHudId
 playervar powerUpAirStrikeRingId
 playervar powerUpCloakingDeviceSphereId
-playervar powerUpSuperNanoGoodAuraId
+playervar powerUpSuperNanoGoodAuraId  # Super Nano good-aura entity; nonzero only while the power-up is active, and the flag the shared damage-intake recompute reads.
 playervar powerUpJetpackIsFlying  # Dedicated boolean; also read by shared movement-speed updates on both teams.
 playervar powerUpUltimateChargerHudId
 playervar powerUpStunBeamId

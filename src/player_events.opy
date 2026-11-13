@@ -97,7 +97,10 @@ rule "PLAYER DIED":
         if eventPlayer.augmentDashSmokeEntity != null:
             destroyEffect(eventPlayer.augmentDashSmokeEntity)
             eventPlayer.augmentDashSmokeEntity = null
-        eventPlayer.setDamageReceived(100)
+    # Death ends the ultimate resist with the ultimate itself, and Super Nano
+    # cleans up on its own thread (~1.25s, always before any respawn), so the
+    # recompute restores the normal intake for the next life.
+    applyDamageReceivedModifier()
     # Health pools vanish with death, so any player's scrap-armor stacks must
     # go with them, whatever their enhancement or augment.
     if eventPlayer.scrapArmorAmount > 0:

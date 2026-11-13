@@ -210,8 +210,9 @@ rule "DASH SMOKE FADE":
     # Clearing the handle also rearms this rule for the next window.
     destroyEffect(eventPlayer.augmentDashSmokeEntity)
     eventPlayer.augmentDashSmokeEntity = null
-    # Restore normal damage intake exactly with the aura's removal.
-    eventPlayer.setDamageReceived(100)
+    # Recompute intake exactly with the aura's removal: a Super Nano or
+    # ultimate resist active underneath must survive the dash window.
+    applyDamageReceivedModifier()
 
 
 rule "KEVLAR RANGED DAMAGE COMPENSATION":
@@ -291,8 +292,9 @@ def useAugmentAirAction():
                 # including while already protected. Do not defer renewal to expiry.
                 # 100% damage resist instead of the INVINCIBLE status: that status keys
                 # the DoT-clearing rule, which must not purge infection DoT/burning.
-                # The resist is set and cleared together with the smoke aura window.
-                eventPlayer.setDamageReceived(0)
+                # The smoke entity gates the resist, so open the window first and let
+                # the recompute pick the strongest active protection (0 beats the
+                # Super Nano / ultimate 50; it still clears together with the aura).
                 # Keep one aura for overlapping dashes; only its deadline changes.
                 # augmentIsAirActionReady shares this entity slot: only Double Jump
                 # may write that alias, including on failed/cooldown activations.
@@ -300,6 +302,7 @@ def useAugmentAirAction():
                     createEffect(getAllPlayers(), Effect.BAD_AURA, Color.BLUE, eventPlayer, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
                     eventPlayer.augmentDashSmokeEntity = getLastCreatedEntity()
                 eventPlayer.augmentDashSmokeDeadline = getTotalTimeElapsed() + AUGMENT_DASH_PHASE_DURATION
+                applyDamageReceivedModifier()
                 # Zero movement input grants only the invulnerability: no impulse.
                 # Otherwise a flat horizontal push: a downward pitch would fight the
                 # floor when grounded and cancel the rising jump's momentum

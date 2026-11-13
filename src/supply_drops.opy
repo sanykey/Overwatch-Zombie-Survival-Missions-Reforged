@@ -422,7 +422,9 @@ def superNano():
         startDamageModification(eventPlayer, getAllPlayers(), 50)
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SUPER_NANO_DAMAGE_RECEIVED_MODIFICATION] = getLastDamageModification()
     heal(eventPlayer, null, 100)
-    eventPlayer.setDamageReceived(50)
+    # The aura handle above gates this resist in the shared recompute, which
+    # keeps an active Dash window at 0 instead of overwriting it.
+    applyDamageReceivedModifier()
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.RED, eventPlayer.getPosition(), distance(eventPlayer.getEyePosition(), eventPlayer) * 0.95)
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.RED, eventPlayer.getPosition(), 50)
     for eventPlayer.powerUpSuperNanoTimeRemaining in range(SUPER_NANO_DURATION, 0, -1):
@@ -436,8 +438,9 @@ def superNano():
     stopDamageModification(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SUPER_NANO_DAMAGE_DEALT_MODIFICATION])
     stopDamageModification(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SUPER_NANO_DAMAGE_RECEIVED_MODIFICATION])
     eventPlayer.setMoveSpeed(100)
-    eventPlayer.setDamageReceived(100)
     eventPlayer.powerUpSuperNanoGoodAuraId = 0
+    # Clearing the handle first lets the recompute keep an active Dash window.
+    applyDamageReceivedModifier()
     eventPlayer.movementSpeedScale /= 1.5
     applyScaledMoveSpeed()
 

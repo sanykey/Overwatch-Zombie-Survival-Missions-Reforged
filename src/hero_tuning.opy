@@ -116,6 +116,31 @@ rule "SOLDIER TACTICAL VISOR DAMAGE BONUS":
     applyDamageDealtModifier()
 
 
+def applyDamageReceivedModifier():
+    @Name "applyDamageReceivedModifier"
+    # The only Team 1 Set Damage Received writers are the Dash protection
+    # window, the Super Nano power-up and the ultimate resist. Every state
+    # edge calls this recompute; the strongest (lowest) intake wins and the
+    # resists never stack. SWARM SHOOTOUT lowers intake through Start Damage
+    # Modification, which multiplies on top and stays outside this recompute.
+    # The mech heroes cannot use the ultimate term: Is Using Ultimate sticks
+    # true from Self-Destruct through pilot form and Call Mech for both, so it
+    # never marks a real ult window for them.
+    eventPlayer.setDamageReceived(0 if eventPlayer.augmentId == Augment.DASH and eventPlayer.augmentDashSmokeEntity != null else 50 if eventPlayer.powerUpSuperNanoGoodAuraId != 0 or (eventPlayer.isUsingUltimate() and eventPlayer.getHero() != Hero.DMON and eventPlayer.getHero() != Hero.DVA) else 100)
+
+
+rule "PLAYER ULTIMATE DAMAGE RESIST":
+    @Event eachPlayer
+    @Team 1
+    @Condition eventPlayer.isUsingUltimate() == true
+    @Condition eventPlayer.getHero() != Hero.DMON
+    @Condition eventPlayer.getHero() != Hero.DVA
+
+    applyDamageReceivedModifier()
+    waitUntil(not eventPlayer.isUsingUltimate(), Math.INFINITY)
+    applyDamageReceivedModifier()
+
+
 rule "SIERRA TRACKING SHOT HACK":
     @Event playerDealtDamage
     @Team 1
