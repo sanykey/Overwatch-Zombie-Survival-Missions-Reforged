@@ -1,0 +1,1278 @@
+{
+  "elements": 30006,
+  "variables": "variables {\n    global:\n        0: tmp0\n        1: tmp1\n        2: tmp2\n        3: tmp3\n        4: phaseSlot0\n        5: phaseSlot1\n        6: phaseSlot2\n        7: phaseSlot3\n        8: phaseSlot4\n        9: phaseSlot5\n        10: phaseSlot6\n        11: phaseSlot7\n        12: phaseSlot8\n        13: phaseSlot9\n        14: phaseSlot10\n        15: biomorphingGoalColor\n        16: currentObjectivePosition\n        17: offsetUpThreeQuartersConst\n        18: offsetUpHalfConst\n        19: losOffsetConst\n        20: dummyHoldingPositionConst\n        21: offsetDownHundredConst\n        22: offsetUpOneAndHalfConst\n        23: offsetUpQuarterConst\n        24: powerUpColorListConst\n        25: isPregameSetup\n        26: isSpecialGameMode\n        27: isGameplayActive\n        28: isOvertimeActive\n        29: isVoting\n        30: difficultySetting\n        31: challengeSetting\n        32: zombieSetting\n        33: objectiveTypeSetting\n        34: matchEndTime\n        35: numberOfBots\n        36: walkCenter\n        37: mapGridList\n        38: attackSpawnRooms\n        39: activeAttackSpawnRoom\n        40: spawnRoomIndex\n        41: botSpawnPointList\n        42: botSpawnPointTimerList\n        43: botSpawnWaypointList\n        44: customTeleportPositionList\n        45: botSpawnTimeList\n        46: startPos\n        47: startCamPos\n        48: objectivePositionList\n        49: objectiveTypeList\n        50: objectiveSpacingList\n        51: objectiveValue\n        52: objectiveProgressSlot\n        53: objectiveDescription\n        54: objectiveColor\n        55: isObjectiveComplete\n        56: objectivePlayerList\n        57: objectiveEntityIdList\n        58: objectivePositionsSlot\n        59: objectivePlacementSlot\n        60: objectiveMotionSlot\n        61: objectiveCheckpointSlot\n        62: objectiveQueueSlot\n        63: objectiveActorSlot\n        64: isBiomorphingGoalPending\n        65: biomorphingResourceTypeList\n        66: biomorphingDeferredTypeList\n        67: biomorphingDeferredPositionList\n        68: biomorphingResourceTextIdList\n        69: biomorphingResourceEffectIdList\n        70: extractionSpeedUp\n        71: evacSurvivorList\n        72: supplyDropLandingPosition\n        73: isSupplyDropOpen\n        74: supplyDropPowerUpCount\n        75: supplyPowerUpIdList\n        76: supplyPowerUpPositionList\n        77: supplyPowerUpTextIdList\n        78: supplyPowerUpEffectIdList\n        79: playerTargetList\n        80: userNameList\n        81: playerStatsList\n        82: healthpackPositionList\n        83: mustReviveTime\n        84: botHeroList\n        85: botSpawnRateList\n        86: botBiteDamageList\n        87: botBiteDurationList\n        88: botDamageDealtList\n        89: botHealthList\n        90: botThrottleSpeedList\n        91: availableMutationList\n        92: miniBossList\n        93: bossStateList\n        94: isSmolderEventActive\n        95: bossesAvailableHeroList\n        96: bossesExcludedHeroList\n        97: objectiveRad\n        98: satelliteLaserPosition\n        99: extractionZoneRad\n        100: menuFinaleMotionSlot\n        101: supplyDropPosition\n        102: augmentIconListConst\n        103: enhancementIconListConst\n        104: augmentColorListConst\n        105: augmentNameListConst\n        106: augmentMeleeWeaponHeroListConst\n        107: augmentMeleeBtnHeroListConst\n        108: numbersList\n        127: __holygrail__\n    player:\n        0: botBiteDamage\n        1: botBaseHealth\n        2: isPlayerActive\n        3: isReviving\n        4: reviveDuration\n        5: isInfected\n        6: rescueTimeRemaining\n        7: invisibilityCount\n        8: infectionDamageOverTimeId\n        9: reconnectUserIndex\n        10: isAfk\n        11: isHeroSwitchRespawn\n        12: enhancementId\n        13: augmentId\n        14: augmentState0\n        15: augmentState1\n        16: augmentState2\n        17: augmentState3\n        18: isDotProtected\n        19: hasDamageResist\n        20: enhancementHitchhikerPassenger\n        21: enhancementCarrierPoolId\n        22: scrapArmorAmount\n        23: engineerScrapAssistSnapshot\n        24: pregameState\n        25: isPregameVoting\n        26: rescueLeader\n        27: biomorphingResourceAmount\n        28: explosionInnerColor\n        29: explosionOuterColor\n        30: explosionScale\n        31: aiThrottleSpeedSlot\n        32: recoveryTimeSlot\n        33: isCrowdControlled\n        34: botIsCrowdControlled\n        35: actorCountdownSlot\n        36: controlStateSlot\n        37: actorAbilitySlot2\n        38: initialMaxHealth\n        39: isAttached\n        40: candidateTargetList\n        41: sizeScale\n        42: actorAbilitySlot1\n        43: objectiveTypeSnapshot\n        44: visualEntityIdList\n        45: visualCleanupIndex\n        46: actorLoopSlot\n        47: abilityTargetList\n        48: movementSpeedScale\n        49: actorTeamSlot0\n        50: actorTeamSlot1\n        51: actorTeamSlot2\n        52: actorTeamSlot3\n        53: actorTeamSlot4\n        54: powerUpForceFieldSphereId\n        55: powerUpHealBeaconLightShaftId\n        56: powerUpNoCooldownsHudId\n        57: powerUpAirStrikeRingId\n        58: powerUpCloakingDeviceSphereId\n        59: powerUpSuperNanoGoodAuraId\n        60: powerUpJetpackIsFlying\n        61: powerUpUltimateChargerHudId\n        62: powerUpStunBeamId\n        63: actorTeamSlot5\n        64: actorTeamSlot6\n        65: actorTeamSlot7\n        66: actorTeamSlot8\n        67: actorTeamSlot9\n        68: actorTeamSlot10\n        69: actorTeamSlot11\n        70: actorTeamSlot13\n        71: actorTeamSlot14\n        72: actorTeamSlot15\n        73: actorTeamSlot16\n        74: actorTeamSlot17\n        75: actorTeamSlot18\n        76: actorTeamSlot19\n        77: actorTeamSlot20\n        78: actorTeamSlot21\n        79: actorTeamSlot22\n        80: actorTeamSlot23\n        81: actorTeamSlot24\n        82: actorTeamSlot25\n        83: actorTeamSlot26\n        84: actorTeamSlot27\n        85: actorTeamSlot28\n        86: team1PositionSlot\n        87: objectiveActorKindSlot\n        88: menuTradeItemSlot\n        89: infectionLevel\n        90: actorMotionSlot1\n        91: actorMotionSlot2\n        92: damageOverTimeRemaining\n        93: botReturnTime\n        94: actorTeamSlot12\n        95: botAbilityCooldown\n        96: enhancementPupPosition\n        97: botReigniteRisePosition\n        98: enhancementPupCooldown\n        99: augmentBarrierHealth\n}",
+  "ruleHashes": [
+    [
+      "OverPy <­tx> / <­fg> setup code",
+      "5ae55a6a8e35d2fc02916dc1327eafc097c87186cf973cf93e2131a44d1f3c6c"
+    ],
+    [
+      "Initialize global variables",
+      "6b4f6fa4ba509b1653f384126a431dd583cb50b4ef39b03177acabed94670ae1"
+    ],
+    [
+      "Subroutine createRemainingObjectivesHud",
+      "eacee8ba72e2c15e9f79e79d58855bb4e776a798f0cdd3df9084dafba81f78f6"
+    ],
+    [
+      "setDifficulty",
+      "71a9744b50c3f8a599aa626e9fc1b02112753b9f3a59713a995c6f3bac5cb4bc"
+    ],
+    [
+      "setPrematchTimer",
+      "78b919c31a6a1cfb54ed79c6261576ce0f5d813c641a6a5d1a2fac643bd26f3a"
+    ],
+    [
+      "shortenPrematchTimer",
+      "9a9bfa432b93cd9a48932043c5c1b697372e9f39a873581ca4bb46d59d557b08"
+    ],
+    [
+      "enableDisableAbilities",
+      "def1e5da34c16bf94f1b6a748bcca3257e7193c6464b8887ad936bafc4c28a03"
+    ],
+    [
+      "objectivesManagement",
+      "11d8d7f796d0445964eb023c529eb15629fde2ac2c59b746a550a5faa7bcd20b"
+    ],
+    [
+      "selectTarget",
+      "fc12fcadbfd3d9a69198f00b20958789e5264cb98668020e328d5c4f7b52bc5f"
+    ],
+    [
+      "restoreDefaultFacingMovement",
+      "a4cac02f22beeeffa9b82109997bc39953309667ec123a56b977e1c73bf306eb"
+    ],
+    [
+      "botRespawnInitialization",
+      "d01e48b86bf6bc68c4416a702d7869fc75b7fac438aa68f9705b5a446cac9bdd"
+    ],
+    [
+      "abilityPlacement",
+      "05c04c97275609ce837804b4a760608344b31b271f6806343fe688e37d4cd144"
+    ],
+    [
+      "explosionSequence",
+      "34484b94e5dccc8d739af829cec806e4380ecf465ab4d04b9facd498c39079e4"
+    ],
+    [
+      "DAYTAKER'S REVENGE (BOSS)",
+      "1f427a503ba24a49b1b78177f1ea89dc4de55869bb7fc75681ce22cdbcc76d43"
+    ],
+    [
+      "applyScaledMoveSpeed",
+      "b1108b4fbccd1d9545b0b540e30662fa7366fd6865c2458a06cfd2f139a0518f"
+    ],
+    [
+      "refreshCurrentObjectivePosition",
+      "90b7cefd0e293c7dcf8105571bddad2f8c316fda31802cc2a1f6ee949ddb96c9"
+    ],
+    [
+      "refreshCurrentObjectiveType",
+      "ed950aa42fd5931fc2153b184ddfa1d1f0b193aef6834c528f5551e0f7dda126"
+    ],
+    [
+      "faceCurrentThrottle",
+      "816494ec600ce2fc7c8441edb9b7844eea4e915513fd2ea08fed3873544893d5"
+    ],
+    [
+      "excludeCurrentHeroFromSelection",
+      "2b560ec476683bbfc6768fb12e1b64a62e118e8faccf43310c5bb7b1397031ed"
+    ],
+    [
+      "applyBotKnockbackScale",
+      "fcd06ce0579fc2db978a3a98c38687d15f495dae87326e116d05976b6b6c06cc"
+    ],
+    [
+      "applyCurrentSizeScale",
+      "3cabad619281b204f0a602e2e093cc0f39fa79e8ead643989a7879b0a1599fb7"
+    ],
+    [
+      "applyBotBossHealth",
+      "07e6a39338c48695368c9a17caf563469279c23ea0bbf48a9b0e888adeb1382e"
+    ],
+    [
+      "resolveReconnectUserIndex",
+      "9e15717ae91329d6874f3a74acbfab434971a2f25debcdbffeffa4db36e7921f"
+    ],
+    [
+      "PREGAME QUICK TIPS FOR PLAYERS",
+      "e3c3bbb2b15da181bb35da8e6b2e1d08f74837bcfe0a9847774f170f430ac2e8"
+    ],
+    [
+      "SPAWN BOTS",
+      "b6d8f6f63d0cac3aa2cc114ff802bc65172ceb3d856b1d7209950521c24e57f0"
+    ],
+    [
+      "SPAWN TIME CONTROL",
+      "5e1ba4c3d9c9b98bc682adb071bcba7367edf20bfc36e701df22bd1484dd2476"
+    ],
+    [
+      "START GAME IF WAITING FOR PLAYERS",
+      "69a653ae384d6d912e9b06905bc1b089729695b8654f3ace9707f329dee3b66e"
+    ],
+    [
+      "SKIP ASSEMBLING HEROES",
+      "f7e08328e4574baf00267cd57404c8d4adbde5cce711e2aa2e404d7dbda1d2dc"
+    ],
+    [
+      "PREGAME SPAWN ROOM ROTATION",
+      "349ef85a4dcda86165512d4450460c240e4ad58f30604387f5d5cee4c7e6629e"
+    ],
+    [
+      "VARIABLE ASSIGNMENT",
+      "5ea7e5a92cb08bf74c3166d2a261f45e26671f98461af2d1b71c41033e66aba9"
+    ],
+    [
+      "START GAME",
+      "77c496b82a53d122072e1e4ee9678b61ffa0d9b6f2d56811d2ddd3e256ec8b2b"
+    ],
+    [
+      "generateMapGrid",
+      "f8c9be60be1408352a2d3de510440c3010bbca003c3446a9261e9767eba325ac"
+    ],
+    [
+      "GLOBAL MENU INITIALIZATION",
+      "cc61b3d4586118caaca3652ce19ecc20db611cba99ea6c26b7d41bd466bce7af"
+    ],
+    [
+      "EFFECTS/TEXTS",
+      "ac5643fd64e2366a01567039ad0e8ec82b8030be8594874b03550caab6490562"
+    ],
+    [
+      "END VOTING",
+      "5fa0d53ffb6625cb28eb9346b18f051067e711537bcf162b3bb0977f31b4470d"
+    ],
+    [
+      "MUSIC/ANNOUNCER CONTROL",
+      "7f42895c983241d801830885e0b3a31eca60a02011a32813537e60f893ea8c08"
+    ],
+    [
+      "determineZombieMode",
+      "65930eb7bcf515fd8b1381e4e1db03f7ffc7a033808024ebe658254490320072"
+    ],
+    [
+      "setZombieMode",
+      "3b89ac101d5b2416d2deec1724c60ec22a3895995eb5b55963b269e31d719af1"
+    ],
+    [
+      "determineChallenge",
+      "635ea2efff7d006499551ea5646b498cf3b99313e01684e8d0cadabdce0afc05"
+    ],
+    [
+      "determineObjectiveType",
+      "7644d5505736e4006d0625438f4527534148c204e373ac649bdf24e69719aa67"
+    ],
+    [
+      "Subroutine selectVoteWinner",
+      "aa0d2d38f23b7cd9afd317b0037dd560de412dc2018a898d4dddba7eb22f7123"
+    ],
+    [
+      "setObjectiveType",
+      "33d1fba97d9e2263927df808378c0e1f4cc57d818cd94b041a09922e5a97731b"
+    ],
+    [
+      "PLAYER MENU INITIALIZATION",
+      "380da1ba0c5dff4a0ae40eefd32a024c3fc5354af33d1c97c63f86503d5ca3b2"
+    ],
+    [
+      "EFFECTS/TEXT",
+      "548e7b6be1eea2951320d53dc3da1fc1beb3918b2a2979a38c3ca512269e767b"
+    ],
+    [
+      "PLAYER SELECTS/RESELECTS HERO",
+      "ec3323e85a60b701221ea38a15c9790776878ca45a15ba556275e494dbb0ecce"
+    ],
+    [
+      "PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY)",
+      "c8bf48c8318c100fbd4713c65386a3f767b5e63550728bfc37c0ca9a1bfa396e"
+    ],
+    [
+      "PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)",
+      "75fd700dc92df8684472e4a16d8accda5b4980805e879b6945f27f186318e2d5"
+    ],
+    [
+      "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)",
+      "6a959f13eba1bc9bd5e580d603be6733134fdd0288010551095fee056c1d4399"
+    ],
+    [
+      "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)",
+      "455a618166bcb665b3a8382780f34586d396a33e520ef753704fc8e05510cc88"
+    ],
+    [
+      "PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)",
+      "67a767443ab6a9bf4390e41b84c0624346dfc1261f514aff87567a1579a77ecd"
+    ],
+    [
+      "UPDATE PREGAME VOTING STATUS",
+      "3123c7804f287a97f7b3cc966f7f0cc427c31a6061fae1cfe40c53762d0097b5"
+    ],
+    [
+      "PREVENT PLAYERS FROM LEAVING START EARLY",
+      "b85672027ff23bb7384144733899bb76b2f24de6c71623a36fd3906769931af7"
+    ],
+    [
+      "attachPlayerToPregameAnchor",
+      "3265c761c27c4d777f286d5b54a17792ae0387682f1b69925ae4bf932c717b05"
+    ],
+    [
+      "advanceMenuChoice",
+      "546bf86695d46b366fe4ba8a5b0caea2dba517340648c2c588fe94c37ed2f602"
+    ],
+    [
+      "APPLY PLAYER CAMERA",
+      "313c417340579475004a22252a82bb7b78fdec7f1f82f3eb401054e7a461acf9"
+    ],
+    [
+      "DISABLE PLAYER CAMERA WHILE AIMING",
+      "80a2e0251da3b9c83bb94e4ecaccf395d60bcca1daaa7d1981447fcdf3661cd6"
+    ],
+    [
+      "CYCLE PLAYER CAMERA",
+      "5c7d0df2c47111075234b285be72ea6152f83e70a5e08fc8aa4247d50317b04e"
+    ],
+    [
+      "EFFECTS/TEXTS",
+      "270660fd19271761703d2b960abaa07395ad6709778c79b3c061b821d189d8a8"
+    ],
+    [
+      "ATTACK SPAWN ROOM CONTROL",
+      "af94dd3cbe6ed6aec1a6c100ba04c4203f5f4f0757c6ad48d1b6d3bb68b7eaeb"
+    ],
+    [
+      "PREVENT MATCH TIME FROM UNPAUSING",
+      "dcd2dae95514e920f6e2dd8f2d62d42d9613b203aac80d4dedcdb359eddffea7"
+    ],
+    [
+      "TRI­GGER OVERTIME MUSIC",
+      "04d3c6c8fdc3d958e1cedefc68427b775005bf843c30979afd50fc482097561c"
+    ],
+    [
+      "ZOMBIE SHUFFLE",
+      "9fc97b6ee39ae391e3115cea83c8edfa06958e59b8feea18dd4c6b765f4f68e0"
+    ],
+    [
+      "SWARM SHOOTOUT",
+      "4bb3f7195e3394cb2976b5d718357418b99c1458a685528f086c9053232d4322"
+    ],
+    [
+      "RANDOM ABILITIES",
+      "ac05408c82b232cd6f7bf2d482cce4f9173273164b820684c10d348f8ab3b23d"
+    ],
+    [
+      "PLAYER LEAVES THE GAME",
+      "c27dedf870e3ff950686c066a566e57fef8200e2f2022e0946b69e79eb5a1d45"
+    ],
+    [
+      "OBJECTIVE COMPLETE",
+      "c93c5b9dbcdb331230c1dc8551bb18bd359dfbeb1b4bbda2085ea619e48bf471"
+    ],
+    [
+      "PLAYERS IN EXTRACTION POINT CONTROL",
+      "3c3d978585484bf5d2aca705afb70e4da04eb772fbf4e4f9d48c07264bcc7538"
+    ],
+    [
+      "EXTRACTION ZONE INFECTION INCREASE",
+      "f14018fbb819a9204b3e746003ae08c3a93a485c1be6cf8c882dea426eebb68a"
+    ],
+    [
+      "PLAYER EXTRACTION CONTROL",
+      "821d9706b79907fba7c4d825601894513213ea86dd3fb964cba4b394842d907c"
+    ],
+    [
+      "WIN/LOSS CONDITIONS",
+      "0afccbeb3359a2d7d3d62388b3f490c3734c1882be4fe2b371bc1cf06f1a4b77"
+    ],
+    [
+      "nukeMap",
+      "5788faedfd9a604bd3be5f0f09e50c5fa3b10e3ce28e5bee1fa57ef1ca2266cc"
+    ],
+    [
+      "startExtractionAscent",
+      "bd563f790c76c7a248984267899ab259d8c6444de642702b4a7aa3281256864b"
+    ],
+    [
+      "PLAYERS ON OBJECTIVE CONTROL",
+      "303b24f5f1f85eb63da2140e79b093e0f6fd0b6ed2c6005cddef23473c0748f2"
+    ],
+    [
+      "INCREASE OBJECTIVE CAPTURE PERCENTAGE",
+      "d5e184b2f14ebfb8fdb5fe55b0e689761b289aa94059f8ea64d0d253f2babdca"
+    ],
+    [
+      "DECREASES CAPTURE PERCENTAGE",
+      "31312b425b7e9d1d4961806223ef92defa71311b05ea4ea7598f7ce0c53a03d6"
+    ],
+    [
+      "SPAWN BOSS",
+      "dc37b01aa67a218f421f1943246bc10b622a72f07cc1bb045730d626ffa797c0"
+    ],
+    [
+      "BOT BECOMES BOSS",
+      "382959ad16765b18db3667b69638a304faa9cc1e2c3454838ecdd5dd949b19c3"
+    ],
+    [
+      "BOSS STUCK",
+      "64d039d83f48919ca0ef585ae139735bf66242e062d1f17ef050411c925d3908"
+    ],
+    [
+      "BOSS HEALTH CONTROL (ALL BOSS OBJECTIVES)",
+      "be8bd34c1177b79ba39ff3ad3507b4335757616321797d11b8c11dc47385cb8b"
+    ],
+    [
+      "BOSS DIES (ALL BOSS OBJECTIVES)",
+      "103673086f7675b18e52b056a1e79ab492b2b1c1ab94220a92e82a9f600db75e"
+    ],
+    [
+      "BOSS TAKES KNOCKBACK",
+      "3086b521c07e148249cc21b9cc1224f16822fdfdbb348ce10f7402e668a48537"
+    ],
+    [
+      "BOSS TELEPORT TO TARGET IF NOT USED",
+      "68f411e3c76254b8fe5ee5fde6a31702702989ec18e7509bcaa917fe890b4297"
+    ],
+    [
+      "bossReturn",
+      "1ddd595591ed4529439e9364615bf3a7bf254bd1d94067d23d9250443f2b9cf5"
+    ],
+    [
+      "completeBossObjective",
+      "32696b8207fac1eeb0296a5d312ca71961cdaa8dfb7e1ff91eb8ef28f7d32812"
+    ],
+    [
+      "BIOMORPHING GOAL START",
+      "579c7890ac71779d1cc5ec4f0d8f1af47b875f8eb7ba1647d723334c62fd91b3"
+    ],
+    [
+      "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS",
+      "e995a029936b7f5ddc84cf2181191427755faa5607f7f014ba6f9d888c871a33"
+    ],
+    [
+      "BIOWASTE IS PICKED UP",
+      "0635d4bca4292d46a73d922d520c9a82029b0b2fbf00592f1e2f54adf16b2580"
+    ],
+    [
+      "PLAYER DELIVERS RESOURCE VALUE",
+      "5756c2a63d87178a2620cfe586e84d55f95ca307d68aaf789481dd4c195be510"
+    ],
+    [
+      "BIOWASTE HOLDER DIES, ORB IS QUEUED AND RESOURCE AMOUNT REMOVED",
+      "30786c2b4f2bd42f436616de172e12bbe1abf12feecc261e75c4c61d1b1bdd3d"
+    ],
+    [
+      "BIOWASTE MANAGEMENT",
+      "77a7723ca98e793dcbaa307c356973e84a78131dc9ba096bc38e143235e58bb9"
+    ],
+    [
+      "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE",
+      "359956e7052a46775ed75e2b5d72e66fccf657fa73e5c140aecfe863e3420f0a"
+    ],
+    [
+      "INITIALIZE SURVIVOR TO BE RESCUED",
+      "79a5da9fab55877172cf6954f78d30dc8dc9d9f2029d8c62a473ec910d48e885"
+    ],
+    [
+      "SURVIVOR TO BE RESCUED DIES",
+      "6a74f57783d1fadd6a85348fea57fe806f56f3f183fe0ff0797f11afc324dd3a"
+    ],
+    [
+      "SURVIVOR FOLLOW TARGET",
+      "834a44afe7c881fb6e2861f91e836615ddf4dee8cce4a78e46f03ea3398b5416"
+    ],
+    [
+      "CREATE PATH",
+      "e5d61f4219365fc1013151f4b0a292c9200beac756687e9e1e5677f7f8787fa6"
+    ],
+    [
+      "DELETE PATH",
+      "7111ad4b0147fd512602b1e101f5a06224502c21566587ab32eb6f2d38c29c5b"
+    ],
+    [
+      "SURVIVOR FOLLOW TARGET LETS GO",
+      "04cfc59bd91cec66f16f3cc299696b575ff265a179057ed4593adfd0d9eca088"
+    ],
+    [
+      "PLAYER SAYS GROUP UP TO SURVIVOR",
+      "a43dae6c182c11e296faf8f57bc7b80ceb1f7118fe2620c89269b93e2dcc47b0"
+    ],
+    [
+      "SURVIVOR JUMP",
+      "2efd82c2e60c70fbedf69a0ec7c0723b0a74ffc4a40eda9b4fba80ebe554ebc4"
+    ],
+    [
+      "SURVIVOR REACHES EXTRACTION SITE",
+      "03c78812b638a8fdf5c63c4b3b560cfea0e934fec68c2fc110f8db804b749461"
+    ],
+    [
+      "ASSIGN ZOMBIE TO BECOME EGG",
+      "cbb4642f1561ce8df700b21408dd6bc6058a4b909589b110dc369fbce8d07a9c"
+    ],
+    [
+      "BOT BECOMES ZOMBIE EGG",
+      "c6b8a455d7806c7cc605adfec41703a633882e39ba4dd6cb827c755a86163c68"
+    ],
+    [
+      "BOTS TELEPORT TO THE EGG",
+      "a177c8bd7b9415df37421142daaba4ee1a63163ce867db7cffb276f962254fb9"
+    ],
+    [
+      "EGG SWITCHES THE POSITION FOR YOU",
+      "8c8c1ac2ebe6e4da9d41fef6ba3e9fc9f95a76b75133e87c2d5a866b1dcd6abb"
+    ],
+    [
+      "SET UP TERMINAL POSITIONS",
+      "06ad278a307f9bbb6ace3decb6bf9d829e577a8099760c19854c6d56f6976201"
+    ],
+    [
+      "PLAYERS AT TERMINALS CONTROLS",
+      "3365cfd4369f28a01dc22a84befbd64cd769a6234b67dd035a10ff205d449915"
+    ],
+    [
+      "PLAYERS REPAIR TERMINALS",
+      "05c5e09a3c8067ec4a7c109074229bc1777f0873830324198ce26defbf637933"
+    ],
+    [
+      "chaseSatelliteTarget",
+      "742ba1117c09c0ebaa9f68151d8e7ce597acb15a055e9820e927f31a7405898f"
+    ],
+    [
+      "PLAYER INITIALIZATION",
+      "fa1e21fd7a6d142683bb7ec9744dadf3c919efb36319e48b63a6bef88f1ec70c"
+    ],
+    [
+      "EFFECTS/TEXTS",
+      "11e2efc6322e30da8ff3b7d5fa0d3190dd5d75aeecceda151dc83a6353b1a437"
+    ],
+    [
+      "PLAYER GETS DOWNED",
+      "36a9f77f72cfdc633ef927194d74505fd806bdbfe315c2e9a43aa185d10a1e80"
+    ],
+    [
+      "REVIVE PLAYER OR ADVANCE DEATH TIMER",
+      "f9a483e5fb98066219ff0ce1eeeec74f2652ffa7c71a6cb2f5240cbca4c019c3"
+    ],
+    [
+      "PLAYER PICKS UP HEALTH PACK",
+      "83b929de3949377b526b1397794262c30973b393ad4cfd42fd4bb61de2dc5c32"
+    ],
+    [
+      "PLAYER CLEARS DAMAGE OVER TIME",
+      "9a097b28a654d154ce83baee1cb8e8e65f990d9e4148a65d9d0577bcc125d0b9"
+    ],
+    [
+      "PLAYER INFECTION DAMAGE MANAGEMENT",
+      "df0b8b9724b7415dde131844b2ccd9c7c33b8985fcae95d94e78f5fe1d12f152"
+    ],
+    [
+      "PLAYER AFK",
+      "e049228ffd853fce9a6dc7410fea8cd1fa0efa8456150f589b46f78b1e947101"
+    ],
+    [
+      "PLAYER SWITCHES HERO",
+      "34905c5da85589bc492a387fabb1c7c2bbdd57bdec1e8ca53f31cd89ab49aff1"
+    ],
+    [
+      "PLAYER AUTOMATIC RELOAD",
+      "7865b8ffafb04ebea03f981bc90960f5cf1e8a4e55d0847fd0d6cc1794c52dc3"
+    ],
+    [
+      "OBJECTIVE CHANGES AND PLAYER ENTITIES UPDATE",
+      "4e053bb363e9a5ac587fcafec39c03263c86ec90bd0476ce7aef5c6d401f243a"
+    ],
+    [
+      "PLAYER TARGET (ADD)",
+      "d5afcac1b973bc2bdcf196f28c589aa2ea3e992d5348bd815f2c16d2d1eb7e6c"
+    ],
+    [
+      "PLAYER TARGET (REMOVE)",
+      "cd8e34bedf4e47c524f1cabf127392f879013390488d8a9aa4d8a061d93f8d04"
+    ],
+    [
+      "teleportToClosestPlayer",
+      "277a7b547eb386ebe00934d673030a4dfd322c7c31c964633c087c2a270b3709"
+    ],
+    [
+      "teleportDownedPlayerToWalkable",
+      "f20fb2dbeaacd384ba5f68a0cdc016e1a5679f0f94a79d1e432d6a1c31f11752"
+    ],
+    [
+      "updateUsers",
+      "d7d1062ed4067dcb29f21e2d27937b4cac52b57e5dee7a9dc623cb8ae04770ed"
+    ],
+    [
+      "Subroutine saveAlivePlayerState",
+      "288744c70a7f45f9eacb7de76d22e2a636f38f4179d96566b7e0a673ca86f193"
+    ],
+    [
+      "ANA SELF SUPER NANO",
+      "fc4c189f8dd7b37fae04dee48e65ff3aa7f1ffeb8db13f840a57ca0f51f0b658"
+    ],
+    [
+      "CC COOLDOWN FROM DOWNFALLEN/BRUTE",
+      "df912604c3c67a0cd490c2630372f7b5a94db5589fbc4975d513a0fd991fb2d8"
+    ],
+    [
+      "SOMBRA USES TRANSLOCATOR",
+      "24d3e4ff38b0d99f02f68384d766f1766377e0c3778fd4b80b626305f9c8c2fe"
+    ],
+    [
+      "DOOMFIST INVIS WHILE ULTING",
+      "96ccee92867941bf2359791c5671c92f2dff7811b41bee39e514824fc0bed7e6"
+    ],
+    [
+      "MOIRA & VENTURE INVIS WHILE USING SKILL",
+      "5bcc3445e858f8b773c473749793f896abc844c564778edfd9277497a6f9b92d"
+    ],
+    [
+      "TRACER INVIS WHILE RECALLING",
+      "37debe42f5a8f700349351bf15631a3a69ece9216aa0ba1f6f960978a6121653"
+    ],
+    [
+      "applyDamageDealtModifier",
+      "c09e31891fee2c57f261bfb47481af870787f6d8f2ea09d7bbeaf514106e54b4"
+    ],
+    [
+      "SOLDIER TACTICAL VISOR DAMAGE BONUS",
+      "d62273062b8e0ff2e0b1a42133685aba382fa9d5be073d60a99c87f31b02dc49"
+    ],
+    [
+      "applyDamageReceivedModifier",
+      "3acef90b506a3e6259198515e45590229df2e074eb5f3136729f22ae5b35c7ff"
+    ],
+    [
+      "PLAYER ULTIMATE DAMAGE RESIST",
+      "9f8374c14e609f0be27640b3b1cd78e62600e5d3b85df51c789bd60996a859ba"
+    ],
+    [
+      "SIERRA TRACKING SHOT HACK",
+      "859f5d2263e6a0fe9a54bae663b934df9bae07eb9cf444e11fbf31c149b975c8"
+    ],
+    [
+      "REINHARDT SHIELD SLAM STUN",
+      "0d6402bc7b110b627e5ad4c4a008553659a72215d61ae424b32a0dd249529436"
+    ],
+    [
+      "BRIGITTE SHIELD BASH STUN",
+      "40ce13025d17f4af3215bc20060b114894a0071e70fdf57a4bc777c03b370f92"
+    ],
+    [
+      "CASSIDY FLASHBANG STUN",
+      "52eb6379e620b91d7b7907fa1ac7ce76f51c6ddb0192d78cd663bba635775695"
+    ],
+    [
+      "Fix bot health",
+      "4bda03b35820a69574b3e6f3a303244d49c30bf0574aa27fff2a7cc413f5f25c"
+    ],
+    [
+      "BOT INITIALIZATION",
+      "e9b189e4bd0eebb2fbeb2e6e5003eb7f20d5e0f614a16125aaafeb488b4e8c36"
+    ],
+    [
+      "KILL BOTS THAT ARE STUCK OR ARE NOT MOVING",
+      "4ce8a087a490582ceef91260e02149da0991026a2fc396141975430363bea534"
+    ],
+    [
+      "BOT DIES",
+      "5deb225fa69a19032153e97f5593917faecc1348bfbe1352e9e6818612190dd3"
+    ],
+    [
+      "TELEPORT BOTS (GENERAL)",
+      "0fe9c628590487f26241332f51868780a9af8ab5cf43e3a727a81a3a0335a9bc"
+    ],
+    [
+      "TELEPORT BOTS WHEN NOT USED FOR TOO LONG",
+      "26ae081ff5e6cafdc9f6319c1987df34e0d0a138ef008b47495576e38551659a"
+    ],
+    [
+      "BOT STUN MANAGEMENT",
+      "2d8a34e77549d997be57ebaa8dd7aaa6b235733cb1c8711d1e7ff6738d5f9f82"
+    ],
+    [
+      "UPDATE SUCCESSFUL TELEPORT STATUS",
+      "547728405109dffad59d468c53ab55cb952edf77f00efa9d16be3c47abc02137"
+    ],
+    [
+      "BOT TARGET VISIBLE",
+      "ba5d662316f62b2f66ae167b454bb8fe698b4f41ea1d47d6705546eb44908f1d"
+    ],
+    [
+      "BOT TAKES DAMAGE AND SWITCHES TARGETS",
+      "ee158ee399f5e347d22842d203f6cd4667bf2cd5472263de53c101148707cc73"
+    ],
+    [
+      "DESELECT BOT TARGET",
+      "295bd930dbdf4058ad593f246bd72d8b6cda01d715ea684744c9b754ed92477b"
+    ],
+    [
+      "BOT WANDERS",
+      "e0305fb88ce1c3f4ca9d840fe1e73c457d6b2a46d29b9c3e1041930b5f449c02"
+    ],
+    [
+      "BOTS JUMP",
+      "2b073dce7009d5f6d0b6da7af0201cb03dc7951e9b7fcc85422a0bce157f0ff0"
+    ],
+    [
+      "BOTS MOVE THROUGH SPAWN DOORS",
+      "ca83ea81e30d2e04b36dc79001e258acf3e5cddf82c5ebcda817ed429257da57"
+    ],
+    [
+      "BOTS MELEE",
+      "6f2eff770025a53900c7f0ba950f0bcfda7b58df661ca0ab2aa991be999c574a"
+    ],
+    [
+      "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)",
+      "03ba789faca191b25b5f5bfd16e0b5936e119ddd426a57cd8884005ff3201072"
+    ],
+    [
+      "BOTS RECOIL FROM DAMAGE",
+      "f3c53e9130bfb3d1afa23ed6f547b1f7c434b62197bcb9ff771ba9d354fda8fc"
+    ],
+    [
+      "enterExitTeleport",
+      "dba0438fa390ebcfece4122e36a14ad7163047ef862f4136d9aa44b6460bcf5c"
+    ],
+    [
+      "teleportBots",
+      "13400ea28431166db6c1438ed6c9cbd146ac73b47503d8323a19a060f68bedf4"
+    ],
+    [
+      "locateAveragePlayerLocation",
+      "bc32c1f05ccba2108f171ecb5fb7ef206da78e7339d4a02f67b2581ff94a0ea3"
+    ],
+    [
+      "setClosestPlayerTeleportCenter",
+      "3f2974bca4f22b0accaac8efc3702802d5ec85a3369dacde9d9f9da939a3094e"
+    ],
+    [
+      "successfulTeleportStatus",
+      "eb592f3f3f445e150a113fd1e25bab06682b687b7cd24226d3f4f8bea9503919"
+    ],
+    [
+      "updateBotSpawnPoints",
+      "a537748a2e39f3a0ccbdf12add0288c567cf7731b2dee22768e1ace729a8a291"
+    ],
+    [
+      "MINIBOSS MESSAGE",
+      "0a821550d0e882e1f21b1593cf692013f7fd76f5e86393bf35855372bff43de5"
+    ],
+    [
+      "Subroutine removeBotSpawnPoint",
+      "89fafbb6dae78bc561a175c0602caf405c42610ee905207ab4f3efbeb66414b4"
+    ],
+    [
+      "collectEngineerScrap",
+      "232571777537e821527abacad5510c5154f76631f3dd52b6535455e0bb8a0959"
+    ],
+    [
+      "CARRION (JETPACK CAT) ABILITIES",
+      "11c103d950f9b11c2ede13f75f7c34b668666b1637d6afd1026005f2c930d12b"
+    ],
+    [
+      "CARRION (JETPACK CAT) TRANSPORT",
+      "8d9eb8f894ca57324c6a7c634c898a2667c6e865f186eed8e960465747f9deb0"
+    ],
+    [
+      "BASIC (REAPER) SHADOW STEP (BOSS)",
+      "e8c69fcdc206deca76fb92873fdbc77bd6210cb44a3cafbb424a5dda181f138b"
+    ],
+    [
+      "BOMBER (JUNKRAT) SELF DESTRUCT",
+      "1093ca98b56c661c6a6eecc4b0f6d91ac74640bb7b327735af5abd291a3801ec"
+    ],
+    [
+      "RUSHER (TORB) SPEED MECHANICS",
+      "9f071ba3255a003505bbe13d31eb6742a6e95ccd2dea26ee92c548779f4a85e6"
+    ],
+    [
+      "RUSHER MOLTEN CORE (BOSS)",
+      "61de1d47c477bc890e19d72ff0cb69a63ec7e8d623df74b795bef171f7d829ff"
+    ],
+    [
+      "RUSHER MOLTEN CORE BURNS PLAYERS (BOSS)",
+      "64e23065480b04898ebe075c97159c00f2556d70f1e7f75d0f69e9dd71541080"
+    ],
+    [
+      "BEHEMOTH (ROAD) TOXIC CLOUD",
+      "45f6287a791d1acfb54f0b9e5f54baae1dafcacbe928d7b63db9e9968df0cf57"
+    ],
+    [
+      "BEHEMOTH GAS STREAM (BOSS)",
+      "c6d21e0a136d89b5717001d6fadfeb2b32d5d41606fdf5685f95f2bfb94732fb"
+    ],
+    [
+      "BRUTE (REIN) SUPER SEISMIC SLAM",
+      "550296cfd5b4624063dd9bdc28a3c085a85cfe45222b2e85fa36332c963a2321"
+    ],
+    [
+      "BRUTE, GLADIATOR, AND SMOLDER ALTERNATE ATTACK CONTROL",
+      "f53487c9d3147e7bcc521cb8d8267b8c403036fa2f0d563ef1165519a4e4b092"
+    ],
+    [
+      "BRUTE KNOCKDOWN",
+      "6a23533ba5afbbca2f13e42f782aa56b8362a10c1020ac6fa7f80ba33d8ae729"
+    ],
+    [
+      "BRUTE FIRE STRIKE (BOSS)",
+      "b6db7da19d9be193bd0e08a465a4ce91ce3c8bb6658dbdbfca4c1db865294861"
+    ],
+    [
+      "REIGNITED (ANRAN) ABILITIES",
+      "1f7fdfc1fc1f48658fdf33a7e6715e243a4d8de6f0b66d692d680eef95b30a3b"
+    ],
+    [
+      "REIGNITED ULTIMATE ATTACK COUNTER",
+      "d2c9229e4980231c7db71b10c261f328f70588ef68bc539989ff81cf6a6f0db8"
+    ],
+    [
+      "REIGNITED USES ULTIMATE NEAR PLAYER",
+      "a514dc90168eedc86e89d823402a756b3280b6b7a53538f27ab6ba3677915ba6"
+    ],
+    [
+      "ZOMBIES SPAWN AT REIGNITED",
+      "06356e14670c81d69bb9188096709968f5099d507e0c71b487c75eaeb3d71094"
+    ],
+    [
+      "RIDER (WIDOWMAKER) ATTACH TO PLAYERS",
+      "f6146f909ced4ac87d4a9ed3f4159ab15c4c9186b8cdcdfaaf1ab6971efb659a"
+    ],
+    [
+      "RIDER DETACH WHEN DEAD OR TARGET IS DEAD",
+      "bdce5e60842295c91f3087bd0b04cc863402bd9d3edeb32466a8a6ecf53be549"
+    ],
+    [
+      "RIDER ATTACH TO TEAMMATES",
+      "a9d7f695064ae299b5c69f24b0d70bc1882a8e8c2d78492c6841a1bf00de35e8"
+    ],
+    [
+      "RIDER DETATCH FROM TEAMMATES WHILE ALIVE",
+      "f45e6f1e8ef58ca0dd856f5b853a22089d805b84cf68a711f7fd87070134be37"
+    ],
+    [
+      "RIDER USE GRAPPLING HOOK",
+      "8037fdba47ddab45754215a7acaf35230fa9bd263cfef535561965619950b805"
+    ],
+    [
+      "CHARGER (MAUGA) CHARGE",
+      "19c9d7139edd43ba7fb94e45aa7ab3cf5fc44160659b568c26142fd505536150"
+    ],
+    [
+      "CHARGER KNOCKBACK",
+      "41ae08e2aa62b63dbca8a8c269260b81a5edffdc31bd35d7d1cecd3669171e5f"
+    ],
+    [
+      "SLIMER (MERCY) TENTACLE GRAB",
+      "30a11d989ea7c5f55b6c06f090fb5736131e0716178f2d0cdc8fca9759fedba5"
+    ],
+    [
+      "PRIME SLIMER (EMRE) FLIGHT (BOSS)",
+      "3c450a9f91f0f302f9d54683fcfdc0d4d03e020a7a7f28c1930d619146428538"
+    ],
+    [
+      "STRIKER (WRECKING BALL) PILE DRIVER",
+      "9b17a0faca76afc698988c1afd1950ccee4f78a9189a4d038c8b3c7e63b22e91"
+    ],
+    [
+      "STRIKER CANCEL BALL FORM",
+      "9e81087c3a03227a3f48e5a8076cd5bc59c5991999e159054d76e30f66fe8600"
+    ],
+    [
+      "STRIKER NORMAL PILE DRIVER",
+      "3c334def7f02cf6caa921ef1c6a94b11f04fba5384a417c9315f575dfb619c49"
+    ],
+    [
+      "STALKER (MOIRA) FADE",
+      "bcc33162cd8dc504861c0c496e8bbdc0146968397885176abb070cfb3245895f"
+    ],
+    [
+      "STALKER KNOCKBACK BLAST (BOSS)",
+      "7ede07f6c3461a2f39f636e8ad4e37fd5dc52257e3a7680a70f3e8bb6809590f"
+    ],
+    [
+      "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES",
+      "d340d2cb8affaefd8bd679cc7ae66df695beed39ebd9ad23be988f1a3408c120"
+    ],
+    [
+      "BLASTER ROCKET HITS TARGET",
+      "7f613e2f471b4241affa0f8669dc2c849e070d5f22875d7541b815dbb9a83955"
+    ],
+    [
+      "DOWNFALLEN (SIGMA) FIRES",
+      "c0feaf1e1d0cc44a6971f75262c81187d4e2fc8e9ba1fd890fc39b854397be4c"
+    ],
+    [
+      "DOWNFALLEN GRABS PLAYER",
+      "84ae5b646572540c805d2dbca487669afccd8de1dc1cfc636ee15ebd670036bc"
+    ],
+    [
+      "DOWNFALLEN PULLS PLAYERS",
+      "6945ee25e3cd38e8ca987e8e574670c6026638fd71101b23751003398c15c63f"
+    ],
+    [
+      "GLADIATOR (JUNKERQUEEN) COMMAND SHOUT",
+      "7aee49628b1c3d296729fe866af992812f358bc2a9ef3eb547c4a27726289d01"
+    ],
+    [
+      "DAYTAKER (ILLARI) BURST",
+      "94ccdf8f7d3e377e36a16f662db3b133683777ac007428e84eded584f25d9236"
+    ],
+    [
+      "DAYTAKER ATTACKS AT HALF HEALTH (BOSS)",
+      "79e4f3bacab43c11102b1921eb772ea681f21048bd9b78df3c2b58e098bc1d22"
+    ],
+    [
+      "TUNNELER (SYMMETRA) BUILDS PORTAL",
+      "a98818977527c39704882f8c4385705c9f4e92bc0e161f7aa0be0d713d9b2dc8"
+    ],
+    [
+      "TUNNELER PORTAL LETS ZOMBIES THROUGH",
+      "38180c9931d2dd53430fd568e56f83d5cd48c711e7329c442604c125014b0027"
+    ],
+    [
+      "CADAVER (ANA) DETONATION",
+      "d0c9982b578c17a329b25f230c0634f268f003ba12133b6ad089a4f6dc84aa21"
+    ],
+    [
+      "ENSNARER (HAZARD) BLOCKS PLAYERS",
+      "de00bd523befdae85d4c1230aa899f2d13dbaef5c98b7fb5cd52bc01c88f32d3"
+    ],
+    [
+      "ENSNARER LUNGE",
+      "aec040cf08bf6b8b7c7896bc54e514e542d3f353a640628bcebd72e1f48742db"
+    ],
+    [
+      "SMOLDER (WINSTON) SEES PLAYER",
+      "e5dca0b4962cd1a8a89771ca24dd2bef3743c9735ba512905be22f98b694a6a7"
+    ],
+    [
+      "SMOLDER ACTIVATES FROM DAMAGE",
+      "39adad0ec043afd33bcd54b58843dc217263234535291dbd90c4671084ebdede"
+    ],
+    [
+      "SMOLDER BOSS SLAM",
+      "37e36810abe68bb76a5f9653b30345abc3894a1f53da16120e1151bf95def74e"
+    ],
+    [
+      "SMOLDER SUPER SLAM",
+      "5d187354126e658429778001b22677d5e17ee476e699f8ba037c1804156a7bfd"
+    ],
+    [
+      "SMOLDER STAYS ENRAGE DURING BOSS EVENT",
+      "0d71609b5031496b1ab86deaac27f3ac00e6dc242bedc2f48a49fdeeff525dd5"
+    ],
+    [
+      "SMOLDER BOSS EVENT STARTS",
+      "79a597b41c000b00d3624d5638684a2cd9d2feba684d575ee51969e6ba66371a"
+    ],
+    [
+      "SMOLDER ACTIVATED FROM BOSS EVENT",
+      "e4f3e1dae7b1528a572ff7e03934a2785e6147ea32f26a7a7e4d18715d884a35"
+    ],
+    [
+      "PROTECTOR (KIRIKO) USES CLEANSE",
+      "295380efc8a946f13072f968edfdc34c106fe1835d1ee850c80acb8599764811"
+    ],
+    [
+      "SUCCESSOR (DOOMFIST) HOLDS BLOCK IF TARGET USE ULTIMATE",
+      "b66a4e5e436656848197b873a749f45e48bc1e33ad1709dec59d9990288de25b"
+    ],
+    [
+      "SUCCESSOR PUNCHES IN RETALIATION",
+      "f484fc17a7a30e7db6daf3012bd7dbabe4c12e9f74de8d1ac4530232c9e21122"
+    ],
+    [
+      "BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)",
+      "db4597c13f4cbe92dacb22e62e562ed6e9e1d44fa722bf12718837a1e45e92e6"
+    ],
+    [
+      "CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)",
+      "c8664168fd97cc977b3b455b3fc8a4fb2aca95187ee85deeefa94776d48b40ae"
+    ],
+    [
+      "abilityThrowdown",
+      "37b52ce835421cd9c20542364800ac40376bc04e17b7eb7b231aac9977eaad2e"
+    ],
+    [
+      "entityFloat",
+      "6812440ad5ffeff166983425b1e689973cb0b51bd461fa97a4498f69e538e355"
+    ],
+    [
+      "explosionWarning",
+      "3dd9b2103ed9c1d3bd5fcd852a3aad1c0a0a59aed5c5b4f870616fc2eaffb1d0"
+    ],
+    [
+      "Subroutine smolderBoost",
+      "f23cc748f825bd105ca1a8866bc7ad86778ac82b3990589f47075e156e6a09d8"
+    ],
+    [
+      "Subroutine spawnGasCloud",
+      "39d06d9bc9835f27fd8418e08f1e3d6627b89551c0ac16795d0d99d94ba46d21"
+    ],
+    [
+      "Subroutine resumeBotMovementAndFacing",
+      "b13c9f3ee9424a757db24e70f70d3b4e3f49aa4f04b469401eb38ebca909fff3"
+    ],
+    [
+      "Subroutine resumeBotFacingAndMovement",
+      "a242f635e0bdbf9e45522647db2995e870872ca7f8171526514cb4bdead5c89d"
+    ],
+    [
+      "startBlasterDaytakerFacing",
+      "7d12bb643ebe0921b5d3d0d8070c1262df4c869b66086a2bf07229a1e949bab4"
+    ],
+    [
+      "startBotThrottleAtTarget",
+      "cb08754f705e4c4d9c067ed0caf9c4af0879facc4228e46113e720a18422928d"
+    ],
+    [
+      "playReignitedWarningPair",
+      "3311e03f7fcda23e8556eb693a64b586f6d837f770cc1934565a1f38ca2797bc"
+    ],
+    [
+      "beginBotOverride",
+      "d3ef42cdf4ba96f6ad0fcb8ad11d196a4186c5d84e16686d8c04b7ac62e64b49"
+    ],
+    [
+      "restoreBotThrottle",
+      "6b8075085ae32da384382bbf8295b32c897d3e78185854494d0ca2f8423da85d"
+    ],
+    [
+      "reenableBotWallAndJump",
+      "7cfb20a928a46e4650c987211705493f7bbdc54f6d4369d7042e668526990213"
+    ],
+    [
+      "applyBriefBurnAndRoot",
+      "77a8443cb1c78d0e55e1630d1d4028522c25ec3bb2f7691b2f4a1545df177b7f"
+    ],
+    [
+      "daytakerAbortReset",
+      "84497e84c07f32eab022500a53410c926d1385ceeabb505a9038860e55b8d4b3"
+    ],
+    [
+      "GENERATE SUPPLY DROPS",
+      "a1c1a481c5ecb778ba4dd764e39d6ea57ed65463b9e55caefcf3c1964d73dab1"
+    ],
+    [
+      "EFFECT/TEXT (GLOBAL)",
+      "084593638f08138218fc26a0b5694c69654b872f1b463d44ecec89565ebbd142"
+    ],
+    [
+      "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)",
+      "fc19064252de63b0bf4ce4f9a0bc0ce4c8e4b6807fa9159ddcad271c8cef1513"
+    ],
+    [
+      "instantRevive (0-9)",
+      "7ad2921dd8cd791286fe2cf7abd711afb24b582ab37321a841d083f5acb34167"
+    ],
+    [
+      "playerForceField (10-19)",
+      "2583273c8624fceb0ae36c30f2555a0b3d3abd82053d3e5161e5ec23589f446c"
+    ],
+    [
+      "noCooldowns (20-29)",
+      "f21bc6d06c9fe8db6b0f19af9615c2e36b853f0eb5eeb4145b797144de605c36"
+    ],
+    [
+      "airStrike (30-39)",
+      "4ac3536bf2c73c72046272550d364766cd76821000cb4624e9ed8d5618299088"
+    ],
+    [
+      "beaconofHealing (40-49)",
+      "f3c2b9779bb7ec059a42b51b0a59d3b321e895da548c728569dddf08a0032464"
+    ],
+    [
+      "sentryTurret (50-59)",
+      "4e8bdb7ae06a245d5e8374fe0d9374e45a2c82cc2f72211a512d16ee369236c3"
+    ],
+    [
+      "cloakingDevice (60-69)",
+      "a12e5204244c52d587df5579f5c740f0a7da8cdcc11f3060a5b83c95e47c9480"
+    ],
+    [
+      "superNano (70-79)",
+      "a36d4b9100f65d3f973cc0c261cbc2351388b6314a72defbc29ae6f30bac36e9"
+    ],
+    [
+      "JETPACK FLIGHT",
+      "565a13c2e0a3fd77d0aba4a8cd22f1650843bc85b5f820c0dc400d9aa91a3ca0"
+    ],
+    [
+      "ultimateCharger (90-99)",
+      "2511b69fdaef7378cd54072e0ef20a2107fdc3c4ae42b096cce15758ad92dff8"
+    ],
+    [
+      "stun (100-109)",
+      "a2463e5d20032481f8117efbd1bef7e87a6ebed51ab674eb15e974882f7da539"
+    ],
+    [
+      "powerUpUsage",
+      "df75e18043339c82e6f915cf8a8d29923aad9938b524300e1ad9bd6157fcf535"
+    ],
+    [
+      "playAquaPowerUpSound",
+      "24ffdb5fd26fdbf31a2b19bd1f848a603b0924db4dfb3dbcfec2d6eaa8f4ebd0"
+    ],
+    [
+      "POWER UP EFFECT/TEXT MANAGEMENT",
+      "648d0f48c86a9f19d4e93af412f1c1278d2c21c70722741c2f8e2f323addc583"
+    ],
+    [
+      "EFFECT/TEXT (PERMANENT)",
+      "98f84fc8dafead85c3cff7c44be73fe71fe41aff1bc50b1b771525a45ef79cf9"
+    ],
+    [
+      "PLAYER DROPS POWER UP (MANUAL)",
+      "20fe2066a2ab265978f9a445608a19aac249c67a8a3cdd1b52b2d3d1437dd81d"
+    ],
+    [
+      "PLAYER DROPS POWER UP (DEATH)",
+      "169e757c147e245747b7d6914a1bfa56e6105997e8b75d4aa3e9e2b57a79ae2d"
+    ],
+    [
+      "dropCarriedPowerUps",
+      "75146211fae274036fb42105eaa8072ef154cda0de7887a9f8ce3c959bdc075e"
+    ],
+    [
+      "finishPowerUpDrop",
+      "e2cdf17de602157ecbe8c67e56976eea8c556ed207fa905df4a18ea6e435f7b9"
+    ],
+    [
+      "ZOMBIE HYBRID",
+      "25924bb549b3d9f589e40da0b994ec25b9418d63caa05d0f30f83610968fb161"
+    ],
+    [
+      "PYROTECHNIC APPLIES DAMAGE",
+      "a81eb4fba740fc7b1489857ff40a93af031ac5448249f11cdd6ad08880b4ada3"
+    ],
+    [
+      "BORN TO BATTLE PLAYER USES ABILITY CHARGE",
+      "1982b300d6a8e1fff55cb73089c6ee6237f782672cead7e681240320e5b67d8e"
+    ],
+    [
+      "applyBulkingSeasonStats",
+      "9c62bb8aeed2dd7d06cf53742a484b8100b0bfa18d14f0ca153fb2bcee203da5"
+    ],
+    [
+      "BULKING SEASON TOGGLES SIZE",
+      "66d45475297f3060e85b7040a11f9e49f985b369f7e6f0f7dfdf3e27a1928d93"
+    ],
+    [
+      "BOLT STRIKE ARMS CHARGE",
+      "d8d77e1e0abe496c3293a85be28ab6676f970d054e3b7915da0a522e708eb774"
+    ],
+    [
+      "OVERCHARGE STORES HEALING AND ASSISTS",
+      "7e4542630982ce77240222caa5769174f4306e6de8e866a7a186d80ddfa8bdc3"
+    ],
+    [
+      "OVERCHARGE ARMS CHARGE",
+      "5f2dc1fdadbe8a0092f41b1fb38946c30e579de95dace790ab34bc28f0acf7ee"
+    ],
+    [
+      "OVERCHARGE CLEARS CHARGE",
+      "7170645e396de9ea1c57e7304859df550c5c019e0f6729351c87ed64aebb34ec"
+    ],
+    [
+      "CHARGE BATTERY",
+      "87471de3eef8a8eeeefc05468ebbf0b4cec62dbc9b48842c0818abb082980f12"
+    ],
+    [
+      "CHARGE BATTERY (USAGE AND COOLDOWNS)",
+      "a91a5d5231ef691951bb8a80c58188a9e928247a6d15b160828b99dce75abd5a"
+    ],
+    [
+      "Subroutine checkEnhancementPlacement",
+      "b9a62ac7942039896aab305b981c00411c5349a7d54717d2cab81c3ac704809c"
+    ],
+    [
+      "HITCHHIKER ATTACH/DETATCH",
+      "ef9de9fd7603a9895cc6ed0444ba0fd013b80fcc63dd073ca88057fe5b93d7c3"
+    ],
+    [
+      "HITCHHIKER PARENT RECIEVES HEALTH POOL",
+      "f300fc78352bd1e96ea86771430b598b1df3909912a717c81c9f7b7a4820daeb"
+    ],
+    [
+      "HITCHHIKER LIFEBONDS",
+      "23ccdacabebb925b371407e3b960c90fb1dd547963b72761c4a5189e16018734"
+    ],
+    [
+      "P.U.P. TARGET",
+      "d237be3f821440fec16e3b5c97c84beb800c6cf7fec6a2f4268f96da0e596837"
+    ],
+    [
+      "P.U.P. CONTROL",
+      "12d5ddb46a6ce41a0a0deda0c948b46390aaf36e353910776951c50b5e7f3d5f"
+    ],
+    [
+      "startPupDefaultChase",
+      "a60ea8685604c5e84ecfb7769b99916d6dc8046f535dedc5b651974c02fa06bf"
+    ],
+    [
+      "resetBattleAbilityCharge",
+      "85631a50ebffe8494b707b1e576187d9402715116926f3e0aeb098c502601aaf"
+    ],
+    [
+      "useLivingProjectile",
+      "05903c5eb7131487e29d3a9c95b8704e127ef7152f8669e320d03a82f9628d22"
+    ],
+    [
+      "LIVING PROJECTILE RELEASE",
+      "063a71e29354acef13763803b51d51b8877967f9d93b9bc2067c3c8dd8cd2446"
+    ],
+    [
+      "ENGINEER SCRAP INCOME",
+      "fae8092283b537c6353e378f02a1856343ee3b93eedf5652b01557329daa59c1"
+    ],
+    [
+      "ENGINEER ASSIST SCRAP",
+      "a2a3af70faac8ebbcd380a06bdaf34f4ee1f5b2858024e1270bf30b952901149"
+    ],
+    [
+      "ENGINEER ARMOR TRANSFER",
+      "e521f4ce6325a733745a4fd09c84c89db2a9d0d5976dcd32365babede93b5262"
+    ],
+    [
+      "ENGINEER TURRET DEPLOY",
+      "3a9c7e588c20075935a90924dfbb659cdf522f3436d7dc07118776d973cfb37f"
+    ],
+    [
+      "ENGINEER BEAM FADE",
+      "91974a1a20cac3ed5d5c6b5998c7ebece736643372cd87c08b383ab7c5023262"
+    ],
+    [
+      "ENGINEER BEAM DISCONNECT CLEANUP",
+      "5a35d2048742625b8a15c143243355b046df065eef82419f7c9a6f5c4761a7b1"
+    ],
+    [
+      "ENGINEER SCRAP ARMOR DEPLETION",
+      "32c43318d25c675ae7542295befcd9e64fee96a417cce85e4861810066290cd1"
+    ],
+    [
+      "[LONG_REACH] MELEE PUSH",
+      "1bdc97ca9b668cfa577b6098822cd888f77608c068a264965a0dc88997b1eed1"
+    ],
+    [
+      "[LONG_REACH] QUICK MELEE",
+      "3c33531c9d49071e7fc27b82a0c20d5874419d0fbea7942f6acb91239cebd5f5"
+    ],
+    [
+      "[LONG_REACH] MELEE WEAPONS",
+      "acb2eb1da43e85c782a8aac4c8d25d2885dbe1402dbeb9a1ba35114e2d703b44"
+    ],
+    [
+      "[LONG_REACH] CARNAGE",
+      "c31f48cd0847e059633cc49e2cc4cd62b91dca2604914c08c6b228e0857b2ce6"
+    ],
+    [
+      "[LONG_REACH] extendAugmentMelee",
+      "8c588d5e28f6352258d70eb2e54c00ee1c4d76614395299db5b652ce09ba6864"
+    ],
+    [
+      "[HIGHRISE] RECHARGE",
+      "76caa71085aef7f8d0a71ee6fabe75ab0ce195fdb754684f2338f8ee9b6f3361"
+    ],
+    [
+      "[HIGHRISE] AIR ACTION INPUT",
+      "619e6e409513b5293e14a87fa5560255a3750cf2b7432a119c46578f1248160b"
+    ],
+    [
+      "[HIGHRISE] DOUBLE TAP",
+      "d81e537e1212521242ba5f25dba8b9d22239b3f85e203cb3fa7df76068e669d5"
+    ],
+    [
+      "[HIGHRISE] AIRBORNE DAMAGE",
+      "13cb718b5661690bd2d805a0ec0f5b12073fbc7fb9ccadbe4b075ae36f95c113"
+    ],
+    [
+      "[DASH] CHARGE RECHARGE",
+      "2b9e00fd6f9c32924c65606cabd29f4cc8566c49abd7d5aade0fc8efae43dd71"
+    ],
+    [
+      "[DASH] DOUBLE TAP",
+      "7226803f9f31a42bcd9c31af511972d704ab546fbb9c5b667ded094283b624a9"
+    ],
+    [
+      "[DASH] SMOKE FADE",
+      "c47a09cb69453dd14717c3e2874edeffd167324d113065e08af4e0929d0d2e12"
+    ],
+    [
+      "AUGMENT MENU",
+      "cd6aba70ff9e5403063a3d8c99124bff5c9b29af78a59476e59b19ef8843e1f8"
+    ],
+    [
+      "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)",
+      "a6124f3ab18ad4751d3be5e627f5671d6e2016161ebbcf3eb127c029472bdcec"
+    ],
+    [
+      "APOTHECARY ULTIMATE RECHARGE",
+      "f20d2509cde18b66a3b5709207fa2ab21a0127ef37a0b7312703ccb35b6d8f14"
+    ],
+    [
+      "APOTHECARY TELEPORT",
+      "49b66ef58bb02c0b81d75bceebb86fb1b8dfa1654641e0520d8a40b2ac8a2cb6"
+    ],
+    [
+      "KEVLAR RANGED DAMAGE COMPENSATION",
+      "c38bbe4ec4ae990540334b133d62c099054e210c3275e406c3144faa3b09dcbf"
+    ],
+    [
+      "useAugmentAirAction",
+      "9be497c1767ea208ccd92f15391cda921e77c52336612613d00f2593f3f71eea"
+    ],
+    [
+      "GRAPNEL LAUNCHER",
+      "752a3962aac349eaba9ded78e981eabe738a406b76f47245ba4a0a80a18b7b69"
+    ],
+    [
+      "GRAPNEL LAUNCHER DISCONNECT CLEANUP",
+      "46fbfd52cdc4c68bc37e89a056cad73800f1c47d55a0bad38df1661c66bb39e4"
+    ],
+    [
+      "AMMO PACK MAGAZINES",
+      "928629ff05478b5086825a75aaf46f096ea1c4b885ec77fba69a2939c52b65aa"
+    ],
+    [
+      "AMMO PACK REFILL FALLBACK",
+      "9ba3e311dd475ea041e8c55f2d438c0f95604e24fab97fd2820fc26cdc1390d8"
+    ],
+    [
+      "LASER BARRICADE (PLACEMENT)",
+      "59b7388fb940c0a1f46c9483d7a319cb011fd4f167c42734d30ca50a1b4c574e"
+    ],
+    [
+      "LASER BARRICADE BLOCKS ZOMBIES",
+      "80ac941ca30f04dc2aad6fea34bef29bf67accaa472db9b3201cee46094b90a4"
+    ],
+    [
+      "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)",
+      "757270b7dd005551d19e2b03c93dedae2bae9dd60f2176f877195fcc455f30d3"
+    ],
+    [
+      "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION",
+      "c3c1a607c766acd4052e6d8a731f5cc66ee022e7621d37a4e3f2b27cec6ad549"
+    ],
+    [
+      "CROWD CONTROL STATUS",
+      "ae7b2ad8405ea07e321596c41d2d2a77ba9e57fad6c9982020e0eed8d1430f83"
+    ],
+    [
+      "PLAYER DEALT FINAL B­LOW",
+      "cdacad82fbdcf7c4e3f079f7dd080b690ea70ee161098b1eca56b4446854e568"
+    ],
+    [
+      "PLAYER EARNED ELIMINATION",
+      "b597ab0148faff4543c30f41aef4099cbaaad518db12d4a7bec24c6b9975247f"
+    ],
+    [
+      "PLAYER DIED",
+      "a067fe93375f2712d51e7ac20c018cbd1c7ce2e15c78cf049e02d09e4020948a"
+    ],
+    [
+      "PLAYER DEALT HEALING",
+      "508e2074c577a941e6c6b1f5685327e43d188886c8dd5d5a8c7d4d4cee3bbe08"
+    ],
+    [
+      "PLAYER DEALT DAMAGE",
+      "69974c7d1dc99c8754f8829d38ece675a75a781895602bfdaa8c7b3282aed5ce"
+    ]
+  ]
+}

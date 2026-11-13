@@ -31,15 +31,20 @@ def applyHitEnhancements():
         # entries instead of keeping a third enhancement slot for an index.
         boltChainTargets = random.shuffle(getPlayersInRadius(eventPlayer.enhancementBoltVictim, 10, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive() and (player.getHero() != Hero.WINSTON or player.botSmolderState != 1)).exclude(eventPlayer.enhancementBoltVictim)).slice(0, 2)
         while boltChainTargets != []:
-            eventPlayer.enhancementBoltHealthBefore = boltChainTargets[0].getHealth()
-            # Direct Damage has no Event Ability; never call the on-hit macro
-            # for chains or discharge, so neither can recurse or earn hit credit.
-            damage(boltChainTargets[0], eventPlayer, boltChainDamage)
-            eventPlayer.enhancementBoltEnergy = min(350, eventPlayer.enhancementBoltEnergy + max(0, eventPlayer.enhancementBoltHealthBefore - boltChainTargets[0].getHealth()))
-            # Visual throttle is per target and never throttles damage/energy.
-            if getTotalTimeElapsed() >= boltChainTargets[0].botBoltFlashReadyAt:
-                boltChainTargets[0].botBoltFlashReadyAt = getTotalTimeElapsed() + 0.5
-                playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, boltChainTargets[0], 0.375)
+            # Per-zombie deadline merges near-simultaneous splash hit events.
+            # Keep it below a 0.05s rapid-fire interval; rejected chains do not
+            # extend the deadline or earn damage energy. No polling or waits.
+            if getTotalTimeElapsed() >= boltChainTargets[0].botBoltDamageReadyAt:
+                boltChainTargets[0].botBoltDamageReadyAt = getTotalTimeElapsed() + 0.032
+                eventPlayer.enhancementBoltHealthBefore = boltChainTargets[0].getHealth()
+                # Direct Damage has no Event Ability; never call the on-hit macro
+                # for chains or discharge, so neither can recurse or earn hit credit.
+                damage(boltChainTargets[0], eventPlayer, boltChainDamage)
+                eventPlayer.enhancementBoltEnergy = min(350, eventPlayer.enhancementBoltEnergy + max(0, eventPlayer.enhancementBoltHealthBefore - boltChainTargets[0].getHealth()))
+                # Independent visual throttle; primary hit credit is unchanged.
+                if getTotalTimeElapsed() >= boltChainTargets[0].botBoltFlashReadyAt:
+                    boltChainTargets[0].botBoltFlashReadyAt = getTotalTimeElapsed() + 0.5
+                    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, boltChainTargets[0], 0.375)
             del boltChainTargets[0]
         if eventPlayer.enhancementBoltBurst == -1:
             # Consume before damage. The chain list is dead; reuse its slot.

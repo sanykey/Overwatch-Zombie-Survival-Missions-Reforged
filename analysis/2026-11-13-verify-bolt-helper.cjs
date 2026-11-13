@@ -76,7 +76,7 @@ const summary = s => ({energy: s.player[energy], burst: s.player[burst],
     run(probeRules, 'BOLT MACRO PROBE', capped);
     assert.equal(capped.player[energy], 350); checks++;
     const rapid = setup(100, false, 2, false); rapid.player.health = 100;
-    for (const time of [100, 100.1, 100.499, 100.5]) {
+    for (const time of [100, 100.1, 100.45, 100.5]) {
         rapid.time = time; run(probeRules, 'BOLT MACRO PROBE', rapid);
     }
     assert.equal(rapid.effects.length, 4); assert.equal(rapid.damage.length, 12);

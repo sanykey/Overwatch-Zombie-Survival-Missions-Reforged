@@ -960,8 +960,14 @@ playervar objectiveActorKindSlot  # Biomorphing resource type on both teams, or 
 # Rescue NPC mood/status icon: halo, sad, dizzy or extraction celebration.
 #!define rescueMoodIcon objectiveActorKindSlot
 
-playervar menuTradeItemSlot  # Human zombie vote; legacy slot name. Gameplay trades use synchronous scratch.
+playervar menuTradeItemSlot  # Team 1: pregame zombie vote; Team 2: Bolt Strike chain damage deadline.
 #!define pregameZombieVote menuTradeItemSlot
+# Next allowed chain damage time on this zombie, shared across attackers.
+# Team 2 only; human vote/HUD readers retain their Team 1 value. Default 0
+# permits the first chain; retained across respawns for at most 0.032s.
+# Set before chain Damage, never on a rejected chain. No chase/wait owns it.
+# Discharge is a separate one-shot ability and does not use this deadline.
+#!define botBoltDamageReadyAt menuTradeItemSlot
 
 # Chased variables
 
