@@ -9,9 +9,9 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
     # subtitle and color entries hold the same conditional expressions, which
     # reevaluate per viewer exactly as the previous per-player calls did.
     hudText(
-        # Only the zero ID gates visibility: dummies and unspawned players keep
-        # NO_PREFERENCE because initializePlayerEnhancement never runs for them.
-        getPlayers(Team.1),
+        # Hide when the viewer has no enhancement state (including zeroed POTG
+        # state). Visibility reevaluates alongside the viewer's strings/colors.
+        localPlayer if localPlayer.enhancementId != Enhancement.NO_PREFERENCE else null,
         ENHANCEMENT_ICONS[localPlayer.enhancementId],
         [
             "",
@@ -54,9 +54,8 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
     # previous per-player calls did. Read live owned state directly: no temporary
     # may be captured by color reevaluation.
     hudText(
-        # Only the zero ID gates visibility: dummies and unspawned players keep
-        # NO_PREFERENCE because initializePlayerAugment never runs for them.
-        getPlayers(Team.1),
+        # Gate on the same viewer-owned ID that selects the HUD contents.
+        localPlayer if localPlayer.augmentId != Augment.NO_PREFERENCE else null,
         AUGMENT_ICONS[localPlayer.augmentId],
         "{2} {1} {0}".format(f"{localPlayer.augmentBarrierPlacementCooldown}s" if localPlayer.augmentBarrierPlacementCooldown > 0 else iconString(Icon.CHECKMARK), " {0}HP".format(ceil(localPlayer.augmentBarrierHealth)) if localPlayer.augmentBarrierHealth > 0 else [], f"Hold [{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.INTERACT)}] to place a barricade" if localPlayer.augmentBarrierPlacementCooldown <= 0 else []) if localPlayer.augmentId == Augment.LASER_BARRICADE else "{1} | {0}".format(
             (iconString(Icon.CHECKMARK) if localPlayer.augmentDashCharges == DASH_MAX_CHARGES else f"{ceil(localPlayer.augmentDashReadyAt - getTotalTimeElapsed())}s {iconString(Icon.CHECKMARK)}" if localPlayer.augmentDashCharges > 0 else f"{ceil(localPlayer.augmentDashReadyAt - getTotalTimeElapsed())}s") if localPlayer.augmentId == Augment.DASH else (iconString(Icon.CHECKMARK) if getTotalTimeElapsed() >= localPlayer.augmentMovementReadyAt else f"{ceil(localPlayer.augmentMovementReadyAt - getTotalTimeElapsed())}s"),

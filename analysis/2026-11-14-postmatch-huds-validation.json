@@ -1,0 +1,11 @@
+{
+  "baseline": "512671f978aec7aa3e76e8a2c0f192c1e1df5b7c",
+  "beforeElements": 30080,
+  "afterElements": 30092,
+  "elementDelta": 12,
+  "changedRules": [
+    "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)"
+  ],
+  "warnings": [],
+  "limitation": "Compiled output verified; POTG and spectator behavior require an in-game check."
+}
