@@ -1,0 +1,12 @@
+{
+  "cases": 56,
+  "before": 30021,
+  "after": 30043,
+  "delta": 22,
+  "changed": [
+    "EFFECTS/TEXTS",
+    "beaconofHealing (40-49)",
+    "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION"
+  ],
+  "warnings": []
+}

@@ -125,6 +125,7 @@ macro initializePlayerEnhancement():
             eventPlayer.enhancementPlagueCureTotal = 0
             break
         case Enhancement.OVERCHARGE:
+            eventPlayer.setHealingDealt(115)
             eventPlayer.enhancementCapacitorEnergy = 0
             eventPlayer.enhancementCapacitorCharge = 0
             eventPlayer.enhancementCapacitorDeadline = 0
