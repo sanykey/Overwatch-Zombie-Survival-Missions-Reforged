@@ -420,7 +420,7 @@ playervar reviveDuration  # Required revive duration; restored from reconnect da
 
 playervar isInfected  # Player infection has activated; infection rules, cures and Zombie Hybrid read this flag.
 
-playervar rescueTimeRemaining  # Time left to rescue a downed player; reconnect cache and extraction dome may adjust it.
+playervar rescueTimeRemaining  # Time left to rescue a downed player; objective completion adds mustReviveTime; reconnect cache and extraction dome may adjust it.
 
 playervar invisibilityCount  # Stacking invisibility/untargetability counter; hero abilities and Cloaking Device increment/decrement it. Not a boolean.
 

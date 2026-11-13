@@ -16,6 +16,10 @@ The [zsmm-classic](https://github.com/sanykey/Overwatch-Zombie-Survival-Missions
 
 The `main` branch is intended for further Reforged development, including new functionality.
 
+## Downed players
+
+Completing any mission objective adds the full current rescue time limit (`mustReviveTime`, 60 seconds initially, decreasing to a minimum of 30 after permanent deaths) to every downed player's remaining rescue time, provided it is still above zero. The bonus is additive: 12 seconds remaining with a 60-second limit becomes 72 seconds, without a cap. This replaces the previous 10-second bonus for timers below 50 seconds. Permanently dead players still respawn on objective completion. The extraction dome can still shorten the rescue timer.
+
 ## Hero changes
 
 While a player is using their ultimate or inside the Dash augment's protection window, zombie attacks cannot start new damage-over-time effects on them: the bite's damage-over-time and infection stacks, the Blaster (Pharah) rocket burns, Roadhog and Behemoth gas clouds, the Rusher boss's Molten Core burns and the Bomber (Junkrat) explosion burns all skip protected victims. Already ticking damage-over-time, existing infection and direct hit damage are unaffected. Infection outside the extraction zone is unaffected. The Dash protection window also grants full knockback immunity, ending together with the window.

@@ -1,0 +1,12 @@
+{
+  "beforeElements": 30081,
+  "afterElements": 30080,
+  "elementDelta": -1,
+  "changedRules": [
+    "OBJECTIVE COMPLETE"
+  ],
+  "unchangedRules": 318,
+  "warnings": [],
+  "newVariables": 0,
+  "nativeGameplayVerified": false
+}

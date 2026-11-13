@@ -124,5 +124,6 @@ rule "OBJECTIVE COMPLETE":
     @Condition isGameplayActive == true
     @Condition isObjectiveComplete == true
     
+    # Extend only players still awaiting rescue, before objective advancement can resurrect the dead.
+    (getDeadPlayers(Team.1).filter(lambda player: player.rescueTimeRemaining > 0)).rescueTimeRemaining += mustReviveTime
     startRule(objectivesManagement)
-    (getDeadPlayers(Team.1).filter(lambda player: player.rescueTimeRemaining < 50)).rescueTimeRemaining += 10
