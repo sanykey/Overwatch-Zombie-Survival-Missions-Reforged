@@ -1,6 +1,7 @@
 #!mainFile "../main.opy"
 
 #!define BOT_MAX_TELEPORT_RANGE 40
+#!define JETPACK_ACTIVATION_TIME 0.17
 #!define AUGMENT_APOTHECARY_ULT_CHARGE 7
 #!define BOSS_BASE_SIZE 2.5
 #!define ZOMBIE_BASE_SIZE 1
