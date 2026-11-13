@@ -20,11 +20,16 @@ globalvar debugHud # ID of snky's diagnostics HUD, recreated after phase cleanup
 #     # Refuel during gameplay only: menu HUD cleanup runs before gameplay begins.
 #     wait(5)
 #     eventPlayer.powerUpJetpackFuel = 100
-#     eventPlayer.powerUpItemId = 11
+#     # eventPlayer.powerUpItemId = 11
 #     # The stack slot belongs to other state when a different enhancement is selected.
-#     # if eventPlayer.enhancementId == Enhancement.BULKING_SEASON:
-#     #     eventPlayer.enhancementBulkStacks = 300
-#     #     applyBulkingSeasonStats()
+#     if eventPlayer.enhancementId == Enhancement.BULKING_SEASON:
+#         eventPlayer.enhancementBulkStacks = 300
+#         applyBulkingSeasonStats()
+#     elif eventPlayer.enhancementId == Enhancement.OVERCHARGE:
+#         eventPlayer.enhancementCapacitorEnergy = 1000
+#     elif eventPlayer.enhancementId == Enhancement.BOLT_STRIKE:
+#         eventPlayer.enhancementBoltEnergy = 350
+
 #     # wait(0.5, Wait.ABORT_WHEN_FALSE)
 #     # if ruleCondition:
 #     #     loop()
