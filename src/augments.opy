@@ -41,6 +41,13 @@ subroutine useAugmentAirAction
 #!define augmentDashDirection tmp0
 
 
+macro extendAugmentMeleeMacro(radius, damage):
+    # Set synchronous scratch inputs after the caller's windup; no waits.
+    augmentMeleeRadius = radius
+    augmentMeleeDamage = damage
+    extendAugmentMelee()
+
+
 rule "AUGMENT MENU":
     # Like the primary enhancement HUD, this is created once and reevaluates per viewer.
     hudText(
@@ -438,9 +445,7 @@ rule "LONG REACH QUICK MELEE":
     wait(0.15, Wait.ABORT_WHEN_FALSE)
     if eventPlayer.getHero() != eventPlayer.augmentMeleeHero:
         return
-    augmentMeleeRadius = AUGMENT_MELEE_RADIUS
-    augmentMeleeDamage = 60 if eventPlayer.getHero() == Hero.ZENYATTA else 70 if eventPlayer.getHero() == Hero.VENTURE else 40
-    extendAugmentMelee()
+    extendAugmentMeleeMacro(AUGMENT_MELEE_RADIUS, 60 if eventPlayer.getHero() == Hero.ZENYATTA else 70 if eventPlayer.getHero() == Hero.VENTURE else 40)
 
 
 rule "LONG REACH VENDETTA SWORD":
@@ -467,9 +472,7 @@ rule "LONG REACH VENDETTA SWORD":
     # Adapted from the supplied Vendetta implementation: extend only the outer
     # annulus, retain windup/LoS/cone checks, and leave energy/other abilities alone.
     wait(AUGMENT_VENDETTA_WINDUP, Wait.ABORT_WHEN_FALSE)
-    augmentMeleeRadius = AUGMENT_VENDETTA_RADIUS
-    augmentMeleeDamage = 45
-    extendAugmentMelee()
+    extendAugmentMeleeMacro(AUGMENT_VENDETTA_RADIUS, 45)
     # Native primary-fire state can remain true through a held attack series.
     # Recovery is mandatory even on release, death or crowd control: clicks and
     # condition edges cannot restart this rule early after a successful swing.
@@ -519,9 +522,7 @@ rule "LONG REACH MELEE WEAPONS":
     wait(eventPlayer.augmentWeaponProfile[3], Wait.ABORT_WHEN_FALSE)
     if eventPlayer.getHero() != eventPlayer.augmentWeaponProfile[0]:
         return
-    augmentMeleeRadius = eventPlayer.augmentWeaponProfile[1]
-    augmentMeleeDamage = eventPlayer.augmentWeaponProfile[2]
-    extendAugmentMelee()
+    extendAugmentMeleeMacro(eventPlayer.augmentWeaponProfile[1], eventPlayer.augmentWeaponProfile[2])
     # Do not let releasing either attack binding shorten recovery. Ignore rule
     # condition changes until it expires, then validate the actor at the loop gate.
     # compressed() rounds to three decimals; retain Genji's exact recovery here.
@@ -544,9 +545,7 @@ rule "LONG REACH CARNAGE":
 
     # Carnage is a committed ability, not a repeating primary-fire timer.
     wait(0.75, Wait.ABORT_WHEN_FALSE)
-    augmentMeleeRadius = 5
-    augmentMeleeDamage = 90
-    extendAugmentMelee()
+    extendAugmentMeleeMacro(5, 90)
 
 
 def extendAugmentMelee():
