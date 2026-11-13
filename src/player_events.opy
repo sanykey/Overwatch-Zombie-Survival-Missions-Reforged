@@ -1,72 +1,52 @@
 #!mainFile "../main.opy"
 
-def enqueuePyroBurn():
-    @Name "enqueuePyroBurn"
+def applyHitEnhancements():
+    @Name "applyHitEnhancements"
 
-    # One shared Pyrotechnic enqueue for native and scripted hits. Inputs:
-    # enhancementHitVictim (tmp3) and enhancementHitHealthBefore (tmp2), the victim's health
-    # before the scripted hit; null skips the health gate for native-event hits,
-    # which are always real. Script hits have no Event Ability, so enqueueing
-    # here cannot recurse through PLAYER DEALT DAMAGE. The 15m range is enforced
-    # for every caller; current scripted call sites are all well inside it.
-    # Both slots are consumed synchronously; no scratch value is written.
+    # Shared synchronous hit inputs: tmp3 is the victim, tmp2 is actual damage.
+    # Native callers supply eventDamage; the scripted macro supplies health lost.
+    # No waits/async calls; tmp0/tmp1 (Long Reach targets/damage) survive.
+    # Only Bolt consumes tmp2/tmp3 for chain damage/targets; its two attacker-owned
+    # enhancement slots remain independent of every Augment. Secondary Damage is
+    # direct, without Event Ability, and cannot reenter this handler.
+    if enhancementHitDamage <= 0:
+        return
     if eventPlayer.enhancementId == Enhancement.PYROTECHNIC:
-        if enhancementHitVictim != eventPlayer and distance(eventPlayer, enhancementHitVictim) < 15 and (enhancementHitHealthBefore == null or enhancementHitVictim.getHealth() < enhancementHitHealthBefore):
+        if enhancementHitVictim != eventPlayer and distance(eventPlayer, enhancementHitVictim) < 15:
             enhancementHitVictim.setStatusEffect(eventPlayer, Status.BURNING, 3)
             eventPlayer.enhancementPyroHitList.append(enhancementHitVictim)
-
-
-def applyOvercharge():
-    @Name "applyOvercharge"
-
-    # Shares the original-hit snapshot with enqueuePyroBurn. Native callers
-    # supply null only for positive event damage; scripted callers require
-    # actual health loss. No waits or scratch writes; bonus Damage has no
-    # Event Ability and cannot reenter native on-hit enhancement handling.
-    if eventPlayer.enhancementId == Enhancement.OVERCHARGE:
-        if eventPlayer.enhancementCapacitorCharge > 0 and enhancementHitVictim != eventPlayer and (enhancementHitHealthBefore == null or enhancementHitVictim.getHealth() < enhancementHitHealthBefore):
+    elif eventPlayer.enhancementId == Enhancement.OVERCHARGE:
+        if eventPlayer.enhancementCapacitorCharge > 0 and enhancementHitVictim != eventPlayer:
             if eventPlayer.enhancementCapacitorDeadline == 0:
                 eventPlayer.enhancementCapacitorDeadline = getTotalTimeElapsed() + 0.3
             if getTotalTimeElapsed() < eventPlayer.enhancementCapacitorDeadline:
                 damage(enhancementHitVictim, eventPlayer, eventPlayer.enhancementCapacitorCharge)
-
-
-def applyBoltStrike():
-    @Name "applyBoltStrike"
-
-    # Native callers supply null + boltNativeDamage (tmp0); scripted callers
-    # supply health before the primary hit. Only actual health loss triggers.
-    # No waits/async calls: tmp0/tmp1 (Long Reach list/damage) survive. The hit
-    # inputs are dead after this check/calculation: reuse tmp2 for chain damage
-    # and tmp3 for chain/discharge targets after saving the center on the attacker.
-    # The two attacker-owned enhancement slots are otherwise unused by Bolt.
-    if eventPlayer.enhancementId == Enhancement.BOLT_STRIKE:
-        if enhancementHitVictim.getTeam() == Team.2 and (enhancementHitHealthBefore == null or enhancementHitVictim.getHealth() < enhancementHitHealthBefore):
-            #!define boltChainDamage tmp2
-            boltChainDamage = min(15, (boltNativeDamage if enhancementHitHealthBefore == null else enhancementHitHealthBefore - enhancementHitVictim.getHealth()) * 0.25)
-            #!define boltChainTargets tmp3
-            eventPlayer.enhancementBoltVictim = enhancementHitVictim
-            eventPlayer.enhancementBoltEnergy = min(350, eventPlayer.enhancementBoltEnergy + 0.3)
-            # Leave warning-phase Smolders untouched. Consume at most two list
-            # entries instead of keeping a third enhancement slot for an index.
-            boltChainTargets = random.shuffle(getPlayersInRadius(eventPlayer.enhancementBoltVictim, 10, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive() and (player.getHero() != Hero.WINSTON or player.botSmolderState != 1)).exclude(eventPlayer.enhancementBoltVictim)).slice(0, 2)
-            while boltChainTargets != []:
-                eventPlayer.enhancementBoltHealthBefore = boltChainTargets[0].getHealth()
-                # Direct Damage has no Event Ability; never call the on-hit macro
-                # for chains or discharge, so neither can recurse or earn hit credit.
-                damage(boltChainTargets[0], eventPlayer, boltChainDamage)
-                eventPlayer.enhancementBoltEnergy = min(350, eventPlayer.enhancementBoltEnergy + max(0, eventPlayer.enhancementBoltHealthBefore - boltChainTargets[0].getHealth()))
-                # Visual throttle is per target and never throttles damage/energy.
-                if getTotalTimeElapsed() >= boltChainTargets[0].botBoltFlashReadyAt:
-                    boltChainTargets[0].botBoltFlashReadyAt = getTotalTimeElapsed() + 0.5
-                    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, boltChainTargets[0], 0.375)
-                boltChainTargets = boltChainTargets.slice(1)
-            if eventPlayer.enhancementBoltBurst == -1:
-                # Consume before damage. The chain list is dead; reuse its slot.
-                eventPlayer.enhancementBoltBurst = 0
-                boltChainTargets = getPlayersInRadius(eventPlayer.enhancementBoltVictim, 10, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive() and (player.getHero() != Hero.WINSTON or player.botSmolderState != 1))
-                boltChainTargets.setStatusEffect(eventPlayer, Status.STUNNED, 2)
-                damage(boltChainTargets, eventPlayer, 60)
+    elif eventPlayer.enhancementId == Enhancement.BOLT_STRIKE:
+        #!define boltChainDamage tmp2
+        boltChainDamage = min(15, enhancementHitDamage * 0.25)
+        #!define boltChainTargets tmp3
+        eventPlayer.enhancementBoltVictim = enhancementHitVictim
+        eventPlayer.enhancementBoltEnergy = min(350, eventPlayer.enhancementBoltEnergy + 0.3)
+        # Leave warning-phase Smolders untouched. Consume at most two list
+        # entries instead of keeping a third enhancement slot for an index.
+        boltChainTargets = random.shuffle(getPlayersInRadius(eventPlayer.enhancementBoltVictim, 10, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive() and (player.getHero() != Hero.WINSTON or player.botSmolderState != 1)).exclude(eventPlayer.enhancementBoltVictim)).slice(0, 2)
+        while boltChainTargets != []:
+            eventPlayer.enhancementBoltHealthBefore = boltChainTargets[0].getHealth()
+            # Direct Damage has no Event Ability; never call the on-hit macro
+            # for chains or discharge, so neither can recurse or earn hit credit.
+            damage(boltChainTargets[0], eventPlayer, boltChainDamage)
+            eventPlayer.enhancementBoltEnergy = min(350, eventPlayer.enhancementBoltEnergy + max(0, eventPlayer.enhancementBoltHealthBefore - boltChainTargets[0].getHealth()))
+            # Visual throttle is per target and never throttles damage/energy.
+            if getTotalTimeElapsed() >= boltChainTargets[0].botBoltFlashReadyAt:
+                boltChainTargets[0].botBoltFlashReadyAt = getTotalTimeElapsed() + 0.5
+                playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, boltChainTargets[0], 0.375)
+            del boltChainTargets[0]
+        if eventPlayer.enhancementBoltBurst == -1:
+            # Consume before damage. The chain list is dead; reuse its slot.
+            eventPlayer.enhancementBoltBurst = 0
+            boltChainTargets = getPlayersInRadius(eventPlayer.enhancementBoltVictim, 10, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive() and (player.getHero() != Hero.WINSTON or player.botSmolderState != 1))
+            boltChainTargets.setStatusEffect(eventPlayer, Status.STUNNED, 2)
+            damage(boltChainTargets, eventPlayer, 60)
 
 
 rule "CROWD CONTROL STATUS":
@@ -190,17 +170,10 @@ rule "PLAYER DEALT DAMAGE":
             #Critical hits deal 50% more damage, 20% if vicitm is a boss
             damage(victim, eventPlayer, eventDamage * (0.2 if victim in bossStateList else 0.6))
             playEffect(eventPlayer, DynamicEffect.BAD_EXPLOSION, Color.RED, victim.getEyePosition() + directionTowards(eventPlayer.getEyePosition(), victim.getEyePosition()) * victim.sizeScale, 0.1 * victim.sizeScale)
-
-    if eventAbility != null:
-        enhancementHitHealthBefore = null
+    elif eventAbility != null:
+        enhancementHitDamage = eventDamage
         enhancementHitVictim = victim
-        if eventPlayer.enhancementId == Enhancement.BOLT_STRIKE:
-            # Native-only input; enqueuePyroBurn returns without scratch writes
-            # for Bolt. applyBoltStrike consumes it synchronously, before Damage.
-            boltNativeDamage = eventDamage
-        enqueuePyroBurn()
-        applyBoltStrike()
-        applyOvercharge()
+        applyHitEnhancements()
 
     # Augments: Leech includes damage from the hero, primary enhancement and
     # scripted powerups. The Double Jump airborne bonus is a Set Damage Dealt

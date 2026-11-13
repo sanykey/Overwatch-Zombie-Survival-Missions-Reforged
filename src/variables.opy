@@ -193,20 +193,14 @@ globalvar tmp1  # Second synchronous scratch value, including bot teleport pivot
 #!define botTeleportPivot tmp1
 globalvar tmp2  # Third synchronous scratch value, including barricade's current target, mutation color captured with evalOnce for the outline, and the on-hit enhancements' health gate; no live reads across waits/async work.
 globalvar tmp3  # Fourth synchronous scratch value, including barricade impulse vertical angle and the on-hit enhancements' victim; assigned and consumed within the same loop iteration, no reads across waits/async work.
-# Shared synchronous on-hit inputs for Pyrotechnic, Overcharge and Bolt Strike.
-# Health before the scripted hit; null skips the health gate for native hits.
-# Native Overcharge/Bolt Strike callers must check eventDamage > 0 before null.
+# applyHitEnhancements inputs for Pyrotechnic, Overcharge and Bolt Strike.
+# tmp2 is health before scripted Damage, then actual health removed in the macro.
+# Native callers supply eventDamage directly; the handler accepts positive damage.
 # Pyro/Overcharge preserve inputs; Bolt consumes tmp2/tmp3 for chain damage/targets.
-# All three preserve tmp0/tmp1; consume before waits/async calls.
+# The handler preserves tmp0/tmp1; consume before waits/async calls.
 #!define enhancementHitHealthBefore tmp2
+#!define enhancementHitDamage tmp2
 #!define enhancementHitVictim tmp3
-# Native Bolt hit damage only; assigned in PLAYER DEALT DAMAGE and consumed
-# synchronously before the first chain Damage. Scripted hits derive damage from
-# tmp2's health snapshot instead and never read/write this alias, preserving the
-# Long Reach target list in tmp0. No waits, async calls, chase or live HUD reads.
-#!define boltNativeDamage tmp0
-#!define pyroBurnHealthBefore enhancementHitHealthBefore
-#!define pyroBurnVictim enhancementHitVictim
 
 # Phase-owned storage, NOT scratch: values may survive waits and reevaluation.
 # START GAME removes all pregame HUD/world text before mission generation can resume.

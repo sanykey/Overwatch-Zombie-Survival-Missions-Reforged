@@ -71,7 +71,7 @@ const slot = name => files['variables.opy'].match(new RegExp('^#!define ' + name
     Object.assign(melee.globals, {tmp0: 2.5, tmp1: 40});
     start(compiled.get('extendAugmentMelee'), melee, compiled);
     assert.deepEqual(melee.damage.map(h => h.amount), [40, 75]);
-    assert(compiled.get('GRAPNEL LAUNCHER').body.includes('Call Subroutine(applyOvercharge);'));
+    assert(compiled.get('GRAPNEL LAUNCHER').body.includes('Call Subroutine(applyHitEnhancements);'));
     checks++;
     if (process.argv.includes('--export')) fs.writeFileSync('main.ws.txt', build.result);
     console.log(JSON.stringify({checks, elements: build.elements, warnings: build.warnings,

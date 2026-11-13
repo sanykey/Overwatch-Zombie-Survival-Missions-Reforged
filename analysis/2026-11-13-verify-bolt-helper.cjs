@@ -29,7 +29,7 @@ const summary = s => ({energy: s.player[energy], burst: s.player[burst],
     await compiler.readyPromise;
     const build = await compile(files); assert.deepEqual(build.warnings, []);
     const compiled = new Map(rules(build.result).map(r => [r.name, r]));
-    assert(!/Wait\(|Wait Until|Start Rule|Chase/.test(compiled.get('applyBoltStrike').body));
+    assert(!/Wait\(|Wait Until|Start Rule|Chase/.test(compiled.get('applyHitEnhancements').body));
     const probe = await compile({...files, 'player_events.opy': files['player_events.opy'] +
         '\nrule "BOLT MACRO PROBE":\n    @Event eachPlayer\n    damageWithEnhancements(eventPlayer.getHealth(), eventPlayer.augmentGrapnelTarget)\n'});
     assert.deepEqual(probe.warnings, []);
@@ -87,16 +87,22 @@ const summary = s => ({energy: s.player[energy], burst: s.player[burst],
         enemy('warning', 5, {hero: 'Winston', [smolder]: 1}), enemy('active', 6, {hero: 'Winston', [smolder]: 2}));
     run(probeRules, 'BOLT MACRO PROBE', filtered);
     assert.deepEqual(filtered.damage.at(-1).targets.map(t => t.id), ['primary', 'edge', 'active']); checks++;
-    for (const reject of ['zero', 'friendly', 'other enhancement', 'ordinary script']) {
+    for (const reject of ['zero', 'other enhancement', 'ordinary script']) {
         const s = setup(40, true, 2, false); s.player.health = 40;
         if (reject === 'zero') s.player.health = 0;
-        if (reject === 'friendly') s.victim.team = 1;
         if (reject === 'other enhancement') s.player.enhancementId = 0;
         if (reject === 'ordinary script') s.eventAbility = 0;
         run(reject === 'ordinary script' ? compiled : probeRules,
             reject === 'ordinary script' ? 'PLAYER DEALT DAMAGE' : 'BOLT MACRO PROBE', s);
         assert.equal(s.player[energy], 0); assert.equal(s.player[burst], -1); checks++;
     }
+    // The current production handler deliberately has no primary-target Team 2
+    // gate. Preserve that behavior while secondary targets still use Team 2.
+    const friendly = setup(40, true, 2, false); friendly.player.health = 40;
+    friendly.victim.team = 1;
+    run(probeRules, 'BOLT MACRO PROBE', friendly);
+    assert.deepEqual(friendly.damage.map(h => h.amount), [40, 10, 10, 60]);
+    assert.equal(friendly.player[energy], 20.3); assert.equal(friendly.player[burst], 0); checks++;
     const melee = setup(40, true, 2, false);
     Object.assign(melee.globals, {tmp0: 2.5, tmp1: 40});
     melee.targets[1].position = [0, 0, 5]; melee.targets[2].position = [0, 0, 6];
@@ -114,21 +120,38 @@ const summary = s => ({energy: s.player[energy], burst: s.player[burst],
         s.player[sharedSlot] = 123;
         run(compiled, 'PLAYER DEALT DAMAGE', s);
         assert.equal(s.player[sharedSlot], 123, 'Native damage preserves other enhancement state');
-        assert.equal(s.globals.tmp0, 'outer targets', 'Only native Bolt writes its input alias');
+        assert.equal(s.globals.tmp0, 'outer targets', 'Native hits preserve outer scratch');
         checks++;
     }
     const nativeInput = setup(100, false, 2, false);
     run(compiled, 'PLAYER DEALT DAMAGE', nativeInput);
-    assert.equal(nativeInput.globals.tmp0, 100);
+    assert.equal(nativeInput.globals.tmp0, 'outer targets');
     assert.equal(nativeInput.player[energy], 30.3);
     checks++;
     if (before) {
-        const afterRules = rules(build.result).filter(r => r.name !== 'applyBoltStrike');
-        const beforeRules = rules(before.result);
-        assert.deepEqual(afterRules.map(r => r.name), beforeRules.map(r => r.name));
-        const changed = beforeRules.filter((r, i) => afterRules[i].body !== r.body).map(r => r.name);
-        assert.deepEqual(changed, ['GRAPNEL LAUNCHER', 'extendAugmentMelee', 'PLAYER DEALT DAMAGE']);
-        assert.deepEqual([...compiled.keys()].filter(n => !old.has(n)), ['applyBoltStrike']);
+        const replaced = new Set(['applyPyrotechnicBurn', 'applyOvercharge', 'applyBoltStrike', 'applyHitEnhancements',
+            'GRAPNEL LAUNCHER', 'extendAugmentMelee', 'PLAYER DEALT DAMAGE']);
+        assert.deepEqual(rules(build.result).filter(r => !replaced.has(r.name)),
+            rules(before.result).filter(r => !replaced.has(r.name)), 'Unrelated rules stay identical');
+        assert.deepEqual([...compiled.keys()].filter(n => !old.has(n)), old.has('applyHitEnhancements') ? [] : ['applyHitEnhancements']);
+        assert.deepEqual([...old.keys()].filter(n => !compiled.has(n)), old.has('applyHitEnhancements') ? [] :
+            ['applyPyrotechnicBurn', 'applyOvercharge', 'applyBoltStrike']);
+        for (const enhancement of [0, 3, 9, 12]) for (const immune of [false, true])
+        for (const armed of [false, true]) {
+            const swing = map => {
+                const s = setup(40, armed, 2, immune);
+                s.player.enhancementId = enhancement;
+                if (enhancement === 3) s.player[slot('enhancementPyroHitList')] = [];
+                if (enhancement === 9) {
+                    s.player[slot('enhancementCapacitorCharge')] = armed ? 75 : 0;
+                    s.player[slot('enhancementCapacitorDeadline')] = 0;
+                }
+                Object.assign(s.globals, {tmp0: 2.5, tmp1: 40});
+                run(map, 'extendAugmentMelee', s);
+                return summary(s);
+            };
+            assert.deepEqual(swing(compiled), swing(old)); checks++;
+        }
     }
     if (process.argv.includes('--export')) fs.writeFileSync('main.ws.txt', build.result);
     console.log(JSON.stringify({checks, before: before?.elements, elements: build.elements,

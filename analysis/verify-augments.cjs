@@ -319,6 +319,7 @@ function* execute(rule, state, compiled) {
                         a[0] === 'supplyPowerUpPositionList' && !a[2].startsWith('Mapped Array(') ? [operand] : operand);
                     else if (a[1] === 'Remove From Array By Index') state.globals[a[0]] = array(current).filter((_, index) => index !== Number(operand));
                     else if (a[1] === 'Multiply') state.globals[a[0]] = current * operand;
+                    else if (a[1] === 'Subtract') state.globals[a[0]] = current - operand;
                     else throw new Error('Unsupported global modification: ' + line);
                     break;
                 }
