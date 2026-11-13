@@ -139,7 +139,10 @@ rule "EFFECTS/TEXTS":
             f" <fgA0E81BFF>Infection: {floor(eventPlayer.infectionLevel)}</fg>" if eventPlayer.infectionLevel >= 1 else f" <fg66BBFFFF>Vaccine: {abs(floor(eventPlayer.infectionLevel))}</fg>" if eventPlayer.infectionLevel < 0 else "",
             f" <fgFFE14AFF>Reviving: {ceil(eventPlayer.reviveTimeRemaining)}s</fg>" if eventPlayer.isReviving else f" <fgFF6666FF>Revive: {ceil(eventPlayer.rescueTimeRemaining)}s</fg>" if eventPlayer.isDead() else ""
         ),
-        "{0}: {1}".format(eventPlayer, f"{ceil(eventPlayer.getNormalizedHealth() * 100)}%" if eventPlayer.isAlive() else "DOWN"),
+        # The trailing `*` marks an active resist from applyDamageReceivedModifier
+        # (Dash window, Super Nano or ultimate) — including a stuck-true
+        # Is Using Ultimate, so mech-hero anomalies stay visible in-game.
+        "{0}: {1}{2}".format(eventPlayer, f"{ceil(eventPlayer.getNormalizedHealth() * 100)}%" if eventPlayer.isAlive() else "DOWN", "*" if eventPlayer.hasDamageResist and eventPlayer.isAlive() else ""),
         # Use the same left alignment as the personal ability cards.
         HudPosition.ACTUALLY_LEFT,
         eventPlayer.getSlot(),

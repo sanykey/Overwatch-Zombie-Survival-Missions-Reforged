@@ -28,8 +28,7 @@ assert((out.match(/Call Subroutine\(applyDamageReceivedModifier\)/g) || []).leng
 const rule = out.match(/rule \("PLAYER ULTIMATE DAMAGE RESIST"\) \{[\s\S]*?\n\}/);
 assert(rule, 'PLAYER ULTIMATE DAMAGE RESIST rule missing');
 assert(rule[0].includes('Is Using Ultimate(Event Player) == True'), 'rule must key on Is Using Ultimate');
-assert(rule[0].includes('Hero Of(Event Player) != Hero(D.Mon)'), 'rule must exclude D.Mon');
-assert(rule[0].includes('Hero Of(Event Player) != Hero(D.Va)'), 'rule must exclude D.Va');
+assert(!rule[0].includes('Hero Of(Event Player) != Hero'), 'mech-hero exclusions must stay removed');
 assert(rule[0].includes('Wait Until(Not(Is Using Ultimate(Event Player)), '), 'rule must wait for the ult to end');
 assert(rule[0].indexOf('Call Subroutine') < rule[0].indexOf('Wait Until'), 'recompute must run on the start edge');
 assert(rule[0].lastIndexOf('Call Subroutine') > rule[0].indexOf('Wait Until'), 'recompute must run on the end edge');
@@ -56,6 +55,32 @@ assert(!nano.includes('Set Damage Received(Event Player, 50)'), 'nano must not w
 // charge/dead/restore plus the botStatManagementMacro reset).
 const stray = [...out.matchAll(/Set Damage Received\(Event Player, (?:0|50|100)\)/g)].map(m => m.index);
 assert(stray.length === 4, `expected only the 4 bot-side writes (Pharah charge/dead/restore + bot stat reset), got ${stray.length}`);
+
+// DoT gate: the flags are materialized by applyDamageReceivedModifier and read
+// cheaply by all six zombie DoT sites (bite, boss Molten Core, Blaster rockets,
+// Roadhog gas, Behemoth clouds, Bomber explosion) plus the health-HUD marker.
+const sub2 = out.match(/rule \("applyDamageReceivedModifier"\) \{[\s\S]*?\n\}/)[0];
+assert(sub2.includes('Set Player Variable(Event Player, isDotProtected, Or(Is Using Ultimate(Event Player), And(Compare((Event Player).augmentId, ==, 2), Compare((Event Player).augmentState1, !=, Null))))'), 'isDotProtected materialization missing from the recompute');
+assert(sub2.includes('Set Player Variable(Event Player, hasDamageResist, Or(Or(And(Compare((Event Player).augmentId, ==, 2), Compare((Event Player).augmentState1, !=, Null)), Compare((Event Player).powerUpSuperNanoGoodAuraId, !=, Null)), Is Using Ultimate(Event Player)))'), 'hasDamageResist materialization missing from the recompute');
+assert(!sub2.includes('Hero(D.Mon)') && !sub2.includes('Hero(D.Va)'), 'mech-hero exclusions must stay removed from the recompute');
+const hudBlock = [...out.matchAll(/rule \("EFFECTS\/TEXTS"\) \{[\s\S]*?\n\}/g)].map(m => m[0]).find(b => b.includes('hasDamageResist'));
+assert(hudBlock, 'health-HUD `*` resist marker missing');
+assert(hudBlock.includes("Custom String(\"*\")"), 'the marker must render as a literal `*`');
+assert(hudBlock.includes('Custom String("{0}: {1}{2}"'), 'the marker must sit right after the health percentage');
+const bite = out.match(/rule \("BOTS INFLICT DAMAGE OVER TIME \(INFECTION LEVEL MANAGEMENT\)"\) \{[\s\S]*?\n\}/)[0];
+assert(bite.includes('(Victim).isDotProtected == False'), 'bite DoT gate missing');
+assert(!bite.includes('Is Using Ultimate'), 'the bite rule must not re-evaluate Is Using Ultimate');
+const molten = out.match(/rule \("RUSHER MOLTEN CORE BURNS PLAYERS \(BOSS\)"\) \{[\s\S]*?\n\}/)[0];
+assert(molten.includes('(Victim).isDotProtected == False'), 'Molten Core DoT gate missing');
+const rocket = out.match(/rule \("BLASTER ROCKET HITS TARGET"\) \{[\s\S]*?\n\}/)[0];
+assert(rocket.includes('(Victim).isDotProtected == False'), 'rocket burn DoT gate missing');
+const gas = out.match(/rule \("BEHEMOTH \(ROAD\) TOXIC CLOUD"\) \{[\s\S]*?\n\}/)[0];
+assert(gas.includes('Not((Current Array Element).isDotProtected)'), 'Roadhog gas attack DoT gate missing');
+const gasStream = out.match(/rule \("BEHEMOTH GAS STREAM \(BOSS\)"\) \{[\s\S]*?\n\}/)[0];
+assert(gasStream.includes('(Current Array Element).isDotProtected)'), 'Behemoth toxic cloud DoT gate missing');
+const explosion = out.match(/rule \("explosionSequence"\) \{[\s\S]*?\n\}/)[0];
+assert(explosion.includes('Compare(Team Of(Current Array Element), ==, Team 2), Not((Current Array Element).isDotProtected)'), 'explosion DoT gate with Team 2 carve-out missing');
+assert((out.match(/\(Victim\)\.isDotProtected == False|\(Current Array Element\)\.isDotProtected/g) || []).length === 6, 'expected exactly 6 gate readers');
 
 // Truth table evaluated against the REAL compiled If-Then-Else formula.
 const formula = sub[0].match(/Set Damage Received\(Event Player, (.*)\);/)[1];
@@ -95,28 +120,21 @@ function value(text, s) {
 }
 // The engine renders the dash's 0 intake as Null, which behaves as 0 intake
 // (zero == Null per workshop.codes comparisons-and-truth).
-function intake({dash = false, nano = false, ult = false, mech = null}) {
+function intake({dash = false, nano = false, ult = false}) {
     return value(formula, {
         augmentId: dash ? 2 : 0,
         augmentState1: dash ? 101 : 0,
         powerUpSuperNanoGoodAuraId: nano ? 102 : 0,
         ult: ult ? 1 : 0,
-        hero: mech ?? 'Soldier',
     });
 }
 assert(intake({}) === 100, 'plain player takes full damage');
 assert(intake({ult: true}) === 50, 'ult gives 50 intake');
-assert(intake({ult: true, mech: 'D.Mon'}) === 100, 'stuck-true D.Mon gets no ult resist');
-assert(intake({ult: true, mech: 'D.Va'}) === 100, 'stuck-true D.Va gets no ult resist');
 assert(intake({nano: true}) === 50, 'nano keeps its 50 intake');
 assert(intake({nano: true, ult: true}) === 50, 'nano and ult must not stack');
 assert(intake({dash: true}) === 0, 'dash window stays strongest');
 assert(intake({dash: true, nano: true}) === 0, 'dash beats nano');
 assert(intake({dash: true, nano: true, ult: true}) === 0, 'dash beats nano and ult');
-assert(intake({nano: true, mech: 'D.Mon'}) === 50, 'D.Mon keeps the nano resist');
-assert(intake({dash: true, mech: 'D.Mon'}) === 0, 'D.Mon keeps the dash resist');
-assert(intake({nano: true, mech: 'D.Va'}) === 50, 'D.Va keeps the nano resist');
-assert(intake({dash: true, mech: 'D.Va'}) === 0, 'D.Va keeps the dash resist');
 
 console.log(`OK: structure and truth table verified, total ${r.elements} elements`);
 })();

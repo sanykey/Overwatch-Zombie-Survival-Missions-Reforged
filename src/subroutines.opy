@@ -809,10 +809,14 @@ def explosionSequence():
     if eventPlayer.isDummy():
         #Scaled
         damage(eventPlayer.explosionTargetList.filter(lambda x: distance(eventPlayer, x) < 3 * eventPlayer.sizeScale), eventPlayer, eventPlayer.botBiteDamage * 5)
-        #Scaled
-        eventPlayer.explosionTargetList.setStatusEffect(eventPlayer, Status.BURNING, 3)
+        #Scaled — Team 2 bots always burn; protected Team 1 victims (the
+        #isDotProtected flag) take the blast damage but no new burn/DoT.
+        #Synchronous scratch: write and both reads sit between waits.
+        #!define dummyExplosionDotTargets tmp0
+        dummyExplosionDotTargets = eventPlayer.explosionTargetList.filter(lambda x: x.getTeam() == Team.2 or not x.isDotProtected)
+        dummyExplosionDotTargets.setStatusEffect(eventPlayer, Status.BURNING, 3)
         #Not scaled damage
-        eventPlayer.explosionTargetList.startDamageOverTime(eventPlayer, 3, eventPlayer.botBiteDamage * 2)
+        dummyExplosionDotTargets.startDamageOverTime(eventPlayer, 3, eventPlayer.botBiteDamage * 2)
         if eventPlayer.damageOverTimeRemaining < 3:
             eventPlayer.damageOverTimeRemaining = 3
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, eventPlayer.explosionOuterColor, eventPlayer.getPosition(), 6 * eventPlayer.explosionScale)

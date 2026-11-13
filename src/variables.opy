@@ -507,6 +507,17 @@ playervar augmentState3
 # smoke cleanup. Invulnerability renews directly on activation; no other Dash use.
 #!define augmentDashSmokeDeadline augmentState3
 
+# Materialized DoT-gate state: while true, no zombie attack may start a NEW
+# damage-over-time effect on this player (bite DoT, infection stacks, rocket/
+# gas/boss burns, Bomber explosion). Already ticking DoTs, existing infection
+# and direct hit damage are untouched. Written ONLY by
+# applyDamageReceivedModifier, which every gate-state edge calls. Read by the
+# bite, rocket, Molten Core, gas and explosion rules.
+playervar isDotProtected
+# Any active resist written by applyDamageReceivedModifier (Dash window,
+# Super Nano or ultimate). Drives the health-HUD `*` marker.
+playervar hasDamageResist
+
 playervar enhancementHitchhikerPassenger  # Passenger attached to this carrier; null when absent. Infection rules also query it.
 
 playervar enhancementCarrierPoolId  # Extra health-pool ID granted to a Hitchhiker carrier, retained for removal. Exported names must fit 32 characters.
@@ -992,7 +1003,7 @@ playervar augmentBarrierHealth  # Chased Laser Barricade health; placement, dama
 # Keep a dedicated slot: pregame storage is reused by objectives during gameplay.
 enum AugmentIcon:
     NO_PREFERENCE = iconString(Icon.QUESTION_MARK),
-    KEVLAR = "<TX C0000000004F73E>",
+    KEVLAR = "<TX C0000000004F73E>", # <TX C00000000004120>
     DASH = iconString(Icon.ARROW_RIGHT),
     DOUBLE_JUMP = iconString(Icon.ARROW_UP),
     LONG_REACH = abilityIconString(Hero.DOOMFIST, Button.SECONDARY_FIRE),

@@ -401,11 +401,16 @@ rule "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)":
     @Team 2
     @Condition eventAbility == Button.MELEE
     @Condition victim.getTeam() == Team.1
-    
+    @Condition not victim.isDotProtected
+
+    # While the victim is ulting or inside the Dash protection window, the bite
+    # applies nothing: no new damage-over-time and no infection stacks.
+    # Already ticking DoTs and existing infection levels run their course; the
+    # direct bite hit is untouched.
     victim.startDamageOverTime(eventPlayer, eventPlayer.botBiteDuration, eventPlayer.botBiteDamage)
     if eventPlayer.damageOverTimeRemaining < eventPlayer.botBiteDuration:
         eventPlayer.damageOverTimeRemaining = eventPlayer.botBiteDuration
-    if createWorkshopSettingBool("Infection", "Melee Infection Enabled", true) and not eventPlayer.hasStatus(Status.HACKED) and not victim.isDummy() and not victim.isUsingUltimate() and (victim.getHealth() <= (victim.getMaxHealth() if victim.enhancementHitchhikerPassenger != null else victim.initialMaxHealth)):
+    if createWorkshopSettingBool("Infection", "Melee Infection Enabled", true) and not eventPlayer.hasStatus(Status.HACKED) and not victim.isDummy() and (victim.getHealth() <= (victim.getMaxHealth() if victim.enhancementHitchhikerPassenger != null else victim.initialMaxHealth)):
         victim.infectionLevel += (2 if eventPlayer in bossStateList or eventPlayer in miniBossList or eventPlayer.botMutationId == 4 else 1) / ((3 if not victim.isInfected and victim.getHero() in [Hero.REINHARDT, Hero.HAZARD, Hero.VENDETTA, Hero.DMON] else 2) if victim.enhancementId != Enhancement.ZOMBIE_HYBRID else 1)
         if not victim.isInfected and victim.infectionLevel >= 1:
             victim.isInfected = true

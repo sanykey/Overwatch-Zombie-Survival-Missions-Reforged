@@ -187,7 +187,8 @@ rule "RUSHER MOLTEN CORE BURNS PLAYERS (BOSS)":
     @Team 2
     @Hero torbjorn
     @Condition eventAbility == Button.ULTIMATE
-    
+    @Condition not victim.isDotProtected
+
     victim.startDamageOverTime(attacker, 1, eventPlayer.botBiteDamage * 0.5)
     victim.setStatusEffect(attacker, Status.BURNING, 0.5)
     if victim.damageOverTimeRemaining < 0.5:
@@ -217,7 +218,7 @@ rule "BEHEMOTH (ROAD) TOXIC CLOUD":
             eventPlayer.setAbilityCooldown(Button.ABILITY_1, 3)
         else:
             #Gas Attack
-            (playerTargetList.filter(lambda x: isInLoS(eventPlayer.getEyePosition(), x.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) and distance(eventPlayer, x) < 10 * eventPlayer.sizeScale and x.getEyePosition().y - eventPlayer.getPosition().y > 0 and x.getPosition().y - eventPlayer.getPosition().y < 2 * eventPlayer.sizeScale)).startDamageOverTime(eventPlayer, 2.5, eventPlayer.botBiteDamage * 0.231)
+            (playerTargetList.filter(lambda x: not x.isDotProtected and isInLoS(eventPlayer.getEyePosition(), x.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) and distance(eventPlayer, x) < 10 * eventPlayer.sizeScale and x.getEyePosition().y - eventPlayer.getPosition().y > 0 and x.getPosition().y - eventPlayer.getPosition().y < 2 * eventPlayer.sizeScale)).startDamageOverTime(eventPlayer, 2.5, eventPlayer.botBiteDamage * 0.231)
             if eventPlayer.damageOverTimeRemaining < 2.5:
                 eventPlayer.damageOverTimeRemaining = 2.5
             eventPlayer.setAbilityCooldown(Button.ABILITY_1, 8)
@@ -279,7 +280,7 @@ rule "BEHEMOTH GAS STREAM (BOSS)":
         #!define behemothGasCloudRadius tmp2
         behemothGasCloudPosition = eventPlayer.botGasPositionList[behemothGasCloudIndex]
         behemothGasCloudRadius = eventPlayer.botGasRadiusList[behemothGasCloudIndex]
-        eventPlayer.botSpecialTargetList.append(playerTargetList.filter(lambda x: not x in eventPlayer.botSpecialTargetList and distance(behemothGasCloudPosition, vect(x.getEyePosition().x, behemothGasCloudPosition.y, x.getEyePosition().z)) < behemothGasCloudRadius and abs(behemothGasCloudPosition.y - x.getEyePosition().y) < behemothGasCloudRadius / 5))
+        eventPlayer.botSpecialTargetList.append(playerTargetList.filter(lambda x: not x in eventPlayer.botSpecialTargetList and not x.isDotProtected and distance(behemothGasCloudPosition, vect(x.getEyePosition().x, behemothGasCloudPosition.y, x.getEyePosition().z)) < behemothGasCloudRadius and abs(behemothGasCloudPosition.y - x.getEyePosition().y) < behemothGasCloudRadius / 5))
     eventPlayer.botSpecialTargetList.startDamageOverTime(eventPlayer, 2.5, eventPlayer.botBiteDamage * 0.1)
     if eventPlayer.damageOverTimeRemaining < 2.5 and eventPlayer.botSpecialTargetList != []:
         eventPlayer.damageOverTimeRemaining = 2.5
@@ -909,7 +910,8 @@ rule "BLASTER ROCKET HITS TARGET":
     @Team 2
     @Hero pharah
     @Condition (eventAbility == Button.PRIMARY_FIRE or eventAbility == Button.ULTIMATE) == true
-    
+    @Condition not victim.isDotProtected
+
     #!define blasterRocketBurnDuration tmp0
     blasterRocketBurnDuration = 2 if eventAbility == Button.ULTIMATE else 1
     victim.startDamageOverTime(eventPlayer, blasterRocketBurnDuration, eventPlayer.botBiteDamage * (0.5 if eventAbility == Button.ULTIMATE else 1))
