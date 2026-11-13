@@ -196,7 +196,9 @@ rule "DASH DOUBLE TAP":
         if eventPlayer.isHoldingButton(Button.JUMP):
             useAugmentAirAction()
             waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), Math.INFINITY)
-    loop()
+    # Selection can change while a press/release wait is pending.
+    if ruleCondition:
+        loop()
 
 
 rule "DASH SMOKE FADE":
@@ -314,7 +316,7 @@ def useAugmentAirAction():
                 # (CANCEL_CONTRARY_MOTION), leaving an in-place dash without push.
                 if augmentDashDirection != vect(0, 0, 0):
                     eventPlayer.applyImpulse(directionFromAngles(eventPlayer.getHorizontalFacingAngle() + horizontalAngleOfDirection(augmentDashDirection), 0), 21.25, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
-        else:
+        elif eventPlayer.augmentId == Augment.DOUBLE_JUMP:
             eventPlayer.augmentIsAirActionReady = false
             if getTotalTimeElapsed() >= eventPlayer.augmentMovementReadyAt:
                 eventPlayer.augmentMovementReadyAt = getTotalTimeElapsed() + 16

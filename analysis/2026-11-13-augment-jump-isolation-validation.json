@@ -1,0 +1,14 @@
+{
+  "baseline": "57f08d75f9bf52c6b9caed30646041b5e6edc743",
+  "beforeElements": 30120,
+  "afterElements": 30126,
+  "elementDelta": 6,
+  "changedRules": [
+    "DASH DOUBLE TAP",
+    "useAugmentAirAction"
+  ],
+  "cases": 28,
+  "baselineBugReproduced": true,
+  "warnings": [],
+  "limitation": "Compiled-action simulation; no in-game run."
+}
