@@ -27,7 +27,7 @@ rule "AUGMENT MENU":
             "Carry twice the ammo per full magazine; full reloads restore the bonus",
             "Crouch + Jump: grapple 7-40m; enemies hit for 35 damage; stun grounded 0.5s / knock airborne down 3s; allies unharmed. cd: 16s",
             "Hold Crouch + Interact to aim a zombie-blocking wall; release Interact to deploy. cd: 30s",
-            f"Health packs: 2x healing, -1 infection, +{AUGMENT_APOTHECARY_ULT_CHARGE}% ult. Ultimate grants 1 teleport (hold Crouch + Interact) to the last pack used, or a random known pack if none used",
+            f"Health packs: 2x healing, -1 infection, +{AUGMENT_APOTHECARY_ULT_CHARGE}% ult. Ultimate (D.Va/D.Mon: ult damage required) grants 1 teleport (hold Crouch + Interact) to the last pack used, or a random known pack if none used",
             "Crouch + Interact: stash (2 slots). Interact: active slot. Hold Reload: drop all. Bot eliminations: 5% loot, backpack first",
             "15% lifesteal, +50 recoverable health"
         ][localPlayer.augmentId],
@@ -52,10 +52,11 @@ rule "APOTHECARY ULTIMATE RECHARGE":
     @Team 1
     @Condition eventPlayer.isUsingUltimate() == true
 
-    if eventPlayer.augmentId != Augment.APOTHECARY:
+    if eventPlayer.augmentId != Augment.APOTHECARY or eventPlayer.getHero() in [Hero.DVA, Hero.DMON]:
         return
 
-    # Activation edge only: spending during a lasting ultimate cannot recharge it.
+    # D.Va/D.Mon recharge on ultimate damage in PLAYER DEALT DAMAGE instead.
+    # Other heroes use the activation edge, not the lasting ultimate state.
     eventPlayer.augmentApothecaryReady = true
 
 

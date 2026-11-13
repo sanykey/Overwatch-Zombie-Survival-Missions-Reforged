@@ -186,3 +186,6 @@ rule "PLAYER DEALT DAMAGE":
     if eventPlayer.augmentId == Augment.LEECH:
         # Include damage from the hero, primary enhancement and scripted powerups.
         heal(eventPlayer, eventPlayer, eventDamage * 0.15)
+    elif eventPlayer.augmentId == Augment.APOTHECARY and eventAbility == Button.ULTIMATE and eventPlayer.getHero() in [Hero.DVA, Hero.DMON]:
+        # Positive, non-self ultimate damage only; activation alone gives no charge.
+        eventPlayer.augmentApothecaryReady = true
