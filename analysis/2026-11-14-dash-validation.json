@@ -1,0 +1,17 @@
+{
+  "beforeElements": 30014,
+  "afterElements": 30014,
+  "elementDelta": 0,
+  "rulesChecked": 319,
+  "compiledRuleBodies": "identical",
+  "variables": "identical",
+  "warnings": [],
+  "rootBuild": "matches",
+  "limitation": "No in-game run; rule order changed by file extraction.",
+  "comparisonScope": "Module extraction before the subsequent impulse increase from 21.25 to 23.375.",
+  "finalBuild": {
+    "dashImpulse": 23.375,
+    "elements": 30014,
+    "warnings": []
+  }
+}

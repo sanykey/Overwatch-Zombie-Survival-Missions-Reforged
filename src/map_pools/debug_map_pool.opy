@@ -1,13 +1,14 @@
 #!mainFile "../../main.opy"
 
-# Original release rotation. These text macros insert settings dictionary entries
+# Hanamura only, including all available time-of-day and weather variants.
+# These text macros insert settings dictionary entries
 # (including the trailing comma); they do not allocate Workshop variables.
-#!define MAP_POOL_ASSAULT "enabled": true,
-#!define MAP_POOL_CTF "disabledMaps": ["busanSanctuaryLny", "lijiangControlCenterLny", "lijiangGardenLny", "oasisCityCenter", "oasisGardens", "oasisUniversity"],
-#!define MAP_POOL_CLASH "enabled": true,
-#!define MAP_POOL_CONTROL "enabledMaps": [{"antarcticPeninsula": ["morning"]}, "oasis", "samoa"],
-#!define MAP_POOL_ESCORT "disabledMaps": ["watchpointGibraltar"],
-#!define MAP_POOL_FLASHPOINT "enabled": true,
-#!define MAP_POOL_HYBRID "disabledMaps": ["eichenwalde", "kingsRow", "paraiso"],
-#!define MAP_POOL_PUSH "enabled": true,
-#!define MAP_POOL_TDM "enabledMaps": ["blackForest", "blackForestWinter", "castillo", "chateauGuillard", "chateauGuillardHalloween", "ecopointAntarctica", "ecopointAntarcticaWinter", "kanezaka", "malevento", "necropolis", "petra"],
+#!define MAP_POOL_ASSAULT "enabledMaps": ["hanamura"],
+#!define MAP_POOL_CTF "enabled": false,
+#!define MAP_POOL_CLASH "enabled": false,
+#!define MAP_POOL_CONTROL "enabled": false,
+#!define MAP_POOL_ESCORT "enabled": false,
+#!define MAP_POOL_FLASHPOINT "enabled": false,
+#!define MAP_POOL_HYBRID "enabled": false,
+#!define MAP_POOL_PUSH "enabled": false,
+#!define MAP_POOL_TDM "enabled": false,
