@@ -1,0 +1,15 @@
+{
+  "beforeElements": 30092,
+  "afterElements": 30096,
+  "elementDelta": 4,
+  "addedVariables": 0,
+  "changedRules": [
+    "[DASH] CHARGE RECHARGE",
+    "[HIGHRISE] DOUBLE TAP"
+  ],
+  "baselineBugReproduced": true,
+  "menuCases": 4,
+  "cooldownTicks": 25,
+  "warnings": [],
+  "limitation": "Compiled-action simulation; no in-game run."
+}

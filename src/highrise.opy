@@ -55,6 +55,8 @@ rule "[HIGHRISE] AIR ACTION INPUT":
 rule "[HIGHRISE] DOUBLE TAP":
     @Event eachPlayer
     @Team 1
+    # The menu's Jump confirmation must not leave a timestamp in another augment's cooldown.
+    @Condition isGameplayActive == true
     @Condition eventPlayer.augmentId == Augment.HIGHRISE
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
