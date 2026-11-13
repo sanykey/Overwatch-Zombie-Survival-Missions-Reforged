@@ -138,7 +138,7 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         #!define supplyDropGeneratedItemIndex tmp0
         for supplyDropGeneratedItemIndex in range(supplyDropPowerUpCount):
             #Range of power ups
-            supplyPowerUpIdList.append(random.randint(1, 13))
+            supplyPowerUpIdList.append(random.randint(PowerUpItem.CURE, PowerUpItem.STUN))
         #Spacing of power ups
         # supplyDropItemAngleOffset: item angle offset in degrees, to spread the opened supply drop's items toward the player.
         #!define supplyDropItemAngleOffset tmp0
@@ -156,7 +156,7 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         tradedPowerUpItemId = eventPlayer.powerUpItemId
         if eventPlayer.augmentId == Augment.SCAVENGER and eventPlayer.isHoldingButton(Button.CROUCH):
             eventPlayer.augmentScavengerBackpack.append(supplyPowerUpIdList[pickedPowerUpIndex])
-            tradedPowerUpItemId = 0
+            tradedPowerUpItemId = PowerUpItem.NONE
         else:
             eventPlayer.powerUpItemId = supplyPowerUpIdList[pickedPowerUpIndex]
         destroyEffect(supplyPowerUpEffectIdList[pickedPowerUpIndex])
@@ -165,7 +165,7 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         del supplyPowerUpPositionList[pickedPowerUpIndex]
         del supplyPowerUpEffectIdList[pickedPowerUpIndex]
         del supplyPowerUpTextIdList[pickedPowerUpIndex]
-        if tradedPowerUpItemId != 0:
+        if tradedPowerUpItemId != PowerUpItem.NONE:
             supplyPowerUpIdList.append(tradedPowerUpItemId)
             supplyPowerUpPositionList.append(pickedPowerUpPosition)
     # Scavenger backpack cycling: Crouch + Interact with nothing to store swaps
@@ -177,11 +177,11 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         if len(eventPlayer.augmentScavengerBackpack) > 0:
             eventPlayer.powerUpItemId = eventPlayer.augmentScavengerBackpack[0]
             del eventPlayer.augmentScavengerBackpack[0]
-            if scavCycleItemId != 0:
+            if scavCycleItemId != PowerUpItem.NONE:
                 eventPlayer.augmentScavengerBackpack.append(scavCycleItemId)
-        elif scavCycleItemId != 0:
+        elif scavCycleItemId != PowerUpItem.NONE:
             eventPlayer.augmentScavengerBackpack.append(scavCycleItemId)
-            eventPlayer.powerUpItemId = 0
+            eventPlayer.powerUpItemId = PowerUpItem.NONE
     elif eventPlayer.powerUpItemId:
         wait(0.25, Wait.ABORT_WHEN_FALSE)
         # Phase/input guards are in Actions, outside Abort When False checks.
@@ -540,7 +540,7 @@ def powerUpUsage():
     
     switch eventPlayer.powerUpItemId:
         #Cure
-        case 1:
+        case PowerUpItem.CURE:
             playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, Color.GREEN, eventPlayer, 1)
             eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 1)
             if eventPlayer.infectionLevel > 0:
@@ -551,51 +551,51 @@ def powerUpUsage():
             playAquaPowerUpSound()
             break
         #Instant Revive
-        case 2:
+        case PowerUpItem.REVIVE:
             if not getDeadPlayers(Team.1).any(lambda player: distance(eventPlayer, player) <= REVIVE_RADIUS):
                 return
             startRule(instantRevive)
             break
         #Force Field
-        case 3:
+        case PowerUpItem.FORCE_FIELD:
             startRule(playerForceField)
             break
         #No Cooldowns
-        case 4:
+        case PowerUpItem.NO_COOLDOWNS:
             startRule(noCooldowns)
             break
         #Air Strike
-        case 5:
+        case PowerUpItem.AIR_STRIKE:
             if distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 41, null, getAllPlayers(), false)) > 40:
                 smallMessage(eventPlayer, "Aim at a surface to call in an aistrike")
                 return
             startRule(airStrike)
             break
         #Beacon of Healing
-        case 6:
+        case PowerUpItem.HEALING_BEACON:
             startRule(healBeacon)
             break
         #Vaccine
-        case 7:
+        case PowerUpItem.VACCINE:
             playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.GREEN, eventPlayer, 6)
             playAquaPowerUpSound()
             smallMessage(eventPlayer, "Your infection is reduced!")
             getPlayersInRadius(eventPlayer, 6, Team.1, LosCheck.SURFACES).infectionLevel -= 1.5
             break
         #Sentry Turret
-        case 8:
+        case PowerUpItem.SENTRY_TURRET:
             startRule(sentryTurret)
             break
         #Cloaking Device
-        case 9:
+        case PowerUpItem.CLOAKING_DEVICE:
             startRule(cloakingDevice)
             break
         #Super Nano
-        case 10:
+        case PowerUpItem.SUPER_NANO:
             startRule(superNano)
             break
         #Jetpack: add 100 fuel up to POWERUP_JETPACK_FUEL_MAX, including during an active flight chase.
-        case 11:
+        case PowerUpItem.JETPACK:
             if eventPlayer.getHero() in [Hero.JETPACK_CAT, Hero.PHARAH]:
                 smallMessage(eventPlayer, "Your hero cannot use Jetpack")
                 return
@@ -606,11 +606,11 @@ def powerUpUsage():
             playAquaPowerUpSound()
             break
         #Ultimate Charger
-        case 12:
+        case PowerUpItem.ULTIMATE_CHARGER:
             startRule(ultimateCharger)
             break
         #Stun
-        case 13:
+        case PowerUpItem.STUN:
             #Check if their are targets nearby and in view angle
             if getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).any(lambda player: distance(eventPlayer, player) < 15 * eventPlayer.sizeScale and angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), player.getEyePosition())) < 45):
                 startRule(stun)
@@ -618,7 +618,7 @@ def powerUpUsage():
                 smallMessage(eventPlayer, "Aim at a nearby target")
                 return
             break
-    eventPlayer.powerUpItemId = 0
+    eventPlayer.powerUpItemId = PowerUpItem.NONE
 
 
 def playAquaPowerUpSound():

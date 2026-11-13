@@ -98,7 +98,7 @@ rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS":
         # biomorphingRewardItemIndex: reward-item index, to place four power-ups at 90-degree intervals around the objective.
         #!define biomorphingRewardItemIndex tmp0
         for biomorphingRewardItemIndex in range(4):
-            supplyPowerUpIdList.append(random.randint(1, 13))
+            supplyPowerUpIdList.append(random.randint(PowerUpItem.CURE, PowerUpItem.STUN))
             supplyPowerUpPositionList.append(currentObjectivePosition + directionFromAngles(90 * biomorphingRewardItemIndex, 0))
         isObjectiveComplete = true
     if ruleCondition:

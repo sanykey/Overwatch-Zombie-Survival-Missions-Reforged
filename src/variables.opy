@@ -135,6 +135,24 @@ enum ReconnectStatus:
     DOWNED = 1,
     DEAD = 2,
 
+# Carried and ground item IDs; NONE is the empty active slot.
+# Real IDs are contiguous CURE..STUN; display tables use ID - 1.
+enum PowerUpItem:
+    NONE = 0,
+    CURE = 1,
+    REVIVE = 2,
+    FORCE_FIELD = 3,
+    NO_COOLDOWNS = 4,
+    AIR_STRIKE = 5,
+    HEALING_BEACON = 6,
+    VACCINE = 7,
+    SENTRY_TURRET = 8,
+    CLOAKING_DEVICE = 9,
+    SUPER_NANO = 10,
+    JETPACK = 11,
+    ULTIMATE_CHARGER = 12,
+    STUN = 13,
+
 # Remaining sparse indices in powerUpEntityIdList; frequently used IDs have dedicated player variables below.
 # Turret effect slots 50..54 stay contiguous for creation and cleanup loops.
 enum PowerUpEntitySlot:
@@ -676,7 +694,7 @@ playervar actorTeamSlot1  # Team 2: botIsSelectingTarget; Team 1: powerUpReviveT
 playervar actorTeamSlot2  # Boss return snapshot on Team 2 or carried item ID on Team 1.
 # Boss eye-position snapshot written and cleared during return; currently not read.
 #!define botReturnPosition actorTeamSlot2
-# Active supply item ID; zero means none. Scavenger reserves never occupy this slot.
+# Active PowerUpItem ID; PowerUpItem.NONE means empty. Scavenger reserves never occupy this slot.
 #!define powerUpItemId actorTeamSlot2
 
 playervar actorTeamSlot3  # Team 2 teleport flag; Team 1 human challenge vote or Rescue dummy path. Menu writers are phase-guarded.

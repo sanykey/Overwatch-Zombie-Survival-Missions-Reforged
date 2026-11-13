@@ -10,7 +10,7 @@ macro powerUpAssignmentMacro():
     # Only visibility reevaluates, so neither the initial color nor the label retains a scratch dependency.
     #!define groundPowerUpItemId tmp0
     groundPowerUpItemId = supplyPowerUpIdList[len(supplyPowerUpEffectIdList)]
-    if groundPowerUpItemId >= 1 and groundPowerUpItemId <= 13:
+    if groundPowerUpItemId >= PowerUpItem.CURE and groundPowerUpItemId <= PowerUpItem.STUN:
         createEffect(getAllPlayers(), Effect.ORB, powerUpColorListConst[groundPowerUpItemId - 1], supplyPowerUpPositionList[len(supplyPowerUpEffectIdList)], 1, EffectReeval.VISIBILITY)
         createInWorldText(getAllPlayers(), ["CURE", "Revive", "Force Field", "No Cooldowns", "Air Strike", "Beacon of Healing", "Vaccine", "Sentry Turret", "Cloaking Device", "Super Nano", "Jetpack", "Ultimate Charger", "Stun"][groundPowerUpItemId - 1], supplyPowerUpPositionList[len(supplyPowerUpTextIdList)], 1, Clip.SURFACES, WorldTextReeval.VISIBILITY)
 
@@ -33,7 +33,7 @@ rule "EFFECT/TEXT (PERMANENT)":
     # Capture each row's color directly from the immutable shared item palette.
     # powerUpHudItemIndex: zero-based item index, to choose the row's visibility, name, instructions and color.
     #!define powerUpHudItemIndex tmp0
-    for powerUpHudItemIndex in range(13):
+    for powerUpHudItemIndex in range(PowerUpItem.STUN):
         hudText(
             getLivingPlayers(Team.1).filter(lambda player: player.powerUpItemId == evalOnce(powerUpHudItemIndex) + 1),
             [
@@ -53,7 +53,7 @@ rule "EFFECT/TEXT (PERMANENT)":
             ][evalOnce(powerUpHudItemIndex)],
             "Hold [{0}] to drop your power up".format(inputBindingString(Button.RELOAD)),
             "{0} [{1}] {2}".format(
-                "Look at a teammate and hold" if evalOnce(powerUpHudItemIndex) == 1 else "Hold",
+                "Look at a teammate and hold" if evalOnce(powerUpHudItemIndex) == PowerUpItem.REVIVE - 1 else "Hold",
                 inputBindingString(Button.INTERACT),
                 [
                     "to stop all damage over time and cure yourself",
@@ -103,7 +103,7 @@ rule "PLAYER DROPS POWER UP (MANUAL)":
 rule "PLAYER DROPS POWER UP (DEATH)":
     @Event playerDied
     @Team 1
-    @Condition (eventPlayer.powerUpItemId != 0 or (eventPlayer.augmentId == Augment.SCAVENGER and len(eventPlayer.augmentScavengerBackpack) > 0)) == true
+    @Condition (eventPlayer.powerUpItemId != PowerUpItem.NONE or (eventPlayer.augmentId == Augment.SCAVENGER and len(eventPlayer.augmentScavengerBackpack) > 0)) == true
     
     # Reserve slots must be emptied before respawn initialization; use a walkable
     # drop position immediately for Scavenger instead of waiting for the corpse.
@@ -120,7 +120,7 @@ def dropCarriedPowerUps():
     # one execution. All writes are synchronous; no waits in this helper.
     #!define droppedPowerUpIds tmp0
     #!define droppedPowerUpPosition tmp1
-    droppedPowerUpIds = [eventPlayer.powerUpItemId] if eventPlayer.powerUpItemId != 0 else []
+    droppedPowerUpIds = [eventPlayer.powerUpItemId] if eventPlayer.powerUpItemId != PowerUpItem.NONE else []
     if eventPlayer.augmentId == Augment.SCAVENGER:
         droppedPowerUpIds = droppedPowerUpIds.concat(eventPlayer.augmentScavengerBackpack)
         eventPlayer.augmentScavengerBackpack = []
@@ -134,5 +134,5 @@ def dropCarriedPowerUps():
 def finishPowerUpDrop():
     @Name "finishPowerUpDrop"
 
-    eventPlayer.powerUpItemId = 0
+    eventPlayer.powerUpItemId = PowerUpItem.NONE
     playEffect(eventPlayer, DynamicEffect.DEBUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.getPosition(), 25)

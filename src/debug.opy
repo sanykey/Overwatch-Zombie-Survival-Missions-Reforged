@@ -20,7 +20,7 @@ rule "[debug] snky buffs":
     # Refuel during gameplay only: menu HUD cleanup runs before gameplay begins.
     wait(5)
     eventPlayer.powerUpJetpackFuel = 100
-    # eventPlayer.powerUpItemId = 11
+    # eventPlayer.powerUpItemId = PowerUpItem.JETPACK
     # The stack slot belongs to other state when a different enhancement is selected.
     if eventPlayer.enhancementId == Enhancement.BULKING_SEASON:
         eventPlayer.enhancementBulkStacks = 300

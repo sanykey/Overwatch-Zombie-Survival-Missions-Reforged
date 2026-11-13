@@ -1,0 +1,19 @@
+{
+  "builds": [
+    {
+      "debug": false,
+      "beforeElements": 30126,
+      "afterElements": 30126,
+      "workshopOutputIdenticalExceptDebugComment": true,
+      "warnings": []
+    },
+    {
+      "debug": true,
+      "beforeElements": 30233,
+      "afterElements": 30233,
+      "workshopOutputIdenticalExceptDebugComment": true,
+      "warnings": []
+    }
+  ],
+  "entryPointMatches": true
+}

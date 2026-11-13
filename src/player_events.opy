@@ -62,9 +62,9 @@ rule "PLAYER EARNED ELIMINATION":
             # One item roll per credited kill or damage participation. No waits or
             # calls while this scratch value is live; reserves never activate here.
             #!define scavengerLootItemId tmp0
-            scavengerLootItemId = random.randint(1, 13)
+            scavengerLootItemId = random.randint(PowerUpItem.CURE, PowerUpItem.STUN)
             # An empty active slot takes the loot directly; only overflow goes to the backpack.
-            if eventPlayer.powerUpItemId == 0:
+            if eventPlayer.powerUpItemId == PowerUpItem.NONE:
                 eventPlayer.powerUpItemId = scavengerLootItemId
                 smallMessage(eventPlayer, "Scavenger: powerup equipped")
             elif len(eventPlayer.augmentScavengerBackpack) < 2:
