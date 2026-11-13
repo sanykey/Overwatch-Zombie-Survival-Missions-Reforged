@@ -1,0 +1,44 @@
+{
+  "beforeTotal": 30346,
+  "afterTotal": 30227,
+  "rules": [
+    {
+      "name": "LONG REACH MELEE PUSH",
+      "before": 102,
+      "after": 102
+    },
+    {
+      "name": "LONG REACH QUICK MELEE",
+      "before": 98,
+      "after": 92
+    },
+    {
+      "name": "LONG REACH VENDETTA SWORD",
+      "before": 54,
+      "after": 44
+    },
+    {
+      "name": "LONG REACH MELEE WEAPONS",
+      "before": 291,
+      "after": 213
+    },
+    {
+      "name": "LONG REACH CARNAGE",
+      "before": 25,
+      "after": 19
+    },
+    {
+      "name": "extendAugmentMelee",
+      "before": 142,
+      "after": 119
+    }
+  ],
+  "virtualHits": 487,
+  "includingPush": 589,
+  "initialization": 26,
+  "fullLogic": 619,
+  "compressionInitializationOverhead": 4,
+  "checks": 59,
+  "warnings": [],
+  "limitation": "Controlled execution of compiled actions; native animation timing and scheduling require in-game testing."
+}

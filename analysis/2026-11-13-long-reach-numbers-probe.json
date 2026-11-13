@@ -1,0 +1,61 @@
+{
+  "baseline": 30274,
+  "rows": [
+    [
+      4,
+      100,
+      0.4,
+      0.56
+    ],
+    [
+      6,
+      45,
+      0.2,
+      0.4
+    ],
+    [
+      4,
+      60,
+      0.2,
+      0.456
+    ],
+    [
+      5,
+      100,
+      0.15,
+      0
+    ],
+    [
+      10,
+      65,
+      0.15,
+      0.45
+    ],
+    [
+      2.5,
+      70,
+      0.35,
+      0.35
+    ]
+  ],
+  "genjiRecoveryPreserved": 0.45869565217391306,
+  "compressedRoundingWouldProduce": 0.459,
+  "results": [
+    {
+      "layout": "prepend-hero",
+      "elements": 30227,
+      "saving": 47,
+      "ruleElements": 213,
+      "profileAction": "        Set Player Variable(Event Player, augmentState2, Append To Array(Array(Hero Of(Event Player)), Array Slice(Global.numbersList, Add(552, Multiply(Index Of Array Value(Global.augmentMeleeWeaponHeroListConst, Hero Of(Event Player)), 4)), 4))); // 21 elements",
+      "warnings": []
+    },
+    {
+      "layout": "append-hero",
+      "elements": 30229,
+      "saving": 45,
+      "ruleElements": 215,
+      "profileAction": "        Set Player Variable(Event Player, augmentState2, Append To Array(Array Slice(Global.numbersList, Add(552, Multiply(Index Of Array Value(Global.augmentMeleeWeaponHeroListConst, Hero Of(Event Player)), 4)), 4), Array(Hero Of(Event Player)))); // 21 elements",
+      "warnings": []
+    }
+  ]
+}

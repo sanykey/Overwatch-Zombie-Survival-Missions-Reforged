@@ -1,0 +1,32 @@
+{
+  "baselineRef": "66ab566db341aac0c1a736827c22a44aab6684b9",
+  "total": 30346,
+  "warnings": [],
+  "initialization": 26,
+  "rules": [
+    {
+      "name": "LONG REACH MELEE PUSH",
+      "elements": 102
+    },
+    {
+      "name": "LONG REACH QUICK MELEE",
+      "elements": 98
+    },
+    {
+      "name": "LONG REACH VENDETTA SWORD",
+      "elements": 54
+    },
+    {
+      "name": "LONG REACH MELEE WEAPONS",
+      "elements": 291
+    },
+    {
+      "name": "LONG REACH CARNAGE",
+      "elements": 25
+    },
+    {
+      "name": "extendAugmentMelee",
+      "elements": 142
+    }
+  ]
+}

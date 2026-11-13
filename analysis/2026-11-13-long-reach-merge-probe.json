@@ -1,0 +1,24 @@
+{
+  "before": 30274,
+  "after": 30255,
+  "saving": 19,
+  "rulesBefore": [
+    {
+      "name": "LONG REACH VENDETTA SWORD",
+      "elements": 44
+    },
+    {
+      "name": "LONG REACH MELEE WEAPONS",
+      "elements": 264
+    }
+  ],
+  "rulesAfter": [
+    {
+      "name": "LONG REACH MELEE WEAPONS",
+      "elements": 287
+    }
+  ],
+  "steadyHeroParityCases": 42,
+  "warnings": [],
+  "limitation": "In-memory prototype only. Cross-hero transitions and engine scheduling are not validated."
+}

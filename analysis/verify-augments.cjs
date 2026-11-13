@@ -317,6 +317,7 @@ function* execute(rule, state, compiled) {
                     if (a[1] === 'Append To Array') state.globals[a[0]] = array(current).concat(
                         a[0] === 'supplyPowerUpPositionList' && !a[2].startsWith('Mapped Array(') ? [operand] : operand);
                     else if (a[1] === 'Remove From Array By Index') state.globals[a[0]] = array(current).filter((_, index) => index !== Number(operand));
+                    else if (a[1] === 'Multiply') state.globals[a[0]] = current * operand;
                     else throw new Error('Unsupported global modification: ' + line);
                     break;
                 }
@@ -662,7 +663,7 @@ async function main() {
     const runExtendedMelee = state => {
         // The helper reuses the native-radius entry for health; each caller
         // supplies a fresh query before a synchronous swing.
-        Object.assign(state.globals, {tmp0: [2.5, 7.5, 30], tmp1: 40});
+        Object.assign(state.globals, {tmp0: 2.5, tmp1: 40});
         run('extendAugmentMelee', state);
     };
     const meleeTargets = invincible => [4, 6].map((z, id) =>

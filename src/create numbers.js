@@ -160,6 +160,20 @@ const numbers = [
     len: "NL_DAMAGE_DEALT_EXPERT_LEN",
     list: [90, 125, 50, 50, 130, 40, 50, 50, 50, 150, 1, 75, 75, 90, 75, 85, 100, 125, 100, 100, 100, 75],
   },
+  { // Long Reach: [native range, damage, windup, recovery], in AUGMENT_MELEE_WEAPON_HEROES order.
+    // Append new groups to preserve all earlier offsets. Genji's recovery is a
+    // placeholder: compressed() rounds to 3 decimals, so its exact formula stays in OverPy.
+    offset: "NL_LONG_REACH_PROFILE_OFFSET",
+    len: "NL_LONG_REACH_PROFILE_LEN",
+    list: [
+      4, 100, 0.4, 0.56, // Reinhardt
+      6, 45, 0.2, 0.4, // Brigitte
+      4, 60, 0.2, 0.456, // D.Mon
+      5, 100, 0.15, 0, // Genji: recovery is calculated separately
+      10, 65, 0.15, 0.45, // Ramattra
+      2.5, 70, 0.35, 0.35, // Torbjorn
+    ],
+  },
 ];
 
 let numberIndex = 0;

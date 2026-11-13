@@ -30,10 +30,10 @@ subroutine useAugmentAirAction
 
 # Only synchronous melee query inputs use global scratch storage. Callers set
 # these AFTER their windup wait; the helper consumes them without yielding or HUD capture.
-# [native radius, augmented radius, view angle].
-#!define augmentMeleeBounds tmp0
+# Native radius; every attack uses the same reach multiplier and 30-degree cone.
+#!define augmentMeleeRadius tmp0
 # The helper snapshots targets once, then deals damage per player without yielding.
-# The bounds array is dead after the query, so both roles share the slot.
+# The radius is dead after the query, so both roles share the slot.
 #!define augmentMeleeTargets tmp0
 #!define augmentMeleeDamage tmp1
 # Health gate for the shared Pyrotechnic enqueue, which reads but never writes
@@ -444,7 +444,7 @@ rule "LONG REACH QUICK MELEE":
     wait(0.15, Wait.ABORT_WHEN_FALSE)
     if eventPlayer.getHero() != eventPlayer.augmentMeleeHero:
         return
-    augmentMeleeBounds = [AUGMENT_MELEE_RADIUS, AUGMENT_MELEE_RADIUS * AUGMENT_WEAPON_REACH_MULTIPLIER, 30]
+    augmentMeleeRadius = AUGMENT_MELEE_RADIUS
     augmentMeleeDamage = 60 if eventPlayer.getHero() == Hero.ZENYATTA else 70 if eventPlayer.getHero() == Hero.VENTURE else 40
     extendAugmentMelee()
 
@@ -473,13 +473,14 @@ rule "LONG REACH VENDETTA SWORD":
     # Adapted from the supplied Vendetta implementation: extend only the outer
     # annulus, retain windup/LoS/cone checks, and leave energy/other abilities alone.
     wait(AUGMENT_VENDETTA_WINDUP, Wait.ABORT_WHEN_FALSE)
-    augmentMeleeBounds = [AUGMENT_VENDETTA_RADIUS, AUGMENT_VENDETTA_RADIUS * AUGMENT_WEAPON_REACH_MULTIPLIER, 30]
+    augmentMeleeRadius = AUGMENT_VENDETTA_RADIUS
     augmentMeleeDamage = 45
     extendAugmentMelee()
     # Native primary-fire state can remain true through a held attack series.
-    # Release rearms the next click; after recovery, the loop gate rechecks the actor.
+    # Recovery is mandatory even on release, death or crowd control: clicks and
+    # condition edges cannot restart this rule early after a successful swing.
     # Scratch query values are consumed before this wait and rebuilt on every hit.
-    waitUntil(not eventPlayer.isHoldingButton(Button.PRIMARY_FIRE), AUGMENT_VENDETTA_INTERVAL - AUGMENT_VENDETTA_WINDUP)
+    wait(AUGMENT_VENDETTA_INTERVAL - AUGMENT_VENDETTA_WINDUP, Wait.IGNORE_CONDITION)
     if ruleCondition:
         loop()
 
@@ -518,21 +519,19 @@ rule "LONG REACH MELEE WEAPONS":
     # approximate cadence rather than polling or depending on a native hit target.
     # Genji's blade cadence includes the October swing-speed increase.
     # Timers do not copy native combo/perk effects.
-    eventPlayer.augmentWeaponProfile = [
-        [Hero.REINHARDT, 4, 100, 0.4, 0.56],
-        [Hero.BRIGITTE, 6, 45, 0.2, 0.4],
-        [Hero.DMON, 4, 60, 0.2, 0.456],
-        [Hero.GENJI, 5, 100, 0.15, 0.7 / 1.15 - 0.15],
-        [Hero.RAMATTRA, 10, 65, 0.15, 0.45],
-        [Hero.TORBJORN, 2.5, 70, 0.35, 0.35]
-    ][AUGMENT_MELEE_WEAPON_HEROES.index(eventPlayer.getHero())]
+    # The numeric rows live in create numbers.js, in the same hero-list order.
+    # Keep the hero snapshot in the retained player slot across both waits.
+    eventPlayer.augmentWeaponProfile = [eventPlayer.getHero()].concat(numbersList.slice(NL_LONG_REACH_PROFILE_OFFSET + AUGMENT_MELEE_WEAPON_HEROES.index(eventPlayer.getHero()) * 4, 4))
     wait(eventPlayer.augmentWeaponProfile[3], Wait.ABORT_WHEN_FALSE)
     if eventPlayer.getHero() != eventPlayer.augmentWeaponProfile[0]:
         return
-    augmentMeleeBounds = [eventPlayer.augmentWeaponProfile[1], eventPlayer.augmentWeaponProfile[1] * AUGMENT_WEAPON_REACH_MULTIPLIER, 30]
+    augmentMeleeRadius = eventPlayer.augmentWeaponProfile[1]
     augmentMeleeDamage = eventPlayer.augmentWeaponProfile[2]
     extendAugmentMelee()
-    waitUntil(not eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) and not (eventPlayer.getHero() in AUGMENT_MELEE_BUTTON_WEAPON_HEROES and eventPlayer.isHoldingButton(Button.MELEE)), eventPlayer.augmentWeaponProfile[4])
+    # Do not let releasing either attack binding shorten recovery. Ignore rule
+    # condition changes until it expires, then validate the actor at the loop gate.
+    # compressed() rounds to three decimals; retain Genji's exact recovery here.
+    wait(0.7 / 1.15 - 0.15 if eventPlayer.augmentWeaponProfile[0] == Hero.GENJI else eventPlayer.augmentWeaponProfile[4], Wait.IGNORE_CONDITION)
     if ruleCondition:
         loop()
 
@@ -551,7 +550,7 @@ rule "LONG REACH CARNAGE":
 
     # Carnage is a committed ability, not a repeating primary-fire timer.
     wait(0.75, Wait.ABORT_WHEN_FALSE)
-    augmentMeleeBounds = [5, 5 * AUGMENT_WEAPON_REACH_MULTIPLIER, 30]
+    augmentMeleeRadius = 5
     augmentMeleeDamage = 90
     extendAugmentMelee()
 
@@ -559,16 +558,20 @@ rule "LONG REACH CARNAGE":
 def extendAugmentMelee():
     @Name "extendAugmentMelee"
 
-    augmentMeleeTargets = getPlayersInRadius(eventPlayer.getEyePosition(), augmentMeleeBounds[1] * eventPlayer.sizeScale + 2, Team.2, LosCheck.SURFACES).filter(lambda target: target.isAlive() and distance(eventPlayer, target) > augmentMeleeBounds[0] * eventPlayer.sizeScale and distance(eventPlayer, target) <= augmentMeleeBounds[1] * eventPlayer.sizeScale and eventPlayer.isInViewAngle(target.getEyePosition(), augmentMeleeBounds[2]))
+    # Scale the scalar scratch once before the query, rather than per candidate.
+    augmentMeleeRadius *= eventPlayer.sizeScale
+    augmentMeleeTargets = getPlayersInRadius(eventPlayer.getEyePosition(), augmentMeleeRadius * AUGMENT_WEAPON_REACH_MULTIPLIER + 2, Team.2, LosCheck.SURFACES).filter(lambda target: target.isAlive() and distance(eventPlayer, target) > augmentMeleeRadius and distance(eventPlayer, target) <= augmentMeleeRadius * AUGMENT_WEAPON_REACH_MULTIPLIER and eventPlayer.isInViewAngle(target.getEyePosition(), 30))
     # The caller's hero snapshot is no longer read after the windup; reuse its
     # owner-only slot as a synchronous index. Each Damage receives one player.
     for eventPlayer.augmentMeleeTargetIndex in range(len(augmentMeleeTargets)):
-        augmentMeleeHealthBeforeDamage = augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex].getHealth()
-        damage(augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex], eventPlayer, augmentMeleeDamage)
+        # tmp3 is the shared enqueue's read-only victim input; it stays valid
+        # through this synchronous iteration, including the Overcharge bonus.
+        pyroBurnVictim = augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex]
+        augmentMeleeHealthBeforeDamage = pyroBurnVictim.getHealth()
+        damage(pyroBurnVictim, eventPlayer, augmentMeleeDamage)
         # Script Damage has no Event Ability; the shared enqueue gates on the
         # health snapshot already in its slot and keeps the burn worker's
         # stacking/cap/boss behavior without recursing.
-        pyroBurnVictim = augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex]
         enqueuePyroBurn()
         if eventPlayer.enhancementId == Enhancement.OVERCHARGE and eventPlayer.enhancementCapacitorCharge > 0:
                 # Extended hits have no Event Ability; apply the armed bonus here.
@@ -576,7 +579,7 @@ def extendAugmentMelee():
                 if eventPlayer.enhancementCapacitorDeadline == 0:
                     eventPlayer.enhancementCapacitorDeadline = getTotalTimeElapsed() + 0.3
                 if getTotalTimeElapsed() < eventPlayer.enhancementCapacitorDeadline:
-                    damage(augmentMeleeTargets[eventPlayer.augmentMeleeTargetIndex], eventPlayer, eventPlayer.enhancementCapacitorCharge)
+                    damage(pyroBurnVictim, eventPlayer, eventPlayer.enhancementCapacitorCharge)
     if augmentMeleeTargets != []:
         # One impact per swing, on the nearest hit target. Rounded from 0.3 to 0.4
         # (about one third larger); Grapnel Launcher uses the same impact size.

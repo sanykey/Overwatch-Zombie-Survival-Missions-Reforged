@@ -1,0 +1,11 @@
+{
+  "before": 30274,
+  "after": 30227,
+  "saving": 47,
+  "oldNumericValues": 552,
+  "addedNumericValues": 24,
+  "parityCases": 24,
+  "warnings": [],
+  "genjiRecovery": 0.45869565217391306,
+  "limitation": "Compiled decoder and actions checked; no in-game server performance measurement."
+}

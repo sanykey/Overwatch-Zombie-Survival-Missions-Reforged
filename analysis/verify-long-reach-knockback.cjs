@@ -65,17 +65,13 @@ async function main() {
     const enlarged=state([zombie('edge',[0,0,20]),zombie('outside',[0,0,20.001])]); enlarged.player.sizeScale=2;
     assert(run(enlarged).done()); assert.deepEqual(enlarged.impulses.map(i=>i.target),['edge']); cases++;
     assert(!applies(input,{...enlarged,alive:false}));
-    // All four damage controllers supply a literal 30-degree cone.
-    for (const name of ['LONG REACH QUICK MELEE','LONG REACH VENDETTA SWORD','LONG REACH MELEE WEAPONS','LONG REACH CARNAGE']) {
-        const query=compiled.get(name).body.split('\n').find(l=>l.startsWith('Set Global Variable(tmp0, Array('));
-        assert(query && query.endsWith(', 30));'),name);
-    }
+    assert(compiled.get('extendAugmentMelee').body.includes('Eye Position(Current Array Element), 30)'));
     // Exercise the emitted damage query across every native range. The new
     // common cone narrows wide sweeps and widens Ramattra's former 6-degree cone.
     for (const radius of [2.5,4.3,4,6,5,10]) {
         const atAngle=(id,angle)=>zombie(id,[(radius+1)*Math.sin(angle*Math.PI/180),0,(radius+1)*Math.cos(angle*Math.PI/180)]);
         const s=state([atAngle('inside',29.9),atAngle('outside',30.1)]);
-        Object.assign(s.globals,{tmp0:[radius,radius*3,30],tmp1:40});
+        Object.assign(s.globals,{tmp0:radius,tmp1:40});
         assert(start(compiled.get('extendAugmentMelee'),s,compiled).done());
         assert.deepEqual(s.damage.flatMap(h=>h.targets.map(t=>t.id)),['inside']); cases++;
     }
