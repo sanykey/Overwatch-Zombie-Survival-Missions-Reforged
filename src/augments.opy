@@ -15,6 +15,11 @@ subroutine useAugmentAirAction
 #!define AUGMENT_MELEE_PUSH_IMPULSE 25
 #!define AUGMENT_MELEE_PUSH_RADIUS 10
 #!define AUGMENT_WEAPON_REACH_MULTIPLIER 3
+#!define AUGMENT_VENDETTA_DAMAGE 33.75
+# Original damage 45; 75% = 33.75 (Vendetta sword).
+#!define AUGMENT_CARNAGE_RADIUS 4.5
+#!define AUGMENT_CARNAGE_DAMAGE 78.75
+# Original damage 105; 75% = 78.75 (Carnage).
 #!define AUGMENT_VENDETTA_RADIUS 4.3
 #!define AUGMENT_VENDETTA_WINDUP 0.15
 #!define AUGMENT_VENDETTA_INTERVAL 0.6
@@ -472,7 +477,7 @@ rule "LONG REACH VENDETTA SWORD":
     # Adapted from the supplied Vendetta implementation: extend only the outer
     # annulus, retain windup/LoS/cone checks, and leave energy/other abilities alone.
     wait(AUGMENT_VENDETTA_WINDUP, Wait.ABORT_WHEN_FALSE)
-    extendAugmentMeleeMacro(AUGMENT_VENDETTA_RADIUS, 45)
+    extendAugmentMeleeMacro(AUGMENT_VENDETTA_RADIUS, AUGMENT_VENDETTA_DAMAGE)
     # Native primary-fire state can remain true through a held attack series.
     # Recovery is mandatory even on release, death or crowd control: clicks and
     # condition edges cannot restart this rule early after a successful swing.
@@ -545,7 +550,7 @@ rule "LONG REACH CARNAGE":
 
     # Carnage is a committed ability, not a repeating primary-fire timer.
     wait(0.75, Wait.ABORT_WHEN_FALSE)
-    extendAugmentMeleeMacro(5, 90)
+    extendAugmentMeleeMacro(AUGMENT_CARNAGE_RADIUS, AUGMENT_CARNAGE_DAMAGE)
 
 
 def extendAugmentMelee():

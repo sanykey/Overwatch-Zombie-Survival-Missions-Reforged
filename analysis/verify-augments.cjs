@@ -1396,7 +1396,7 @@ async function main() {
         const state = {...widow, ...override};
         assert(!applies(fallbackRule, state), 'Do not apply a stale/dead loadout refill');
     }
-    for (const [name, base, hero, amount] of [[quick, 2.5, 'Soldier: 76', 40], [quick, 2.5, 'Zenyatta', 60], [quick, 2.5, 'Venture', 70], [quick, 2.5, 'D.Mon', 40], [sword, 4.3, 'Vendetta', 45]]) {
+    for (const [name, base, hero, amount] of [[quick, 2.5, 'Soldier: 76', 40], [quick, 2.5, 'Zenyatta', 60], [quick, 2.5, 'Venture', 70], [quick, 2.5, 'D.Mon', 40], [sword, 4.3, 'Vendetta', 33.75]]) {
         const attackState = () => {
             const state = scenario(4, {hero, meleeing: name === quick, firing: name === sword});
             run('PLAYER AUGMENT INITIALIZATION', state);
@@ -1447,12 +1447,12 @@ async function main() {
     }
     const weapons = 'LONG REACH MELEE WEAPONS', carnage = 'LONG REACH CARNAGE';
     const weaponCases = [
-        ['Reinhardt', 4, 100, 0.4, 0.96, {}],
-        ['Brigitte', 6, 45, 0.2, 0.6, {}],
-        ['D.Mon', 4, 60, 0.2, 0.656, {}],
-        ['Genji', 5, 100, 0.15, 0.7 / 1.15, {ultimate: true}],
-        ['Ramattra', 10, 65, 0.15, 0.6, {maxArmor: 375}],
-        ['Torbjörn', 2.5, 70, 0.35, 0.7, {weapon: 2}]
+        ['Reinhardt', 4, 75, 0.4, 0.96, {}],
+        ['Brigitte', 6, 33.75, 0.2, 0.6, {}],
+        ['D.Mon', 4, 45, 0.2, 0.656, {}],
+        ['Genji', 5, 75, 0.15, 0.7 / 1.15, {ultimate: true}],
+        ['Ramattra', 10, 48.75, 0.15, 0.6, {maxArmor: 375}],
+        ['Torbjörn', 2.5, 52.5, 0.35, 0.7, {weapon: 2}]
     ];
     const weaponState = (hero, base, overrides) => {
         const state = scenario(4, {hero, firing: true,
@@ -1525,11 +1525,11 @@ async function main() {
     idleSwitch.hero = 'Brigitte'; idleSwitch.firing = true; idleSwitch.buttons.add('Primary Fire'); idleWeapon.resume();
     assert.equal(idleSwitch.player[slot('augmentWeaponProfile')][0], 'Brigitte', 'Sample the weapon after an idle hero switch');
     idleSwitch.time = idleWeapon.deadline(); idleWeapon.resume();
-    assert.equal(idleSwitch.damage.length, 2); assert(idleSwitch.damage.every(hit => hit.amount === 45));
-    const queen = weaponState('Junker Queen', 5, {firing: false, ability2: true});
+    assert.equal(idleSwitch.damage.length, 2); assert(idleSwitch.damage.every(hit => hit.amount === 33.75));
+    const queen = weaponState('Junker Queen', 4.5, {firing: false, ability2: true});
     assert(!applies(compiled.get(quick), {...queen, meleeing: true}));
     const axe = run(carnage, queen); queen.time = axe.deadline(); axe.resume();
-    assert.equal(queen.damage.length, 2); assert(queen.damage.every(event => event.amount === 90));
+    assert.equal(queen.damage.length, 2); assert(queen.damage.every(event => event.amount === 78.75));
     assert.deepEqual(array(queen.player[slot('enhancementPyroHitList')]).map(target => target.id), [2]);
     queen.time += 5; axe.resume(); assert.equal(queen.damage.length, 2, 'One Carnage cast must only extend once');
     for (const stop of [s => {s.ability2 = false;}, s => {s.alive = false;}, s => s.status.add('Stunned'), s => {s.hero = 'Ana';}]) {

@@ -8,13 +8,13 @@ const scenario=(id,extra={})=>{const s=rawScenario(id,extra);s.globals.numbersLi
 const slot = name => files['variables.opy'].match(new RegExp('^#!define ' + name + ' (\\w+)$', 'm'))[1];
 const target = (id, z, extra={}) => ({id,position:[0,0,z],health:10000,alive:true,visible:true,...extra});
 const cases = [
-    ['LONG REACH VENDETTA SWORD','Vendetta',4.3,45,0.15,0.6,{}],
-    ['LONG REACH MELEE WEAPONS','Reinhardt',4,100,0.4,0.96,{}],
-    ['LONG REACH MELEE WEAPONS','Brigitte',6,45,0.2,0.6,{}],
-    ['LONG REACH MELEE WEAPONS','D.Mon',4,60,0.2,0.656,{}],
-    ['LONG REACH MELEE WEAPONS','Genji',5,100,0.15,0.7/1.15,{ultimate:true}],
-    ['LONG REACH MELEE WEAPONS','Ramattra',10,65,0.15,0.6,{maxArmor:375}],
-    ['LONG REACH MELEE WEAPONS','Torbjörn',2.5,70,0.35,0.7,{weapon:2}]
+    ['LONG REACH VENDETTA SWORD','Vendetta',4.3,33.75,0.15,0.6,{}],
+    ['LONG REACH MELEE WEAPONS','Reinhardt',4,75,0.4,0.96,{}],
+    ['LONG REACH MELEE WEAPONS','Brigitte',6,33.75,0.2,0.6,{}],
+    ['LONG REACH MELEE WEAPONS','D.Mon',4,45,0.2,0.656,{}],
+    ['LONG REACH MELEE WEAPONS','Genji',5,75,0.15,0.7/1.15,{ultimate:true}],
+    ['LONG REACH MELEE WEAPONS','Ramattra',10,48.75,0.15,0.6,{maxArmor:375}],
+    ['LONG REACH MELEE WEAPONS','Torbjörn',2.5,52.5,0.35,0.7,{weapon:2}]
 ];
 (async()=>{
     await compiler.readyPromise;

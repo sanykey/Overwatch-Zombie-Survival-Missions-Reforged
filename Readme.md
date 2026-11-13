@@ -111,14 +111,14 @@ Long Reach's extended hits use the ranges, damage and timings below, at normal p
 | Attack | Extended reach | Extended hit damage | Windup | Recovery |
 |---|---:|---:|---:|---|
 | Quick Melee | 7.5m | 40; Zenyatta 60; Venture 70 | 0.15s | Once per melee attack |
-| Vendetta sword | 12.9m | 45 | 0.15s | 0.45s (0.6s per swing) |
-| Reinhardt hammer | 12m | 100 | 0.4s | 0.56s |
-| Brigitte flail | 18m | 45 | 0.2s | 0.4s |
-| D.Mon mech saber | 12m | 60 | 0.2s | 0.456s |
-| Genji Dragonblade | 15m | 100 | 0.15s | About 0.459s |
-| Ramattra Nemesis punches | 30m | 65 | 0.15s | 0.45s |
-| Torbjörn hammer | 7.5m | 70 | 0.35s | 0.35s |
-| Junker Queen Carnage | 15m | 90 | 0.75s | Once per cast |
+| Vendetta sword | 12.9m | 33.75 | 0.15s | 0.45s (0.6s per swing) |
+| Reinhardt hammer | 12m | 75 | 0.4s | 0.56s |
+| Brigitte flail | 18m | 33.75 | 0.2s | 0.4s |
+| D.Mon mech saber | 12m | 45 | 0.2s | 0.456s |
+| Genji Dragonblade | 15m | 75 | 0.15s | About 0.459s |
+| Ramattra Nemesis punches | 30m | 48.75 | 0.15s | 0.45s |
+| Torbjörn hammer | 7.5m | 52.5 | 0.35s | 0.35s |
+| Junker Queen Carnage | 13.5m | 78.75 | 0.75s | Once per cast |
 
 ## Using the mod code
 

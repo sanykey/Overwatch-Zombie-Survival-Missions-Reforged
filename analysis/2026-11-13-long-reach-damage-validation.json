@@ -1,0 +1,10 @@
+{
+  "before": 30064,
+  "after": 30064,
+  "delta": 0,
+  "weaponCases": 7,
+  "carnageCases": 2,
+  "warnings": [],
+  "unchanged": "All other rules, including Quick Melee",
+  "limitation": "Compiled action simulation; no in-game test"
+}

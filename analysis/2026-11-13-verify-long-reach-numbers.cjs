@@ -33,7 +33,7 @@ function numbers(build) {
     return decode(args(action)[1]);
 }
 const heroes=['Reinhardt','Brigitte','D.Mon','Genji','Ramattra','Torbj\u00f6rn'];
-const rows=[[4,100,.4,.56],[6,45,.2,.4],[4,60,.2,.456],[5,100,.15,0],[10,65,.15,.45],[2.5,70,.35,.35]];
+const rows=[[4,75,.4,.56],[6,33.75,.2,.4],[4,45,.2,.456],[5,75,.15,0],[10,48.75,.15,.45],[2.5,52.5,.35,.35]];
 async function main() {
     await compiler.readyPromise;
     const generator=fs.readFileSync('src/create numbers.js','utf8');
