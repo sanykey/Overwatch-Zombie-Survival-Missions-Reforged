@@ -18,35 +18,39 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
         ENHANCEMENT_ICONS[localPlayer.enhancementId],
         [
             " ",
-            "Critical dmg: +60% | Bosses: +20%",
             f"Explosion: {ceil(localPlayer.enhancementHybridCooldown)}s" if localPlayer.enhancementHybridCooldown > 0 else f"[{inputBindingString(Button.MELEE)}]: explode for {floor(localPlayer.infectionLevel * 100)} dmg" if localPlayer.infectionLevel >= 1 else "Build infection",
+            f"Stacks: {localPlayer.enhancementBulkStacks} | +{min(100, localPlayer.enhancementBulkStacks * 0.5)}% HP | Size: {round(localPlayer.sizeScale * 100) / 100}x | Hold [{inputBindingString(Button.MELEE)}]: toggle size",
+            "Critical dmg: +60% | Bosses: +20%",
             "Hits within 15m ignite zombies",
-            f"Infection removed: {round(localPlayer.enhancementPlagueCureTotal)}",
             f"Ability resets: {localPlayer.enhancementBattleResetCharges}/2",
             f"Placement: {ceil(localPlayer.enhancementBatteryPlacementCooldown)}s" if localPlayer.enhancementBatteryPlacementCooldown > 0 else f"Hold [{inputBindingString(Button.MELEE)}]: place battery {iconString(Icon.CHECKMARK)}",
             f"[{inputBindingString(Button.CROUCH)}]: detach" if localPlayer.enhancementIsHitchhiking else f"[{inputBindingString(Button.CROUCH)}]: attach near ally",
             "Attacking" if localPlayer.enhancementIsPupBeamActive == true else f"Drone ready {iconString(Icon.CHECKMARK)}",
-            "{0} | {1}".format(f"Energy: {floor(localPlayer.enhancementCapacitorEnergy)}", f"Armed: +{floor(localPlayer.enhancementCapacitorCharge)} dmg/hit" if localPlayer.enhancementCapacitorCharge > 0 else f"Double-tap [{inputBindingString(Button.CROUCH)}]: arm"),
-            f"Stacks: {localPlayer.enhancementBulkStacks} | +{min(100, localPlayer.enhancementBulkStacks * 0.5)}% HP | Size: {round(localPlayer.sizeScale * 100) / 100}x | Hold [{inputBindingString(Button.MELEE)}]: toggle size",
             f"[{inputBindingString(Button.INTERACT)}]: throw" if localPlayer.enhancementCarryState != WrestlerCarryState.NONE else f"[{inputBindingString(Button.INTERACT)}]: grab | Target disabled or below 20% HP",
             "Hits chain to nearby zombies",
-            f"Scrap {floor(localPlayer.enhancementScrap)}/{ENGINEER_SCRAP_MAX} | Hold [{inputBindingString(Button.CROUCH)}] {ENGINEER_ARMOR_HOLD_DURATION}s: armor +{ENGINEER_ARMOR_STACK} ({ENGINEER_ARMOR_COST}) | Hold [{inputBindingString(Button.MELEE)}]: turret ({ENGINEER_TURRET_COST})"
+            f"Scrap {floor(localPlayer.enhancementScrap)}/{ENGINEER_SCRAP_MAX} | Hold [{inputBindingString(Button.CROUCH)}] {ENGINEER_ARMOR_HOLD_DURATION}s: armor +{ENGINEER_ARMOR_STACK} ({ENGINEER_ARMOR_COST}) | Hold [{inputBindingString(Button.MELEE)}]: turret ({ENGINEER_TURRET_COST})",
+            f"Infection removed: {round(localPlayer.enhancementPlagueCureTotal)}",
+            "{0} | {1}".format(f"Energy: {floor(localPlayer.enhancementCapacitorEnergy)}", f"Armed: +{floor(localPlayer.enhancementCapacitorCharge)} dmg/hit" if localPlayer.enhancementCapacitorCharge > 0 else f"Double-tap [{inputBindingString(Button.CROUCH)}]: arm")
         ][localPlayer.enhancementId],
-        [" ", "Brain Killer", "Zombie Hybrid", "Pyrotechnic", "Plague Doctor", "Born to Battle", "Charge Battery", "Hitchhiker", "P.U.P.", "Overcharge", "Bulking Season", "Wrestler", "Bolt Strike", "Engineer"][localPlayer.enhancementId],
+        [" ", "Zombie Hybrid", "Bulking Season", "Brain Killer", "Pyrotechnic", "Born to Battle", "Charge Battery", "Hitchhiker", "P.U.P.", "Wrestler", "Bolt Strike", "Engineer", "Plague Doctor", "Overcharge"][localPlayer.enhancementId],
         HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE,
         [
-            Color.WHITE, Color.WHITE,
+            Color.WHITE,
             Color.RED if localPlayer.enhancementHybridCooldown > 0 else Color.GREEN if localPlayer.infectionLevel >= 1 else Color.WHITE,
-            Color.WHITE, Color.WHITE,
+            Color.WHITE,
+            Color.WHITE,
+            Color.WHITE,
             [Color.WHITE, Color.SKY_BLUE, Color.GREEN][localPlayer.enhancementBattleResetCharges],
             Color.RED if localPlayer.enhancementBatteryPlacementCooldown > 0 else Color.GREEN,
-            Color.WHITE, Color.RED if localPlayer.enhancementIsPupBeamActive == true else Color.WHITE,
-            Color.YELLOW if localPlayer.enhancementCapacitorCharge > 0 else Color.GREEN if localPlayer.enhancementCapacitorEnergy >= 100 else Color.SKY_BLUE if localPlayer.enhancementCapacitorEnergy >= 50 else Color.WHITE,
-            Color.WHITE, Color.WHITE,
+            Color.WHITE,
+            Color.RED if localPlayer.enhancementIsPupBeamActive == true else Color.WHITE,
+            Color.WHITE,
             Color.WHITE,
             # White below armor cost; sky blue when armor is affordable; green
             # when scrap also covers a turret. Keep thresholds tied to costs.
-            Color.WHITE if localPlayer.enhancementScrap < ENGINEER_ARMOR_COST else Color.SKY_BLUE if localPlayer.enhancementScrap < ENGINEER_TURRET_COST else Color.GREEN
+            Color.WHITE if localPlayer.enhancementScrap < ENGINEER_ARMOR_COST else Color.SKY_BLUE if localPlayer.enhancementScrap < ENGINEER_TURRET_COST else Color.GREEN,
+            Color.WHITE,
+            Color.YELLOW if localPlayer.enhancementCapacitorCharge > 0 else Color.GREEN if localPlayer.enhancementCapacitorEnergy >= 100 else Color.SKY_BLUE if localPlayer.enhancementCapacitorEnergy >= 50 else Color.WHITE
         ][localPlayer.enhancementId],
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
@@ -93,9 +97,13 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
 
 macro initializePlayerEnhancement():
     if eventPlayer.enhancementId == Enhancement.NO_PREFERENCE:
-        # No preference and late-join zero state receive one real choice before
-        # its state is initialized. Retain the selected ID across later spawns.
-        eventPlayer.enhancementId = random.randint(Enhancement.BRAIN_KILLER, Enhancement.ENGINEER)
+        # No preference and late-join zero state roll once for the current hero.
+        # Contiguous IDs exclude Hybrid/Bulking Season for non-tanks and the final two support
+        # enhancements for non-supports. Explicit choices and later spawns retain the ID.
+        eventPlayer.enhancementId = random.randint(
+            Enhancement.ZOMBIE_HYBRID if eventPlayer.getHero() in getTankHeroes() else Enhancement.BRAIN_KILLER,
+            Enhancement.OVERCHARGE if eventPlayer.getHero() in getSupportHeroes() else Enhancement.ENGINEER
+        )
     #Zombie Hybrid
     if eventPlayer.enhancementId == Enhancement.ZOMBIE_HYBRID:
         # enhancementHybridCooldown: remaining explosion cooldown in seconds (20 on use), for activation checks and HUD.

@@ -1,0 +1,18 @@
+{
+  "compiler": "OverPy 9.7.21",
+  "beforeElements": 30045,
+  "afterElements": 30060,
+  "addedElements": 15,
+  "reorderedTables": [
+    "subtitle",
+    "name",
+    "color",
+    "menuColor",
+    "menuName",
+    "description",
+    "icons"
+  ],
+  "rolePoolChoicesChecked": 31,
+  "warnings": [],
+  "limitations": "Compiled output and exhaustive role pool checks; no in-game validation."
+}

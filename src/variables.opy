@@ -67,23 +67,24 @@ enum Challenge:
     PANDORAS_BOX = 5,
 
 # Enhancement IDs index enhancementOptionList and the start-menu tables.
-# Zero means no preference; initialization randomly selects a real ID 1-13.
-# Brain Killer remains the first explicit menu choice.
+# Zero means no preference; initialization rolls a role-eligible real ID.
+# Tank-only Hybrid/Bulking Season start the range; support-only Plague Doctor/Overcharge end it.
+# Keep every indexed menu/HUD/icon table in this same order.
 enum Enhancement:
     NO_PREFERENCE = 0,
-    BRAIN_KILLER = 1,
-    ZOMBIE_HYBRID = 2,
-    PYROTECHNIC = 3,
-    PLAGUE_DOCTOR = 4,
+    ZOMBIE_HYBRID = 1,
+    BULKING_SEASON = 2,
+    BRAIN_KILLER = 3,
+    PYROTECHNIC = 4,
     BORN_TO_BATTLE = 5,
     CHARGE_BATTERY = 6,
     HITCHHIKER = 7,
     PUP = 8,
-    OVERCHARGE = 9,
-    BULKING_SEASON = 10,
-    WRESTLER = 11,
-    BOLT_STRIKE = 12,
-    ENGINEER = 13,
+    WRESTLER = 9,
+    BOLT_STRIKE = 10,
+    ENGINEER = 11,
+    PLAGUE_DOCTOR = 12,
+    OVERCHARGE = 13,
 
 # Wrestler holds until Knocked Down ends; manual throws request release.
 enum WrestlerCarryState:
@@ -1055,21 +1056,21 @@ globalvar augmentIconListConst = [AugmentIcon.NO_PREFERENCE, AugmentIcon.KEVLAR,
 # Keep a dedicated slot: enhancementOptionList becomes Biomorphing text after menu cleanup.
 enum EnhancementIcon:
     NO_PREFERENCE = iconString(Icon.QUESTION_MARK),
-    BRAIN_KILLER = iconString(Icon.SKULL),
     ZOMBIE_HYBRID = iconString(Icon.POISON),
+    BULKING_SEASON = "<TX C0000000002A9ED>",
+    BRAIN_KILLER = iconString(Icon.SKULL),
     PYROTECHNIC = iconString(Icon.FIRE),
-    PLAGUE_DOCTOR = iconString(Icon.PLUS),
     BORN_TO_BATTLE = "<TX C000000000039D7>",
     CHARGE_BATTERY = iconString(Icon.SPIRAL),
     HITCHHIKER = iconString(Icon.FLAG),
     PUP = iconString(Icon.HAPPY),
-    OVERCHARGE = iconString(Icon.MOON),
-    BULKING_SEASON = "<TX C0000000002A9ED>",
     WRESTLER = iconString(Icon.TRASHCAN),
     BOLT_STRIKE = iconString(Icon.BOLT),
     ENGINEER = "<TX C0000000005FA7F>",
+    PLAGUE_DOCTOR = iconString(Icon.PLUS),
+    OVERCHARGE = iconString(Icon.MOON),
 
-globalvar enhancementIconListConst = [EnhancementIcon.NO_PREFERENCE, EnhancementIcon.BRAIN_KILLER, EnhancementIcon.ZOMBIE_HYBRID, EnhancementIcon.PYROTECHNIC, EnhancementIcon.PLAGUE_DOCTOR, EnhancementIcon.BORN_TO_BATTLE, EnhancementIcon.CHARGE_BATTERY, EnhancementIcon.HITCHHIKER, EnhancementIcon.PUP, EnhancementIcon.OVERCHARGE, EnhancementIcon.BULKING_SEASON, EnhancementIcon.WRESTLER, EnhancementIcon.BOLT_STRIKE, EnhancementIcon.ENGINEER]
+globalvar enhancementIconListConst = [EnhancementIcon.NO_PREFERENCE, EnhancementIcon.ZOMBIE_HYBRID, EnhancementIcon.BULKING_SEASON, EnhancementIcon.BRAIN_KILLER, EnhancementIcon.PYROTECHNIC, EnhancementIcon.BORN_TO_BATTLE, EnhancementIcon.CHARGE_BATTERY, EnhancementIcon.HITCHHIKER, EnhancementIcon.PUP, EnhancementIcon.WRESTLER, EnhancementIcon.BOLT_STRIKE, EnhancementIcon.ENGINEER, EnhancementIcon.PLAGUE_DOCTOR, EnhancementIcon.OVERCHARGE]
 
 # Immutable palette shared by the pregame menu and gameplay HUD; indexed by Augment.
 globalvar augmentColorListConst = [Color.AQUA, Color.LIGHT_GRAY, Color.YELLOW, Color.SKY_BLUE, Color.ORANGE, Color.WHITE, Color.TURQUOISE, Color.BLUE, Color.GREEN, Color.LIME_GREEN, Color.RED]

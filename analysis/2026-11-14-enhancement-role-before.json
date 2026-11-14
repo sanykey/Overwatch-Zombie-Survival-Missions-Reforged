@@ -1,0 +1,146 @@
+{
+  "elements": 30045,
+  "filteredElements": 30096,
+  "tables": {
+    "subtitle": {
+      "begin": 991,
+      "end": 3123,
+      "entries": [
+        "\" \"",
+        "\"Critical dmg: +60% | Bosses: +20%\"",
+        "f\"Explosion: {ceil(localPlayer.enhancementHybridCooldown)}s\" if localPlayer.enhancementHybridCooldown > 0 else f\"[{inputBindingString(Button.MELEE)}]: explode for {floor(localPlayer.infectionLevel * 100)} dmg\" if localPlayer.infectionLevel >= 1 else \"Build infection\"",
+        "\"Hits within 15m ignite zombies\"",
+        "f\"Infection removed: {round(localPlayer.enhancementPlagueCureTotal)}\"",
+        "f\"Ability resets: {localPlayer.enhancementBattleResetCharges}/2\"",
+        "f\"Placement: {ceil(localPlayer.enhancementBatteryPlacementCooldown)}s\" if localPlayer.enhancementBatteryPlacementCooldown > 0 else f\"Hold [{inputBindingString(Button.MELEE)}]: place battery {iconString(Icon.CHECKMARK)}\"",
+        "f\"[{inputBindingString(Button.CROUCH)}]: detach\" if localPlayer.enhancementIsHitchhiking else f\"[{inputBindingString(Button.CROUCH)}]: attach near ally\"",
+        "\"Attacking\" if localPlayer.enhancementIsPupBeamActive == true else f\"Drone ready {iconString(Icon.CHECKMARK)}\"",
+        "\"{0} | {1}\".format(f\"Energy: {floor(localPlayer.enhancementCapacitorEnergy)}\", f\"Armed: +{floor(localPlayer.enhancementCapacitorCharge)} dmg/hit\" if localPlayer.enhancementCapacitorCharge > 0 else f\"Double-tap [{inputBindingString(Button.CROUCH)}]: arm\")",
+        "f\"Stacks: {localPlayer.enhancementBulkStacks} | +{min(100, localPlayer.enhancementBulkStacks * 0.5)}% HP | Size: {round(localPlayer.sizeScale * 100) / 100}x | Hold [{inputBindingString(Button.MELEE)}]: toggle size\"",
+        "f\"[{inputBindingString(Button.INTERACT)}]: throw\" if localPlayer.enhancementCarryState != WrestlerCarryState.NONE else f\"[{inputBindingString(Button.INTERACT)}]: grab | Target disabled or below 20% HP\"",
+        "\"Hits chain to nearby zombies\"",
+        "f\"Scrap {floor(localPlayer.enhancementScrap)}/{ENGINEER_SCRAP_MAX} | Hold [{inputBindingString(Button.CROUCH)}] {ENGINEER_ARMOR_HOLD_DURATION}s: armor +{ENGINEER_ARMOR_STACK} ({ENGINEER_ARMOR_COST}) | Hold [{inputBindingString(Button.MELEE)}]: turret ({ENGINEER_TURRET_COST})\""
+      ]
+    },
+    "name": {
+      "begin": 3160,
+      "end": 3361,
+      "entries": [
+        "\" \"",
+        "\"Brain Killer\"",
+        "\"Zombie Hybrid\"",
+        "\"Pyrotechnic\"",
+        "\"Plague Doctor\"",
+        "\"Born to Battle\"",
+        "\"Charge Battery\"",
+        "\"Hitchhiker\"",
+        "\"P.U.P.\"",
+        "\"Overcharge\"",
+        "\"Bulking Season\"",
+        "\"Wrestler\"",
+        "\"Bolt Strike\"",
+        "\"Engineer\""
+      ]
+    },
+    "color": {
+      "begin": 3463,
+      "end": 4597,
+      "entries": [
+        "Color.WHITE",
+        "Color.WHITE",
+        "Color.RED if localPlayer.enhancementHybridCooldown > 0 else Color.GREEN if localPlayer.infectionLevel >= 1 else Color.WHITE",
+        "Color.WHITE",
+        "Color.WHITE",
+        "[Color.WHITE, Color.SKY_BLUE, Color.GREEN][localPlayer.enhancementBattleResetCharges]",
+        "Color.RED if localPlayer.enhancementBatteryPlacementCooldown > 0 else Color.GREEN",
+        "Color.WHITE",
+        "Color.RED if localPlayer.enhancementIsPupBeamActive == true else Color.WHITE",
+        "Color.YELLOW if localPlayer.enhancementCapacitorCharge > 0 else Color.GREEN if localPlayer.enhancementCapacitorEnergy >= 100 else Color.SKY_BLUE if localPlayer.enhancementCapacitorEnergy >= 50 else Color.WHITE",
+        "Color.WHITE",
+        "Color.WHITE",
+        "Color.WHITE",
+        "# White below armor cost; sky blue when armor is affordable; green\n            # when scrap also covers a turret. Keep thresholds tied to costs.\n            Color.WHITE if localPlayer.enhancementScrap < ENGINEER_ARMOR_COST else Color.SKY_BLUE if localPlayer.enhancementScrap < ENGINEER_TURRET_COST else Color.GREEN"
+      ]
+    },
+    "menuColor": {
+      "begin": 12003,
+      "end": 12193,
+      "entries": [
+        "Color.AQUA",
+        "Color.RED",
+        "Color.GRAY",
+        "Color.ORANGE",
+        "Color.GREEN",
+        "Color.GRAY",
+        "Color.WHITE",
+        "Color.PURPLE",
+        "Color.BLUE",
+        "Color.TURQUOISE",
+        "Color.LIME_GREEN",
+        "Color.SKY_BLUE",
+        "Color.YELLOW",
+        "Color.ROSE"
+      ]
+    },
+    "menuName": {
+      "begin": 12285,
+      "end": 12573,
+      "entries": [
+        "\"No Preference\"",
+        "\"Brain Killer \"",
+        "\"Zombie Hybrid \"",
+        "\"Pyrotechnic \"",
+        "\"Plague Doctor \"",
+        "\"Born to Battle \"",
+        "\"Charge Battery \"",
+        "\"Hitchhiker \"",
+        "\"P.U.P. \"",
+        "\"Overcharge \"",
+        "\"Bulking Season \"",
+        "\"Wrestler \"",
+        "\"Bolt Strike \"",
+        "\"Engineer \""
+      ]
+    },
+    "description": {
+      "begin": 12747,
+      "end": 14406,
+      "entries": [
+        "\" \"",
+        "\"Critical hits deal +60% dmg; +20% against bosses.\"",
+        "\"Gain infection faster and convert it into an explosion dealing 100 dmg per infection level.\"",
+        "\"Damaging zombies within 15m sets them on fire for 3s.\"",
+        "\"+30% healing, increased to +62.5% on infected allies. Healing reduces infection in you and infected allies.\"",
+        "\"Final blows store ability resets, up to 2. Your next ability use consumes a reset.\"",
+        "\"Place a battery that grants 15% ultimate charge on contact. Recharges in 10s; placement cd: 20s.\"",
+        "\"Ride a nearby teammate and share your combined health while attached.\"",
+        "\"An autonomous drone burns and knocks down nearby zombies, or freezes distant targets and nearby zombies.\"",
+        "\"+15% healing. Bank healing/3 (packs included) +10 per assist. Double-tap Crouch: spend up to 100 energy for bonus dmg per hit.\"",
+        "\"Each elimination: +0.5% max HP (up to 2x), +0.75% size (up to 2.5x). Lose half your stacks on death.\"",
+        "\"Grab zombies within 5m, including bosses, while disabled (root alone excluded) or below 20% HP. Take 50% less dmg while carrying.\"",
+        "f\"Hits chain to {BOLT_STRIKE_CHAIN_TARGETS} zombies within {BOLT_STRIKE_RADIUS}m for {BOLT_STRIKE_CHAIN_DAMAGE_RATIO * 100}% dmg (max {BOLT_STRIKE_CHAIN_DAMAGE_MAX}).\"",
+        "f\"Scrap: +{ENGINEER_COLLECTION_REWARD} per zombie death within {ENGINEER_COLLECTION_RANGE}m, +{ENGINEER_ASSIST_SCRAP} per assist, +{ENGINEER_SCRAP_PASSIVE_RATE}/s. Craft armor for yourself or allies (up to {ENGINEER_ARMOR_MAX} each) and freezing turrets.\""
+      ]
+    },
+    "icons": {
+      "begin": 63173,
+      "end": 63579,
+      "entries": [
+        "EnhancementIcon.NO_PREFERENCE",
+        "EnhancementIcon.BRAIN_KILLER",
+        "EnhancementIcon.ZOMBIE_HYBRID",
+        "EnhancementIcon.PYROTECHNIC",
+        "EnhancementIcon.PLAGUE_DOCTOR",
+        "EnhancementIcon.BORN_TO_BATTLE",
+        "EnhancementIcon.CHARGE_BATTERY",
+        "EnhancementIcon.HITCHHIKER",
+        "EnhancementIcon.PUP",
+        "EnhancementIcon.OVERCHARGE",
+        "EnhancementIcon.BULKING_SEASON",
+        "EnhancementIcon.WRESTLER",
+        "EnhancementIcon.BOLT_STRIKE",
+        "EnhancementIcon.ENGINEER"
+      ]
+    }
+  }
+}
