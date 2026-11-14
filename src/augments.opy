@@ -20,16 +20,16 @@ rule "AUGMENT MENU":
         f"Augment: {AUGMENT_NAMES[localPlayer.augmentId]} {AUGMENT_ICONS[localPlayer.augmentId] if localPlayer.augmentId != Augment.NO_PREFERENCE else ''}",
         [
             "",
-            f"Gain {AUGMENT_KEVLAR_ARMOR} armor. Incoming ranged and ability damage reduced by {AUGMENT_KEVLAR_RANGED_DMG_RESIST}%. {AUGMENT_KEVLAR_KNOCKBACK_RESIST}% knockback resistance",
-            f"Double-tap Jump: dash; movement input steers. {DASH_MAX_CHARGES} charges, one restores every {DASH_COOLDOWN}s. {DASH_PHASE_DURATION}s invulnerability on activation",
-            "Jump in midair / double-tap Jump. +20% damage from activation until you land. cd: 16s",
-            "Triple Quick Melee, melee weapon (75% dmg) reach. Press Melee to push visible zombies ahead within 10m; cd: 9s",
-            "Carry twice the ammo per full magazine; full reloads restore the bonus",
-            "Crouch + Jump: grapple 7-40m; enemies hit for 35 damage; stun grounded 0.5s / knock airborne down 3s; allies unharmed. cd: 16s",
-            "Hold Crouch + Interact to aim a zombie-blocking wall; release Interact to deploy. cd: 30s",
-            f"Health packs: 2x healing, -1 infection, +{AUGMENT_APOTHECARY_ULT_CHARGE}% ult. Ultimate (D.Va/D.Mon: ult damage required) grants 1 teleport (hold Crouch + Interact) to the last pack used, or a random known pack if none used",
-            "Crouch + Interact: stash (2 slots). Interact: active slot. Hold Reload: drop all. Bot eliminations: 5% loot, backpack first",
-            "15% lifesteal, +50 recoverable health"
+            f"+{AUGMENT_KEVLAR_ARMOR} armor, {AUGMENT_KEVLAR_KNOCKBACK_RESIST}% knockback resistance. {AUGMENT_KEVLAR_RANGED_DMG_RESIST}% resistance to ranged and ability dmg.",
+            f"Dash in your movement direction with {DASH_PHASE_DURATION}s invulnerability. Stores {DASH_MAX_CHARGES} charges; restores one every {DASH_COOLDOWN}s.",
+            "Launch upward and gain +20% dmg until landing. Activate with Jump in midair or a double-tap. cd: 16s.",
+            "Triple melee reach; weapon hits at extended range deal 75% dmg. Push visible zombies ahead within 10m. Push cd: 9s.",
+            "Double magazine capacity. Fully reloading restores the extra ammo.",
+            "Grapple to allies or zombies 7–40m away. 35 dmg; stun grounded zombies or knock airborne ones down for 3s. cd: 16s.",
+            f"Deploy a wall that blocks zombies. Hold Crouch + Interact to aim; release Interact to place. cd: {LASER_BARRICADE_COOLDOWN}s.",
+            f"Packs: 2x healing, -1 infection, +{AUGMENT_APOTHECARY_ULT_CHARGE}% ult. Ult grants a teleport to your last used pack.",
+            "Carry 2 extra powerups. Eliminations: 7% chance to gain a powerup. Loot fills your active slot, then backpack.",
+            "Heal for 15% of dmg dealt. Gain 50 recoverable health."
         ][localPlayer.augmentId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.INTERACT)),
         HudPosition.ACTUALLY_LEFT, 4, AUGMENT_COLORS[localPlayer.augmentId], AUGMENT_COLORS[localPlayer.augmentId], AUGMENT_COLORS[localPlayer.augmentId],
@@ -318,7 +318,7 @@ rule "LASER BARRICADE (PLACEMENT)":
     playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, Color.BLUE, eventPlayer.augmentBarrierPosition, 50)
     smallMessage(eventPlayer, "  Barricade placed!")
     #Laser Barrier cooldown
-    eventPlayer.augmentBarrierPlacementCooldown = 25
+    eventPlayer.augmentBarrierPlacementCooldown = LASER_BARRICADE_COOLDOWN
     while eventPlayer.augmentBarrierPlacementCooldown > 0:
         wait(1)
         eventPlayer.augmentBarrierPlacementCooldown += -1

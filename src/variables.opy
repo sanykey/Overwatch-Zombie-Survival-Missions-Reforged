@@ -9,6 +9,7 @@
 #!define ELIMINATIONS_NEEDED_PER_OBJECTIVE 50
 #!define LASER_BARRICADE_HEIGHT 2
 #!define LASER_BARRICADE_WIDTH 5
+#!define LASER_BARRICADE_COOLDOWN 25
 # Engineer constants live here (not enhancements.opy): BOT DIES collects scrap
 # before enhancements.opy is included.
 #!define ENGINEER_SCRAP_MAX 500

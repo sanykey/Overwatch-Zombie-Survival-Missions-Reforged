@@ -56,7 +56,7 @@ rule "EFFECT/TEXT (PERMANENT)":
                 "Look at a teammate and hold" if evalOnce(powerUpHudItemIndex) == PowerUpItem.REVIVE - 1 else "Hold",
                 inputBindingString(Button.INTERACT),
                 [
-                    "to stop all damage over time and cure yourself",
+                    "to stop all dmg over time and cure yourself",
                     "to revive them",
                     "to place a force field",
                     "to get fast cooldowns",
@@ -65,7 +65,7 @@ rule "EFFECT/TEXT (PERMANENT)":
                     "to increase your resistance to infection",
                     "to place a sentry turret",
                     "to become invisible to enemies",
-                    "to increase your damage and speed",
+                    "to increase your dmg and speed",
                     "to refuel your jetpack; hold Jump in the air to fly",
                     "to rapidly charge your ultimate",
                     "to stun nearby enemies"

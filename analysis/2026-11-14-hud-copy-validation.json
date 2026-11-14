@@ -1,0 +1,721 @@
+{
+  "beforeElements": 30096,
+  "afterElements": 30170,
+  "elementDelta": 74,
+  "menuElementDelta": 0,
+  "combatElementDelta": 74,
+  "warnings": [],
+  "menuLimit": 151,
+  "combatLimit": 79,
+  "cases": 77,
+  "changedRules": [
+    "EFFECTS/TEXTS",
+    "EFFECT/TEXT (PERMANENT)",
+    "AUGMENT MENU",
+    "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)"
+  ],
+  "descriptions": [
+    {
+      "kind": "menu",
+      "key": "enhancementId",
+      "id": 1,
+      "text": "Critical hits deal +60% dmg; +20% against bosses.",
+      "length": 49
+    },
+    {
+      "kind": "menu",
+      "key": "enhancementId",
+      "id": 2,
+      "text": "Gain infection faster and convert it into an explosion dealing 100 dmg per infection level.",
+      "length": 91
+    },
+    {
+      "kind": "menu",
+      "key": "enhancementId",
+      "id": 3,
+      "text": "Damaging zombies within 15m sets them on fire for 3s.",
+      "length": 53
+    },
+    {
+      "kind": "menu",
+      "key": "enhancementId",
+      "id": 4,
+      "text": "+30% healing, increased to +62.5% on infected allies. Healing reduces infection in you and infected allies.",
+      "length": 107
+    },
+    {
+      "kind": "menu",
+      "key": "enhancementId",
+      "id": 5,
+      "text": "Final blows store ability resets, up to 2. Your next ability use consumes a reset.",
+      "length": 82
+    },
+    {
+      "kind": "menu",
+      "key": "enhancementId",
+      "id": 6,
+      "text": "Place a battery that grants 15% ultimate charge on contact. Recharges in 10s; placement cd: 20s.",
+      "length": 96
+    },
+    {
+      "kind": "menu",
+      "key": "enhancementId",
+      "id": 7,
+      "text": "Ride a nearby teammate and share your combined health while attached.",
+      "length": 69
+    },
+    {
+      "kind": "menu",
+      "key": "enhancementId",
+      "id": 8,
+      "text": "An autonomous drone burns and knocks down nearby zombies, or freezes distant targets and nearby zombies.",
+      "length": 104
+    },
+    {
+      "kind": "menu",
+      "key": "enhancementId",
+      "id": 9,
+      "text": "+15% healing. Bank healing/3 (packs included) +10 per assist. Spend up to 100 energy for bonus dmg per hit.",
+      "length": 107
+    },
+    {
+      "kind": "menu",
+      "key": "enhancementId",
+      "id": 10,
+      "text": "Each elimination: +0.5% max HP (up to 2x), +0.75% size (up to 2.5x). Lose half your stacks on death.",
+      "length": 100
+    },
+    {
+      "kind": "menu",
+      "key": "enhancementId",
+      "id": 11,
+      "text": "Grab zombies within 5m, including bosses, while disabled (root alone excluded) or below 20% HP. Take 50% less dmg while carrying.",
+      "length": 129
+    },
+    {
+      "kind": "menu",
+      "key": "enhancementId",
+      "id": 12,
+      "text": "Hits chain to 2 zombies within 10m for 25% dmg (max 15). At 350 energy, arm a 60-dmg blast that stuns zombies within 10m for 2s.",
+      "length": 128
+    },
+    {
+      "kind": "menu",
+      "key": "enhancementId",
+      "id": 13,
+      "text": "Scrap: +10 per zombie death within 15m, +15 per assist, +1/s. Craft armor for yourself or allies (up to 100 each) and freezing turrets.",
+      "length": 135
+    },
+    {
+      "kind": "menu",
+      "key": "augmentId",
+      "id": 1,
+      "text": "+75 armor, 50% knockback resistance. 50% resistance to ranged and ability dmg.",
+      "length": 78
+    },
+    {
+      "kind": "menu",
+      "key": "augmentId",
+      "id": 2,
+      "text": "Dash in your movement direction with 1.70s invulnerability. Stores 2 charges; restores one every 14s.",
+      "length": 101
+    },
+    {
+      "kind": "menu",
+      "key": "augmentId",
+      "id": 3,
+      "text": "Launch upward and gain +20% dmg until landing. Activate with Jump in midair or a double-tap. cd: 16s.",
+      "length": 101
+    },
+    {
+      "kind": "menu",
+      "key": "augmentId",
+      "id": 4,
+      "text": "Triple melee reach; weapon hits at extended range deal 75% dmg. Push visible zombies ahead within 10m. Push cd: 9s.",
+      "length": 115
+    },
+    {
+      "kind": "menu",
+      "key": "augmentId",
+      "id": 5,
+      "text": "Double magazine capacity. Fully reloading restores the extra ammo.",
+      "length": 66
+    },
+    {
+      "kind": "menu",
+      "key": "augmentId",
+      "id": 6,
+      "text": "Grapple to allies or zombies 7–40m away. 35 dmg; stun grounded zombies or knock airborne ones down for 3s. cd: 16s.",
+      "length": 115
+    },
+    {
+      "kind": "menu",
+      "key": "augmentId",
+      "id": 7,
+      "text": "Deploy a wall that blocks zombies. Hold Crouch + Interact to aim; release Interact to place. cd: 25s.",
+      "length": 101
+    },
+    {
+      "kind": "menu",
+      "key": "augmentId",
+      "id": 8,
+      "text": "Packs: 2x healing, -1 infection, +7% ult. Ult grants a teleport to your last used pack.",
+      "length": 87
+    },
+    {
+      "kind": "menu",
+      "key": "augmentId",
+      "id": 9,
+      "text": "Carry 2 extra powerups. Eliminations: 7% chance to gain a powerup. Loot fills your active slot, then backpack.",
+      "length": 110
+    },
+    {
+      "kind": "menu",
+      "key": "augmentId",
+      "id": 10,
+      "text": "Heal for 15% of dmg dealt. Gain 50 recoverable health.",
+      "length": 54
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 1,
+      "state": {},
+      "text": "Critical dmg: +60% | Bosses: +20%",
+      "length": 33
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 2,
+      "state": {},
+      "text": "Build infection",
+      "length": 15
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 2,
+      "state": {
+        "onlyEnhancement": 2,
+        "infectionLevel": 1.237,
+        "enhancementHybridCooldown": 0
+      },
+      "text": "[Melee]: explode for 123 dmg",
+      "length": 28
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 2,
+      "state": {
+        "onlyEnhancement": 2,
+        "infectionLevel": 5,
+        "enhancementHybridCooldown": 19.2
+      },
+      "text": "Explosion: 20s",
+      "length": 14
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 3,
+      "state": {},
+      "text": "Hits within 15m ignite zombies",
+      "length": 30
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 4,
+      "state": {},
+      "text": "Infection removed: 0",
+      "length": 20
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 4,
+      "state": {
+        "onlyEnhancement": 4,
+        "enhancementPlagueCureTotal": 999999.99
+      },
+      "text": "Infection removed: 1000000",
+      "length": 26
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 5,
+      "state": {},
+      "text": "Ability resets: 0/2",
+      "length": 19
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 5,
+      "state": {
+        "onlyEnhancement": 5,
+        "enhancementBattleResetCharges": 2
+      },
+      "text": "Ability resets: 2/2",
+      "length": 19
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 6,
+      "state": {},
+      "text": "Hold [Melee]: place battery ✓",
+      "length": 29
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 6,
+      "state": {
+        "onlyEnhancement": 6,
+        "enhancementBatteryPlacementCooldown": 20
+      },
+      "text": "Placement: 20s",
+      "length": 14
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 7,
+      "state": {},
+      "text": "[Crouch]: attach near ally",
+      "length": 26
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 7,
+      "state": {
+        "onlyEnhancement": 7,
+        "enhancementIsHitchhiking": 1
+      },
+      "text": "[Crouch]: detach",
+      "length": 16
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 8,
+      "state": {},
+      "text": "Drone ready ✓",
+      "length": 13
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 8,
+      "state": {
+        "onlyEnhancement": 8,
+        "enhancementPupCooldown": 2
+      },
+      "text": "Drone ready ✓",
+      "length": 13
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 8,
+      "state": {
+        "onlyEnhancement": 8,
+        "enhancementPupCooldown": 0,
+        "enhancementIsPupBeamActive": 1
+      },
+      "text": "Attacking",
+      "length": 9
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 8,
+      "state": {
+        "onlyEnhancement": 8,
+        "enhancementPupCooldown": 1,
+        "enhancementIsPupBeamActive": 1
+      },
+      "text": "Attacking",
+      "length": 9
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 8,
+      "state": {
+        "onlyEnhancement": 8,
+        "enhancementPupCooldown": 2,
+        "enhancementIsPupBeamActive": 1
+      },
+      "text": "Attacking",
+      "length": 9
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 9,
+      "state": {},
+      "text": "Energy: 0 | Hold [Melee]: arm",
+      "length": 29
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 9,
+      "state": {
+        "onlyEnhancement": 9,
+        "enhancementCapacitorEnergy": 999999
+      },
+      "text": "Energy: 999999 | Hold [Melee]: arm",
+      "length": 34
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 9,
+      "state": {
+        "onlyEnhancement": 9,
+        "enhancementCapacitorEnergy": 999999,
+        "enhancementCapacitorCharge": 100
+      },
+      "text": "Energy: 999999 | Armed: +100 dmg/hit",
+      "length": 36
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 10,
+      "state": {},
+      "text": "Stacks: 0 | +0% HP | Size: 0x | Hold [Melee]: toggle size",
+      "length": 57
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 10,
+      "state": {
+        "onlyEnhancement": 10,
+        "enhancementBulkStacks": 999999,
+        "sizeScale": 2.4925
+      },
+      "text": "Stacks: 999999 | +100% HP | Size: 2.49x | Hold [Melee]: toggle size",
+      "length": 67
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 11,
+      "state": {},
+      "text": "[Interact]: grab | Target disabled or below 20% HP",
+      "length": 50
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 11,
+      "state": {
+        "onlyEnhancement": 11,
+        "enhancementHeldZombie": 1,
+        "enhancementHoldUntil": 104.2
+      },
+      "text": "[Interact]: throw | 5s left",
+      "length": 27
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 12,
+      "state": {},
+      "text": "Energy: 0/350",
+      "length": 13
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 12,
+      "state": {
+        "onlyEnhancement": 12,
+        "enhancementBoltEnergy": 350
+      },
+      "text": "Energy: 350/350 | Hold [Melee]: arm blast",
+      "length": 41
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 12,
+      "state": {
+        "onlyEnhancement": 12,
+        "enhancementBoltBurst": -1
+      },
+      "text": "Blast armed | Hit a zombie to discharge",
+      "length": 39
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 13,
+      "state": {},
+      "text": "Scrap 0/500 | Hold [Crouch] 2s: armor +50 (50) | Hold [Melee]: turret (200)",
+      "length": 75
+    },
+    {
+      "kind": "combat",
+      "key": "enhancementId",
+      "id": 13,
+      "state": {
+        "onlyEnhancement": 13,
+        "enhancementScrap": 500
+      },
+      "text": "Scrap 500/500 | Hold [Crouch] 2s: armor +50 (50) | Hold [Melee]: turret (200)",
+      "length": 77
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 1,
+      "state": {},
+      "text": "+75 armor | 50% ranged/ability dmg resist",
+      "length": 41
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 2,
+      "state": {},
+      "text": "Dash: 0/2 | Double-tap [Jump] | -100s",
+      "length": 37
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 2,
+      "state": {
+        "onlyAugment": 2,
+        "augmentDashCharges": 0,
+        "augmentDashReadyAt": 114
+      },
+      "text": "Dash: 0/2 | Double-tap [Jump] | 14s",
+      "length": 35
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 2,
+      "state": {
+        "onlyAugment": 2,
+        "augmentDashCharges": 1,
+        "augmentDashReadyAt": 114
+      },
+      "text": "Dash: 1/2 | Double-tap [Jump] | 14s ✓",
+      "length": 37
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 2,
+      "state": {
+        "onlyAugment": 2,
+        "augmentDashCharges": 2
+      },
+      "text": "Dash: 2/2 | Double-tap [Jump] | ✓",
+      "length": 33
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 3,
+      "state": {},
+      "text": "[Jump] midair / double-tap | +20% dmg until landing | ✓",
+      "length": 55
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 3,
+      "state": {
+        "onlyAugment": 3,
+        "augmentMovementReadyAt": 116
+      },
+      "text": "[Jump] midair / double-tap | +20% dmg until landing | 16s",
+      "length": 57
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 4,
+      "state": {},
+      "text": "3x melee reach | [Melee]: push | ✓",
+      "length": 34
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 4,
+      "state": {
+        "onlyAugment": 4,
+        "augmentMeleePushReadyAt": 109
+      },
+      "text": "3x melee reach | [Melee]: push | 9s",
+      "length": 35
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 4,
+      "state": {
+        "onlyAugment": 4,
+        "augmentMeleePushReadyAt": 100
+      },
+      "text": "3x melee reach | [Melee]: push | ✓",
+      "length": 34
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 5,
+      "state": {},
+      "text": "2x magazine | Fully reload to refill",
+      "length": 36
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 6,
+      "state": {},
+      "text": "[Crouch]+[Jump]: grapple | 7-40m | ✓",
+      "length": 36
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 6,
+      "state": {
+        "onlyAugment": 6,
+        "augmentMovementReadyAt": 116
+      },
+      "text": "[Crouch]+[Jump]: grapple | 7-40m | 16s",
+      "length": 38
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 7,
+      "state": {},
+      "text": "Hold [Crouch]+[Interact]: aim; release [Interact]: place | ✓",
+      "length": 60
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 7,
+      "state": {
+        "onlyAugment": 7,
+        "augmentBarrierHealth": 10000
+      },
+      "text": "Hold [Crouch]+[Interact]: aim; release [Interact]: place | 10000 HP | ✓",
+      "length": 71
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 7,
+      "state": {
+        "onlyAugment": 7,
+        "augmentBarrierHealth": 10000,
+        "augmentBarrierPlacementCooldown": 25
+      },
+      "text": "10000 HP | 25s",
+      "length": 14
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 8,
+      "state": {},
+      "text": "Use ultimate to charge teleport",
+      "length": 31
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 8,
+      "state": {
+        "onlyAugment": 8,
+        "augmentApothecaryReady": 1,
+        "augmentApothecaryPosition": 1
+      },
+      "text": "Hold [Crouch]+[Interact]: teleport ✓",
+      "length": 36
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 8,
+      "state": {
+        "onlyAugment": 8,
+        "augmentApothecaryReady": 1
+      },
+      "text": "No known health packs",
+      "length": 21
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 8,
+      "state": {
+        "onlyAugment": 8,
+        "hero": "D.Va"
+      },
+      "text": "Deal ultimate dmg to charge teleport",
+      "length": 36
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 8,
+      "state": {
+        "onlyAugment": 8,
+        "hero": "D.Mon"
+      },
+      "text": "Deal ultimate dmg to charge teleport",
+      "length": 36
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 9,
+      "state": {},
+      "text": "Backpack: 0/2 | [Crouch]+[Interact]: store/swap | Hold [Reload]: drop all",
+      "length": 73
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 9,
+      "state": {
+        "onlyAugment": 9,
+        "augmentScavengerBackpack": [
+          1,
+          2
+        ]
+      },
+      "text": "Backpack: 2/2 | [Crouch]+[Interact]: store/swap | Hold [Reload]: drop all",
+      "length": 73
+    },
+    {
+      "kind": "combat",
+      "key": "augmentId",
+      "id": 10,
+      "state": {},
+      "text": "15% lifesteal | +50 health",
+      "length": 26
+    }
+  ],
+  "limitation": "Character lengths use action names as bindings; font width and native client reevaluation require an in-game check."
+}

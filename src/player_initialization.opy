@@ -3,6 +3,9 @@
 # Combat HUD order on the left: roster (player slot), enhancement (97),
 # augment (98), attachment status (98.5), Jetpack fuel (99), carried powerup (100).
 
+# Long Reach's augmentMeleePushReadyAt aliases augmentMovementReadyAt's slot;
+# the shared movement HUD reads the selected augment's deadline directly.
+
 rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
     @Condition isGameplayActive == true
     # One table-driven call replaces the thirteen per-enhancement HUD cases; the
@@ -15,20 +18,20 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
         ENHANCEMENT_ICONS[localPlayer.enhancementId],
         [
             "",
-            "+60% critical damage | +20% vs bosses",
-            f"Press [{inputBindingString(Button.MELEE)}] to deal {floor(localPlayer.infectionLevel)}00 damage {iconString(Icon.CHECKMARK)}" if localPlayer.infectionLevel >= 1 else "Build up infection",
-            "Ignites nearby targets",
-            "Infection Reduced: {0} lvls".format(localPlayer.enhancementPlagueCureTotal),
-            f"{localPlayer.enhancementBattleResetCharges}/2 resets {iconString(Icon.CHECKMARK) if localPlayer.enhancementBattleResetCharges > 0 else ''}",
-            "{1} {0}".format(f"{ceil(localPlayer.enhancementBatteryPlacementCooldown)}s" if localPlayer.enhancementBatteryPlacementCooldown > 0 else iconString(Icon.CHECKMARK), "Hold [{0}]".format(inputBindingString(Button.MELEE)) if localPlayer.enhancementBatteryPlacementCooldown <= 0 else ""),
-            "Press [{0}] to dismount".format(inputBindingString(Button.CROUCH)) if localPlayer.enhancementIsHitchhiking else "Press [{0}] to attach".format(inputBindingString(Button.CROUCH)) if playerTargetList.exclude(localPlayer).any(lambda x: not x.isAttached and distance(localPlayer, x) < 2 * x.sizeScale) else "",
-            f"{ceil(localPlayer.enhancementPupCooldown)}s" if localPlayer.enhancementPupCooldown > 0 else iconString(Icon.CHECKMARK),
-            f"Hold [{inputBindingString(Button.MELEE)}] to charge | Energy: {floor(localPlayer.enhancementCapacitorEnergy)} | Charged: {floor(localPlayer.enhancementCapacitorCharge)}",
-            f"Stacks: {localPlayer.enhancementBulkStacks} | +{min(100, localPlayer.enhancementBulkStacks * 0.5)}% Max Life | Size: {localPlayer.sizeScale}x | Hold [{inputBindingString(Button.MELEE)}] to toggle size",
-            f"{max(0, ceil(localPlayer.enhancementHoldUntil - getTotalTimeElapsed()))}s | [{inputBindingString(Button.INTERACT)}] to throw" if localPlayer.enhancementHeldZombie != null else f"Aim at a vulnerable zombie | [{inputBindingString(Button.INTERACT)}] to pick up",
+            "Critical dmg: +60% | Bosses: +20%",
+            f"Explosion: {ceil(localPlayer.enhancementHybridCooldown)}s" if localPlayer.enhancementHybridCooldown > 0 else f"[{inputBindingString(Button.MELEE)}]: explode for {floor(localPlayer.infectionLevel * 100)} dmg" if localPlayer.infectionLevel >= 1 else "Build infection",
+            "Hits within 15m ignite zombies",
+            f"Infection removed: {round(localPlayer.enhancementPlagueCureTotal)}",
+            f"Ability resets: {localPlayer.enhancementBattleResetCharges}/2",
+            f"Placement: {ceil(localPlayer.enhancementBatteryPlacementCooldown)}s" if localPlayer.enhancementBatteryPlacementCooldown > 0 else f"Hold [{inputBindingString(Button.MELEE)}]: place battery {iconString(Icon.CHECKMARK)}",
+            f"[{inputBindingString(Button.CROUCH)}]: detach" if localPlayer.enhancementIsHitchhiking else f"[{inputBindingString(Button.CROUCH)}]: attach near ally",
+            "Attacking" if localPlayer.enhancementIsPupBeamActive == true else f"Drone ready {iconString(Icon.CHECKMARK)}",
+            "{0} | {1}".format(f"Energy: {floor(localPlayer.enhancementCapacitorEnergy)}", f"Armed: +{floor(localPlayer.enhancementCapacitorCharge)} dmg/hit" if localPlayer.enhancementCapacitorCharge > 0 else f"Hold [{inputBindingString(Button.MELEE)}]: arm"),
+            f"Stacks: {localPlayer.enhancementBulkStacks} | +{min(100, localPlayer.enhancementBulkStacks * 0.5)}% HP | Size: {round(localPlayer.sizeScale * 100) / 100}x | Hold [{inputBindingString(Button.MELEE)}]: toggle size",
+            f"[{inputBindingString(Button.INTERACT)}]: throw | {max(0, ceil(localPlayer.enhancementHoldUntil - getTotalTimeElapsed()))}s left" if localPlayer.enhancementHeldZombie != null else f"[{inputBindingString(Button.INTERACT)}]: grab | Target disabled or below 20% HP",
             # Armed replaces the charge hint: arming zeroes energy and requires burst == 0, so the states are exclusive.
-            "{1}{0}".format(" | Armed" if localPlayer.enhancementBoltBurst != 0 else " | Hold [{0}] to charge next attack".format(inputBindingString(Button.MELEE)) if localPlayer.enhancementBoltEnergy >= 350 else "", f"Energy: {floor(localPlayer.enhancementBoltEnergy)}/350"),
-            f"Scrap: {floor(localPlayer.enhancementScrap)}/{ENGINEER_SCRAP_MAX} | Hold [{inputBindingString(Button.CROUCH)}] ({ENGINEER_ARMOR_HOLD_DURATION}s): {ENGINEER_ARMOR_STACK} armor ({ENGINEER_ARMOR_COST}) | Hold [{inputBindingString(Button.MELEE)}]: turret ({ENGINEER_TURRET_COST})"
+            "Blast armed | Hit a zombie to discharge" if localPlayer.enhancementBoltBurst != 0 else "{0}{1}".format(f"Energy: {floor(localPlayer.enhancementBoltEnergy)}/350", f" | Hold [{inputBindingString(Button.MELEE)}]: arm blast" if localPlayer.enhancementBoltEnergy >= 350 else ""),
+            f"Scrap {floor(localPlayer.enhancementScrap)}/{ENGINEER_SCRAP_MAX} | Hold [{inputBindingString(Button.CROUCH)}] {ENGINEER_ARMOR_HOLD_DURATION}s: armor +{ENGINEER_ARMOR_STACK} ({ENGINEER_ARMOR_COST}) | Hold [{inputBindingString(Button.MELEE)}]: turret ({ENGINEER_TURRET_COST})"
         ][localPlayer.enhancementId],
         [" ", "Brain Killer", "Zombie Hybrid", "Pyrotechnic", "Plague Doctor", "Born to Battle", "Charge Battery", "Hitchhiker", "P.U.P.", "Overcharge", "Bulking Season", "Wrestler", "Bolt Strike", "Engineer"][localPlayer.enhancementId],
         HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE,
@@ -36,15 +39,15 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             Color.WHITE, Color.WHITE,
             Color.RED if localPlayer.enhancementHybridCooldown > 0 else Color.GREEN if localPlayer.infectionLevel >= 1 else Color.WHITE,
             Color.WHITE, Color.WHITE,
-            [Color.WHITE, Color.LIME_GREEN, Color.GREEN][localPlayer.enhancementBattleResetCharges],
+            [Color.WHITE, Color.SKY_BLUE, Color.GREEN][localPlayer.enhancementBattleResetCharges],
             Color.RED if localPlayer.enhancementBatteryPlacementCooldown > 0 else Color.GREEN,
-            Color.WHITE, Color.WHITE,
-            Color.YELLOW if localPlayer.enhancementCapacitorCharge > 0 else Color.GREEN if localPlayer.enhancementCapacitorEnergy >= 100 else Color.WHITE,
+            Color.WHITE, Color.RED if localPlayer.enhancementIsPupBeamActive == true else Color.WHITE,
+            Color.YELLOW if localPlayer.enhancementCapacitorCharge > 0 else Color.GREEN if localPlayer.enhancementCapacitorEnergy >= 100 else Color.SKY_BLUE if localPlayer.enhancementCapacitorEnergy >= 50 else Color.WHITE,
             Color.WHITE, Color.WHITE,
             Color.YELLOW if localPlayer.enhancementBoltBurst != 0 else Color.GREEN if localPlayer.enhancementBoltEnergy >= 350 else Color.WHITE,
-            # Engineer's name reads gray until the scrap balance covers the cost
-            # of one armor throw, then green.
-            Color.GRAY if localPlayer.enhancementScrap < ENGINEER_ARMOR_COST else Color.GREEN
+            # White below armor cost; sky blue when armor is affordable; green
+            # when scrap also covers a turret. Keep thresholds tied to costs.
+            Color.WHITE if localPlayer.enhancementScrap < ENGINEER_ARMOR_COST else Color.SKY_BLUE if localPlayer.enhancementScrap < ENGINEER_TURRET_COST else Color.GREEN
         ][localPlayer.enhancementId],
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
@@ -57,13 +60,13 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
         # Gate on the same viewer-owned ID that selects the HUD contents.
         localPlayer if localPlayer.augmentId != Augment.NO_PREFERENCE else null,
         AUGMENT_ICONS[localPlayer.augmentId],
-        "{2} {1} {0}".format(f"{localPlayer.augmentBarrierPlacementCooldown}s" if localPlayer.augmentBarrierPlacementCooldown > 0 else iconString(Icon.CHECKMARK), " {0}HP".format(ceil(localPlayer.augmentBarrierHealth)) if localPlayer.augmentBarrierHealth > 0 else [], f"Hold [{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.INTERACT)}] to place a barricade" if localPlayer.augmentBarrierPlacementCooldown <= 0 else []) if localPlayer.augmentId == Augment.LASER_BARRICADE else "{1} | {0}".format(
+        "{0}{1}".format(f"Hold [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.INTERACT)}]: aim; release [{inputBindingString(Button.INTERACT)}]: place | " if localPlayer.augmentBarrierPlacementCooldown <= 0 else "", "{0}{1}".format(f"{ceil(localPlayer.augmentBarrierHealth)} HP | " if localPlayer.augmentBarrierHealth > 0 else "", f"{localPlayer.augmentBarrierPlacementCooldown}s" if localPlayer.augmentBarrierPlacementCooldown > 0 else iconString(Icon.CHECKMARK))) if localPlayer.augmentId == Augment.LASER_BARRICADE else "{1} | {0}".format(
             (iconString(Icon.CHECKMARK) if localPlayer.augmentDashCharges == DASH_MAX_CHARGES else f"{ceil(localPlayer.augmentDashReadyAt - getTotalTimeElapsed())}s {iconString(Icon.CHECKMARK)}" if localPlayer.augmentDashCharges > 0 else f"{ceil(localPlayer.augmentDashReadyAt - getTotalTimeElapsed())}s") if localPlayer.augmentId == Augment.DASH else (iconString(Icon.CHECKMARK) if getTotalTimeElapsed() >= localPlayer.augmentMovementReadyAt else f"{ceil(localPlayer.augmentMovementReadyAt - getTotalTimeElapsed())}s"),
-            f"Extended reach | [{inputBindingString(Button.MELEE)}] knockback" if localPlayer.augmentId == Augment.LONG_REACH else f"[{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.JUMP)}]" if localPlayer.augmentId == Augment.GRAPNEL_LAUNCHER else f"[{inputBindingString(Button.JUMP)}] in midair / double-tap | +20% dmg until landing" if localPlayer.augmentId == Augment.HIGHRISE else f"{localPlayer.augmentDashCharges}/2 | double-tap [{inputBindingString(Button.JUMP)}]"
-        ) if localPlayer.augmentId in [Augment.DASH, Augment.HIGHRISE, Augment.LONG_REACH, Augment.GRAPNEL_LAUNCHER] else (f"Hold [{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.INTERACT)}] | {iconString(Icon.CHECKMARK)}" if localPlayer.augmentApothecaryReady and (localPlayer.augmentApothecaryPosition != null or healthpackPositionList != []) else "Use ultimate to charge teleport") if localPlayer.augmentId == Augment.APOTHECARY else f"Backpack: {len(localPlayer.augmentScavengerBackpack)}/2 | Crouch + Interact to store/swap | Hold [{inputBindingString(Button.RELOAD)}] to drop all" if localPlayer.augmentId == Augment.SCAVENGER else [" ", "+75 armor | incoming ranged/ability dmg −50%", " ", " ", "Extended melee reach", "Double magazine capacity", " ", " ", " ", " ", "15% lifesteal | +50 health"][localPlayer.augmentId],
+            f"3x melee reach | [{inputBindingString(Button.MELEE)}]: push" if localPlayer.augmentId == Augment.LONG_REACH else f"[{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.JUMP)}]: grapple | 7-40m" if localPlayer.augmentId == Augment.GRAPNEL_LAUNCHER else f"[{inputBindingString(Button.JUMP)}] midair / double-tap | +20% dmg until landing" if localPlayer.augmentId == Augment.HIGHRISE else f"Dash: {localPlayer.augmentDashCharges}/2 | Double-tap [{inputBindingString(Button.JUMP)}]"
+        ) if localPlayer.augmentId in [Augment.DASH, Augment.HIGHRISE, Augment.LONG_REACH, Augment.GRAPNEL_LAUNCHER] else (f"Hold [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.INTERACT)}]: teleport {iconString(Icon.CHECKMARK)}" if localPlayer.augmentApothecaryReady and (localPlayer.augmentApothecaryPosition != null or healthpackPositionList != []) else "No known health packs" if localPlayer.augmentApothecaryReady else "Deal ultimate dmg to charge teleport" if localPlayer.getHero() in [Hero.DVA, Hero.DMON] else "Use ultimate to charge teleport") if localPlayer.augmentId == Augment.APOTHECARY else f"Backpack: {len(localPlayer.augmentScavengerBackpack)}/2 | [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.INTERACT)}]: store/swap | Hold [{inputBindingString(Button.RELOAD)}]: drop all" if localPlayer.augmentId == Augment.SCAVENGER else [" ", "+75 armor | 50% ranged/ability dmg resist", " ", " ", " ", "2x magazine | Fully reload to refill", " ", " ", " ", " ", "15% lifesteal | +50 health"][localPlayer.augmentId],
         AUGMENT_NAMES[localPlayer.augmentId],
         HudPosition.ACTUALLY_LEFT, 98, Color.WHITE, Color.WHITE,
-        (Color.RED if localPlayer.augmentBarrierPlacementCooldown > 0 else Color.GREEN) if localPlayer.augmentId == Augment.LASER_BARRICADE else ((Color.RED if localPlayer.augmentDashCharges == 0 else Color.GREEN) if localPlayer.augmentId == Augment.DASH else (Color.RED if getTotalTimeElapsed() < localPlayer.augmentMovementReadyAt else Color.GREEN)) if localPlayer.augmentId in [Augment.DASH, Augment.HIGHRISE, Augment.LONG_REACH, Augment.GRAPNEL_LAUNCHER] else ([Color.WHITE, Color.GREEN, Color.YELLOW][len(localPlayer.augmentScavengerBackpack)] if localPlayer.augmentId == Augment.SCAVENGER else Color.WHITE),
+        (Color.RED if localPlayer.augmentBarrierPlacementCooldown > 0 else Color.GREEN) if localPlayer.augmentId == Augment.LASER_BARRICADE else ([Color.RED, Color.SKY_BLUE, Color.GREEN][localPlayer.augmentDashCharges] if localPlayer.augmentId == Augment.DASH else (Color.RED if getTotalTimeElapsed() < localPlayer.augmentMovementReadyAt else Color.GREEN)) if localPlayer.augmentId in [Augment.DASH, Augment.HIGHRISE, Augment.LONG_REACH, Augment.GRAPNEL_LAUNCHER] else ([Color.WHITE, Color.SKY_BLUE, Color.GREEN][len(localPlayer.augmentScavengerBackpack)] if localPlayer.augmentId == Augment.SCAVENGER else Color.GREEN if localPlayer.augmentId == Augment.APOTHECARY and localPlayer.augmentApothecaryReady == true else Color.WHITE),
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
 
@@ -234,7 +237,7 @@ macro initializePlayerAugment():
         #Augment: Laser Barricade
         # augmentBarrierFacing: horizontal unit direction saved at placement, to reconstruct both push reference points.
         # augmentBarrierEdgeDirection: unit direction from corner 1 to corner 2, cached for zombie collision checks.
-        # augmentBarrierPlacementCooldown: -1 while aiming; otherwise remaining placement cooldown in seconds (30 on placement), for checks and HUD.
+        # augmentBarrierPlacementCooldown: -1 while aiming; otherwise remaining placement cooldown in seconds (LASER_BARRICADE_COOLDOWN on placement), for checks and HUD.
         # augmentBarrierPosition: placed barrier center in world coordinates, for collision checks, push points and HP text.
         # augmentBarrierCorner1: first lower corner in world coordinates, for beams and collision geometry.
         # augmentBarrierCorner2: second lower corner in world coordinates, for beams and the along-barrier direction.
