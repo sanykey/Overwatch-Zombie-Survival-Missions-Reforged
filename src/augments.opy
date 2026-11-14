@@ -3,7 +3,7 @@
 #!define AUGMENT_KEVLAR_ARMOR 75
 #!define AUGMENT_KEVLAR_RANGED_DMG_RESIST 50
 #!define AUGMENT_KEVLAR_KNOCKBACK_RESIST 50
-#!define AUGMENT_GRAPNEL_RANGE 40
+#!define AUGMENT_GRAPNEL_RANGE 45
 #!define AUGMENT_GRAPNEL_MIN_RANGE 7
 #!define AUGMENT_GRAPNEL_SPEED 40
 #!define AUGMENT_GRAPNEL_COOLDOWN 16
@@ -25,7 +25,7 @@ rule "AUGMENT MENU":
             "Launch upward and gain +20% dmg until landing. Activate with Jump in midair or a double-tap. cd: 16s.",
             "Triple melee reach; weapon hits at extended range deal 75% dmg. Push visible zombies ahead within 10m. Push cd: 9s.",
             "Double magazine capacity. Fully reloading restores the extra ammo.",
-            "Grapple to allies or zombies 7–40m away. 35 dmg; stun grounded zombies or knock airborne ones down for 3s. cd: 16s.",
+            f"Grapple to allies or zombies {AUGMENT_GRAPNEL_MIN_RANGE}–{AUGMENT_GRAPNEL_RANGE}m away. 35 dmg; stun grounded zombies or knock airborne ones down for 3s. cd: 16s.",
             f"Deploy a wall that blocks zombies. Hold Crouch + Interact to aim; release Interact to place. cd: {LASER_BARRICADE_COOLDOWN}s.",
             f"Packs: 2x healing, -1 infection, +{AUGMENT_APOTHECARY_ULT_CHARGE}% ult. Ult grants a teleport to your last used pack.",
             "Carry 2 extra powerups. Eliminations: 7% chance to gain a powerup. Loot fills your active slot, then backpack.",
@@ -147,9 +147,9 @@ rule "GRAPNEL LAUNCHER":
     # cannot auto-launch. A miss does not consume the cooldown.
     if getTotalTimeElapsed() < eventPlayer.augmentMovementReadyAt or AUGMENT_GRAPNEL_MOVEMENT_BLOCKED:
         return
-    # Zombies and allies are both valid anchors; the closest candidate in the
-    # aim cone wins. The all-team query includes this player, so self must go.
-    eventPlayer.augmentGrapnelTarget = sorted(getPlayersInRadius(eventPlayer.getEyePosition(), AUGMENT_GRAPNEL_RANGE + 2, Team.ALL, LosCheck.SURFACES).filter(lambda target: target != eventPlayer and target.isAlive() and not target.botIsTeleporting and distance(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(target)) >= AUGMENT_GRAPNEL_MIN_RANGE and distance(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(target)) <= AUGMENT_GRAPNEL_RANGE and eventPlayer.isInViewAngle(augmentGrapnelCenter(target), 8) and isInLoS(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(target))), lambda target: distance(eventPlayer, target))[0]
+    # Zombies and allies are both valid anchors; the candidate closest in the
+    # aim cone to the crosshair wins. The all-team query includes this player, so self must go.
+    eventPlayer.augmentGrapnelTarget = sorted(getPlayersInRadius(eventPlayer.getEyePosition(), AUGMENT_GRAPNEL_RANGE + 2, Team.ALL, LosCheck.SURFACES).filter(lambda target: target != eventPlayer and target.isAlive() and not target.botIsTeleporting and distance(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(target)) >= AUGMENT_GRAPNEL_MIN_RANGE and distance(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(target)) <= AUGMENT_GRAPNEL_RANGE and eventPlayer.isInViewAngle(augmentGrapnelCenter(target), 35) and isInLoS(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(target))), lambda target: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), augmentGrapnelCenter(target))))[0]
     if eventPlayer.augmentGrapnelTarget == null:
         return
     eventPlayer.augmentMovementReadyAt = getTotalTimeElapsed() + AUGMENT_GRAPNEL_COOLDOWN
