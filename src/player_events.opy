@@ -6,8 +6,8 @@ def applyHitEnhancements():
     # Shared synchronous hit inputs: tmp3 is the victim, tmp2 is actual damage.
     # Native callers supply eventDamage; the scripted macro supplies health lost.
     # No waits/async calls; tmp0/tmp1 (Long Reach targets/damage) survive.
-    # Only Bolt consumes tmp2/tmp3 for chain damage/targets; its two attacker-owned
-    # enhancement slots remain independent of every Augment. Secondary Damage is
+    # Only Bolt consumes tmp2/tmp3 for chain damage/targets; its attacker-owned
+    # enhancement slot remains independent of every Augment. Secondary Damage is
     # direct, without Event Ability, and cannot reenter this handler.
     if enhancementHitDamage <= 0:
         return
@@ -26,21 +26,18 @@ def applyHitEnhancements():
         boltChainDamage = min(15, enhancementHitDamage * 0.25)
         #!define boltChainTargets tmp3
         eventPlayer.enhancementBoltVictim = enhancementHitVictim
-        eventPlayer.enhancementBoltEnergy = min(350, eventPlayer.enhancementBoltEnergy + 0.3)
         # Leave warning-phase Smolders untouched. Consume at most two list
         # entries instead of keeping a third enhancement slot for an index.
         boltChainTargets = random.shuffle(getPlayersInRadius(eventPlayer.enhancementBoltVictim, 10, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive() and (player.getHero() != Hero.WINSTON or player.botSmolderState != 1)).exclude(eventPlayer.enhancementBoltVictim)).slice(0, 2)
         while boltChainTargets != []:
             # Per-zombie deadline merges near-simultaneous splash hit events.
             # Keep it below a 0.05s rapid-fire interval; rejected chains do not
-            # extend the deadline or earn damage energy. No polling or waits.
+            # extend the deadline. No polling or waits.
             if getTotalTimeElapsed() >= boltChainTargets[0].botBoltDamageReadyAt:
                 boltChainTargets[0].botBoltDamageReadyAt = getTotalTimeElapsed() + 0.032
-                eventPlayer.enhancementBoltHealthBefore = boltChainTargets[0].getHealth()
                 # Direct Damage has no Event Ability; never call the on-hit macro
                 # for chains or discharge, so neither can recurse or earn hit credit.
                 damage(boltChainTargets[0], eventPlayer, boltChainDamage)
-                eventPlayer.enhancementBoltEnergy = min(350, eventPlayer.enhancementBoltEnergy + max(0, eventPlayer.enhancementBoltHealthBefore - boltChainTargets[0].getHealth()))
                 # Independent visual throttle; primary hit credit is unchanged.
                 if getTotalTimeElapsed() >= boltChainTargets[0].botBoltFlashReadyAt:
                     boltChainTargets[0].botBoltFlashReadyAt = getTotalTimeElapsed() + 0.5

@@ -35,4 +35,4 @@
 #!include "player_initialization.opy"
 #!include "player_events.opy"
 
-##!include "debug.opy"
+#!include "debug.opy"

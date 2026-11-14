@@ -1,0 +1,22 @@
+{
+  "compiler": "OverPy 9.7.21",
+  "beforeElements": 30239,
+  "afterElements": 30273,
+  "deltaElements": 34,
+  "warnings": [],
+  "added": [
+    "BOLT STRIKE AND OVERCHARGE ARM ON DOUBLE CROUCH"
+  ],
+  "removed": [
+    "BOLT STRIKE ARMS CHARGE",
+    "OVERCHARGE ARMS CHARGE"
+  ],
+  "changed": [
+    "EFFECTS/TEXTS",
+    "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)"
+  ],
+  "unchangedRules": 316,
+  "newVariables": 0,
+  "inputModelCases": 7,
+  "limitations": "Static compiled-rule comparison and bounded-wait input model; no in-game test."
+}

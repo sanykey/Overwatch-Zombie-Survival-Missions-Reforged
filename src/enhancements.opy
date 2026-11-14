@@ -133,20 +133,32 @@ rule "BULKING SEASON TOGGLES SIZE":
     applyBulkingSeasonStats()
 
 
-rule "BOLT STRIKE ARMS CHARGE":
+rule "BOLT STRIKE AND OVERCHARGE ARM ON DOUBLE CROUCH":
     @Event eachPlayer
     @Team 1
     @Condition isGameplayActive == true
-    @Condition eventPlayer.enhancementId == Enhancement.BOLT_STRIKE
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
-    @Condition eventPlayer.enhancementBoltEnergy >= 350
-    @Condition eventPlayer.enhancementBoltBurst == 0
+    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
+    @Condition ((eventPlayer.enhancementId == Enhancement.BOLT_STRIKE and getTotalTimeElapsed() >= eventPlayer.enhancementBoltReadyAt and eventPlayer.enhancementBoltBurst == 0) or (eventPlayer.enhancementId == Enhancement.OVERCHARGE and eventPlayer.enhancementCapacitorEnergy > 0 and eventPlayer.enhancementCapacitorCharge == 0)) == true
 
-    # Match inventory powerup activation; releasing Melee early preserves the bank.
-    wait(0.25, Wait.ABORT_WHEN_FALSE)
-    eventPlayer.enhancementBoltEnergy = 0
-    eventPlayer.enhancementBoltBurst = -1
+    # Press-release-press: each gap is at most 0.3s. Holding cannot arm a charge.
+    # No shared scratch survives these waits. Recheck all eligibility on the
+    # second press, including life, selection, readiness and an already armed charge.
+    waitUntil(not eventPlayer.isHoldingButton(Button.CROUCH), 0.3)
+    if eventPlayer.isHoldingButton(Button.CROUCH):
+        return
+    waitUntil(eventPlayer.isHoldingButton(Button.CROUCH), 0.3)
+    if not ruleCondition:
+        return
+    if eventPlayer.enhancementId == Enhancement.BOLT_STRIKE:
+        # Cooldown starts on arming, regardless of subsequent hits or death.
+        eventPlayer.enhancementBoltReadyAt = getTotalTimeElapsed() + 18
+        eventPlayer.enhancementBoltBurst = -1
+    else:
+        # Transfer at most 100; retain the remainder in the uncapped bank.
+        # Continued healing cannot change this burst's fixed damage.
+        eventPlayer.enhancementCapacitorCharge = min(eventPlayer.enhancementCapacitorEnergy, 100)
+        eventPlayer.enhancementCapacitorEnergy -= eventPlayer.enhancementCapacitorCharge
 
 
 rule "OVERCHARGE STORES HEALING AND ASSISTS":
@@ -164,24 +176,6 @@ rule "OVERCHARGE STORES HEALING AND ASSISTS":
     eventPlayer.enhancementCapacitorEnergy += max(0, overchargeCurrentEarnedEnergy - eventPlayer.enhancementCapacitorStatsSnapshot)
     # Resync on a stat reset too, without subtracting energy or paying twice.
     eventPlayer.enhancementCapacitorStatsSnapshot = overchargeCurrentEarnedEnergy
-
-
-rule "OVERCHARGE ARMS CHARGE":
-    @Event eachPlayer
-    @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
-    @Condition eventPlayer.enhancementCapacitorEnergy > 0
-    @Condition eventPlayer.enhancementCapacitorCharge == 0
-
-    # Match inventory powerup activation; releasing Melee early preserves the bank.
-    wait(0.25, Wait.ABORT_WHEN_FALSE)
-    # Transfer at most 100; retain the remainder in the uncapped bank.
-    # Continued healing cannot change this burst's fixed damage.
-    eventPlayer.enhancementCapacitorCharge = min(eventPlayer.enhancementCapacitorEnergy, 100)
-    eventPlayer.enhancementCapacitorEnergy -= eventPlayer.enhancementCapacitorCharge
 
 
 rule "OVERCHARGE CLEARS CHARGE":
@@ -573,10 +567,10 @@ rule "ENGINEER ARMOR TRANSFER":
     # insta-save themselves mid-fight, and a held channel never repeats. Melee is
     # not part of this channel; the Turret rule needs Melee without Crouch instead.
     wait(ENGINEER_ARMOR_HOLD_DURATION, Wait.ABORT_WHEN_FALSE)
-    # The target resolves at completion: the ally in the crosshair (within 15m)
-    # receives the armor, otherwise it goes to self. One synchronous query per
-    # hold; the candidate array is dead after the target pick, so both roles
-    # share the slot. No waits below.
+    # The target resolves at completion: the visible ally closest to the crosshair
+    # in the wide aim cone (within 15m) receives armor, otherwise it goes to self.
+    # One synchronous query per hold; the candidate array is dead after the target
+    # pick, so both roles share the slot. No waits below.
     #!define scrapTransferCandidates tmp0
     #!define scrapArmorGrantTarget tmp1
     scrapTransferCandidates = sorted(getPlayersInRadius(eventPlayer, ENGINEER_TRANSFER_RANGE, Team.1, LosCheck.SURFACES).filter(lambda ally: ally != eventPlayer and ally.isAlive() and eventPlayer.isInViewAngle(ally.getEyePosition(), ENGINEER_TRANSFER_ANGLE)), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition())))
@@ -632,7 +626,7 @@ rule "ENGINEER TURRET DEPLOY":
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == false
 
     # Crouch owns the armor hold channel, so the two rules never fire from one
-    # hold. The 0.25s Melee hold matches Bolt Strike and Overcharge; guards run
+    # hold. The 0.25s Melee hold matches inventory powerups; guards run
     # only after a confirmed hold, so taps stay silent.
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     # The turret reuses the powerup effect slots; one live turret per player.

@@ -211,10 +211,10 @@ rule "EFFECTS/TEXTS":
             "Place a battery that grants 15% ultimate charge on contact. Recharges in 10s; placement cd: 20s.",
             "Ride a nearby teammate and share your combined health while attached.",
             "An autonomous drone burns and knocks down nearby zombies, or freezes distant targets and nearby zombies.",
-            "+15% healing. Bank healing/3 (packs included) +10 per assist. Spend up to 100 energy for bonus dmg per hit.",
+            "+15% healing. Bank healing/3 (packs included) +10 per assist. Double-tap Crouch: spend up to 100 energy for bonus dmg per hit.",
             "Each elimination: +0.5% max HP (up to 2x), +0.75% size (up to 2.5x). Lose half your stacks on death.",
             "Grab zombies within 5m, including bosses, while disabled (root alone excluded) or below 20% HP. Take 50% less dmg while carrying.",
-            "Hits chain to 2 zombies within 10m for 25% dmg (max 15). At 350 energy, arm a 60-dmg blast that stuns zombies within 10m for 2s.",
+            "Hits chain to 2 zombies within 10m for 25% dmg (max 15). Double-tap Crouch to arm a 60-dmg blast that stuns zombies within 10m for 2s. Cooldown: 18s from arming.",
             f"Scrap: +{ENGINEER_COLLECTION_REWARD} per zombie death within {ENGINEER_COLLECTION_RANGE}m, +{ENGINEER_ASSIST_SCRAP} per assist, +{ENGINEER_SCRAP_PASSIVE_RATE}/s. Craft armor for yourself or allies (up to {ENGINEER_ARMOR_MAX} each) and freezing turrets."
         ][localPlayer.enhancementId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)),

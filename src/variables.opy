@@ -24,7 +24,7 @@
 #!define ENGINEER_TURRET_COST 200
 #!define ENGINEER_BEAM_DURATION 1.4
 #!define ENGINEER_TRANSFER_RANGE 15
-#!define ENGINEER_TRANSFER_ANGLE 10
+#!define ENGINEER_TRANSFER_ANGLE 60
 # Native offensive + defensive assist count; shared by Overcharge's earned-energy
 # formula and Engineer's assist-scrap snapshot.
 #!define earnedAssists(player) (player.getStatistic(Stat.OFFENSIVE_ASSISTS) + player.getStatistic(Stat.DEFENSIVE_ASSISTS))
@@ -846,10 +846,10 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 # Exclusive primary enhancement; its selected human owns the native-stat earnings,
 # charge spending and persistent balance; never write it on an enemy target.
 #!define enhancementCapacitorEnergy actorTeamSlot22
-# Bolt Strike: actual chain health removed plus 0.3 per primary hero hit,
-# capped at 350; retained on death.
+# Bolt Strike: absolute next arm time; 0 means initially ready.
+# Arming sets now + 18 seconds; death preserves the deadline.
 # Exclusive primary enhancement on its attacking human; no Augment owns this slot.
-#!define enhancementBoltEnergy actorTeamSlot22
+#!define enhancementBoltReadyAt actorTeamSlot22
 # Born to Battle unspent ability resets (0-2); retained through ability waits and reevaluated by its HUD.
 #!define enhancementBattleResetCharges actorTeamSlot22
 # Placed Charge Battery position; zero clears it.
@@ -921,9 +921,6 @@ playervar actorTeamSlot25  # Team 2: botCandidateTarget; Team 1: enhancementStat
 # Engineer beam deadline; refreshed on every armor transfer and read live
 # by BEAM FADE. No other Engineer use of this slot.
 #!define enhancementScrapBeamDeadline actorTeamSlot25
-# Bolt Strike's synchronous chain-target health snapshot. Owned by the attacking
-# human; no other Bolt state, Augment, wait/chase or HUD reads this slot.
-#!define enhancementBoltHealthBefore actorTeamSlot25
 
 playervar actorTeamSlot26  # Teleport permission on Team 2 or first barrier corner on Team 1.
 # Zombie initialization has enabled teleport processing.

@@ -34,7 +34,7 @@ const setup = () => {
         for (let i = 0; i < 3; i++) hit(s, 100 + i * delay, s.targets[i]);
         assert.equal(s.damage.length, 3);
         assert(s.targets.every(t => t.health === 9985));
-        assert(Math.abs(s.player[energy] - 45.9) < 1e-9);
+        assert.equal(s.player[energy], 9);
         assert.equal(s.targets[1][ready], 100.032);
         checks++;
     }
@@ -58,7 +58,7 @@ const setup = () => {
     const shared = setup(); hit(shared, 100);
     const second = setup(); second.targets = shared.targets; hit(second, 100.008);
     assert.equal(second.damage.length, 0);
-    assert.equal(second.player[energy], 0.3);
+    assert.equal(second.player[energy], 3);
     hit(second, 100.05); assert.equal(second.damage.length, 2);
     checks++;
     // The armed discharge must still fire once even when chains are blocked.

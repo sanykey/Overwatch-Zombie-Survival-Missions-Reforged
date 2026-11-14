@@ -87,7 +87,7 @@ async function main() {
         cases++;
     }
     for (const [name, energy, armed, threshold] of [
-        ['Bolt Strike', 'enhancementBoltEnergy', 'enhancementBoltBurst', 350],
+        ['Bolt Strike', 'enhancementBoltEnergy', 'enhancementBoltBurst', 100],
         ['Overcharge', 'enhancementCapacitorEnergy', 'enhancementCapacitorCharge', 100]
     ]) {
         for (const value of [0, threshold - 0.01, threshold, threshold + 1]) {

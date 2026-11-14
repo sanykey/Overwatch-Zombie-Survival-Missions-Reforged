@@ -19,7 +19,7 @@ rule "AUGMENT MENU":
         getPlayers(Team.1),
         f"Augment: {AUGMENT_NAMES[localPlayer.augmentId]} {AUGMENT_ICONS[localPlayer.augmentId] if localPlayer.augmentId != Augment.NO_PREFERENCE else ''}",
         [
-            "",
+            " ",
             f"+{AUGMENT_KEVLAR_ARMOR} armor, {AUGMENT_KEVLAR_KNOCKBACK_RESIST}% knockback resistance. {AUGMENT_KEVLAR_RANGED_DMG_RESIST}% resistance to ranged and ability dmg.",
             f"Dash in your movement direction with {DASH_PHASE_DURATION}s invulnerability. Stores {DASH_MAX_CHARGES} charges; restores one every {DASH_COOLDOWN}s.",
             "Launch upward and gain +20% dmg until landing. Activate with Jump in midair or a double-tap. cd: 16s.",
@@ -70,8 +70,7 @@ rule "APOTHECARY TELEPORT":
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
     @Condition (eventPlayer.enhancementId != Enhancement.DEAD_WEIGHT or eventPlayer.enhancementHeldZombie == null) == true
 
-    # Keep both buttons held for 0.25 seconds, matching Bolt Strike and
-    # Overcharge; interruption preserves the charge.
+    # Keep both buttons held for 0.25 seconds; interruption preserves the charge.
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     if eventPlayer.augmentId != Augment.APOTHECARY:
         return

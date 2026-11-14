@@ -7,32 +7,32 @@
 globalvar debugHud # ID of snky's diagnostics HUD, recreated after phase cleanup.
 
 
-rule "[debug] snky buffs":
-    @Event eachPlayer
-    @Condition "{0}".format(eventPlayer) == "snky"
-    @Condition eventPlayer.hasSpawned()
-    @Condition isGameplayActive
+# rule "[debug] snky buffs":
+#     @Event eachPlayer
+#     @Condition "{0}".format(eventPlayer) == "snky"
+#     @Condition eventPlayer.hasSpawned()
+#     @Condition isGameplayActive
 
-    # Reapply after respawns, hero changes and power-ups that overwrite healing dealt.
-    # eventPlayer.setDamageDealt(1000)
-    # eventPlayer.setHealingDealt(10000)
-    # eventPlayer.setMaxHealth(10000)
-    # Refuel during gameplay only: menu HUD cleanup runs before gameplay begins.
-    wait(5)
-    eventPlayer.powerUpJetpackFuel = 100
-    eventPlayer.powerUpItemId = PowerUpItem.JETPACK
-    # The stack slot belongs to other state when a different enhancement is selected.
-    if eventPlayer.enhancementId == Enhancement.BULKING_SEASON:
-        eventPlayer.enhancementBulkStacks = 300
-        applyBulkingSeasonStats()
-    elif eventPlayer.enhancementId == Enhancement.OVERCHARGE:
-        eventPlayer.enhancementCapacitorEnergy = 1000
-    elif eventPlayer.enhancementId == Enhancement.BOLT_STRIKE:
-        eventPlayer.enhancementBoltEnergy = 350
+#     # Reapply after respawns, hero changes and power-ups that overwrite healing dealt.
+#     # eventPlayer.setDamageDealt(1000)
+#     # eventPlayer.setHealingDealt(10000)
+#     # eventPlayer.setMaxHealth(10000)
+#     # Refuel during gameplay only: menu HUD cleanup runs before gameplay begins.
+#     wait(5)
+#     eventPlayer.powerUpJetpackFuel = 100
+#     eventPlayer.powerUpItemId = PowerUpItem.JETPACK
+#     # The stack slot belongs to other state when a different enhancement is selected.
+#     if eventPlayer.enhancementId == Enhancement.BULKING_SEASON:
+#         eventPlayer.enhancementBulkStacks = 300
+#         applyBulkingSeasonStats()
+#     elif eventPlayer.enhancementId == Enhancement.OVERCHARGE:
+#         eventPlayer.enhancementCapacitorEnergy = 1000
+#     elif eventPlayer.enhancementId == Enhancement.BOLT_STRIKE:
+#         eventPlayer.enhancementBoltReadyAt = 0
 
-    # wait(0.5, Wait.ABORT_WHEN_FALSE)
-    # if ruleCondition:
-    #     loop()
+#     # wait(0.5, Wait.ABORT_WHEN_FALSE)
+#     # if ruleCondition:
+#     #     loop()
 
 
 rule "[debug] Resource usage and server load":
