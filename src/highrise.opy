@@ -8,7 +8,7 @@ subroutine useAugmentAirAction
 
 #!define HIGHRISE_JUMP_IMPULSE 16
 #!define HIGHRISE_TAP_WINDOW 0.3
-#!define HIGHRISE_COOLDOWN 16
+#!define HIGHRISE_COOLDOWN 14
 
 macro useHighriseAirActionMacro():
     eventPlayer.augmentIsAirActionReady = false

@@ -10,6 +10,7 @@
 #!define LASER_BARRICADE_HEIGHT 2
 #!define LASER_BARRICADE_WIDTH 5
 #!define LASER_BARRICADE_COOLDOWN 25
+#!define HIGHRISE_DAMAGE_BONUS 40
 # Engineer constants live here (not enhancements.opy): BOT DIES collects scrap
 # before enhancements.opy is included.
 #!define ENGINEER_SCRAP_MAX 500
@@ -522,7 +523,7 @@ playervar augmentState3
 #!define deadWeightThrowDamageCredit augmentState3
 # Laser Barricade center; retained across waits and reevaluated by live effects.
 #!define augmentBarrierPosition augmentState3
-# HIGHRISE: the +20% damage bonus was armed by an activation and lasts until
+# HIGHRISE: the damage bonus was armed by an activation and lasts until
 # the following landing. Cleared by the flight rule on landing/death; only the
 # activation write and the flight rule own this slot.
 #!define augmentJumpDamageActive augmentState3

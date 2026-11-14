@@ -1,0 +1,11 @@
+{
+  "beforeElements": 30243,
+  "afterElements": 30243,
+  "delta": 0,
+  "warnings": [],
+  "changed": [
+    "applyDamageDealtModifier",
+    "useAugmentAirAction",
+    "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)"
+  ]
+}
