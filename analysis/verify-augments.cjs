@@ -170,6 +170,11 @@ function value(expr, state, element) {
         case 'Angle Between Vectors': return angle(v(0), v(1));
         case 'Hero Of': return v(0) === state.player ? state.hero : v(0).hero ?? state.hero;
         case 'Horizontal Facing Angle Of': case 'Horizontal Facing Angle': return state.yaw;
+        case 'Horizontal Angle Towards': {
+            const source=point(v(0)),target=point(v(1));
+            const yaw=Math.atan2(target[0]-source[0],target[2]-source[2])*180/Math.PI;
+            return ((yaw-state.yaw+180)%360+360)%360-180;
+        }
         case 'Horizontal Angle From Direction': {const vector = v(0); return Math.atan2(vector[0], vector[2]) * 180 / Math.PI;}
         case 'Direction From Angles': {
             const yaw = v(0) * Math.PI / 180, pitch = v(1) * Math.PI / 180;
@@ -195,7 +200,11 @@ function value(expr, state, element) {
         case 'Entity Exists': return !!v(0) && v(0).exists !== false;
         case 'Normalized Health': return v(0).health / v(0).maxHealth;
         case 'Ray Cast Hit Player': state.raycastCalls = (state.raycastCalls ?? 0) + 1; return state.raycastTarget ?? 0;
-        case 'Eye Position': return point(v(0)).map((x, i) => x + (i === 1 ? 1.5 : 0));
+        case 'Eye Position': {
+            const player=v(0);
+            return player.eyePosition ?? (player===state.player ? state.eyePosition : undefined)
+                ?? point(player).map((x,i)=>x+(i===1?1.5:0));
+        }
         case 'Facing Direction Of': return state.facing;
         case 'All Players': return [state.player, ...state.targets];
         case 'Position Of': return point(v(0));

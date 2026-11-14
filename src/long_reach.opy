@@ -52,7 +52,9 @@ rule "[LONG_REACH] MELEE PUSH":
     #!define augmentPushTargets tmp0
     #!define augmentPushTargetIndex tmp1
     #!define augmentPushTarget tmp2
-    augmentPushTargets = getPlayersInRadius(eventPlayer, LONG_REACH_MELEE_PUSH_RADIUS * eventPlayer.sizeScale, Team.2, LosCheck.SURFACES).filter(lambda zombie: zombie.isAlive() and not zombie.botIsTeleporting and not zombie.botIsAttached and zombie.botKnockbackScale > 0 and eventPlayer.isInViewAngle(zombie.getEyePosition(), 30))
+    # A frontal ground-plane push must not require aiming at the target's eyes.
+    # Preserve the 30-degree horizontal cone using the native wrapped angle.
+    augmentPushTargets = getPlayersInRadius(eventPlayer, LONG_REACH_MELEE_PUSH_RADIUS * eventPlayer.sizeScale, Team.2, LosCheck.SURFACES).filter(lambda zombie: zombie.isAlive() and not zombie.botIsTeleporting and not zombie.botIsAttached and zombie.botKnockbackScale > 0 and abs(horizontalAngleTowards(eventPlayer, zombie)) <= 30)
     if augmentPushTargets == []:
         return
     eventPlayer.augmentMeleePushReadyAt = getTotalTimeElapsed() + LONG_REACH_MELEE_PUSH_COOLDOWN
