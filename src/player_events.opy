@@ -6,8 +6,7 @@ def applyHitEnhancements():
     # Shared synchronous hit inputs: tmp3 is the victim, tmp2 is actual damage.
     # Native callers supply eventDamage; the scripted macro supplies health lost.
     # No waits/async calls; tmp0/tmp1 (Long Reach targets/damage) survive.
-    # Only Bolt consumes tmp2/tmp3 for chain damage/targets; its attacker-owned
-    # enhancement slot remains independent of every Augment. Secondary Damage is
+    # Only Bolt consumes tmp2/tmp3 for chain damage/targets. Secondary Damage is
     # direct, without Event Ability, and cannot reenter this handler.
     if enhancementHitDamage <= 0:
         return
@@ -23,32 +22,26 @@ def applyHitEnhancements():
                 damage(enhancementHitVictim, eventPlayer, eventPlayer.enhancementCapacitorCharge)
     elif eventPlayer.enhancementId == Enhancement.BOLT_STRIKE:
         #!define boltChainDamage tmp2
-        boltChainDamage = min(15, enhancementHitDamage * 0.25)
+        boltChainDamage = min(BOLT_STRIKE_CHAIN_DAMAGE_MAX, enhancementHitDamage * BOLT_STRIKE_CHAIN_DAMAGE_RATIO)
         #!define boltChainTargets tmp3
-        eventPlayer.enhancementBoltVictim = enhancementHitVictim
         # Leave warning-phase Smolders untouched. Consume at most two list
         # entries instead of keeping a third enhancement slot for an index.
-        boltChainTargets = random.shuffle(getPlayersInRadius(eventPlayer.enhancementBoltVictim, 10, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive() and (player.getHero() != Hero.WINSTON or player.botSmolderState != 1)).exclude(eventPlayer.enhancementBoltVictim)).slice(0, 2)
+        # Read the original victim before this assignment reuses tmp3 as the list.
+        boltChainTargets = random.shuffle(getPlayersInRadius(enhancementHitVictim, BOLT_STRIKE_RADIUS, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive() and (player.getHero() != Hero.WINSTON or player.botSmolderState != 1)).exclude(enhancementHitVictim)).slice(0, BOLT_STRIKE_CHAIN_TARGETS)
         while boltChainTargets != []:
             # Per-zombie deadline merges near-simultaneous splash hit events.
             # Keep it below a 0.05s rapid-fire interval; rejected chains do not
             # extend the deadline. No polling or waits.
             if getTotalTimeElapsed() >= boltChainTargets[0].botBoltDamageReadyAt:
-                boltChainTargets[0].botBoltDamageReadyAt = getTotalTimeElapsed() + 0.032
+                boltChainTargets[0].botBoltDamageReadyAt = getTotalTimeElapsed() + BOLT_STRIKE_CHAIN_INTERVAL
                 # Direct Damage has no Event Ability; never call the on-hit macro
-                # for chains or discharge, so neither can recurse or earn hit credit.
+                # for chains, so they cannot recurse or trigger on-hit enhancements.
                 damage(boltChainTargets[0], eventPlayer, boltChainDamage)
                 # Independent visual throttle; primary hit credit is unchanged.
                 if getTotalTimeElapsed() >= boltChainTargets[0].botBoltFlashReadyAt:
-                    boltChainTargets[0].botBoltFlashReadyAt = getTotalTimeElapsed() + 0.5
-                    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, boltChainTargets[0], 0.375)
+                    boltChainTargets[0].botBoltFlashReadyAt = getTotalTimeElapsed() + BOLT_STRIKE_FLASH_INTERVAL
+                    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, boltChainTargets[0], BOLT_STRIKE_FLASH_SIZE)
             del boltChainTargets[0]
-        if eventPlayer.enhancementBoltBurst == -1:
-            # Consume before damage. The chain list is dead; reuse its slot.
-            eventPlayer.enhancementBoltBurst = 0
-            boltChainTargets = getPlayersInRadius(eventPlayer.enhancementBoltVictim, 10, Team.2, LosCheck.SURFACES).filter(lambda player: player.isAlive() and (player.getHero() != Hero.WINSTON or player.botSmolderState != 1))
-            boltChainTargets.setStatusEffect(eventPlayer, Status.STUNNED, 2)
-            damage(boltChainTargets, eventPlayer, 60)
 
 
 rule "CROWD CONTROL STATUS":
@@ -114,9 +107,7 @@ rule "PLAYER DIED":
     @Event playerDied
     @Team 1
 
-    if eventPlayer.enhancementId == Enhancement.BOLT_STRIKE:
-        eventPlayer.enhancementBoltBurst = 0
-    elif eventPlayer.enhancementId == Enhancement.BULKING_SEASON:
+    if eventPlayer.enhancementId == Enhancement.BULKING_SEASON:
         eventPlayer.enhancementBulkStacks = floor(eventPlayer.enhancementBulkStacks / 2)
         applyBulkingSeasonStats()
     elif eventPlayer.enhancementId == Enhancement.ENGINEER and eventPlayer.enhancementScrapBeamEntity != null:

@@ -29,7 +29,7 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             "{0} | {1}".format(f"Energy: {floor(localPlayer.enhancementCapacitorEnergy)}", f"Armed: +{floor(localPlayer.enhancementCapacitorCharge)} dmg/hit" if localPlayer.enhancementCapacitorCharge > 0 else f"Double-tap [{inputBindingString(Button.CROUCH)}]: arm"),
             f"Stacks: {localPlayer.enhancementBulkStacks} | +{min(100, localPlayer.enhancementBulkStacks * 0.5)}% HP | Size: {round(localPlayer.sizeScale * 100) / 100}x | Hold [{inputBindingString(Button.MELEE)}]: toggle size",
             f"[{inputBindingString(Button.INTERACT)}]: throw | {max(0, ceil(localPlayer.enhancementHoldUntil - getTotalTimeElapsed()))}s left" if localPlayer.enhancementHeldZombie != null else f"[{inputBindingString(Button.INTERACT)}]: grab | Target disabled or below 20% HP",
-            "Blast armed | Hit a zombie to discharge" if localPlayer.enhancementBoltBurst != 0 else f"Blast: {ceil(localPlayer.enhancementBoltReadyAt - getTotalTimeElapsed())}s" if getTotalTimeElapsed() < localPlayer.enhancementBoltReadyAt else f"Double-tap [{inputBindingString(Button.CROUCH)}]: arm blast",
+            "Hits chain to nearby zombies",
             f"Scrap {floor(localPlayer.enhancementScrap)}/{ENGINEER_SCRAP_MAX} | Hold [{inputBindingString(Button.CROUCH)}] {ENGINEER_ARMOR_HOLD_DURATION}s: armor +{ENGINEER_ARMOR_STACK} ({ENGINEER_ARMOR_COST}) | Hold [{inputBindingString(Button.MELEE)}]: turret ({ENGINEER_TURRET_COST})"
         ][localPlayer.enhancementId],
         [" ", "Brain Killer", "Zombie Hybrid", "Pyrotechnic", "Plague Doctor", "Born to Battle", "Charge Battery", "Hitchhiker", "P.U.P.", "Overcharge", "Bulking Season", "Wrestler", "Bolt Strike", "Engineer"][localPlayer.enhancementId],
@@ -43,7 +43,7 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             Color.WHITE, Color.RED if localPlayer.enhancementIsPupBeamActive == true else Color.WHITE,
             Color.YELLOW if localPlayer.enhancementCapacitorCharge > 0 else Color.GREEN if localPlayer.enhancementCapacitorEnergy >= 100 else Color.SKY_BLUE if localPlayer.enhancementCapacitorEnergy >= 50 else Color.WHITE,
             Color.WHITE, Color.WHITE,
-            Color.YELLOW if localPlayer.enhancementBoltBurst != 0 else Color.GREEN if getTotalTimeElapsed() >= localPlayer.enhancementBoltReadyAt else Color.WHITE,
+            Color.WHITE,
             # White below armor cost; sky blue when armor is affordable; green
             # when scrap also covers a turret. Keep thresholds tied to costs.
             Color.WHITE if localPlayer.enhancementScrap < ENGINEER_ARMOR_COST else Color.SKY_BLUE if localPlayer.enhancementScrap < ENGINEER_TURRET_COST else Color.GREEN
@@ -140,10 +140,6 @@ macro initializePlayerEnhancement():
             # This shared slot must start as a player reference or null, never
             # a previous enhancement's number/array/color. Pickup sets its deadline.
             eventPlayer.enhancementHeldZombie = null
-            break
-        case Enhancement.BOLT_STRIKE:
-            eventPlayer.enhancementBoltReadyAt = 0
-            eventPlayer.enhancementBoltBurst = 0
             break
         #Engineer
         case Enhancement.ENGINEER:

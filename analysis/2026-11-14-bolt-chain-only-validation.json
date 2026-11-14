@@ -1,0 +1,19 @@
+{
+  "cases": 273,
+  "beforeElements": 30243,
+  "afterElements": 30081,
+  "deltaElements": -162,
+  "warnings": [],
+  "changedRules": [
+    "EFFECTS/TEXTS",
+    "OVERCHARGE ARM ON DOUBLE CROUCH",
+    "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)",
+    "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION",
+    "applyHitEnhancements",
+    "PLAYER DIED"
+  ],
+  "addedVariables": 0,
+  "removedBoltPlayerStateAliases": 3,
+  "retainedChainBehaviorComparedWithBaseline": true,
+  "nativeGameplayVerified": false
+}

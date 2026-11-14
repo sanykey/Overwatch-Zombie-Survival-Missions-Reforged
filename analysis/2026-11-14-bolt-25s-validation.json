@@ -1,0 +1,16 @@
+{
+  "cases": 39,
+  "beforeElements": 30243,
+  "afterElements": 30243,
+  "deltaElements": 0,
+  "warnings": [],
+  "changedRules": [
+    "EFFECTS/TEXTS",
+    "BOLT STRIKE AND OVERCHARGE ARM ON DOUBLE CROUCH",
+    "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)",
+    "applyHitEnhancements"
+  ],
+  "addedVariables": 0,
+  "cooldownStarts": "arming",
+  "nativeGameplayVerified": false
+}

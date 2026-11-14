@@ -27,8 +27,6 @@ globalvar debugHud # ID of snky's diagnostics HUD, recreated after phase cleanup
 #         applyBulkingSeasonStats()
 #     elif eventPlayer.enhancementId == Enhancement.OVERCHARGE:
 #         eventPlayer.enhancementCapacitorEnergy = 1000
-#     elif eventPlayer.enhancementId == Enhancement.BOLT_STRIKE:
-#         eventPlayer.enhancementBoltReadyAt = 0
 
 #     # wait(0.5, Wait.ABORT_WHEN_FALSE)
 #     # if ruleCondition:

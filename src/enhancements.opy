@@ -133,32 +133,30 @@ rule "BULKING SEASON TOGGLES SIZE":
     applyBulkingSeasonStats()
 
 
-rule "BOLT STRIKE AND OVERCHARGE ARM ON DOUBLE CROUCH":
+rule "OVERCHARGE ARM ON DOUBLE CROUCH":
     @Event eachPlayer
     @Team 1
     @Condition isGameplayActive == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
-    @Condition ((eventPlayer.enhancementId == Enhancement.BOLT_STRIKE and getTotalTimeElapsed() >= eventPlayer.enhancementBoltReadyAt and eventPlayer.enhancementBoltBurst == 0) or (eventPlayer.enhancementId == Enhancement.OVERCHARGE and eventPlayer.enhancementCapacitorEnergy > 0 and eventPlayer.enhancementCapacitorCharge == 0)) == true
+    @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
+    @Condition eventPlayer.enhancementCapacitorEnergy > 0
+    @Condition eventPlayer.enhancementCapacitorCharge == 0
 
-    # Press-release-press: each gap is at most 0.3s. Holding cannot arm a charge.
+    # Press-release-press: each gap is bounded by OVERCHARGE_ARM_TAP_WINDOW.
+    # Holding cannot arm a charge.
     # No shared scratch survives these waits. Recheck all eligibility on the
     # second press, including life, selection, readiness and an already armed charge.
-    waitUntil(not eventPlayer.isHoldingButton(Button.CROUCH), 0.3)
+    waitUntil(not eventPlayer.isHoldingButton(Button.CROUCH), OVERCHARGE_ARM_TAP_WINDOW)
     if eventPlayer.isHoldingButton(Button.CROUCH):
         return
-    waitUntil(eventPlayer.isHoldingButton(Button.CROUCH), 0.3)
+    waitUntil(eventPlayer.isHoldingButton(Button.CROUCH), OVERCHARGE_ARM_TAP_WINDOW)
     if not ruleCondition:
         return
-    if eventPlayer.enhancementId == Enhancement.BOLT_STRIKE:
-        # Cooldown starts on arming, regardless of subsequent hits or death.
-        eventPlayer.enhancementBoltReadyAt = getTotalTimeElapsed() + 18
-        eventPlayer.enhancementBoltBurst = -1
-    else:
-        # Transfer at most 100; retain the remainder in the uncapped bank.
-        # Continued healing cannot change this burst's fixed damage.
-        eventPlayer.enhancementCapacitorCharge = min(eventPlayer.enhancementCapacitorEnergy, 100)
-        eventPlayer.enhancementCapacitorEnergy -= eventPlayer.enhancementCapacitorCharge
+    # Transfer at most 100; retain the remainder in the uncapped bank.
+    # Continued healing cannot change this burst's fixed damage.
+    eventPlayer.enhancementCapacitorCharge = min(eventPlayer.enhancementCapacitorEnergy, 100)
+    eventPlayer.enhancementCapacitorEnergy -= eventPlayer.enhancementCapacitorCharge
 
 
 rule "OVERCHARGE STORES HEALING AND ASSISTS":

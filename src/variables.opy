@@ -11,6 +11,14 @@
 #!define LASER_BARRICADE_WIDTH 5
 #!define LASER_BARRICADE_COOLDOWN 25
 #!define HIGHRISE_DAMAGE_BONUS 40
+#!define BOLT_STRIKE_RADIUS 10
+#!define BOLT_STRIKE_CHAIN_TARGETS 2
+#!define BOLT_STRIKE_CHAIN_DAMAGE_RATIO 0.25
+#!define BOLT_STRIKE_CHAIN_DAMAGE_MAX 15
+#!define BOLT_STRIKE_CHAIN_INTERVAL 0.032
+#!define BOLT_STRIKE_FLASH_INTERVAL 0.5
+#!define BOLT_STRIKE_FLASH_SIZE 0.375
+#!define OVERCHARGE_ARM_TAP_WINDOW 0.3
 # Engineer constants live here (not enhancements.opy): BOT DIES collects scrap
 # before enhancements.opy is included.
 #!define ENGINEER_SCRAP_MAX 500
@@ -847,10 +855,6 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 # Exclusive primary enhancement; its selected human owns the native-stat earnings,
 # charge spending and persistent balance; never write it on an enemy target.
 #!define enhancementCapacitorEnergy actorTeamSlot22
-# Bolt Strike: absolute next arm time; 0 means initially ready.
-# Arming sets now + 18 seconds; death preserves the deadline.
-# Exclusive primary enhancement on its attacking human; no Augment owns this slot.
-#!define enhancementBoltReadyAt actorTeamSlot22
 # Born to Battle unspent ability resets (0-2); retained through ability waits and reevaluated by its HUD.
 #!define enhancementBattleResetCharges actorTeamSlot22
 # Placed Charge Battery position; zero clears it.
@@ -887,9 +891,6 @@ playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateS
 # Engineer's transfer beam entity; null after BEAM FADE, death and
 # disconnect cleanup. Beam state re-cleans on every non-hero-switch spawn.
 #!define enhancementScrapBeamEntity actorTeamSlot23
-# Bolt Strike's synchronous original-hit victim, owned by the attacking
-# human only. No other Bolt state, Augment, wait/chase or HUD reads this slot.
-#!define enhancementBoltVictim actorTeamSlot23
 
 playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateSlot3. Receivers, not rule teams, own the storage.
 # Movement waypoint associated with the accepted zombie spawn point.
@@ -897,9 +898,6 @@ playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateS
 # Overcharge: absolute burst deadline; zero means armed but waiting for its first hit.
 # Set once by the first hit, read by later hits, cleared with the charge on expiry/death.
 #!define enhancementCapacitorDeadline actorTeamSlot24
-# Bolt Strike: 0 inactive, -1 armed until the first eligible hit; consumed once.
-# Exclusive primary enhancement; read across damage events/HUD, with no waits/chases.
-#!define enhancementBoltBurst actorTeamSlot24
 # Full battery reuse cooldown used for progress scaling (10 seconds).
 #!define enhancementBatteryReuseDuration actorTeamSlot24
 # Current P.U.P. enemy target; null while idle.
