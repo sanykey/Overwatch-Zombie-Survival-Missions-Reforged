@@ -37,6 +37,14 @@
 #!define ENGINEER_BEAM_DURATION 0.7
 #!define ENGINEER_TRANSFER_RANGE 15
 #!define ENGINEER_TRANSFER_ANGLE 60
+
+# Shared Grapnel/Wrestler targeting geometry and Wrestler HUD/menu constants.
+#!define augmentGrapnelCenter(player) ((player.getPosition() + player.getEyePosition()) * 0.5)
+#!define WRESTLER_PULL_RANGE 25
+#!define WRESTLER_PULL_COOLDOWN 16
+#!define WRESTLER_PULL_SPEED 25
+#!define WRESTLER_PULL_BEAM_DURATION 0.2
+#!define WRESTLER_PULL_KNOCKDOWN 1
 # Native offensive + defensive assist count; shared by Overcharge's earned-energy
 # formula and Engineer's assist-scrap snapshot.
 #!define earnedAssists(player) (player.getStatistic(Stat.OFFENSIVE_ASSISTS) + player.getStatistic(Stat.DEFENSIVE_ASSISTS))
@@ -882,6 +890,9 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateSlot2. Receivers, not rule teams, own the storage.
 # Boss Behemoth gas-cloud radii, aligned with botGasPositionList.
 #!define botGasRadiusList actorTeamSlot23
+# Wrestler: absolute pull cooldown deadline, retained across deaths/hero changes.
+# Exclusive primary enhancement, human-owned; independent of carry and Augments.
+#!define enhancementPullReadyAt actorTeamSlot23
 # Overcharge: energy spent on the armed/active burst, retained across damage events and HUD reevaluation.
 #!define enhancementCapacitorCharge actorTeamSlot23
 # Bulking Season: persistent size/pitch toggle on its human; false means stacked
@@ -903,6 +914,10 @@ playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateS
 playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateSlot3. Receivers, not rule teams, own the storage.
 # Movement waypoint associated with the accepted zombie spawn point.
 #!define botSpawnWaypoint actorTeamSlot24
+# Wrestler: short-lived pull beam handle, retained only through its 0.2s
+# unconditional cleanup wait; departure cleanup also destroys it. No spawn reset.
+# Beam endpoints are snapshots, so the global target scratch is never captured.
+#!define enhancementPullBeamEntity actorTeamSlot24
 # Overcharge: absolute burst deadline; zero means armed but waiting for its first hit.
 # Set once by the first hit, read by later hits, cleared with the charge on expiry/death.
 #!define enhancementCapacitorDeadline actorTeamSlot24

@@ -212,7 +212,7 @@ rule "EFFECTS/TEXTS":
             "Place a battery that grants 15% ultimate charge on contact. Recharges in 10s; placement cd: 20s. Using ultimate resets all ability cd.",
             "Ride a nearby teammate and share your combined health while attached.",
             "An autonomous drone burns and knocks down nearby zombies, or freezes distant targets and nearby zombies.",
-            "Grab zombies within 5m, including bosses, while disabled (root alone excluded) or below 20% HP. Take 50% less dmg while carrying.",
+            f"Grab disabled or <20% HP zombies within 5m, bosses included; 50% dmg resist while carrying. Hold Melee: pull a zombie within {WRESTLER_PULL_RANGE}m, knock down for {WRESTLER_PULL_KNOCKDOWN}s; cd {WRESTLER_PULL_COOLDOWN}s.",
             f"Hits chain to {BOLT_STRIKE_CHAIN_TARGETS} zombies within {BOLT_STRIKE_RADIUS}m for {BOLT_STRIKE_CHAIN_DAMAGE_RATIO * 100}% dmg (max {BOLT_STRIKE_CHAIN_DAMAGE_MAX}).",
             f"Scrap: +{ENGINEER_COLLECTION_REWARD} per zombie death within {ENGINEER_COLLECTION_RANGE}m, +{ENGINEER_ASSIST_SCRAP} per assist, +{ENGINEER_SCRAP_PASSIVE_RATE}/s. Craft armor for yourself or allies (up to {ENGINEER_ARMOR_MAX} each) and freezing turrets.",
             "+30% healing, increased to +62.5% on infected allies. Healing reduces infection in you and infected allies.",

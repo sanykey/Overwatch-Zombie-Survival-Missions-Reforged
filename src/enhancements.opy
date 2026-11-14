@@ -389,6 +389,48 @@ def resetBattleAbilityCharge():
     eventPlayer.enhancementBattleResetCharges -= 1
 
 
+rule "WRESTLER PULL":
+    @Event eachPlayer
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.enhancementId == Enhancement.WRESTLER
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
+
+    # Same hold as Engineer. Check cooldown on this input edge: holding through
+    # expiry cannot auto-cast, and an invalid target never spends the cooldown.
+    wait(0.25, Wait.ABORT_WHEN_FALSE)
+    if getTotalTimeElapsed() < eventPlayer.enhancementPullReadyAt or eventPlayer.isAttached or eventPlayer.isCrowdControlled:
+        return
+    # Grapnel's body-center cone, surface LOS and crosshair-angle priority;
+    # only living, available Team 2 dummies are eligible. No minimum distance.
+    # Synchronous scratch: NONE snapshots both beam endpoints, and every target
+    # read finishes before the wait. No Augment-owned storage is touched.
+    #!define wrestlerPullTarget tmp0
+    wrestlerPullTarget = sorted(getPlayersInRadius(eventPlayer.getEyePosition(), WRESTLER_PULL_RANGE + 2, Team.2, LosCheck.SURFACES).filter(lambda target: target.isDummy() and target.isAlive() and not target.botIsInitializing and not target.botIsTeleporting and not target.botIsAttached and distance(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(target)) <= WRESTLER_PULL_RANGE and eventPlayer.isInViewAngle(augmentGrapnelCenter(target), 35) and isInLoS(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(target))), lambda target: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), augmentGrapnelCenter(target))))[0]
+    if wrestlerPullTarget == null:
+        return
+    eventPlayer.enhancementPullReadyAt = getTotalTimeElapsed() + WRESTLER_PULL_COOLDOWN
+    # Slimer's Bad Beam, recolored purple, appears at full length immediately.
+    createBeam(getAllPlayers(), Beam.BAD, augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(wrestlerPullTarget), Color.PURPLE, EffectReeval.NONE)
+    eventPlayer.enhancementPullBeamEntity = getLastCreatedEntity()
+    wrestlerPullTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, WRESTLER_PULL_KNOCKDOWN)
+    wrestlerPullTarget.applyImpulse(directionTowards(augmentGrapnelCenter(wrestlerPullTarget), augmentGrapnelCenter(eventPlayer)), WRESTLER_PULL_SPEED, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+    # Always clean up, including release, death, hero change or end of gameplay.
+    wait(WRESTLER_PULL_BEAM_DURATION, Wait.IGNORE_CONDITION)
+    destroyEffect(eventPlayer.enhancementPullBeamEntity)
+    eventPlayer.enhancementPullBeamEntity = null
+
+
+rule "WRESTLER PULL DISCONNECT CLEANUP":
+    @Event playerLeft
+    @Team 1
+    @Condition eventPlayer.enhancementId == Enhancement.WRESTLER
+    @Condition eventPlayer.enhancementPullBeamEntity != null
+
+    destroyEffect(eventPlayer.enhancementPullBeamEntity)
+
+
 def useLivingProjectile():
     @Name "useLivingProjectile"
 

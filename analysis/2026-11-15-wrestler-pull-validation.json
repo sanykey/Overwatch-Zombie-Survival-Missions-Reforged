@@ -1,0 +1,25 @@
+{
+  "baselineRef": "e6f89b6d6ef3070b9071e171cb253a9917cef0b3",
+  "beforeElements": 30074,
+  "afterElements": 30304,
+  "addedElements": 230,
+  "ruleCosts": [
+    {
+      "name": "WRESTLER PULL",
+      "elements": 187
+    },
+    {
+      "name": "WRESTLER PULL DISCONNECT CLEANUP",
+      "elements": 11
+    }
+  ],
+  "changedExistingRules": [
+    "EFFECTS/TEXTS",
+    "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)"
+  ],
+  "unchangedRules": 319,
+  "newVariableSlots": 0,
+  "warnings": [],
+  "nativeIncludesMatch": true,
+  "runtimeValidation": "Not run; verify aim/LOS/range boundaries, boss knockback, cooldown/hold, cleanup, and Augment coexistence in Overwatch."
+}
