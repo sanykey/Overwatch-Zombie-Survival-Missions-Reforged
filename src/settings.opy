@@ -100,6 +100,56 @@ settings {
         }
     },
     "heroes": {
+        "team1": {
+            "ana": {
+                "damageDealt%": 110
+            },
+            "baptiste": {
+                "damageDealt%": 110
+            },
+            "brigitte": {
+                "damageDealt%": 110
+            },
+            "doctrine": {
+                "damageDealt%": 110
+            },
+            "illari": {
+                "damageDealt%": 110
+            },
+            "jetpackCat": {
+                "damageDealt%": 110
+            },
+            "juno": {
+                "damageDealt%": 110
+            },
+            "kiriko": {
+                "damageDealt%": 110
+            },
+            "lifeweaver": {
+                "damageDealt%": 110
+            },
+            "lucio": {
+                "damageDealt%": 110
+            },
+            "mercy": {
+                "damageDealt%": 110
+            },
+            "mizuki": {
+                "damageDealt%": 110
+            },
+            "moira": {
+                "damageDealt%": 110
+            },
+            "sombra": {
+                "damageDealt%": 110
+            },
+            "wuyang": {
+                "damageDealt%": 110
+            },
+            "zenyatta": {
+                "damageDealt%": 110
+            }
+        },
         "team2": {
             "general": {
                 "abilityCooldown%": 0,
