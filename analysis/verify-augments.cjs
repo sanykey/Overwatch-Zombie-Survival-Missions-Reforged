@@ -218,8 +218,10 @@ function value(expr, state, element) {
         case 'Is In Line of Sight': return state.lineOfSight;
         case 'Distance Between': return magnitude(point(v(0)).map((x, i) => x - point(v(1))[i]));
         case 'Players Within Radius':
-            assert.equal(a[2], 'Team 2'); assert.equal(a[3], 'Surfaces');
-            return state.targets.filter(target => (target.team ?? 2) === 2 && target.visible && magnitude(target.position.map((x, i) => x - point(v(0))[i])) <= v(1));
+            assert(['Team 1', 'Team 2', 'All Teams'].includes(a[2])); assert.equal(a[3], 'Surfaces');
+            return [state.player, ...state.targets].filter(target =>
+                (a[2] === 'All Teams' || (target.team ?? (target === state.player ? 1 : 2)) === v(2))
+                && target.visible !== false && magnitude(target.position.map((x, i) => x - point(v(0))[i])) <= v(1));
         case 'Is In View Angle': return angle(state.facing, v(1).map((x, i) => x - value('Eye Position(Event Player)', state)[i])) <= v(2);
         case 'Random Integer': {
             const min = Number(v(0)), max = Number(v(1)), roll = state.randomRolls?.shift() ?? state.randomRoll ?? min;
@@ -501,12 +503,221 @@ function scenario(augmentId, overrides = {}) {
         ...overrides};
 }
 
+async function verifyGrapnel(build, parsed, compiled, run) {
+    const pyrotechnic = Number(files['variables.opy'].match(/PYROTECHNIC = (\d+),/)[1]);
+    const readyAt = slot('augmentMovementReadyAt');
+    const grapnel = 'GRAPNEL LAUNCHER', grappleTargetSlot = slot('augmentGrapnelTarget');
+    const zombie = (id, position = [0, 0, 20], overrides = {}) =>
+        ({id, position, alive: true, visible: true, team: 2, ground: true, sizeScale: 1, ...overrides});
+    const grapnelState = (overrides = {}) => scenario(6, {buttons: new Set(['Crouch', 'Jump']),
+        targets: [zombie('locked')], ...overrides});
+    const advancePull = (state, task, integrate = true) => {
+        assert(!task.done());
+        const elapsed = task.deadline() - state.time;
+        if (integrate) state.player.position = state.player.position.map((x, i) => x + state.velocity[i] * elapsed);
+        state.time = task.deadline(); task.resume();
+    };
+    const finishPull = (state, task, integrate = true) => {
+        for (let step = 0; !task.done() && step < 40; step++) {
+            assert(magnitude(state.velocity) <= 40 + 1e-8, 'Pull corrects velocity instead of stacking impulses');
+            advancePull(state, task, integrate);
+        }
+        assert(task.done(), 'A blocked/unreachable hook must terminate within its travel timeout');
+        assert.equal(state.liveEffects.size, 0, 'Every finished pull destroys its cable');
+        assert.equal(state.player[grappleTargetSlot], 0);
+        assert.equal(state.player[slot('augmentGrapnelState')], 0);
+    };
+    for (const buttons of [new Set(), new Set(['Jump']), new Set(['Crouch'])]) {
+        assert(!applies(compiled.get(grapnel), grapnelState({buttons})), 'Both input buttons are required');
+    }
+    const selection = grapnelState({targets: [zombie('farther', [3, 0, 20]), zombie('nearest', [0, 0, 10]),
+        zombie('too close', [0, 0, 6.99]),
+        zombie('behind wall', [0, 0, 9], {visible: false}), zombie('dead', [0, 0, 8.2], {alive: false}),
+        zombie('teleporting', [0, 0, 8.4], {[slot('botIsTeleporting')]: true}), zombie('ally', [2, 0, 8], {team: 1}),
+        zombie('off aim', [8, 0, 10]), zombie('out of range', [0, 0, 46])]});
+    const selectionTask = run(grapnel, selection);
+    assert.equal(selection.player[grappleTargetSlot].id, 'nearest', 'Lock the visible living target closest to the crosshair');
+    finishPull(selection, selectionTask);
+    assert.deepEqual(selection.damage.map(hit => hit.targets[0].id), ['nearest']);
+    for (const sharedSlot of [0, 1, 2, [[0, 0, 5], [0, 0, 10]]]) {
+        const ally = zombie('ally anchor', [0, 0, 10], {team: 1, [slot('botIsTeleporting')]: sharedSlot});
+        const state = grapnelState({targets: [zombie('off-center enemy', [2, 0, 8]), ally]});
+        state.player.team = 1;
+        state.player.enhancementId = pyrotechnic;
+        const task = run(grapnel, state);
+        assert.equal(state.player[grappleTargetSlot], ally, 'Team 1 votes/Rescue paths must not exclude allied anchors');
+        ally[slot('botIsTeleporting')] = [[0, 0, 15]];
+        advancePull(state, task);
+        assert(!task.done(), 'Allied shared-slot updates must not interrupt travel');
+        finishPull(state, task);
+        assert.equal(state.player[readyAt], 116);
+        assert.deepEqual(state.damage, [], 'Allied arrival deals no damage');
+        assert.deepEqual(state.statusWrites, [], 'Allied arrival applies no crowd control or burn');
+        assert.equal(state.effects.length, 1, 'Allied arrival produces no hostile impact effect');
+        assert(magnitude(state.velocity) < 1e-8);
+    }
+    const pull = grapnelState(), pulling = run(grapnel, pull);
+    assert.equal(pull.player[readyAt], 116);
+    assert.equal(pull.damage.length, 0, 'Launching the cable does not deal damage');
+    assert.deepEqual(pull.effects, [{effect: 'Debuff Impact Sound', color: 'Color(White)', position: [0, 0, 0], size: 25}],
+        'One launch sound, with no impact before arrival');
+    assert.deepEqual(pull.player.position, [0, 0, 0], 'Pull uses movement rather than teleporting');
+    assert.equal(pull.beams.length, 1); assert.equal(pull.beams[0].type, 'Grapple Beam');
+    assert.equal(pull.beams[0].color, 'Null', 'White is the compiler default, matching the sentry cable');
+    assert.equal(pull.beams[0].reevaluation, 'Visible To Position and Radius');
+    assert.deepEqual(value(pull.beams[0].from, pull), [0, 0.75, 0]);
+    assert.deepEqual(value(pull.beams[0].to, pull), [0, 0.75, 20]);
+    pull.buttons.clear(); pull.meleeing = true; pull.globals.tmp0 = [999, 999, 999];
+    advancePull(pull, pulling);
+    assert(!pulling.done(), 'Releasing activation input and using Quick Melee do not cancel a committed hook');
+    assert(Math.abs(value(pull.beams[0].from, pull)[2] - 2) < 1e-9, 'The cable start follows the player');
+    pull.targets[0].position = [0.5, 0, 20.5];
+    assert.deepEqual(value(pull.beams[0].to, pull), [0.5, 0.75, 20.5], 'The cable end follows the locked zombie');
+    pull.targets.unshift(zombie('new closer zombie', [0, 0, 8]));
+    finishPull(pull, pulling);
+    assert.equal(pull.damage.length, 1); assert.equal(pull.damage[0].amount, 35);
+    assert.equal(pull.damage[0].targets[0].id, 'locked', 'Do not retarget after launch');
+    assert.deepEqual(pull.statusWrites, [{status: 'Stunned', duration: 0.5, target: 'locked'}]);
+    assert.deepEqual(pull.effects.slice(1), [{effect: 'Bad Explosion', color: 'Color(Orange)',
+        position: [0.5, 1, 20.5], size: 0.4}], 'Arrival plays one enlarged Long Reach impact on the locked zombie');
+    assert(magnitude(pull.velocity) < 1e-8, 'Arrival cancels the remaining pull velocity');
+    assert(!pull.impulses.some(impulse => impulse.speed === 14.4 && equal(impulse.direction, [0, 1, 0])),
+        'Releasing Jump before arrival must not bounce');
+    assert.equal(pull.player[readyAt], 116, 'The sixteen-second cooldown starts on a successful launch');
+    assert(conditions(compiled.get(grapnel)).every(condition => !condition.includes('Total Time Elapsed')),
+        'Cooldown expiry alone must not auto-launch while the chord remains held');
+    assert(!/Disallow Button|Start Forcing Throttle|Set Move Speed/.test(compiled.get(grapnel).body), 'Melee input remains available');
+    for (const heldOnArrival of [false, true]) {
+        const state = grapnelState({targets: [zombie('minimum range', [0, 0, 7])]}), task = run(grapnel, state);
+        assert.equal(state.player[readyAt], 116, 'Exactly seven meters is within launch range');
+        state.buttons.delete('Jump'); state.buttons.delete('Crouch'); advancePull(state, task);
+        if (heldOnArrival) state.buttons.add('Jump');
+        finishPull(state, task);
+        const bounces = state.impulses.filter(impulse => impulse.speed === 14.4 && equal(impulse.direction, [0, 1, 0]));
+        assert.equal(bounces.length, 0, 'Grapnel arrival must not add a jump, even if Jump is held');
+        assert(magnitude(state.velocity) < 1e-8, 'Arrival ends by stopping the pull');
+    }
+    for (const overrides of [{targets: []}, {targets: [zombie('off aim', [20, 0, 20])]},
+        {targets: [zombie('far', [0, 0, 46])]}, {targets: [zombie('too close', [0, 0, 6.99])]}, {lineOfSight: false}]) {
+        const miss = grapnelState(overrides), task = run(grapnel, miss);
+        assert(task.done()); assert.equal(miss.beams.length, 0); assert.equal(miss.player[readyAt] ?? 0, 0);
+        assert.deepEqual(miss.effects, []); assert.deepEqual(miss.statusWrites, []);
+    }
+    for (const status of ['Rooted', 'Stunned', 'Asleep', 'Frozen', 'Knocked Down']) {
+        const state = grapnelState({status: new Set([status])}), task = run(grapnel, state);
+        assert(task.done()); assert.equal(state.beams.length, 0); assert.equal(state.player[readyAt] ?? 0, 0);
+    }
+    const cooling = grapnelState(); cooling.player[readyAt] = 110;
+    assert(run(grapnel, cooling).done()); assert.equal(cooling.beams.length, 0);
+    const blocked = grapnelState(), blockedTask = run(grapnel, blocked);
+    finishPull(blocked, blockedTask, false);
+    assert.equal(blocked.damage.length, 0); assert(blocked.time < 101.6); assert(magnitude(blocked.velocity) < 1e-8);
+    assert.equal(blocked.effects.length, 1); assert.equal(blocked.statusWrites.length, 0);
+    assert(!blocked.impulses.some(impulse => impulse.speed === 14.4 && equal(impulse.direction, [0, 1, 0])),
+        'Holding Jump through a travel timeout cannot bounce without arrival');
+    for (const cancel of [s => {s.targets[0].alive = false;},
+        s => {s.targets[0][slot('botIsTeleporting')] = true;}, s => {s.lineOfSight = false;},
+        s => {s.alive = false;}, s => {s.spawned = false;}, s => {s.hero = 'Ana';},
+        s => {s.globals.isGameplayActive = false;}, s => {s.player.isAttached = true;},
+        ...['Rooted', 'Stunned', 'Asleep', 'Frozen', 'Knocked Down'].map(status => s => s.status.add(status))]) {
+        const state = grapnelState(), task = run(grapnel, state);
+        cancel(state); advancePull(state, task, false);
+        assert(task.done()); assert.equal(state.liveEffects.size, 0); assert.equal(state.damage.length, 0);
+        assert.equal(state.effects.length, 1, 'Interruptions must not produce an impact');
+        assert.deepEqual(state.statusWrites, [], 'Interruptions must not stun the target');
+        assert(!state.impulses.some(impulse => impulse.speed === 14.4 && equal(impulse.direction, [0, 1, 0])),
+            'Cancelled hooks must not grant an arrival jump');
+        assert.equal(state.player[readyAt], 116, 'Cancelling/death does not reset the cooldown');
+    }
+    const controlled = grapnelState(), controlledTask = run(grapnel, controlled);
+    controlled.status.add('Knocked Down'); controlled.velocity = [5, 10, 0];
+    advancePull(controlled, controlledTask, false);
+    assert.deepEqual(controlled.velocity, [5, 10, 0], 'Cleanup preserves crowd-control knockback');
+    const large = grapnelState({targets: [zombie('large', [0, 0, 10], {sizeScale: 3})]});
+    const largePull = run(grapnel, large); finishPull(large, largePull);
+    assert.equal(large.damage.length, 1, 'Body-sized contact distance also reaches large zombies');
+    for (const groundAtLaunch of [false, true]) for (const groundAtArrival of [false, true])
+    for (const invincible of [false, true]) for (const enhancement of [0, pyrotechnic]) {
+        const target = zombie('changing altitude', [0, 0, 20], {ground: groundAtLaunch, invincible});
+        const state = grapnelState({targets: [target]});
+        state.player.enhancementId = enhancement;
+        const task = run(grapnel, state);
+        advancePull(state, task);
+        assert.deepEqual(state.statusWrites, [], 'Launch and travel do not control the target');
+        target.ground = groundAtArrival;
+        finishPull(state, task);
+        assert.deepEqual(state.statusWrites.filter(write => ['Stunned', 'Knocked Down'].includes(write.status)),
+            [{status: groundAtArrival ? 'Stunned' : 'Knocked Down', duration: groundAtArrival ? 0.5 : 3, target: target.id}],
+            'Arrival reads the target ground state, even if it changed in flight; control also applies to invulnerable targets');
+        assert.equal(state.damage.length, 1);
+        assert.equal(state.damage[0].amount, 35);
+        assert.equal(state.player[readyAt], 116);
+        assert.equal(state.statusWrites.filter(write => write.status === 'Burning').length,
+            enhancement === pyrotechnic && !invincible ? 1 : 0, 'Both control branches preserve actual-hit Pyrotechnic burns');
+    }
+    for (const enhancement of [0, pyrotechnic]) for (const invincible of [false, true]) {
+        const state = grapnelState({targets: [zombie('pyro hook', [0, 0, 20], {invincible})]});
+        state.player.enhancementId = enhancement;
+        const task = run(grapnel, state);
+        assert.deepEqual(array(state.player[slot('enhancementPyroHitList')]), [], 'Hook launch does not ignite a distant target');
+        finishPull(state, task);
+        const expected = enhancement === pyrotechnic && !invincible ? ['pyro hook'] : [];
+        assert.deepEqual(array(state.player[slot('enhancementPyroHitList')]).map(target => target.id), expected,
+            'Grapnel queues exactly one Pyrotechnic burn only after an actual damaging impact');
+        assert.deepEqual(state.statusWrites.filter(write => write.status === 'Burning').map(write => write.target), expected);
+        assert(state.statusWrites.filter(write => write.status === 'Burning').every(write => write.duration === 3));
+        assert.deepEqual(state.statusWrites.filter(write => write.status === 'Stunned'), [{status: 'Stunned', duration: 0.5, target: 'pyro hook'}]);
+    }
+    const pyroMiss = grapnelState(); pyroMiss.player.enhancementId = pyrotechnic;
+    finishPull(pyroMiss, run(grapnel, pyroMiss), false);
+    assert.deepEqual(array(pyroMiss.player[slot('enhancementPyroHitList')]), [], 'An unreachable hook must not ignite its target');
+    const distantImpact = grapnelState({targets: [zombie('huge', [0, 0, 20], {sizeScale: 50})]});
+    distantImpact.player.enhancementId = pyrotechnic;
+    finishPull(distantImpact, run(grapnel, distantImpact));
+    assert.deepEqual(array(distantImpact.player[slot('enhancementPyroHitList')]), [], 'Grapnel retains Pyrotechnic\'s native 15-meter burn limit');
+    const leaving = grapnelState(); run(grapnel, leaving);
+    // Execute the supplied project's departure-event pattern before releasing
+    // the player's state. This checks the handler, not native event timing.
+    leaving.liveEffects.add(99);
+    run('GRAPNEL LAUNCHER DISCONNECT CLEANUP', leaving);
+    assert.deepEqual([...leaving.liveEffects], [99], 'Departure cleanup destroys only the departing player\'s cable');
+    assert.deepEqual(leaving.destroyedEffects, [leaving.player[slot('augmentGrapnelState')][1]]);
+    for (const state of [grapnelState(), scenario(5), pull]) {
+        assert(!applies(compiled.get('GRAPNEL LAUNCHER DISCONNECT CLEANUP'), state),
+            'Departure cleanup requires Grapnel Launcher with an active cable');
+    }
+    assert(!files['variables.opy'].includes('globalvar augmentGrapnel'), 'Cable ownership needs no additional global state');
+    if (process.argv.includes('--grapnel-only')) {
+        if (process.argv.includes('--export')) {
+            const exported = await compiler.compile(fs.readFileSync(path.join(root, 'main.opy'), 'utf8'),
+                'en-US', root.replace(/\\/g, '/') + '/', 'main.opy');
+            assert.deepEqual(exported.encounteredWarnings, []);
+            assert.equal(exported.nbElements, build.elements);
+            assert.deepEqual(rules(exported.result), parsed);
+            fs.writeFileSync(path.join(root, 'main.ws.txt'), exported.result);
+        }
+        console.log(JSON.stringify({elements: build.elements, warnings: build.warnings,
+            groundTransitionCases: 16,
+            checked: ['target ground state sampled on arrival, independent of player/launch state',
+                'allied anchors with zero/vote/Rescue-path shared slots / updates during travel / harmless arrival',
+                'grounded 0.5s stun / airborne 3s knockdown', '35 damage / immunity / Pyrotechnic',
+                '7-45m selection / live cable / moving targets / 16s cooldown',
+                'misses / timeout / crowd control / death / hero switch / disconnect cleanup'],
+            exported: process.argv.includes('--export')}, null, 2));
+        return;
+    }
+}
+
 async function main() {
     await compiler.readyPromise;
     const build = await compile(files);
     assert.deepEqual(build.warnings, []);
     const parsed = rules(build.result), compiled = new Map(parsed.map(rule => [rule.name, rule]));
     const run = (name, state) => start(compiled.get(name), state, compiled);
+    if (process.argv.includes('--grapnel-only')) {
+        await verifyGrapnel(build, parsed, compiled, run);
+        return;
+    }
     // Run the shared pickup handler across both normal cure and timeout paths.
     const pickup = 'PLAYER PICKS UP HEALTH PACK';
     let pickupCases = 0;
@@ -1105,188 +1316,7 @@ async function main() {
         assert.equal(value(movementHud, state), '10s');
         state.time = 110; assert.equal(value(movementHud, state), '✓');
     }
-    const grapnel = 'GRAPNEL LAUNCHER', grappleTargetSlot = slot('augmentGrapnelTarget');
-    const zombie = (id, position = [0, 0, 20], overrides = {}) =>
-        ({id, position, alive: true, visible: true, team: 2, ground: true, sizeScale: 1, ...overrides});
-    const grapnelState = (overrides = {}) => scenario(6, {buttons: new Set(['Crouch', 'Jump']),
-        targets: [zombie('locked')], ...overrides});
-    const advancePull = (state, task, integrate = true) => {
-        assert(!task.done());
-        const elapsed = task.deadline() - state.time;
-        if (integrate) state.player.position = state.player.position.map((x, i) => x + state.velocity[i] * elapsed);
-        state.time = task.deadline(); task.resume();
-    };
-    const finishPull = (state, task, integrate = true) => {
-        for (let step = 0; !task.done() && step < 40; step++) {
-            assert(magnitude(state.velocity) <= 40 + 1e-8, 'Pull corrects velocity instead of stacking impulses');
-            advancePull(state, task, integrate);
-        }
-        assert(task.done(), 'A blocked/unreachable hook must terminate within its travel timeout');
-        assert.equal(state.liveEffects.size, 0, 'Every finished pull destroys its cable');
-        assert.equal(state.player[grappleTargetSlot], 0);
-        assert.equal(state.player[slot('augmentGrapnelState')], 0);
-    };
-    for (const buttons of [new Set(), new Set(['Jump']), new Set(['Crouch'])]) {
-        assert(!applies(compiled.get(grapnel), grapnelState({buttons})), 'Both input buttons are required');
-    }
-    const selection = grapnelState({targets: [zombie('farther', [0, 0, 20]), zombie('nearest', [0, 0, 10]),
-        zombie('too close', [0, 0, 6.99]),
-        zombie('behind wall', [0, 0, 9], {visible: false}), zombie('dead', [0, 0, 8.2], {alive: false}),
-        zombie('teleporting', [0, 0, 8.4], {[slot('botIsTeleporting')]: true}), zombie('ally', [0, 0, 8], {team: 1}),
-        zombie('off aim', [8, 0, 10]), zombie('out of range', [0, 0, 41])]});
-    const selectionTask = run(grapnel, selection);
-    assert.equal(selection.player[grappleTargetSlot].id, 'nearest', 'Lock the nearest visible living aimed zombie');
-    finishPull(selection, selectionTask);
-    assert.deepEqual(selection.damage.map(hit => hit.targets[0].id), ['nearest']);
-    const pull = grapnelState(), pulling = run(grapnel, pull);
-    assert.equal(pull.player[readyAt], 116);
-    assert.equal(pull.damage.length, 0, 'Launching the cable does not deal damage');
-    assert.deepEqual(pull.effects, [{effect: 'Debuff Impact Sound', color: 'Color(White)', position: [0, 0, 0], size: 25}],
-        'One launch sound, with no impact before arrival');
-    assert.deepEqual(pull.player.position, [0, 0, 0], 'Pull uses movement rather than teleporting');
-    assert.equal(pull.beams.length, 1); assert.equal(pull.beams[0].type, 'Grapple Beam');
-    assert.equal(pull.beams[0].color, 'Null', 'White is the compiler default, matching the sentry cable');
-    assert.equal(pull.beams[0].reevaluation, 'Visible To Position and Radius');
-    assert.deepEqual(value(pull.beams[0].from, pull), [0, 0.75, 0]);
-    assert.deepEqual(value(pull.beams[0].to, pull), [0, 0.75, 20]);
-    pull.buttons.clear(); pull.meleeing = true; pull.globals.tmp0 = [999, 999, 999];
-    advancePull(pull, pulling);
-    assert(!pulling.done(), 'Releasing activation input and using Quick Melee do not cancel a committed hook');
-    assert(Math.abs(value(pull.beams[0].from, pull)[2] - 2) < 1e-9, 'The cable start follows the player');
-    pull.targets[0].position = [0.5, 0, 20.5];
-    assert.deepEqual(value(pull.beams[0].to, pull), [0.5, 0.75, 20.5], 'The cable end follows the locked zombie');
-    pull.targets.unshift(zombie('new closer zombie', [0, 0, 8]));
-    finishPull(pull, pulling);
-    assert.equal(pull.damage.length, 1); assert.equal(pull.damage[0].amount, 35);
-    assert.equal(pull.damage[0].targets[0].id, 'locked', 'Do not retarget after launch');
-    assert.deepEqual(pull.statusWrites, [{status: 'Stunned', duration: 0.5, target: 'locked'}]);
-    assert.deepEqual(pull.effects.slice(1), [{effect: 'Bad Explosion', color: 'Color(Orange)',
-        position: [0.5, 1, 20.5], size: 0.4}], 'Arrival plays one enlarged Long Reach impact on the locked zombie');
-    assert(magnitude(pull.velocity) < 1e-8, 'Arrival cancels the remaining pull velocity');
-    assert(!pull.impulses.some(impulse => impulse.speed === 14.4 && equal(impulse.direction, [0, 1, 0])),
-        'Releasing Jump before arrival must not bounce');
-    assert.equal(pull.player[readyAt], 116, 'The sixteen-second cooldown starts on a successful launch');
-    assert(conditions(compiled.get(grapnel)).every(condition => !condition.includes('Total Time Elapsed')),
-        'Cooldown expiry alone must not auto-launch while the chord remains held');
-    assert(!/Disallow Button|Start Forcing Throttle|Set Move Speed/.test(compiled.get(grapnel).body), 'Melee input remains available');
-    for (const heldOnArrival of [false, true]) {
-        const state = grapnelState({targets: [zombie('minimum range', [0, 0, 7])]}), task = run(grapnel, state);
-        assert.equal(state.player[readyAt], 116, 'Exactly seven meters is within launch range');
-        state.buttons.delete('Jump'); state.buttons.delete('Crouch'); advancePull(state, task);
-        if (heldOnArrival) state.buttons.add('Jump');
-        finishPull(state, task);
-        const bounces = state.impulses.filter(impulse => impulse.speed === 14.4 && equal(impulse.direction, [0, 1, 0]));
-        assert.equal(bounces.length, 0, 'Grapnel arrival must not add a jump, even if Jump is held');
-        assert(magnitude(state.velocity) < 1e-8, 'Arrival ends by stopping the pull');
-    }
-    for (const overrides of [{targets: []}, {targets: [zombie('off aim', [20, 0, 20])]},
-        {targets: [zombie('far', [0, 0, 41])]}, {targets: [zombie('too close', [0, 0, 6.99])]}, {lineOfSight: false}]) {
-        const miss = grapnelState(overrides), task = run(grapnel, miss);
-        assert(task.done()); assert.equal(miss.beams.length, 0); assert.equal(miss.player[readyAt] ?? 0, 0);
-        assert.deepEqual(miss.effects, []); assert.deepEqual(miss.statusWrites, []);
-    }
-    for (const status of ['Rooted', 'Stunned', 'Asleep', 'Frozen', 'Knocked Down']) {
-        const state = grapnelState({status: new Set([status])}), task = run(grapnel, state);
-        assert(task.done()); assert.equal(state.beams.length, 0); assert.equal(state.player[readyAt] ?? 0, 0);
-    }
-    const cooling = grapnelState(); cooling.player[readyAt] = 110;
-    assert(run(grapnel, cooling).done()); assert.equal(cooling.beams.length, 0);
-    const blocked = grapnelState(), blockedTask = run(grapnel, blocked);
-    finishPull(blocked, blockedTask, false);
-    assert.equal(blocked.damage.length, 0); assert(blocked.time < 101.6); assert(magnitude(blocked.velocity) < 1e-8);
-    assert.equal(blocked.effects.length, 1); assert.equal(blocked.statusWrites.length, 0);
-    assert(!blocked.impulses.some(impulse => impulse.speed === 14.4 && equal(impulse.direction, [0, 1, 0])),
-        'Holding Jump through a travel timeout cannot bounce without arrival');
-    for (const cancel of [s => {s.targets[0].alive = false;}, s => {s.targets[0].team = 1;},
-        s => {s.targets[0][slot('botIsTeleporting')] = true;}, s => {s.lineOfSight = false;},
-        s => {s.alive = false;}, s => {s.spawned = false;}, s => {s.hero = 'Ana';},
-        s => {s.globals.isGameplayActive = false;}, s => {s.player.isAttached = true;},
-        ...['Rooted', 'Stunned', 'Asleep', 'Frozen', 'Knocked Down'].map(status => s => s.status.add(status))]) {
-        const state = grapnelState(), task = run(grapnel, state);
-        cancel(state); advancePull(state, task, false);
-        assert(task.done()); assert.equal(state.liveEffects.size, 0); assert.equal(state.damage.length, 0);
-        assert.equal(state.effects.length, 1, 'Interruptions must not produce an impact');
-        assert.deepEqual(state.statusWrites, [], 'Interruptions must not stun the target');
-        assert(!state.impulses.some(impulse => impulse.speed === 14.4 && equal(impulse.direction, [0, 1, 0])),
-            'Cancelled hooks must not grant an arrival jump');
-        assert.equal(state.player[readyAt], 116, 'Cancelling/death does not reset the cooldown');
-    }
-    const controlled = grapnelState(), controlledTask = run(grapnel, controlled);
-    controlled.status.add('Knocked Down'); controlled.velocity = [5, 10, 0];
-    advancePull(controlled, controlledTask, false);
-    assert.deepEqual(controlled.velocity, [5, 10, 0], 'Cleanup preserves crowd-control knockback');
-    const large = grapnelState({targets: [zombie('large', [0, 0, 10], {sizeScale: 3})]});
-    const largePull = run(grapnel, large); finishPull(large, largePull);
-    assert.equal(large.damage.length, 1, 'Body-sized contact distance also reaches large zombies');
-    for (const groundAtLaunch of [false, true]) for (const groundAtArrival of [false, true])
-    for (const invincible of [false, true]) for (const enhancement of [0, 3]) {
-        const target = zombie('changing altitude', [0, 0, 20], {ground: groundAtLaunch, invincible});
-        const state = grapnelState({targets: [target]});
-        state.player.enhancementId = enhancement;
-        const task = run(grapnel, state);
-        advancePull(state, task);
-        assert.deepEqual(state.statusWrites, [], 'Launch and travel do not control the target');
-        target.ground = groundAtArrival;
-        finishPull(state, task);
-        assert.deepEqual(state.statusWrites.filter(write => ['Stunned', 'Knocked Down'].includes(write.status)),
-            [{status: groundAtArrival ? 'Stunned' : 'Knocked Down', duration: groundAtArrival ? 0.5 : 3, target: target.id}],
-            'Arrival reads the target ground state, even if it changed in flight; control also applies to invulnerable targets');
-        assert.equal(state.damage.length, 1);
-        assert.equal(state.damage[0].amount, 35);
-        assert.equal(state.player[readyAt], 116);
-        assert.equal(state.statusWrites.filter(write => write.status === 'Burning').length,
-            enhancement === 3 && !invincible ? 1 : 0, 'Both control branches preserve actual-hit Pyrotechnic burns');
-    }
-    for (const enhancement of [0, 3]) for (const invincible of [false, true]) {
-        const state = grapnelState({targets: [zombie('pyro hook', [0, 0, 20], {invincible})]});
-        state.player.enhancementId = enhancement;
-        const task = run(grapnel, state);
-        assert.deepEqual(array(state.player[slot('enhancementPyroHitList')]), [], 'Hook launch does not ignite a distant target');
-        finishPull(state, task);
-        const expected = enhancement === 3 && !invincible ? ['pyro hook'] : [];
-        assert.deepEqual(array(state.player[slot('enhancementPyroHitList')]).map(target => target.id), expected,
-            'Grapnel queues exactly one Pyrotechnic burn only after an actual damaging impact');
-        assert.deepEqual(state.statusWrites.filter(write => write.status === 'Burning').map(write => write.target), expected);
-        assert(state.statusWrites.filter(write => write.status === 'Burning').every(write => write.duration === 3));
-        assert.deepEqual(state.statusWrites.filter(write => write.status === 'Stunned'), [{status: 'Stunned', duration: 0.5, target: 'pyro hook'}]);
-    }
-    const pyroMiss = grapnelState(); pyroMiss.player.enhancementId = 3;
-    finishPull(pyroMiss, run(grapnel, pyroMiss), false);
-    assert.deepEqual(array(pyroMiss.player[slot('enhancementPyroHitList')]), [], 'An unreachable hook must not ignite its target');
-    const distantImpact = grapnelState({targets: [zombie('huge', [0, 0, 20], {sizeScale: 50})]});
-    distantImpact.player.enhancementId = 3;
-    finishPull(distantImpact, run(grapnel, distantImpact));
-    assert.deepEqual(array(distantImpact.player[slot('enhancementPyroHitList')]), [], 'Grapnel retains Pyrotechnic\'s native 15-meter burn limit');
-    const leaving = grapnelState(); run(grapnel, leaving);
-    // Execute the supplied project's departure-event pattern before releasing
-    // the player's state. This checks the handler, not native event timing.
-    leaving.liveEffects.add(99);
-    run('GRAPNEL LAUNCHER DISCONNECT CLEANUP', leaving);
-    assert.deepEqual([...leaving.liveEffects], [99], 'Departure cleanup destroys only the departing player\'s cable');
-    assert.deepEqual(leaving.destroyedEffects, [leaving.player[slot('augmentGrapnelState')][1]]);
-    for (const state of [grapnelState(), scenario(5), pull]) {
-        assert(!applies(compiled.get('GRAPNEL LAUNCHER DISCONNECT CLEANUP'), state),
-            'Departure cleanup requires Grapnel Launcher with an active cable');
-    }
-    assert(!files['variables.opy'].includes('globalvar augmentGrapnel'), 'Cable ownership needs no additional global state');
-    if (process.argv.includes('--grapnel-only')) {
-        if (process.argv.includes('--export')) {
-            const exported = await compiler.compile(fs.readFileSync(path.join(root, 'main.opy'), 'utf8'),
-                'en-US', root.replace(/\\/g, '/') + '/', 'main.opy');
-            assert.deepEqual(exported.encounteredWarnings, []);
-            assert.equal(exported.nbElements, build.elements);
-            assert.deepEqual(rules(exported.result), parsed);
-            fs.writeFileSync(path.join(root, 'main.ws.txt'), exported.result);
-        }
-        console.log(JSON.stringify({elements: build.elements, warnings: build.warnings,
-            groundTransitionCases: 16,
-            checked: ['target ground state sampled on arrival, independent of player/launch state',
-                'grounded 0.5s stun / airborne 3s knockdown', '35 damage / immunity / Pyrotechnic',
-                '7-40m selection / live cable / moving targets / 16s cooldown',
-                'misses / timeout / crowd control / death / hero switch / disconnect cleanup'],
-            exported: process.argv.includes('--export')}, null, 2));
-        return;
-    }
+    await verifyGrapnel(build, parsed, compiled, run);
     const gun = scenario(5), gunTask = run(ammo, gun);
     const settleAmmo = (state, task) => {state.time = task.deadline(); task.resume();};
     assert.deepEqual(gun.maxAmmo, [40, 20]); assert.deepEqual(gun.ammo, [38, 14]);
