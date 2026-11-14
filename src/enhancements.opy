@@ -574,7 +574,7 @@ rule "ENGINEER ARMOR TRANSFER":
     scrapTransferCandidates = sorted(getPlayersInRadius(eventPlayer, ENGINEER_TRANSFER_RANGE, Team.1, LosCheck.SURFACES).filter(lambda ally: ally != eventPlayer and ally.isAlive() and eventPlayer.isInViewAngle(ally.getEyePosition(), ENGINEER_TRANSFER_ANGLE)), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition())))
     if scrapTransferCandidates != []:
         # Aiming at an ally: the action is ally-directed and never falls back to
-        # self. Engineer armor caps at 80 per target across every Engineer
+        # self. Engineer armor caps at ENGINEER_ARMOR_MAX per target across every Engineer
         # donor; a grant is refused only at the full cap.
         scrapArmorGrantTarget = scrapTransferCandidates[0]
         if scrapArmorGrantTarget.scrapArmorAmount >= ENGINEER_ARMOR_MAX:
@@ -590,7 +590,7 @@ rule "ENGINEER ARMOR TRANSFER":
         return
     eventPlayer.enhancementScrap -= ENGINEER_ARMOR_COST
     # Non-recoverable, fixed pool: healing never restores scrap armor. One
-    # throw adds at most one 40-armor pool and tops the target up to the cap;
+    # throw adds at most ENGINEER_ARMOR_STACK armor and tops the target up to the cap;
     # the wasted remainder of a partial refill is the thrower's loss.
     scrapArmorGrantTarget.addHealthPool(Health.ARMOR, min(ENGINEER_ARMOR_STACK, ENGINEER_ARMOR_MAX - scrapArmorGrantTarget.scrapArmorAmount), false, false)
     scrapArmorGrantTarget.scrapArmorAmount = min(ENGINEER_ARMOR_MAX, scrapArmorGrantTarget.scrapArmorAmount + ENGINEER_ARMOR_STACK)
@@ -603,7 +603,7 @@ rule "ENGINEER ARMOR TRANSFER":
     playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, scrapArmorGrantTarget, 4)
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, scrapArmorGrantTarget, ENGINEER_TRANSFER_RANGE)
     # Self-armor creates no beam. A transfer moves the single beam to the new
-    # ally and resets its 1.4s lifetime; the endpoint must be a stable player
+    # ally and resets its ENGINEER_BEAM_DURATION lifetime; the endpoint must be a stable player
     # variable, never scratch, because the reevaluating beam reads it every frame.
     if scrapArmorGrantTarget != eventPlayer:
         eventPlayer.enhancementScrapBeamTarget = scrapArmorGrantTarget

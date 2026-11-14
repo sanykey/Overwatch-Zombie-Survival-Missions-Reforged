@@ -359,12 +359,9 @@ def sentryTurret():
             # before the wait, with no nested calls or asynchronous scratch reads.
             #!define turretShotVictim tmp0
             turretShotVictim = raycastHitPlayer(eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + directionTowards(eventPlayer.powerUpTurretPosition, turretShotImpactPosition) * 100, getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())), getPlayers(eventPlayer.getTeam()), true)
-            # Bobby the Snowman (QZD5F): one of 21 rolls freezes for 2 seconds,
-            # before damage, with a white ring and sound at the turret even on a miss.
+            # Bobby the Snowman (QZD5F): one of 21 rolls freezes for 2 seconds before damage.
             if eventPlayer.enhancementId == Enhancement.ENGINEER and random.randint(0, 20) == 0:
                 turretShotVictim.setStatusEffect(eventPlayer, Status.FROZEN, 2)
-                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.WHITE, eventPlayer.powerUpTurretPosition + Vector.DOWN, 4)
-                playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.powerUpTurretPosition, 50)
             damage(turretShotVictim, eventPlayer, 20)
         wait(0.125)
     # turretCleanupEffectIndex: turret-effect slot 50-54, to destroy the sphere, legs and barrel when the turret expires.
