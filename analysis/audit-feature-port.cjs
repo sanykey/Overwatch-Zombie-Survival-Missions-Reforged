@@ -33,7 +33,7 @@ function referenceSources() {
     const init = /        case Enhancement\.BOLT_STRIKE:\n[\s\S]*?(?=^        case )/m;
     assert(init.test(tree['enhancements.opy'])); tree['enhancements.opy'] = tree['enhancements.opy'].replace(init,'');
     replace(tree,'variables.opy','    BOLT_STRIKE = 11,\n','');
-    replace(tree,'variables.opy','    DEAD_WEIGHT = 12,','    DEAD_WEIGHT = 11,');
+    replace(tree,'variables.opy','    WRESTLER = 12,','    WRESTLER = 11,');
     replace(tree,'variables.opy','    BOLT_STRIKE = iconString(Icon.BOLT),\n','');
     replace(tree,'variables.opy','    EnhancementIcon.BOLT_STRIKE,\n','');
     replace(tree,'global_start_menu.opy','"Bolt Strike ", ','');
@@ -80,7 +80,7 @@ async function main() {
     assert(!all.includes('groupedConditions('),'Mode-wide workaround must remain reverted');
     assert(!now.some(r=>r.name.includes('BOLT STRIKE') || r.name === 'APOTHECARY ALLOW HEALTH PACK PICKUP'));
     const enumBlock = files['variables.opy'].match(/enum Enhancement:([\s\S]*?)\n\n/)[1];
-    assert(enumBlock.includes('DEAD_WEIGHT = 11'));assert(!enumBlock.includes('BOLT'));
+    assert(enumBlock.includes('WRESTLER = 11'));assert(!enumBlock.includes('BOLT'));
     assert(now.find(r=>r.name==='LEECH LIFESTEAL').body.includes('If('));
     assert(!now.find(r=>r.name==='LEECH LIFESTEAL').body.includes('conditions {'));
     assert(now.find(r=>r.name==='PLAYER DROPS POWER UP (MANUAL)').body.includes('And(Global.isGameplayActive, Is Alive(Event Player))'));

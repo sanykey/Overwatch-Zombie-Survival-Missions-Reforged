@@ -81,9 +81,15 @@ enum Enhancement:
     PUP = 8,
     OVERCHARGE = 9,
     BULKING_SEASON = 10,
-    DEAD_WEIGHT = 11,
+    WRESTLER = 11,
     BOLT_STRIKE = 12,
     ENGINEER = 13,
+
+# Wrestler holds until Knocked Down ends; manual throws request release.
+enum WrestlerCarryState:
+    NONE = 0,
+    HOLDING = 1,
+    THROW_REQUESTED = 2,
 
 # Independent secondary enhancement slot. IDs index the augment name, icon and color tables.
 enum Augment:
@@ -446,13 +452,13 @@ playervar isHeroSwitchRespawn  # Player has switched heroes; prevents repeating 
 playervar enhancementId  # Selected Enhancement enum; pregame selection, runtime behavior and Rescue Hitchhiker initialization.
 
 # Human Augment storage is independent of enhancements and power-ups.
-# Team 2 Dead Weight roles are team-exclusive; no bot Augment owns these slots.
+# Team 2 Wrestler roles are team-exclusive; no bot Augment owns these slots.
 # Only the selected human augment owns them; selection is fixed once gameplay begins.
 playervar augmentId  # Selected Augment enum; pregame Interact selection and gameplay effects.
 playervar augmentState0
-# Team 2 Dead Weight: carrier reference until release, including carrier disconnect.
+# Team 2 Wrestler: carrier reference until release, including carrier disconnect.
 # Humans use separate primary enhancement storage; no bot augment uses this slot.
-#!define deadWeightZombieCarrier augmentState0
+#!define wrestlerZombieCarrier augmentState0
 # Scavenger: up to two reserve item IDs, separate from the active powerup and primary enhancement.
 # Retained through hero switches; death/manual drop clears it synchronously. Never activated.
 #!define augmentScavengerBackpack augmentState0
@@ -481,10 +487,10 @@ playervar augmentState1
 # Dash smoke effect entity; retained across overlapping dashes, null after DASH
 # SMOKE FADE removes it. Never write augmentIsAirActionReady for Dash: same slot.
 #!define augmentDashSmokeEntity augmentState1
-# Team 2 Dead Weight: carrier's 50% damage modifier, from pickup to synchronous
+# Team 2 Wrestler: carrier's 50% damage modifier, from pickup to synchronous
 # release cleanup, before any throw-damage wait. Overwritten on each pickup.
 # No bot Augment owns this slot; independent of all human powerup/augment state.
-#!define deadWeightProtectionId augmentState1
+#!define wrestlerProtectionId augmentState1
 # Laser Barricade unit edge direction; persists for collision checks.
 #!define augmentBarrierEdgeDirection augmentState1
 # HIGHRISE ONLY: armed after releasing Jump in midair; consumed once, cleared
@@ -498,9 +504,9 @@ playervar augmentState1
 #!define augmentMeleeTargetIndex augmentState1
 
 playervar augmentState2
-# Team 2 Dead Weight: carrier hero at pickup, retained until release. No human reader.
-#!define deadWeightCarryHero augmentState2
-# Laser Barricade: -2 reserves a Dead Weight press; -1 latches aiming until Interact release/death/cancel; 0 is ready,
+# Team 2 Wrestler: carrier hero at pickup, retained until release. No human reader.
+#!define wrestlerCarryHero augmentState2
+# Laser Barricade: -2 reserves a Wrestler press; -1 latches aiming until Interact release/death/cancel; 0 is ready,
 # positive values are cooldown seconds. Owned by placement across waits; read by
 # preview, HUD and power-up input exclusion. Clear the latch before every abort.
 #!define augmentBarrierPlacementCooldown augmentState2
@@ -526,9 +532,9 @@ playervar augmentState2
 #!define augmentGrapnelState augmentState2
 
 playervar augmentState3
-# Team 2 Dead Weight: throw damage credit retained across the 0.75s wait.
+# Team 2 Wrestler: throw damage credit retained across the 0.75s wait.
 # Pickup never writes this role; the inactive value is dead and needs no reset.
-#!define deadWeightThrowDamageCredit augmentState3
+#!define wrestlerThrowDamageCredit augmentState3
 # Laser Barricade center; retained across waits and reevaluated by live effects.
 #!define augmentBarrierPosition augmentState3
 # HIGHRISE: the damage bonus was armed by an activation and lasts until
@@ -598,7 +604,7 @@ playervar recoveryTimeSlot  # Existing Team 1 revive countdown / Team 2 replacem
 #!define botRespawnDelay recoveryTimeSlot
 
 playervar isCrowdControlled  # Live boolean for both teams, set/reset by CROWD CONTROL STATUS. Excludes Rooted.
-# The bot CC tracker itself and Team 1 consumers (Hitchhiker carriers, Dead Weight,
+# The bot CC tracker itself and Team 1 consumers (Hitchhiker carriers, Wrestler,
 # Ana self Nano, augments) read this live flag; zombie behavior rules read the
 # delayed flag below so a recent interruption still counts for up to 0.125s.
 playervar botIsCrowdControlled  # Delayed Team 2 flag, lags CC exit by up to 0.125s. BOT STUN MANAGEMENT refreshes it; botRespawnInitialization resets it.
@@ -838,10 +844,11 @@ playervar actorTeamSlot21  # Team 2: botLastTarget; Team 1: pregame objective vo
 playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state on Team 1.
 # Boss Behemoth active gas-cloud positions.
 #!define botGasPositionList actorTeamSlot22
-# Dead Weight: human-owned held zombie, retained for HUD and bot release.
+# Wrestler: human-owned WrestlerCarryState, retained for input, HUD and bot release.
+# The bot owns the carrier reference; no human-side target reference is needed.
+# Pickup sets HOLDING, a second press sets THROW_REQUESTED, release sets NONE.
 # Exclusive primary enhancement, independent of all human Augments and bot state.
-# Initialization writes null; pickup alone writes a player reference.
-#!define enhancementHeldZombie actorTeamSlot22
+#!define enhancementCarryState actorTeamSlot22
 # Zombie Hybrid explosion cooldown in seconds.
 #!define enhancementHybridCooldown actorTeamSlot22
 # Pyrotechnic hit queue; repeated targets determine fire damage.
@@ -871,9 +878,6 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateSlot2. Receivers, not rule teams, own the storage.
 # Boss Behemoth gas-cloud radii, aligned with botGasPositionList.
 #!define botGasRadiusList actorTeamSlot23
-# Dead Weight: hold deadline; 0 requests a throw. Read only while a zombie is held.
-# Pickup overwrites it; no chase, wait or human Augment owns this role.
-#!define enhancementHoldUntil actorTeamSlot23
 # Overcharge: energy spent on the armed/active burst, retained across damage events and HUD reevaluation.
 #!define enhancementCapacitorCharge actorTeamSlot23
 # Bulking Season: persistent size/pitch toggle on its human; false means stacked
@@ -1061,11 +1065,11 @@ enum EnhancementIcon:
     PUP = iconString(Icon.HAPPY),
     OVERCHARGE = iconString(Icon.MOON),
     BULKING_SEASON = "<TX C0000000002A9ED>",
-    DEAD_WEIGHT = iconString(Icon.TRASHCAN),
+    WRESTLER = iconString(Icon.TRASHCAN),
     BOLT_STRIKE = iconString(Icon.BOLT),
     ENGINEER = "<TX C0000000005FA7F>",
 
-globalvar enhancementIconListConst = [EnhancementIcon.NO_PREFERENCE, EnhancementIcon.BRAIN_KILLER, EnhancementIcon.ZOMBIE_HYBRID, EnhancementIcon.PYROTECHNIC, EnhancementIcon.PLAGUE_DOCTOR, EnhancementIcon.BORN_TO_BATTLE, EnhancementIcon.CHARGE_BATTERY, EnhancementIcon.HITCHHIKER, EnhancementIcon.PUP, EnhancementIcon.OVERCHARGE, EnhancementIcon.BULKING_SEASON, EnhancementIcon.DEAD_WEIGHT, EnhancementIcon.BOLT_STRIKE, EnhancementIcon.ENGINEER]
+globalvar enhancementIconListConst = [EnhancementIcon.NO_PREFERENCE, EnhancementIcon.BRAIN_KILLER, EnhancementIcon.ZOMBIE_HYBRID, EnhancementIcon.PYROTECHNIC, EnhancementIcon.PLAGUE_DOCTOR, EnhancementIcon.BORN_TO_BATTLE, EnhancementIcon.CHARGE_BATTERY, EnhancementIcon.HITCHHIKER, EnhancementIcon.PUP, EnhancementIcon.OVERCHARGE, EnhancementIcon.BULKING_SEASON, EnhancementIcon.WRESTLER, EnhancementIcon.BOLT_STRIKE, EnhancementIcon.ENGINEER]
 
 # Immutable palette shared by the pregame menu and gameplay HUD; indexed by Augment.
 globalvar augmentColorListConst = [Color.AQUA, Color.LIGHT_GRAY, Color.YELLOW, Color.SKY_BLUE, Color.ORANGE, Color.WHITE, Color.TURQUOISE, Color.BLUE, Color.GREEN, Color.LIME_GREEN, Color.RED]

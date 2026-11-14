@@ -1,0 +1,112 @@
+{
+  "compiler": "OverPy 9.7.21",
+  "before": 30092,
+  "variants": [
+    {
+      "name": "positiveCarryPredicate",
+      "choices": [
+        "positiveCarryPredicate"
+      ],
+      "elements": 30090,
+      "saved": 2
+    },
+    {
+      "name": "simplerLateInputGuard",
+      "choices": [
+        "simplerLateInputGuard"
+      ],
+      "elements": 30077,
+      "saved": 15
+    },
+    {
+      "name": "factoredInputPredicate",
+      "choices": [
+        "factoredInputPredicate"
+      ],
+      "elements": 30086,
+      "saved": 6
+    },
+    {
+      "name": "factoredAllInputPredicates",
+      "choices": [
+        "factoredAllInputPredicates"
+      ],
+      "elements": 30086,
+      "saved": 6
+    },
+    {
+      "name": "immediateThrowDamage",
+      "choices": [
+        "immediateThrowDamage"
+      ],
+      "elements": 30087,
+      "saved": 5
+    },
+    {
+      "name": "noCarryProtection",
+      "choices": [
+        "noCarryProtection"
+      ],
+      "elements": 30083,
+      "saved": 9
+    },
+    {
+      "name": "noCountdownHud",
+      "choices": [
+        "noCountdownHud"
+      ],
+      "elements": 30084,
+      "saved": 8
+    },
+    {
+      "name": "staticHud",
+      "choices": [
+        "staticHud"
+      ],
+      "elements": 30070,
+      "saved": 22
+    },
+    {
+      "name": "safeCombined",
+      "choices": [
+        "positiveCarryPredicate",
+        "simplerLateInputGuard"
+      ],
+      "elements": 30075,
+      "saved": 17
+    },
+    {
+      "name": "safeWithFactoring",
+      "choices": [
+        "positiveCarryPredicate",
+        "simplerLateInputGuard",
+        "factoredInputPredicate"
+      ],
+      "elements": 30072,
+      "saved": 20
+    },
+    {
+      "name": "safeAllFactored",
+      "choices": [
+        "positiveCarryPredicate",
+        "simplerLateInputGuard",
+        "factoredAllInputPredicates"
+      ],
+      "elements": 30069,
+      "saved": 23
+    },
+    {
+      "name": "simplifiedCombined",
+      "choices": [
+        "positiveCarryPredicate",
+        "simplerLateInputGuard",
+        "immediateThrowDamage",
+        "noCarryProtection",
+        "staticHud"
+      ],
+      "elements": 30039,
+      "saved": 53
+    }
+  ],
+  "limitations": "Read-only compilation probes. Safe candidates require equivalence and lifetime review; feature cuts are proposals, not production changes."
+}

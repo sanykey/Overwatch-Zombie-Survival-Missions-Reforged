@@ -28,7 +28,7 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             "Attacking" if localPlayer.enhancementIsPupBeamActive == true else f"Drone ready {iconString(Icon.CHECKMARK)}",
             "{0} | {1}".format(f"Energy: {floor(localPlayer.enhancementCapacitorEnergy)}", f"Armed: +{floor(localPlayer.enhancementCapacitorCharge)} dmg/hit" if localPlayer.enhancementCapacitorCharge > 0 else f"Double-tap [{inputBindingString(Button.CROUCH)}]: arm"),
             f"Stacks: {localPlayer.enhancementBulkStacks} | +{min(100, localPlayer.enhancementBulkStacks * 0.5)}% HP | Size: {round(localPlayer.sizeScale * 100) / 100}x | Hold [{inputBindingString(Button.MELEE)}]: toggle size",
-            f"[{inputBindingString(Button.INTERACT)}]: throw | {max(0, ceil(localPlayer.enhancementHoldUntil - getTotalTimeElapsed()))}s left" if localPlayer.enhancementHeldZombie != null else f"[{inputBindingString(Button.INTERACT)}]: grab | Target disabled or below 20% HP",
+            f"[{inputBindingString(Button.INTERACT)}]: throw" if localPlayer.enhancementCarryState != WrestlerCarryState.NONE else f"[{inputBindingString(Button.INTERACT)}]: grab | Target disabled or below 20% HP",
             "Hits chain to nearby zombies",
             f"Scrap {floor(localPlayer.enhancementScrap)}/{ENGINEER_SCRAP_MAX} | Hold [{inputBindingString(Button.CROUCH)}] {ENGINEER_ARMOR_HOLD_DURATION}s: armor +{ENGINEER_ARMOR_STACK} ({ENGINEER_ARMOR_COST}) | Hold [{inputBindingString(Button.MELEE)}]: turret ({ENGINEER_TURRET_COST})"
         ][localPlayer.enhancementId],
@@ -136,10 +136,9 @@ macro initializePlayerEnhancement():
             eventPlayer.enhancementBulkStacks = 0
             eventPlayer.enhancementBulkNormalSize = false
             break
-        case Enhancement.DEAD_WEIGHT:
-            # This shared slot must start as a player reference or null, never
-            # a previous enhancement's number/array/color. Pickup sets its deadline.
-            eventPlayer.enhancementHeldZombie = null
+        case Enhancement.WRESTLER:
+            # Shared enhancement storage starts in the numeric idle state.
+            eventPlayer.enhancementCarryState = WrestlerCarryState.NONE
             break
         #Engineer
         case Enhancement.ENGINEER:

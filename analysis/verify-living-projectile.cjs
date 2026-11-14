@@ -5,10 +5,10 @@ const {rules} = require('./verify-player-variables.cjs');
 const {scenario, start, actions, applies, value, enhancementCount} = require('./verify-augments.cjs');
 const {args, checkWorkshop} = require('./verify-global-temporaries.cjs');
 const slot = name => files['variables.opy'].match(new RegExp('^#!define ' + name + ' (\\w+)$', 'm'))[1];
-const held = slot('enhancementHeldZombie'), owner = slot('deadWeightZombieCarrier');
+const held = slot('enhancementHeldZombie'), owner = slot('wrestlerZombieCarrier');
 const until = slot('enhancementHoldUntil'), attached = slot('botIsAttached');
-const credit = slot('deadWeightThrowDamageCredit');
-const protection = slot('deadWeightProtectionId');
+const credit = slot('wrestlerThrowDamageCredit');
+const protection = slot('wrestlerProtectionId');
 async function main() {
     await compiler.readyPromise;
     const build = await compile(files);
@@ -31,7 +31,7 @@ rule "PLAYER AUGMENT INITIALIZATION":
     const run = (name, state) => start(compiled.get(name), state, compiled);
     assert(compiled.get('useLivingProjectile').body.includes('Multiply(Facing Direction Of(Event Player), 5)'),
         'The emitted pickup ray extends exactly five meters');
-    assert(!files['variables.opy'].match(/enum Augment:([\s\S]*?)\n\n/)[1].includes('DEAD_WEIGHT'));
+    assert(!files['variables.opy'].match(/enum Augment:([\s\S]*?)\n\n/)[1].includes('WRESTLER'));
     const enhancementInit = compiled.get('PLAYER ENHANCEMENT INITIALIZATION');
     const selection = {...enhancementInit, body: enhancementInit.body.split('actions {\n')[0]
         + 'actions {\n' + actions(enhancementInit).slice(0, 2).join('\n') + '\n}'};

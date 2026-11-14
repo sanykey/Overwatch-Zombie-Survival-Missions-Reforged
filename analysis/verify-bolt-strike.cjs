@@ -31,7 +31,7 @@ async function main() {
     assert(!Object.values(files).join('\n').match(/enhancementBolt(?:ChainEffect|EffectDeadline)|clearBoltEffects/));
     assert(!compiled.has('APOTHECARY ALLOW HEALTH PACK PICKUP'));
     assert.equal(boltId,12);assert.equal(enhancementCount,12);
-    assert(files['variables.opy'].includes('    DEAD_WEIGHT = 11,'));
+    assert(files['variables.opy'].includes('    WRESTLER = 11,'));
     const run = (name,s) => applies(compiled.get(name),s) ? start(compiled.get(name),s,compiled) : null;
     function state(overrides={}) {
         const s=scenario(1,{eventDamage:100,eventAbility:'Primary Fire',...overrides});

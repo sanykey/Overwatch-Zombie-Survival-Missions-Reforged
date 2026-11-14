@@ -68,7 +68,7 @@ rule "APOTHECARY TELEPORT":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
-    @Condition (eventPlayer.enhancementId != Enhancement.DEAD_WEIGHT or eventPlayer.enhancementHeldZombie == null) == true
+    @Condition (eventPlayer.enhancementId != Enhancement.WRESTLER or eventPlayer.enhancementCarryState == WrestlerCarryState.NONE) == true
 
     # Keep both buttons held for 0.25 seconds; interruption preserves the charge.
     wait(0.25, Wait.ABORT_WHEN_FALSE)
@@ -285,9 +285,9 @@ rule "LASER BARRICADE (PLACEMENT)":
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.augmentBarrierPlacementCooldown == 0
-    @Condition (eventPlayer.enhancementId != Enhancement.DEAD_WEIGHT or eventPlayer.enhancementHeldZombie == null) == true
+    @Condition (eventPlayer.enhancementId != Enhancement.WRESTLER or eventPlayer.enhancementCarryState == WrestlerCarryState.NONE) == true
 
-    # -1 latches aiming; Interact may reserve -2 for a consumed Dead Weight press.
+    # -1 latches aiming; Interact may reserve -2 for a consumed Wrestler press.
     # Clear the placement latch on every exit before starting the normal cooldown.
     eventPlayer.augmentBarrierPlacementCooldown = -1
     waitUntil(not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead(), 0.5)

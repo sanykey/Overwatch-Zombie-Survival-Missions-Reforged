@@ -1,0 +1,26 @@
+{
+  "compiler": "OverPy 9.7.21",
+  "before": 30069,
+  "after": 30061,
+  "saved": 8,
+  "changedRules": [
+    "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)",
+    "useLivingProjectile",
+    "LIVING PROJECTILE RELEASE",
+    "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)"
+  ],
+  "unchangedRules": 315,
+  "changedFiles": [
+    "augments.opy",
+    "enhancements.opy",
+    "player_initialization.opy",
+    "supply_drops.opy",
+    "variables.opy"
+  ],
+  "warnings": [],
+  "carryModelCases": 8,
+  "newVariables": 0,
+  "newSubroutines": 0,
+  "behavior": "Carry lasts until the existing 6s Knocked Down ends or is removed early. No separate 5s limit or HUD countdown. Manual throw uses states 0/1/2 in the existing human enhancement slot; the former deadline slot is no longer used by Wrestler. Existing safety checks, carrier protection and delayed throw damage remain.",
+  "limitations": "Static build, rule-scope comparison and release-state model; no Overwatch playtest."
+}

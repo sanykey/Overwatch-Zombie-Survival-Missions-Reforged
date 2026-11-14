@@ -5,12 +5,11 @@ subroutine checkEnhancementPlacement
 subroutine startPupDefaultChase
 subroutine applyBulkingSeasonStats
 
-#!define DEAD_WEIGHT_RANGE 5
-#!define DEAD_WEIGHT_DURATION 5
-#!define DEAD_WEIGHT_KNOCKDOWN_DURATION 6
-#!define DEAD_WEIGHT_THROW_SPEED 12.5
-#!define DEAD_WEIGHT_THROW_DAMAGE 50
-#!define DEAD_WEIGHT_DAMAGE_DELAY 0.75
+#!define WRESTLER_RANGE 5
+#!define WRESTLER_KNOCKDOWN_DURATION 6
+#!define WRESTLER_THROW_SPEED 12.5
+#!define WRESTLER_THROW_DAMAGE 50
+#!define WRESTLER_DAMAGE_DELAY 0.75
 
 #!define overchargeEarnedEnergyTotal(player) (player.getStatistic(Stat.HEALING_DEALT) / 3 + 10 * earnedAssists(player))
 
@@ -454,15 +453,15 @@ def resetBattleAbilityCharge():
 def useLivingProjectile():
     @Name "useLivingProjectile"
 
-    if eventPlayer.enhancementHeldZombie != null:
-        eventPlayer.enhancementHoldUntil = 0
+    if eventPlayer.enhancementCarryState != WrestlerCarryState.NONE:
+        eventPlayer.enhancementCarryState = WrestlerCarryState.THROW_REQUESTED
         return
     if eventPlayer.isAttached or eventPlayer.isCrowdControlled:
         return
     # One raycast per press, against all players so intervening actors block pickup.
     # Synchronous scratch only: the candidate is committed to both actors before returning.
     #!define livingProjectileCandidate tmp0
-    livingProjectileCandidate = raycastHitPlayer(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * DEAD_WEIGHT_RANGE, getAllPlayers(), eventPlayer, false)
+    livingProjectileCandidate = raycastHitPlayer(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * WRESTLER_RANGE, getAllPlayers(), eventPlayer, false)
     if livingProjectileCandidate == null:
         return
     if [livingProjectileCandidate.getTeam() != Team.2, not livingProjectileCandidate.isDummy(), not livingProjectileCandidate.isAlive(), livingProjectileCandidate.botIsInitializing, livingProjectileCandidate.botIsTeleporting, livingProjectileCandidate.botIsAttached].any():
@@ -474,49 +473,50 @@ def useLivingProjectile():
     # delayed flag.
     if not (livingProjectileCandidate.getNormalizedHealth() < 0.2 or livingProjectileCandidate.isCrowdControlled or livingProjectileCandidate.botIsCrowdControlled):
         return
-    eventPlayer.enhancementHeldZombie = livingProjectileCandidate
-    eventPlayer.enhancementHoldUntil = getTotalTimeElapsed() + DEAD_WEIGHT_DURATION
-    livingProjectileCandidate.deadWeightCarryHero = eventPlayer.getHero()
-    livingProjectileCandidate.deadWeightZombieCarrier = eventPlayer
+    eventPlayer.enhancementCarryState = WrestlerCarryState.HOLDING
+    livingProjectileCandidate.wrestlerCarryHero = eventPlayer.getHero()
+    livingProjectileCandidate.wrestlerZombieCarrier = eventPlayer
     # Independent of Super Nano's damage-received settings; bot owns cleanup.
     startDamageModification(eventPlayer, getAllPlayers(), 50)
-    livingProjectileCandidate.deadWeightProtectionId = getLastDamageModification()
+    livingProjectileCandidate.wrestlerProtectionId = getLastDamageModification()
     livingProjectileCandidate.botIsAttached = true
-    # Knockdown begins at pickup and outlasts the hold limit by one second.
-    # Clearing it early interrupts the carry; throw damage clears it explicitly.
-    livingProjectileCandidate.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, DEAD_WEIGHT_KNOCKDOWN_DURATION)
+    # Knockdown owns the carry lifetime; expiration or early removal releases.
+    # Throw damage clears it explicitly after the existing damage delay.
+    livingProjectileCandidate.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, WRESTLER_KNOCKDOWN_DURATION)
     livingProjectileCandidate.attachTo(eventPlayer, vect(0, 1.5, 1))
 
 
-#!define livingProjectileInterrupted(carrier) ([not isGameplayActive, not entityExists(carrier), not carrier.isAlive(), carrier.isAttached, carrier.getHero() != eventPlayer.deadWeightCarryHero, not eventPlayer.isAlive(), eventPlayer.botIsInitializing, eventPlayer.botIsTeleporting, not eventPlayer.botIsAttached, not eventPlayer.hasStatus(Status.KNOCKED_DOWN)].any())
+# All entries are booleans/default zero; negate this predicate for interruptions.
+# Keeping positive checks avoids repeated Not values in the compiled array.
+#!define livingProjectileValid(carrier) ([isGameplayActive, entityExists(carrier), carrier.isAlive(), not carrier.isAttached, carrier.getHero() == eventPlayer.wrestlerCarryHero, eventPlayer.isAlive(), not eventPlayer.botIsInitializing, not eventPlayer.botIsTeleporting, eventPlayer.botIsAttached, eventPlayer.hasStatus(Status.KNOCKED_DOWN)].all())
 
 rule "LIVING PROJECTILE RELEASE":
     @Event eachPlayer
     @Team 2
-    @Condition eventPlayer.deadWeightZombieCarrier != null
-    @Condition (eventPlayer.deadWeightZombieCarrier.enhancementHoldUntil <= getTotalTimeElapsed() or livingProjectileInterrupted(eventPlayer.deadWeightZombieCarrier)) == true
+    @Condition eventPlayer.wrestlerZombieCarrier != null
+    @Condition (eventPlayer.wrestlerZombieCarrier.enhancementCarryState == WrestlerCarryState.THROW_REQUESTED or not livingProjectileValid(eventPlayer.wrestlerZombieCarrier)) == true
 
     # Release and cleanup are synchronous; only throw damage waits below.
     # Bot-owned cleanup survives carrier departure.
-    # A second press requests release by setting the carrier's deadline to zero.
+    # A second press sets THROW_REQUESTED; knockdown expiry releases without a throw.
     # Synchronous carrier snapshot, used only through release cleanup below.
     # No wait, async call or live HUD/effect captures this global scratch alias.
-    #!define deadWeightCarrier tmp0
-    deadWeightCarrier = eventPlayer.deadWeightZombieCarrier
+    #!define wrestlerCarrier tmp0
+    wrestlerCarrier = eventPlayer.wrestlerZombieCarrier
     # Boolean snapshot, consumed by the branch before its damage wait.
     # No later action reads this scratch slot after yielding.
-    #!define deadWeightShouldThrow tmp1
-    deadWeightShouldThrow = deadWeightCarrier.enhancementHoldUntil == 0 and not livingProjectileInterrupted(deadWeightCarrier)
+    #!define wrestlerShouldThrow tmp1
+    wrestlerShouldThrow = wrestlerCarrier.enhancementCarryState == WrestlerCarryState.THROW_REQUESTED and livingProjectileValid(wrestlerCarrier)
     eventPlayer.detach()
     eventPlayer.botIsAttached = false
-    stopDamageModification(eventPlayer.deadWeightProtectionId)
-    deadWeightCarrier.enhancementHeldZombie = null
-    eventPlayer.deadWeightZombieCarrier = null
-    if deadWeightShouldThrow:
-        eventPlayer.applyImpulse(deadWeightCarrier.getFacingDirection(), DEAD_WEIGHT_THROW_SPEED, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
-        eventPlayer.deadWeightThrowDamageCredit = deadWeightCarrier
-        wait(DEAD_WEIGHT_DAMAGE_DELAY, Wait.IGNORE_CONDITION)
-        damage(eventPlayer, eventPlayer.deadWeightThrowDamageCredit, DEAD_WEIGHT_THROW_DAMAGE)
+    stopDamageModification(eventPlayer.wrestlerProtectionId)
+    wrestlerCarrier.enhancementCarryState = WrestlerCarryState.NONE
+    eventPlayer.wrestlerZombieCarrier = null
+    if wrestlerShouldThrow:
+        eventPlayer.applyImpulse(wrestlerCarrier.getFacingDirection(), WRESTLER_THROW_SPEED, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+        eventPlayer.wrestlerThrowDamageCredit = wrestlerCarrier
+        wait(WRESTLER_DAMAGE_DELAY, Wait.IGNORE_CONDITION)
+        damage(eventPlayer, eventPlayer.wrestlerThrowDamageCredit, WRESTLER_THROW_DAMAGE)
         eventPlayer.clearStatusEffect(Status.KNOCKED_DOWN)
     # A pickup/release request made during the short damage wait is handled next.
     if ruleCondition:

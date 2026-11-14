@@ -77,10 +77,11 @@ rule "EFFECT/TEXT (GLOBAL)":
     createInWorldText(getAllPlayers().filter(lambda player: supplyDropLandingPosition != null and distance(player, supplyDropPosition) > 5), "Supply Drop: {0}m".format(distance(localPlayer, supplyDropPosition)), supplyDropPosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.AQUA, SpecVisibility.NEVER)
 
 
-# Carried Dead Weight throws take priority over augment input reservations.
+# Carried Wrestler throws take priority over augment input reservations.
 # Boolean predicate, reused after the powerup hold because these checks live in
 # Actions and are no longer observed by Abort When False.
-#!define INTERACT_AUGMENT_INPUT_ALLOWED ((eventPlayer.enhancementId == Enhancement.DEAD_WEIGHT and eventPlayer.enhancementHeldZombie != null) or ((eventPlayer.augmentId != Augment.APOTHECARY or not eventPlayer.isHoldingButton(Button.CROUCH)) and (eventPlayer.augmentId != Augment.LASER_BARRICADE or (not eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.augmentBarrierPlacementCooldown >= 0))))
+#!define INTERACT_AUGMENT_INPUT_RESERVED ((eventPlayer.augmentId in [Augment.APOTHECARY, Augment.LASER_BARRICADE] and eventPlayer.isHoldingButton(Button.CROUCH)) or (eventPlayer.augmentId == Augment.LASER_BARRICADE and eventPlayer.augmentBarrierPlacementCooldown < 0))
+#!define INTERACT_AUGMENT_INPUT_ALLOWED ((eventPlayer.enhancementId == Enhancement.WRESTLER and eventPlayer.enhancementCarryState != WrestlerCarryState.NONE) or not INTERACT_AUGMENT_INPUT_RESERVED)
 
 rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)":
     @Event eachPlayer
@@ -109,19 +110,19 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         return
 
     # Resolve zombie interaction once per press, before any item transaction.
-    # The held reference survives a throw request until the bot finishes cleanup.
-    if eventPlayer.enhancementId == Enhancement.DEAD_WEIGHT:
+    # Carry state stays nonzero through a throw request until bot cleanup.
+    if eventPlayer.enhancementId == Enhancement.WRESTLER:
         useLivingProjectile()
-        if eventPlayer.enhancementHeldZombie != null:
+        if eventPlayer.enhancementCarryState != WrestlerCarryState.NONE:
             # Reserve a ready barricade until this consumed press ends. Bot release
-            # can clear the held reference before the placement rule runs.
+            # can clear the carry state before the placement rule runs.
             if eventPlayer.augmentId == Augment.LASER_BARRICADE and eventPlayer.augmentBarrierPlacementCooldown <= 0:
                 eventPlayer.augmentBarrierPlacementCooldown = -2
                 waitUntil(not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead(), Math.INFINITY)
                 eventPlayer.augmentBarrierPlacementCooldown = 0
             # Keep this player's Interact handler busy briefly after a throw request.
-            # This branch stays consumed even if bot cleanup clears the held reference.
-            if eventPlayer.enhancementHoldUntil == 0:
+            # This branch stays consumed even if bot cleanup clears the carry state.
+            if eventPlayer.enhancementCarryState == WrestlerCarryState.THROW_REQUESTED:
                 wait(0.5, Wait.IGNORE_CONDITION)
             return
 
@@ -186,7 +187,9 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         wait(0.25, Wait.ABORT_WHEN_FALSE)
         # Phase/input guards are in Actions, outside Abort When False checks.
         # Recheck to prevent activation after game end or a reserved input change.
-        if isGameplayActive and INTERACT_AUGMENT_INPUT_ALLOWED:
+        # Pickup/throw success returns above; this handler is the only pickup caller,
+        # so no carried zombie can appear during this powerup wait.
+        if isGameplayActive and not INTERACT_AUGMENT_INPUT_RESERVED:
             powerUpUsage()
 
 

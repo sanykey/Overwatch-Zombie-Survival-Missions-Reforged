@@ -1,0 +1,17 @@
+{
+  "before": 30092,
+  "after": 30069,
+  "saved": 23,
+  "compiler": "OverPy 9.7.21",
+  "warnings": [],
+  "changedRules": [
+    "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)",
+    "LIVING PROJECTILE RELEASE"
+  ],
+  "unchangedRules": 317,
+  "inputCases": 220,
+  "carryBooleanCases": 1024,
+  "newVariables": 0,
+  "newSubroutines": 0,
+  "limitations": "Compiled equivalence scope and boolean models; no in-game validation or runtime profiling. main.ws.txt also catches up with previously stale source changes."
+}

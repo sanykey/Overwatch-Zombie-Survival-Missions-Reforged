@@ -1,0 +1,83 @@
+{
+  "compiler": "OverPy 9.7.21",
+  "baselineElements": 30092,
+  "withoutWrestlerElements": 29679,
+  "wrestlerTotalElements": 413,
+  "shareOfCurrentBuildPercent": 1.37,
+  "changedRules": [
+    {
+      "name": "Initialize global variables",
+      "before": 310,
+      "withoutWrestler": 308,
+      "cost": 2
+    },
+    {
+      "name": "EFFECTS/TEXTS",
+      "before": 1283,
+      "withoutWrestler": 1277,
+      "cost": 6
+    },
+    {
+      "name": "RIDER DETACH WHEN DEAD OR TARGET IS DEAD",
+      "before": 48,
+      "withoutWrestler": 45,
+      "cost": 3
+    },
+    {
+      "name": "RIDER DETATCH FROM TEAMMATES WHILE ALIVE",
+      "before": 60,
+      "withoutWrestler": 57,
+      "cost": 3
+    },
+    {
+      "name": "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)",
+      "before": 438,
+      "withoutWrestler": 356,
+      "cost": 82
+    },
+    {
+      "name": "useLivingProjectile",
+      "before": 114,
+      "withoutWrestler": 0,
+      "cost": 114
+    },
+    {
+      "name": "LIVING PROJECTILE RELEASE",
+      "before": 138,
+      "withoutWrestler": 0,
+      "cost": 138
+    },
+    {
+      "name": "APOTHECARY TELEPORT",
+      "before": 69,
+      "withoutWrestler": 55,
+      "cost": 14
+    },
+    {
+      "name": "LASER BARRICADE (PLACEMENT)",
+      "before": 179,
+      "withoutWrestler": 165,
+      "cost": 14
+    },
+    {
+      "name": "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)",
+      "before": 943,
+      "withoutWrestler": 912,
+      "cost": 31
+    },
+    {
+      "name": "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION",
+      "before": 701,
+      "withoutWrestler": 695,
+      "cost": 6
+    }
+  ],
+  "ruleCost": 413,
+  "outsideCountedRules": 0,
+  "removedDeclarations": [
+    "useLivingProjectile"
+  ],
+  "warnings": [],
+  "method": "In-memory complete removal of pickup/release, Interact handling and its predicate exceptions, augment/Rider guards, spawn initialization, HUD subtitle/name/color entry, menu name/description/color entry and icon entry. Subsequent Enhancement IDs shift down by one. All shared storage and shared UI infrastructure remain. Sum of compiled rule deltas must equal total compiler delta.",
+  "limitations": "Marginal compiled size of removing the full option, including compiler string packing and switch optimizations. No runtime-performance claim. Production source and main.ws.txt remain unchanged."
+}
