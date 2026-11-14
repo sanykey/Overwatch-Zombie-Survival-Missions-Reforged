@@ -26,6 +26,7 @@ subroutine explosionSequence
 subroutine illariUlt
 subroutine abilityPlacement
 subroutine createRemainingObjectivesHud
+subroutine selectPullAimTarget
 subroutine applyHitEnhancements
 
 
@@ -924,3 +925,14 @@ def resolveReconnectUserIndex():
     @Name "resolveReconnectUserIndex"
 
     eventPlayer.reconnectUserIndex = userNameList.index("{0}".format(eventPlayer))
+
+
+def selectPullAimTarget():
+    @Name "selectPullAimTarget"
+
+    pullAimRange = WRESTLER_PULL_RANGE if pullAimIsWrestler else AUGMENT_GRAPNEL_RANGE
+    pullAimCandidates = getPlayersInRadius(eventPlayer.getEyePosition(), pullAimRange + 2, Team.2 if pullAimIsWrestler else Team.ALL, LosCheck.SURFACES).filter(lambda target: target.isAlive() and (target.getTeam() == Team.1 or not target.botIsTeleporting) and (target.isDummy() and not target.botIsInitializing and not target.botIsAttached if pullAimIsWrestler else target != eventPlayer and distance(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(target)) >= AUGMENT_GRAPNEL_MIN_RANGE))
+    # Mode is dead after candidate filtering; reuse its slot for the eye position.
+    pullAimEyePosition = eventPlayer.getEyePosition()
+    pullAimOrigin = (eventPlayer.getPosition() + pullAimEyePosition) * 0.5
+    pullAimTarget = sorted(pullAimCandidates.filter(lambda target: distance(pullAimOrigin, augmentGrapnelCenter(target)) <= pullAimRange and eventPlayer.isInViewAngle(augmentGrapnelCenter(target), 35) and isInLoS(pullAimOrigin, augmentGrapnelCenter(target))), lambda target: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(pullAimEyePosition, augmentGrapnelCenter(target))))[0]

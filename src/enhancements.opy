@@ -404,10 +404,12 @@ rule "WRESTLER PULL":
         return
     # Grapnel's body-center cone, surface LOS and crosshair-angle priority;
     # only living, available Team 2 dummies are eligible. No minimum distance.
-    # Synchronous scratch: NONE snapshots both beam endpoints, and every target
+    # selectPullAimTarget returns tmp0. NONE snapshots both beam endpoints; every target
     # read finishes before the wait. No Augment-owned storage is touched.
     #!define wrestlerPullTarget tmp0
-    wrestlerPullTarget = sorted(getPlayersInRadius(eventPlayer.getEyePosition(), WRESTLER_PULL_RANGE + 2, Team.2, LosCheck.SURFACES).filter(lambda target: target.isDummy() and target.isAlive() and not target.botIsInitializing and not target.botIsTeleporting and not target.botIsAttached and distance(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(target)) <= WRESTLER_PULL_RANGE and eventPlayer.isInViewAngle(augmentGrapnelCenter(target), 35) and isInLoS(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(target))), lambda target: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), augmentGrapnelCenter(target))))[0]
+    # Shared selection consumes scratch synchronously; persist/capture its result before waits.
+    pullAimIsWrestler = true
+    selectPullAimTarget()
     if wrestlerPullTarget == null:
         return
     eventPlayer.enhancementPullReadyAt = getTotalTimeElapsed() + WRESTLER_PULL_COOLDOWN

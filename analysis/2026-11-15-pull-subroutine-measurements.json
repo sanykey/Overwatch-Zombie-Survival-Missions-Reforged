@@ -1,0 +1,22 @@
+{
+  "baselineRef": "4bae601",
+  "beforeElements": 30419,
+  "probes": [
+    {
+      "cache": false,
+      "elements": 30360,
+      "delta": -59
+    },
+    {
+      "cache": true,
+      "elements": 30358,
+      "delta": -61
+    },
+    {
+      "cache": "unified",
+      "elements": 30357,
+      "delta": -62
+    }
+  ],
+  "selectedCache": "unified"
+}

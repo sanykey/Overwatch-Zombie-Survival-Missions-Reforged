@@ -41,6 +41,8 @@
 
 # Shared Grapnel/Wrestler targeting geometry and Wrestler HUD/menu constants.
 #!define augmentGrapnelCenter(player) ((player.getPosition() + player.getEyePosition()) * 0.5)
+#!define AUGMENT_GRAPNEL_MIN_RANGE 7
+#!define AUGMENT_GRAPNEL_RANGE 45
 #!define WRESTLER_PULL_RANGE 25
 #!define WRESTLER_PULL_COOLDOWN 16
 #!define WRESTLER_PULL_SPEED 25
@@ -230,6 +232,19 @@ globalvar tmp3  # Fourth synchronous scratch value, including barricade impulse 
 #!define enhancementHitHealthBefore tmp2
 #!define enhancementHitDamage tmp2
 #!define enhancementHitVictim tmp3
+
+
+# Synchronous selectPullAimTarget contract: tmp1 inputs Wrestler mode;
+# tmp0 returns the selected player (or Null), tmp2/tmp3 are clobbered.
+# tmp1 becomes the eye position only after mode-dependent filtering finishes.
+# The helper has no waits or nested calls. Consume/copy the result before waits;
+# reevaluated visuals must use persistent storage or snapshot the result.
+#!define pullAimCandidates tmp0
+#!define pullAimTarget tmp0
+#!define pullAimIsWrestler tmp1
+#!define pullAimRange tmp2
+#!define pullAimEyePosition tmp1
+#!define pullAimOrigin tmp3
 
 # Phase-owned storage, NOT scratch: values may survive waits and reevaluation.
 # START GAME removes all pregame HUD/world text before mission generation can resume.

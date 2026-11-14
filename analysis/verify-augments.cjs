@@ -66,6 +66,7 @@ function value(expr, state, element) {
     if (expr === 'Last Damage Modification ID') return state.lastDamageModification;
     if (expr === 'Team 2') return 2;
     if (expr === 'Team 1') return 1;
+    if (expr === 'All Teams') return 'all';
     if (expr === 'Attacker') return state.attacker ?? 0;
     if (expr === 'Event Was Environment') return state.eventWasEnvironment ?? false;
     if (expr === 'Event Player' || expr === 'Local Player') return state.player;
@@ -217,11 +218,13 @@ function value(expr, state, element) {
         }
         case 'Is In Line of Sight': return state.lineOfSight;
         case 'Distance Between': return magnitude(point(v(0)).map((x, i) => x - point(v(1))[i]));
-        case 'Players Within Radius':
-            assert(['Team 1', 'Team 2', 'All Teams'].includes(a[2])); assert.equal(a[3], 'Surfaces');
+        case 'Players Within Radius': {
+            const team = v(2);
+            assert([1, 2, 'all'].includes(team)); assert.equal(a[3], 'Surfaces');
             return [state.player, ...state.targets].filter(target =>
-                (a[2] === 'All Teams' || (target.team ?? (target === state.player ? 1 : 2)) === v(2))
+                (team === 'all' || (target.team ?? (target === state.player ? 1 : 2)) === team)
                 && target.visible !== false && magnitude(target.position.map((x, i) => x - point(v(0))[i])) <= v(1));
+        }
         case 'Is In View Angle': return angle(state.facing, v(1).map((x, i) => x - value('Eye Position(Event Player)', state)[i])) <= v(2);
         case 'Random Integer': {
             const min = Number(v(0)), max = Number(v(1)), roll = state.randomRolls?.shift() ?? state.randomRoll ?? min;

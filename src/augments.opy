@@ -3,8 +3,6 @@
 #!define AUGMENT_KEVLAR_ARMOR 75
 #!define AUGMENT_KEVLAR_RANGED_DMG_RESIST 50
 #!define AUGMENT_KEVLAR_KNOCKBACK_RESIST 50
-#!define AUGMENT_GRAPNEL_RANGE 45
-#!define AUGMENT_GRAPNEL_MIN_RANGE 7
 #!define AUGMENT_GRAPNEL_SPEED 40
 #!define AUGMENT_GRAPNEL_COOLDOWN 16
 #!define AUGMENT_GRAPNEL_TIMEOUT 1.5
@@ -173,7 +171,10 @@ rule "GRAPNEL LAUNCHER":
     # aim cone to the crosshair wins. The all-team query includes this player, so self must go.
     # botIsTeleporting shares its slot with Team 1 votes/Rescue paths; only
     # interpret that slot as a teleport flag on Team 2, including during travel.
-    eventPlayer.augmentGrapnelTarget = sorted(getPlayersInRadius(eventPlayer.getEyePosition(), AUGMENT_GRAPNEL_RANGE + 2, Team.ALL, LosCheck.SURFACES).filter(lambda target: target != eventPlayer and target.isAlive() and (target.getTeam() == Team.1 or not target.botIsTeleporting) and distance(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(target)) >= AUGMENT_GRAPNEL_MIN_RANGE and distance(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(target)) <= AUGMENT_GRAPNEL_RANGE and eventPlayer.isInViewAngle(augmentGrapnelCenter(target), 35) and isInLoS(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(target))), lambda target: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), augmentGrapnelCenter(target))))[0]
+    # Shared selection consumes scratch synchronously; persist/capture its result before waits.
+    pullAimIsWrestler = false
+    selectPullAimTarget()
+    eventPlayer.augmentGrapnelTarget = pullAimTarget
     if eventPlayer.augmentGrapnelTarget == null:
         return
     eventPlayer.augmentMovementReadyAt = getTotalTimeElapsed() + AUGMENT_GRAPNEL_COOLDOWN

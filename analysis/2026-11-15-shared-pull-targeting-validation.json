@@ -1,0 +1,10 @@
+{
+  "baselineRef": "4bae601",
+  "beforeElements": 30419,
+  "afterElements": 30357,
+  "elementDelta": -62,
+  "unchangedUnrelatedRules": true,
+  "behavioralComparisons": 220,
+  "variableDeclarationsIdentical": true,
+  "warnings": []
+}
