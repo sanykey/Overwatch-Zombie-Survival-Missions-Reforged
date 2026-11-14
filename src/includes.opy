@@ -8,6 +8,7 @@
 #!include "variables.opy"
 #!include "compressed numbers.opy"
 #!include "subroutines.opy"
+#!include "charge_battery.opy"
 
 #!include "global_startup.opy"
 #!include "global_start_menu.opy"

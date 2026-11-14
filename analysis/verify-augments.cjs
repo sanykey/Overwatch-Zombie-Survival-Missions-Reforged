@@ -100,6 +100,8 @@ function value(expr, state, element) {
     const name = expr.slice(0, expr.indexOf('(')), a = args(expr);
     const v = i => value(a[i], state, element);
     switch (name) {
+        case 'Ability Cooldown': return state.cooldowns?.[v(1)] ?? 0;
+        case 'Ability Charge': return state.abilityCharges?.[v(1)] ?? 0;
         case 'Player Stat': return v(0).stats?.[a[1]] ?? 0;
         case 'Button': case 'Hero': return a[0];
         case 'Icon String': assert.equal(a[0], 'Checkmark'); return '✓';
@@ -306,6 +308,11 @@ function* execute(rule, state, compiled) {
                 case 'Abort If': if (truth(v(0))) return; break;
                 case 'Skip If': if (truth(v(0))) pc += Number(v(1)); break;
                 case 'Skip': pc += Number(v(0)); break;
+                case 'Set Ability Cooldown':
+                    (state.cooldowns ??= {})[v(1)] = Number(v(2));
+                    (state.cooldownWrites ??= []).push({button:v(1), cooldown:Number(v(2)), time:state.time});
+                    break;
+                case 'Set Ability Charge': (state.abilityCharges ??= {})[v(1)] = Number(v(2)); break;
                 case 'Set Player Variable': if (v(0)) v(0)[a[1]] = v(2); break;
                 case 'Attach Players': v(0).attachedTo = v(1); v(0).attachmentOffset = v(2); break;
                 case 'Detach Players': v(0).attachedTo = null; break;

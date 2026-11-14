@@ -209,7 +209,7 @@ rule "EFFECTS/TEXTS":
             "Critical hits deal +60% dmg; +20% against bosses.",
             "Damaging zombies within 15m sets them on fire for 3s.",
             "Final blows store ability resets, up to 2. Your next ability use consumes a reset.",
-            "Place a battery that grants 15% ultimate charge on contact. Recharges in 10s; placement cd: 20s.",
+            "Place a battery that grants 15% ultimate charge on contact. Recharges in 10s; placement cd: 20s. Using ultimate resets all ability cd.",
             "Ride a nearby teammate and share your combined health while attached.",
             "An autonomous drone burns and knocks down nearby zombies, or freezes distant targets and nearby zombies.",
             "Grab zombies within 5m, including bosses, while disabled (root alone excluded) or below 20% HP. Take 50% less dmg while carrying.",

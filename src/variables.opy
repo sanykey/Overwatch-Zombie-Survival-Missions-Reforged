@@ -1,5 +1,8 @@
 #!mainFile "../main.opy"
 
+# Synchronous placement helper output; consume before waits or asynchronous work.
+#!define isEnhancementPlacementInvalid tmp0
+
 #!define BOT_MAX_TELEPORT_RANGE 40
 #!define JETPACK_ACTIVATION_TIME 0.17
 #!define AUGMENT_APOTHECARY_ULT_CHARGE 7

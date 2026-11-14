@@ -1,7 +1,6 @@
 #!mainFile "../main.opy"
 subroutine resetBattleAbilityCharge
 
-subroutine checkEnhancementPlacement
 subroutine startPupDefaultChase
 subroutine applyBulkingSeasonStats
 
@@ -30,9 +29,6 @@ rule "ZOMBIE HYBRID":
         wait(1)
         eventPlayer.enhancementHybridCooldown += -1
 
-
-# Synchronous helper output; consume immediately before any wait or asynchronous work.
-#!define isEnhancementPlacementInvalid tmp0
 
 rule "PYROTECHNIC APPLIES DAMAGE":
     @Event eachPlayer
@@ -186,63 +182,6 @@ rule "OVERCHARGE CLEARS CHARGE":
 
     eventPlayer.enhancementCapacitorCharge = 0
     eventPlayer.enhancementCapacitorDeadline = 0
-
-
-rule "CHARGE BATTERY":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
-    @Condition eventPlayer.enhancementId == Enhancement.CHARGE_BATTERY
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.enhancementBatteryPlacementCooldown <= 0
-    
-    wait(0.5, Wait.ABORT_WHEN_FALSE)
-    playEffect(eventPlayer, DynamicEffect.GOOD_EXPLOSION, Color.YELLOW, eventPlayer.getEyePosition() + ((directionFromAngles(eventPlayer.getHorizontalFacingAngle() + random.uniform(-5, 5), eventPlayer.getVerticalFacingAngle() + random.uniform(-5, 5))) * 1.5), 0.1)
-    playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.YELLOW, eventPlayer.getPosition(), 75)
-    waitUntil(not eventPlayer.isHoldingButton(Button.MELEE) or eventPlayer.isDead(), Math.INFINITY)
-    checkEnhancementPlacement()
-    if isEnhancementPlacementInvalid:
-        return
-    eventPlayer.enhancementBatteryPosition = raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)
-    #Charge Battery cooldown
-    eventPlayer.enhancementBatteryPlacementCooldown = 20
-    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.YELLOW, eventPlayer.enhancementBatteryPosition, 2)
-    playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, Color.YELLOW, eventPlayer.enhancementBatteryPosition, 50)
-    smallMessage(eventPlayer, "  Battery placed!")
-    eventPlayer.enhancementBatteryReuseCooldown = 0
-    while eventPlayer.enhancementBatteryPlacementCooldown > 0:
-        wait(1)
-        eventPlayer.enhancementBatteryPlacementCooldown += -1
-
-
-# Share eligibility between activation and selection; playerTargetList can briefly retain dead/unspawned players.
-#!define isBatteryChargeEligible(player) player.hasSpawned() and player.isAlive() and player.getUltCharge() < 100 and distance(player, eventPlayer.enhancementBatteryPosition) < 1.5 * player.sizeScale
-
-rule "CHARGE BATTERY (USAGE AND COOLDOWNS)":
-    @Event eachPlayer
-    @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.enhancementId == Enhancement.CHARGE_BATTERY
-    @Condition eventPlayer.enhancementBatteryPosition
-    @Condition playerTargetList.any(lambda player: isBatteryChargeEligible(player)) == true
-    
-    # batteryChargeRecipient: survivor using the battery, to play feedback and grant ultimate charge before cooldown waits.
-    #!define batteryChargeRecipient tmp0
-    batteryChargeRecipient = (playerTargetList.filter(lambda player: isBatteryChargeEligible(player)))[0]
-    # Recheck at action time: no feedback, charge or cooldown if eligibility changed since activation.
-    if batteryChargeRecipient == null:
-        return
-    playEffect(batteryChargeRecipient, DynamicEffect.BUFF_IMPACT_SOUND, Color.YELLOW, batteryChargeRecipient, 50)
-    playEffect(batteryChargeRecipient, DynamicEffect.GOOD_EXPLOSION, Color.GRAY, eventPlayer.enhancementBatteryPosition, 3)
-    playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, Color.YELLOW, batteryChargeRecipient, 1)
-    batteryChargeRecipient.setUltCharge(batteryChargeRecipient.getUltCharge() + 15)
-    eventPlayer.enhancementBatteryReuseCooldown = eventPlayer.enhancementBatteryReuseDuration
-    while eventPlayer.enhancementBatteryReuseCooldown > 0:
-        wait(0.5)
-        eventPlayer.enhancementBatteryReuseCooldown += -0.5
-    if ruleCondition:
-        loop()
 
 
 def checkEnhancementPlacement():

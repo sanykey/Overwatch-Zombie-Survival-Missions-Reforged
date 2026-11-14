@@ -2,6 +2,9 @@
 
 # Shared subroutines used by multiple sections (including their dependencies).
 
+subroutine checkEnhancementPlacement
+subroutine resetAbilityCooldowns
+
 subroutine applyScaledMoveSpeed
 subroutine refreshCurrentObjectivePosition
 subroutine refreshCurrentObjectiveType

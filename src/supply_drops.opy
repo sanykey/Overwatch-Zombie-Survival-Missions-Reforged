@@ -229,6 +229,24 @@ def playerForceField():
     eventPlayer.powerUpForceFieldPosition = 0
 
 
+# Shared instantaneous reset; no waits or temporary state. Preserve the Reaper charge exception.
+def resetAbilityCooldowns():
+    eventPlayer.setAbilityCooldown(Button.ABILITY_1, 0)
+    eventPlayer.setAbilityCooldown(Button.ABILITY_2, 0)
+    eventPlayer.setAbilityCooldown(Button.PRIMARY_FIRE, 0)
+    eventPlayer.setAbilityCooldown(Button.SECONDARY_FIRE, 0)
+    eventPlayer.setAbilityCooldown(Button.INTERACT, 0)
+    eventPlayer.setAbilityCooldown(Button.CROUCH, 0)
+    eventPlayer.setAbilityCooldown(Button.JUMP, 0)
+    eventPlayer.setAbilityCharge(Button.ABILITY_1, 2)
+    if eventPlayer.getHero() == Hero.REAPER:
+        goto lbl_0
+    eventPlayer.setAbilityCharge(Button.ABILITY_2, 2)
+    lbl_0:
+    eventPlayer.setAbilityCharge(Button.SECONDARY_FIRE, 2)
+    eventPlayer.setAbilityCooldown(Button.RELOAD, 0)
+
+
 def noCooldowns():
     @Name "noCooldowns (20-29)"
     
@@ -239,20 +257,7 @@ def noCooldowns():
         eventPlayer.powerUpNoCooldownsHudId = getLastCreatedText()
     #No cooldown powerup duration
     for eventPlayer.powerUpNoCooldownsTimeRemaining in range(15, 0, -0.032):
-        eventPlayer.setAbilityCooldown(Button.ABILITY_1, 0)
-        eventPlayer.setAbilityCooldown(Button.ABILITY_2, 0)
-        eventPlayer.setAbilityCooldown(Button.PRIMARY_FIRE, 0)
-        eventPlayer.setAbilityCooldown(Button.SECONDARY_FIRE, 0)
-        eventPlayer.setAbilityCooldown(Button.INTERACT, 0)
-        eventPlayer.setAbilityCooldown(Button.CROUCH, 0)
-        eventPlayer.setAbilityCooldown(Button.JUMP, 0)
-        eventPlayer.setAbilityCharge(Button.ABILITY_1, 2)
-        if eventPlayer.getHero() == Hero.REAPER:
-            goto lbl_0
-        eventPlayer.setAbilityCharge(Button.ABILITY_2, 2)
-        lbl_0:
-        eventPlayer.setAbilityCharge(Button.SECONDARY_FIRE, 2)
-        eventPlayer.setAbilityCooldown(Button.RELOAD, 0)
+        resetAbilityCooldowns()
         wait(0.032)
     destroyHudText(eventPlayer.powerUpNoCooldownsHudId)
     eventPlayer.powerUpNoCooldownsHudId = 0
