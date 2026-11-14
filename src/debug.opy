@@ -37,7 +37,7 @@ rule "[debug] Resource usage and server load":
     # START GAME and WIN/LOSS CONDITIONS destroy all HUD texts. Recreate this one
     # after either phase changes, allowing their cleanup actions to finish first.
     wait(0.5)
-    hudSubheader(getAllPlayers().filter(lambda player: not player.isDummy() and "{0}".format(player) == "snky"), "Texts: {0}/128 | Effects: {1}/256\nServer load: {2}{3}".format(getNumberOfTextIds(), getNumberOfEntityIds(), "{0} | Avg (2s): {1} | Peak (2s): {2}".format(getServerLoad(), getAverageServerLoad(), getPeakServerLoad()), f"\nMap grid: {len(mapGridList)}/900"), HudPosition.RIGHT, -10, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudSubheader(getAllPlayers().filter(lambda player: not player.isDummy() and "{0}".format(player) == "snky"), "Texts: {0}/128 | Effects: {1}/256\nServer load: {2}{3}".format(getNumberOfTextIds(), getNumberOfEntityIds(), "{0} | Avg (2s): {1} | Peak (2s): {2}".format(getServerLoad(), getAverageServerLoad(), getPeakServerLoad()), f"\nMap: {__getCurrentMap__()}\nMap grid: {len(mapGridList)}/900"), HudPosition.RIGHT, -10, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
     debugHud = getLastCreatedText()
     # evalOnce captures the phase at HUD creation; the other operands keep updating.
     waitUntil(isPregameSetup != evalOnce(isPregameSetup) or isGameplayActive != evalOnce(isGameplayActive), Math.INFINITY)
