@@ -415,7 +415,8 @@ rule "WRESTLER PULL":
     createBeam(getAllPlayers(), Beam.BAD, augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(wrestlerPullTarget), Color.PURPLE, EffectReeval.NONE)
     eventPlayer.enhancementPullBeamEntity = getLastCreatedEntity()
     wrestlerPullTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, WRESTLER_PULL_KNOCKDOWN)
-    wrestlerPullTarget.applyImpulse(directionTowards(augmentGrapnelCenter(wrestlerPullTarget), augmentGrapnelCenter(eventPlayer)), WRESTLER_PULL_SPEED, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+    # Keep the pull's horizontal bearing with a fixed 15-degree upward pitch.
+    wrestlerPullTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(wrestlerPullTarget, eventPlayer)), -15), WRESTLER_PULL_SPEED, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     # Always clean up, including release, death, hero change or end of gameplay.
     wait(WRESTLER_PULL_BEAM_DURATION, Wait.IGNORE_CONDITION)
     destroyEffect(eventPlayer.enhancementPullBeamEntity)
@@ -445,14 +446,15 @@ def useLivingProjectile():
     livingProjectileCandidate = raycastHitPlayer(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * WRESTLER_RANGE, getAllPlayers(), eventPlayer, false)
     if livingProjectileCandidate == null:
         return
-    if [livingProjectileCandidate.getTeam() != Team.2, not livingProjectileCandidate.isDummy(), not livingProjectileCandidate.isAlive(), livingProjectileCandidate.botIsInitializing, livingProjectileCandidate.botIsTeleporting, livingProjectileCandidate.botIsAttached].any():
+    # Objective bosses/eggs and Contester minibosses cannot be grabbed.
+    if [livingProjectileCandidate.getTeam() != Team.2, not livingProjectileCandidate.isDummy(), not livingProjectileCandidate.isAlive(), livingProjectileCandidate.botIsInitializing, livingProjectileCandidate.botIsTeleporting, livingProjectileCandidate.botIsAttached, livingProjectileCandidate in bossStateList, livingProjectileCandidate in miniBossList].any():
         return
     # Either CC flag qualifies: the live status excludes Rooted, and the delayed
     # bot flag keeps a zombie grabbable for up to 0.125s after CC exits, matching
-    # the zombie-side checks; low health still qualifies independently. The
+    # the zombie-side checks. The
     # candidate is already a Team 2 dummy, so BOT STUN MANAGEMENT maintains its
     # delayed flag.
-    if not (livingProjectileCandidate.getNormalizedHealth() < 0.2 or livingProjectileCandidate.isCrowdControlled or livingProjectileCandidate.botIsCrowdControlled):
+    if not (livingProjectileCandidate.isCrowdControlled or livingProjectileCandidate.botIsCrowdControlled):
         return
     eventPlayer.enhancementCarryState = WrestlerCarryState.HOLDING
     livingProjectileCandidate.wrestlerCarryHero = eventPlayer.getHero()

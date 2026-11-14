@@ -45,7 +45,7 @@
 #!define WRESTLER_PULL_COOLDOWN 16
 #!define WRESTLER_PULL_SPEED 25
 #!define WRESTLER_PULL_BEAM_DURATION 0.2
-#!define WRESTLER_PULL_KNOCKDOWN 1
+#!define WRESTLER_PULL_KNOCKDOWN 1.8
 # Native offensive + defensive assist count; shared by Overcharge's earned-energy
 # formula and Engineer's assist-scrap snapshot.
 #!define earnedAssists(player) (player.getStatistic(Stat.OFFENSIVE_ASSISTS) + player.getStatistic(Stat.DEFENSIVE_ASSISTS))
