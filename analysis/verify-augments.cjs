@@ -332,13 +332,21 @@ function* execute(rule, state, compiled) {
                     const current = state.globals[a[0]] ?? 0, operand = v(2);
                     // Workshop vectors are scalar values, represented here as JS arrays.
                     if (a[1] === 'Append To Array') state.globals[a[0]] = array(current).concat(
-                        a[0] === 'supplyPowerUpPositionList' && !a[2].startsWith('Mapped Array(') ? [operand] : operand);
+                        (a[0] === 'supplyPowerUpPositionList' && !a[2].startsWith('Mapped Array('))
+                            || /^(?:Position Of|Eye Position|Vector)\(/.test(a[2]) ? [operand] : operand);
                     else if (a[1] === 'Remove From Array By Index') state.globals[a[0]] = array(current).filter((_, index) => index !== Number(operand));
                     else if (a[1] === 'Multiply') state.globals[a[0]] = current * operand;
                     else if (a[1] === 'Subtract') state.globals[a[0]] = current - operand;
                     else throw new Error('Unsupported global modification: ' + line);
                     break;
                 }
+                case 'Create Icon': {
+                    const id = ++state.lastEntity;
+                    state.liveEffects.add(id);
+                    (state.icons ??= []).push({id, visibility: a[0], position: a[1]});
+                    break;
+                }
+                case 'Destroy Icon': (state.destroyedIcons ??= []).push(v(0)); state.liveEffects.delete(v(0)); break;
                 case 'Destroy In-World Text': (state.destroyedTexts ??= []).push(v(0)); break;
                 case 'Modify Player Variable': {
                     const current = state.player[a[1]] ?? 0;

@@ -6,6 +6,7 @@
 #!define BOT_MAX_TELEPORT_RANGE 40
 #!define JETPACK_ACTIVATION_TIME 0.17
 #!define AUGMENT_APOTHECARY_ULT_CHARGE 7
+#!define healthpacksCureNormally (difficultySetting < Difficulty.EXPERT or getMatchTime() > matchEndTime)
 #!define BOSS_BASE_SIZE 2.5
 #!define ZOMBIE_BASE_SIZE 1
 #!define BIOMORPHING_RESOURCE_AMOUNT 25
@@ -475,7 +476,8 @@ playervar augmentState0
 # Retained through hero switches; death/manual drop clears it synchronously. Never activated.
 #!define augmentScavengerBackpack augmentState0
 # Apothecary: last pack pickup position, null until first pickup; zero vector is valid.
-# Retained through death/hero switches; only this augment owns these slots.
+# Retained through death/hero switches; also the only shared cure point owned by
+# this Apothecary. Moving it unbinds the old pack unless another owner uses it.
 #!define augmentApothecaryPosition augmentState0
 # Boolean single teleport charge; refreshed on ultimate activation, spent on teleport.
 # Retained through death/hero switches; HUD reevaluates it without a chase.
@@ -516,6 +518,10 @@ playervar augmentState1
 #!define augmentMeleeTargetIndex augmentState1
 
 playervar augmentState2
+# Apothecary: owned cure-location icon ID; created once in gameplay when its
+# first teleport point exists. Position/visibility reevaluate without recreating
+# the icon on pickup, death or hero switch. Destroyed on owner departure.
+#!define augmentApothecaryCureIcon augmentState2
 # Team 2 Wrestler: carrier hero at pickup, retained until release. No human reader.
 #!define wrestlerCarryHero augmentState2
 # Laser Barricade: -2 reserves a Wrestler press; -1 latches aiming until Interact release/death/cancel; 0 is ready,

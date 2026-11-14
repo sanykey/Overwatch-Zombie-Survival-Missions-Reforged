@@ -26,7 +26,7 @@ rule "AUGMENT MENU":
             "Double magazine capacity. Fully reloading restores the extra ammo.",
             f"Grapple to allies or zombies {AUGMENT_GRAPNEL_MIN_RANGE}–{AUGMENT_GRAPNEL_RANGE}m away. 35 dmg; stun grounded zombies or knock airborne ones down for 3s. cd: 16s.",
             f"Deploy a wall that blocks zombies. Hold Crouch + Interact to aim; release Interact to place. cd: {LASER_BARRICADE_COOLDOWN}s.",
-            f"Packs: 2x healing, -1 infection, +{AUGMENT_APOTHECARY_ULT_CHARGE}% ult. Ult grants a teleport to your last used pack.",
+            f"Packs: 2x healing, cure 1/3 infection (min 1), +{AUGMENT_APOTHECARY_ULT_CHARGE}% ult. Your latest pack also cures allies. Ult grants a teleport to it.",
             "Carry 2 extra powerups. Eliminations: 7% chance to gain a powerup. Loot fills your active slot, then backpack.",
             "Heal for 15% of dmg dealt. Gain 50 recoverable health."
         ][localPlayer.augmentId],
@@ -44,6 +44,29 @@ rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)":
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
 
     eventPlayer.augmentId = (eventPlayer.augmentId + (Augment.LEECH if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else 1)) % (Augment.LEECH + 1)
+
+
+rule "APOTHECARY CURE ICON":
+    @Event eachPlayer
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.augmentId == Augment.APOTHECARY
+    @Condition eventPlayer.augmentApothecaryPosition != null
+
+    # One icon per owner, kept on that player's entity budget. Moving the saved
+    # teleport point moves the same icon; death/hero changes leave it intact.
+    # No alive/charge guard: a spent teleport or dead owner still has a point.
+    createIcon(getPlayers(Team.1).filter(lambda player: isGameplayActive and not healthpacksCureNormally and player.isInfected and player.enhancementId != Enhancement.ZOMBIE_HYBRID), eventPlayer.augmentApothecaryPosition + offsetUpThreeQuartersConst + offsetUpHalfConst, Icon.POISON, IconReeval.VISIBILITY_AND_POSITION, Color.GREEN)
+    eventPlayer.augmentApothecaryCureIcon = getLastCreatedEntity()
+
+
+rule "APOTHECARY CURE ICON DISCONNECT CLEANUP":
+    @Event playerLeft
+    @Team 1
+    @Condition eventPlayer.augmentId == Augment.APOTHECARY
+    @Condition eventPlayer.augmentApothecaryCureIcon != null
+
+    destroyIcon(eventPlayer.augmentApothecaryCureIcon)
 
 
 rule "APOTHECARY ULTIMATE RECHARGE":
