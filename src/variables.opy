@@ -954,6 +954,10 @@ playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateS
 playervar actorTeamSlot25  # Team 2: botCandidateTarget; Team 1: enhancementStateSlot4. Receivers, not rule teams, own the storage.
 # First candidate that passed line of sight in selectTarget; null when none passed.
 #!define botCandidateTarget actorTeamSlot25
+# Wrestler: absolute grab deadline, set by bot-owned release on the human carrier.
+# Default zero allows the first grab; retained across death/hero changes.
+# Exclusive primary enhancement; no wait/chase/HUD owns this slot on Wrestler.
+#!define enhancementGrabReadyAt actorTeamSlot25
 # Overcharge: last credited native Healing Dealt / 3 + 10 * (offensive + defensive assists).
 # Exclusive primary enhancement; retained across death/hero changes, no wait/chase/HUD ownership.
 #!define enhancementCapacitorStatsSnapshot actorTeamSlot25

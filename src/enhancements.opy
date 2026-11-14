@@ -440,7 +440,8 @@ def useLivingProjectile():
     if eventPlayer.enhancementCarryState != WrestlerCarryState.NONE:
         eventPlayer.enhancementCarryState = WrestlerCarryState.THROW_REQUESTED
         return
-    if eventPlayer.isAttached or eventPlayer.isCrowdControlled:
+    # Check only on pickup input, before raycasting; throwing stays available.
+    if getTotalTimeElapsed() < eventPlayer.enhancementGrabReadyAt or eventPlayer.isAttached or eventPlayer.isCrowdControlled:
         return
     # One raycast per press, against all players so intervening actors block pickup.
     # Synchronous scratch only: the candidate is committed to both actors before returning.
@@ -496,6 +497,8 @@ rule "LIVING PROJECTILE RELEASE":
     eventPlayer.botIsAttached = false
     stopDamageModification(eventPlayer.wrestlerProtectionId)
     wrestlerCarrier.enhancementCarryState = WrestlerCarryState.NONE
+    # Every release starts the silent pickup cooldown, including interrupted holds.
+    wrestlerCarrier.enhancementGrabReadyAt = getTotalTimeElapsed() + 1.5
     eventPlayer.wrestlerZombieCarrier = null
     if wrestlerShouldThrow:
         eventPlayer.applyImpulse(wrestlerCarrier.getFacingDirection(), WRESTLER_THROW_SPEED, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
