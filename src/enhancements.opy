@@ -474,7 +474,7 @@ def useLivingProjectile():
 
 # All entries are booleans/default zero; negate this predicate for interruptions.
 # Keeping positive checks avoids repeated Not values in the compiled array.
-#!define livingProjectileValid(carrier) ([isGameplayActive, entityExists(carrier), carrier.isAlive(), not carrier.isAttached, carrier.getHero() == eventPlayer.wrestlerCarryHero, eventPlayer.isAlive(), not eventPlayer.botIsInitializing, not eventPlayer.botIsTeleporting, eventPlayer.botIsAttached, eventPlayer.hasStatus(Status.KNOCKED_DOWN)].all())
+#!define livingProjectileValid(carrier) ([isGameplayActive, entityExists(carrier), carrier.isAlive(), not carrier.isCrowdControlled, not carrier.isAttached, carrier.getHero() == eventPlayer.wrestlerCarryHero, eventPlayer.isAlive(), not eventPlayer.botIsInitializing, not eventPlayer.botIsTeleporting, eventPlayer.botIsAttached, eventPlayer.hasStatus(Status.KNOCKED_DOWN)].all())
 
 rule "LIVING PROJECTILE RELEASE":
     @Event eachPlayer
@@ -500,6 +500,9 @@ rule "LIVING PROJECTILE RELEASE":
     # Every release starts the silent pickup cooldown, including interrupted holds.
     wrestlerCarrier.enhancementGrabReadyAt = getTotalTimeElapsed() + 1.5
     eventPlayer.wrestlerZombieCarrier = null
+    # Death/CC drops the zombie immediately, without throw damage or delay.
+    if wrestlerCarrier.isDead() or wrestlerCarrier.isCrowdControlled:
+        eventPlayer.clearStatusEffect(Status.KNOCKED_DOWN)
     if wrestlerShouldThrow:
         eventPlayer.applyImpulse(wrestlerCarrier.getFacingDirection(), WRESTLER_THROW_SPEED, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
         eventPlayer.wrestlerThrowDamageCredit = wrestlerCarrier
