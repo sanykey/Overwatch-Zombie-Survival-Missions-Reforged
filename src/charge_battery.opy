@@ -26,8 +26,8 @@ macro initializeChargeBatteryMacro():
 rule "[CHARGE_BATTERY] RESET COOLDOWNS ON ULTIMATE":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.enhancementId == Enhancement.CHARGE_BATTERY
+    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    @Condition uiPhaseAndId(eventPlayer.enhancementId == Enhancement.CHARGE_BATTERY)
     @Condition eventPlayer.isUsingUltimate() == true
 
     # Run once on the ultimate condition's false-to-true transition.
@@ -68,8 +68,8 @@ rule "[CHARGE_BATTERY] PLACE BATTERY":
 rule "[CHARGE_BATTERY] USAGE AND COOLDOWNS":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.enhancementId == Enhancement.CHARGE_BATTERY
+    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    @Condition uiPhaseAndId(eventPlayer.enhancementId == Enhancement.CHARGE_BATTERY)
     @Condition eventPlayer.enhancementBatteryPosition
     @Condition playerTargetList.any(lambda player: isBatteryChargeEligible(player)) == true
     

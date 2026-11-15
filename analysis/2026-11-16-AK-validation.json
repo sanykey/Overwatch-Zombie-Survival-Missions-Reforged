@@ -1,0 +1,130 @@
+{
+  "inputFile": "2026-11-16-AJ-rollback-no-gameplay-visuals.ws.txt",
+  "inputSha256": "12fb308aab73fbca3f57cbb9dd6a98fae9820a5050020475ea52a34ef88a4482",
+  "baselineSha256": "bb7298a6da7ab541175aa4e1674e0f23667c2499c7600142f88b5f0b8f4dfe4e",
+  "outputSha256": "41e631ca260ce172ce27405f6227dd3da11733d4a618757515cb46ad68046e25",
+  "restored": [
+    {
+      "index": 279,
+      "name": "WRESTLER PULL DISCONNECT CLEANUP",
+      "savedElements": 8
+    },
+    {
+      "index": 287,
+      "name": "ENGINEER BEAM DISCONNECT CLEANUP",
+      "savedElements": 8
+    }
+  ],
+  "savedFromPrevious": 16,
+  "deltaFromAE": 94,
+  "modifiedRulesRemaining": 21,
+  "rankedRemaining": [
+    {
+      "index": 288,
+      "name": "ENGINEER SCRAP ARMOR DEPLETION",
+      "delta": 8
+    },
+    {
+      "index": 302,
+      "name": "[APOTHECARY AUGMENT] CURE ICON DISCONNECT CLEANUP",
+      "delta": 8
+    },
+    {
+      "index": 310,
+      "name": "GRAPNEL LAUNCHER DISCONNECT CLEANUP",
+      "delta": 8
+    },
+    {
+      "index": 140,
+      "name": "REINHARDT SHIELD SLAM STUN",
+      "delta": 5
+    },
+    {
+      "index": 25,
+      "name": "[CHARGE_BATTERY] RESET COOLDOWNS ON ULTIMATE",
+      "delta": 4
+    },
+    {
+      "index": 27,
+      "name": "[CHARGE_BATTERY] USAGE AND COOLDOWNS",
+      "delta": 4
+    },
+    {
+      "index": 266,
+      "name": "BULKING SEASON TOGGLES SIZE",
+      "delta": 4
+    },
+    {
+      "index": 268,
+      "name": "OVERCHARGE STORES HEALING AND ASSISTS",
+      "delta": 4
+    },
+    {
+      "index": 278,
+      "name": "WRESTLER PULL",
+      "delta": 4
+    },
+    {
+      "index": 282,
+      "name": "ENGINEER SCRAP INCOME",
+      "delta": 4
+    },
+    {
+      "index": 283,
+      "name": "ENGINEER ASSIST SCRAP",
+      "delta": 4
+    },
+    {
+      "index": 284,
+      "name": "ENGINEER ARMOR TRANSFER",
+      "delta": 4
+    },
+    {
+      "index": 285,
+      "name": "ENGINEER TURRET DEPLOY",
+      "delta": 4
+    },
+    {
+      "index": 294,
+      "name": "[HIGHRISE] RECHARGE",
+      "delta": 4
+    },
+    {
+      "index": 296,
+      "name": "[HIGHRISE] DOUBLE TAP",
+      "delta": 4
+    },
+    {
+      "index": 298,
+      "name": "[DASH] CHARGE RECHARGE",
+      "delta": 4
+    },
+    {
+      "index": 301,
+      "name": "[APOTHECARY AUGMENT] CURE ICON",
+      "delta": 4
+    },
+    {
+      "index": 309,
+      "name": "GRAPNEL LAUNCHER",
+      "delta": 4
+    },
+    {
+      "index": 311,
+      "name": "AMMO PACK MAGAZINES",
+      "delta": 4
+    },
+    {
+      "index": 312,
+      "name": "AMMO PACK REFILL FALLBACK",
+      "delta": 4
+    },
+    {
+      "index": 322,
+      "name": "PLAYER PICKS UP HEALTH PACK",
+      "delta": 1
+    }
+  ],
+  "verification": "Exactly two AE rule blocks restored; all other executable content/settings identical to previous checkpoint. Full decompiler accepted output; paired block compilation confirmed savings.",
+  "limitation": "No native game test. AJ is the last user-confirmed successful checkpoint; return to it if this backwards step regresses."
+}

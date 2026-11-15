@@ -1,0 +1,30 @@
+{
+  "inputSha256": "4c85df63f10b5d8ad6655b31e7856b5b3fff070285328305f912efd2edd360ec",
+  "outputSha256": "e01702888f2105f882d9e94b21887a1b3376162caa218c2ef1b157022f8eed7d",
+  "elements": 30384,
+  "deltaFromAO": 24,
+  "deltaFromV": 89,
+  "changedRules": [
+    {
+      "index": 62,
+      "name": "EFFECTS/TEXTS",
+      "calls": 6,
+      "waits": 5
+    },
+    {
+      "index": 114,
+      "name": "EFFECTS/TEXTS",
+      "calls": 4,
+      "waits": 3
+    },
+    {
+      "index": 313,
+      "name": "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)",
+      "calls": 5,
+      "waits": 4
+    }
+  ],
+  "verification": "Removing only 12 waits recovers AO. All Conditions and 17 fixes unchanged; all visuals retained. Full decompiler accepted output; paired block compilation confirmed +24 elements.",
+  "lifetimeReview": "Selected blocks have only visual creations and no ID captures, loops, subroutine calls or stored shared scratch. Other blocks, damage/healing actions and Create/ID-save pairs unmodified.",
+  "limitation": "Diagnostic only. Existing delays/visual parameters retained, panels finish up to 1.25 seconds later. Other players/blocks and objective/ability visuals may still create simultaneous bursts. Ignore Condition not yet protected against match-end cleanup. No native game test."
+}

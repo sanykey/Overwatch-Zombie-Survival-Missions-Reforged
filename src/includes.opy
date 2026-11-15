@@ -6,6 +6,7 @@
 #!include "directives.opy"
 #!include "settings.opy"
 #!include "variables.opy"
+#!include "ui_workarounds.opy"
 #!include "compressed numbers.opy"
 #!include "subroutines.opy"
 #!include "charge_battery.opy"

@@ -1,0 +1,742 @@
+{
+  "baseline": "D:\\projects\\Overwatch-Zombie-Survival-Missions-Reforged\\analysis\\2026-11-15-pregame-text-V-phase-safe-full-menu.ws.txt",
+  "inputSha256": "b011aefa8ad8ada51601b1d8b083b8911f24cbf76b427f63b18a8929ac893d9e",
+  "hudChanges": [
+    {
+      "index": 2,
+      "name": "Subroutine createRemainingObjectivesHud",
+      "creates": 1,
+      "ids": 1,
+      "destroys": 0
+    },
+    {
+      "index": 3,
+      "name": "setDifficulty",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 7,
+      "name": "objectivesManagement",
+      "creates": 60,
+      "ids": 45,
+      "destroys": 4
+    },
+    {
+      "index": 10,
+      "name": "botRespawnInitialization",
+      "creates": 20,
+      "ids": 20,
+      "destroys": 1
+    },
+    {
+      "index": 12,
+      "name": "explosionSequence",
+      "creates": 4,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 26,
+      "name": "[CHARGE_BATTERY] PLACE BATTERY",
+      "creates": 5,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 27,
+      "name": "[CHARGE_BATTERY] USAGE AND COOLDOWNS",
+      "creates": 3,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 28,
+      "name": "PREGAME QUICK TIPS FOR PLAYERS",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 34,
+      "name": "VARIABLE ASSIGNMENT",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 35,
+      "name": "START GAME",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 37,
+      "name": "GLOBAL MENU INITIALIZATION",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 38,
+      "name": "EFFECTS/TEXTS",
+      "creates": 11,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 39,
+      "name": "END VOTING",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 48,
+      "name": "EFFECTS/TEXT",
+      "creates": 7,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 49,
+      "name": "PLAYER SELECTS/RESELECTS HERO",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 61,
+      "name": "CYCLE PLAYER CAMERA",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 62,
+      "name": "EFFECTS/TEXTS",
+      "creates": 6,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 66,
+      "name": "ZOMBIE SHUFFLE",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 74,
+      "name": "WIN/LOSS CONDITIONS",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 75,
+      "name": "nukeMap",
+      "creates": 2,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 78,
+      "name": "INCREASE OBJECTIVE CAPTURE PERCENTAGE",
+      "creates": 4,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 79,
+      "name": "DECREASES CAPTURE PERCENTAGE",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 87,
+      "name": "bossReturn",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 89,
+      "name": "BIOMORPHING GOAL START",
+      "creates": 2,
+      "ids": 0,
+      "destroys": 2
+    },
+    {
+      "index": 91,
+      "name": "BIOWASTE IS PICKED UP",
+      "creates": 3,
+      "ids": 0,
+      "destroys": 2
+    },
+    {
+      "index": 92,
+      "name": "PLAYER DELIVERS RESOURCE VALUE",
+      "creates": 3,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 94,
+      "name": "BIOWASTE MANAGEMENT",
+      "creates": 2,
+      "ids": 2,
+      "destroys": 0
+    },
+    {
+      "index": 96,
+      "name": "INITIALIZE SURVIVOR TO BE RESCUED",
+      "creates": 6,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 104,
+      "name": "SURVIVOR REACHES EXTRACTION SITE",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 107,
+      "name": "BOTS TELEPORT TO THE EGG",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 111,
+      "name": "PLAYERS REPAIR TERMINALS",
+      "creates": 18,
+      "ids": 6,
+      "destroys": 0
+    },
+    {
+      "index": 114,
+      "name": "EFFECTS/TEXTS",
+      "creates": 4,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 116,
+      "name": "REVIVE PLAYER OR ADVANCE DEATH TIMER",
+      "creates": 4,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 119,
+      "name": "PLAYER AFK",
+      "creates": 2,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 121,
+      "name": "PLAYER AUTOMATIC RELOAD",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 122,
+      "name": "OBJECTIVE CHANGES AND PLAYER ENTITIES UPDATE",
+      "creates": 1,
+      "ids": 2,
+      "destroys": 2
+    },
+    {
+      "index": 144,
+      "name": "BOT INITIALIZATION",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 146,
+      "name": "BOT DIES",
+      "creates": 2,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 166,
+      "name": "MINIBOSS MESSAGE",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 178,
+      "name": "BRUTE (REIN) SUPER SEISMIC SLAM",
+      "creates": 2,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 185,
+      "name": "ZOMBIES SPAWN AT REIGNITED",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 192,
+      "name": "SLIMER (MERCY) TENTACLE GRAB",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 193,
+      "name": "PRIME SLIMER (EMRE) FLIGHT (BOSS)",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 194,
+      "name": "STRIKER (WRECKING BALL) PILE DRIVER",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 205,
+      "name": "DAYTAKER (ILLARI) BURST",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 209,
+      "name": "CADAVER (ANA) DETONATION",
+      "creates": 2,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 212,
+      "name": "SMOLDER (WINSTON) SEES PLAYER",
+      "creates": 2,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 215,
+      "name": "SMOLDER SUPER SLAM",
+      "creates": 2,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 217,
+      "name": "SMOLDER BOSS EVENT STARTS",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 222,
+      "name": "BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 227,
+      "name": "Subroutine smolderBoost",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 228,
+      "name": "Subroutine spawnGasCloud",
+      "creates": 2,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 233,
+      "name": "playReignitedWarningPair",
+      "creates": 2,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 239,
+      "name": "GENERATE SUPPLY DROPS",
+      "creates": 3,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 240,
+      "name": "EFFECT/TEXT (GLOBAL)",
+      "creates": 8,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 241,
+      "name": "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)",
+      "creates": 2,
+      "ids": 0,
+      "destroys": 2
+    },
+    {
+      "index": 242,
+      "name": "instantRevive (0-9)",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 243,
+      "name": "playerForceField (10-19)",
+      "creates": 4,
+      "ids": 2,
+      "destroys": 2
+    },
+    {
+      "index": 245,
+      "name": "noCooldowns (20-29)",
+      "creates": 2,
+      "ids": 1,
+      "destroys": 1
+    },
+    {
+      "index": 246,
+      "name": "airStrike (30-39)",
+      "creates": 7,
+      "ids": 2,
+      "destroys": 2
+    },
+    {
+      "index": 247,
+      "name": "beaconofHealing (40-49)",
+      "creates": 7,
+      "ids": 4,
+      "destroys": 4
+    },
+    {
+      "index": 248,
+      "name": "sentryTurret (50-59)",
+      "creates": 9,
+      "ids": 4,
+      "destroys": 2
+    },
+    {
+      "index": 249,
+      "name": "cloakingDevice (60-69)",
+      "creates": 7,
+      "ids": 2,
+      "destroys": 2
+    },
+    {
+      "index": 250,
+      "name": "superNano (70-79)",
+      "creates": 5,
+      "ids": 3,
+      "destroys": 3
+    },
+    {
+      "index": 251,
+      "name": "JETPACK FLIGHT",
+      "creates": 1,
+      "ids": 1,
+      "destroys": 1
+    },
+    {
+      "index": 252,
+      "name": "ultimateCharger (90-99)",
+      "creates": 2,
+      "ids": 1,
+      "destroys": 1
+    },
+    {
+      "index": 253,
+      "name": "stun (100-109)",
+      "creates": 4,
+      "ids": 1,
+      "destroys": 1
+    },
+    {
+      "index": 254,
+      "name": "powerUpUsage",
+      "creates": 8,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 255,
+      "name": "playAquaPowerUpSound",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 256,
+      "name": "POWER UP EFFECT/TEXT MANAGEMENT",
+      "creates": 2,
+      "ids": 2,
+      "destroys": 0
+    },
+    {
+      "index": 257,
+      "name": "EFFECT/TEXT (PERMANENT)",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 261,
+      "name": "finishPowerUpDrop",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 271,
+      "name": "HITCHHIKER ATTACH/DETATCH",
+      "creates": 2,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 275,
+      "name": "P.U.P. CONTROL",
+      "creates": 3,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 278,
+      "name": "WRESTLER PULL",
+      "creates": 1,
+      "ids": 1,
+      "destroys": 1
+    },
+    {
+      "index": 279,
+      "name": "WRESTLER PULL DISCONNECT CLEANUP",
+      "creates": 0,
+      "ids": 0,
+      "destroys": 1
+    },
+    {
+      "index": 284,
+      "name": "ENGINEER ARMOR TRANSFER",
+      "creates": 6,
+      "ids": 1,
+      "destroys": 1
+    },
+    {
+      "index": 285,
+      "name": "ENGINEER TURRET DEPLOY",
+      "creates": 2,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 286,
+      "name": "ENGINEER BEAM FADE",
+      "creates": 0,
+      "ids": 0,
+      "destroys": 1
+    },
+    {
+      "index": 287,
+      "name": "ENGINEER BEAM DISCONNECT CLEANUP",
+      "creates": 0,
+      "ids": 0,
+      "destroys": 1
+    },
+    {
+      "index": 293,
+      "name": "[LONG_REACH] extendAugmentMelee",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 300,
+      "name": "[DASH] SMOKE FADE",
+      "creates": 0,
+      "ids": 0,
+      "destroys": 1
+    },
+    {
+      "index": 301,
+      "name": "[APOTHECARY AUGMENT] CURE ICON",
+      "creates": 1,
+      "ids": 1,
+      "destroys": 0
+    },
+    {
+      "index": 302,
+      "name": "[APOTHECARY AUGMENT] CURE ICON DISCONNECT CLEANUP",
+      "creates": 0,
+      "ids": 0,
+      "destroys": 1
+    },
+    {
+      "index": 304,
+      "name": "AUGMENT MENU",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 306,
+      "name": "CROUCH + INTERACT (APOTHECARY TELEPORT / LASER BARRICADE)",
+      "creates": 6,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 308,
+      "name": "useAugmentAirAction",
+      "creates": 1,
+      "ids": 1,
+      "destroys": 0
+    },
+    {
+      "index": 309,
+      "name": "GRAPNEL LAUNCHER",
+      "creates": 3,
+      "ids": 1,
+      "destroys": 1
+    },
+    {
+      "index": 310,
+      "name": "GRAPNEL LAUNCHER DISCONNECT CLEANUP",
+      "creates": 0,
+      "ids": 0,
+      "destroys": 1
+    },
+    {
+      "index": 313,
+      "name": "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)",
+      "creates": 5,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 314,
+      "name": "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION",
+      "creates": 15,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 315,
+      "name": "applyHitEnhancements",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 318,
+      "name": "PLAYER EARNED ELIMINATION",
+      "creates": 2,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 319,
+      "name": "PLAYER DIED",
+      "creates": 0,
+      "ids": 0,
+      "destroys": 2
+    },
+    {
+      "index": 320,
+      "name": "PLAYER DEALT HEALING",
+      "creates": 2,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 321,
+      "name": "PLAYER DEALT DAMAGE",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 322,
+      "name": "PLAYER PICKS UP HEALTH PACK",
+      "creates": 1,
+      "ids": 0,
+      "destroys": 0
+    },
+    {
+      "index": 323,
+      "name": "[debug] Resource usage and server load",
+      "creates": 1,
+      "ids": 1,
+      "destroys": 1
+    }
+  ],
+  "guards": [
+    {
+      "index": 279,
+      "name": "WRESTLER PULL DISCONNECT CLEANUP",
+      "event": "Player Left Match",
+      "predicates": [
+        "Compare((Event Player).enhancementId, ==, 9)"
+      ],
+      "delta": 4
+    },
+    {
+      "index": 287,
+      "name": "ENGINEER BEAM DISCONNECT CLEANUP",
+      "event": "Player Left Match",
+      "predicates": [
+        "Compare((Event Player).enhancementId, ==, 11)"
+      ],
+      "delta": 4
+    },
+    {
+      "index": 302,
+      "name": "[APOTHECARY AUGMENT] CURE ICON DISCONNECT CLEANUP",
+      "event": "Player Left Match",
+      "predicates": [
+        "Compare((Event Player).augmentId, ==, 8)"
+      ],
+      "delta": 4
+    },
+    {
+      "index": 307,
+      "name": "KEVLAR RANGED DAMAGE COMPENSATION",
+      "event": "Player Took Damage",
+      "predicates": [
+        "Compare((Event Player).augmentId, ==, 1)"
+      ],
+      "delta": 4
+    },
+    {
+      "index": 310,
+      "name": "GRAPNEL LAUNCHER DISCONNECT CLEANUP",
+      "event": "Player Left Match",
+      "predicates": [
+        "Compare((Event Player).augmentId, ==, 6)"
+      ],
+      "delta": 4
+    }
+  ],
+  "totalGuardDelta": 20,
+  "verification": "AC/AD have identical full visual suppression. Only phase/Enhancement/Augment eligibility predicates in short native Team1 event handlers without waits/loops/subcalls are moved. Other Conditions retained. Predicates moved intact to one If at Actions entry. Undoing each guard and restoring Conditions recovers AC rule byte-for-byte. Full exports parsed; per-rule paired no-optimization compilation measured guard cost.",
+  "limitations": "Diagnostic builds. Visual IDs now store Null; native dummy entity IDs preserved. Handle-driven branches may differ from normal gameplay. No reduction in runtime CPU proven; more event Actions enter and evaluate a guard. Native UI fault remains a symptom, not proven server-crash mechanism. All visual definitions still stored disabled. No native game test."
+}

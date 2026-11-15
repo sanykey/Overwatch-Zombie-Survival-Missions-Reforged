@@ -57,8 +57,8 @@ rule "[DASH] CHARGE RECHARGE":
     @Event eachPlayer
     @Team 1
     # Menu selection passes through Dash; never seed another augment's shared cooldown.
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.augmentId == Augment.DASH
+    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    @Condition uiPhaseAndId(eventPlayer.augmentId == Augment.DASH)
     @Condition eventPlayer.augmentDashCharges < DASH_MAX_CHARGES
     @Condition getTotalTimeElapsed() >= eventPlayer.augmentDashReadyAt
 

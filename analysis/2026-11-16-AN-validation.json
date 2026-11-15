@@ -1,0 +1,100 @@
+{
+  "inputFile": "2026-11-16-AM-rollback-no-gameplay-visuals.ws.txt",
+  "inputSha256": "a4c2460523eca5cf9ee9bc181bc308c06c62e14e0148fe0e5b8bc103713715df",
+  "baselineSha256": "bb7298a6da7ab541175aa4e1674e0f23667c2499c7600142f88b5f0b8f4dfe4e",
+  "outputSha256": "cf63e20e322f586d24be88062a946376ec2c8c6986c9fc0a6b007c8f92d12902",
+  "restored": [
+    {
+      "index": 25,
+      "name": "[CHARGE_BATTERY] RESET COOLDOWNS ON ULTIMATE",
+      "savedElements": 4
+    },
+    {
+      "index": 27,
+      "name": "[CHARGE_BATTERY] USAGE AND COOLDOWNS",
+      "savedElements": 4
+    }
+  ],
+  "savedFromPrevious": 8,
+  "deltaFromAE": 57,
+  "modifiedRulesRemaining": 15,
+  "rankedRemaining": [
+    {
+      "index": 266,
+      "name": "BULKING SEASON TOGGLES SIZE",
+      "delta": 4
+    },
+    {
+      "index": 268,
+      "name": "OVERCHARGE STORES HEALING AND ASSISTS",
+      "delta": 4
+    },
+    {
+      "index": 278,
+      "name": "WRESTLER PULL",
+      "delta": 4
+    },
+    {
+      "index": 282,
+      "name": "ENGINEER SCRAP INCOME",
+      "delta": 4
+    },
+    {
+      "index": 283,
+      "name": "ENGINEER ASSIST SCRAP",
+      "delta": 4
+    },
+    {
+      "index": 284,
+      "name": "ENGINEER ARMOR TRANSFER",
+      "delta": 4
+    },
+    {
+      "index": 285,
+      "name": "ENGINEER TURRET DEPLOY",
+      "delta": 4
+    },
+    {
+      "index": 294,
+      "name": "[HIGHRISE] RECHARGE",
+      "delta": 4
+    },
+    {
+      "index": 296,
+      "name": "[HIGHRISE] DOUBLE TAP",
+      "delta": 4
+    },
+    {
+      "index": 298,
+      "name": "[DASH] CHARGE RECHARGE",
+      "delta": 4
+    },
+    {
+      "index": 301,
+      "name": "[APOTHECARY AUGMENT] CURE ICON",
+      "delta": 4
+    },
+    {
+      "index": 309,
+      "name": "GRAPNEL LAUNCHER",
+      "delta": 4
+    },
+    {
+      "index": 311,
+      "name": "AMMO PACK MAGAZINES",
+      "delta": 4
+    },
+    {
+      "index": 312,
+      "name": "AMMO PACK REFILL FALLBACK",
+      "delta": 4
+    },
+    {
+      "index": 322,
+      "name": "PLAYER PICKS UP HEALTH PACK",
+      "delta": 1
+    }
+  ],
+  "verification": "Exactly two AE rule blocks restored; all other executable content/settings identical to previous checkpoint. Full decompiler accepted output; paired block compilation confirmed savings.",
+  "limitation": "No native game test. AM is the last user-confirmed successful checkpoint; return to it if this backwards step regresses."
+}

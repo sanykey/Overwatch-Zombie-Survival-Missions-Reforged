@@ -181,24 +181,25 @@ rule "PLAYER DEALT DAMAGE":
 rule "PLAYER PICKS UP HEALTH PACK":
     @Event playerReceivedHealing
     @Team 1
-    @Condition eventWasHealthPack == true
 
-    eventPlayer.startHealingOverTime(null, 5, 20)
-    if isGameplayActive and eventPlayer.enhancementId == Enhancement.OVERCHARGE:
-        # Credit the actual pack healing; Apothecary's additional healing is measured below.
-        eventPlayer.enhancementCapacitorEnergy += eventHealing / 3
-    # Discover packs even after time expires for the teleport fallback.
-    if healthpackPositionList.all(lambda x: distance(x, eventPlayer) > 5):
-        healthpackPositionList.append(eventPlayer.getPosition())
-    if healthpacksCureNormally:
-        eventPlayer.stopAllDamageOverTime()
-        eventPlayer.clearStatusEffect(Status.BURNING)
-        if eventPlayer.infectionLevel > 0:
-            eventPlayer.isInfected = false
-            eventPlayer.infectionLevel = 0
-    elif eventPlayer.augmentId == Augment.APOTHECARY or getPlayers(Team.1).any(lambda owner: owner.augmentId == Augment.APOTHECARY and owner.augmentApothecaryPosition != null and distance(owner.augmentApothecaryPosition, eventPlayer) <= 5):
-        cureApothecaryAugmentInfectionMacro()
-    elif eventPlayer.isInfected:
-        smallMessage(eventPlayer, "Time has run out. Use an Apothecary's health pack to reduce infection.")
-    if eventPlayer.augmentId == Augment.APOTHECARY:
-        pickUpApothecaryAugmentHealthPackMacro()
+    # Event eligibility stays synchronous; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    if (eventWasHealthPack == true):
+        eventPlayer.startHealingOverTime(null, 5, 20)
+        if isGameplayActive and eventPlayer.enhancementId == Enhancement.OVERCHARGE:
+            # Credit the actual pack healing; Apothecary's additional healing is measured below.
+            eventPlayer.enhancementCapacitorEnergy += eventHealing / 3
+        # Discover packs even after time expires for the teleport fallback.
+        if healthpackPositionList.all(lambda x: distance(x, eventPlayer) > 5):
+            healthpackPositionList.append(eventPlayer.getPosition())
+        if healthpacksCureNormally:
+            eventPlayer.stopAllDamageOverTime()
+            eventPlayer.clearStatusEffect(Status.BURNING)
+            if eventPlayer.infectionLevel > 0:
+                eventPlayer.isInfected = false
+                eventPlayer.infectionLevel = 0
+        elif eventPlayer.augmentId == Augment.APOTHECARY or getPlayers(Team.1).any(lambda owner: owner.augmentId == Augment.APOTHECARY and owner.augmentApothecaryPosition != null and distance(owner.augmentApothecaryPosition, eventPlayer) <= 5):
+            cureApothecaryAugmentInfectionMacro()
+        elif eventPlayer.isInfected:
+            smallMessage(eventPlayer, "Time has run out. Use an Apothecary's health pack to reduce infection.")
+        if eventPlayer.augmentId == Augment.APOTHECARY:
+            pickUpApothecaryAugmentHealthPackMacro()

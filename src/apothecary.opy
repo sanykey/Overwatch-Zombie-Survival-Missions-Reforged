@@ -43,8 +43,8 @@ macro pickUpApothecaryAugmentHealthPackMacro():
 rule "[APOTHECARY AUGMENT] CURE ICON":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.augmentId == Augment.APOTHECARY
+    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    @Condition uiPhaseAndId(eventPlayer.augmentId == Augment.APOTHECARY)
     @Condition eventPlayer.augmentApothecaryPosition != null
 
     # One icon per owner, kept on that player's entity budget. Moving the saved
@@ -57,7 +57,7 @@ rule "[APOTHECARY AUGMENT] CURE ICON":
 rule "[APOTHECARY AUGMENT] CURE ICON DISCONNECT CLEANUP":
     @Event playerLeft
     @Team 1
-    @Condition eventPlayer.augmentId == Augment.APOTHECARY
-    @Condition eventPlayer.augmentApothecaryCureIcon != null
 
-    destroyIcon(eventPlayer.augmentApothecaryCureIcon)
+    # Event eligibility stays synchronous; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    if (eventPlayer.augmentId == Augment.APOTHECARY) and (eventPlayer.augmentApothecaryCureIcon != null):
+        destroyIcon(eventPlayer.augmentApothecaryCureIcon)

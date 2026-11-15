@@ -23,8 +23,8 @@ macro useHighriseAirActionMacro():
 rule "[HIGHRISE] RECHARGE":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.augmentId == Augment.HIGHRISE
+    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    @Condition uiPhaseAndId(eventPlayer.augmentId == Augment.HIGHRISE)
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isOnGround() == false
 
@@ -56,8 +56,8 @@ rule "[HIGHRISE] DOUBLE TAP":
     @Event eachPlayer
     @Team 1
     # The menu's Jump confirmation must not leave a timestamp in another augment's cooldown.
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.augmentId == Augment.HIGHRISE
+    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    @Condition uiPhaseAndId(eventPlayer.augmentId == Augment.HIGHRISE)
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
 

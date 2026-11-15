@@ -1,0 +1,265 @@
+{
+  "mode": "AR",
+  "amSha256": "a4c2460523eca5cf9ee9bc181bc308c06c62e14e0148fe0e5b8bc103713715df",
+  "aqSha256": "028bbc6a5da37598ba8a8e83027ff6b881bd33159e3f8306600b41f784280042",
+  "outputSha256": "b6c0baa6f38306aaa7bd30d003d078f49c34c6c140f100368cd5b10c09f2877a",
+  "restoredGroup": "text",
+  "restoredActions": 28,
+  "restoredIdSaves": 14,
+  "restoredLines": [
+    {
+      "rule": 7,
+      "line": 127,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 7,
+      "line": 137,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 7,
+      "line": 138,
+      "kind": "text",
+      "category": "id-save"
+    },
+    {
+      "rule": 7,
+      "line": 151,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 7,
+      "line": 152,
+      "kind": "text",
+      "category": "id-save"
+    },
+    {
+      "rule": 7,
+      "line": 156,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 7,
+      "line": 157,
+      "kind": "text",
+      "category": "id-save"
+    },
+    {
+      "rule": 7,
+      "line": 174,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 7,
+      "line": 175,
+      "kind": "text",
+      "category": "id-save"
+    },
+    {
+      "rule": 7,
+      "line": 191,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 7,
+      "line": 192,
+      "kind": "text",
+      "category": "id-save"
+    },
+    {
+      "rule": 7,
+      "line": 210,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 7,
+      "line": 211,
+      "kind": "text",
+      "category": "id-save"
+    },
+    {
+      "rule": 7,
+      "line": 213,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 7,
+      "line": 214,
+      "kind": "text",
+      "category": "id-save"
+    },
+    {
+      "rule": 7,
+      "line": 234,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 7,
+      "line": 235,
+      "kind": "text",
+      "category": "id-save"
+    },
+    {
+      "rule": 7,
+      "line": 257,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 7,
+      "line": 258,
+      "kind": "text",
+      "category": "id-save"
+    },
+    {
+      "rule": 7,
+      "line": 277,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 7,
+      "line": 278,
+      "kind": "text",
+      "category": "id-save"
+    },
+    {
+      "rule": 7,
+      "line": 291,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 7,
+      "line": 292,
+      "kind": "text",
+      "category": "id-save"
+    },
+    {
+      "rule": 62,
+      "line": 15,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 89,
+      "line": 14,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 91,
+      "line": 25,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 94,
+      "line": 17,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 94,
+      "line": 18,
+      "kind": "text",
+      "category": "id-save"
+    },
+    {
+      "rule": 96,
+      "line": 23,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 96,
+      "line": 27,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 111,
+      "line": 52,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 111,
+      "line": 53,
+      "kind": "text",
+      "category": "id-save"
+    },
+    {
+      "rule": 114,
+      "line": 19,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 240,
+      "line": 17,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 240,
+      "line": 19,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 240,
+      "line": 23,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 241,
+      "line": 43,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 256,
+      "line": 12,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 256,
+      "line": 15,
+      "kind": "text",
+      "category": "id-save"
+    },
+    {
+      "rule": 314,
+      "line": 78,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 314,
+      "line": 80,
+      "kind": "text",
+      "category": "action"
+    },
+    {
+      "rule": 314,
+      "line": 136,
+      "kind": "text",
+      "category": "action"
+    }
+  ],
+  "verification": "Conditions and all 17 fixes identical to AM/AQ. Every rule equals AM plus only reviewed AQ lines of selected category. ID saves and per-ID cleanup restored with matching object type. Full export parsed by OverPy.",
+  "limitation": "No native test. Visual-ID-driven branches may differ between enabled/disabled groups; native physical entities remain. AS includes visual and audio Play Effect calls. Counts describe source actions, not simultaneous objects."
+}

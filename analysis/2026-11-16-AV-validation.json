@@ -1,0 +1,73 @@
+{
+  "mode": "AV",
+  "inputSha256": "84664fa4d78d32b73e1da7f958aac0bb297117ea8a6d96d19e21a3252e3186c3",
+  "fullSha256": "4c85df63f10b5d8ad6655b31e7856b5b3fff070285328305f912efd2edd360ec",
+  "outputSha256": "c26e33d20b8356bafccab92bba2ffbe43f467cb6776b791fce9dbccbacc51f52",
+  "worldGroup": "bot",
+  "restoredActions": 39,
+  "restoredIdSaves": 20,
+  "restoredRules": [
+    {
+      "index": 10,
+      "name": "botRespawnInitialization"
+    },
+    {
+      "index": 107,
+      "name": "BOTS TELEPORT TO THE EGG"
+    },
+    {
+      "index": 144,
+      "name": "BOT INITIALIZATION"
+    },
+    {
+      "index": 146,
+      "name": "BOT DIES"
+    },
+    {
+      "index": 178,
+      "name": "BRUTE (REIN) SUPER SEISMIC SLAM"
+    },
+    {
+      "index": 185,
+      "name": "ZOMBIES SPAWN AT REIGNITED"
+    },
+    {
+      "index": 192,
+      "name": "SLIMER (MERCY) TENTACLE GRAB"
+    },
+    {
+      "index": 193,
+      "name": "PRIME SLIMER (EMRE) FLIGHT (BOSS)"
+    },
+    {
+      "index": 194,
+      "name": "STRIKER (WRECKING BALL) PILE DRIVER"
+    },
+    {
+      "index": 205,
+      "name": "DAYTAKER (ILLARI) BURST"
+    },
+    {
+      "index": 209,
+      "name": "CADAVER (ANA) DETONATION"
+    },
+    {
+      "index": 212,
+      "name": "SMOLDER (WINSTON) SEES PLAYER"
+    },
+    {
+      "index": 215,
+      "name": "SMOLDER SUPER SLAM"
+    },
+    {
+      "index": 217,
+      "name": "SMOLDER BOSS EVENT STARTS"
+    },
+    {
+      "index": 222,
+      "name": "BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)"
+    }
+  ],
+  "verification": "Every output rule equals AP plus selected world visual/ID/cleanup lines from AO. All Conditions/17 fixes preserved. Full decompiler accepted both exports.",
+  "limitation": "No native game test. Bot group means explicit Team2 events plus botRespawnInitialization, not every effect a zombie might cause. Shared helpers and objectives are in other group. Screen HUD is enabled equally in both."
+}

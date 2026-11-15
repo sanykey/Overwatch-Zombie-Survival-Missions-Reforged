@@ -152,23 +152,23 @@ rule "SIERRA TRACKING SHOT HACK":
     @Event playerDealtDamage
     @Team 1
     @Hero sierra
-    @Condition eventAbility == Button.SECONDARY_FIRE
-    @Condition victim.getTeam() == Team.2
 
-    # Match Tracking Shot's base mark duration from impact. No waits: every hit
-    # can apply/refresh Hack, including when another source already hacked it.
-    victim.setStatusEffect(attacker, Status.HACKED, 3)
+    # Event eligibility stays synchronous; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    if (eventAbility == Button.SECONDARY_FIRE) and (victim.getTeam() == Team.2):
+        # Match Tracking Shot's base mark duration from impact. No waits: every hit
+        # can apply/refresh Hack, including when another source already hacked it.
+        victim.setStatusEffect(attacker, Status.HACKED, 3)
 
 
 rule "REINHARDT SHIELD SLAM STUN":
     @Event playerDealtDamage
     @Team 1
     @Hero reinhardt
-    @Condition eventPlayer.isFiringSecondaryFire() == true
-    @Condition victim != attacker
 
-    # Shield-active damage is sufficient; no perk or event-ability check.
-    victim.setStatusEffect(attacker, Status.STUNNED, 0.8)
+    # Event eligibility stays synchronous; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    if (eventPlayer.isFiringSecondaryFire() == true) and (victim != attacker):
+        # Shield-active damage is sufficient; no perk or event-ability check.
+        victim.setStatusEffect(attacker, Status.STUNNED, 0.8)
 
 
 rule "BRIGITTE SHIELD BASH STUN":
@@ -188,7 +188,7 @@ rule "CASSIDY FLASHBANG STUN":
     @Event playerDealtDamage
     @Team 1
     @Hero cassidy
-    @Condition eventAbility == Button.ABILITY_2
-    @Condition victim != attacker
-    
-    victim.setStatusEffect(attacker, Status.STUNNED, 0.8)
+
+    # Event eligibility stays synchronous; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    if (eventAbility == Button.ABILITY_2) and (victim != attacker):
+        victim.setStatusEffect(attacker, Status.STUNNED, 0.8)

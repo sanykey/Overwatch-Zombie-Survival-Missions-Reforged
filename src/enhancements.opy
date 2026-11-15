@@ -117,8 +117,8 @@ def applyBulkingSeasonStats():
 rule "BULKING SEASON TOGGLES SIZE":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.enhancementId == Enhancement.BULKING_SEASON
+    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    @Condition uiPhaseAndId(eventPlayer.enhancementId == Enhancement.BULKING_SEASON)
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
 
@@ -157,8 +157,8 @@ rule "OVERCHARGE ARM ON DOUBLE CROUCH":
 rule "OVERCHARGE STORES HEALING AND ASSISTS":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
+    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    @Condition uiPhaseAndId(eventPlayer.enhancementId == Enhancement.OVERCHARGE)
     @Condition overchargeEarnedEnergyTotal(eventPlayer) != eventPlayer.enhancementCapacitorStatsSnapshot
 
     # Native Healing Dealt is the only healing source; event healing can include passive regeneration.
@@ -392,8 +392,8 @@ def resetBattleAbilityCharge():
 rule "WRESTLER PULL":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.enhancementId == Enhancement.WRESTLER
+    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    @Condition uiPhaseAndId(eventPlayer.enhancementId == Enhancement.WRESTLER)
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
 
@@ -428,10 +428,10 @@ rule "WRESTLER PULL":
 rule "WRESTLER PULL DISCONNECT CLEANUP":
     @Event playerLeft
     @Team 1
-    @Condition eventPlayer.enhancementId == Enhancement.WRESTLER
-    @Condition eventPlayer.enhancementPullBeamEntity != null
 
-    destroyEffect(eventPlayer.enhancementPullBeamEntity)
+    # Event eligibility stays synchronous; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    if (eventPlayer.enhancementId == Enhancement.WRESTLER) and (eventPlayer.enhancementPullBeamEntity != null):
+        destroyEffect(eventPlayer.enhancementPullBeamEntity)
 
 
 def useLivingProjectile():
@@ -517,8 +517,8 @@ rule "LIVING PROJECTILE RELEASE":
 rule "ENGINEER SCRAP INCOME":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.enhancementId == Enhancement.ENGINEER
+    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    @Condition uiPhaseAndId(eventPlayer.enhancementId == Enhancement.ENGINEER)
     @Condition eventPlayer.isAlive() == true
 
     eventPlayer.enhancementScrap = min(ENGINEER_SCRAP_MAX, eventPlayer.enhancementScrap + ENGINEER_SCRAP_PASSIVE_RATE)
@@ -530,8 +530,8 @@ rule "ENGINEER SCRAP INCOME":
 rule "ENGINEER ASSIST SCRAP":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.enhancementId == Enhancement.ENGINEER
+    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    @Condition uiPhaseAndId(eventPlayer.enhancementId == Enhancement.ENGINEER)
     @Condition earnedAssists(eventPlayer) != eventPlayer.engineerScrapAssistSnapshot
 
     # Overcharge-style stat delta: pay once per new offensive/defensive assist,
@@ -546,8 +546,8 @@ rule "ENGINEER ASSIST SCRAP":
 rule "ENGINEER ARMOR TRANSFER":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.enhancementId == Enhancement.ENGINEER
+    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    @Condition uiPhaseAndId(eventPlayer.enhancementId == Enhancement.ENGINEER)
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
 
@@ -608,8 +608,8 @@ rule "ENGINEER ARMOR TRANSFER":
 rule "ENGINEER TURRET DEPLOY":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.enhancementId == Enhancement.ENGINEER
+    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    @Condition uiPhaseAndId(eventPlayer.enhancementId == Enhancement.ENGINEER)
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == false
@@ -644,23 +644,23 @@ rule "ENGINEER BEAM FADE":
 rule "ENGINEER BEAM DISCONNECT CLEANUP":
     @Event playerLeft
     @Team 1
-    @Condition eventPlayer.enhancementId == Enhancement.ENGINEER
-    @Condition eventPlayer.enhancementScrapBeamEntity != null
 
-    # Follow the project's supplied playerLeft cleanup pattern: consume the
-    # departing player's effect ID synchronously in the departure event.
-    destroyEffect(eventPlayer.enhancementScrapBeamEntity)
+    # Event eligibility stays synchronous; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    if (eventPlayer.enhancementId == Enhancement.ENGINEER) and (eventPlayer.enhancementScrapBeamEntity != null):
+        # Follow the project's supplied playerLeft cleanup pattern: consume the
+        # departing player's effect ID synchronously in the departure event.
+        destroyEffect(eventPlayer.enhancementScrapBeamEntity)
 
 
 rule "ENGINEER SCRAP ARMOR DEPLETION":
     @Event playerTookDamage
     @Team 1
-    @Condition eventPlayer.scrapArmorAmount > 0
-    @Condition eventDamage > 0
 
-    # Damage order on armored targets: scrap stacks absorb first, the older
-    # recoverable Kevlar pool last. Subtracting the full hit capped at the
-    # modeled remainder is therefore exact: overflow into Kevlar and health
-    # never touches this mirror, and healing cannot refill the non-recoverable
-    # pools.
-    eventPlayer.scrapArmorAmount = max(0, eventPlayer.scrapArmorAmount - eventDamage)
+    # Event eligibility stays synchronous; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    if (eventPlayer.scrapArmorAmount > 0) and (eventDamage > 0):
+        # Damage order on armored targets: scrap stacks absorb first, the older
+        # recoverable Kevlar pool last. Subtracting the full hit capped at the
+        # modeled remainder is therefore exact: overflow into Kevlar and health
+        # never touches this mirror, and healing cannot refill the non-recoverable
+        # pools.
+        eventPlayer.scrapArmorAmount = max(0, eventPlayer.scrapArmorAmount - eventDamage)

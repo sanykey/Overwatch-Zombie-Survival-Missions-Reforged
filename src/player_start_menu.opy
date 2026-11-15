@@ -55,7 +55,7 @@ rule "EFFECTS/TEXT":
     #In world hero text
     createInWorldText(getAllPlayers().filter(lambda _: eventPlayer.pregameState < PregameState.READY), heroIcon(eventPlayer.getHero()) if eventPlayer.pregameState == PregameState.HERO_SELECTED else "?", eventPlayer.pregamePosition + offsetUpHalfConst, 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING)
     # Spacing creation prevents native hero-select UI corruption in the tested
-    # full-menu build (analysis/2026-11-15-pregame-text-test.ru.md, U).
+    # full-menu build; see WORKSHOP_NATIVE_UI_CORRUPTION.md in the project root.
     # Abort remaining creation when Pregame ends, before it can outlive cleanup.
     # No shared scratch is retained across these waits.
     wait(0.25, Wait.ABORT_WHEN_FALSE)

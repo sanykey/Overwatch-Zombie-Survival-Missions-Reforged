@@ -24,6 +24,14 @@ Everything in `analysis/` (reports, temporary scripts, validation results) belon
 - Compiled global and player variable names must not exceed 31 characters; the Workshop rejects longer names at import with "variable is too long" (a 37-character name fails, 31-character names import fine; 32 is often cited but unverified). `#!define` macro aliases are not compiled and are exempt. When a declaration would exceed the limit, shorten the compiled name (e.g. abbreviate a middle word) and keep the descriptive alias in `src/variables.opy`.
 - When reusing variables, account for value lifetimes, which player owns each player variable, waits, asynchronous calls, `chase`, and HUD/effect reevaluation. Follow the contracts and comments in `src/variables.opy`; use meaningful `#!define` aliases for shared temporary slots and document their purpose near each use.
 
+## Workshop Native UI Diagnostics
+
+For disappearing native hero portraits or related Workshop UI corruption, start with
+[WORKSHOP_NATIVE_UI_CORRUPTION.md](WORKSHOP_NATIVE_UI_CORRUPTION.md). The source macro
+`uiPhaseAndId`, selected event-body guards and Pregame creation spacing are intentional
+workarounds. Check the compiled Conditions and first menu opening in fresh matches;
+results from builds with disabled visuals do not establish a fix with full visuals.
+
 ## Commit Messages
 
 Never commit changes to git unless the user explicitly asks for it. Only create a commit when the user directly requests one.

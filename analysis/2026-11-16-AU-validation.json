@@ -1,0 +1,245 @@
+{
+  "mode": "AU",
+  "inputSha256": "84664fa4d78d32b73e1da7f958aac0bb297117ea8a6d96d19e21a3252e3186c3",
+  "fullSha256": "4c85df63f10b5d8ad6655b31e7856b5b3fff070285328305f912efd2edd360ec",
+  "outputSha256": "b0879e2cfb52317eff29258aed40270b01af0e9ed74a4891d91227b70ea8da70",
+  "worldGroup": "other",
+  "restoredActions": 229,
+  "restoredIdSaves": 67,
+  "restoredRules": [
+    {
+      "index": 7,
+      "name": "objectivesManagement"
+    },
+    {
+      "index": 12,
+      "name": "explosionSequence"
+    },
+    {
+      "index": 26,
+      "name": "[CHARGE_BATTERY] PLACE BATTERY"
+    },
+    {
+      "index": 27,
+      "name": "[CHARGE_BATTERY] USAGE AND COOLDOWNS"
+    },
+    {
+      "index": 62,
+      "name": "EFFECTS/TEXTS"
+    },
+    {
+      "index": 75,
+      "name": "nukeMap"
+    },
+    {
+      "index": 78,
+      "name": "INCREASE OBJECTIVE CAPTURE PERCENTAGE"
+    },
+    {
+      "index": 79,
+      "name": "DECREASES CAPTURE PERCENTAGE"
+    },
+    {
+      "index": 87,
+      "name": "bossReturn"
+    },
+    {
+      "index": 89,
+      "name": "BIOMORPHING GOAL START"
+    },
+    {
+      "index": 91,
+      "name": "BIOWASTE IS PICKED UP"
+    },
+    {
+      "index": 92,
+      "name": "PLAYER DELIVERS RESOURCE VALUE"
+    },
+    {
+      "index": 94,
+      "name": "BIOWASTE MANAGEMENT"
+    },
+    {
+      "index": 96,
+      "name": "INITIALIZE SURVIVOR TO BE RESCUED"
+    },
+    {
+      "index": 104,
+      "name": "SURVIVOR REACHES EXTRACTION SITE"
+    },
+    {
+      "index": 111,
+      "name": "PLAYERS REPAIR TERMINALS"
+    },
+    {
+      "index": 114,
+      "name": "EFFECTS/TEXTS"
+    },
+    {
+      "index": 116,
+      "name": "REVIVE PLAYER OR ADVANCE DEATH TIMER"
+    },
+    {
+      "index": 122,
+      "name": "OBJECTIVE CHANGES AND PLAYER ENTITIES UPDATE"
+    },
+    {
+      "index": 227,
+      "name": "Subroutine smolderBoost"
+    },
+    {
+      "index": 228,
+      "name": "Subroutine spawnGasCloud"
+    },
+    {
+      "index": 233,
+      "name": "playReignitedWarningPair"
+    },
+    {
+      "index": 239,
+      "name": "GENERATE SUPPLY DROPS"
+    },
+    {
+      "index": 240,
+      "name": "EFFECT/TEXT (GLOBAL)"
+    },
+    {
+      "index": 241,
+      "name": "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)"
+    },
+    {
+      "index": 243,
+      "name": "playerForceField (10-19)"
+    },
+    {
+      "index": 245,
+      "name": "noCooldowns (20-29)"
+    },
+    {
+      "index": 246,
+      "name": "airStrike (30-39)"
+    },
+    {
+      "index": 247,
+      "name": "beaconofHealing (40-49)"
+    },
+    {
+      "index": 248,
+      "name": "sentryTurret (50-59)"
+    },
+    {
+      "index": 249,
+      "name": "cloakingDevice (60-69)"
+    },
+    {
+      "index": 250,
+      "name": "superNano (70-79)"
+    },
+    {
+      "index": 251,
+      "name": "JETPACK FLIGHT"
+    },
+    {
+      "index": 252,
+      "name": "ultimateCharger (90-99)"
+    },
+    {
+      "index": 253,
+      "name": "stun (100-109)"
+    },
+    {
+      "index": 254,
+      "name": "powerUpUsage"
+    },
+    {
+      "index": 255,
+      "name": "playAquaPowerUpSound"
+    },
+    {
+      "index": 256,
+      "name": "POWER UP EFFECT/TEXT MANAGEMENT"
+    },
+    {
+      "index": 261,
+      "name": "finishPowerUpDrop"
+    },
+    {
+      "index": 275,
+      "name": "P.U.P. CONTROL"
+    },
+    {
+      "index": 278,
+      "name": "WRESTLER PULL"
+    },
+    {
+      "index": 279,
+      "name": "WRESTLER PULL DISCONNECT CLEANUP"
+    },
+    {
+      "index": 284,
+      "name": "ENGINEER ARMOR TRANSFER"
+    },
+    {
+      "index": 286,
+      "name": "ENGINEER BEAM FADE"
+    },
+    {
+      "index": 287,
+      "name": "ENGINEER BEAM DISCONNECT CLEANUP"
+    },
+    {
+      "index": 293,
+      "name": "[LONG_REACH] extendAugmentMelee"
+    },
+    {
+      "index": 300,
+      "name": "[DASH] SMOKE FADE"
+    },
+    {
+      "index": 301,
+      "name": "[APOTHECARY AUGMENT] CURE ICON"
+    },
+    {
+      "index": 302,
+      "name": "[APOTHECARY AUGMENT] CURE ICON DISCONNECT CLEANUP"
+    },
+    {
+      "index": 306,
+      "name": "CROUCH + INTERACT (APOTHECARY TELEPORT / LASER BARRICADE)"
+    },
+    {
+      "index": 308,
+      "name": "useAugmentAirAction"
+    },
+    {
+      "index": 309,
+      "name": "GRAPNEL LAUNCHER"
+    },
+    {
+      "index": 310,
+      "name": "GRAPNEL LAUNCHER DISCONNECT CLEANUP"
+    },
+    {
+      "index": 314,
+      "name": "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION"
+    },
+    {
+      "index": 315,
+      "name": "applyHitEnhancements"
+    },
+    {
+      "index": 319,
+      "name": "PLAYER DIED"
+    },
+    {
+      "index": 320,
+      "name": "PLAYER DEALT HEALING"
+    },
+    {
+      "index": 321,
+      "name": "PLAYER DEALT DAMAGE"
+    }
+  ],
+  "verification": "Every output rule equals AP plus selected world visual/ID/cleanup lines from AO. All Conditions/17 fixes preserved. Full decompiler accepted both exports.",
+  "limitation": "No native game test. Bot group means explicit Team2 events plus botRespawnInitialization, not every effect a zombie might cause. Shared helpers and objectives are in other group. Screen HUD is enabled equally in both."
+}

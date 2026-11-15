@@ -1,0 +1,909 @@
+{
+  "inputSha256": "b011aefa8ad8ada51601b1d8b083b8911f24cbf76b427f63b18a8929ac893d9e",
+  "outputSha256": "201d0946dbf3dffa59a6ae0c952c1fb1bee198e7ac1ba4e122ed27f87572920a",
+  "elements": 31379,
+  "deltaFromV": 1084,
+  "conditionsBefore": 838,
+  "conditionsAfter": 625,
+  "changes": [
+    {
+      "index": 25,
+      "name": "[CHARGE_BATTERY] RESET COOLDOWNS ON ULTIMATE",
+      "before": 3,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare((Event Player).enhancementId, ==, 6)",
+        "Compare(Is Using Ultimate(Event Player), ==, True)"
+      ]
+    },
+    {
+      "index": 26,
+      "name": "[CHARGE_BATTERY] PLACE BATTERY",
+      "before": 5,
+      "after": 1,
+      "predicates": [
+        "Compare(Is Button Held(Event Player, Button(Melee)), ==, True)",
+        "Compare((Event Player).enhancementId, ==, 6)",
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare((Event Player).actorTeamSlot25, <=, Null)"
+      ]
+    },
+    {
+      "index": 27,
+      "name": "[CHARGE_BATTERY] USAGE AND COOLDOWNS",
+      "before": 4,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare((Event Player).enhancementId, ==, 6)",
+        "Compare((Event Player).actorTeamSlot22, !=, False)",
+        "Compare(Is True For Any(Global.playerTargetList, And(And(And(Has Spawned(Current Array Element), Is Alive(Current Array Element)), Compare(Ultimate Charge Percent(Current Array Element), <, 100)), Compare(Distance Between(Current Array Element, (Event Player).actorTeamSlot22), <, Multiply(1.5, (Current Array Element).sizeScale)))), ==, True)"
+      ]
+    },
+    {
+      "index": 60,
+      "name": "DISABLE PLAYER CAMERA WHILE AIMING",
+      "before": 4,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare((Event Player).actorTeamSlot28, ==, 1)",
+        "Compare(Array Contains(Array(Hero(Ana), Hero(Ashe), Hero(Widowmaker), Hero(Emre)), Hero Of(Event Player)), ==, True)",
+        "Compare(Is Firing Secondary(Event Player), ==, True)"
+      ]
+    },
+    {
+      "index": 61,
+      "name": "CYCLE PLAYER CAMERA",
+      "before": 7,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare((Event Player).isPlayerActive, ==, True)",
+        "Compare(Is Dummy Bot(Event Player), ==, False)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Is Button Held(Event Player, Button(Reload)), ==, True)",
+        "Compare(Is Button Held(Event Player, Button(Crouch)), ==, True)",
+        "Compare(Is Button Held(Event Player, Button(Jump)), ==, True)"
+      ]
+    },
+    {
+      "index": 71,
+      "name": "PLAYERS IN EXTRACTION POINT CONTROL",
+      "before": 7,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isObjectiveComplete, ==, False)",
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare(Has Spawned(Event Player), ==, True)",
+        "Compare(Global.phaseSlot10, ==, 1)",
+        "Compare(Count Of(Global.objectivePositionList), ==, 1)",
+        "Compare(Subtract(Y Component Of(Global.currentObjectivePosition), Y Component Of(Eye Position(Event Player))), <, 2)",
+        "Compare(Distance Between(Event Player, Vector(X Component Of(Global.currentObjectivePosition), Y Component Of(Position Of(Event Player)), Z Component Of(Global.currentObjectivePosition))), <, Global.objectiveRad)"
+      ]
+    },
+    {
+      "index": 72,
+      "name": "EXTRACTION ZONE INFECTION INCREASE",
+      "before": 6,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Count Of(Global.objectivePositionList), ==, 1)",
+        "Compare(Global.extractionZoneRad, <, 200)",
+        "Compare(Distance Between(Global.currentObjectivePosition, Event Player), >, Global.extractionZoneRad)",
+        "Compare(Array Contains(Global.objectivePlayerList, Event Player), ==, False)"
+      ]
+    },
+    {
+      "index": 92,
+      "name": "PLAYER DELIVERS RESOURCE VALUE",
+      "before": 6,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.phaseSlot10, ==, 3)",
+        "Compare((Event Player).invisibilityCount, !=, True)",
+        "Compare((Event Player).biomorphingResourceAmount, >, Null)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Distance Between(Global.currentObjectivePosition, Event Player), <, Global.objectiveRad)",
+        "Compare((Event Player).isAfk, !=, True)"
+      ]
+    },
+    {
+      "index": 96,
+      "name": "INITIALIZE SURVIVOR TO BE RESCUED",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.phaseSlot10, ==, 4)",
+        "Compare(Global.objectiveActorSlot, ==, Event Player)"
+      ]
+    },
+    {
+      "index": 97,
+      "name": "SURVIVOR TO BE RESCUED DIES",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.phaseSlot10, ==, 4)",
+        "Compare(Global.objectiveActorSlot, ==, Event Player)"
+      ]
+    },
+    {
+      "index": 108,
+      "name": "EGG SWITCHES THE POSITION FOR YOU",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.phaseSlot10, ==, 6)",
+        "Compare(First Of(Global.bossStateList), ==, Victim)"
+      ]
+    },
+    {
+      "index": 110,
+      "name": "PLAYERS AT TERMINALS CONTROLS",
+      "before": 6,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.phaseSlot10, ==, 7)",
+        "Compare(Global.isObjectiveComplete, ==, False)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Has Spawned(Event Player), ==, True)",
+        "Compare((Event Player).invisibilityCount, !=, True)",
+        "Compare(Is True For Any(Filtered Array(Global.objectivePositionsSlot, Compare(Value In Array(Global.objectiveProgressSlot, Current Array Index), <, 100)), And(Compare(Distance Between(Current Array Element, Event Player), <, Global.objectiveRad), Compare(X Component Of(Current Array Element), !=, Null))), ==, True)"
+      ]
+    },
+    {
+      "index": 113,
+      "name": "PLAYER INITIALIZATION",
+      "before": 4,
+      "after": 1,
+      "predicates": [
+        "Compare(Is Game In Progress, ==, True)",
+        "Compare(Global.isPregameSetup, !=, True)",
+        "Compare(Has Spawned(Event Player), ==, True)",
+        "Compare(Is Dummy Bot(Event Player), ==, False)"
+      ]
+    },
+    {
+      "index": 114,
+      "name": "EFFECTS/TEXTS",
+      "before": 6,
+      "after": 1,
+      "predicates": [
+        "Compare(Is Game In Progress, ==, True)",
+        "Compare((Event Player).isPlayerActive, ==, True)",
+        "Compare(Has Spawned(Event Player), ==, True)",
+        "Compare(Global.isPregameSetup, !=, True)",
+        "Compare(Is Dummy Bot(Event Player), ==, False)",
+        "Compare((Event Player).isHeroSwitchRespawn, ==, False)"
+      ]
+    },
+    {
+      "index": 115,
+      "name": "PLAYER GETS DOWNED",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).isPlayerActive, ==, True)",
+        "Compare(Is Dummy Bot(Event Player), ==, False)"
+      ]
+    },
+    {
+      "index": 116,
+      "name": "REVIVE PLAYER OR ADVANCE DEATH TIMER",
+      "before": 5,
+      "after": 1,
+      "predicates": [
+        "Compare(Is Dead(Event Player), ==, True)",
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare((Event Player).isPlayerActive, ==, True)",
+        "Compare((Event Player).rescueTimeRemaining, >, Null)",
+        "Compare(Is Dummy Bot(Event Player), ==, False)"
+      ]
+    },
+    {
+      "index": 117,
+      "name": "PLAYER CLEARS DAMAGE OVER TIME",
+      "before": 3,
+      "after": 1,
+      "predicates": [
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Is Dummy Bot(Event Player), ==, False)",
+        "Compare(Or(Has Status(Event Player, Phased Out), Has Status(Event Player, Invincible)), ==, True)"
+      ]
+    },
+    {
+      "index": 119,
+      "name": "PLAYER AFK",
+      "before": 11,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isPregameSetup, !=, True)",
+        "Compare(Workshop Setting Toggle(Custom String(\"General\"), Custom String(\"Allow players to go AFK\u0001\"), True, 3), ==, True)",
+        "Compare((Event Player).isPlayerActive, ==, True)",
+        "Compare((Event Player).isAttached, !=, True)",
+        "Compare(Magnitude Of(Throttle Of(Event Player)), ==, False)",
+        "Compare(Is Dummy Bot(Event Player), ==, False)",
+        "Compare(Has Spawned(Event Player), ==, True)",
+        "Compare(Is Button Held(Event Player, Button(Primary Fire)), ==, False)",
+        "Compare(Is Button Held(Event Player, Button(Secondary Fire)), ==, False)",
+        "Compare(Array Contains(Global.objectivePlayerList, Event Player), ==, False)",
+        "Compare(Is Communicating Any Voice line(Event Player), ==, False)"
+      ]
+    },
+    {
+      "index": 120,
+      "name": "PLAYER SWITCHES HERO",
+      "before": 3,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare(Is Button Held(Event Player, Button(Reload)), ==, True)",
+        "Compare(Is Alive(Event Player), ==, True)"
+      ]
+    },
+    {
+      "index": 121,
+      "name": "PLAYER AUTOMATIC RELOAD",
+      "before": 4,
+      "after": 1,
+      "predicates": [
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Ammo(Event Player, False), ==, Null)",
+        "Compare(Max Ammo(Event Player, False), !=, Null)",
+        "Compare(Hero Of(Event Player), !=, Hero(Illari))"
+      ]
+    },
+    {
+      "index": 123,
+      "name": "PLAYER TARGET (ADD)",
+      "before": 6,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare((Event Player).isAfk, !=, True)",
+        "Compare(Has Spawned(Event Player), ==, True)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Array Contains(Global.playerTargetList, Event Player), ==, False)",
+        "Compare(Is Dummy Bot(Event Player), ==, False)"
+      ]
+    },
+    {
+      "index": 124,
+      "name": "PLAYER TARGET (REMOVE)",
+      "before": 3,
+      "after": 1,
+      "predicates": [
+        "Compare(Or(Is Dead(Event Player), Not(Has Spawned(Event Player))), ==, True)",
+        "Compare(Array Contains(Global.playerTargetList, Event Player), ==, True)",
+        "Compare(Is Dummy Bot(Event Player), ==, False)"
+      ]
+    },
+    {
+      "index": 129,
+      "name": "ANA SELF SUPER NANO",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare(Is Button Held(Event Player, Button(Ultimate)), ==, True)",
+        "Compare(Ultimate Charge Percent(Event Player), >=, 100)"
+      ]
+    },
+    {
+      "index": 132,
+      "name": "DOOMFIST INVIS WHILE ULTING",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare(Is Using Ultimate(Event Player), ==, True)"
+      ]
+    },
+    {
+      "index": 133,
+      "name": "MOIRA & VENTURE INVIS WHILE USING SKILL",
+      "before": 3,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare(Is Using Ability 1(Event Player), ==, True)",
+        "Compare(Array Contains(Array(Hero(Moira), Hero(Venture)), Hero Of(Event Player)), ==, True)"
+      ]
+    },
+    {
+      "index": 134,
+      "name": "TRACER INVIS WHILE RECALLING",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare(Is Using Ability 2(Event Player), ==, True)"
+      ]
+    },
+    {
+      "index": 139,
+      "name": "SIERRA TRACKING SHOT HACK",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare(Event Ability, ==, Button(Secondary Fire))",
+        "Compare(Team Of(Victim), ==, Team 2)"
+      ]
+    },
+    {
+      "index": 140,
+      "name": "REINHARDT SHIELD SLAM STUN",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare(Is Firing Secondary(Event Player), ==, True)",
+        "Compare(Victim, !=, Attacker)"
+      ]
+    },
+    {
+      "index": 141,
+      "name": "BRIGITTE SHIELD BASH STUN",
+      "before": 3,
+      "after": 1,
+      "predicates": [
+        "Compare(Event Ability, ==, Button(Primary Fire))",
+        "Compare(Is Firing Secondary(Event Player), ==, True)",
+        "Compare(Victim, !=, Attacker)"
+      ]
+    },
+    {
+      "index": 142,
+      "name": "CASSIDY FLASHBANG STUN",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare(Event Ability, ==, Button(Ability 2))",
+        "Compare(Victim, !=, Attacker)"
+      ]
+    },
+    {
+      "index": 180,
+      "name": "BRUTE KNOCKDOWN",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare(Event Ability, ==, Button(Primary Fire))",
+        "Compare(Hero Of(Attacker), ==, Hero(Reinhardt))"
+      ]
+    },
+    {
+      "index": 241,
+      "name": "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)",
+      "before": 3,
+      "after": 1,
+      "predicates": [
+        "Compare(Is Button Held(Event Player, Button(Interact)), ==, True)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Is Dummy Bot(Event Player), ==, False)"
+      ]
+    },
+    {
+      "index": 251,
+      "name": "JETPACK FLIGHT",
+      "before": 4,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Is Button Held(Event Player, Button(Jump)), ==, True)",
+        "Compare((Event Player).actorTeamSlot17, >, Null)"
+      ]
+    },
+    {
+      "index": 258,
+      "name": "PLAYER DROPS POWER UP (MANUAL)",
+      "before": 3,
+      "after": 1,
+      "predicates": [
+        "Compare(Is Button Held(Event Player, Button(Reload)), ==, True)",
+        "Compare(And(Global.isGameplayActive, Is Alive(Event Player)), ==, True)",
+        "Compare(Or(Compare((Event Player).actorTeamSlot2, !=, Null), And(Compare((Event Player).augmentId, ==, 9), Compare(Count Of((Event Player).augmentState0), >, Null))), ==, True)"
+      ]
+    },
+    {
+      "index": 262,
+      "name": "ZOMBIE HYBRID",
+      "before": 5,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).enhancementId, ==, 1)",
+        "Compare(Is Button Held(Event Player, Button(Melee)), ==, True)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare((Event Player).actorTeamSlot22, <=, Null)",
+        "Compare((Event Player).infectionLevel, >=, 1)"
+      ]
+    },
+    {
+      "index": 263,
+      "name": "PYROTECHNIC APPLIES DAMAGE",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).enhancementId, ==, 4)",
+        "Compare((Event Player).actorTeamSlot22, !=, Empty Array)"
+      ]
+    },
+    {
+      "index": 264,
+      "name": "BORN TO BATTLE PLAYER USES ABILITY CHARGE",
+      "before": 3,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).enhancementId, ==, 5)",
+        "Compare((Event Player).actorTeamSlot22, >, Null)",
+        "Compare(Is True For Any(Array(Button(Secondary Fire), Button(Ability 1), Button(Ability 2), Button(Crouch), Button(Jump)), Is Button Held(Event Player, Current Array Element)), ==, True)"
+      ]
+    },
+    {
+      "index": 266,
+      "name": "BULKING SEASON TOGGLES SIZE",
+      "before": 4,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare((Event Player).enhancementId, ==, 2)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Is Button Held(Event Player, Button(Melee)), ==, True)"
+      ]
+    },
+    {
+      "index": 267,
+      "name": "OVERCHARGE ARM ON DOUBLE CROUCH",
+      "before": 6,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Is Button Held(Event Player, Button(Crouch)), ==, True)",
+        "Compare((Event Player).enhancementId, ==, 13)",
+        "Compare((Event Player).actorTeamSlot22, >, Null)",
+        "Compare((Event Player).actorTeamSlot23, ==, Null)"
+      ]
+    },
+    {
+      "index": 268,
+      "name": "OVERCHARGE STORES HEALING AND ASSISTS",
+      "before": 3,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare((Event Player).enhancementId, ==, 13)",
+        "Compare(Add(Divide(Player Stat(Event Player, Healing Dealt), 3), Multiply(10, Add(Player Stat(Event Player, Offensive Assists), Player Stat(Event Player, Defensive Assists)))), !=, (Event Player).actorTeamSlot25)"
+      ]
+    },
+    {
+      "index": 269,
+      "name": "OVERCHARGE CLEARS CHARGE",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).actorTeamSlot23, >, Null)",
+        "Compare(Or(Is Dead(Event Player), And(Compare((Event Player).actorTeamSlot24, >, Null), Compare(Total Time Elapsed, >=, (Event Player).actorTeamSlot24))), ==, True)"
+      ]
+    },
+    {
+      "index": 271,
+      "name": "HITCHHIKER ATTACH/DETATCH",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).enhancementId, ==, 7)",
+        "Compare(Or(Is Button Held(Event Player, Button(Crouch)), And((Event Player).isAttached, Or(Or(Or(Or(Or(Or(Not(And(Has Spawned(Event Player), Has Spawned((Event Player).actorTeamSlot22))), Is Dead(Event Player)), Is Dead((Event Player).actorTeamSlot22)), Not(Entity Exists((Event Player).actorTeamSlot22))), Has Status(Event Player, Knocked Down)), Has Status((Event Player).actorTeamSlot22, Knocked Down)), Compare(Distance Between(Event Player, (Event Player).actorTeamSlot22), >, Multiply(3, ((Event Player).actorTeamSlot22).sizeScale))))), ==, True)"
+      ]
+    },
+    {
+      "index": 273,
+      "name": "HITCHHIKER LIFEBONDS",
+      "before": 5,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).enhancementId, ==, 7)",
+        "Compare((Event Player).isAttached, ==, True)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Is Alive((Event Player).actorTeamSlot22), ==, True)",
+        "Compare(Absolute Value(Subtract(Normalized Health(Event Player), Normalized Health((Event Player).actorTeamSlot22))), >, 0.01)"
+      ]
+    },
+    {
+      "index": 274,
+      "name": "P.U.P. TARGET",
+      "before": 4,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).enhancementId, ==, 8)",
+        "Compare((Event Player).enhancementPupCooldown, <=, Null)",
+        "Compare((Event Player).actorTeamSlot24, ==, Null)",
+        "Compare(Is True For Any(All Living Players(Team 2), And(Compare((Current Array Element).actorTeamSlot5, ==, Event Player), Compare(Distance Between(Event Player, Current Array Element), <, 10))), ==, True)"
+      ]
+    },
+    {
+      "index": 275,
+      "name": "P.U.P. CONTROL",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).enhancementId, ==, 8)",
+        "Compare((Event Player).actorTeamSlot24, !=, Null)"
+      ]
+    },
+    {
+      "index": 278,
+      "name": "WRESTLER PULL",
+      "before": 4,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare((Event Player).enhancementId, ==, 9)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Is Button Held(Event Player, Button(Melee)), ==, True)"
+      ]
+    },
+    {
+      "index": 279,
+      "name": "WRESTLER PULL DISCONNECT CLEANUP",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).enhancementId, ==, 9)",
+        "Compare((Event Player).actorTeamSlot24, !=, Null)"
+      ]
+    },
+    {
+      "index": 282,
+      "name": "ENGINEER SCRAP INCOME",
+      "before": 3,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare((Event Player).enhancementId, ==, 11)",
+        "Compare(Is Alive(Event Player), ==, True)"
+      ]
+    },
+    {
+      "index": 283,
+      "name": "ENGINEER ASSIST SCRAP",
+      "before": 3,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare((Event Player).enhancementId, ==, 11)",
+        "Compare(Add(Player Stat(Event Player, Offensive Assists), Player Stat(Event Player, Defensive Assists)), !=, (Event Player).engineerScrapAssistSnapshot)"
+      ]
+    },
+    {
+      "index": 284,
+      "name": "ENGINEER ARMOR TRANSFER",
+      "before": 4,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare((Event Player).enhancementId, ==, 11)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Is Button Held(Event Player, Button(Crouch)), ==, True)"
+      ]
+    },
+    {
+      "index": 285,
+      "name": "ENGINEER TURRET DEPLOY",
+      "before": 5,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare((Event Player).enhancementId, ==, 11)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Is Button Held(Event Player, Button(Melee)), ==, True)",
+        "Compare(Is Button Held(Event Player, Button(Crouch)), ==, False)"
+      ]
+    },
+    {
+      "index": 286,
+      "name": "ENGINEER BEAM FADE",
+      "before": 3,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).enhancementId, ==, 11)",
+        "Compare((Event Player).actorTeamSlot23, !=, Null)",
+        "Compare(Total Time Elapsed, >=, (Event Player).actorTeamSlot25)"
+      ]
+    },
+    {
+      "index": 287,
+      "name": "ENGINEER BEAM DISCONNECT CLEANUP",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).enhancementId, ==, 11)",
+        "Compare((Event Player).actorTeamSlot23, !=, Null)"
+      ]
+    },
+    {
+      "index": 288,
+      "name": "ENGINEER SCRAP ARMOR DEPLETION",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).scrapArmorAmount, >, Null)",
+        "Compare(Event Damage, >, Null)"
+      ]
+    },
+    {
+      "index": 289,
+      "name": "[LONG_REACH] MELEE PUSH",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Is Button Held(Event Player, Button(Melee)), ==, True)"
+      ]
+    },
+    {
+      "index": 290,
+      "name": "[LONG_REACH] QUICK MELEE",
+      "before": 7,
+      "after": 1,
+      "predicates": [
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Is Meleeing(Event Player), ==, True)",
+        "Compare(Array Contains(Array(Hero(Reinhardt), Hero(Brigitte)), Hero Of(Event Player)), ==, False)",
+        "Compare(Or(Compare(Hero Of(Event Player), !=, Hero(Torbjörn)), Compare(Weapon(Event Player), !=, 2)), ==, True)",
+        "Compare(Or(Compare(Hero Of(Event Player), !=, Hero(Vendetta)), Not(Is Firing Primary(Event Player))), ==, True)",
+        "Compare(Or(Compare(Hero Of(Event Player), !=, Hero(Junker Queen)), Not(Is Using Ability 2(Event Player))), ==, True)",
+        "Compare(Is Using Ultimate(Event Player), ==, False)"
+      ]
+    },
+    {
+      "index": 291,
+      "name": "[LONG_REACH] MELEE WEAPONS",
+      "before": 12,
+      "after": 1,
+      "predicates": [
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Array Contains(Global.augmentMeleeWeaponHeroListConst, Hero Of(Event Player)), ==, True)",
+        "Compare(Or(Compare(Hero Of(Event Player), !=, Hero(Genji)), Is Using Ultimate(Event Player)), ==, True)",
+        "Compare(Or(Compare(Hero Of(Event Player), !=, Hero(D.Mon)), Not(Is In Alternate Form(Event Player))), ==, True)",
+        "Compare(And(Array Contains(Array(Hero(D.Mon), Hero(Ramattra)), Hero Of(Event Player)), Is Meleeing(Event Player)), ==, False)",
+        "Compare(Or(Compare(Hero Of(Event Player), !=, Hero(Torbjörn)), Compare(Weapon(Event Player), ==, 2)), ==, True)",
+        "Compare(Or(Compare(Hero Of(Event Player), !=, Hero(Ramattra)), Compare(Max Health Of Type(Event Player, Armor), >, Multiply((Event Player).initialMaxHealth, 0.4))), ==, True)",
+        "Compare(Is Firing Secondary(Event Player), ==, False)",
+        "Compare(Or(Compare(Hero Of(Event Player), ==, Hero(Ramattra)), Not(Is Using Ability 1(Event Player))), ==, True)",
+        "Compare(Or(Compare(Hero Of(Event Player), ==, Hero(Torbjörn)), Not(Is Using Ability 2(Event Player))), ==, True)",
+        "Compare(Or(Not(Is Using Ultimate(Event Player)), Array Contains(Array(Hero(Genji), Hero(Brigitte), Hero(Ramattra)), Hero Of(Event Player))), ==, True)",
+        "Compare((Event Player).isCrowdControlled, ==, False)"
+      ]
+    },
+    {
+      "index": 292,
+      "name": "[LONG_REACH] CARNAGE",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Is Using Ability 2(Event Player), ==, True)"
+      ]
+    },
+    {
+      "index": 294,
+      "name": "[HIGHRISE] RECHARGE",
+      "before": 4,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare((Event Player).augmentId, ==, 3)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Is On Ground(Event Player), ==, False)"
+      ]
+    },
+    {
+      "index": 295,
+      "name": "[HIGHRISE] AIR ACTION INPUT",
+      "before": 5,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).augmentId, ==, 3)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare((Event Player).augmentState1, ==, True)",
+        "Compare(Is On Ground(Event Player), ==, False)",
+        "Compare(Is Button Held(Event Player, Button(Jump)), ==, True)"
+      ]
+    },
+    {
+      "index": 296,
+      "name": "[HIGHRISE] DOUBLE TAP",
+      "before": 4,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare((Event Player).augmentId, ==, 3)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Is Button Held(Event Player, Button(Jump)), ==, True)"
+      ]
+    },
+    {
+      "index": 297,
+      "name": "[HIGHRISE] AIRBORNE DAMAGE",
+      "before": 3,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).augmentId, ==, 3)",
+        "Compare((Event Player).augmentState3, ==, True)",
+        "Compare(Is Alive(Event Player), ==, True)"
+      ]
+    },
+    {
+      "index": 298,
+      "name": "[DASH] CHARGE RECHARGE",
+      "before": 4,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare((Event Player).augmentId, ==, 2)",
+        "Compare((Event Player).augmentState2, <, 2)",
+        "Compare(Total Time Elapsed, >=, (Event Player).augmentState0)"
+      ]
+    },
+    {
+      "index": 299,
+      "name": "[DASH] DOUBLE TAP",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).augmentId, ==, 2)",
+        "Compare(Is Alive(Event Player), ==, True)"
+      ]
+    },
+    {
+      "index": 300,
+      "name": "[DASH] SMOKE FADE",
+      "before": 3,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).augmentId, ==, 2)",
+        "Compare((Event Player).augmentState1, !=, Null)",
+        "Compare(Total Time Elapsed, >=, (Event Player).augmentState3)"
+      ]
+    },
+    {
+      "index": 301,
+      "name": "[APOTHECARY AUGMENT] CURE ICON",
+      "before": 3,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare((Event Player).augmentId, ==, 8)",
+        "Compare((Event Player).augmentState0, !=, Null)"
+      ]
+    },
+    {
+      "index": 302,
+      "name": "[APOTHECARY AUGMENT] CURE ICON DISCONNECT CLEANUP",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).augmentId, ==, 8)",
+        "Compare((Event Player).augmentState2, !=, Null)"
+      ]
+    },
+    {
+      "index": 303,
+      "name": "[LASER_BARRICADE AUGMENT] BLOCKS ZOMBIES",
+      "before": 3,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).augmentId, ==, 7)",
+        "Compare((Event Player).augmentBarrierHealth, >, Null)",
+        "Compare(Is True For Any(All Living Players(Team 2), And(And(And(Compare(Distance Between((Event Player).augmentState3, Vector(X Component Of(Position Of(Current Array Element)), Y Component Of(Position Of((Event Player).augmentState3)), Z Component Of(Position Of(Current Array Element)))), <, 2.5), Compare(Y Component Of(Position Of(Current Array Element)), <, Add(Y Component Of((Event Player).augmentState3), 2))), Compare(Y Component Of(Eye Position(Current Array Element)), >, Y Component Of((Event Player).augmentState3))), Compare(Distance Between(Vector(X Component Of(Position Of(Current Array Element)), Y Component Of((Event Player).actorTeamSlot26), Z Component Of(Position Of(Current Array Element))), Add((Event Player).actorTeamSlot26, Multiply((Event Player).augmentState1, Min(5, Absolute Value(Dot Product((Event Player).augmentState1, Subtract(Vector(X Component Of(Position Of(Current Array Element)), Y Component Of((Event Player).actorTeamSlot26), Z Component Of(Position Of(Current Array Element))), (Event Player).actorTeamSlot26))))))), <, 1.5))), ==, True)"
+      ]
+    },
+    {
+      "index": 306,
+      "name": "CROUCH + INTERACT (APOTHECARY TELEPORT / LASER BARRICADE)",
+      "before": 5,
+      "after": 1,
+      "predicates": [
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Is Button Held(Event Player, Button(Crouch)), ==, True)",
+        "Compare(Is Button Held(Event Player, Button(Interact)), ==, True)",
+        "Compare(Or(Compare((Event Player).enhancementId, !=, 9), Compare((Event Player).actorTeamSlot22, ==, Null)), ==, True)",
+        "Compare(Or(And(And(Compare((Event Player).augmentId, ==, 8), Compare((Event Player).augmentState1, ==, True)), Or(Compare((Event Player).augmentState0, !=, Null), Compare(Global.healthpackPositionList, !=, Empty Array))), And(Compare((Event Player).augmentId, ==, 7), Compare((Event Player).augmentState2, ==, Null))), ==, True)"
+      ]
+    },
+    {
+      "index": 307,
+      "name": "KEVLAR RANGED DAMAGE COMPENSATION",
+      "before": 5,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).augmentId, ==, 1)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Event Damage, >, Null)",
+        "Compare(Attacker, !=, Null)",
+        "Compare(Team Of(Attacker), ==, Team 2)"
+      ]
+    },
+    {
+      "index": 309,
+      "name": "GRAPNEL LAUNCHER",
+      "before": 6,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare((Event Player).augmentId, ==, 6)",
+        "Compare(Has Spawned(Event Player), ==, True)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Is Button Held(Event Player, Button(Crouch)), ==, True)",
+        "Compare(Is Button Held(Event Player, Button(Jump)), ==, True)"
+      ]
+    },
+    {
+      "index": 310,
+      "name": "GRAPNEL LAUNCHER DISCONNECT CLEANUP",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare((Event Player).augmentId, ==, 6)",
+        "Compare((Event Player).augmentState2, !=, Null)"
+      ]
+    },
+    {
+      "index": 311,
+      "name": "AMMO PACK MAGAZINES",
+      "before": 4,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare((Event Player).augmentId, ==, 5)",
+        "Compare(Has Spawned(Event Player), ==, True)",
+        "Compare(Is Alive(Event Player), ==, True)"
+      ]
+    },
+    {
+      "index": 312,
+      "name": "AMMO PACK REFILL FALLBACK",
+      "before": 8,
+      "after": 1,
+      "predicates": [
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare((Event Player).augmentId, ==, 5)",
+        "Compare(Has Spawned(Event Player), ==, True)",
+        "Compare(Is Alive(Event Player), ==, True)",
+        "Compare(Hero Of(Event Player), ==, First Of((Event Player).augmentState1))",
+        "Compare(Weapon(Event Player), ==, Value In Array((Event Player).augmentState1, True))",
+        "Compare((Event Player).augmentState2, !=, Null)",
+        "Compare(Or(Or(Compare(Compare(Ammo(Event Player, False), <, Max Ammo(Event Player, False)), !=, First Of((Event Player).augmentState2)), Compare(Compare(Ammo(Event Player, True), <, Max Ammo(Event Player, True)), !=, Value In Array((Event Player).augmentState2, True))), Compare(Is Reloading(Event Player), !=, Value In Array((Event Player).augmentState2, 2))), ==, True)"
+      ]
+    },
+    {
+      "index": 314,
+      "name": "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION",
+      "before": 4,
+      "after": 1,
+      "predicates": [
+        "Compare(Has Spawned(Event Player), ==, True)",
+        "Compare(Global.isGameplayActive, ==, True)",
+        "Compare(Is Dummy Bot(Event Player), ==, False)",
+        "Compare((Event Player).isHeroSwitchRespawn, ==, False)"
+      ]
+    },
+    {
+      "index": 321,
+      "name": "PLAYER DEALT DAMAGE",
+      "before": 2,
+      "after": 1,
+      "predicates": [
+        "Compare(Victim, !=, Attacker)",
+        "Compare(Event Damage, >, Null)"
+      ]
+    }
+  ],
+  "verification": "All Events/Actions and settings retained. AST conjunction comparison preserved every predicate. Disabled-optimization roundtrip preserved condition counts; paired compile measured element delta.",
+  "limitation": "Diagnostic only. Fewer condition entries do not prove reduced CPU. Grouping may affect engine bookkeeping/scheduling. Pregame-only and non-Team1 rules not grouped. No native game test."
+}

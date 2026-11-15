@@ -1,0 +1,174 @@
+{
+  "inputFile": "2026-11-16-AY-full-visuals-27-rule-fixes.ws.txt",
+  "inputSha256": "6dc1f59ab427820806db950e5ed470cb17c087e6185c835f12fcee7ac0f0b53c",
+  "vSha256": "b011aefa8ad8ada51601b1d8b083b8911f24cbf76b427f63b18a8929ac893d9e",
+  "outputSha256": "9434af37d0983414e7eaa9fea1d97f6ed2b02debacfafeddc4837cae6f5b211b",
+  "restored": [
+    {
+      "index": 307,
+      "name": "KEVLAR RANGED DAMAGE COMPENSATION",
+      "savedElements": 17
+    },
+    {
+      "index": 141,
+      "name": "BRIGITTE SHIELD BASH STUN",
+      "savedElements": 9
+    },
+    {
+      "index": 139,
+      "name": "SIERRA TRACKING SHOT HACK",
+      "savedElements": 8
+    },
+    {
+      "index": 142,
+      "name": "CASSIDY FLASHBANG STUN",
+      "savedElements": 8
+    }
+  ],
+  "savedFromPrevious": 42,
+  "elements": 30405,
+  "deltaFromV": 110,
+  "modifiedRulesRemaining": 23,
+  "rankedRemaining": [
+    {
+      "index": 279,
+      "name": "WRESTLER PULL DISCONNECT CLEANUP",
+      "kind": "event",
+      "delta": 8
+    },
+    {
+      "index": 287,
+      "name": "ENGINEER BEAM DISCONNECT CLEANUP",
+      "kind": "event",
+      "delta": 8
+    },
+    {
+      "index": 288,
+      "name": "ENGINEER SCRAP ARMOR DEPLETION",
+      "kind": "event",
+      "delta": 8
+    },
+    {
+      "index": 302,
+      "name": "[APOTHECARY AUGMENT] CURE ICON DISCONNECT CLEANUP",
+      "kind": "event",
+      "delta": 8
+    },
+    {
+      "index": 310,
+      "name": "GRAPNEL LAUNCHER DISCONNECT CLEANUP",
+      "kind": "event",
+      "delta": 8
+    },
+    {
+      "index": 140,
+      "name": "REINHARDT SHIELD SLAM STUN",
+      "kind": "event",
+      "delta": 5
+    },
+    {
+      "index": 25,
+      "name": "[CHARGE_BATTERY] RESET COOLDOWNS ON ULTIMATE",
+      "kind": "ongoing",
+      "delta": 4
+    },
+    {
+      "index": 27,
+      "name": "[CHARGE_BATTERY] USAGE AND COOLDOWNS",
+      "kind": "ongoing",
+      "delta": 4
+    },
+    {
+      "index": 266,
+      "name": "BULKING SEASON TOGGLES SIZE",
+      "kind": "ongoing",
+      "delta": 4
+    },
+    {
+      "index": 268,
+      "name": "OVERCHARGE STORES HEALING AND ASSISTS",
+      "kind": "ongoing",
+      "delta": 4
+    },
+    {
+      "index": 278,
+      "name": "WRESTLER PULL",
+      "kind": "ongoing",
+      "delta": 4
+    },
+    {
+      "index": 282,
+      "name": "ENGINEER SCRAP INCOME",
+      "kind": "ongoing",
+      "delta": 4
+    },
+    {
+      "index": 283,
+      "name": "ENGINEER ASSIST SCRAP",
+      "kind": "ongoing",
+      "delta": 4
+    },
+    {
+      "index": 284,
+      "name": "ENGINEER ARMOR TRANSFER",
+      "kind": "ongoing",
+      "delta": 4
+    },
+    {
+      "index": 285,
+      "name": "ENGINEER TURRET DEPLOY",
+      "kind": "ongoing",
+      "delta": 4
+    },
+    {
+      "index": 294,
+      "name": "[HIGHRISE] RECHARGE",
+      "kind": "ongoing",
+      "delta": 4
+    },
+    {
+      "index": 296,
+      "name": "[HIGHRISE] DOUBLE TAP",
+      "kind": "ongoing",
+      "delta": 4
+    },
+    {
+      "index": 298,
+      "name": "[DASH] CHARGE RECHARGE",
+      "kind": "ongoing",
+      "delta": 4
+    },
+    {
+      "index": 301,
+      "name": "[APOTHECARY AUGMENT] CURE ICON",
+      "kind": "ongoing",
+      "delta": 4
+    },
+    {
+      "index": 309,
+      "name": "GRAPNEL LAUNCHER",
+      "kind": "ongoing",
+      "delta": 4
+    },
+    {
+      "index": 311,
+      "name": "AMMO PACK MAGAZINES",
+      "kind": "ongoing",
+      "delta": 4
+    },
+    {
+      "index": 312,
+      "name": "AMMO PACK REFILL FALLBACK",
+      "kind": "ongoing",
+      "delta": 4
+    },
+    {
+      "index": 322,
+      "name": "PLAYER PICKS UP HEALTH PACK",
+      "kind": "event",
+      "delta": 1
+    }
+  ],
+  "verification": "Only selected rules restored exactly from full V; every other rule and settings unchanged from previous checkpoint. Full decompilation and paired compilation passed. All visuals remain enabled.",
+  "limitation": "No native game test. AY is the last user-confirmed successful full-visual checkpoint; restore it if this backwards step regresses."
+}

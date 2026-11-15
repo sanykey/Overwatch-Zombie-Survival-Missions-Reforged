@@ -1,0 +1,11 @@
+{
+  "mode": "AX",
+  "inputSha256": "4c85df63f10b5d8ad6655b31e7856b5b3fff070285328305f912efd2edd360ec",
+  "outputSha256": "8af56f0f945561ec56b160a8f255aad812841583413d4b7c0950f6b3c0ca182f",
+  "elements": 30362,
+  "deltaFromAO": 2,
+  "cleanupWorldVisuals": false,
+  "pauseSeconds": 0.25,
+  "verification": "Only three world cleanup actions (AW) and matched wait (AW/AX) inserted after original 5-second hold, before hero exclusion. Removing insertion recovers AO. Full export parsed; paired block compile confirmed delta.",
+  "limitation": "No native test. AW removes global world cues for all players, but does not erase their ID slots or create history. Visual-ID-dependent branches may react or recreate objects during the wait. Screen HUD, native models, physical projectiles and mechanics remain. Runtime counts must be observed; failure after cleanup does not prove previous creation alone is causal."
+}

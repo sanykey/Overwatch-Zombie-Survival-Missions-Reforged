@@ -114,8 +114,8 @@ def useAugmentAirAction():
 rule "GRAPNEL LAUNCHER":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER
+    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    @Condition uiPhaseAndId(eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER)
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
@@ -177,19 +177,19 @@ rule "GRAPNEL LAUNCHER":
 rule "GRAPNEL LAUNCHER DISCONNECT CLEANUP":
     @Event playerLeft
     @Team 1
-    @Condition eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER
-    @Condition eventPlayer.augmentGrapnelState != null
 
-    # Follow the project's supplied playerLeft cleanup pattern: consume the
-    # departing player's effect ID synchronously in the departure event.
-    destroyEffect(eventPlayer.augmentGrapnelState[1])
+    # Event eligibility stays synchronous; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    if (eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER) and (eventPlayer.augmentGrapnelState != null):
+        # Follow the project's supplied playerLeft cleanup pattern: consume the
+        # departing player's effect ID synchronously in the departure event.
+        destroyEffect(eventPlayer.augmentGrapnelState[1])
 
 
 rule "AMMO PACK MAGAZINES":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.augmentId == Augment.AMMO_PACK
+    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    @Condition uiPhaseAndId(eventPlayer.augmentId == Augment.AMMO_PACK)
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isAlive() == true
 
@@ -231,8 +231,8 @@ rule "AMMO PACK MAGAZINES":
 rule "AMMO PACK REFILL FALLBACK":
     @Event eachPlayer
     @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.augmentId == Augment.AMMO_PACK
+    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    @Condition uiPhaseAndId(eventPlayer.augmentId == Augment.AMMO_PACK)
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.getHero() == eventPlayer.augmentAmmoLoadout[0]
