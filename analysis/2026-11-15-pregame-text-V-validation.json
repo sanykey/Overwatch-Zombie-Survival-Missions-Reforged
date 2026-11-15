@@ -1,0 +1,15 @@
+{
+  "compiler": "OverPy 9.7.21",
+  "elements": 30295,
+  "deltaFromA": 8,
+  "warnings": [],
+  "outputSha256": "b011aefa8ad8ada51601b1d8b083b8911f24cbf76b427f63b18a8929ac893d9e",
+  "verified": "All executable content matches frozen A except four Wait(0.25, Abort When False) actions. Changing only their behavior back to Ignore Condition matches user-validated U. Five original player text calls and both original rule Conditions retained.",
+  "exports": [
+    "main.ws.txt",
+    "src/includes.ws.txt",
+    "analysis/2026-11-15-pregame-text-V-phase-safe-full-menu.ws.txt"
+  ],
+  "tradeoff": "Adds 8 elements and four one-time waits per player; all five menu labels appear over 1 second. No new rules, variables or repeated polling. CPU improvement not measured.",
+  "limitation": "Native success reported for U. V/source cancellation mode has compiled structural verification only; needs game checks for hero selection, ending pregame during spacing, late join and Reload during gameplay."
+}

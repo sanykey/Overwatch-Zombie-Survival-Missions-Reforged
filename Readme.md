@@ -164,7 +164,9 @@ During pregame voting, selecting a hero and then returning to the native hero-se
 
 The problem can appear or disappear after changing rule Conditions unrelated to hero availability, including in rules whose Actions do not run during voting. The root cause remains unknown; high Server Load, a memory leak and a specific engine resource limit have not been established.
 
-**A tested workaround is to combine separate Conditions into a single nested `And` expression.** For example:
+**Current targeted workaround:** the five player-owned pregame world texts are created 0.25 seconds apart. On Malevento with five standard lobby bots, Shion → Crouch made Doctrine disappear in the control, while the full-menu spacing variant U passed the user's tests. The source uses `Abort When False` on the four waits to cancel remaining creation when pregame ends. The user confirmed Pregame works with this version; hero selection during gameplay still reproduces the defect and is being investigated separately. Cost: 30,287 → 30,295 compiled elements (+8), no new variables or rules. Text counts of 6–7 remained stable in reduced failing probes, so this was not the 128-text limit. The internal cause remains unknown. See the [experiment log](analysis/2026-11-15-pregame-text-test.ru.md).
+
+**An earlier tested workaround was to combine separate Conditions into a single nested `And` expression.** For example:
 
 ```csharp
 conditions {

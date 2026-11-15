@@ -1,0 +1,701 @@
+{
+  "date": "2026-11-15",
+  "compiler": "zezombye.overpy-9.7.21",
+  "limitation": "Static compilation only; no native UI reproduction, timing, memory or CPU measurements.",
+  "current": {
+    "sourceSha256": "9c2b9cc5c4908ee99543abcb7b89f5b950f295e2d134bd82bb6dafa20bcd5cc0",
+    "elements": 30287,
+    "warnings": [],
+    "sha256": "4b0dd013b9f287ba8c33c4428c099a0fd5797a6eed834679cce2d1ae0d93f596",
+    "rules": 324,
+    "conditions": 838,
+    "events": {
+      "Ongoing - Global": {
+        "rules": 45,
+        "conditions": 114
+      },
+      "Subroutine": {
+        "rules": 90,
+        "conditions": 0
+      },
+      "Ongoing - Each Player": {
+        "rules": 150,
+        "conditions": 642
+      },
+      "Player Left Match": {
+        "rules": 5,
+        "conditions": 9
+      },
+      "Player Took Damage": {
+        "rules": 9,
+        "conditions": 28
+      },
+      "Player Died": {
+        "rules": 7,
+        "conditions": 13
+      },
+      "Player Received Knockback": {
+        "rules": 1,
+        "conditions": 3
+      },
+      "Player Dealt Damage": {
+        "rules": 12,
+        "conditions": 26
+      },
+      "Player Dealt Knockback": {
+        "rules": 1,
+        "conditions": 2
+      },
+      "Player Dealt Final Blow": {
+        "rules": 1,
+        "conditions": 0
+      },
+      "Player Earned Elimination": {
+        "rules": 1,
+        "conditions": 0
+      },
+      "Player Dealt Healing": {
+        "rules": 1,
+        "conditions": 0
+      },
+      "Player Received Healing": {
+        "rules": 1,
+        "conditions": 1
+      }
+    },
+    "largestConditionLists": [
+      {
+        "name": "BOTS MOVE THROUGH SPAWN DOORS",
+        "event": "Ongoing - Each Player",
+        "conditions": 12
+      },
+      {
+        "name": "[LONG_REACH] MELEE WEAPONS",
+        "event": "Ongoing - Each Player",
+        "conditions": 12
+      },
+      {
+        "name": "PLAYER AFK",
+        "event": "Ongoing - Each Player",
+        "conditions": 11
+      },
+      {
+        "name": "BOTS JUMP",
+        "event": "Ongoing - Each Player",
+        "conditions": 11
+      },
+      {
+        "name": "BIOWASTE IS PICKED UP",
+        "event": "Ongoing - Each Player",
+        "conditions": 9
+      },
+      {
+        "name": "BOTS TELEPORT TO THE EGG",
+        "event": "Ongoing - Each Player",
+        "conditions": 9
+      },
+      {
+        "name": "KILL BOTS THAT ARE STUCK OR ARE NOT MOVING",
+        "event": "Ongoing - Each Player",
+        "conditions": 9
+      },
+      {
+        "name": "CHARGER (MAUGA) CHARGE",
+        "event": "Ongoing - Each Player",
+        "conditions": 9
+      },
+      {
+        "name": "TELEPORT BOTS WHEN NOT USED FOR TOO LONG",
+        "event": "Ongoing - Each Player",
+        "conditions": 8
+      },
+      {
+        "name": "ZOMBIES SPAWN AT REIGNITED",
+        "event": "Ongoing - Each Player",
+        "conditions": 8
+      },
+      {
+        "name": "STRIKER (WRECKING BALL) PILE DRIVER",
+        "event": "Ongoing - Each Player",
+        "conditions": 8
+      },
+      {
+        "name": "AMMO PACK REFILL FALLBACK",
+        "event": "Ongoing - Each Player",
+        "conditions": 8
+      }
+    ],
+    "allowedHeroActions": [
+      "Set Player Allowed Heroes(Event Player, Remove From Array(All Heroes, Hero Of(Event Player))); // 4 elements",
+      "Set Player Allowed Heroes(Event Player, All Heroes); // 1 element",
+      "Set Player Allowed Heroes(Event Player, All Heroes); // 1 element"
+    ]
+  },
+  "historicalExports": {
+    "f84a148b89c400ae3a6ececa6ae1e81e91bb859c": {
+      "sha256": "67e9ae44f311a2b379d25e3b60d9191792c687991898ffa61f81ea009091ecba",
+      "rules": 268,
+      "conditions": 692,
+      "events": {
+        "Ongoing - Global": {
+          "rules": 42,
+          "conditions": 114
+        },
+        "Subroutine": {
+          "rules": 82,
+          "conditions": 0
+        },
+        "Ongoing - Each Player": {
+          "rules": 114,
+          "conditions": 511
+        },
+        "Player Left Match": {
+          "rules": 1,
+          "conditions": 1
+        },
+        "Player Took Damage": {
+          "rules": 7,
+          "conditions": 21
+        },
+        "Player Died": {
+          "rules": 6,
+          "conditions": 13
+        },
+        "Player Received Knockback": {
+          "rules": 1,
+          "conditions": 3
+        },
+        "Player Dealt Final Blow": {
+          "rules": 2,
+          "conditions": 4
+        },
+        "Player Dealt Damage": {
+          "rules": 10,
+          "conditions": 21
+        },
+        "Player Received Healing": {
+          "rules": 1,
+          "conditions": 1
+        },
+        "Player Dealt Knockback": {
+          "rules": 1,
+          "conditions": 2
+        },
+        "Player Dealt Healing": {
+          "rules": 1,
+          "conditions": 1
+        }
+      },
+      "largestConditionLists": [
+        {
+          "name": "BOTS MOVE THROUGH SPAWN DOORS",
+          "event": "Ongoing - Each Player",
+          "conditions": 12
+        },
+        {
+          "name": "PLAYER AFK",
+          "event": "Ongoing - Each Player",
+          "conditions": 11
+        },
+        {
+          "name": "BOTS JUMP",
+          "event": "Ongoing - Each Player",
+          "conditions": 11
+        },
+        {
+          "name": "BIOWASTE IS PICKED UP",
+          "event": "Ongoing - Each Player",
+          "conditions": 9
+        },
+        {
+          "name": "BOTS TELEPORT TO THE EGG",
+          "event": "Ongoing - Each Player",
+          "conditions": 9
+        },
+        {
+          "name": "KILL BOTS THAT ARE STUCK OR ARE NOT MOVING",
+          "event": "Ongoing - Each Player",
+          "conditions": 9
+        },
+        {
+          "name": "CHARGER (MAUGA) CHARGE",
+          "event": "Ongoing - Each Player",
+          "conditions": 9
+        },
+        {
+          "name": "TELEPORT BOTS WHEN NOT USED FOR TOO LONG",
+          "event": "Ongoing - Each Player",
+          "conditions": 8
+        },
+        {
+          "name": "ZOMBIES SPAWN AT REIGNITED",
+          "event": "Ongoing - Each Player",
+          "conditions": 8
+        },
+        {
+          "name": "STRIKER (WRECKING BALL) PILE DRIVER",
+          "event": "Ongoing - Each Player",
+          "conditions": 8
+        },
+        {
+          "name": "PLAYERS IN EXTRACTION POINT CONTROL",
+          "event": "Ongoing - Each Player",
+          "conditions": 7
+        },
+        {
+          "name": "PLAYERS ON OBJECTIVE CONTROL",
+          "event": "Ongoing - Each Player",
+          "conditions": 7
+        }
+      ],
+      "allowedHeroActions": [
+        "Set Player Allowed Heroes(Event Player, Remove From Array(All Heroes, Hero Of(Event Player))); // 4 elements",
+        "Set Player Allowed Heroes(Event Player, All Heroes); // 1 element",
+        "Set Player Allowed Heroes(Event Player, All Heroes); // 1 element"
+      ]
+    },
+    "30bddc91ecd0465f0b2bb2824d37ea00ccf40a91": {
+      "sha256": "939f5b5bb22de01e7b58bba09c810dd9db2fd505a1648a356f6feda812477674",
+      "rules": 300,
+      "conditions": 842,
+      "events": {
+        "Ongoing - Global": {
+          "rules": 44,
+          "conditions": 114
+        },
+        "Subroutine": {
+          "rules": 85,
+          "conditions": 0
+        },
+        "Ongoing - Each Player": {
+          "rules": 134,
+          "conditions": 638
+        },
+        "Player Left Match": {
+          "rules": 2,
+          "conditions": 3
+        },
+        "Player Took Damage": {
+          "rules": 7,
+          "conditions": 21
+        },
+        "Player Died": {
+          "rules": 8,
+          "conditions": 16
+        },
+        "Player Received Knockback": {
+          "rules": 1,
+          "conditions": 3
+        },
+        "Player Dealt Final Blow": {
+          "rules": 2,
+          "conditions": 4
+        },
+        "Player Dealt Damage": {
+          "rules": 12,
+          "conditions": 35
+        },
+        "Player Received Healing": {
+          "rules": 1,
+          "conditions": 1
+        },
+        "Player Dealt Knockback": {
+          "rules": 1,
+          "conditions": 2
+        },
+        "Player Dealt Healing": {
+          "rules": 2,
+          "conditions": 3
+        },
+        "Player Earned Elimination": {
+          "rules": 1,
+          "conditions": 2
+        }
+      },
+      "largestConditionLists": [
+        {
+          "name": "LONG REACH MELEE WEAPONS",
+          "event": "Ongoing - Each Player",
+          "conditions": 18
+        },
+        {
+          "name": "LONG REACH VENDETTA SWORD",
+          "event": "Ongoing - Each Player",
+          "conditions": 13
+        },
+        {
+          "name": "BOTS MOVE THROUGH SPAWN DOORS",
+          "event": "Ongoing - Each Player",
+          "conditions": 12
+        },
+        {
+          "name": "PLAYER AFK",
+          "event": "Ongoing - Each Player",
+          "conditions": 11
+        },
+        {
+          "name": "BOTS JUMP",
+          "event": "Ongoing - Each Player",
+          "conditions": 11
+        },
+        {
+          "name": "LONG REACH QUICK MELEE",
+          "event": "Ongoing - Each Player",
+          "conditions": 10
+        },
+        {
+          "name": "LONG REACH CARNAGE",
+          "event": "Ongoing - Each Player",
+          "conditions": 10
+        },
+        {
+          "name": "BIOWASTE IS PICKED UP",
+          "event": "Ongoing - Each Player",
+          "conditions": 9
+        },
+        {
+          "name": "BOTS TELEPORT TO THE EGG",
+          "event": "Ongoing - Each Player",
+          "conditions": 9
+        },
+        {
+          "name": "KILL BOTS THAT ARE STUCK OR ARE NOT MOVING",
+          "event": "Ongoing - Each Player",
+          "conditions": 9
+        },
+        {
+          "name": "CHARGER (MAUGA) CHARGE",
+          "event": "Ongoing - Each Player",
+          "conditions": 9
+        },
+        {
+          "name": "AMMO PACK REFILL FALLBACK",
+          "event": "Ongoing - Each Player",
+          "conditions": 9
+        }
+      ],
+      "allowedHeroActions": [
+        "Set Player Allowed Heroes(Event Player, Remove From Array(All Heroes, Hero Of(Event Player))); // 4 elements",
+        "Set Player Allowed Heroes(Event Player, All Heroes); // 1 element",
+        "Set Player Allowed Heroes(Event Player, All Heroes); // 1 element"
+      ]
+    },
+    "e23f73d2ac3af65bba98d509f08625eb493b23e3": {
+      "sha256": "140154ecc209b13f3c2935a217c6910241dfc09d9d28f93e3c8a42715d0ccaec",
+      "rules": 305,
+      "conditions": 850,
+      "events": {
+        "Ongoing - Global": {
+          "rules": 44,
+          "conditions": 114
+        },
+        "Subroutine": {
+          "rules": 87,
+          "conditions": 0
+        },
+        "Ongoing - Each Player": {
+          "rules": 135,
+          "conditions": 642
+        },
+        "Player Left Match": {
+          "rules": 2,
+          "conditions": 3
+        },
+        "Player Took Damage": {
+          "rules": 7,
+          "conditions": 21
+        },
+        "Player Died": {
+          "rules": 8,
+          "conditions": 16
+        },
+        "Player Received Knockback": {
+          "rules": 1,
+          "conditions": 3
+        },
+        "Player Dealt Final Blow": {
+          "rules": 2,
+          "conditions": 4
+        },
+        "Player Dealt Damage": {
+          "rules": 13,
+          "conditions": 35
+        },
+        "Player Received Healing": {
+          "rules": 1,
+          "conditions": 1
+        },
+        "Player Dealt Knockback": {
+          "rules": 1,
+          "conditions": 2
+        },
+        "Player Dealt Healing": {
+          "rules": 2,
+          "conditions": 3
+        },
+        "Player Earned Elimination": {
+          "rules": 2,
+          "conditions": 6
+        }
+      },
+      "largestConditionLists": [
+        {
+          "name": "LONG REACH MELEE WEAPONS",
+          "event": "Ongoing - Each Player",
+          "conditions": 18
+        },
+        {
+          "name": "LONG REACH VENDETTA SWORD",
+          "event": "Ongoing - Each Player",
+          "conditions": 13
+        },
+        {
+          "name": "BOTS MOVE THROUGH SPAWN DOORS",
+          "event": "Ongoing - Each Player",
+          "conditions": 12
+        },
+        {
+          "name": "PLAYER AFK",
+          "event": "Ongoing - Each Player",
+          "conditions": 11
+        },
+        {
+          "name": "BOTS JUMP",
+          "event": "Ongoing - Each Player",
+          "conditions": 11
+        },
+        {
+          "name": "LONG REACH QUICK MELEE",
+          "event": "Ongoing - Each Player",
+          "conditions": 10
+        },
+        {
+          "name": "LONG REACH CARNAGE",
+          "event": "Ongoing - Each Player",
+          "conditions": 10
+        },
+        {
+          "name": "BIOWASTE IS PICKED UP",
+          "event": "Ongoing - Each Player",
+          "conditions": 9
+        },
+        {
+          "name": "BOTS TELEPORT TO THE EGG",
+          "event": "Ongoing - Each Player",
+          "conditions": 9
+        },
+        {
+          "name": "KILL BOTS THAT ARE STUCK OR ARE NOT MOVING",
+          "event": "Ongoing - Each Player",
+          "conditions": 9
+        },
+        {
+          "name": "CHARGER (MAUGA) CHARGE",
+          "event": "Ongoing - Each Player",
+          "conditions": 9
+        },
+        {
+          "name": "AMMO PACK REFILL FALLBACK",
+          "event": "Ongoing - Each Player",
+          "conditions": 9
+        }
+      ],
+      "allowedHeroActions": [
+        "Set Player Allowed Heroes(Event Player, Remove From Array(All Heroes, Hero Of(Event Player))); // 4 elements",
+        "Set Player Allowed Heroes(Event Player, All Heroes); // 1 element",
+        "Set Player Allowed Heroes(Event Player, All Heroes); // 1 element"
+      ]
+    },
+    "experiment-hero-selection-grouped-conditions": {
+      "sha256": "e69ad7fe019645c934aa176faf35aeac09db32767ad81ab2a21999f1eb7c4951",
+      "rules": 305,
+      "conditions": 212,
+      "events": {
+        "Ongoing - Global": {
+          "rules": 44,
+          "conditions": 39
+        },
+        "Subroutine": {
+          "rules": 87,
+          "conditions": 0
+        },
+        "Ongoing - Each Player": {
+          "rules": 135,
+          "conditions": 135
+        },
+        "Player Left Match": {
+          "rules": 2,
+          "conditions": 2
+        },
+        "Player Took Damage": {
+          "rules": 7,
+          "conditions": 7
+        },
+        "Player Died": {
+          "rules": 8,
+          "conditions": 8
+        },
+        "Player Received Knockback": {
+          "rules": 1,
+          "conditions": 1
+        },
+        "Player Dealt Final Blow": {
+          "rules": 2,
+          "conditions": 2
+        },
+        "Player Dealt Damage": {
+          "rules": 13,
+          "conditions": 12
+        },
+        "Player Received Healing": {
+          "rules": 1,
+          "conditions": 1
+        },
+        "Player Dealt Knockback": {
+          "rules": 1,
+          "conditions": 1
+        },
+        "Player Dealt Healing": {
+          "rules": 2,
+          "conditions": 2
+        },
+        "Player Earned Elimination": {
+          "rules": 2,
+          "conditions": 2
+        }
+      },
+      "largestConditionLists": [
+        {
+          "name": "PREGAME QUICK TIPS FOR PLAYERS",
+          "event": "Ongoing - Global",
+          "conditions": 1
+        },
+        {
+          "name": "SPAWN BOTS",
+          "event": "Ongoing - Global",
+          "conditions": 1
+        },
+        {
+          "name": "SPAWN TIME CONTROL",
+          "event": "Ongoing - Global",
+          "conditions": 1
+        },
+        {
+          "name": "START GAME IF WAITING FOR PLAYERS",
+          "event": "Ongoing - Global",
+          "conditions": 1
+        },
+        {
+          "name": "SKIP ASSEMBLING HEROES",
+          "event": "Ongoing - Global",
+          "conditions": 1
+        },
+        {
+          "name": "PREGAME SPAWN ROOM ROTATION",
+          "event": "Ongoing - Global",
+          "conditions": 1
+        },
+        {
+          "name": "START GAME",
+          "event": "Ongoing - Global",
+          "conditions": 1
+        },
+        {
+          "name": "GLOBAL MENU INITIALIZATION",
+          "event": "Ongoing - Global",
+          "conditions": 1
+        },
+        {
+          "name": "SPECIAL EFFECT CONTROLS",
+          "event": "Ongoing - Global",
+          "conditions": 1
+        },
+        {
+          "name": "END VOTING",
+          "event": "Ongoing - Global",
+          "conditions": 1
+        },
+        {
+          "name": "MUSIC/ANNOUNCER CONTROL",
+          "event": "Ongoing - Global",
+          "conditions": 1
+        },
+        {
+          "name": "PLAYER MENU INITIALIZATION",
+          "event": "Ongoing - Each Player",
+          "conditions": 1
+        }
+      ],
+      "allowedHeroActions": [
+        "Set Player Allowed Heroes(Event Player, Remove From Array(All Heroes, Hero Of(Event Player))); // 4 elements",
+        "Set Player Allowed Heroes(Event Player, All Heroes); // 1 element",
+        "Set Player Allowed Heroes(Event Player, All Heroes); // 1 element"
+      ]
+    }
+  },
+  "compilerProbes": {
+    "separate": {
+      "elements": 10,
+      "sha256": "a916f060a0e1293f433d789299bd41de1665425725d9691ff6523292ec5c203f",
+      "rules": 1,
+      "conditions": 2,
+      "events": {
+        "Ongoing - Each Player": {
+          "rules": 1,
+          "conditions": 2
+        }
+      },
+      "largestConditionLists": [
+        {
+          "name": "probe",
+          "event": "Ongoing - Each Player",
+          "conditions": 2
+        }
+      ],
+      "allowedHeroActions": [],
+      "workshop": "/* Element count: (total 10)\n\n   10: rule \"probe\"\n\n*/\n\nvariables {\n    global:\n        0: phase\n}\n\n//Optimize for size enabled\n//10 elements\nrule (\"probe\") {\n    event {\n        Ongoing - Each Player;\n        All;\n        All;\n    }\n    conditions {\n        Global.phase == True; // 2 elements\n        Is Alive(Event Player) == True; // 2 elements\n    }\n    actions {\n        Small Message(Event Player, Custom String(\"probe\")); // 5 elements\n    }\n}\n\n"
+    },
+    "andTrue": {
+      "elements": 10,
+      "sha256": "a916f060a0e1293f433d789299bd41de1665425725d9691ff6523292ec5c203f",
+      "rules": 1,
+      "conditions": 2,
+      "events": {
+        "Ongoing - Each Player": {
+          "rules": 1,
+          "conditions": 2
+        }
+      },
+      "largestConditionLists": [
+        {
+          "name": "probe",
+          "event": "Ongoing - Each Player",
+          "conditions": 2
+        }
+      ],
+      "allowedHeroActions": [],
+      "workshop": "/* Element count: (total 10)\n\n   10: rule \"probe\"\n\n*/\n\nvariables {\n    global:\n        0: phase\n}\n\n//Optimize for size enabled\n//10 elements\nrule (\"probe\") {\n    event {\n        Ongoing - Each Player;\n        All;\n        All;\n    }\n    conditions {\n        Global.phase == True; // 2 elements\n        Is Alive(Event Player) == True; // 2 elements\n    }\n    actions {\n        Small Message(Event Player, Custom String(\"probe\")); // 5 elements\n    }\n}\n\n"
+    },
+    "andOne": {
+      "elements": 15,
+      "sha256": "fa0f867d544aae4de5b32c1ae262f7c46c21218c0ce1e58358fb6f709de3bc05",
+      "rules": 1,
+      "conditions": 1,
+      "events": {
+        "Ongoing - Each Player": {
+          "rules": 1,
+          "conditions": 1
+        }
+      },
+      "largestConditionLists": [
+        {
+          "name": "probe",
+          "event": "Ongoing - Each Player",
+          "conditions": 1
+        }
+      ],
+      "allowedHeroActions": [],
+      "workshop": "/* Element count: (total 15)\n\n   15: rule \"probe\"\n\n*/\n\nvariables {\n    global:\n        0: phase\n}\n\n//Optimize for size enabled\n//15 elements\nrule (\"probe\") {\n    event {\n        Ongoing - Each Player;\n        All;\n        All;\n    }\n    conditions {\n        And(Compare(Global.phase, ==, True), Is Alive(Event Player)) == 1; // 9 elements\n    }\n    actions {\n        Small Message(Event Player, Custom String(\"probe\")); // 5 elements\n    }\n}\n\n"
+    }
+  }
+}

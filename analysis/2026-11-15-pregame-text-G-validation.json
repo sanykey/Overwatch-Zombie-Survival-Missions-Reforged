@@ -1,0 +1,99 @@
+{
+  "input": "2026-11-15-pregame-text-A-control.ws.txt",
+  "inputSha256": "05d36cb43d2b2b83a57739f8a6c65d3baaec04fc7834bdc1f646a411cd2b0e96",
+  "outputSha256": "1d3528a2c1f3c263838d46881dc94b5e6ecadab2c530900d24f30804bf8211d2",
+  "controlElements": 30287,
+  "probeElements": 29541,
+  "delta": -746,
+  "countMethod": "Subtract compiler-annotated costs of removed actions from frozen compiled total; no source-line estimate.",
+  "mode": "G",
+  "description": "Per-player Pregame world texts only; no selected HUD or global world texts",
+  "rules": 324,
+  "changedRules": [
+    {
+      "index": 38,
+      "name": "EFFECTS/TEXTS"
+    },
+    {
+      "index": 304,
+      "name": "AUGMENT MENU"
+    }
+  ],
+  "deleted": [
+    {
+      "ruleIndex": 38,
+      "rule": "EFFECTS/TEXTS",
+      "action": "Create HUD Text",
+      "elements": 29
+    },
+    {
+      "ruleIndex": 38,
+      "rule": "EFFECTS/TEXTS",
+      "action": "Create HUD Text",
+      "elements": 8
+    },
+    {
+      "ruleIndex": 38,
+      "rule": "EFFECTS/TEXTS",
+      "action": "Create In-World Text",
+      "elements": 28
+    },
+    {
+      "ruleIndex": 38,
+      "rule": "EFFECTS/TEXTS",
+      "action": "Create In-World Text",
+      "elements": 41
+    },
+    {
+      "ruleIndex": 38,
+      "rule": "EFFECTS/TEXTS",
+      "action": "Create In-World Text",
+      "elements": 25
+    },
+    {
+      "ruleIndex": 38,
+      "rule": "EFFECTS/TEXTS",
+      "action": "Create In-World Text",
+      "elements": 31
+    },
+    {
+      "ruleIndex": 38,
+      "rule": "EFFECTS/TEXTS",
+      "action": "Create In-World Text",
+      "elements": 32
+    },
+    {
+      "ruleIndex": 38,
+      "rule": "EFFECTS/TEXTS",
+      "action": "Create HUD Text",
+      "elements": 104
+    },
+    {
+      "ruleIndex": 38,
+      "rule": "EFFECTS/TEXTS",
+      "action": "Create HUD Text",
+      "elements": 101
+    },
+    {
+      "ruleIndex": 38,
+      "rule": "EFFECTS/TEXTS",
+      "action": "Create HUD Text",
+      "elements": 127
+    },
+    {
+      "ruleIndex": 38,
+      "rule": "EFFECTS/TEXTS",
+      "action": "Create HUD Text",
+      "elements": 121
+    },
+    {
+      "ruleIndex": 304,
+      "rule": "AUGMENT MENU",
+      "action": "Create HUD Text",
+      "elements": 99
+    }
+  ],
+  "verification": "OverPy 9.7.21 decompiler accepted both exports. Every rule compared: only 12 selected text-creation actions and comments removed. Settings/declarations unchanged. No native game test.",
+  "scenario": "Malevento, 5 standard lobby bots in the same teams, Shion, no Enhancement/Augment selection, Crouch back to hero selection.",
+  "limitation": "Selected Pregame objects absent; diagnostic only. Effects, objective description and debug HUD remain. Removing creation also reduces code size and action work; a positive result does not identify an engine/network mechanism."
+}

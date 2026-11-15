@@ -1,0 +1,8 @@
+{
+  "inputSha256": "b011aefa8ad8ada51601b1d8b083b8911f24cbf76b427f63b18a8929ac893d9e",
+  "outputSha256": "362b8ef73e6ea0c6ef4c88a4bb1877d8acd5f9cf25377b040c53a1be0824ac02",
+  "elements": 30295,
+  "deltaFromV": 0,
+  "verified": "Only gameplay roster restoration action changed from Set Player Allowed Heroes(All Heroes) to Reset Player Hero Availability. Original minimum wait and all other actions retained. Supplied settings have no explicit enabled/disabled hero lists. Decompiler and paired compilation passed.",
+  "limitation": "Reset follows lobby hero availability, unlike explicit All Heroes. Do not add lobby hero restrictions. Does not reset every native UI state. No native game test. No change to Pregame restoration or gameplay mechanics."
+}

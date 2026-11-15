@@ -1,0 +1,545 @@
+{
+  "inputSha256": "b011aefa8ad8ada51601b1d8b083b8911f24cbf76b427f63b18a8929ac893d9e",
+  "outputSha256": "2db4e093391919989c375e916982cb2f014396372b46f5cd222814db0035358f",
+  "totals": {
+    "creations": 262,
+    "cleanup": 43,
+    "idReads": 104
+  },
+  "changedRules": [
+    {
+      "index": 2,
+      "name": "Subroutine createRemainingObjectivesHud",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 1
+    },
+    {
+      "index": 7,
+      "name": "objectivesManagement",
+      "creations": 57,
+      "cleanup": 4,
+      "idReads": 45
+    },
+    {
+      "index": 10,
+      "name": "botRespawnInitialization",
+      "creations": 20,
+      "cleanup": 1,
+      "idReads": 20
+    },
+    {
+      "index": 12,
+      "name": "explosionSequence",
+      "creations": 4,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 26,
+      "name": "[CHARGE_BATTERY] PLACE BATTERY",
+      "creations": 4,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 27,
+      "name": "[CHARGE_BATTERY] USAGE AND COOLDOWNS",
+      "creations": 3,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 62,
+      "name": "EFFECTS/TEXTS",
+      "creations": 6,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 75,
+      "name": "nukeMap",
+      "creations": 2,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 78,
+      "name": "INCREASE OBJECTIVE CAPTURE PERCENTAGE",
+      "creations": 3,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 79,
+      "name": "DECREASES CAPTURE PERCENTAGE",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 87,
+      "name": "bossReturn",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 89,
+      "name": "BIOMORPHING GOAL START",
+      "creations": 2,
+      "cleanup": 2,
+      "idReads": 0
+    },
+    {
+      "index": 91,
+      "name": "BIOWASTE IS PICKED UP",
+      "creations": 2,
+      "cleanup": 2,
+      "idReads": 0
+    },
+    {
+      "index": 92,
+      "name": "PLAYER DELIVERS RESOURCE VALUE",
+      "creations": 2,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 94,
+      "name": "BIOWASTE MANAGEMENT",
+      "creations": 2,
+      "cleanup": 0,
+      "idReads": 2
+    },
+    {
+      "index": 96,
+      "name": "INITIALIZE SURVIVOR TO BE RESCUED",
+      "creations": 6,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 104,
+      "name": "SURVIVOR REACHES EXTRACTION SITE",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 107,
+      "name": "BOTS TELEPORT TO THE EGG",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 111,
+      "name": "PLAYERS REPAIR TERMINALS",
+      "creations": 11,
+      "cleanup": 0,
+      "idReads": 6
+    },
+    {
+      "index": 114,
+      "name": "EFFECTS/TEXTS",
+      "creations": 4,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 116,
+      "name": "REVIVE PLAYER OR ADVANCE DEATH TIMER",
+      "creations": 2,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 122,
+      "name": "OBJECTIVE CHANGES AND PLAYER ENTITIES UPDATE",
+      "creations": 1,
+      "cleanup": 2,
+      "idReads": 2
+    },
+    {
+      "index": 144,
+      "name": "BOT INITIALIZATION",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 146,
+      "name": "BOT DIES",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 178,
+      "name": "BRUTE (REIN) SUPER SEISMIC SLAM",
+      "creations": 2,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 185,
+      "name": "ZOMBIES SPAWN AT REIGNITED",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 192,
+      "name": "SLIMER (MERCY) TENTACLE GRAB",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 193,
+      "name": "PRIME SLIMER (EMRE) FLIGHT (BOSS)",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 194,
+      "name": "STRIKER (WRECKING BALL) PILE DRIVER",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 205,
+      "name": "DAYTAKER (ILLARI) BURST",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 209,
+      "name": "CADAVER (ANA) DETONATION",
+      "creations": 2,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 212,
+      "name": "SMOLDER (WINSTON) SEES PLAYER",
+      "creations": 2,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 215,
+      "name": "SMOLDER SUPER SLAM",
+      "creations": 2,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 217,
+      "name": "SMOLDER BOSS EVENT STARTS",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 222,
+      "name": "BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 227,
+      "name": "Subroutine smolderBoost",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 228,
+      "name": "Subroutine spawnGasCloud",
+      "creations": 2,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 233,
+      "name": "playReignitedWarningPair",
+      "creations": 2,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 239,
+      "name": "GENERATE SUPPLY DROPS",
+      "creations": 2,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 240,
+      "name": "EFFECT/TEXT (GLOBAL)",
+      "creations": 8,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 241,
+      "name": "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)",
+      "creations": 2,
+      "cleanup": 2,
+      "idReads": 0
+    },
+    {
+      "index": 243,
+      "name": "playerForceField (10-19)",
+      "creations": 4,
+      "cleanup": 2,
+      "idReads": 2
+    },
+    {
+      "index": 245,
+      "name": "noCooldowns (20-29)",
+      "creations": 2,
+      "cleanup": 1,
+      "idReads": 1
+    },
+    {
+      "index": 246,
+      "name": "airStrike (30-39)",
+      "creations": 6,
+      "cleanup": 2,
+      "idReads": 2
+    },
+    {
+      "index": 247,
+      "name": "beaconofHealing (40-49)",
+      "creations": 7,
+      "cleanup": 4,
+      "idReads": 4
+    },
+    {
+      "index": 248,
+      "name": "sentryTurret (50-59)",
+      "creations": 9,
+      "cleanup": 2,
+      "idReads": 4
+    },
+    {
+      "index": 249,
+      "name": "cloakingDevice (60-69)",
+      "creations": 4,
+      "cleanup": 2,
+      "idReads": 2
+    },
+    {
+      "index": 250,
+      "name": "superNano (70-79)",
+      "creations": 5,
+      "cleanup": 3,
+      "idReads": 3
+    },
+    {
+      "index": 251,
+      "name": "JETPACK FLIGHT",
+      "creations": 1,
+      "cleanup": 1,
+      "idReads": 1
+    },
+    {
+      "index": 252,
+      "name": "ultimateCharger (90-99)",
+      "creations": 2,
+      "cleanup": 1,
+      "idReads": 1
+    },
+    {
+      "index": 253,
+      "name": "stun (100-109)",
+      "creations": 4,
+      "cleanup": 1,
+      "idReads": 1
+    },
+    {
+      "index": 254,
+      "name": "powerUpUsage",
+      "creations": 2,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 255,
+      "name": "playAquaPowerUpSound",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 256,
+      "name": "POWER UP EFFECT/TEXT MANAGEMENT",
+      "creations": 2,
+      "cleanup": 0,
+      "idReads": 2
+    },
+    {
+      "index": 257,
+      "name": "EFFECT/TEXT (PERMANENT)",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 261,
+      "name": "finishPowerUpDrop",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 275,
+      "name": "P.U.P. CONTROL",
+      "creations": 3,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 278,
+      "name": "WRESTLER PULL",
+      "creations": 1,
+      "cleanup": 1,
+      "idReads": 1
+    },
+    {
+      "index": 279,
+      "name": "WRESTLER PULL DISCONNECT CLEANUP",
+      "creations": 0,
+      "cleanup": 1,
+      "idReads": 0
+    },
+    {
+      "index": 284,
+      "name": "ENGINEER ARMOR TRANSFER",
+      "creations": 3,
+      "cleanup": 1,
+      "idReads": 1
+    },
+    {
+      "index": 286,
+      "name": "ENGINEER BEAM FADE",
+      "creations": 0,
+      "cleanup": 1,
+      "idReads": 0
+    },
+    {
+      "index": 287,
+      "name": "ENGINEER BEAM DISCONNECT CLEANUP",
+      "creations": 0,
+      "cleanup": 1,
+      "idReads": 0
+    },
+    {
+      "index": 293,
+      "name": "[LONG_REACH] extendAugmentMelee",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 300,
+      "name": "[DASH] SMOKE FADE",
+      "creations": 0,
+      "cleanup": 1,
+      "idReads": 0
+    },
+    {
+      "index": 301,
+      "name": "[APOTHECARY AUGMENT] CURE ICON",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 1
+    },
+    {
+      "index": 302,
+      "name": "[APOTHECARY AUGMENT] CURE ICON DISCONNECT CLEANUP",
+      "creations": 0,
+      "cleanup": 1,
+      "idReads": 0
+    },
+    {
+      "index": 306,
+      "name": "CROUCH + INTERACT (APOTHECARY TELEPORT / LASER BARRICADE)",
+      "creations": 5,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 308,
+      "name": "useAugmentAirAction",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 1
+    },
+    {
+      "index": 309,
+      "name": "GRAPNEL LAUNCHER",
+      "creations": 3,
+      "cleanup": 1,
+      "idReads": 1
+    },
+    {
+      "index": 310,
+      "name": "GRAPNEL LAUNCHER DISCONNECT CLEANUP",
+      "creations": 0,
+      "cleanup": 1,
+      "idReads": 0
+    },
+    {
+      "index": 313,
+      "name": "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)",
+      "creations": 5,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 314,
+      "name": "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION",
+      "creations": 15,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 315,
+      "name": "applyHitEnhancements",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 319,
+      "name": "PLAYER DIED",
+      "creations": 0,
+      "cleanup": 2,
+      "idReads": 0
+    },
+    {
+      "index": 320,
+      "name": "PLAYER DEALT HEALING",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    },
+    {
+      "index": 321,
+      "name": "PLAYER DEALT DAMAGE",
+      "creations": 1,
+      "cleanup": 0,
+      "idReads": 0
+    }
+  ],
+  "verification": "Settings/declarations, rule count, all Conditions and protected Pregame/debug blocks unchanged. Full decompiler accepted output. Visual creations/Play Effect and per-ID cleanup disabled in other rules, matching Last ID saves now store Null.",
+  "limitation": "Broad diagnostic screen only. ID-dependent branches may behave differently, so improvement cannot be attributed solely to rendering/CPU/object count. Native hero visuals, physical projectiles, barriers/other nonvisual entities and objective description remain. Do not deploy optional abilities/items. No native test or compiled savings claimed."
+}

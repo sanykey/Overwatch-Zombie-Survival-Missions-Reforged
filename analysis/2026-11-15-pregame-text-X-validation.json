@@ -1,0 +1,23 @@
+{
+  "inputSha256": "b011aefa8ad8ada51601b1d8b083b8911f24cbf76b427f63b18a8929ac893d9e",
+  "outputSha256": "57870b34c9a3e7cb284567e704dd27f6476c039ffba42acdddc8b8a899f162c9",
+  "changedRules": [
+    {
+      "index": 62,
+      "name": "EFFECTS/TEXTS",
+      "disabledCreationCalls": 6
+    },
+    {
+      "index": 114,
+      "name": "EFFECTS/TEXTS",
+      "disabledCreationCalls": 4
+    },
+    {
+      "index": 313,
+      "name": "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)",
+      "disabledCreationCalls": 5
+    }
+  ],
+  "verified": "Only disabled flags on 15 visual creation definitions added. Removing flags recovers frozen V before diagnostic comment cleanup. Conditions/settings/mechanics/Pregame preserved. Decompiler accepted export; each changed block recompiles without active creation actions.",
+  "limitation": "Diagnostic only: partial combat HUD, revive/infection cues and personal status panels absent. Objective/powerup/ability visuals and objective description/debug HUD remain. No native game test; no element optimization claimed."
+}

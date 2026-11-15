@@ -1,0 +1,8 @@
+{
+  "inputSha256": "b011aefa8ad8ada51601b1d8b083b8911f24cbf76b427f63b18a8929ac893d9e",
+  "outputSha256": "1dbbb57c5f13d33bc9c6de7389f9d3066d651dd24d9e446f374011f2079b7ea4",
+  "elements": 30296,
+  "deltaFromV": 1,
+  "verified": "Only one Wait duration in PLAYER SWITCHES HERO changed, from False (minimum wait) to 0.5 seconds, immediately after Wait Until(Not Has Spawned) and before Set Player Allowed Heroes. Full decompilation and paired block compilation passed.",
+  "limitation": "Diagnostic only. Current hero is excluded for longer; roster and isHeroSwitchRespawn flag restore later. Tester must wait 2 seconds before choosing. Does not test/reset client internal state directly. No native game test; original Wait Until timeout retained."
+}

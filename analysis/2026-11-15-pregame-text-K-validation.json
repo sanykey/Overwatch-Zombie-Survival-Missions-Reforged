@@ -1,0 +1,10 @@
+{
+  "mode": "K",
+  "description": "J without player Pregame Ring/Light Shaft effects",
+  "inputSha256": "c79c279e06382777008d1532baa00d06cf8989baf285d1938f10c90efce6445e",
+  "outputSha256": "ea6cb5f4e3bbf772913f73ff996eb7ec68ecc95ad0bdfaa60359f6441ebb52ef",
+  "elements": 29510,
+  "deltaFromJ": -35,
+  "verification": "Only rule index 48 changed. All other rules and settings identical. OverPy decompiler accepted variant. K delta uses removed compiled action annotations; L delta measured by compiling original/changed visual rule separately.",
+  "limitation": "No native game test. K retains empty effect branches. L keeps text creation but changes visibility dependencies and may change client evaluation/rendering; success would not prove rendering alone is responsible."
+}

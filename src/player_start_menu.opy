@@ -54,12 +54,20 @@ rule "EFFECTS/TEXT":
         createEffect(getAllPlayers().filter(lambda _: eventPlayer.pregameState < PregameState.READY), Effect.LIGHT_SHAFT, Color.SKY_BLUE, eventPlayer.pregamePosition + -10 * Vector.UP, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     #In world hero text
     createInWorldText(getAllPlayers().filter(lambda _: eventPlayer.pregameState < PregameState.READY), heroIcon(eventPlayer.getHero()) if eventPlayer.pregameState == PregameState.HERO_SELECTED else "?", eventPlayer.pregamePosition + offsetUpHalfConst, 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING)
+    # Spacing creation prevents native hero-select UI corruption in the tested
+    # full-menu build (analysis/2026-11-15-pregame-text-test.ru.md, U).
+    # Abort remaining creation when Pregame ends, before it can outlive cleanup.
+    # No shared scratch is retained across these waits.
+    wait(0.25, Wait.ABORT_WHEN_FALSE)
     #Selecting hero text
     createInWorldText(getAllPlayers().filter(lambda _: eventPlayer.pregameState < PregameState.READY and eventPlayer.isPregameVoting == false), "SELECTING HERO..." if eventPlayer.pregameState < PregameState.HERO_SELECTED else "Getting Ready...", eventPlayer.pregamePosition + offsetUpOneAndHalfConst, 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.SKY_BLUE)
+    wait(0.25, Wait.ABORT_WHEN_FALSE)
     #Voting text
     createInWorldText(getAllPlayers().filter(lambda _: eventPlayer.isPregameVoting == true), "Voting...", eventPlayer.pregamePosition + ((1.5 if eventPlayer.pregameState < PregameState.READY else -1) * Vector.UP), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.PURPLE)
+    wait(0.25, Wait.ABORT_WHEN_FALSE)
     #Name text
     createInWorldText(getAllPlayers().filter(lambda _: eventPlayer.pregameState < PregameState.READY), eventPlayer, eventPlayer.pregamePosition + Vector.DOWN, 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.AQUA)
+    wait(0.25, Wait.ABORT_WHEN_FALSE)
     # Enhancement and Augment share one line above the player.
     createInWorldText(getAllPlayers(), f"{ENHANCEMENT_ICONS[eventPlayer.enhancementId]} {AUGMENT_ICONS[eventPlayer.augmentId]}", eventPlayer.pregamePosition + 2.25 * Vector.UP, 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING)
 
