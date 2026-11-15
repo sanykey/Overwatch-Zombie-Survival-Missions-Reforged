@@ -1,0 +1,29 @@
+[
+  {
+    "name": "baseline",
+    "elements": 30282,
+    "delta": 0,
+    "rules": 327,
+    "eachPlayerRules": 153,
+    "eachPlayerConditionRows": 656,
+    "warnings": []
+  },
+  {
+    "name": "merge-crouch-handlers",
+    "elements": 30285,
+    "delta": 3,
+    "rules": 326,
+    "eachPlayerRules": 152,
+    "eachPlayerConditionRows": 649,
+    "warnings": []
+  },
+  {
+    "name": "merge-menu-into-interact",
+    "elements": 30292,
+    "delta": 10,
+    "rules": 326,
+    "eachPlayerRules": 152,
+    "eachPlayerConditionRows": 652,
+    "warnings": []
+  }
+]

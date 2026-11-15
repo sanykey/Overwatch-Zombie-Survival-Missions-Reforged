@@ -80,27 +80,65 @@ rule "APOTHECARY ULTIMATE RECHARGE":
     eventPlayer.augmentApothecaryReady = true
 
 
-rule "APOTHECARY TELEPORT":
+rule "CROUCH + INTERACT (APOTHECARY TELEPORT / LASER BARRICADE)":
     @Event eachPlayer
     @Team 1
-    @Condition eventPlayer.augmentApothecaryReady == true
-    @Condition (eventPlayer.augmentApothecaryPosition != null or healthpackPositionList != []) == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
     @Condition (eventPlayer.enhancementId != Enhancement.WRESTLER or eventPlayer.enhancementCarryState == WrestlerCarryState.NONE) == true
+    # State slots have different owners for each augment. Guard by augmentId:
+    # Apothecary readiness is boolean; Barricade's shared slot is a vector.
+    @Condition ((eventPlayer.augmentId == Augment.APOTHECARY and eventPlayer.augmentApothecaryReady == true and (eventPlayer.augmentApothecaryPosition != null or healthpackPositionList != [])) or (eventPlayer.augmentId == Augment.LASER_BARRICADE and eventPlayer.augmentBarrierPlacementCooldown == 0)) == true
 
-    # Keep both buttons held for 0.25 seconds; interruption preserves the charge.
-    wait(0.25, Wait.ABORT_WHEN_FALSE)
-    if eventPlayer.augmentId != Augment.APOTHECARY:
-        return
+    if eventPlayer.augmentId == Augment.APOTHECARY:
+        # Keep both buttons held for 0.25 seconds; interruption preserves the charge.
+        wait(0.25, Wait.ABORT_WHEN_FALSE)
+        if eventPlayer.augmentId != Augment.APOTHECARY:
+            return
 
-    eventPlayer.augmentApothecaryReady = false
-    # Play Effect snapshots departure before Teleport; no scratch or effect entity.
-    # Bolt Strike's 1.5 flash scaled by three.
-    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, eventPlayer.getPosition(), 4.5)
-    # Choose only when teleporting; keep the saved point reserved for actual pickups.
-    eventPlayer.teleport(eventPlayer.augmentApothecaryPosition if eventPlayer.augmentApothecaryPosition != null else random.choice(healthpackPositionList))
+        eventPlayer.augmentApothecaryReady = false
+        # Play Effect snapshots departure before Teleport; no scratch or effect entity.
+        # Bolt Strike's 1.5 flash scaled by three.
+        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, eventPlayer.getPosition(), 4.5)
+        # Choose only when teleporting; keep the saved point reserved for actual pickups.
+        eventPlayer.teleport(eventPlayer.augmentApothecaryPosition if eventPlayer.augmentApothecaryPosition != null else random.choice(healthpackPositionList))
+    else:
+        # -1 latches aiming until Interact release or death.
+        # After entry, placement and cooldown ignore the common input conditions.
+        # Clear the placement latch on every exit before starting the normal cooldown.
+        eventPlayer.augmentBarrierPlacementCooldown = -1
+        waitUntil(not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead(), 0.5)
+        if not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead():
+            eventPlayer.augmentBarrierPlacementCooldown = 0
+            return
+        playEffect(eventPlayer, DynamicEffect.GOOD_EXPLOSION, Color.BLUE, eventPlayer.getEyePosition() + ((directionFromAngles(eventPlayer.getHorizontalFacingAngle() + random.uniform(-5, 5), eventPlayer.getVerticalFacingAngle() + random.uniform(-5, 5))) * 1.5), 0.1)
+        playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.BLUE, eventPlayer.getPosition(), 75)
+        waitUntil(not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead(), Math.INFINITY)
+        eventPlayer.augmentBarrierPlacementCooldown = 0
+        checkEnhancementPlacement()
+        if isEnhancementPlacementInvalid:
+            return
+        #Laser Barrier health
+        eventPlayer.augmentBarrierHealth = 10000
+        #Barrier center point
+        eventPlayer.augmentBarrierPosition = raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)
+        #Barrier corner 1
+        eventPlayer.augmentBarrierCorner1 = eventPlayer.augmentBarrierPosition + worldVector((-0.5 * LASER_BARRICADE_WIDTH) * Vector.LEFT, eventPlayer, Transform.ROTATION)
+        #Barrier Corner 2
+        eventPlayer.augmentBarrierCorner2 = eventPlayer.augmentBarrierPosition + worldVector((0.5 * LASER_BARRICADE_WIDTH) * Vector.LEFT, eventPlayer, Transform.ROTATION)
+        # Horizontal push direction captured at placement; reference points are center +/- this vector.
+        eventPlayer.augmentBarrierFacing = directionFromAngles(eventPlayer.getHorizontalFacingAngle(), 0)
+        # Along-barrier direction, reused by collision checks.
+        eventPlayer.augmentBarrierEdgeDirection = directionTowards(eventPlayer.augmentBarrierCorner1, eventPlayer.augmentBarrierCorner2)
+        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.BLUE, eventPlayer.augmentBarrierPosition, 2)
+        playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, Color.BLUE, eventPlayer.augmentBarrierPosition, 50)
+        smallMessage(eventPlayer, "  Barricade placed!")
+        #Laser Barrier cooldown
+        eventPlayer.augmentBarrierPlacementCooldown = LASER_BARRICADE_COOLDOWN
+        while eventPlayer.augmentBarrierPlacementCooldown > 0:
+            wait(1)
+            eventPlayer.augmentBarrierPlacementCooldown += -1
 
 
 rule "KEVLAR RANGED DAMAGE COMPENSATION":
@@ -300,52 +338,6 @@ rule "AMMO PACK REFILL FALLBACK":
             # while preserving those spent rounds (34/35 becomes 69/35).
             eventPlayer.setAmmo(augmentAmmoFallbackClipIndex, eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) + eventPlayer.augmentAmmoLoadout[augmentAmmoFallbackClipIndex + 2] - augmentAmmoNativeCapacity)
     eventPlayer.augmentAmmoFallbackState = [eventPlayer.getAmmo(0) < eventPlayer.getMaxAmmo(0), eventPlayer.getAmmo(1) < eventPlayer.getMaxAmmo(1), eventPlayer.isReloading(), eventPlayer.augmentAmmoFallbackState[3], eventPlayer.augmentAmmoFallbackState[4]]
-
-
-rule "LASER BARRICADE (PLACEMENT)":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.augmentId == Augment.LASER_BARRICADE
-    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
-    @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.augmentBarrierPlacementCooldown == 0
-    @Condition (eventPlayer.enhancementId != Enhancement.WRESTLER or eventPlayer.enhancementCarryState == WrestlerCarryState.NONE) == true
-
-    # -1 latches aiming until Interact release or death.
-    # Clear the placement latch on every exit before starting the normal cooldown.
-    eventPlayer.augmentBarrierPlacementCooldown = -1
-    waitUntil(not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead(), 0.5)
-    if not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead():
-        eventPlayer.augmentBarrierPlacementCooldown = 0
-        return
-    playEffect(eventPlayer, DynamicEffect.GOOD_EXPLOSION, Color.BLUE, eventPlayer.getEyePosition() + ((directionFromAngles(eventPlayer.getHorizontalFacingAngle() + random.uniform(-5, 5), eventPlayer.getVerticalFacingAngle() + random.uniform(-5, 5))) * 1.5), 0.1)
-    playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.BLUE, eventPlayer.getPosition(), 75)
-    waitUntil(not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead(), Math.INFINITY)
-    eventPlayer.augmentBarrierPlacementCooldown = 0
-    checkEnhancementPlacement()
-    if isEnhancementPlacementInvalid:
-        return
-    #Laser Barrier health
-    eventPlayer.augmentBarrierHealth = 10000
-    #Barrier center point
-    eventPlayer.augmentBarrierPosition = raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)
-    #Barrier corner 1
-    eventPlayer.augmentBarrierCorner1 = eventPlayer.augmentBarrierPosition + worldVector((-0.5 * LASER_BARRICADE_WIDTH) * Vector.LEFT, eventPlayer, Transform.ROTATION)
-    #Barrier Corner 2
-    eventPlayer.augmentBarrierCorner2 = eventPlayer.augmentBarrierPosition + worldVector((0.5 * LASER_BARRICADE_WIDTH) * Vector.LEFT, eventPlayer, Transform.ROTATION)
-    # Horizontal push direction captured at placement; reference points are center +/- this vector.
-    eventPlayer.augmentBarrierFacing = directionFromAngles(eventPlayer.getHorizontalFacingAngle(), 0)
-    # Along-barrier direction, reused by collision checks.
-    eventPlayer.augmentBarrierEdgeDirection = directionTowards(eventPlayer.augmentBarrierCorner1, eventPlayer.augmentBarrierCorner2)
-    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.BLUE, eventPlayer.augmentBarrierPosition, 2)
-    playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, Color.BLUE, eventPlayer.augmentBarrierPosition, 50)
-    smallMessage(eventPlayer, "  Barricade placed!")
-    #Laser Barrier cooldown
-    eventPlayer.augmentBarrierPlacementCooldown = LASER_BARRICADE_COOLDOWN
-    while eventPlayer.augmentBarrierPlacementCooldown > 0:
-        wait(1)
-        eventPlayer.augmentBarrierPlacementCooldown += -1
 
 
 rule "LASER BARRICADE BLOCKS ZOMBIES":
