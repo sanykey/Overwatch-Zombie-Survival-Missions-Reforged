@@ -541,9 +541,9 @@ playervar augmentState2
 #!define augmentApothecaryCureIcon augmentState2
 # Team 2 Wrestler: carrier hero at pickup, retained until release. No human reader.
 #!define wrestlerCarryHero augmentState2
-# Laser Barricade: -2 reserves a Wrestler press; -1 latches aiming until Interact release/death/cancel; 0 is ready,
+# Laser Barricade: -1 latches aiming until Interact release/death/cancel; 0 is ready,
 # positive values are cooldown seconds. Owned by placement across waits; read by
-# preview, HUD and power-up input exclusion. Clear the latch before every abort.
+# preview and HUD. Clear the latch before every abort.
 #!define augmentBarrierPlacementCooldown augmentState2
 # Ammo Pack refill snapshot [clip 0 below native max, clip 1 below native max,
 # was reloading, clip 0 ammo at reload start, clip 1 ammo at reload start].

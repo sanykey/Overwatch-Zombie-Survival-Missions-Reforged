@@ -312,7 +312,7 @@ rule "LASER BARRICADE (PLACEMENT)":
     @Condition eventPlayer.augmentBarrierPlacementCooldown == 0
     @Condition (eventPlayer.enhancementId != Enhancement.WRESTLER or eventPlayer.enhancementCarryState == WrestlerCarryState.NONE) == true
 
-    # -1 latches aiming; Interact may reserve -2 for a consumed Wrestler press.
+    # -1 latches aiming until Interact release or death.
     # Clear the placement latch on every exit before starting the normal cooldown.
     eventPlayer.augmentBarrierPlacementCooldown = -1
     waitUntil(not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead(), 0.5)

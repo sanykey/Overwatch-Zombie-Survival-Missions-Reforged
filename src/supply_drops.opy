@@ -77,12 +77,6 @@ rule "EFFECT/TEXT (GLOBAL)":
     createInWorldText(getAllPlayers().filter(lambda player: supplyDropLandingPosition != null and distance(player, supplyDropPosition) > 5), "Supply Drop: {0}m".format(distance(localPlayer, supplyDropPosition)), supplyDropPosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.AQUA, SpecVisibility.NEVER)
 
 
-# Carried Wrestler throws take priority over augment input reservations.
-# Boolean predicate, reused after the powerup hold because these checks live in
-# Actions and are no longer observed by Abort When False.
-#!define INTERACT_AUGMENT_INPUT_RESERVED ((eventPlayer.augmentId in [Augment.APOTHECARY, Augment.LASER_BARRICADE] and eventPlayer.isHoldingButton(Button.CROUCH)) or (eventPlayer.augmentId == Augment.LASER_BARRICADE and eventPlayer.augmentBarrierPlacementCooldown < 0))
-#!define INTERACT_AUGMENT_INPUT_ALLOWED ((eventPlayer.enhancementId == Enhancement.WRESTLER and eventPlayer.enhancementCarryState != WrestlerCarryState.NONE) or not INTERACT_AUGMENT_INPUT_RESERVED)
-
 rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)":
     @Event eachPlayer
     @Team 1
@@ -90,46 +84,18 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isDummy() == false
 
-    # Workshop workaround (map dependent): the gameplay Condition here reproduced
-    # newer heroes disappearing when returning from voting to hero selection.
-    # Keep the phase guard in Actions, before any raycast/pickup/throw; cause unknown.
-    # Related cases:
-    # - Apothecary: "APOTHECARY ALLOW HEALTH PACK PICKUP", src/augments.opy,
-    #   reverted by ba8e70de7d4e282b2f90c8ae6c15f6d1d500a342; And did NOT help.
-    # - Scavenger: "PLAYER DROPS POWER UP (MANUAL)", src/power_ups.opy,
-    #   1079602bbdcf12d9e989d595c315949601fd184b; grouped And helped in user tests.
-    # - Leech: "LEECH LIFESTEAL", src/augments.opy,
-    #   de11b70848715973335c011e19821273504f5d3c; eligibility moved to Actions.
-    # isGameplayActive only holds boolean/default zero.
     if not isGameplayActive:
         return
 
-    # Reserve Crouch + Interact for Apothecary even without a teleport charge.
-    # Barricade keeps the reservation until Interact release, even without Crouch.
-    if not INTERACT_AUGMENT_INPUT_ALLOWED:
-        return
-
-    # Resolve zombie interaction once per press, before any item transaction.
-    # Carry state stays nonzero through a throw request until bot cleanup.
+    # Zombie and item interactions may share the same press.
     if eventPlayer.enhancementId == Enhancement.WRESTLER:
         useLivingProjectile()
-        if eventPlayer.enhancementCarryState != WrestlerCarryState.NONE:
-            # Reserve a ready barricade until this consumed press ends. Bot release
-            # can clear the carry state before the placement rule runs.
-            if eventPlayer.augmentId == Augment.LASER_BARRICADE and eventPlayer.augmentBarrierPlacementCooldown <= 0:
-                eventPlayer.augmentBarrierPlacementCooldown = -2
-                waitUntil(not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead(), Math.INFINITY)
-                eventPlayer.augmentBarrierPlacementCooldown = 0
-            # Keep this player's Interact handler busy briefly after a throw request.
-            # This branch stays consumed even if bot cleanup clears the carry state.
-            if eventPlayer.enhancementCarryState == WrestlerCarryState.THROW_REQUESTED:
-                wait(0.5, Wait.IGNORE_CONDITION)
-            return
 
     # Query aimed items only on interaction; reuse this scratch slot for the chosen
     # position below after sorting. No reader retains the candidate array across waits.
     #!define aimedPowerUpPositions tmp0
     aimedPowerUpPositions = supplyPowerUpPositionList.filter(lambda x: distance(x, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), x)) < 0.5 and distance(eventPlayer, x) <= 6)
+
     if distance(supplyDropLandingPosition, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), supplyDropLandingPosition)) < 0.5 and not isSupplyDropOpen and distance(eventPlayer, supplyDropLandingPosition) <= 6 and supplyDropLandingPosition != null and distance(supplyDropLandingPosition, supplyDropPosition) < 1:
         isSupplyDropOpen = true
         playEffect(getPlayers(Team.1), DynamicEffect.GOOD_EXPLOSION, Color.AQUA, supplyDropPosition, 0.5)
@@ -145,6 +111,7 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         #!define supplyDropItemAngleOffset tmp0
         for supplyDropItemAngleOffset in range(-60, 61, 120 / (supplyDropPowerUpCount - 1)):
             supplyPowerUpPositionList.append(supplyDropLandingPosition + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(supplyDropLandingPosition, eventPlayer)) + supplyDropItemAngleOffset, 0)) * 2))
+
     elif len(aimedPowerUpPositions) > 0 and not (eventPlayer.augmentId == Augment.SCAVENGER and eventPlayer.isHoldingButton(Button.CROUCH) and len(eventPlayer.augmentScavengerBackpack) >= 2):
         # Commit pickup and all four aligned ground lists without waits: another
         # player's pickup or a Reload drop must never observe a half-finished trade.
@@ -169,6 +136,7 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         if tradedPowerUpItemId != PowerUpItem.NONE:
             supplyPowerUpIdList.append(tradedPowerUpItemId)
             supplyPowerUpPositionList.append(pickedPowerUpPosition)
+
     # Scavenger backpack cycling: Crouch + Interact with nothing to store swaps
     # the first reserve with the active slot; an empty backpack stows the active
     # item, an empty slot pulls the first reserve. Reuses the aimed-items scratch.
@@ -183,13 +151,16 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         elif scavCycleItemId != PowerUpItem.NONE:
             eventPlayer.augmentScavengerBackpack.append(scavCycleItemId)
             eventPlayer.powerUpItemId = PowerUpItem.NONE
+
     elif eventPlayer.powerUpItemId:
-        wait(0.25, Wait.ABORT_WHEN_FALSE)
-        # Phase/input guards are in Actions, outside Abort When False checks.
-        # Recheck to prevent activation after game end or a reserved input change.
-        # Pickup/throw success returns above; this handler is the only pickup caller,
-        # so no carried zombie can appear during this powerup wait.
-        if isGameplayActive and not INTERACT_AUGMENT_INPUT_RESERVED:
+        # Any Crouch during the hold cancels use, regardless of abilities. Ending
+        # this invocation on interruption consumes the press even after Crouch is
+        # released; no latch variable or polling loop is needed.
+        waitUntil(eventPlayer.isHoldingButton(Button.CROUCH) or not ruleCondition, 0.25)
+        if not ruleCondition:
+            return
+        # Gameplay is guarded in Actions, so recheck it after the wait as well.
+        if isGameplayActive and not eventPlayer.isHoldingButton(Button.CROUCH):
             powerUpUsage()
 
 
