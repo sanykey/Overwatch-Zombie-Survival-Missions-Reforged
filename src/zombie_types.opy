@@ -969,14 +969,14 @@ rule "DOWNFALLEN GRABS PLAYER":
     eventPlayer.applyImpulse(vect(0, 5, -3), 5 * eventPlayer.sizeScale, Relativity.TO_PLAYER, Impulse.CANCEL_CONTRARY_MOTION)
     waitUntil(not eventPlayer.isUsingUltimate(), 1.25)
     eventPlayer.cancelPrimaryAction()
+    # Facing ends on both interruption and throw, without a wait in between.
+    eventPlayer.botAbilityTarget.stopFacing()
     # A recent interruption must still cancel the grab when native ult ends.
     if eventPlayer.botIsCrowdControlled or distance(eventPlayer.getEyePosition(), eventPlayer.botAbilityTarget.getEyePosition()) > 4 * eventPlayer.sizeScale or eventPlayer.hasStatus(Status.HACKED) or eventPlayer.isDead():
-        eventPlayer.botAbilityTarget.stopFacing()
-        eventPlayer.botAbilityTarget.detach()
+        detachAbilityTarget()
     else:
         eventPlayer.forceButtonPress(Button.MELEE)
-        eventPlayer.botAbilityTarget.detach()
-        eventPlayer.botAbilityTarget.stopFacing()
+        detachAbilityTarget()
         eventPlayer.botAbilityTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, eventPlayer.botAbilityTarget)), 25), 50, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
         eventPlayer.botAbilityTarget.setStatusEffect(null, Status.KNOCKED_DOWN, 1.75)
     waitUntil(not eventPlayer.isUsingUltimate(), Math.INFINITY)
@@ -1051,7 +1051,7 @@ rule "DAYTAKER (ILLARI) BURST":
         lbl_0:
         stopChasing(eventPlayer.botDaytakerCharge)
         eventPlayer.botDaytakerCharge = 0
-        eventPlayer.botAbilityTarget.detach()
+        detachAbilityTarget()
         eventPlayer.botAbilityTarget.isAttached = false
         goto lbl_1
     #Abort
@@ -1070,7 +1070,7 @@ rule "DAYTAKER (ILLARI) BURST":
     eventPlayer.startThrottleInDirection(Vector.FORWARD, 1, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
     #Eject zombies
     if eventPlayer.isAlive() and eventPlayer.botAbilityTarget.isAlive():
-        eventPlayer.botAbilityTarget.detach()
+        detachAbilityTarget()
         eventPlayer.botAbilityTarget.isAttached = false
         #Boss Collision
         if eventPlayer in bossStateList:

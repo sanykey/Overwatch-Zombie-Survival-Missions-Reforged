@@ -1,4 +1,5 @@
 #!mainFile "../main.opy"
+subroutine detachAbilityTarget
 
 # Shared subroutines used by multiple sections (including their dependencies).
 
@@ -851,7 +852,7 @@ def explosionSequence():
 def illariUlt():
     @Name "DAYTAKER'S REVENGE (BOSS)"
     
-    eventPlayer.botAbilityTarget.detach()
+    detachAbilityTarget()
     eventPlayer.botAbilityTarget.isAttached = false
     eventPlayer.botAbilityTarget = null
     eventPlayer.setAbilityCooldown(Button.ABILITY_1, 10)
@@ -936,3 +937,9 @@ def selectPullAimTarget():
     pullAimEyePosition = eventPlayer.getEyePosition()
     pullAimOrigin = (eventPlayer.getPosition() + pullAimEyePosition) * 0.5
     pullAimTarget = sorted(pullAimCandidates.filter(lambda target: distance(pullAimOrigin, augmentGrapnelCenter(target)) <= pullAimRange and eventPlayer.isInViewAngle(augmentGrapnelCenter(target), 35) and isInLoS(pullAimOrigin, augmentGrapnelCenter(target))), lambda target: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(pullAimEyePosition, augmentGrapnelCenter(target))))[0]
+
+
+def detachAbilityTarget():
+    @Name "detachAbilityTarget"
+    # Synchronous; reads the caller-owned target without changing it or yielding.
+    eventPlayer.botAbilityTarget.detach()
