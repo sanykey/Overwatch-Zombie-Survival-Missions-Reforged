@@ -61,16 +61,3 @@ rule "[APOTHECARY AUGMENT] CURE ICON DISCONNECT CLEANUP":
     @Condition eventPlayer.augmentApothecaryCureIcon != null
 
     destroyIcon(eventPlayer.augmentApothecaryCureIcon)
-
-
-rule "[APOTHECARY AUGMENT] ULTIMATE RECHARGE":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.isUsingUltimate() == true
-
-    if eventPlayer.augmentId != Augment.APOTHECARY or eventPlayer.getHero() in [Hero.DVA, Hero.DMON]:
-        return
-
-    # D.Va/D.Mon recharge on ultimate damage in PLAYER DEALT DAMAGE instead.
-    # Other heroes use the activation edge, not the lasting ultimate state.
-    eventPlayer.augmentApothecaryReady = true

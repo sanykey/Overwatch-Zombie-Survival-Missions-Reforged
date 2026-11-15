@@ -1,0 +1,13 @@
+{
+  "beforeElements": 30285,
+  "afterElements": 30287,
+  "elementDelta": 2,
+  "beforeEachPlayerRules": 152,
+  "afterEachPlayerRules": 150,
+  "beforeRules": 326,
+  "afterRules": 324,
+  "unchangedCompiledRules": 322,
+  "riderActionsUnchanged": true,
+  "warnings": [],
+  "limitations": "Compiled verification only; no in-game timing or UI test."
+}

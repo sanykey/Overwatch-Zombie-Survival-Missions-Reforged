@@ -482,14 +482,15 @@ rule "RIDER (WIDOWMAKER) ATTACH TO PLAYERS":
     eventPlayer.attachTo(eventPlayer.botAbilityTarget, eventPlayer.botAbilityTarget.sizeScale * Vector.FORWARD)
 
 
-rule "RIDER DETACH WHEN DEAD OR TARGET IS DEAD":
+rule "RIDER DETACH":
     @Event eachPlayer
     @Team 2
     @Condition eventPlayer.wrestlerZombieCarrier == null
     @Hero widowmaker
     @Condition eventPlayer.botIsAttached == true
-    @Condition eventPlayer.botAbilityTarget != null
-    @Condition (eventPlayer.botIsCrowdControlled or eventPlayer.botAbilityTarget.invisibilityCount or eventPlayer.isDead() or eventPlayer.botAbilityTarget.isDead() or eventPlayer.botAbilityTarget.hasStatus(Status.PHASED_OUT) or eventPlayer.botAbilityTarget.hasStatus(Status.INVINCIBLE) or not entityExists(eventPlayer.botAbilityTarget)) == true
+    # Keep target validity local to its original branch; teammate detachment also
+    # requires a combat target and a Team 2 attachment. Neither branch waits.
+    @Condition ((eventPlayer.botAbilityTarget != null and (eventPlayer.botIsCrowdControlled or eventPlayer.botAbilityTarget.invisibilityCount or eventPlayer.isDead() or eventPlayer.botAbilityTarget.isDead() or eventPlayer.botAbilityTarget.hasStatus(Status.PHASED_OUT) or eventPlayer.botAbilityTarget.hasStatus(Status.INVINCIBLE) or not entityExists(eventPlayer.botAbilityTarget)) == true) or (eventPlayer.botTarget != null and eventPlayer.botAbilityTarget.getTeam() == Team.2 and (eventPlayer.botIsTeleporting or eventPlayer.botAbilityTarget.botIsTeleporting or distance(eventPlayer.getEyePosition(), eventPlayer.botTarget) < 3 or eventPlayer.botTarget.isOnGround() and not eventPlayer.getAbilityCooldown(Button.ABILITY_1) and distance(eventPlayer.getEyePosition(), eventPlayer.botTarget) < 10) == true)) == true
     
     eventPlayer.botAbilityTarget = null
     eventPlayer.botIsAttached = false
@@ -511,21 +512,6 @@ rule "RIDER ATTACH TO TEAMMATES":
     eventPlayer.botAbilityTarget = (sorted(getLivingPlayers(Team.2).exclude(eventPlayer).filter(lambda x: not x.botIsTeleporting and x.getHero() != eventPlayer.getHero()), lambda x: distance(eventPlayer, x)))[0]
     eventPlayer.attachTo(eventPlayer.botAbilityTarget, eventPlayer.botAbilityTarget.sizeScale * vect(random.uniform(-0.5, 0.5), 0.25, -0.75))
     eventPlayer.botIsAttached = true
-
-
-rule "RIDER DETATCH FROM TEAMMATES WHILE ALIVE":
-    @Event eachPlayer
-    @Team 2
-    @Condition eventPlayer.wrestlerZombieCarrier == null
-    @Hero widowmaker
-    @Condition eventPlayer.botIsAttached == true
-    @Condition eventPlayer.botTarget != null
-    @Condition eventPlayer.botAbilityTarget.getTeam() == Team.2
-    @Condition (eventPlayer.botIsTeleporting or eventPlayer.botAbilityTarget.botIsTeleporting or distance(eventPlayer.getEyePosition(), eventPlayer.botTarget) < 3 or eventPlayer.botTarget.isOnGround() and not eventPlayer.getAbilityCooldown(Button.ABILITY_1) and distance(eventPlayer.getEyePosition(), eventPlayer.botTarget) < 10) == true
-    
-    eventPlayer.botAbilityTarget = null
-    eventPlayer.botIsAttached = false
-    eventPlayer.detach()
 
 
 rule "RIDER USE GRAPPLING HOOK":
