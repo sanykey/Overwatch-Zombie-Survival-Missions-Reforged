@@ -23,8 +23,8 @@ rule "AUGMENT MENU":
             "Triple melee reach; weapon hits at extended range deal 75% dmg. Push visible zombies ahead within 10m. Push cd: 9s.",
             "Double magazine capacity. Fully reloading restores the extra ammo.",
             f"Grapple to allies or zombies {AUGMENT_GRAPNEL_MIN_RANGE}–{AUGMENT_GRAPNEL_RANGE}m away. 35 dmg; stun grounded zombies or knock airborne ones down for 3s. cd: 16s.",
-            f"Deploy a wall that blocks zombies. Hold Crouch + Interact to aim; release Interact to place. cd: {LASER_BARRICADE_COOLDOWN}s.",
-            f"Packs: 2x healing, cure 1/3 infection (min 1), +{AUGMENT_APOTHECARY_ULT_CHARGE}% ult. Your latest pack also cures allies. Ult grants a teleport to it.",
+            f"Deploy a wall that blocks zombies. Hold Crouch + Interact to aim; release Interact to place. cd: {LASER_BARRICADE_AUGMENT_COOLDOWN}s.",
+            f"Packs: 2x healing, cure 1/3 infection (min 1), +{APOTHECARY_AUGMENT_ULT_CHARGE}% ult. Your latest pack also cures allies. Ult grants a teleport to it.",
             "Carry 2 extra powerups. Eliminations: 7% chance to gain a powerup. Loot fills your active slot, then backpack.",
             "Heal for 15% of dmg dealt. Gain 50 recoverable health."
         ][localPlayer.augmentId],
@@ -44,42 +44,6 @@ rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)":
     eventPlayer.augmentId = (eventPlayer.augmentId + (Augment.LEECH if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else 1)) % (Augment.LEECH + 1)
 
 
-rule "APOTHECARY CURE ICON":
-    @Event eachPlayer
-    @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.augmentId == Augment.APOTHECARY
-    @Condition eventPlayer.augmentApothecaryPosition != null
-
-    # One icon per owner, kept on that player's entity budget. Moving the saved
-    # teleport point moves the same icon; death/hero changes leave it intact.
-    # No alive/charge guard: a spent teleport or dead owner still has a point.
-    createIcon(getPlayers(Team.1).filter(lambda player: isGameplayActive and not healthpacksCureNormally and player.isInfected and player.enhancementId != Enhancement.ZOMBIE_HYBRID), eventPlayer.augmentApothecaryPosition + offsetUpThreeQuartersConst + offsetUpHalfConst, Icon.POISON, IconReeval.VISIBILITY_AND_POSITION, Color.GREEN)
-    eventPlayer.augmentApothecaryCureIcon = getLastCreatedEntity()
-
-
-rule "APOTHECARY CURE ICON DISCONNECT CLEANUP":
-    @Event playerLeft
-    @Team 1
-    @Condition eventPlayer.augmentId == Augment.APOTHECARY
-    @Condition eventPlayer.augmentApothecaryCureIcon != null
-
-    destroyIcon(eventPlayer.augmentApothecaryCureIcon)
-
-
-rule "APOTHECARY ULTIMATE RECHARGE":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.isUsingUltimate() == true
-
-    if eventPlayer.augmentId != Augment.APOTHECARY or eventPlayer.getHero() in [Hero.DVA, Hero.DMON]:
-        return
-
-    # D.Va/D.Mon recharge on ultimate damage in PLAYER DEALT DAMAGE instead.
-    # Other heroes use the activation edge, not the lasting ultimate state.
-    eventPlayer.augmentApothecaryReady = true
-
-
 rule "CROUCH + INTERACT (APOTHECARY TELEPORT / LASER BARRICADE)":
     @Event eachPlayer
     @Team 1
@@ -92,53 +56,9 @@ rule "CROUCH + INTERACT (APOTHECARY TELEPORT / LASER BARRICADE)":
     @Condition ((eventPlayer.augmentId == Augment.APOTHECARY and eventPlayer.augmentApothecaryReady == true and (eventPlayer.augmentApothecaryPosition != null or healthpackPositionList != [])) or (eventPlayer.augmentId == Augment.LASER_BARRICADE and eventPlayer.augmentBarrierPlacementCooldown == 0)) == true
 
     if eventPlayer.augmentId == Augment.APOTHECARY:
-        # Keep both buttons held for 0.25 seconds; interruption preserves the charge.
-        wait(0.25, Wait.ABORT_WHEN_FALSE)
-        if eventPlayer.augmentId != Augment.APOTHECARY:
-            return
-
-        eventPlayer.augmentApothecaryReady = false
-        # Play Effect snapshots departure before Teleport; no scratch or effect entity.
-        # Bolt Strike's 1.5 flash scaled by three.
-        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.AQUA, eventPlayer.getPosition(), 4.5)
-        # Choose only when teleporting; keep the saved point reserved for actual pickups.
-        eventPlayer.teleport(eventPlayer.augmentApothecaryPosition if eventPlayer.augmentApothecaryPosition != null else random.choice(healthpackPositionList))
+        useApothecaryAugmentTeleportMacro()
     else:
-        # -1 latches aiming until Interact release or death.
-        # After entry, placement and cooldown ignore the common input conditions.
-        # Clear the placement latch on every exit before starting the normal cooldown.
-        eventPlayer.augmentBarrierPlacementCooldown = -1
-        waitUntil(not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead(), 0.5)
-        if not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead():
-            eventPlayer.augmentBarrierPlacementCooldown = 0
-            return
-        playEffect(eventPlayer, DynamicEffect.GOOD_EXPLOSION, Color.BLUE, eventPlayer.getEyePosition() + ((directionFromAngles(eventPlayer.getHorizontalFacingAngle() + random.uniform(-5, 5), eventPlayer.getVerticalFacingAngle() + random.uniform(-5, 5))) * 1.5), 0.1)
-        playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.BLUE, eventPlayer.getPosition(), 75)
-        waitUntil(not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead(), Math.INFINITY)
-        eventPlayer.augmentBarrierPlacementCooldown = 0
-        checkEnhancementPlacement()
-        if isEnhancementPlacementInvalid:
-            return
-        #Laser Barrier health
-        eventPlayer.augmentBarrierHealth = 10000
-        #Barrier center point
-        eventPlayer.augmentBarrierPosition = raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)
-        #Barrier corner 1
-        eventPlayer.augmentBarrierCorner1 = eventPlayer.augmentBarrierPosition + worldVector((-0.5 * LASER_BARRICADE_WIDTH) * Vector.LEFT, eventPlayer, Transform.ROTATION)
-        #Barrier Corner 2
-        eventPlayer.augmentBarrierCorner2 = eventPlayer.augmentBarrierPosition + worldVector((0.5 * LASER_BARRICADE_WIDTH) * Vector.LEFT, eventPlayer, Transform.ROTATION)
-        # Horizontal push direction captured at placement; reference points are center +/- this vector.
-        eventPlayer.augmentBarrierFacing = directionFromAngles(eventPlayer.getHorizontalFacingAngle(), 0)
-        # Along-barrier direction, reused by collision checks.
-        eventPlayer.augmentBarrierEdgeDirection = directionTowards(eventPlayer.augmentBarrierCorner1, eventPlayer.augmentBarrierCorner2)
-        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.BLUE, eventPlayer.augmentBarrierPosition, 2)
-        playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, Color.BLUE, eventPlayer.augmentBarrierPosition, 50)
-        smallMessage(eventPlayer, "  Barricade placed!")
-        #Laser Barrier cooldown
-        eventPlayer.augmentBarrierPlacementCooldown = LASER_BARRICADE_COOLDOWN
-        while eventPlayer.augmentBarrierPlacementCooldown > 0:
-            wait(1)
-            eventPlayer.augmentBarrierPlacementCooldown += -1
+        placeLaserBarricadeAugmentMacro()
 
 
 rule "KEVLAR RANGED DAMAGE COMPENSATION":
@@ -338,56 +258,3 @@ rule "AMMO PACK REFILL FALLBACK":
             # while preserving those spent rounds (34/35 becomes 69/35).
             eventPlayer.setAmmo(augmentAmmoFallbackClipIndex, eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) + eventPlayer.augmentAmmoLoadout[augmentAmmoFallbackClipIndex + 2] - augmentAmmoNativeCapacity)
     eventPlayer.augmentAmmoFallbackState = [eventPlayer.getAmmo(0) < eventPlayer.getMaxAmmo(0), eventPlayer.getAmmo(1) < eventPlayer.getMaxAmmo(1), eventPlayer.isReloading(), eventPlayer.augmentAmmoFallbackState[3], eventPlayer.augmentAmmoFallbackState[4]]
-
-
-rule "LASER BARRICADE BLOCKS ZOMBIES":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.augmentId == Augment.LASER_BARRICADE
-    #Barrier health is greater than 0
-    @Condition eventPlayer.augmentBarrierHealth > 0
-    #Blocked zombie: horizontal band, feet below wall top, eyes above wall base and distance from
-    #the wall, all checked on the same zombie (separate gates could be satisfied by four different zombies).
-    @Condition getLivingPlayers(Team.2).any(lambda player: (distance(eventPlayer.augmentBarrierPosition, vect(player.getPosition().x, eventPlayer.augmentBarrierPosition.getPosition().y, player.getPosition().z)) < 0.5 * LASER_BARRICADE_WIDTH) and (player.getPosition().y < eventPlayer.augmentBarrierPosition.y + LASER_BARRICADE_HEIGHT) and (player.getEyePosition().y > eventPlayer.augmentBarrierPosition.y) and (distance(vect(player.getPosition().x, eventPlayer.augmentBarrierCorner1.y, player.getPosition().z), eventPlayer.augmentBarrierCorner1 + eventPlayer.augmentBarrierEdgeDirection * (min(LASER_BARRICADE_WIDTH, abs(dotProduct(eventPlayer.augmentBarrierEdgeDirection, vect(player.getPosition().x, eventPlayer.augmentBarrierCorner1.y, player.getPosition().z) - eventPlayer.augmentBarrierCorner1))))) < 1.5)) == true
-
-    stopChasing(eventPlayer.augmentBarrierHealth)
-    #Filter horizontal distance, feet height, eye height and distance from wall together.
-    eventPlayer.augmentBarrierTargetList = getLivingPlayers(Team.2).filter(lambda target: (distance(eventPlayer.augmentBarrierPosition, vect(target.getPosition().x, eventPlayer.augmentBarrierPosition.getPosition().y, target.getPosition().z)) < 0.5 * LASER_BARRICADE_WIDTH) and (target.getPosition().y < eventPlayer.augmentBarrierPosition.y + LASER_BARRICADE_HEIGHT) and (target.getEyePosition().y > eventPlayer.augmentBarrierPosition.y) and (distance(vect(target.getPosition().x, eventPlayer.augmentBarrierCorner1.y, target.getPosition().z), eventPlayer.augmentBarrierCorner1 + eventPlayer.augmentBarrierEdgeDirection * (min(LASER_BARRICADE_WIDTH, abs(dotProduct(eventPlayer.augmentBarrierEdgeDirection, vect(target.getPosition().x, eventPlayer.augmentBarrierCorner1.y, target.getPosition().z) - eventPlayer.augmentBarrierCorner1))))) < 1.5))
-    # barrierPushReferencePointList: both push reference points, reconstructed from saved geometry and consumed before wait.
-    #!define barrierPushReferencePointList tmp1
-    barrierPushReferencePointList = [eventPlayer.augmentBarrierPosition + eventPlayer.augmentBarrierFacing, eventPlayer.augmentBarrierPosition + eventPlayer.augmentBarrierFacing * -1]
-    # barrierCollisionTargetIndex: barricade target index, to damage and push each zombie crossing the barrier.
-    #!define barrierCollisionTargetIndex tmp0
-    for barrierCollisionTargetIndex in range(len(eventPlayer.augmentBarrierTargetList)):
-        # barrierCollisionTarget: current zombie, consumed by this iteration's damage/push actions before wait.
-        #!define barrierCollisionTarget tmp2
-        barrierCollisionTarget = eventPlayer.augmentBarrierTargetList[barrierCollisionTargetIndex]
-        if not barrierCollisionTarget.hasStatus(Status.ROOTED):
-            #Damage the barricade
-            eventPlayer.augmentBarrierHealth -= barrierCollisionTarget.getMaxHealth() * 2.5
-            barrierCollisionTarget.setStatusEffect(eventPlayer, Status.ROOTED, 0.5)
-            damage(barrierCollisionTarget, eventPlayer, 10)
-        # barrierImpulseVertical: shared vertical angle component of both impulse directions.
-        #!define barrierImpulseVertical tmp3
-        barrierImpulseVertical = (-1 if barrierCollisionTarget.getPosition().y > eventPlayer.augmentBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(barrierCollisionTarget.getPosition(), barrierCollisionTarget.getPosition() + Vector.DOWN, null, getAllPlayers(), false))))
-        if not magnitude(barrierCollisionTarget.getThrottle()):
-            #If bot is not throttling
-            barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.augmentBarrierPosition, (sorted(barrierPushReferencePointList, lambda x: distance(barrierCollisionTarget, x)))[0])), barrierImpulseVertical), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
-        else:
-            #If bot is throttling
-            barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.augmentBarrierPosition, (sorted(barrierPushReferencePointList, lambda x: angleBetweenVectors(worldVector(barrierCollisionTarget.getThrottle(), barrierCollisionTarget, Transform.ROTATION), directionTowards(eventPlayer.augmentBarrierPosition, x)))).last())), barrierImpulseVertical), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
-    wait()
-    if ruleCondition:
-        loop()
-    if eventPlayer.augmentBarrierHealth > 0:
-        wait(3, Wait.RESTART_WHEN_TRUE)
-    else:
-        wait(6, Wait.RESTART_WHEN_TRUE)
-        #If shield is regenerating from 0HP
-        if eventPlayer.augmentBarrierHealth <= 0:
-            eventPlayer.augmentBarrierHealth = 1
-    chaseAtRate(eventPlayer.augmentBarrierHealth, 10000, 500, ChaseRateReeval.NONE)
-    if ruleCondition:
-        loop()
-
-# SCAVENGER BOT LOOT moved to "PLAYER EARNED ELIMINATION" in player_events.opy.

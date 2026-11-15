@@ -175,5 +175,30 @@ rule "PLAYER DEALT DAMAGE":
         # Include damage from the hero, primary enhancement and scripted powerups.
         heal(eventPlayer, eventPlayer, eventDamage * 0.15)
     elif eventPlayer.augmentId == Augment.APOTHECARY and eventAbility == Button.ULTIMATE and eventPlayer.getHero() in [Hero.DVA, Hero.DMON]:
-        # Positive, non-self ultimate damage only; activation alone gives no charge.
-        eventPlayer.augmentApothecaryReady = true
+        rechargeApothecaryAugmentFromDamageMacro()
+
+
+rule "PLAYER PICKS UP HEALTH PACK":
+    @Event playerReceivedHealing
+    @Team 1
+    @Condition eventWasHealthPack == true
+
+    eventPlayer.startHealingOverTime(null, 5, 20)
+    if isGameplayActive and eventPlayer.enhancementId == Enhancement.OVERCHARGE:
+        # Credit the actual pack healing; Apothecary's additional healing is measured below.
+        eventPlayer.enhancementCapacitorEnergy += eventHealing / 3
+    # Discover packs even after time expires for the teleport fallback.
+    if healthpackPositionList.all(lambda x: distance(x, eventPlayer) > 5):
+        healthpackPositionList.append(eventPlayer.getPosition())
+    if healthpacksCureNormally:
+        eventPlayer.stopAllDamageOverTime()
+        eventPlayer.clearStatusEffect(Status.BURNING)
+        if eventPlayer.infectionLevel > 0:
+            eventPlayer.isInfected = false
+            eventPlayer.infectionLevel = 0
+    elif eventPlayer.augmentId == Augment.APOTHECARY or getPlayers(Team.1).any(lambda owner: owner.augmentId == Augment.APOTHECARY and owner.augmentApothecaryPosition != null and distance(owner.augmentApothecaryPosition, eventPlayer) <= 5):
+        cureApothecaryAugmentInfectionMacro()
+    elif eventPlayer.isInfected:
+        smallMessage(eventPlayer, "Time has run out. Use an Apothecary's health pack to reduce infection.")
+    if eventPlayer.augmentId == Augment.APOTHECARY:
+        pickUpApothecaryAugmentHealthPackMacro()

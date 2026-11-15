@@ -32,6 +32,8 @@
 #!include "long_reach.opy"
 #!include "highrise.opy"
 #!include "dash.opy"
+#!include "apothecary.opy"
+#!include "laser_barricade.opy"
 #!include "augments.opy"
 #!include "player_initialization.opy"
 #!include "player_events.opy"

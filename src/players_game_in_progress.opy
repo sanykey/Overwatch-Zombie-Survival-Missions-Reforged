@@ -234,45 +234,6 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
         saveAlivePlayerState()
 
 
-rule "PLAYER PICKS UP HEALTH PACK":
-    @Event playerReceivedHealing
-    @Team 1
-    @Condition eventWasHealthPack == true
-    
-    eventPlayer.startHealingOverTime(null, 5, 20)
-    if isGameplayActive and eventPlayer.enhancementId == Enhancement.OVERCHARGE:
-        # Credit the actual pack healing; Apothecary's additional healing is measured below.
-        eventPlayer.enhancementCapacitorEnergy += eventHealing / 3
-    # Discover packs even after time expires for the teleport fallback.
-    if healthpackPositionList.all(lambda x: distance(x, eventPlayer) > 5):
-        healthpackPositionList.append(eventPlayer.getPosition())
-    if healthpacksCureNormally:
-        eventPlayer.stopAllDamageOverTime()
-        eventPlayer.clearStatusEffect(Status.BURNING)
-        if eventPlayer.infectionLevel > 0:
-            eventPlayer.isInfected = false
-            eventPlayer.infectionLevel = 0
-    elif eventPlayer.augmentId == Augment.APOTHECARY or getPlayers(Team.1).any(lambda owner: owner.augmentId == Augment.APOTHECARY and owner.augmentApothecaryPosition != null and distance(owner.augmentApothecaryPosition, eventPlayer) <= 5):
-        # Cure one third, at least 1: healing/ult/teleport remain personal bonuses.
-        # Clamp to zero without granting vaccine; keep Hybrid's infection intact.
-        if eventPlayer.infectionLevel > 0 and eventPlayer.enhancementId != Enhancement.ZOMBIE_HYBRID:
-            eventPlayer.infectionLevel = max(0, eventPlayer.infectionLevel - max(1, eventPlayer.infectionLevel / 3))
-    elif eventPlayer.isInfected:
-        smallMessage(eventPlayer, "Time has run out. Use an Apothecary's teleport health pack to reduce infection.")
-    if eventPlayer.augmentId == Augment.APOTHECARY:
-        # Only reduce existing infection; never create or increase vaccine reserves.
-        # Scripted healing is not a health-pack event, so this cannot recurse.
-        # Synchronous scratch: consumed immediately after Heal, with no waits/calls.
-        # No healer is attributed, so no dealt-healing handler can overwrite this slot.
-        #!define apothecaryHealthBefore tmp0
-        apothecaryHealthBefore = eventPlayer.getHealth()
-        heal(eventPlayer, null, eventHealing)
-        if isGameplayActive and eventPlayer.enhancementId == Enhancement.OVERCHARGE:
-            eventPlayer.enhancementCapacitorEnergy += max(0, eventPlayer.getHealth() - apothecaryHealthBefore) / 3
-        eventPlayer.setUltCharge(eventPlayer.getUltCharge() + AUGMENT_APOTHECARY_ULT_CHARGE)
-        eventPlayer.augmentApothecaryPosition = eventPlayer.getPosition()
-
-
 rule "PLAYER CLEARS DAMAGE OVER TIME":
     @Event eachPlayer
     @Team 1

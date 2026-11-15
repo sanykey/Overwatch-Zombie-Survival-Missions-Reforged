@@ -221,27 +221,7 @@ macro initializePlayerAugment():
     if eventPlayer.augmentId == Augment.DASH:
         eventPlayer.augmentDashCharges = DASH_MAX_CHARGES
     if eventPlayer.augmentId == Augment.LASER_BARRICADE:
-        #Augment: Laser Barricade
-        # augmentBarrierFacing: horizontal unit direction saved at placement, to reconstruct both push reference points.
-        # augmentBarrierEdgeDirection: unit direction from corner 1 to corner 2, cached for zombie collision checks.
-        # augmentBarrierPlacementCooldown: -1 while aiming; otherwise remaining placement cooldown in seconds (LASER_BARRICADE_COOLDOWN on placement), for checks and HUD.
-        # augmentBarrierPosition: placed barrier center in world coordinates, for collision checks, push points and HP text.
-        # augmentBarrierCorner1: first lower corner in world coordinates, for beams and collision geometry.
-        # augmentBarrierCorner2: second lower corner in world coordinates, for beams and the along-barrier direction.
-        # augmentBarrierHealth: current barrier health (10000 on placement), for blocking, damage, regeneration and HUD.
-        # HUD lives in AUGMENT HUD (PERMANENT TABLE).
-        #Barricade placement visual
-        createBeam(eventPlayer.filter(lambda _: eventPlayer.augmentBarrierPlacementCooldown == -1 and eventPlayer.isHoldingButton(Button.INTERACT) and distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) <= 30), Beam.BAD, worldVector(vect(-0.5 * LASER_BARRICADE_WIDTH, 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), worldVector(vect(0.5 * LASER_BARRICADE_WIDTH, 0.1, 0), eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), Color.GREEN, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        #Barricade bottom
-        createBeam(getAllPlayers().filter(lambda _: eventPlayer.augmentBarrierPosition != null), Beam.BAD, eventPlayer.augmentBarrierCorner1, eventPlayer.augmentBarrierCorner2, Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        #Barricade side 1
-        createBeam(getAllPlayers().filter(lambda _: eventPlayer.augmentBarrierHealth > 0), Beam.BAD, eventPlayer.augmentBarrierCorner1 + LASER_BARRICADE_HEIGHT * Vector.UP, eventPlayer.augmentBarrierCorner1, Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        #Barricade side 2
-        createBeam(getAllPlayers().filter(lambda _: eventPlayer.augmentBarrierHealth > 0), Beam.BAD, eventPlayer.augmentBarrierCorner2, eventPlayer.augmentBarrierCorner2 + LASER_BARRICADE_HEIGHT * Vector.UP, Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        #Barricade top
-        createBeam(getAllPlayers().filter(lambda _: eventPlayer.augmentBarrierHealth > 0), Beam.BAD, eventPlayer.augmentBarrierCorner2 + LASER_BARRICADE_HEIGHT * Vector.UP, eventPlayer.augmentBarrierCorner1 + LASER_BARRICADE_HEIGHT * Vector.UP, Color.BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        #Barricade health
-        createInWorldText(getAllPlayers() if eventPlayer.augmentBarrierHealth > 0 else null, "{0}HP".format(ceil(eventPlayer.augmentBarrierHealth)), eventPlayer.augmentBarrierPosition + Vector.UP, 1.5, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.BLUE)
+        initializeLaserBarricadeAugmentMacro()
     # HUD lives in AUGMENT HUD (PERMANENT TABLE).
     if eventPlayer.augmentId in [Augment.KEVLAR, Augment.LEECH]:
         # Share the native-health readiness gate; keep both pools recoverable.
