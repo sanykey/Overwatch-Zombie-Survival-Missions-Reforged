@@ -16,7 +16,7 @@ macro useHighriseAirActionMacro():
         eventPlayer.augmentMovementReadyAt = getTotalTimeElapsed() + HIGHRISE_COOLDOWN
         eventPlayer.applyImpulse(Vector.UP, HIGHRISE_JUMP_IMPULSE, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
         # Arm the airborne damage bonus; the flight rule keeps it active
-        # until this impulse's liftoff ends in a landing.
+        # until landing or the flight timeout, then grants the grace period.
         eventPlayer.augmentJumpDamageActive = true
 
 
@@ -79,10 +79,11 @@ rule "[HIGHRISE] AIRBORNE DAMAGE":
     @Condition eventPlayer.isAlive() == true
 
     # Armed on activation. A grounded activation still lifts off from its own
-    # impulse, so hold for that liftoff first; the bonus then lasts to landing.
-    # Death breaks out of both waits and clears it.
+    # impulse, so hold for that liftoff first. Landing/death or the duration
+    # timeout ends the flight window; keep the bonus for the grace period.
     waitUntil(eventPlayer.isOnGround() == false or not eventPlayer.isAlive(), Math.INFINITY)
     applyDamageDealtModifier()
-    waitUntil(eventPlayer.isOnGround() or not eventPlayer.isAlive(), Math.INFINITY)
+    waitUntil(eventPlayer.isOnGround() or not eventPlayer.isAlive(), HIGHRISE_DAMAGE_DURATION)
+    wait(HIGHRISE_DAMAGE_GRACE_PERIOD)
     eventPlayer.augmentJumpDamageActive = false
     applyDamageDealtModifier()

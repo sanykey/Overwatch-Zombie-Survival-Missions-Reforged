@@ -1,0 +1,15 @@
+{
+  "compiler": "OverPy 9.7.21",
+  "beforeElements": 30369,
+  "afterElements": 30371,
+  "deltaElements": 2,
+  "warnings": [],
+  "changed": [
+    "[HIGHRISE] AIRBORNE DAMAGE",
+    "AUGMENT MENU",
+    "useAugmentAirAction",
+    "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)"
+  ],
+  "newVariables": 0,
+  "limitations": "Compiled output checked; no in-game test."
+}

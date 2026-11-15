@@ -15,6 +15,8 @@
 #!define LASER_BARRICADE_WIDTH 5
 #!define LASER_BARRICADE_COOLDOWN 25
 #!define HIGHRISE_DAMAGE_BONUS 40
+#!define HIGHRISE_DAMAGE_DURATION 7
+#!define HIGHRISE_DAMAGE_GRACE_PERIOD 0.1
 #!define BOLT_STRIKE_RADIUS 10
 #!define BOLT_STRIKE_CHAIN_TARGETS 2
 #!define BOLT_STRIKE_CHAIN_DAMAGE_RATIO 0.25
@@ -570,9 +572,9 @@ playervar augmentState3
 #!define wrestlerThrowDamageCredit augmentState3
 # Laser Barricade center; retained across waits and reevaluated by live effects.
 #!define augmentBarrierPosition augmentState3
-# HIGHRISE: the damage bonus was armed by an activation and lasts until
-# the following landing. Cleared by the flight rule on landing/death; only the
-# activation write and the flight rule own this slot.
+# HIGHRISE: damage bonus armed on activation, retained for the grace period
+# after landing, death, or the flight timeout. Only the activation write and the
+# flight rule own this slot.
 #!define augmentJumpDamageActive augmentState3
 # Dash smoke deadline; refreshed on every successful dash and read live by
 # smoke cleanup. Invulnerability renews directly on activation; no other Dash use.

@@ -1,0 +1,1309 @@
+{
+  "elements": 30369,
+  "rules": [
+    {
+      "name": "OverPy <­tx> / <­fg> setup code",
+      "hash": "32bb7d4dc2e696cb3a929a80dd0562aafb7dbac3360a7a219247a4187e636485"
+    },
+    {
+      "name": "Initialize global variables",
+      "hash": "a574ab3351d8b26c6518e0962024ef20a99f36ca7a2d49eb43ef530e99a4ce7d"
+    },
+    {
+      "name": "Subroutine createRemainingObjectivesHud",
+      "hash": "3126d894cd244f19958f1e5b9b3bf614117ff87b5d2fc353069158ca513c9771"
+    },
+    {
+      "name": "setDifficulty",
+      "hash": "856351c167dddd1a47e1e289eed1745c590fa5d23c9e2373fe698f5d17578a1d"
+    },
+    {
+      "name": "setPrematchTimer",
+      "hash": "eb6ee3830d40301e69224cc199db014c9c2419069429d313029c0dc789ac01be"
+    },
+    {
+      "name": "shortenPrematchTimer",
+      "hash": "a48eef2c55386560a08434f20fc3cb8c558c1d524674b2ef6c7a82d80a366a1a"
+    },
+    {
+      "name": "enableDisableAbilities",
+      "hash": "d4de1f9142a07f983554cfacb4df85c14c53ac8a313710e0fc00540170315fec"
+    },
+    {
+      "name": "objectivesManagement",
+      "hash": "867e1bd4765ef7bbd210c916064d866145cbd38778f1378fe58ee062bbd76acd"
+    },
+    {
+      "name": "selectTarget",
+      "hash": "eb51c67bef4a401fa652c79f85c3e183edddce86e8855ce457a5da01390e4af0"
+    },
+    {
+      "name": "restoreDefaultFacingMovement",
+      "hash": "f39fd4cc02ad7dba22fdea91fe0e54684df9f00e8a8427a50e2dd6d621fbb1a5"
+    },
+    {
+      "name": "botRespawnInitialization",
+      "hash": "3486a355120cc5d2fd7fdef245bf0e458e6150c6d640656594c502004f2df887"
+    },
+    {
+      "name": "abilityPlacement",
+      "hash": "0b51249dc023221e38185430aba3b060e65f709be419b0ea7dc2a1fabb884bdd"
+    },
+    {
+      "name": "explosionSequence",
+      "hash": "48956ab1b3fedb6a1024adad1488fab253ef8d4810ccf38719d45faa7be01c80"
+    },
+    {
+      "name": "DAYTAKER'S REVENGE (BOSS)",
+      "hash": "2e21e81531ddcf2bff9d9c6f8eb4e2040b3e02750611d4d170a3bd4b63169fa1"
+    },
+    {
+      "name": "applyScaledMoveSpeed",
+      "hash": "828054546c3fd337876f14fa1e8967efa77789743ed00d00e0c0484c9aa73ef6"
+    },
+    {
+      "name": "refreshCurrentObjectivePosition",
+      "hash": "2e17fefef3029c42c8d85efa7d19611c5788e6f5bcc7d743e31bd043bb5c26ac"
+    },
+    {
+      "name": "refreshCurrentObjectiveType",
+      "hash": "92d96a6447bf42ee84a460fca273d74bacd45486c85273446cb08b8369d89f4d"
+    },
+    {
+      "name": "faceCurrentThrottle",
+      "hash": "313ad8aa0c3d4285afab0edd3e2de9f899294fbebd45db4311ce4e7a9dc94ea8"
+    },
+    {
+      "name": "excludeCurrentHeroFromSelection",
+      "hash": "8dc42e0392cbf9f5b7910445f6a7087bc727e6f59970ebfd2ad754cb50b42606"
+    },
+    {
+      "name": "applyBotKnockbackScale",
+      "hash": "ceda1f4dffdcc23b7aa4581aa79e90878618eb42eaf5b1a0c0f756763be21020"
+    },
+    {
+      "name": "applyCurrentSizeScale",
+      "hash": "eae6df9650abb6562bddc6d6c516c6ec814825abc64d0419cddd927696be1cdf"
+    },
+    {
+      "name": "applyBotBossHealth",
+      "hash": "548cf93a4b271f866d084188f129d72a52a53d5c521a27c9ecc28d318be54d2d"
+    },
+    {
+      "name": "resolveReconnectUserIndex",
+      "hash": "433568b50b1918427b7b4fd9e59e8d1a8c02d15cf2c37b1b28c37aeebef4727b"
+    },
+    {
+      "name": "selectPullAimTarget",
+      "hash": "060dbad4430b7cf1bf4223286329ef199b5240e8fa734a0146638d7375d49065"
+    },
+    {
+      "name": "[CHARGE_BATTERY] RESET COOLDOWNS ON ULTIMATE",
+      "hash": "8a9226fc10bbdfa10c9a52c3099e35799e1738e3a47c90f0ed36d9dae034e335"
+    },
+    {
+      "name": "[CHARGE_BATTERY] PLACE BATTERY",
+      "hash": "b0272dbd81ffa2e1ac9e0cb20bac8cca3a25b784e55cb2f67c06325e26424bfd"
+    },
+    {
+      "name": "[CHARGE_BATTERY] USAGE AND COOLDOWNS",
+      "hash": "9f4e650a50bcaf605d9af451478de026e917d33dd81c4b6ba9fbe5af6e4698b6"
+    },
+    {
+      "name": "PREGAME QUICK TIPS FOR PLAYERS",
+      "hash": "783e9c42286b2942904d433bd1c1f14c6306d9b8fc0d12088ea8f2aae456555e"
+    },
+    {
+      "name": "SPAWN BOTS",
+      "hash": "9bd811cdf79e26c30abc328549753aa908bfa940fac6816fa4e08affe17807d6"
+    },
+    {
+      "name": "SPAWN TIME CONTROL",
+      "hash": "29a8162de7f244581dfabbdfcd737edd54444676bf35786a577223647aae23c8"
+    },
+    {
+      "name": "START GAME IF WAITING FOR PLAYERS",
+      "hash": "95175c5d7d972b88179ce1b1972d33784f5d22837e4051eaa50d7b8f7dd4807d"
+    },
+    {
+      "name": "SKIP ASSEMBLING HEROES",
+      "hash": "3da2c98d79001f69184ec3a26b126c1a0f850b5d167062ca07d7af9bc8def5ad"
+    },
+    {
+      "name": "PREGAME SPAWN ROOM ROTATION",
+      "hash": "ad978cd40b380e90a501f3626ee59f1349afe692c8c7edddc0327a6366414e28"
+    },
+    {
+      "name": "VARIABLE ASSIGNMENT",
+      "hash": "0a969a5dfd687294a002f0b3dbd1e34cfb4bac580c7b1b1db2e5694309cdd680"
+    },
+    {
+      "name": "START GAME",
+      "hash": "0de0d8b18d6b91aafe390c7c02dc329931b67b4f4bafd289a5d670047226cb75"
+    },
+    {
+      "name": "generateMapGrid",
+      "hash": "ba3914e103da6ce343abc4ba1b5b4d8aa5d7c9ce6b94d7f4ed5324e3de7e2b08"
+    },
+    {
+      "name": "GLOBAL MENU INITIALIZATION",
+      "hash": "bcec9db6d236463a4730a57b06b54f6c9a6a91852eecfd369021a56d69ff7ad1"
+    },
+    {
+      "name": "EFFECTS/TEXTS",
+      "hash": "389d92d68ad5d0009d954974f9c02e450981870306e5497b0333c5b9ad43ed14"
+    },
+    {
+      "name": "END VOTING",
+      "hash": "ea2b23cf9136bee03dff9e5848d58294c1e38a7827acaacc32e53c746fbe3420"
+    },
+    {
+      "name": "MUSIC/ANNOUNCER CONTROL",
+      "hash": "aee409ac9c8eb2897f93c732b020946d6c26c996c3bafde3416b553844371e09"
+    },
+    {
+      "name": "determineZombieMode",
+      "hash": "99d6f87bbce9974255bb36dabebb58383d5dce24002723a84182299dda3700a8"
+    },
+    {
+      "name": "setZombieMode",
+      "hash": "66564102f5e1fb86f1adbb804c3f30ffa35e2d14b7d9466be3a098d8eaae6039"
+    },
+    {
+      "name": "determineChallenge",
+      "hash": "c2c875fec8881f4f3e862d4f8758a4b17bb0a4d8912c8d5658048563b2e48576"
+    },
+    {
+      "name": "determineObjectiveType",
+      "hash": "7c6ab6dacd768e2fe3dba807fabfdc22e1a5b59d049c2de91582ce48502396ef"
+    },
+    {
+      "name": "Subroutine selectVoteWinner",
+      "hash": "8a78672670856bb9341b10010c662cb4b31326e12f43fb23e8a8ba242569b5dd"
+    },
+    {
+      "name": "setObjectiveType",
+      "hash": "e026004fa2ca9f0e3341cc80dfe5a09954146b58c7ff3c1086a0fbd6a273673b"
+    },
+    {
+      "name": "PLAYER MENU INITIALIZATION",
+      "hash": "db512569feee61083467e7873483467b334a6a7cf82f5780d91009e02d258685"
+    },
+    {
+      "name": "EFFECTS/TEXT",
+      "hash": "633f599b370fca2bc64bd3abaf55b823543e9b195a9182709ebe518f99999d19"
+    },
+    {
+      "name": "PLAYER SELECTS/RESELECTS HERO",
+      "hash": "c57be5bd67918d827b9e2249a268722c3270e128c0677d6737b62f90d3f7ef14"
+    },
+    {
+      "name": "PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY)",
+      "hash": "4bac22c9a2ef3e1615fe28d36f527c7bfef675b3fde7009df4810eac52bbb6b5"
+    },
+    {
+      "name": "PLAYER MENU CONTROLS (ULTIMATE, DIFFICULTY VOTE)",
+      "hash": "96855e131bb976a8bac759acc521536321bef1c1447eaac413dfb1d355d7407f"
+    },
+    {
+      "name": "PLAYER MENU CONTROLS (ABILITY 1, ZOMBIE VOTE)",
+      "hash": "42287494169c3affd320b396ed27481417e5e001592d00ba2669d0f2dcfe42ad"
+    },
+    {
+      "name": "PLAYER MENU CONTROLS (ABILITY 2, OBJECTIVE TYPE VOTE)",
+      "hash": "364479b0cb85b8f65edb0f430eedf5e575b970f126dc084e557c6a9bda775664"
+    },
+    {
+      "name": "PLAYER MENU CONTROLS (MELEE , ENHANCEMENT SELECTION)",
+      "hash": "51938dd28d4613a2419b892918137d7765b77f122c920b63b7030d46f259d61b"
+    },
+    {
+      "name": "UPDATE PREGAME VOTING STATUS",
+      "hash": "0129e52501e7f012be303b898c07c86e3989b13b63dfe9f49c1a5ff37ade2906"
+    },
+    {
+      "name": "PREVENT PLAYERS FROM LEAVING START EARLY",
+      "hash": "5608b80f6fd22176eaa5e01afba94416c1d511d0d6f13e1e167dc9284a13468f"
+    },
+    {
+      "name": "attachPlayerToPregameAnchor",
+      "hash": "c936edb60297fc5399bd33345017cdf3f761d2ff2f2dd368d606e7d9bdb56b05"
+    },
+    {
+      "name": "advanceMenuChoice",
+      "hash": "d8c6dd5daac9250685faff8f2c31379dedbd5264ad838cf4247673e491b393ac"
+    },
+    {
+      "name": "APPLY PLAYER CAMERA",
+      "hash": "04992b995b004e209e3b02c42661db00dfb053e180724a2eeb22722a06c724bc"
+    },
+    {
+      "name": "DISABLE PLAYER CAMERA WHILE AIMING",
+      "hash": "f522d33cc12626a72a9133ce6d9552cdde40bc7aa7eb4017a76bf892087d5939"
+    },
+    {
+      "name": "CYCLE PLAYER CAMERA",
+      "hash": "5f2fe22209be260c6ca64681f231d908fbbb87c21c90649e7bcf18ab8675ce91"
+    },
+    {
+      "name": "EFFECTS/TEXTS",
+      "hash": "bdf3118008c75ec0c7095b3b806e601d349576ddaf0d38a6b706055bc8f4d09a"
+    },
+    {
+      "name": "ATTACK SPAWN ROOM CONTROL",
+      "hash": "a8e47c0fa5647f4ffb410d26d5346aa6fd9790627ae3df546d8947bd0b970c58"
+    },
+    {
+      "name": "PREVENT MATCH TIME FROM UNPAUSING",
+      "hash": "f477b18133ea59573a1b69017e91edb76e7873652286d57d221e110b19e0fb6b"
+    },
+    {
+      "name": "TRI­GGER OVERTIME MUSIC",
+      "hash": "409417b4f9fb866b2f276eab412e3ee2ffa9dae8103a96e427cf9a43b49eb4e0"
+    },
+    {
+      "name": "ZOMBIE SHUFFLE",
+      "hash": "ff36b6effe85b3cd66d2105d9dc18ff181360c501ba24f4f41d3e533be23ac22"
+    },
+    {
+      "name": "SWARM SHOOTOUT",
+      "hash": "bf7baccfb15145fc21fdeda70e9cb79a0963c63d077a3cd133aa647daa3f44d3"
+    },
+    {
+      "name": "RANDOM ABILITIES",
+      "hash": "6b499342cafbdb99ecb340dd7ce241e81a97df5e650e86962aac56eabde14913"
+    },
+    {
+      "name": "PLAYER LEAVES THE GAME",
+      "hash": "5239cd4a41001f696295bafc2290e56212e32c5ed4204cce73a3b38e8704c282"
+    },
+    {
+      "name": "OBJECTIVE COMPLETE",
+      "hash": "b0369285864d9ee0ace51e1b355da3202c7d2d170b02973b0a924ba50e0b4b07"
+    },
+    {
+      "name": "PLAYERS IN EXTRACTION POINT CONTROL",
+      "hash": "9709313f156a78bd44f5f08d3435e1538b74a549ebcbcd263620546a5f387c49"
+    },
+    {
+      "name": "EXTRACTION ZONE INFECTION INCREASE",
+      "hash": "5af204eea2cdfb4d5b38104847381771a210defa6ae91934b40ed78f631fde53"
+    },
+    {
+      "name": "PLAYER EXTRACTION CONTROL",
+      "hash": "45a051256d67267d37f315df0c5c56c2240665918e65eb9486a4ba342f99292f"
+    },
+    {
+      "name": "WIN/LOSS CONDITIONS",
+      "hash": "4513a71c805b0b6f23c396017e7491bc5a3cc9fb66794dfcf06ea628094dbb47"
+    },
+    {
+      "name": "nukeMap",
+      "hash": "9fd7ce434aae27fb14560ea918dd6ecf2a4c3e9c3074844af3abdf676c58e279"
+    },
+    {
+      "name": "startExtractionAscent",
+      "hash": "76552bedb818ec939cefecfadd39e011007eb79f824494d3a0620a211882e4c5"
+    },
+    {
+      "name": "PLAYERS ON OBJECTIVE CONTROL",
+      "hash": "f81db2b402133fa9feb79c6a5d08043fbf59d5fe01e004dd43837d969192604e"
+    },
+    {
+      "name": "INCREASE OBJECTIVE CAPTURE PERCENTAGE",
+      "hash": "9d1b408002a93f5d5a723e760125a71875bc4542fd5c32ce42a09d175b61cd37"
+    },
+    {
+      "name": "DECREASES CAPTURE PERCENTAGE",
+      "hash": "a68fec00bfde63f1af950d122b96506baec898dcd17fe4f42639caee3493840e"
+    },
+    {
+      "name": "SPAWN BOSS",
+      "hash": "3707c3086abcfd895d8b7bd25048f82e09d9c59290170bac6b2173737824c9ad"
+    },
+    {
+      "name": "BOT BECOMES BOSS",
+      "hash": "5ab399cd655135e9a81055c6dda566e1ade592836a6f591dff48ab4fa0130b0d"
+    },
+    {
+      "name": "BOSS STUCK",
+      "hash": "3d16ab50b11cb96d06316743b5fda3c641300cc37c5b5534fcaedc3c4c682539"
+    },
+    {
+      "name": "BOSS HEALTH CONTROL (ALL BOSS OBJECTIVES)",
+      "hash": "d35b38ad107c87d9398f6477b1bf145e2ece7aa25dc49a8123cb3c56728471f7"
+    },
+    {
+      "name": "BOSS DIES (ALL BOSS OBJECTIVES)",
+      "hash": "d8eb8b852ccdee506b6cc0c0e222931650d5165bc0036a3ac0a72f0b5bb37918"
+    },
+    {
+      "name": "BOSS TAKES KNOCKBACK",
+      "hash": "d4aa98f2e01c63fb9846cf42f89d2a503b1fd45841d00f7abf13d2994a390a5d"
+    },
+    {
+      "name": "BOSS TELEPORT TO TARGET IF NOT USED",
+      "hash": "995c101fa33ed24bc31d3bd22e5bb3686ba7222534b0c1237709ec7f7fe8041a"
+    },
+    {
+      "name": "bossReturn",
+      "hash": "8c3ec679c5ad52a25a9847634ed8095780623b233d067172ca943a8f45abd629"
+    },
+    {
+      "name": "completeBossObjective",
+      "hash": "5ceb0ed398c8e57e16c53d6d8840bdf8c4d9260d7bb62b3bb5be4cc28657307c"
+    },
+    {
+      "name": "BIOMORPHING GOAL START",
+      "hash": "0c07d7e9764458678c27c819a8c3ec29ba88349bbf1572c8ab2c989043c87a30"
+    },
+    {
+      "name": "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS",
+      "hash": "502e06a2bcdd5969025ba5fccb0275ca3df7d60533a4dc5cb41687c5946c68f2"
+    },
+    {
+      "name": "BIOWASTE IS PICKED UP",
+      "hash": "d476051f22669b1edaa15b48013b037b73163ee7c739879556b90e77c2140664"
+    },
+    {
+      "name": "PLAYER DELIVERS RESOURCE VALUE",
+      "hash": "88bc9703d3b3ca18fe626f75761668bd961f7eda4cad0e4db0aa10afed036314"
+    },
+    {
+      "name": "BIOWASTE HOLDER DIES, ORB IS QUEUED AND RESOURCE AMOUNT REMOVED",
+      "hash": "24b2120c11a629e439c831200544611e58bec0526b367284f6b4402d1fe8915e"
+    },
+    {
+      "name": "BIOWASTE MANAGEMENT",
+      "hash": "61b94af51decdceaaa957b002ae871bee673df799bfc22b1e6bd7a5a5162c40e"
+    },
+    {
+      "name": "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE",
+      "hash": "eb1c74b3af4736e21cb9d52396f9b60e80a44a9126e18d2b32e4e853d477d5c0"
+    },
+    {
+      "name": "INITIALIZE SURVIVOR TO BE RESCUED",
+      "hash": "84ac6d6b77401e6f0bbec8a84c2eb103f5b1df90f01021c239fb985a2f927d00"
+    },
+    {
+      "name": "SURVIVOR TO BE RESCUED DIES",
+      "hash": "e92ee304c1a6a8d761cb8757d07d488328666499b3bfdee5f5aecbeee1a6e41f"
+    },
+    {
+      "name": "SURVIVOR FOLLOW TARGET",
+      "hash": "f1d5f35d80421b20b61558a737a3b733e263a91afd6701e4d2ea802e49933329"
+    },
+    {
+      "name": "CREATE PATH",
+      "hash": "c7f4f72415649eacbcdc16b5af0e584c147103477f3e51a42b5fb33409bc38a9"
+    },
+    {
+      "name": "DELETE PATH",
+      "hash": "060b368a1656bd1112846c78f3161f5198855f05ce81d4cb4b3aa06cbde19511"
+    },
+    {
+      "name": "SURVIVOR FOLLOW TARGET LETS GO",
+      "hash": "e9ee225888395dffa089732636506cfdaecaa88bd8538382c17d9c0743916ec1"
+    },
+    {
+      "name": "PLAYER SAYS GROUP UP TO SURVIVOR",
+      "hash": "0778acb8cc3d120c63ecafa2fa3b1a87f7f7653cc5d2d8d868578e10d63f2b11"
+    },
+    {
+      "name": "SURVIVOR JUMP",
+      "hash": "5f7186d53410895d24ac3bba7dcfc7378121d7aefa888ea9885fd5d5b62f6df8"
+    },
+    {
+      "name": "SURVIVOR REACHES EXTRACTION SITE",
+      "hash": "2edff7ee21ddd1426be00365ed09e981a6849caa95a5e9f9a8ba3a4a6b3f3190"
+    },
+    {
+      "name": "ASSIGN ZOMBIE TO BECOME EGG",
+      "hash": "9d172ed958520e5d68477409cb0db023c63ada22bd7eb38cbee958ae4842b647"
+    },
+    {
+      "name": "BOT BECOMES ZOMBIE EGG",
+      "hash": "43993348c45a192592d87c85781a644c412d9df3e5c6daae6d570bdff87f336c"
+    },
+    {
+      "name": "BOTS TELEPORT TO THE EGG",
+      "hash": "110860a01b551316c8c38968b5f07e292c4f8e744993c08fca3484c96dc880d5"
+    },
+    {
+      "name": "EGG SWITCHES THE POSITION FOR YOU",
+      "hash": "f7cc6c9ae1b588bad7c4c0da7ca6577186a6ddf4cc70bec2fae2805a4570666b"
+    },
+    {
+      "name": "SET UP TERMINAL POSITIONS",
+      "hash": "69bc06affd69bd7c853690f3533b3cfbea110bb5faa212e3edfadfa478a2f9a1"
+    },
+    {
+      "name": "PLAYERS AT TERMINALS CONTROLS",
+      "hash": "ce898206e217829ef2181723adf05d6f424715f745fe683bbcb6dafdf1af14c2"
+    },
+    {
+      "name": "PLAYERS REPAIR TERMINALS",
+      "hash": "77ec912ffcaeb135cdf18e72feaa459e54daa23b61695325bfca7da6d30a56cf"
+    },
+    {
+      "name": "chaseSatelliteTarget",
+      "hash": "009fe219275db5e5fb11290008b3dbc634579769ff27829d2a241dbceed2f852"
+    },
+    {
+      "name": "PLAYER INITIALIZATION",
+      "hash": "831edd9313fbf78d6a40f33ffc99c33e34b83650b5b330e7ecefef1776ff0817"
+    },
+    {
+      "name": "EFFECTS/TEXTS",
+      "hash": "d64f13ceea19a827ef54b276d6d4c12ada93c2ef1def2d3f2789b12344163f43"
+    },
+    {
+      "name": "PLAYER GETS DOWNED",
+      "hash": "1143da4361662f211904fa4529a37a741d40a6fab288c694295d3f782f347da4"
+    },
+    {
+      "name": "REVIVE PLAYER OR ADVANCE DEATH TIMER",
+      "hash": "e36f80d97242b942c1a3dc077f70ed9a36bcf67f9b0b575704d57dcecf1eadcb"
+    },
+    {
+      "name": "PLAYER PICKS UP HEALTH PACK",
+      "hash": "948a01b328c4edc47554abcb338bc90ef395d718e3642bebc803355bcf182eb0"
+    },
+    {
+      "name": "PLAYER CLEARS DAMAGE OVER TIME",
+      "hash": "3320792bd7897e2fd62ffcf1df41e00f142b781a597b88cf655e07a07574a978"
+    },
+    {
+      "name": "PLAYER INFECTION DAMAGE MANAGEMENT",
+      "hash": "2b3d9afca3a6fd0f1a7c9e66599b357c4bdec6e4395f64f6dd1ab045a8cee8fc"
+    },
+    {
+      "name": "PLAYER AFK",
+      "hash": "68218da1c298e782019b19b03610b7fc6560aa8b4038456a3a7ea555abc15b40"
+    },
+    {
+      "name": "PLAYER SWITCHES HERO",
+      "hash": "59893fee2423e0eabc7fb5c7d1132f4f87f172b8d5772ede78ab2fdbd9ba900a"
+    },
+    {
+      "name": "PLAYER AUTOMATIC RELOAD",
+      "hash": "1e8342ab296a617d338bae40a607d92ebd4945cca14c97a26e84bdf2498b2220"
+    },
+    {
+      "name": "OBJECTIVE CHANGES AND PLAYER ENTITIES UPDATE",
+      "hash": "a75fa508532bca7de4dfcce52463acda6e8c5a2c23f1be84dfb121bbc2e339c3"
+    },
+    {
+      "name": "PLAYER TARGET (ADD)",
+      "hash": "dbd6e9135f5164fe69d2a04ca8fa65de7c4402b54b67cc3e5cc3138ddb4fa51e"
+    },
+    {
+      "name": "PLAYER TARGET (REMOVE)",
+      "hash": "35b55335824700333df9b95d87e69f4dbc1c8306f0f97192f1a1841aa16ba00c"
+    },
+    {
+      "name": "teleportToClosestPlayer",
+      "hash": "e58ebad2815129cdbb8bb40a1cfe4731febbb83956fda2319acac3a821d13362"
+    },
+    {
+      "name": "teleportDownedPlayerToWalkable",
+      "hash": "d6105451d2076ea25ec4d0fd3ca319890e43dc0a800929344b8f8b7ae0758e06"
+    },
+    {
+      "name": "updateUsers",
+      "hash": "b98faa51e5b4026fc894c40a99d7d2d4ca307d79714301abbf89d152c42c4a76"
+    },
+    {
+      "name": "Subroutine saveAlivePlayerState",
+      "hash": "6d9978d670972bc6c0b44d667b700cae5d76c4176c0d4656e544bf9d1813847e"
+    },
+    {
+      "name": "ANA SELF SUPER NANO",
+      "hash": "01d45dc444c2c5d6c8d503c740dae8ee1a63f25b921cbf0f8a53940c53f44b52"
+    },
+    {
+      "name": "CC COOLDOWN FROM DOWNFALLEN/BRUTE",
+      "hash": "23dbfff4d66b82e08d965be38cbff562fcdc922a53d2acd3639167d3f14d0ea0"
+    },
+    {
+      "name": "SOMBRA USES TRANSLOCATOR",
+      "hash": "f7ab32e29f394151f4ba8c5c5fe5567682abd77e0e3c2118ee138cc06c05af02"
+    },
+    {
+      "name": "DOOMFIST INVIS WHILE ULTING",
+      "hash": "d60004e14ce8329ccd512e8bf8b36f67f76bb1a53c99d33385ee3f1c21ee1d28"
+    },
+    {
+      "name": "MOIRA & VENTURE INVIS WHILE USING SKILL",
+      "hash": "f5fa895c7383d29c6496601fd63de922fd8f43217885c0426b36fb14f71ea8ae"
+    },
+    {
+      "name": "TRACER INVIS WHILE RECALLING",
+      "hash": "aa93627e5bbc1f18bb1ecc57e9f75e7e92d3978dd1447affd9479b3d3a9a1823"
+    },
+    {
+      "name": "applyDamageDealtModifier",
+      "hash": "ebe3b85690d1f3dff431b04dbab5b9f77b340e07eff8dcc9aaa0e4e87e874319"
+    },
+    {
+      "name": "SOLDIER TACTICAL VISOR DAMAGE BONUS",
+      "hash": "2b824fb838b8d6a44f1b5dd95322fde12b52c715774637393700bf2a634ee5d0"
+    },
+    {
+      "name": "applyDamageReceivedModifier",
+      "hash": "9f9fe9b91bd0e164616220e455aec1d2fa0ab377d0520ff037bbcd8eb196d4d8"
+    },
+    {
+      "name": "PLAYER ULTIMATE DAMAGE RESIST",
+      "hash": "babcdafcb89713e49a338736a8ba7460af721071ce277d95ef07cd307d84f520"
+    },
+    {
+      "name": "SIERRA TRACKING SHOT HACK",
+      "hash": "c8215df1316d479c67d024d15cab8f636b53d547ccfddb95fe4739914477b03e"
+    },
+    {
+      "name": "REINHARDT SHIELD SLAM STUN",
+      "hash": "113a711dc62bc6659bd06121ce201b966bf635d916c5e7824cc561c56241b58b"
+    },
+    {
+      "name": "BRIGITTE SHIELD BASH STUN",
+      "hash": "b3cb6d2250ef91ce015fc27895e267490536c736b5afd2a3316f37e857dd16b5"
+    },
+    {
+      "name": "CASSIDY FLASHBANG STUN",
+      "hash": "5de2659e5d7af2380c03f62c52619b217d3c52c1c3cd26ffef993996279d8ff8"
+    },
+    {
+      "name": "Fix bot health",
+      "hash": "016b13ac3aa19412e9d77c716a50b6a312af17f67a4e1d964bca9689a980bc5d"
+    },
+    {
+      "name": "BOT INITIALIZATION",
+      "hash": "a73f92a6685ae5dfed86eea306951669c45ec2c99c458d8db103de846118edf6"
+    },
+    {
+      "name": "KILL BOTS THAT ARE STUCK OR ARE NOT MOVING",
+      "hash": "66ae28fbf41e1877c7bf4e80063ce5e1c70017444c476b38e7d191e69586c1dc"
+    },
+    {
+      "name": "BOT DIES",
+      "hash": "6c22abe49b048692d7be5e9b536c3e351297c7feaa46f2cb4e350d6155a0fb36"
+    },
+    {
+      "name": "TELEPORT BOTS (GENERAL)",
+      "hash": "b63681aaa10f24da568c367fda71371c537a30d7ea305bd3192f295557b43590"
+    },
+    {
+      "name": "TELEPORT BOTS WHEN NOT USED FOR TOO LONG",
+      "hash": "e3bd07ad5bd515f80862f6e86e381095c1097a0f4b2001a39079cef88acea2cb"
+    },
+    {
+      "name": "BOT STUN MANAGEMENT",
+      "hash": "5b4f83c3ce3a464f199d95bd9efc41a1ea2a6362ccd5f06d49db3e9b298e50d4"
+    },
+    {
+      "name": "UPDATE SUCCESSFUL TELEPORT STATUS",
+      "hash": "c71c18dc89b783d64e4eba8b88dceed2e45b147ede4380b8a867a4922304574e"
+    },
+    {
+      "name": "BOT TARGET VISIBLE",
+      "hash": "bcbe7a3ce5b1f23da4c1abb093a127b8ce18b6b438419a4723c91949b5f4b0a0"
+    },
+    {
+      "name": "BOT TAKES DAMAGE AND SWITCHES TARGETS",
+      "hash": "15ab88421e74ff09c727a9d561345797e09594d32ff6214b14f64096ec569a83"
+    },
+    {
+      "name": "DESELECT BOT TARGET",
+      "hash": "6c05044408b01776adb335281b3804c2b23c24167c7748284615598b7502ae3a"
+    },
+    {
+      "name": "BOT WANDERS",
+      "hash": "5ee46f9c33d54b20f36954f36c88f13ee2996a7c6f0ef7b3e6dcae137c0002b5"
+    },
+    {
+      "name": "BOTS JUMP",
+      "hash": "9b71686a1b7be97402d2bcbcfe6b9bfc5f856394bdf88d5b9fc5696406adc0bf"
+    },
+    {
+      "name": "BOTS MOVE THROUGH SPAWN DOORS",
+      "hash": "1a35bb944f455f3a22b1be1fc6a9327693b480f72627a50a743cedd1201db819"
+    },
+    {
+      "name": "BOTS MELEE",
+      "hash": "b13a1be9cebbe32de59c63f8e6f070b145de63864ef9fd147dea25fa48ced3e8"
+    },
+    {
+      "name": "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)",
+      "hash": "00017ab77ae786e942a97100050dc9bf7964cc3b9366f4514e0dce0035af275f"
+    },
+    {
+      "name": "BOTS RECOIL FROM DAMAGE",
+      "hash": "b84c3d84ddf954a92b323cce75643dcee9b49a45a8f352c2b4a5d8f586abe365"
+    },
+    {
+      "name": "enterExitTeleport",
+      "hash": "55f05ff915dc233ffcae599a5bbcea3abe9a702b04e449e06816c93eabdafb4b"
+    },
+    {
+      "name": "teleportBots",
+      "hash": "ce9b98186ebded32eab1d3b42f278bc58f5e105d9d8e46e5517fecf7de9a1d51"
+    },
+    {
+      "name": "locateAveragePlayerLocation",
+      "hash": "5f286c66b44d02389edabf52ad4368688d50448f62bce92154e4502e90d3f8b2"
+    },
+    {
+      "name": "setClosestPlayerTeleportCenter",
+      "hash": "368dd9439a878f469eeb5890ec999bfaabedaeab463a4fe644052d009dbb30f7"
+    },
+    {
+      "name": "successfulTeleportStatus",
+      "hash": "e2956817ca84444b4bd49354e6e4f792748f731f87c388cfdc191285888ac34d"
+    },
+    {
+      "name": "updateBotSpawnPoints",
+      "hash": "d36788e40aa9c6fd7a7b3deda47ec5b2b5a689a140ba5e1fc265272d2055e88f"
+    },
+    {
+      "name": "MINIBOSS MESSAGE",
+      "hash": "f7a677d5975879cadfcc63554712807f4fa8272db0628025ae4dff95d259d028"
+    },
+    {
+      "name": "Subroutine removeBotSpawnPoint",
+      "hash": "3857296cf56f40dde6234f36e7c69c9fcc4bd5858e35a16f8e0abdf83d14707d"
+    },
+    {
+      "name": "collectEngineerScrap",
+      "hash": "2d7227698ac782dd9cb9f797e4c69feeb07d433701b51e49df752159dd8c2694"
+    },
+    {
+      "name": "CARRION (JETPACK CAT) ABILITIES",
+      "hash": "ebd71ac79ee9db6857ce24a88f99000c674ebbae31e9e0a477f222e88da43d02"
+    },
+    {
+      "name": "CARRION (JETPACK CAT) TRANSPORT",
+      "hash": "570a0e9801eefcfc4e0e6ed01b9368e88a280d4206c847139fef2afcd48f1697"
+    },
+    {
+      "name": "BASIC (REAPER) SHADOW STEP (BOSS)",
+      "hash": "d264d67eef9239d668793bbabf9dfac5af2b022896b25e8775037006feecced7"
+    },
+    {
+      "name": "BOMBER (JUNKRAT) SELF DESTRUCT",
+      "hash": "8e2761d5efed464d0819f2c2b25b2f02831d5e45205855848f170350302d520d"
+    },
+    {
+      "name": "RUSHER (TORB) SPEED MECHANICS",
+      "hash": "3c12d00b77cad0e98e048de6bc0b97af02cefcf5f5dc1d4d3267428390c9a875"
+    },
+    {
+      "name": "RUSHER MOLTEN CORE (BOSS)",
+      "hash": "70e6605db130dc84ba03f7bd74dae4c854bb7fc7ca13213206441c4ada35e723"
+    },
+    {
+      "name": "RUSHER MOLTEN CORE BURNS PLAYERS (BOSS)",
+      "hash": "16139da3a7359078d1b28c042f323bb9c122ea085f456561646e54081328d607"
+    },
+    {
+      "name": "BEHEMOTH (ROAD) TOXIC CLOUD",
+      "hash": "a286e9b5727e452992dd421369942c09b8ac10ec2fd3d8b0871d63ffb7cad7ef"
+    },
+    {
+      "name": "BEHEMOTH GAS STREAM (BOSS)",
+      "hash": "040d5e892e46369e425d6f1f696bcad1808b232d33d15e9f9818976e35905744"
+    },
+    {
+      "name": "BRUTE (REIN) SUPER SEISMIC SLAM",
+      "hash": "132f04a1724ec4c262738db45d26584fbcd7727532cdbd8a0631f34e21037384"
+    },
+    {
+      "name": "BRUTE, GLADIATOR, AND SMOLDER ALTERNATE ATTACK CONTROL",
+      "hash": "97f64e5b60cdd737cf58f2f84e54aa66a4f37cff384f42c0741b78da6c8939c3"
+    },
+    {
+      "name": "BRUTE KNOCKDOWN",
+      "hash": "f2f1b0a08f1ff7a67361b1e477b94c3586e92f30dd9d5d4b158cc1efd5a46044"
+    },
+    {
+      "name": "BRUTE FIRE STRIKE (BOSS)",
+      "hash": "1a4d0f5707e0407edfa9b89f5cde511ca7f10df9f929aa1d9bdf6aecdf48ba93"
+    },
+    {
+      "name": "REIGNITED (ANRAN) ABILITIES",
+      "hash": "207060b3d7d7173aba865a83583f185037e925c361fbd6a409a257252245346d"
+    },
+    {
+      "name": "REIGNITED ULTIMATE ATTACK COUNTER",
+      "hash": "86e52b452326ef18ea07c8847a506dbbbb85630de73e54efe54dab1f187f84da"
+    },
+    {
+      "name": "REIGNITED USES ULTIMATE NEAR PLAYER",
+      "hash": "f60fef29cca9b585fa0707080714fd52fdd5bc425b1a476cf1100d5200f7b69f"
+    },
+    {
+      "name": "ZOMBIES SPAWN AT REIGNITED",
+      "hash": "a19b4a0f30f2c9e02622108887d8ae71b0e82f3d8211f5fcaeafed4c0b06d4da"
+    },
+    {
+      "name": "RIDER (WIDOWMAKER) ATTACH TO PLAYERS",
+      "hash": "fd7e3ce6910a1cd0a35befea784431c7f7dbd45cf46b3c2e6214ae81415d71e8"
+    },
+    {
+      "name": "RIDER DETACH WHEN DEAD OR TARGET IS DEAD",
+      "hash": "bbb73133b99a06c807167d0c45cd333b1b103ed45b214a647dc3b8e857d11896"
+    },
+    {
+      "name": "RIDER ATTACH TO TEAMMATES",
+      "hash": "edd12d8f795d47e0ee95214c8aa82c10d16481f6ee76c9aec1df45cb6960c3a3"
+    },
+    {
+      "name": "RIDER DETATCH FROM TEAMMATES WHILE ALIVE",
+      "hash": "f0cda46c3d0134fa5c4918aeab09a198c4308d8915732f7e97f218945121aae5"
+    },
+    {
+      "name": "RIDER USE GRAPPLING HOOK",
+      "hash": "ebc9e8faf6fb093b5d8187ee8d4fe19f31ce7a4b3b01e14dcf97f892d4333fb5"
+    },
+    {
+      "name": "CHARGER (MAUGA) CHARGE",
+      "hash": "28cd2b029c0bf611fd09fa890f1dc696e1ec7c358b077255e0e75286c787fe31"
+    },
+    {
+      "name": "CHARGER KNOCKBACK",
+      "hash": "dc2e72df0b0a4c036b2e3306c43c3f6d532acd6fb2dd85197db3f3ddccbba3ec"
+    },
+    {
+      "name": "SLIMER (MERCY) TENTACLE GRAB",
+      "hash": "077cd96841fcb1a17e489b033b3a64d6dc6319768bd44e19fc894f492c4e73da"
+    },
+    {
+      "name": "PRIME SLIMER (EMRE) FLIGHT (BOSS)",
+      "hash": "dc777e9bd3d88c5f8c05aafb75becab510030223578107354b93ae8ea8efe7cd"
+    },
+    {
+      "name": "STRIKER (WRECKING BALL) PILE DRIVER",
+      "hash": "5b6d8815d118ad2e2bf39c982df11ea0a87d5b1079e88a0e82bff2e7bc6ed92c"
+    },
+    {
+      "name": "STRIKER CANCEL BALL FORM",
+      "hash": "b365007c8491ff44e7c581c15ce0b506afd232915e5674c88cf8c6f44d49ffc7"
+    },
+    {
+      "name": "STRIKER NORMAL PILE DRIVER",
+      "hash": "f8b8ca7045296783ed8cdc7b65536795c0bb6c965df612d86f34220f3b70663f"
+    },
+    {
+      "name": "STALKER (MOIRA) FADE",
+      "hash": "e36e0c2e5022b5aff912e857e701ab2447b1dd77ba6e488e53c98ac6a61402a2"
+    },
+    {
+      "name": "STALKER KNOCKBACK BLAST (BOSS)",
+      "hash": "52caa4cfa71e9ec22f0ede4e3b505373c6e387f41711402bc04360bce6a77492"
+    },
+    {
+      "name": "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES",
+      "hash": "a3798bb7f517777fa3ec6df28021825b860f9c1dcb9914af1d23e2768da65cf9"
+    },
+    {
+      "name": "BLASTER ROCKET HITS TARGET",
+      "hash": "341bd42e1dde1b513ee7d21f5c6f01228666dcfc31a1c0215f93e2dbb596f092"
+    },
+    {
+      "name": "DOWNFALLEN (SIGMA) FIRES",
+      "hash": "f5c1a231e15357f6c443b420df34611ea8294628f2f2ae7b98e405199df65d7d"
+    },
+    {
+      "name": "DOWNFALLEN GRABS PLAYER",
+      "hash": "0bd69211e7f9279afa812e38ff4388741933673a28044606803644f9813433ef"
+    },
+    {
+      "name": "DOWNFALLEN PULLS PLAYERS",
+      "hash": "81c4f1155572c377ca64f2395473dc3cf3939c72a3f5aba22a319b3c2fd19fb0"
+    },
+    {
+      "name": "GLADIATOR (JUNKERQUEEN) COMMAND SHOUT",
+      "hash": "930dfe9b02efa9ffbb2e9ae180c778705159ba1ffeefd3f907bd754f78219096"
+    },
+    {
+      "name": "DAYTAKER (ILLARI) BURST",
+      "hash": "e75ced8026522c0d1bc25c8a9e53dc5bf7f54b8480902ddae1f36b7ad9ecd04a"
+    },
+    {
+      "name": "DAYTAKER ATTACKS AT HALF HEALTH (BOSS)",
+      "hash": "233b63d3cf3f57dda02bff3b93e61d23e46e718a571d92d41beb49c87503c6db"
+    },
+    {
+      "name": "TUNNELER (SYMMETRA) BUILDS PORTAL",
+      "hash": "49922ede2bf6c4d669d557ac9740bc1e6169093a429dfb65a67bd6fec53e73d6"
+    },
+    {
+      "name": "TUNNELER PORTAL LETS ZOMBIES THROUGH",
+      "hash": "0a410ef613a1a6e5fa5b7e8e31a6cd9f20ebab6b64afbc975a1254f9d94ab82d"
+    },
+    {
+      "name": "CADAVER (ANA) DETONATION",
+      "hash": "d55e77eb7a3c908b8f3cb25cfa065d12de33cdfa511ba9a1bccb888a7be93833"
+    },
+    {
+      "name": "ENSNARER (HAZARD) BLOCKS PLAYERS",
+      "hash": "3171bf0d0814410d62ca9215936ff875d58035245ce12a0cab921b9a69576409"
+    },
+    {
+      "name": "ENSNARER LUNGE",
+      "hash": "072451bac184c211a0e44456c3e5bf92476e02b2241b430122dcdf4f70678a6a"
+    },
+    {
+      "name": "SMOLDER (WINSTON) SEES PLAYER",
+      "hash": "88f21cac01bd94cac062848081fded039f779cb8d4c77ed7ab2180c065130d87"
+    },
+    {
+      "name": "SMOLDER ACTIVATES FROM DAMAGE",
+      "hash": "567b3c09e848fd5f631649543800967cc66c009dcea8a8c6795c5447c745ceff"
+    },
+    {
+      "name": "SMOLDER BOSS SLAM",
+      "hash": "0e91f5ddc900393063b22f46b616795d7c70501e47f1d512de16100d9fa0a386"
+    },
+    {
+      "name": "SMOLDER SUPER SLAM",
+      "hash": "c26a91f52e7294c0d8355d6b6a7dd94689ad114c37eae8f49cf3e147e753e834"
+    },
+    {
+      "name": "SMOLDER STAYS ENRAGE DURING BOSS EVENT",
+      "hash": "e682dbf6ffd25af8b8583cb1dbef11e575a4b1331c906072549c8c238150327f"
+    },
+    {
+      "name": "SMOLDER BOSS EVENT STARTS",
+      "hash": "152ba7004bf4d3e228ff54744a9f52ffeb24d19c6eed80068808946dd6f6f4ee"
+    },
+    {
+      "name": "SMOLDER ACTIVATED FROM BOSS EVENT",
+      "hash": "f48f19aa4892986d5c3b6ed23a2e7956e3b29391695a2641c88fc01bf0405fde"
+    },
+    {
+      "name": "PROTECTOR (KIRIKO) USES CLEANSE",
+      "hash": "19624be688ce4ba9a7858359c1228f12792f012431b48cf4ed1ce93ad711e72a"
+    },
+    {
+      "name": "SUCCESSOR (DOOMFIST) HOLDS BLOCK IF TARGET USE ULTIMATE",
+      "hash": "ee5cccce1e245918f32dae29677f808cb3d97dc78a0c805af03985bed06558a6"
+    },
+    {
+      "name": "SUCCESSOR PUNCHES IN RETALIATION",
+      "hash": "88ddc8a7457e520e9a998c8e0e40b68e034b22dec13c3f427cdf75ca1062c4c6"
+    },
+    {
+      "name": "BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS)",
+      "hash": "97bc94a66da227bc44d9d6771dbbc55ee9500b8ed811dc7ee119d76a13b57edc"
+    },
+    {
+      "name": "CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)",
+      "hash": "2757004c7fbcde8aef93ba5353ed89b3e03895d8e6a5552659142175c857579f"
+    },
+    {
+      "name": "abilityThrowdown",
+      "hash": "b1556c536455979eae7fccb4ab17907a306d5e08e37b05994c06502d7484e259"
+    },
+    {
+      "name": "entityFloat",
+      "hash": "c262de20471c0e98b6899f12cfb4aeb7366f26ef59ca83f08f1b56e4907e1c06"
+    },
+    {
+      "name": "explosionWarning",
+      "hash": "98b6e8545c3b3fea17219288d3bda8515bb2795700684c69b5300e6a75bcb556"
+    },
+    {
+      "name": "Subroutine smolderBoost",
+      "hash": "488870407951d0ac891202684fb6ee6dd98eaa2087915850a94a79d7355c9f05"
+    },
+    {
+      "name": "Subroutine spawnGasCloud",
+      "hash": "9d4dfa4dd1ba8c9c50f564fa60b6bd319e61580ba9e646c2c848ddf6a273ef19"
+    },
+    {
+      "name": "Subroutine resumeBotMovementAndFacing",
+      "hash": "d9091ccc7f301bdcc510c2590619b7a5ad95835393b9aa72e25209e954a59801"
+    },
+    {
+      "name": "Subroutine resumeBotFacingAndMovement",
+      "hash": "211b40930873ab04ed84bc666a86d587edf5e0cbccfe7200c7824d891c9f0575"
+    },
+    {
+      "name": "startBlasterDaytakerFacing",
+      "hash": "b005db93cfe0c3e4670367a1928b8b60edff31a2cf9c63c8e66dbf352c26f881"
+    },
+    {
+      "name": "startBotThrottleAtTarget",
+      "hash": "9f9e345cbfaa63a21390c49695d6d4dc87b5d20e593fcf060a0afdaaa84c8879"
+    },
+    {
+      "name": "playReignitedWarningPair",
+      "hash": "0cf9d5e5b009f2af2475856dc61a9dabc708bb2370570c4f821fc6c9394dd69f"
+    },
+    {
+      "name": "beginBotOverride",
+      "hash": "b3e8159751cb291ded4c84ca15297dafd3d3fce7c6c3c473074b7ecb38ab69f5"
+    },
+    {
+      "name": "restoreBotThrottle",
+      "hash": "b88277011807457ba81a8b05ad977e70aa39614214503b3e60ef123d81d936a3"
+    },
+    {
+      "name": "reenableBotWallAndJump",
+      "hash": "5a29821e089d7890f26a492156e95cc11cff53dc0f6b2faf6130ffd25ea53b2c"
+    },
+    {
+      "name": "applyBriefBurnAndRoot",
+      "hash": "e0883cc3c4f9d8b86f0e6b8672d6afe23793a39d3cffc2b8d0765b7f538713f8"
+    },
+    {
+      "name": "daytakerAbortReset",
+      "hash": "1b31c1a8287f93bec467f85bf8468c16729b4c35f0f0552d5fd588506a67e495"
+    },
+    {
+      "name": "GENERATE SUPPLY DROPS",
+      "hash": "49f9af9759e0b380f0f11b6f6574b14dac384d8b7deff0ba7e4117e8fa7252f2"
+    },
+    {
+      "name": "EFFECT/TEXT (GLOBAL)",
+      "hash": "b3dd319f31d9e1a8fd48d504ace36414c0f03a3fadf2f2943a1f066319525153"
+    },
+    {
+      "name": "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)",
+      "hash": "c8a447aacc8728d4ea5102f50e3ea57f0d00ff04193253d1db1977e60fc34a76"
+    },
+    {
+      "name": "instantRevive (0-9)",
+      "hash": "d302614a452a7640d5052649b9d59116a2f3a12c9e05bc13f8a0e92c90ac731a"
+    },
+    {
+      "name": "playerForceField (10-19)",
+      "hash": "889f62eac032eda0c80affe8223389755623504be85f2709816658a30f21f78b"
+    },
+    {
+      "name": "Subroutine resetAbilityCooldowns",
+      "hash": "f4329ab64388e2c7af545e31e6719bc4a5dd5d098456578c062da42de12d53d6"
+    },
+    {
+      "name": "noCooldowns (20-29)",
+      "hash": "515bc9d0b28b75a3c7b98d28777caef227a09dd02e9f0d1a9f505d5342b9658f"
+    },
+    {
+      "name": "airStrike (30-39)",
+      "hash": "d91f693f2bc6f61d28ac10decfa6d157e20f4129454304184e71c22ab34bc2ab"
+    },
+    {
+      "name": "beaconofHealing (40-49)",
+      "hash": "56a27baa8f931743916687022676fdd32139c21d6c69003827b63e45399db64b"
+    },
+    {
+      "name": "sentryTurret (50-59)",
+      "hash": "3d65006243eac4ffb9d050b578c753e84fad2518334f7e006dbab81b97f9b37b"
+    },
+    {
+      "name": "cloakingDevice (60-69)",
+      "hash": "ef9aac69fb968d6aad73b5eb3592ecdc5e50f21622a766b6c1259581cc5e9471"
+    },
+    {
+      "name": "superNano (70-79)",
+      "hash": "8fcad8d62dcd7d41536d0df5b61a684dfecf4a3fa5480137c1351e2f8da5a1d4"
+    },
+    {
+      "name": "JETPACK FLIGHT",
+      "hash": "b3be5f9c21d318c2bd6a9ec70e8b5ed7848a0d2c4ccd7a9970be09c74c5ec43d"
+    },
+    {
+      "name": "ultimateCharger (90-99)",
+      "hash": "bda23302ad6a3bc8618e654267f6596051d667deebec0aadf093c9696be5886d"
+    },
+    {
+      "name": "stun (100-109)",
+      "hash": "7ce5b8d6e5e03776d973b375f5940a0bdc3a40392d332a2adc1827e46647e1fc"
+    },
+    {
+      "name": "powerUpUsage",
+      "hash": "e91f7ca3e992d99eeb53f7ff933a37546d71d4be249c6ab13c39f3f6684df0ee"
+    },
+    {
+      "name": "playAquaPowerUpSound",
+      "hash": "35fd5380ed16f7f55fc36d60be662a7763f730356e4b9eb4c4566a984820c028"
+    },
+    {
+      "name": "POWER UP EFFECT/TEXT MANAGEMENT",
+      "hash": "4c31a513c9cc4ea3788fe1312837176f862785e2ea8213efe8c107d1e901004d"
+    },
+    {
+      "name": "EFFECT/TEXT (PERMANENT)",
+      "hash": "899151ef096f189a369256f6b01cdf595dfac13b4a3af95f0386803671546d91"
+    },
+    {
+      "name": "PLAYER DROPS POWER UP (MANUAL)",
+      "hash": "c6b2a06ab3d7ac0dce385725e3a6c6da3be20a86064bfdc73c81fb4206859bd0"
+    },
+    {
+      "name": "PLAYER DROPS POWER UP (DEATH)",
+      "hash": "2e70f3c49a619a4dc1ce9a160660fa799974758601658480e4792491b74c6690"
+    },
+    {
+      "name": "dropCarriedPowerUps",
+      "hash": "47d602fff743b798d7c008592fe9ec23cfd2f09683b402b3531f417cfbc9f0fb"
+    },
+    {
+      "name": "finishPowerUpDrop",
+      "hash": "b834c060903c413c0a74654871f6de4e84adedc74325c7c967770bb385a117ed"
+    },
+    {
+      "name": "ZOMBIE HYBRID",
+      "hash": "01a4ae4dc6a4a7cb7b0ab0b4c44fd0207b0c95ad00284355835aea0c92062851"
+    },
+    {
+      "name": "PYROTECHNIC APPLIES DAMAGE",
+      "hash": "cbd3ad372eb22ce326e6bf8ab7a8617b7d406ef74058a273b885d271fe755dcf"
+    },
+    {
+      "name": "BORN TO BATTLE PLAYER USES ABILITY CHARGE",
+      "hash": "52a76f981111a3623feda695e0bfc50823cc3c0089aaf35939b7ee1b7131dd0b"
+    },
+    {
+      "name": "applyBulkingSeasonStats",
+      "hash": "1014a1b53589a913e53730f96a84783f4bf4ebad5869ac07dfe16bb3f6a9ef03"
+    },
+    {
+      "name": "BULKING SEASON TOGGLES SIZE",
+      "hash": "bbee63cfdc38c407238eafd864371fe94c6f168d4f5ddd958339f5eb5f23e6d2"
+    },
+    {
+      "name": "OVERCHARGE ARM ON DOUBLE CROUCH",
+      "hash": "ae4022b64f8d8d7360fe25b0059a71b1af0c8ee34bbce291db1c50c1c0d00dc8"
+    },
+    {
+      "name": "OVERCHARGE STORES HEALING AND ASSISTS",
+      "hash": "b8d7172bf13df80e8e74e950217ce9370035991e30c0c9d77190cdcbf51050d1"
+    },
+    {
+      "name": "OVERCHARGE CLEARS CHARGE",
+      "hash": "7b8c9a8668427e6e9371b8f14b2fd3e65bb9a54d749e60828dc14ec517897ddb"
+    },
+    {
+      "name": "Subroutine checkEnhancementPlacement",
+      "hash": "58abb5d267b8794fdb46db4b0123c4d80e96e31b33925d4b9f2c54b14b2f257e"
+    },
+    {
+      "name": "HITCHHIKER ATTACH/DETATCH",
+      "hash": "9f23d2d9ad99071dea4c48e7029f5ecb41598acc74038feedb305749635a2f07"
+    },
+    {
+      "name": "HITCHHIKER PARENT RECIEVES HEALTH POOL",
+      "hash": "f8a1b65c10fd5d3b6e70caf78fecff4c7b998b18bb06a343fe37ffd2d914f53e"
+    },
+    {
+      "name": "HITCHHIKER LIFEBONDS",
+      "hash": "36659331e23fc467053c27b4254d6482c25a24d1e6d5bba3ffb2d8d6da175236"
+    },
+    {
+      "name": "P.U.P. TARGET",
+      "hash": "9ea3a5aeba964b213cd07404b37e0cdc0f7894bebfbf69a98acf3a12b753d5b4"
+    },
+    {
+      "name": "P.U.P. CONTROL",
+      "hash": "0804bb0f553984e9b975f00b36e4993f70f394e9269a67bc0eff310e09a74772"
+    },
+    {
+      "name": "startPupDefaultChase",
+      "hash": "a8575b018a06791b855b5141a3de39109b9430d6ab2e370cace739db482e6e60"
+    },
+    {
+      "name": "resetBattleAbilityCharge",
+      "hash": "433c9c971f3eaf791ff5838095f57e01611dcdecc4dbce08f3a7a924d9215563"
+    },
+    {
+      "name": "WRESTLER PULL",
+      "hash": "29036736601df2a9193be053a47289fb06e061bd7ca2e8c26fdd2a1c73e9b65a"
+    },
+    {
+      "name": "WRESTLER PULL DISCONNECT CLEANUP",
+      "hash": "55fb7c13e78519864d4eaf3148eeada322dd08c456ef38a40643b604b91d8f7c"
+    },
+    {
+      "name": "useLivingProjectile",
+      "hash": "48ae6d46ff4c21a1fb51cfe83e95d4897c4d504f744e05579d202744e2368d4a"
+    },
+    {
+      "name": "LIVING PROJECTILE RELEASE",
+      "hash": "3b28be4d94a036341ee36e0f15d7e63127b25de8003faa198d6834a88d2fb603"
+    },
+    {
+      "name": "ENGINEER SCRAP INCOME",
+      "hash": "b3cbbd596428563c359964c0f61a52b582c35713ffdcf4956f5291c8ab85794a"
+    },
+    {
+      "name": "ENGINEER ASSIST SCRAP",
+      "hash": "a4e0f46d8b18e549fcb5b7c33d9bdf0e97ef963db54d24a3f95cf97d5dbac674"
+    },
+    {
+      "name": "ENGINEER ARMOR TRANSFER",
+      "hash": "d1b37e374e87dbe81d14d76f33114a6fb9ad90d7eaee364f3f6ed59d0396d09d"
+    },
+    {
+      "name": "ENGINEER TURRET DEPLOY",
+      "hash": "54b9e242d7eee05341abd9fb05ad4516ffa2d0107ad09992627994f4c385af3f"
+    },
+    {
+      "name": "ENGINEER BEAM FADE",
+      "hash": "07a3102176b16deeb53962eab5d1d818d0111761beafe08f9c24c093ab52543b"
+    },
+    {
+      "name": "ENGINEER BEAM DISCONNECT CLEANUP",
+      "hash": "4a043a4a8b5764df2c52036ef9982c3b1b986a180bc8dccf56fdac4ef66ac933"
+    },
+    {
+      "name": "ENGINEER SCRAP ARMOR DEPLETION",
+      "hash": "31818c29d3ab1fd62d40829207f28a8754741b8b449c2c4429fdb9662f1faefe"
+    },
+    {
+      "name": "[LONG_REACH] MELEE PUSH",
+      "hash": "d0a2c192e08c143cb1766dc25126e60ab8bcecbe9f666155eb8cc66955dfa1ab"
+    },
+    {
+      "name": "[LONG_REACH] QUICK MELEE",
+      "hash": "9629cd4efc544fccf515c21b0621eec6867b264ad2d0391020fbc6cd2ce34778"
+    },
+    {
+      "name": "[LONG_REACH] MELEE WEAPONS",
+      "hash": "747b65b6941e6a9409bf6d1c9085a8593f9a6f48381e71c243b2be99d7282fc4"
+    },
+    {
+      "name": "[LONG_REACH] CARNAGE",
+      "hash": "3c912ca65f9a63f5b96ba6965e0066b2c5b1e813b8c4512fdb70348adc09b797"
+    },
+    {
+      "name": "[LONG_REACH] extendAugmentMelee",
+      "hash": "9b47d1e105a5a0445e074f9a19e4cd26610e667904043a6783b0c2cb54caced3"
+    },
+    {
+      "name": "[HIGHRISE] RECHARGE",
+      "hash": "cf2bb992cd162cabb88621a9ba749e3d065bc9236867af15e6d2d01b25c92eed"
+    },
+    {
+      "name": "[HIGHRISE] AIR ACTION INPUT",
+      "hash": "eb7f82588149dd3e7102ddc125df9d4e098aa3599585aceb91ac5022f94e5ad8"
+    },
+    {
+      "name": "[HIGHRISE] DOUBLE TAP",
+      "hash": "ea03fc4a098738752fba2d4e246a6d17a4517f5b617dc9b2409ec760f81e1966"
+    },
+    {
+      "name": "[HIGHRISE] AIRBORNE DAMAGE",
+      "hash": "145b6876d6021a7db9455f17703cd5b42dd7017f915edf3a292b72f28dd7464c"
+    },
+    {
+      "name": "[DASH] CHARGE RECHARGE",
+      "hash": "9b4e9e5e18c31cd8eb53589040ea066d5e24b4458c187b9431d37e4396b73ee0"
+    },
+    {
+      "name": "[DASH] DOUBLE TAP",
+      "hash": "16414379465b10b4cc772a435e79125b721c8a653195b3c4ea60032e3d834058"
+    },
+    {
+      "name": "[DASH] SMOKE FADE",
+      "hash": "7c8464c43059ef815b51e3317a17665284686f13b158b4f65b014fd0b3bc1254"
+    },
+    {
+      "name": "AUGMENT MENU",
+      "hash": "23ff228726c4392fd9ea8aaf59acff8e8080421346604469431baca46d1345f4"
+    },
+    {
+      "name": "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)",
+      "hash": "f335edcc0204b32ff30aa02cc14fbf9c01578b03ad18f60982cf951e579f331d"
+    },
+    {
+      "name": "APOTHECARY CURE ICON",
+      "hash": "3691fa88fc760621b3a8c1ed0c23943288cd69f3c95cd055f5172866cea72910"
+    },
+    {
+      "name": "APOTHECARY CURE ICON DISCONNECT CLEANUP",
+      "hash": "f29745a382c2a5d61d8342b8f7e9a7990376b1e547cde307687ea157b49fd917"
+    },
+    {
+      "name": "APOTHECARY ULTIMATE RECHARGE",
+      "hash": "5a4b22eee5b5f1ed7dcf8b2b04c42d988b2e846f2ca4554b57592edf119d6e89"
+    },
+    {
+      "name": "APOTHECARY TELEPORT",
+      "hash": "0c0e8d1e6e0ea02403860768872450963d564df58343fcf8b4e3be87b95e708b"
+    },
+    {
+      "name": "KEVLAR RANGED DAMAGE COMPENSATION",
+      "hash": "fd381a319bf4577f063ce3ec8781e7ec5e24315956a8c3e1d0ed1a4a1a0456fb"
+    },
+    {
+      "name": "useAugmentAirAction",
+      "hash": "13ff4bf4356f177bdf420430030b774d65099759453c3ac2b7bc0001ef4b5f67"
+    },
+    {
+      "name": "GRAPNEL LAUNCHER",
+      "hash": "d874738573a3df2c9a64bee2eb83c1d348333e8cd12eb1f24f108da1d4b8cd55"
+    },
+    {
+      "name": "GRAPNEL LAUNCHER DISCONNECT CLEANUP",
+      "hash": "ac8da1646bf3f04ab6d3abeecbccf1986c695b2e59c28f05dd45dec53af321c5"
+    },
+    {
+      "name": "AMMO PACK MAGAZINES",
+      "hash": "a7957ee78825cd8e80bf9645b8faf1dc3b1c67bcc21780b2cbce1c52e3960b7e"
+    },
+    {
+      "name": "AMMO PACK REFILL FALLBACK",
+      "hash": "345cac0cc057a3bcbbefd8bc7ca2e9dc429e84f571d9b828a489e8e897cfa2e2"
+    },
+    {
+      "name": "LASER BARRICADE (PLACEMENT)",
+      "hash": "88f663ce4c78ed8ece859dad39473f7085e6fa82d3d50dafb5d207a71aebadc4"
+    },
+    {
+      "name": "LASER BARRICADE BLOCKS ZOMBIES",
+      "hash": "827702fbb918c20e16324549f2ba6d4caa912f62b3d8a4be019ec2aa33d257e9"
+    },
+    {
+      "name": "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)",
+      "hash": "e4ce2de71e690fdaaaf22fdd5bca041e0904fd19164d322602c0d339ea051dbb"
+    },
+    {
+      "name": "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION",
+      "hash": "c42f4dde76f6da7e77780864338ca2645fb461958bed7a14051aaf7cc7ecd455"
+    },
+    {
+      "name": "applyHitEnhancements",
+      "hash": "f0f4753b4cee9f1ce77f77233fe5da4b3ce7b3a09ee22e393c14ff7683e26d5d"
+    },
+    {
+      "name": "CROWD CONTROL STATUS",
+      "hash": "0466c468cfc8ed078ccdd698a157a317a1ad107e6f5ba66a076480fcc3d2e9da"
+    },
+    {
+      "name": "PLAYER DEALT FINAL B­LOW",
+      "hash": "9fd3a35986955fa19ce0ea1cb1b636528a062fc1de80366ae4f8da9367bb5ada"
+    },
+    {
+      "name": "PLAYER EARNED ELIMINATION",
+      "hash": "1583bac5217087bbfbcd8eaaa8cee2b0982c36c064c0ddb9654ea8515b09099f"
+    },
+    {
+      "name": "PLAYER DIED",
+      "hash": "6a43b7eb10a083e95d73e48a5974f91d63e691ef97cd43161994f8fc956ec474"
+    },
+    {
+      "name": "PLAYER DEALT HEALING",
+      "hash": "61624b1f570d0cc9f6191834d6d56af9e609eb8d6118c06b237297c526dbd95f"
+    },
+    {
+      "name": "PLAYER DEALT DAMAGE",
+      "hash": "6825a17ba5cda30cec84157efe99d875fb0a0c458f3215c79edb03589aec93e0"
+    },
+    {
+      "name": "[debug] Resource usage and server load",
+      "hash": "833f2fbfe1308007ef0cf60572dc0aa42065154c62af5ab1d2296cc9fcd0c398"
+    }
+  ]
+}

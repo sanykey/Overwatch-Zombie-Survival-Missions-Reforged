@@ -19,7 +19,7 @@ rule "AUGMENT MENU":
             " ",
             f"+{AUGMENT_KEVLAR_ARMOR} armor, {AUGMENT_KEVLAR_KNOCKBACK_RESIST}% knockback resistance. {AUGMENT_KEVLAR_RANGED_DMG_RESIST}% resistance to ranged and ability dmg.",
             f"Dash in your movement direction with {DASH_PHASE_DURATION}s invulnerability. Stores {DASH_MAX_CHARGES} charges; restores one every {DASH_COOLDOWN}s.",
-            "Launch upward and gain +20% dmg until landing. Activate with Jump in midair or a double-tap. cd: 16s.",
+            f"Launch upward and gain +{HIGHRISE_DAMAGE_BONUS}% dmg until landing/{HIGHRISE_DAMAGE_DURATION}s +{HIGHRISE_DAMAGE_GRACE_PERIOD}s. cd: 16s.",
             "Triple melee reach; weapon hits at extended range deal 75% dmg. Push visible zombies ahead within 10m. Push cd: 9s.",
             "Double magazine capacity. Fully reloading restores the extra ammo.",
             f"Grapple to allies or zombies {AUGMENT_GRAPNEL_MIN_RANGE}–{AUGMENT_GRAPNEL_RANGE}m away. 35 dmg; stun grounded zombies or knock airborne ones down for 3s. cd: 16s.",
