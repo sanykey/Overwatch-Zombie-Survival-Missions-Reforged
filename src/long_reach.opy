@@ -38,9 +38,10 @@ rule "[LONG_REACH] MELEE PUSH":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
+    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
+    @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
 
-    # Button edge only: readiness/phase in Actions prevent a held press from
+    # Chord edge only: readiness/phase in Actions prevent a held press from
     # automatically firing on cooldown expiry or when a target enters range.
     if not isGameplayActive or eventPlayer.augmentId != Augment.LONG_REACH or getTotalTimeElapsed() < eventPlayer.augmentMeleePushReadyAt:
         return
@@ -109,7 +110,9 @@ rule "[LONG_REACH] MELEE WEAPONS":
     if eventPlayer.augmentId != Augment.LONG_REACH or eventPlayer.getHero() == Hero.VENDETTA and not isGameplayActive:
         return
 
-    waitUntil((eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) or eventPlayer.getHero() in LONG_REACH_MELEE_BUTTON_WEAPON_HEROES and eventPlayer.isHoldingButton(Button.MELEE)) and (eventPlayer.isFiringPrimaryFire() or eventPlayer.getHero() in LONG_REACH_MELEE_BUTTON_WEAPON_HEROES and eventPlayer.isMeleeing()), Math.INFINITY)
+    # D.Mon's sword does not reliably report Is Firing Primary Fire; its held
+    # primary input starts the swing after the weapon/form/ability guards above.
+    waitUntil((eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) or eventPlayer.getHero() in LONG_REACH_MELEE_BUTTON_WEAPON_HEROES and eventPlayer.isHoldingButton(Button.MELEE)) and (eventPlayer.getHero() == Hero.DMON or eventPlayer.isFiringPrimaryFire() or eventPlayer.getHero() in LONG_REACH_MELEE_BUTTON_WEAPON_HEROES and eventPlayer.isMeleeing()), Math.INFINITY)
     if not ruleCondition:
         return
     # Build the profile after idle input, so a hero switch during the idle wait
