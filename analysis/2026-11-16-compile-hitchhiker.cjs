@@ -1,0 +1,3 @@
+const fs=require('fs'),path=require('path');
+const c=require(path.join(process.env.USERPROFILE,'.vscode/extensions/zezombye.overpy-9.7.21/npm/overpy.js'));
+(async()=>{await c.readyPromise;const r=await c.compile(fs.readFileSync('src/includes.opy','utf8'),'en-US',path.resolve('src').replace(/\\/g,'/')+'/','includes.opy');fs.writeFileSync('analysis/2026-11-16-hitchhiker-'+(process.argv[2]||'before')+'.json',JSON.stringify({elements:r.nbElements,warnings:r.encounteredWarnings}));if(process.argv[2]==='after')fs.writeFileSync('main.ws.txt',r.result);console.log(JSON.stringify({elements:r.nbElements,warnings:r.encounteredWarnings}));})().catch(e=>{console.error(e);process.exitCode=1});

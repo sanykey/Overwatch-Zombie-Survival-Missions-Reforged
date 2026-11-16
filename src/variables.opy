@@ -85,7 +85,8 @@ enum Challenge:
 
 # Enhancement IDs index enhancementOptionList and the start-menu tables.
 # Zero means no preference; initialization rolls a role-eligible real ID.
-# Tank-only Hybrid/Bulking Season start the range; support-only Plague Doctor/Overcharge end it.
+# Tank-only Hybrid/Bulking Season start the random range; support-only Plague Doctor/Overcharge end it.
+# Hitchhiker is last for manual selection only, outside the random range.
 # Keep every indexed menu/HUD/icon table in this same order.
 enum Enhancement:
     NO_PREFERENCE = 0,
@@ -95,13 +96,13 @@ enum Enhancement:
     PYROTECHNIC = 4,
     BORN_TO_BATTLE = 5,
     CHARGE_BATTERY = 6,
-    HITCHHIKER = 7,
-    PUP = 8,
-    WRESTLER = 9,
-    BOLT_STRIKE = 10,
-    ENGINEER = 11,
-    PLAGUE_DOCTOR = 12,
-    OVERCHARGE = 13,
+    PUP = 7,
+    WRESTLER = 8,
+    BOLT_STRIKE = 9,
+    ENGINEER = 10,
+    PLAGUE_DOCTOR = 11,
+    OVERCHARGE = 12,
+    HITCHHIKER = 13,
 
 # Wrestler holds until Knocked Down ends; manual throws request release.
 enum WrestlerCarryState:
@@ -1126,7 +1127,7 @@ enum EnhancementIcon:
     PLAGUE_DOCTOR = iconString(Icon.PLUS),
     OVERCHARGE = iconString(Icon.MOON),
 
-globalvar enhancementIconListConst = [EnhancementIcon.NO_PREFERENCE, EnhancementIcon.ZOMBIE_HYBRID, EnhancementIcon.BULKING_SEASON, EnhancementIcon.BRAIN_KILLER, EnhancementIcon.PYROTECHNIC, EnhancementIcon.BORN_TO_BATTLE, EnhancementIcon.CHARGE_BATTERY, EnhancementIcon.HITCHHIKER, EnhancementIcon.PUP, EnhancementIcon.WRESTLER, EnhancementIcon.BOLT_STRIKE, EnhancementIcon.ENGINEER, EnhancementIcon.PLAGUE_DOCTOR, EnhancementIcon.OVERCHARGE]
+globalvar enhancementIconListConst = [EnhancementIcon.NO_PREFERENCE, EnhancementIcon.ZOMBIE_HYBRID, EnhancementIcon.BULKING_SEASON, EnhancementIcon.BRAIN_KILLER, EnhancementIcon.PYROTECHNIC, EnhancementIcon.BORN_TO_BATTLE, EnhancementIcon.CHARGE_BATTERY, EnhancementIcon.PUP, EnhancementIcon.WRESTLER, EnhancementIcon.BOLT_STRIKE, EnhancementIcon.ENGINEER, EnhancementIcon.PLAGUE_DOCTOR, EnhancementIcon.OVERCHARGE, EnhancementIcon.HITCHHIKER]
 
 # Immutable palette shared by the pregame menu and gameplay HUD; indexed by Augment.
 globalvar augmentColorListConst = [Color.AQUA, Color.LIGHT_GRAY, Color.YELLOW, Color.SKY_BLUE, Color.ORANGE, Color.WHITE, Color.TURQUOISE, Color.BLUE, Color.GREEN, Color.LIME_GREEN, Color.RED]
