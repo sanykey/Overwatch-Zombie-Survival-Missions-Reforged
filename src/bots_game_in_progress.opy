@@ -24,7 +24,7 @@ macro collectNearbyZombieLoot():
             zombieLootCollector.enhancementScrap = min(ENGINEER_SCRAP_MAX, zombieLootCollector.enhancementScrap + ENGINEER_COLLECTION_REWARD)
         # Enhancement and augment can coexist: an Engineer/Scavenger gets both.
         if zombieLootCollector.augmentId == Augment.SCAVENGER:
-            if random.randint(1, 100) <= 7:
+            if random.randint(1, 100) <= SCAVENGER_LOOT_CHANCE:
                 scavengerLootItemId = random.randint(PowerUpItem.CURE, PowerUpItem.STUN)
                 # An empty active slot takes the loot; reserves never activate here.
                 if zombieLootCollector.powerUpItemId == PowerUpItem.NONE:

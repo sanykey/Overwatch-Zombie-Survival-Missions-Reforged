@@ -25,7 +25,7 @@ rule "AUGMENT MENU":
             f"Grapple to allies or zombies {AUGMENT_GRAPNEL_MIN_RANGE}–{AUGMENT_GRAPNEL_RANGE}m away. 35 dmg; stun grounded zombies or knock airborne ones down for 3s. cd: 16s.",
             f"Deploy a wall that blocks zombies. Hold Crouch + Interact to aim; release Interact to place. cd: {LASER_BARRICADE_AUGMENT_COOLDOWN}s.",
             f"Packs: 2x healing, cure 1/3 infection (min 1), +{APOTHECARY_AUGMENT_ULT_CHARGE}% ult. Your latest pack also cures allies. Ult grants a teleport to it.",
-            f"Carry 2 extra powerups. Zombie deaths within {ENGINEER_COLLECTION_RANGE}m: 7% chance to gain a powerup. Loot fills your active slot, then backpack.",
+            f"Carry 2 extra powerups. Zombie deaths within {ENGINEER_COLLECTION_RANGE}m: {SCAVENGER_LOOT_CHANCE}% chance to gain a powerup. Loot fills your active slot, then backpack.",
             "Heal for 15% of dmg dealt. Gain 50 recoverable health."
         ][localPlayer.augmentId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.INTERACT)),

@@ -27,6 +27,7 @@
 #!define ENGINEER_SCRAP_PASSIVE_RATE 1
 # Shared nearby-death radius for Engineer and Scavenger.
 #!define ENGINEER_COLLECTION_RANGE 15
+#!define SCAVENGER_LOOT_CHANCE 5
 #!define ENGINEER_COLLECTION_REWARD 10
 #!define ENGINEER_ASSIST_SCRAP 15
 #!define ENGINEER_ARMOR_COST 50
