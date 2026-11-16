@@ -43,6 +43,8 @@
 #!define augmentGrapnelCenter(player) ((player.getPosition() + player.getEyePosition()) * 0.5)
 #!define AUGMENT_GRAPNEL_MIN_RANGE 7
 #!define AUGMENT_GRAPNEL_RANGE 45
+#!define WRESTLER_RANGE 5
+#!define WRESTLER_GRAB_ANGLE 50
 #!define WRESTLER_PULL_RANGE 20
 #!define WRESTLER_PULL_COOLDOWN 16
 #!define WRESTLER_PULL_FORCE_MULTIPLIER 1.6
@@ -105,6 +107,12 @@ enum WrestlerCarryState:
     NONE = 0,
     HOLDING = 1,
     THROW_REQUESTED = 2,
+
+# Indices into selectPullAimTarget's range table; no persistent state.
+enum PullAimMode:
+    GRAPNEL = 0,
+    WRESTLER_PULL = 1,
+    WRESTLER_GRAB = 2,
 
 # Independent secondary enhancement slot. IDs index the augment name, icon and color tables.
 enum Augment:
@@ -234,14 +242,14 @@ globalvar tmp3  # Fourth synchronous scratch value, including barricade impulse 
 #!define enhancementHitVictim tmp3
 
 
-# Synchronous selectPullAimTarget contract: tmp1 inputs Wrestler mode;
+# Synchronous selectPullAimTarget contract: tmp1 inputs PullAimMode;
 # tmp0 returns the selected player (or Null), tmp2/tmp3 are clobbered.
 # tmp1 becomes the eye position only after mode-dependent filtering finishes.
 # The helper has no waits or nested calls. Consume/copy the result before waits;
 # reevaluated visuals must use persistent storage or snapshot the result.
 #!define pullAimCandidates tmp0
 #!define pullAimTarget tmp0
-#!define pullAimIsWrestler tmp1
+#!define pullAimMode tmp1
 #!define pullAimRange tmp2
 #!define pullAimEyePosition tmp1
 #!define pullAimOrigin tmp3

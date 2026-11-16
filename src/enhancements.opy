@@ -4,7 +4,6 @@ subroutine resetBattleAbilityCharge
 subroutine startPupDefaultChase
 subroutine applyBulkingSeasonStats
 
-#!define WRESTLER_RANGE 5
 #!define WRESTLER_KNOCKDOWN_DURATION 4
 #!define WRESTLER_THROW_SPEED 12.5
 #!define WRESTLER_THROW_DAMAGE 75
@@ -408,7 +407,7 @@ rule "WRESTLER PULL":
     # read finishes before the wait. No Augment-owned storage is touched.
     #!define wrestlerPullTarget tmp0
     # Shared selection consumes scratch synchronously; persist/capture its result before waits.
-    pullAimIsWrestler = true
+    pullAimMode = PullAimMode.WRESTLER_PULL
     selectPullAimTarget()
     if wrestlerPullTarget == null:
         return
@@ -441,24 +440,16 @@ def useLivingProjectile():
     if eventPlayer.enhancementCarryState != WrestlerCarryState.NONE:
         eventPlayer.enhancementCarryState = WrestlerCarryState.THROW_REQUESTED
         return
-    # Check only on pickup input, before raycasting; throwing stays available.
+    # Check only on pickup input, before target selection; throwing stays available.
     if getTotalTimeElapsed() < eventPlayer.enhancementGrabReadyAt or eventPlayer.isAttached or eventPlayer.isCrowdControlled:
         return
-    # One raycast per press, against all players so intervening actors block pickup.
-    # Synchronous scratch only: the candidate is committed to both actors before returning.
+    # Body-center cone (50 degrees), LOS and crosshair priority, limited to 5m.
+    # The shared grab mode excludes bosses/minibosses and requires bot CC.
+    # Synchronous tmp0 result: committed to both actors before any yield.
     #!define livingProjectileCandidate tmp0
-    livingProjectileCandidate = raycastHitPlayer(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * WRESTLER_RANGE, getAllPlayers(), eventPlayer, false)
+    pullAimMode = PullAimMode.WRESTLER_GRAB
+    selectPullAimTarget()
     if livingProjectileCandidate == null:
-        return
-    # Objective bosses/eggs and Contester minibosses cannot be grabbed.
-    if [livingProjectileCandidate.getTeam() != Team.2, not livingProjectileCandidate.isDummy(), not livingProjectileCandidate.isAlive(), livingProjectileCandidate.botIsInitializing, livingProjectileCandidate.botIsTeleporting, livingProjectileCandidate.botIsAttached, livingProjectileCandidate in bossStateList, livingProjectileCandidate in miniBossList].any():
-        return
-    # Either CC flag qualifies: the live status excludes Rooted, and the delayed
-    # bot flag keeps a zombie grabbable for up to 0.125s after CC exits, matching
-    # the zombie-side checks. The
-    # candidate is already a Team 2 dummy, so BOT STUN MANAGEMENT maintains its
-    # delayed flag.
-    if not (livingProjectileCandidate.isCrowdControlled or livingProjectileCandidate.botIsCrowdControlled):
         return
     eventPlayer.enhancementCarryState = WrestlerCarryState.HOLDING
     livingProjectileCandidate.wrestlerCarryHero = eventPlayer.getHero()

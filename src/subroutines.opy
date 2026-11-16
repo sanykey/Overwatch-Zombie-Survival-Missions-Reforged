@@ -931,12 +931,17 @@ def resolveReconnectUserIndex():
 def selectPullAimTarget():
     @Name "selectPullAimTarget"
 
-    pullAimRange = WRESTLER_PULL_RANGE if pullAimIsWrestler else AUGMENT_GRAPNEL_RANGE
-    pullAimCandidates = getPlayersInRadius(eventPlayer.getEyePosition(), pullAimRange + 2, Team.2 if pullAimIsWrestler else Team.ALL, LosCheck.SURFACES).filter(lambda target: target.isAlive() and (target.getTeam() == Team.1 or not target.botIsTeleporting) and (target.isDummy() and not target.botIsInitializing and not target.botIsAttached if pullAimIsWrestler else target != eventPlayer and distance(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(target)) >= AUGMENT_GRAPNEL_MIN_RANGE))
+    # Indexed by PullAimMode; one small array per input avoids nested range branches.
+    pullAimRange = [AUGMENT_GRAPNEL_RANGE, WRESTLER_PULL_RANGE, WRESTLER_RANGE][pullAimMode]
+    pullAimCandidates = getPlayersInRadius(eventPlayer.getEyePosition(), pullAimRange + 2, Team.2 if pullAimMode != PullAimMode.GRAPNEL else Team.ALL, LosCheck.SURFACES).filter(lambda target: target.isAlive() and (target.getTeam() == Team.1 or not target.botIsTeleporting) and (target.isDummy() and not target.botIsInitializing and not target.botIsAttached if pullAimMode != PullAimMode.GRAPNEL else target != eventPlayer and distance(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(target)) >= AUGMENT_GRAPNEL_MIN_RANGE) and eventPlayer.isInViewAngle(augmentGrapnelCenter(target), WRESTLER_GRAB_ANGLE if pullAimMode == PullAimMode.WRESTLER_GRAB else 35))
+    if pullAimMode == PullAimMode.WRESTLER_GRAB:
+        # Filter before aim sorting so an ineligible bot cannot hide a valid one.
+        # Preserve both live CC and the bot tracker's up-to-0.125s exit grace.
+        pullAimCandidates = pullAimCandidates.filter(lambda target: target not in bossStateList and target not in miniBossList and (target.isCrowdControlled or target.botIsCrowdControlled))
     # Mode is dead after candidate filtering; reuse its slot for the eye position.
     pullAimEyePosition = eventPlayer.getEyePosition()
     pullAimOrigin = (eventPlayer.getPosition() + pullAimEyePosition) * 0.5
-    pullAimTarget = sorted(pullAimCandidates.filter(lambda target: distance(pullAimOrigin, augmentGrapnelCenter(target)) <= pullAimRange and eventPlayer.isInViewAngle(augmentGrapnelCenter(target), 35) and isInLoS(pullAimOrigin, augmentGrapnelCenter(target))), lambda target: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(pullAimEyePosition, augmentGrapnelCenter(target))))[0]
+    pullAimTarget = sorted(pullAimCandidates.filter(lambda target: distance(pullAimOrigin, augmentGrapnelCenter(target)) <= pullAimRange and isInLoS(pullAimOrigin, augmentGrapnelCenter(target))), lambda target: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(pullAimEyePosition, augmentGrapnelCenter(target))))[0]
 
 
 def detachAbilityTarget():

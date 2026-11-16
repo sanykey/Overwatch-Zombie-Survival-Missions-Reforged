@@ -130,7 +130,7 @@ rule "GRAPNEL LAUNCHER":
     # botIsTeleporting shares its slot with Team 1 votes/Rescue paths; only
     # interpret that slot as a teleport flag on Team 2, including during travel.
     # Shared selection consumes scratch synchronously; persist/capture its result before waits.
-    pullAimIsWrestler = false
+    pullAimMode = PullAimMode.GRAPNEL
     selectPullAimTarget()
     eventPlayer.augmentGrapnelTarget = pullAimTarget
     if eventPlayer.augmentGrapnelTarget == null:
