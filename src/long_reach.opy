@@ -9,7 +9,7 @@
 subroutine extendAugmentMelee
 
 #!define LONG_REACH_MELEE_RADIUS 2.5
-#!define LONG_REACH_MELEE_PUSH_COOLDOWN 9
+#!define LONG_REACH_MELEE_PUSH_COOLDOWN 16
 #!define LONG_REACH_MELEE_PUSH_IMPULSE 25
 #!define LONG_REACH_MELEE_PUSH_RADIUS 10
 #!define LONG_REACH_WEAPON_REACH_MULTIPLIER 3
@@ -53,12 +53,13 @@ rule "[LONG_REACH] MELEE PUSH":
     #!define augmentPushTargets tmp0
     #!define augmentPushTargetIndex tmp1
     #!define augmentPushTarget tmp2
-    # A frontal ground-plane push must not require aiming at the target's eyes.
-    # Preserve the 30-degree horizontal cone using the native wrapped angle.
-    augmentPushTargets = getPlayersInRadius(eventPlayer, LONG_REACH_MELEE_PUSH_RADIUS * eventPlayer.sizeScale, Team.2, LosCheck.SURFACES).filter(lambda zombie: zombie.isAlive() and not zombie.botIsTeleporting and not zombie.botIsAttached and zombie.botKnockbackScale > 0 and abs(horizontalAngleTowards(eventPlayer, zombie)) <= 30)
+    # Push in every direction within a fixed radius; surfaces block visibility.
+    augmentPushTargets = getPlayersInRadius(eventPlayer, LONG_REACH_MELEE_PUSH_RADIUS, Team.2, LosCheck.SURFACES).filter(lambda zombie: zombie.isAlive() and not zombie.botIsTeleporting and not zombie.botIsAttached and zombie.botKnockbackScale > 0 and zombie not in bossStateList and zombie not in miniBossList)
     if augmentPushTargets == []:
         return
     eventPlayer.augmentMeleePushReadyAt = getTotalTimeElapsed() + LONG_REACH_MELEE_PUSH_COOLDOWN
+    # One expanding ring per push, centered at waist height with the push radius.
+    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.RED, augmentGrapnelCenter(eventPlayer), LONG_REACH_MELEE_PUSH_RADIUS)
     for augmentPushTargetIndex in range(len(augmentPushTargets)):
         augmentPushTarget = augmentPushTargets[augmentPushTargetIndex]
         augmentPushTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, augmentPushTarget)), -15), LONG_REACH_MELEE_PUSH_IMPULSE * augmentPushTarget.botKnockbackScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
