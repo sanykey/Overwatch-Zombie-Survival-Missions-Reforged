@@ -1,6 +1,9 @@
+#!define DEBUG false
+#!define SERVER_LOAD_UI true
+
 # Select exactly one map pool, then save the root main.opy to rebuild.
-#!include "map_pools/standart.opy"
-##!include "map_pools/perf_test.opy"
+##!include "map_pools/standart.opy"
+#!include "map_pools/perf_test.opy"
 ##!include "map_pools/debug_map_pool.opy"
 
 #!include "directives.opy"
