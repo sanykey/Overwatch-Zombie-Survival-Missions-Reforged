@@ -133,7 +133,7 @@ assert.equal((text.match(/Impulse\.CANCEL_CONTRARY_MOTION\b/g) || []).length, 20
 const report = {
     date: '2026-11-04', original, originalSha256: hash(text), hashNormalization: 'UTF-8, CRLF -> LF',
     scope: 'Source comparison of existing report findings, not an in-game test or an exhaustive search for regressions.',
-    excludedSourceFiles: ['src/debug.opy'],
+    excludedSourceFiles: ['src/debug/debug.opy'],
     findings, starts, chase, impulses,
 };
 if (process.argv.includes('--write')) fs.writeFileSync(path.join(__dirname, 'original-provenance-2026-11-04.json'), JSON.stringify(report, null, 2) + '\n');

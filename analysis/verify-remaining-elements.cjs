@@ -311,7 +311,7 @@ async function main() {
     assert.equal(exported.nbElements, after.elements);
     assert.deepEqual(rules(exported.result), currentRules);
     assert.deepEqual(checkImportNames(exported.result), importNames);
-    fs.writeFileSync(path.join(src, 'main.ws.txt'), exported.result);
+    fs.writeFileSync(require('./source-layout.cjs').sourcePath('main.ws.txt'), exported.result);
     const report = {baselineRef, compiler: 'OverPy 9.7.20',
         before: {elements: before.elements, globalVariables: 102, playerVariables: 74},
         after: {elements: after.elements, globalVariables: layout.globalVariables, playerVariables: layout.playerVariables},

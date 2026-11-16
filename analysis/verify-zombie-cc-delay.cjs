@@ -8,7 +8,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const src = path.join(root, 'src');
-const read = name => fs.readFileSync(path.join(src, name), 'utf8');
+const read = name => fs.readFileSync(require('./source-layout.cjs').sourcePath(name), 'utf8');
 const liveReads = text => (text.match(/(?<!bot)isCrowdControlled/g) || []).length;
 const delayedReads = text => (text.match(/botIsCrowdControlled/g) || []).length;
 const lines = (text, needle) => text.split(/\r?\n/).filter(line => line.includes(needle));

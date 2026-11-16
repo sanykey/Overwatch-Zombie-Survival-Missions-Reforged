@@ -17,7 +17,7 @@
 
 ## 1. Apothecary и сопротивление во время ультимейта
 
-Источники: [PLAYER ULTIMATE DAMAGE RESIST](../src/hero_tuning.opy#L137), [APOTHECARY ULTIMATE RECHARGE](../src/apothecary.opy#L66).
+Источники: [PLAYER ULTIMATE DAMAGE RESIST](../src/abilities/hero_tuning.opy#L137), [APOTHECARY ULTIMATE RECHARGE](../src/abilities/augment_apothecary.opy#L66).
 
 Оба правила имеют одинаковый вход: Team 1 и `isUsingUltimate() == true`. В начале правила сопротивления добавить:
 
@@ -34,7 +34,7 @@ Charge Battery пока не включать в тот же перенос ав
 
 ## 2. Два отсоединения Rider
 
-Источники: [отсоединение при смерти/невалидной цели](../src/zombie_types.opy#L485), [отсоединение от союзника](../src/zombie_types.opy#L516).
+Источники: [отсоединение при смерти/невалидной цели](../src/game/zombie_types.opy#L485), [отсоединение от союзника](../src/game/zombie_types.opy#L516).
 
 Одинаковые действия: очистить `botAbilityTarget`, сбросить `botIsAttached`, вызвать `detach()`. В обоих правилах нет ожиданий. Вынести общие условия Team 2, Widowmaker, отсутствие Wrestler-переносчика и активное прикрепление; остальные наборы условий объединить через `or`.
 
@@ -44,7 +44,7 @@ Charge Battery пока не включать в тот же перенос ав
 
 ## 3. Общий Melee для трёх Enhancement
 
-Источники: [Zombie Hybrid](../src/enhancements.opy#L15), [Bulking Season](../src/enhancements.opy#L117), [Charge Battery placement](../src/charge_battery.opy#L37).
+Источники: [Zombie Hybrid](../src/abilities/enhancements.opy#L15), [Bulking Season](../src/abilities/enhancements.opy#L117), [Charge Battery placement](../src/abilities/enhancement_charge_battery.opy#L37).
 
 У всех Team 1, живой игрок и удержание Melee. Enhancement взаимоисключающие: можно оставить общее правило, точные дополнительные условия каждой ветки и выбрать тело по `enhancementId`. Сохранить `wait(0.5, ABORT_WHEN_FALSE)` у Bulking/Battery, отпускание кнопки у Battery и независимые процедуры кулдауна. Нового общего таймера не требуется.
 
@@ -65,7 +65,7 @@ Charge Battery пока не включать в тот же перенос ав
 
 Объединение четырёх обработчиков статусов от попаданий добавляет 50 элементов и убирает встроенную фильтрацию событий по герою. Не следует переносить их под общие условия `PLAYER DEALT DAMAGE`: там есть `victim != attacker` и `eventDamage > 0`, которые не совпадают с исходными условиями всех четырёх правил. Нулевой урон нельзя исключать без отдельного обоснования.
 
-Само количество правил с `eventPlayer` пока не установлено как причина поломки UI. В [debug HUD](../src/debug.opy#L36) уже выводятся Text IDs, Entity IDs и текущая/средняя/пиковая Server Load. Зафиксировать эти значения до и после объединений при одинаковом числе людей, ботов, выбранных способностях и объективе. Отдельно записывать момент поломки UI: вход/переподключение, смена героя, начало игры, смена цели. Сокращение правил само по себе не сокращает число создаваемых HUD/эффектов и их переоценок.
+Само количество правил с `eventPlayer` пока не установлено как причина поломки UI. В [debug HUD](../src/debug/debug.opy#L36) уже выводятся Text IDs, Entity IDs и текущая/средняя/пиковая Server Load. Зафиксировать эти значения до и после объединений при одинаковом числе людей, ботов, выбранных способностях и объективе. Отдельно записывать момент поломки UI: вход/переподключение, смена героя, начало игры, смена цели. Сокращение правил само по себе не сокращает число создаваемых HUD/эффектов и их переоценок.
 
 ## Проверка и воспроизведение
 

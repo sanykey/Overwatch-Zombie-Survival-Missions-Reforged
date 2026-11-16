@@ -34,24 +34,24 @@
   [DELETE PATH](../src/objective_types/objective_type_survivor_rescue.opy#L131).
   Между записью и чтением нет ожидания или вызова подпрограммы.
 - **`botReigniteSource`** нужен только для расчёта `botReigniteDestination` в
-  [появлении у Anran](../src/zombie_types.opy#L417). Сразу после этого общий слот
+  [появлении у Anran](../src/game/zombie_types.opy#L417). Сразу после этого общий слот
   перезаписывается вектором `botReigniteRisePosition`. Вектор должен остаться в playervar:
   его использует принудительное позиционирование и анимация с ожиданием.
 - **`enhancementBarrierTarget`** используется только внутри синхронного прохода по пересечениям
-  [Laser Barricade](../src/enhancements.opy#L234). `tmp0` уже занят индексом,
+  [Laser Barricade](../src/abilities/enhancements.opy#L234). `tmp0` уже занят индексом,
   `tmp1` — двумя опорными точками для толчка; для текущей цели свободен `tmp2`.
-- **Расчёт `botPotentialTargetList`** в [selectTarget](../src/subroutines.opy#L652) начинается с пустого `tmp1`,
+- **Расчёт `botPotentialTargetList`** в [selectTarget](../src/core/subroutines.opy#L652) начинается с пустого `tmp1`,
   фильтруется и обходится до `startRule(restoreDefaultFacingMovement)`. Действующего `wait`
   внутри обхода нет: строка `#wait()` закомментирована. **Готовый снимок копируется в
   `eventPlayer.botPotentialTargetList` перед обходом**: его читает видимость переоцениваемого
-  [текста расстояния до босса](../src/subroutines.opy#L290).
+  [текста расстояния до босса](../src/core/subroutines.opy#L290).
   Это не разрешает автоматически переносить отдельный `botCandidateTarget`: его случай описан ниже.
   Сбросы ботского списка при смерти/инициализации босса и общая очистка при падении игрока
   сохранены: снимок по-прежнему имеет постоянного потребителя.
 - **`enhancementBarrierTargetList`** локален тому же проходу Barricade. Его перенос в `tmp2`
   является альтернативой переносу текущей цели в `tmp2`: обе простые замены одновременно конфликтуют.
   Для совместного переноса понадобится иной способ адресовать текущую цель или распределять временные значения.
-- **`explosionTargetList`** в [explosionSequence](../src/subroutines.opy#L762) используется до
+- **`explosionTargetList`** в [explosionSequence](../src/core/subroutines.opy#L762) используется до
   завершающего `wait(0.25)`: для разового урона, статусов и запуска DoT на выбранных акторов.
   Последующего чтения списка в этой подпрограмме нет. Компиляция и проверка scratch проходят.
   Перед внедрением стоит отдельно проверить пересечение старых обработчиков других героев при смене зомби:
@@ -60,7 +60,7 @@
 
 ## Почему цвет мутации можно сделать временным
 
-В [mutationsMacro](../src/subroutines.opy#L78) все пять присваиваний цвета выполняются
+В [mutationsMacro](../src/core/subroutines.opy#L78) все пять присваиваний цвета выполняются
 непосредственно перед `startForcingOutlineFor`, без ожиданий между ними и этим действием.
 При отсутствии мутации код останавливает контур через `stopForcingOutlineFor`.
 Других записей или обычных чтений `botMutationOutlineColor` нет.
@@ -79,7 +79,7 @@ eventPlayer.startForcingOutlineFor(getAllPlayers(), true, evalOnce(tmp2))
 
 В проверенном варианте последняя ветка выбора мутации `elif ... == 5` превращена в `else`,
 чтобы запись `tmp2` была гарантирована на каждом пути перед чтением.
-Это опирается на проверенный диапазон: [enableMutationsMacro](../src/global_startup.opy#L74)
+Это опирается на проверенный диапазон: [enableMutationsMacro](../src/core/global_startup.opy#L74)
 формирует список только из включённых ID 1–5 и удаляет нули; успешный выбор берётся из непустого списка.
 Другие присваивания ID ограничены сбросом в 0 в ветке без мутации.
 Проба проверяет источники ID и соответствие цветов всем пяти ID.
@@ -102,7 +102,7 @@ evalOnce([null, Color.PURPLE, Color.VIOLET, Color.ROSE, Color.LIME_GREEN, Color.
 
 В исходной ревизии **107 из 108 физических полей имеют явные обращения на чтение**.
 В текущей сборке поле цвета удалено; осталось 107 физических полей.
-Оставшееся поле, [powerUpAirStrikeIndex](../src/supply_drops.opy#L204), — счётчик `For Player Variable`.
+Оставшееся поле, [powerUpAirStrikeIndex](../src/items/supply_drops.opy#L204), — счётчик `For Player Variable`.
 Его неявно читает сам цикл, который управляет 50 взрывами и содержит `wait(0.125)`.
 Это не неиспользуемая переменная и не кандидат для общего tmp.
 
@@ -118,14 +118,14 @@ evalOnce([null, Color.PURPLE, Color.VIOLET, Color.ROSE, Color.LIME_GREEN, Color.
 | `botEnsnarerUltimateIndex` | заголовок `for` | Есть неявные чтения счётчика циклом; внутри есть ожидания. Сохранять. |
 
 Для **`botIsBomberPrimed`** прямые записи находятся в
-[Bomber](../src/zombie_types.opy#L75) и [explosionWarning](../src/zombie_types.opy#L1473).
+[Bomber](../src/game/zombie_types.opy#L75) и [explosionWarning](../src/game/zombie_types.opy#L1473).
 Удаление обеих в пробе уменьшает размер на **2 элемента**, но не освобождает playervar:
 `actorAbilitySlot1` по-прежнему нужен другим героям и Rescue.
 Успешная компиляция сама по себе не доказывает отсутствие наблюдения через другие роли общего слота.
 
-Удаление только [сброса botAuxiliaryState в Sigma](../src/zombie_types.opy#L955)
+Удаление только [сброса botAuxiliaryState в Sigma](../src/game/zombie_types.opy#L955)
 уменьшает размер на **1 элемент**, без освобождения слота.
-Общий [сброс при респауне](../src/subroutines.opy#L719) нужен для инициализации других ролей.
+Общий [сброс при респауне](../src/core/subroutines.opy#L719) нужен для инициализации других ролей.
 
 Особенно важно не объявлять автоматически неиспользуемыми записи **`botReturnPosition`**.
 `bossReturn()` вызывается и из [обработчика смерти босса](../src/objective_types/objective_type_bosses.opy#L134),
@@ -145,10 +145,10 @@ evalOnce([null, Color.PURPLE, Color.VIOLET, Color.ROSE, Color.LIME_GREEN, Color.
 - **`botSpawnWaypoint`**: `updateBotSpawnPoints()` вызывается не только сразу после записи waypoint,
   но и при смерти/выходе из телепорта. Там используется ранее сохранённый снимок.
 - **`powerUpTurretDirection`**: кроме расчёта очередного выстрела, его читает
-  [переоцениваемый луч турели](../src/supply_drops.opy#L265). Между выстрелами есть ожидания.
+  [переоцениваемый луч турели](../src/items/supply_drops.opy#L265). Между выстрелами есть ожидания.
   Захват единственного направления при создании луча изменил бы поведение турели.
 - **`visualCleanupIndex`**: циклы уничтожения визуальных объектов содержат `wait()`
-  и в [botEntityManagementMacro](../src/subroutines.opy#L128), и в управлении иконками цели игрока.
+  и в [botEntityManagementMacro](../src/core/subroutines.opy#L128), и в управлении иконками цели игрока.
   Проба замены ботского цикла на `tmp0` отклонена CFG-проверкой:
   `botRespawnInitialization: tmp0 live across Wait(False, Ignore Condition)`.
 - **`rescuePotentialLeaderList`**: это не только локальный расчёт лидера в одном правиле.

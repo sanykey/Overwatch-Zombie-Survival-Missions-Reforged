@@ -14,7 +14,7 @@ const normalize = body => body.split('\n').filter(l => !/^\s*(?:"|\/\/)/.test(l)
     .map(l => l.replace(/;\s*\/\/.*$/, ';').trim()).filter(Boolean).join('\n');
 (async () => {
     await compiler.readyPromise;
-    const result = await compiler.compile(fs.readFileSync(path.join(src, 'includes.opy'), 'utf8'), 'en-US', src.replace(/\\/g, '/') + '/', 'includes.opy');
+    const result = await compiler.compile(fs.readFileSync(require('./source-layout.cjs').sourcePath('includes.opy'), 'utf8'), 'en-US', src.replace(/\\/g, '/') + '/', 'includes.opy');
     assert.deepEqual(result.encounteredWarnings, []);
     const rules = [...result.result.matchAll(/^rule \("([^"\n]+)"\) \{([\s\S]*?)^\}/gm)].map(([,name,body]) => ({name, body}));
     const report = {elements: result.nbElements, eachPlayerRules: rules.filter(r => r.body.includes('Ongoing - Each Player;')).length,

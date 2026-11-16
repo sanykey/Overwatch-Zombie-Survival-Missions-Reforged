@@ -36,7 +36,7 @@ const heroes=['Reinhardt','Brigitte','D.Mon','Genji','Ramattra','Torbj\u00f6rn']
 const rows=[[4,75,.4,.56],[6,33.75,.2,.4],[4,45,.2,.456],[5,75,.15,0],[10,48.75,.15,.45],[2.5,52.5,.35,.35]];
 async function main() {
     await compiler.readyPromise;
-    const generator=fs.readFileSync('src/create numbers.js','utf8');
+    const generator=fs.readFileSync('tools/create numbers.js','utf8');
     const before={...files};
     const prefix=vm.runInNewContext(generator.replace('let numberIndex = 0;',"numbers.splice(numbers.findIndex(g=>g.offset==='NL_LONG_REACH_PROFILE_OFFSET'));\nlet numberIndex = 0;"));
     before['compressed numbers.opy']=before['compressed numbers.opy'].replace('    createNumbers()',prefix);

@@ -84,7 +84,7 @@ async function main() {
     assert.deepEqual(included.encounteredWarnings, []);
     assert.deepEqual(compiledRules(included.result), compiledRules(after.result));
     for (const [file, contents] of Object.entries(files))
-        assert.equal(fs.readFileSync(path.join(src, file), 'utf8').replace(/\r\n/g, '\n'), contents);
+        assert.equal(fs.readFileSync(require('./source-layout.cjs').sourcePath(file), 'utf8').replace(/\r\n/g, '\n'), contents);
     const count = (sources, type) => (Object.values(sources).join('\n').match(new RegExp(`^${type} `, 'gm')) || []).length;
     const report = {date: '2026-11-04', beforeRef, workingRef,
         before: {elements: before.elements, globals: count(baseline, 'globalvar'), players: count(baseline, 'playervar')},
@@ -98,7 +98,7 @@ async function main() {
             'Other compiled actions match 9363ec1 after storage-name normalization'],
         limitations: 'Static validation and compilation; in-game camera rendering/scheduler not tested.'};
     assert(report.after.globals <= 128 && report.after.players <= 128);
-    fs.writeFileSync(path.join(src, 'main.ws.txt'), included.result);
+    fs.writeFileSync(require('./source-layout.cjs').sourcePath('main.ws.txt'), included.result);
     fs.writeFileSync(path.join(__dirname, 'pregame-camera-transition-validation.json'), JSON.stringify(report, null, 2) + '\n');
     console.log(JSON.stringify(report, null, 2));
 }

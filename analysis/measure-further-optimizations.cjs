@@ -13,7 +13,7 @@ const baselineRef = refIndex < 0 ? null : args.splice(refIndex, 2)[1];
 if (refIndex >= 0 && !baselineRef) throw new Error('--baseline-ref requires a Git revision');
 // Dated checks use the logical key main.opy and Git revisions containing that name.
 // Resolve it to the current include manifest only for reads of the working tree.
-const sourcePath = name => path.join(src, name === 'main.opy' ? 'includes.opy' : name);
+const sourcePath = name => require('./source-layout.cjs').sourcePath(name === 'main.opy' ? 'includes.opy' : name);
 const readSource = name => baselineRef
     ? execFileSync('git', ['show', `${baselineRef}:src/${name}`], {cwd: root})
     : fs.readFileSync(sourcePath(name));
@@ -25,7 +25,7 @@ function readTree(dir, prefix = '') {
             e.name.endsWith('.opy') ? [[name, readSource(name).toString('utf8').replace(/\r\n/g,'\n')]] : [];
     }));
 }
-const files = readTree(src);
+const files = Object.fromEntries(Object.entries(require('./source-layout.cjs').readLegacyTree()).map(([name, text]) => [name === 'includes.opy' ? 'main.opy' : name, baselineRef ? readSource(name === 'includes.opy' ? 'main.opy' : name).toString('utf8').replace(/\r\n/g,'\n') : text]));
 function source(f) {
     return f['main.opy'].replace(/^#!include "([^"]+)".*$/gm, (line,n) => n.startsWith('vas/') ? line : f[n].replace(/^#!mainFile .*\n/gm,''))
         .replace(/^#!writeToOutputFile.*\n/gm,'');
@@ -165,7 +165,7 @@ async function main() {
             } catch(e) {const row={name,error:e.message};report.combinations.push(row);console.log(JSON.stringify(row));}
         }
     }
-    assert.deepEqual(readTree(src),files,'Source changed during measurement');
+    assert.deepEqual(Object.fromEntries(Object.entries(require('./source-layout.cjs').readLegacyTree()).map(([name,text]) => [name === 'includes.opy' ? 'main.opy' : name, text])),files,'Source changed during measurement');
     if(!baselineRef) assert.deepEqual(readSource('main.ws.txt'),originalOutput,'Baseline output changed during measurement');
     assert.deepEqual(readSource('vas/create numbers.js'),generator,'Number generator changed during measurement');
     fs.writeFileSync(path.join(__dirname,'further-optimization-results.json'),JSON.stringify(report,null,2)+'\n');

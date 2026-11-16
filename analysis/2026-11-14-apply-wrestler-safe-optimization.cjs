@@ -62,8 +62,8 @@ function ruleBodies(result) {
     const changedFiles = Object.keys(files).filter(name => files[name] !== candidate[name]);
     assert.deepEqual(changedFiles.sort(), ['enhancements.opy','supply_drops.opy']);
     // Only mutate after the full build, rule-scope and equivalence checks pass.
-    for (const name of changedFiles) fs.writeFileSync(path.join(src, name), candidate[name].replace(/\n/g, '\r\n'));
-    fs.writeFileSync(path.join(src, '..', 'main.ws.txt'), after.result);
+    for (const name of changedFiles) fs.writeFileSync(require('./source-layout.cjs').sourcePath(name), candidate[name].replace(/\n/g, '\r\n'));
+    fs.writeFileSync(require('./source-layout.cjs').sourcePath('..', 'main.ws.txt'), after.result);
     const report = {before: before.elements, after: after.elements, saved: before.elements-after.elements,
         compiler:'OverPy 9.7.21', warnings:after.warnings, changedRules:changed,
         unchangedRules:oldRules.length-changed.length, inputCases, carryBooleanCases:1024,

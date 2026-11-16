@@ -2,13 +2,13 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),src=path.join(root,'src');
 const manifest=JSON.parse(fs.readFileSync(path.join(__dirname,'2026-11-16-BA-validation.json'),'utf8'));
-const reportName='WORKSHOP_NATIVE_UI_CORRUPTION.md';
-const files=fs.readdirSync(src).filter(n=>n.endsWith('.opy'));
+const reportName='docs/WORKSHOP_NATIVE_UI_CORRUPTION.md';
+const files=Object.keys(require('./source-layout.cjs').readLegacyTree());
 const replacements=new Map();
 for(const t of manifest.rankedRemaining){
  let found;
  for(const f of files){
-    const text=replacements.get(f)||fs.readFileSync(path.join(src,f),'utf8').replace(/\r\n/g,'\n');
+    const text=replacements.get(f)||fs.readFileSync(require('./source-layout.cjs').sourcePath(f),'utf8').replace(/\r\n/g,'\n');
     const start=text.indexOf('rule "'+t.name+'":\n');if(start<0)continue;
     assert(!found,'Duplicate source rule '+t.name);
     const tail=text.slice(start),next=tail.slice(1).search(/^(?:rule |def |macro |#!define|#!enableOptimizations|#!disableOptimizations)/m);
@@ -43,5 +43,5 @@ for(const t of manifest.rankedRemaining){
 }
 assert.equal(manifest.rankedRemaining.filter(t=>t.kind==='ongoing').length,16);
 assert.equal(manifest.rankedRemaining.filter(t=>t.kind==='event').length,9);
-for(const [f,text] of replacements)fs.writeFileSync(path.join(src,f),text);
+for(const [f,text] of replacements)fs.writeFileSync(require('./source-layout.cjs').sourcePath(f),text);
 console.log(JSON.stringify({changedSourceFiles:[...replacements.keys()],rules:25,reportName},null,2));

@@ -73,7 +73,7 @@ function flattenVoteLists(f) {
 
 async function main() {
     await compiler.readyPromise;
-    const base = readTree(src);
+    const base = require('./source-layout.cjs').readLegacyTree();
     const baseline = await compileQ(base);
     console.log('baseline:', baseline.elements, 'elements,', baseline.warnings.length, 'warnings');
 

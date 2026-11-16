@@ -8,9 +8,8 @@ const crypto = require('node:crypto');
 const root = path.resolve(__dirname, '..');
 const src = path.join(root, 'src');
 const apply = process.argv.includes('--apply');
-const originals = Object.fromEntries(fs.readdirSync(src).filter(n => n.endsWith('.opy'))
-    .map(n => [n, fs.readFileSync(path.join(src, n), 'utf8')]));
-const files = Object.fromEntries(Object.entries(originals).map(([n, s]) => [n, s.replace(/\r\n/g, '\n')]));
+const originals = require('./source-layout.cjs').readLegacyTree({normalize:false});
+const files = Object.fromEntries(Object.entries(originals).map(([n, s]) => [n, require('./source-layout.cjs').probeSource(s.replace(/\r\n/g, '\n'))]));
 
 // Preserve offsets while ignoring comments and quoted text when counting references.
 function codeOnly(text) {
@@ -127,16 +126,16 @@ async function main() {
         for (const [file, text] of Object.entries(snapshot)) {
             const original = originals[file];
             if (text === files[file]) continue;
-            assert.equal(fs.readFileSync(path.join(src, file), 'utf8'), original, 'Source changed during measurement: ' + file);
+            assert.equal(fs.readFileSync(require('./source-layout.cjs').sourcePath(file), 'utf8'), original, 'Source changed during measurement: ' + file);
             const clean = text.trimEnd() + '\n';
-            fs.writeFileSync(path.join(src, file), original.includes('\r\n') ? clean.replace(/\n/g, '\r\n') : clean);
+            fs.writeFileSync(require('./source-layout.cjs').sourcePath(file), original.includes('\r\n') ? clean.replace(/\n/g, '\r\n') : clean);
         }
         // Compile real includes for the output so debug comments retain the source filenames.
-        const diskResult = await compiler.compile(fs.readFileSync(path.join(src, 'includes.opy'), 'utf8')
+        const diskResult = await compiler.compile(fs.readFileSync(require('./source-layout.cjs').sourcePath('includes.opy'), 'utf8')
             .replace(/^#!writeToOutputFile.*\r?\n/gm, ''), 'en-US', src.replace(/\\/g, '/') + '/', 'includes.opy');
         assert.equal(diskResult.nbElements, report.after);
         assert.deepEqual(diskResult.encounteredWarnings, result.warnings);
-        fs.writeFileSync(path.join(src, 'main.ws.txt'), diskResult.result);
+        fs.writeFileSync(require('./source-layout.cjs').sourcePath('main.ws.txt'), diskResult.result);
     }
     fs.writeFileSync(path.join(__dirname, 'single-use-subroutines-results.json'), JSON.stringify(report, null, 2) + '\n');
     console.log(JSON.stringify({ applied: apply, converted: report.results.length, before: report.before, after: report.after, saved: report.saved, warnings: result.warnings.length }));

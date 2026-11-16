@@ -13,7 +13,7 @@ function tree(dir, prefix='') {
         ? Object.entries(tree(path.join(dir,e.name), prefix+e.name+'/'))
         : e.name.endsWith('.opy') ? [[prefix+e.name, fs.readFileSync(path.join(dir,e.name),'utf8').replace(/\r\n/g,'\n')]] : []));
 }
-const baseline = tree(src);
+const baseline = require('./source-layout.cjs').readLegacyTree();
 let touchedNames = new Set();
 function get(f, file, name) {
     touchedNames.add(name);
@@ -82,7 +82,7 @@ async function compile(f) {
     await compiler.readyPromise;
     const {fingerprints:beforeFingerprints,...before}=await compile(baseline);
     // Check that flattening includes has exactly the same size as the normal entry point.
-    const normal=await compiler.compile(baseline['includes.opy'].replace(/^#!writeToOutputFile.*\n/gm,''),'en-US',src.replace(/\\/g,'/')+'/', 'includes.opy');
+    const normal=await compiler.compile(fs.readFileSync(path.join(src,'includes.opy'),'utf8').replace(/^#!writeToOutputFile.*\n/gm,''),'en-US',src.replace(/\\/g,'/')+'/', 'includes.opy');
     assert.equal(normal.nbElements,before.elements);
     const variants={ultimate,rider,melee,disconnect,heroDamage,combined:f=>{ultimate(f);rider(f);melee(f);disconnect(f);heroDamage(f);}};
     const results={};
@@ -101,7 +101,7 @@ async function compile(f) {
         console.log(name,JSON.stringify(results[name]));
     }
     // Assert source tree was never modified by a compiler directive or experiment.
-    assert.deepEqual(tree(src),baseline);
+    assert.deepEqual(require('./source-layout.cjs').readLegacyTree(),baseline);
     const report={compiler:version,sourceHash:crypto.createHash('sha256').update(JSON.stringify(baseline)).digest('hex'),before,results,
         limitations:'Compiler experiments only. No runtime timing, UI reproduction, or in-game gameplay equivalence test. Melee merge assumes enhancementId is stable during an active ability, as in normal gameplay.'};
     fs.writeFileSync(path.join(__dirname,'2026-11-15-rule-merge-probes.json'),JSON.stringify(report,null,2)+'\n');

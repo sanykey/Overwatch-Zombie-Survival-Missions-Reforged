@@ -91,7 +91,7 @@ async function main() {
     fs.writeFileSync(path.join(__dirname, '2026-11-15-pull-subroutine-measurements.json'), JSON.stringify(report, null, 2) + '\n');
     if (process.argv.includes('--apply')) {
         assert(best.build.elements < before.elements);
-        for (const file of changed) fs.writeFileSync(path.join(src, file), best.next[file]);
+        for (const file of changed) fs.writeFileSync(require('./source-layout.cjs').sourcePath(file), best.next[file]);
     }
     console.log(JSON.stringify(report, null, 2));
 }

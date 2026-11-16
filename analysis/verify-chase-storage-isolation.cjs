@@ -99,9 +99,9 @@ async function main() {
     assert.deepEqual(rules(included.result), rules(after.result));
     assert.deepEqual(warningCounts(included.encounteredWarnings), remaining);
     for (const [file, contents] of Object.entries(files))
-        assert.equal(fs.readFileSync(path.join(src, file), 'utf8').replace(/\r\n/g, '\n'), contents,
+        assert.equal(fs.readFileSync(require('./source-layout.cjs').sourcePath(file), 'utf8').replace(/\r\n/g, '\n'), contents,
             `Source changed during validation: ${file}`);
-    fs.writeFileSync(path.join(src, 'main.ws.txt'), included.result);
+    fs.writeFileSync(require('./source-layout.cjs').sourcePath('main.ws.txt'), included.result);
     const report = {date: '2026-11-04', baselineRef, isolated,
         before: {elements: before.elements, variables: oldCounts, warnings: before.warnings.length},
         after: {elements: after.elements, variables: newCounts, warnings: after.warnings.length},

@@ -97,4 +97,4 @@ Biomorphing, Survivor Rescue, Kill Zone, Zombie Egg, Satellite Uplink и бос�
 node analysis/measure-zsmm-elements.cjs
 ```
 
-Скрипт находит установленный OverPy в `%USERPROFILE%/.vscode/extensions`; при необходимости путь к `npm/overpy.js` передаётся первым аргументом. Скрипт записывает версию компилятора, SHA-256 исходников, суммы и разницу по правилам в [ZSMM-elements.json](./ZSMM-elements.json) и [ZSMM-elements-by-rule.csv](./ZSMM-elements-by-rule.csv). Пересчёт другой версией компилятора может дать другие числа.
+Скрипт находит установленный OverPy в `%USERPROFILE%/.vscode/extensions`; при необходимости путь к `npm/overpy.js` передаётся первым аргументом. Скрипт записывает версию компилятора, SHA-256 исходников, суммы и разницу по правилам в [ZSMM-elements.json](ZSMM-elements.json) и [ZSMM-elements-by-rule.csv](ZSMM-elements-by-rule.csv). Пересчёт другой версией компилятора может дать другие числа.

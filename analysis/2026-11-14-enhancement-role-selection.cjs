@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const root = path.resolve(__dirname, '..');
 const compiler = require(path.join(process.env.USERPROFILE, '.vscode/extensions/zezombye.overpy-9.7.21/npm/overpy.js'));
 const artifact = suffix => path.join(__dirname, `2026-11-14-enhancement-role-${suffix}.json`);
-const read = file => fs.readFileSync(path.join(root, 'src', file), 'utf8');
+const read = file => fs.readFileSync(require('./source-layout.cjs').sourcePath(file), 'utf8');
 // Split table entries without splitting nested calls, arrays, or string literals.
 function table(source, start) {
   const begin = source.indexOf('[', start);
@@ -60,11 +60,11 @@ async function main() {
     assert(source.includes(assignment));
     let filtered;
     try {
-      fs.writeFileSync(path.join(root, 'src/player_initialization.opy'), source.replace(assignment,
+      fs.writeFileSync(path.join(root, 'src/abilities/player_initialization.opy'), source.replace(assignment,
         'random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].filter(lambda enhancement: (enhancement not in [Enhancement.ZOMBIE_HYBRID, Enhancement.BULKING_SEASON] or eventPlayer.getHero() in getTankHeroes()) and (enhancement not in [Enhancement.PLAGUE_DOCTOR, Enhancement.OVERCHARGE] or eventPlayer.getHero() in getSupportHeroes())))'));
       filtered = await compile();
     } finally {
-      fs.writeFileSync(path.join(root, 'src/player_initialization.opy'), source);
+      fs.writeFileSync(path.join(root, 'src/abilities/player_initialization.opy'), source);
     }
     const baseline = {elements: original.nbElements, filteredElements: filtered.nbElements, tables: savedTables};
     fs.writeFileSync(artifact('before'), JSON.stringify(baseline, null, 2) + '\n');

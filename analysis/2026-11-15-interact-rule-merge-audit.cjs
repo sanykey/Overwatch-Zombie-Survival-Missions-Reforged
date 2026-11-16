@@ -4,7 +4,7 @@ const path = require('node:path');
 const compiler = require(path.join(process.env.USERPROFILE, '.vscode/extensions/zezombye.overpy-9.7.21/npm/overpy.js'));
 const root = path.resolve(__dirname, '..');
 const src = path.join(root, 'src');
-const read = name => fs.readFileSync(path.join(src, name), 'utf8').replace(/\r\n/g, '\n');
+const read = name => fs.readFileSync(require('./source-layout.cjs').sourcePath(name), 'utf8').replace(/\r\n/g, '\n');
 const supply = read('supply_drops.opy');
 const augments = read('augments.opy');
 function rule(text, name) {

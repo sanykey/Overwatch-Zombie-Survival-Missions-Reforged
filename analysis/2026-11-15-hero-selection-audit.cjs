@@ -38,7 +38,7 @@ function inline(file) {
 }
 (async () => {
     await compiler.readyPromise;
-    const input = inline(path.join(src, 'includes.opy'));
+    const input = inline(require('./source-layout.cjs').sourcePath('includes.opy'));
     const result = await compiler.compile(input, 'en-US', src.replace(/\\/g, '/') + '/', 'includes.opy');
     assert.deepEqual(result.encounteredWarnings, []);
     const report = {date: '2026-11-15', compiler: version,

@@ -9,7 +9,7 @@ const rules=s=>[...s.matchAll(/^rule \("([^"\n]+)"\) \{([\s\S]*?)^\}/gm)].map(m=
 const normalize=s=>s.replace(/\/\*[\s\S]*?\*\//g,'').split('\n').filter(l=>!/^\s*(?:\/\/|")/.test(l)).map(l=>l.replace(/;\s*\/\/.*$/,';').trim()).filter(Boolean).join('\n');
 (async()=>{
  await compiler.readyPromise;
- const input=inline(path.join(src,'includes.opy'));
+ const input=inline(require('./source-layout.cjs').sourcePath('includes.opy'));
  const result=await compiler.compile(input,'en-US',src.replace(/\\/g,'/')+'/', 'includes.opy');
  const a=rules(expected),b=rules(result.result);assert.equal(a.length,b.length);
  const differences=[];

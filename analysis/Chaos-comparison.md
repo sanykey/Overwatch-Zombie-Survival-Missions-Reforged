@@ -20,7 +20,7 @@
 
 Из 263 исходных блоков `rule`/`def` 151 совпадает, 47 изменены, 65 отсутствуют под прежним названием. В Chaos добавлено 175 блоков. Это статистика текстового сопоставления, включающая переименования и переносы. В текстовом diff 2875 добавленных и 1735 удалённых строк: текст вырос, хотя элементов стало меньше.
 
-Артефакты: [diff overPy](./Chaos-overpy.diff), [diff Workshop](./Chaos-workshop.diff), [изменённые блоки с номерами строк](./Chaos-changed-blocks.md), [элементы по исходным именам функций](./Chaos-elements-by-function.csv), [полные результаты компиляции](./Chaos-elements.json), [баланс крупных групп](./Chaos-element-groups.json).
+Артефакты: [diff overPy](Chaos-overpy.diff), [diff Workshop](Chaos-workshop.diff), [изменённые блоки с номерами строк](Chaos-changed-blocks.md), [элементы по исходным именам функций](Chaos-elements-by-function.csv), [полные результаты компиляции](Chaos-elements.json), [баланс крупных групп](Chaos-element-groups.json).
 
 В таблице по исходным именам нормализованы `@Name`. Это важно: `setDifficulty` теперь называется в выходном Workshop `setDifficulty Bot Setup`, `setZombieMode` — `setZombieMode zombie variable`, `botHeroRandomization` — `botHeroRandomization Spawn Rate`. Они **не удалены**. В частности, `setDifficulty` занимает те же 1112 элементов. Наивный diff счётчика по названиям ошибочно показывает удаление и повторное добавление этих подпрограмм.
 

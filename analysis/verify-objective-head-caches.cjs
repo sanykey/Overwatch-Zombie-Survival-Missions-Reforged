@@ -134,7 +134,7 @@ async function main() {
     // The diagnostic header lists included filenames in the real build and main.opy in the flattened build.
     const withoutDiagnostics = s => s.replace(/^\/\* Element count:[\s\S]*?\*\//, '');
     assert.equal(withoutDiagnostics(exported.result), withoutDiagnostics(after.result));
-    fs.writeFileSync(path.join(src, 'main.ws.txt'), exported.result);
+    fs.writeFileSync(require('./source-layout.cjs').sourcePath('main.ws.txt'), exported.result);
     const report = {date: '2026-11-02', baselineRef,
         before: {elements: before.elements, globals: 99, playerVariables},
         unsharedCaches: {elements: cached.elements, globals: 101, playerVariables},

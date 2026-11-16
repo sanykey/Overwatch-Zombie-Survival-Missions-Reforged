@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
 const src = path.resolve(__dirname, '../src');
-const read = name => fs.readFileSync(path.join(src, name), 'utf8').replace(/\r\n/g, '\n');
+const read = name => fs.readFileSync(require('./source-layout.cjs').sourcePath(name), 'utf8').replace(/\r\n/g, '\n');
 const files = Object.fromEntries(['augments.opy', 'variables.opy', 'includes.opy', 'player_events.opy', 'players_game_in_progress.opy', 'player_initialization.opy'].map(n => [n, read(n)]));
 function block(source, startText, endText) {
     const start = source.indexOf(startText);
@@ -99,5 +99,5 @@ const names = {'AUGMENT_APOTHECARY_ULT_CHARGE': 'APOTHECARY_AUGMENT_ULT_CHARGE',
 for (const [name, contents] of Object.entries(files)) {
     let updated = contents;
     for (const [oldName, newName] of Object.entries(names)) updated = updated.replaceAll(oldName, newName);
-    fs.writeFileSync(path.join(src, name), updated);
+    fs.writeFileSync(require('./source-layout.cjs').sourcePath(name), updated);
 }

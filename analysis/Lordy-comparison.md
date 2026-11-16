@@ -20,7 +20,7 @@
 
 Из 263 блоков `rule`/`def` оригинала 173 совпадают, 60 изменены, 30 отсутствуют под прежними названиями. Добавлено 39 блоков. Переименования и переносы входят в эту статистику; она не равна количеству новых или вырезанных механик. Текстовый diff: 868 добавленных и 887 удалённых строк.
 
-Артефакты: [diff overPy](./Lordy-overpy.diff), [diff Workshop](./Lordy-workshop.diff), [изменённые блоки с номерами строк](./Lordy-changed-blocks.md), [элементы по правилам, CSV](./Lordy-elements-by-rule.csv), [полные результаты измерения, JSON](./Lordy-elements.json).
+Артефакты: [diff overPy](Lordy-overpy.diff), [diff Workshop](Lordy-workshop.diff), [изменённые блоки с номерами строк](Lordy-changed-blocks.md), [элементы по правилам, CSV](Lordy-elements-by-rule.csv), [полные результаты измерения, JSON](Lordy-elements.json).
 
 **1. Постоянные улучшения игроков: самая большая переработка.**
 

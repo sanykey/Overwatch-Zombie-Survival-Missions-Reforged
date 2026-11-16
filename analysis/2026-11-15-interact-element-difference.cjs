@@ -4,7 +4,7 @@ const root = path.resolve(__dirname, '..');
 const compiler = require(path.join(process.env.USERPROFILE, '.vscode/extensions/zezombye.overpy-9.7.21/npm/overpy.js'));
 (async () => {
     await compiler.readyPromise;
-    const current = fs.readFileSync(path.join(root, 'src/supply_drops.opy'), 'utf8');
+    const current = fs.readFileSync(path.join(root, 'src/items/supply_drops.opy'), 'utf8');
     const prior = current.replace(
         '    @Condition isGameplayActive == true\n    @Condition eventPlayer.isDummy() == false\n    @Condition eventPlayer.isAlive() == true\n    @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true',
         '    @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true\n    @Condition eventPlayer.isAlive() == true\n    @Condition eventPlayer.isDummy() == false\n\n    if not isGameplayActive:\n        return'

@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const root = path.resolve(__dirname, '..');
 const src = path.join(root, 'src');
 const compiler = require(path.join(process.env.USERPROFILE, '.vscode/extensions/zezombye.overpy-9.7.21/npm/overpy.js'));
-const source = fs.readFileSync(path.join(src, 'supply_drops.opy'), 'utf8').replace(/\r\n/g, '\n');
+const source = fs.readFileSync(require('./source-layout.cjs').sourcePath('supply_drops.opy'), 'utf8').replace(/\r\n/g, '\n');
 const start = source.indexOf('rule "PLAYER INTERACT');
 const end = source.indexOf('\ndef instantRevive():', start);
 const original = source.slice(start, end);
@@ -16,7 +16,7 @@ assert.equal((original.match(/^    elif /gm) || []).length, 3);
     const rows = [];
     for (const [name, rule] of [['elif', original], ['early-return', modified]]) {
         const fullSource = source.slice(0, start) + rule + source.slice(end);
-        const input = fs.readFileSync(path.join(src, 'includes.opy'), 'utf8').replace('#!include "supply_drops.opy"', fullSource.replace(/^#!mainFile.*$/gm, ''));
+        const input = fs.readFileSync(require('./source-layout.cjs').sourcePath('includes.opy'), 'utf8').replace('#!include "supply_drops.opy"', fullSource.replace(/^#!mainFile.*$/gm, ''));
         const result = await compiler.compile(input, 'en-US', src.replace(/\\/g, '/') + '/', 'includes.opy');
         assert.deepEqual(result.encounteredWarnings, []);
         const compiled = result.result.match(/\/\/(\d+) elements\nrule \("PLAYER INTERACT[^\n]+\n[\s\S]*?^\}/m);

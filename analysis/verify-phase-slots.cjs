@@ -134,7 +134,7 @@ async function main() {
     assert.equal(exported.nbElements, after.elements);
     assert.deepEqual(exported.encounteredWarnings, []);
     assert.deepEqual(rules(exported.result), newRules);
-    fs.writeFileSync(path.join(src, 'main.ws.txt'), exported.result);
+    fs.writeFileSync(require('./source-layout.cjs').sourcePath('main.ws.txt'), exported.result);
     const report = {
         date: '2026-11-02', baselineRef,
         baselineOverrides: {'debug.opy': playerLayout.baselineRef},

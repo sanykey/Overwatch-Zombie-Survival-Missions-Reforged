@@ -110,7 +110,7 @@ function sigmaStopFacing(f) {
         runtime: 'Not measured in Overwatch. Shared detach adds one synchronous subroutine call per release; no waits, polling, parameter copies, or new persistent storage. Wrestler and Hitchhiker rules are byte-identical after normalization.'};
     if (process.argv.includes('--apply')) {
         for (const name of Object.keys(selected)) if (selected[name] !== files[name]) {
-            fs.writeFileSync(path.join(root, 'src', name), selected[name].replace(/\n/g, '\r\n'));
+            fs.writeFileSync(require('./source-layout.cjs').sourcePath(name), selected[name].replace(/\n/g, '\r\n'));
         }
         const native = await compiler.compile(fs.readFileSync(path.join(root, 'main.opy'), 'utf8'), 'en-US', root.replace(/\\/g, '/') + '/', 'main.opy');
         assert.deepEqual(native.encounteredWarnings, []);

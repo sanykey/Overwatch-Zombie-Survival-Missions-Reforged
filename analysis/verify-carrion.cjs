@@ -7,9 +7,9 @@ const vm = require('node:vm');
 const root = path.resolve(__dirname, '..');
 const read = name => fs.readFileSync(path.join(root, name), 'utf8');
 const remix = read('workshop-snapshots/ZSMM-remixed (QZD5F)/2026-10-30 ZSMM-remixed (QZD5F).opy');
-const tables = vm.runInNewContext(read('src/create numbers.js') + '\n; numbers');
+const tables = vm.runInNewContext(read('tools/create numbers.js') + '\n; numbers');
 const table = id => tables.find(g => g.offset === 'NL_' + id + '_OFFSET').list;
-const menu = read('src/global_start_menu.opy');
+const menu = read('src/game/global_start_menu.opy');
 const heroes = menu.match(/botHeroList = \[([^\]]+)\]/)[1].split(', ');
 const catIndex = heroes.indexOf('Hero.JETPACK_CAT');
 assert.equal(catIndex, 21, 'Append Carrion without moving existing hero indices');
@@ -46,7 +46,7 @@ for (const [difficulty, sourceIndex] of groups) {
     assert(table('BOT_HEALTH_' + healthGroup)[catIndex] > 0);
     assert(table('DAMAGE_DEALT_' + difficulty)[catIndex] > 0, 'Bite recalibration divides by damage dealt');
 }
-const insanityCount = Number(read('src/subroutines.opy').match(/for insanityThrottleHeroIndex in range\((\d+)\)/)[1]);
+const insanityCount = Number(read('src/core/subroutines.opy').match(/for insanityThrottleHeroIndex in range\((\d+)\)/)[1]);
 assert.equal(insanityCount, heroes.length);
 for (const mode of ['ALL_ZOMBIES', 'NEW_BLOOD', 'SHUFFLE', 'DINNER_RUSH', 'HAM_N_HAMMER']) {
     const weights = table('SPAWN_RATES_' + mode);

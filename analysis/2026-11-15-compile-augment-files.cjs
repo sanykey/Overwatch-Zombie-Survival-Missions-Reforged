@@ -16,7 +16,7 @@ const renames = {
 const normalize = body => body.split('\n').filter(l => !/^\s*(?:"|\/\/)/.test(l)).map(l => l.replace(/;\s*\/\/.*$/, ';').trim()).filter(Boolean).join('\n');
 (async () => {
     await compiler.readyPromise;
-    const input = fs.readFileSync(path.join(src, 'includes.opy'), 'utf8');
+    const input = fs.readFileSync(require('./source-layout.cjs').sourcePath('includes.opy'), 'utf8');
     const result = await compiler.compile(input, 'en-US', src.replace(/\\/g, '/') + '/', 'includes.opy');
     assert.deepEqual(result.encounteredWarnings, []);
     const rules = [...result.result.matchAll(/^rule \("([^"\n]+)"\) \{([\s\S]*?)^\}/gm)].map(([,name,body]) => ({name, code: normalize(body)}));

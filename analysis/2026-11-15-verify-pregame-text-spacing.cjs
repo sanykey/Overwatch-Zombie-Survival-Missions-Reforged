@@ -8,7 +8,7 @@ function norm(s){return s.replace(/\/\*[\s\S]*?\*\//g,'').split('\n').filter(l=>
 const re=/^rule \("EFFECTS\/TEXT"\) \{[\s\S]*?^\}/m;
 (async()=>{
  await compiler.readyPromise;
- const result=await compiler.compile(inline(path.join(src,'includes.opy')),'en-US',src.replace(/\\/g,'/')+'/', 'includes.opy');
+ const result=await compiler.compile(inline(require('./source-layout.cjs').sourcePath('includes.opy')),'en-US',src.replace(/\\/g,'/')+'/', 'includes.opy');
  assert.deepEqual(result.encounteredWarnings,[]);
  const a=fs.readFileSync(file('A-control.ws.txt'),'utf8');
  const u=fs.readFileSync(file('U-full-menu-spaced.ws.txt'),'utf8');

@@ -116,8 +116,8 @@ async function main() {
     assert.deepEqual(exported.encounteredWarnings, []);
     assert.deepEqual(rules(exported.result), updated);
     for (const [name, text] of Object.entries(files))
-        assert.equal(fs.readFileSync(path.join(src, name), 'utf8').replace(/\r\n/g, '\n'), text, 'Concurrent source edit');
-    fs.writeFileSync(path.join(src, 'main.ws.txt'), exported.result);
+        assert.equal(fs.readFileSync(require('./source-layout.cjs').sourcePath(name), 'utf8').replace(/\r\n/g, '\n'), text, 'Concurrent source edit');
+    fs.writeFileSync(require('./source-layout.cjs').sourcePath('main.ws.txt'), exported.result);
     const all = Object.values(files).join('\n');
     const report = {date: '2026-11-03', compiler: 'OverPy 9.7.20', baselineEnhancementsRef: baselineRef,
         before: before.elements, after: after.elements, saved: before.elements - after.elements,

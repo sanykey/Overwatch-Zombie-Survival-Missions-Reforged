@@ -125,7 +125,7 @@ function rendered(rows,env) {
 async function main() {
     await compiler.readyPromise;
     const baseline = Object.fromEntries(Object.keys(files).map(name => [name,historical(name)]));
-    const generator = fs.readFileSync(path.join(src,'create numbers.js'),'utf8').replace(/\r\n/g,'\n');
+    const generator = fs.readFileSync(require('./source-layout.cjs').sourcePath('create numbers.js'),'utf8').replace(/\r\n/g,'\n');
     const oldGenerated = vm.runInNewContext(historical('create numbers.js'));
     const newGenerated = vm.runInNewContext(generator);
     const generatedData = text => ({
@@ -192,7 +192,7 @@ async function main() {
     finally { console.log = log; }
     assert.equal(exported.nbElements,after.elements);
     assert.deepEqual(exported.encounteredWarnings,[]);
-    fs.writeFileSync(path.join(src,'main.ws.txt'),exported.result);
+    fs.writeFileSync(require('./source-layout.cjs').sourcePath('main.ws.txt'),exported.result);
     const report = {
         baselineRef, compiler:'OverPy 9.7.20', baseline:before.elements, current:after.elements, saved:before.elements-after.elements,
         menuRule:{before:oldRows.length,after:newRows.length,menuObjectsBefore:original.length,menuObjectsAfter:current.length},

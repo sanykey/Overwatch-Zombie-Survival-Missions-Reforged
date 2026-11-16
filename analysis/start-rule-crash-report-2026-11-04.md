@@ -48,34 +48,34 @@ startRule(subroutineName, StartRuleBehavior.RESTART)
 
 | № | Место вызова | Цель | Характер риска | Приоритет |
 | --- | --- | --- | --- | --- |
-| [W01](#w01) | [global_start_menu:246](../src/global_start_menu.opy#L246) | `determineZombieMode` | Собственного ожидания нет | P3 |
-| [W02](#w02) | [global_start_menu:297](../src/global_start_menu.opy#L297) | `determineChallenge` | Собственного ожидания нет | P3 |
-| [W03](#w03) | [global_start_menu:351](../src/global_start_menu.opy#L351) | `determineObjectiveType` | Собственного ожидания нет | P3 |
-| [W04](#w04) | [global_start_menu:374](../src/global_start_menu.opy#L374) | `setObjectiveType` | Долгое ожидание старта; повтор при повторной подготовке | P2 |
-| [W05](#w05) | [player_start_menu:72](../src/player_start_menu.opy#L72) | `setPrematchTimer` | Этот путь обычно без ожидания; общий получатель с W06 | P3 |
-| [W06](#w06) | [player_start_menu:119](../src/player_start_menu.opy#L119) | `setPrematchTimer` | Короткое ожидание при готовности всей команды | P2 |
-| [W07](#w07) | [player_start_menu:120](../src/player_start_menu.opy#L120) | `randomActions` | Повтор готовности в течение 1 секунды | P1 |
-| [W08](#w08) | [player_start_menu:127](../src/player_start_menu.opy#L127) | `setPrematchTimer` | Отмена готовности может прервать выполнение W06 | P2 |
-| [W09](#w09) | [player_start_menu:211](../src/player_start_menu.opy#L211) | `setPrematchTimer` | Обычно без ожидания; возможна граница конца голосования | P2 |
-| [W10](#w10) | [player_start_menu:214](../src/player_start_menu.opy#L214) | `setPrematchTimer` | Пересчёт после 2 секунд без голосования | P2 |
-| [W11](#w11) | [global_game_in_progress:127](../src/global_game_in_progress.opy#L127) | `objectivesManagement` | Ожидания есть; штатный переход защищён порядком флагов | P2 |
-| [W12](#w12) | [supply_drops:472](../src/supply_drops.opy#L472) | `instantRevive` | Повтор Revive до завершения воскрешения | P2 |
-| [W13](#w13) | [supply_drops:476](../src/supply_drops.opy#L476) | `playerForceField` | Повтор поля за ~10 секунд | P1 |
-| [W14](#w14) | [supply_drops:480](../src/supply_drops.opy#L480) | `noCooldowns` | Повтор за ~15 секунд | P1 |
-| [W15](#w15) | [supply_drops:487](../src/supply_drops.opy#L487) | `airStrike` | Повтор во время задержки/бомбардировки | P1 |
-| [W16](#w16) | [supply_drops:491](../src/supply_drops.opy#L491) | `healBeacon` | Повтор маяка за ~30 секунд | P1 |
-| [W17](#w17) | [supply_drops:502](../src/supply_drops.opy#L502) | `sentryTurret` | Повтор турели за ~30 секунд | P1 |
-| [W18](#w18) | [supply_drops:506](../src/supply_drops.opy#L506) | `cloakingDevice` | Повтор за ~25 секунд; парные изменения состояния | P1 |
-| [W19](#w19) | [supply_drops:510](../src/supply_drops.opy#L510) | `superNano` | Повтор за ~20 секунд; модификаторы и скорость | P1 |
-| [W20](#w20) | [supply_drops:514](../src/supply_drops.opy#L514) | `bouncePad` | Повтор во время ~61 секунды работы | P1 |
-| [W21](#w21) | [supply_drops:518](../src/supply_drops.opy#L518) | `ultimateCharger` | Повтор за ~20 секунд | P1 |
-| [W22](#w22) | [supply_drops:524](../src/supply_drops.opy#L524) | `stun` | Повтор незавершённой цепочки оглушений | P1 |
+| [W01](#w01) | [global_start_menu:246](../src/game/global_start_menu.opy#L246) | `determineZombieMode` | Собственного ожидания нет | P3 |
+| [W02](#w02) | [global_start_menu:297](../src/game/global_start_menu.opy#L297) | `determineChallenge` | Собственного ожидания нет | P3 |
+| [W03](#w03) | [global_start_menu:351](../src/game/global_start_menu.opy#L351) | `determineObjectiveType` | Собственного ожидания нет | P3 |
+| [W04](#w04) | [global_start_menu:374](../src/game/global_start_menu.opy#L374) | `setObjectiveType` | Долгое ожидание старта; повтор при повторной подготовке | P2 |
+| [W05](#w05) | [player_start_menu:72](../src/game/player_start_menu.opy#L72) | `setPrematchTimer` | Этот путь обычно без ожидания; общий получатель с W06 | P3 |
+| [W06](#w06) | [player_start_menu:119](../src/game/player_start_menu.opy#L119) | `setPrematchTimer` | Короткое ожидание при готовности всей команды | P2 |
+| [W07](#w07) | [player_start_menu:120](../src/game/player_start_menu.opy#L120) | `randomActions` | Повтор готовности в течение 1 секунды | P1 |
+| [W08](#w08) | [player_start_menu:127](../src/game/player_start_menu.opy#L127) | `setPrematchTimer` | Отмена готовности может прервать выполнение W06 | P2 |
+| [W09](#w09) | [player_start_menu:211](../src/game/player_start_menu.opy#L211) | `setPrematchTimer` | Обычно без ожидания; возможна граница конца голосования | P2 |
+| [W10](#w10) | [player_start_menu:214](../src/game/player_start_menu.opy#L214) | `setPrematchTimer` | Пересчёт после 2 секунд без голосования | P2 |
+| [W11](#w11) | [global_game_in_progress:127](../src/game/global_game_in_progress.opy#L127) | `objectivesManagement` | Ожидания есть; штатный переход защищён порядком флагов | P2 |
+| [W12](#w12) | [supply_drops:472](../src/items/supply_drops.opy#L472) | `instantRevive` | Повтор Revive до завершения воскрешения | P2 |
+| [W13](#w13) | [supply_drops:476](../src/items/supply_drops.opy#L476) | `playerForceField` | Повтор поля за ~10 секунд | P1 |
+| [W14](#w14) | [supply_drops:480](../src/items/supply_drops.opy#L480) | `noCooldowns` | Повтор за ~15 секунд | P1 |
+| [W15](#w15) | [supply_drops:487](../src/items/supply_drops.opy#L487) | `airStrike` | Повтор во время задержки/бомбардировки | P1 |
+| [W16](#w16) | [supply_drops:491](../src/items/supply_drops.opy#L491) | `healBeacon` | Повтор маяка за ~30 секунд | P1 |
+| [W17](#w17) | [supply_drops:502](../src/items/supply_drops.opy#L502) | `sentryTurret` | Повтор турели за ~30 секунд | P1 |
+| [W18](#w18) | [supply_drops:506](../src/items/supply_drops.opy#L506) | `cloakingDevice` | Повтор за ~25 секунд; парные изменения состояния | P1 |
+| [W19](#w19) | [supply_drops:510](../src/items/supply_drops.opy#L510) | `superNano` | Повтор за ~20 секунд; модификаторы и скорость | P1 |
+| [W20](#w20) | [supply_drops:514](../src/items/supply_drops.opy#L514) | `bouncePad` | Повтор во время ~61 секунды работы | P1 |
+| [W21](#w21) | [supply_drops:518](../src/items/supply_drops.opy#L518) | `ultimateCharger` | Повтор за ~20 секунд | P1 |
+| [W22](#w22) | [supply_drops:524](../src/items/supply_drops.opy#L524) | `stun` | Повтор незавершённой цепочки оглушений | P1 |
 
 Продолжительности приблизительны: это интервалы из исходных циклов и ожиданий, а не замер времени на сервере.
 
 ## 3. Голосование и создание заданий
 
-Общий вход: [END VOTING](../src/global_start_menu.opy#L239). Он срабатывает в подготовке, пока `isVoting == true`, при времени матча **меньше 30 секунд** и наличии хотя бы одного игрока Team 1, уже вышедшего из состояния выбора героя. Константа: [VOTING_END_TIME](../src/variables.opy#L11).
+Общий вход: [END VOTING](../src/game/global_start_menu.opy#L239). Он срабатывает в подготовке, пока `isVoting == true`, при времени матча **меньше 30 секунд** и наличии хотя бы одного игрока Team 1, уже вышедшего из состояния выбора героя. Константа: [VOTING_END_TIME](../src/core/variables.opy#L11).
 
 Основная цепочка:
 
@@ -96,7 +96,7 @@ END VOTING
       ⇢ setZombieMode [отдельная ветвь без ожиданий]
 ```
 
-Связанные этапы: [SKIP ASSEMBLING HEROES](../src/global_startup.opy#L148) устанавливает `isVoting = true`, готовит таблицы и запускает предматчевый отсчёт; [START GAME](../src/global_startup.opy#L275) при времени ≤ 0.1 переводит `isPregameSetup` в `false`, после чего `setObjectiveType` может продолжить работу.
+Связанные этапы: [SKIP ASSEMBLING HEROES](../src/core/global_startup.opy#L148) устанавливает `isVoting = true`, готовит таблицы и запускает предматчевый отсчёт; [START GAME](../src/core/global_startup.opy#L275) при времени ≤ 0.1 переводит `isPregameSetup` в `false`, после чего `setObjectiveType` может продолжить работу.
 
 У `END VOTING` нет `loop()`: истинность условий сама по себе не означает вызов на каждом кадре. Штатно цепочка проходит один раз. Возможный повторный цикл подготовки нужно проверять отдельно: условие `SKIP ASSEMBLING HEROES` допускает повтор при `isPregameSetup` и отсутствии активных игроков. Если предматчевая сессия опустела и затем наполнилась, голосование может быть инициализировано заново, пока старый `setObjectiveType` ещё ждёт старта.
 
@@ -104,7 +104,7 @@ END VOTING
 
 ### W01. `END VOTING` ⇢ `determineZombieMode`
 
-**Код:** [правило END VOTING](../src/global_start_menu.opy#L239), [вызов:246](../src/global_start_menu.opy#L246), [подпрограмма:282](../src/global_start_menu.opy#L282).
+**Код:** [правило END VOTING](../src/game/global_start_menu.opy#L239), [вызов:246](../src/game/global_start_menu.opy#L246), [подпрограмма:282](../src/game/global_start_menu.opy#L282).
 
 **Цепочка:** `END VOTING ⇢ determineZombieMode → selectVoteWinner`; затем две асинхронные ветви: `⇢ determineChallenge ⇢ determineObjectiveType ⇢ setObjectiveType` и `⇢ setZombieMode`.
 
@@ -120,7 +120,7 @@ END VOTING
 
 ### W02. `determineZombieMode` ⇢ `determineChallenge`
 
-**Код:** [вызывающая подпрограмма](../src/global_start_menu.opy#L282), [вызов:297](../src/global_start_menu.opy#L297), [determineChallenge:321](../src/global_start_menu.opy#L321), исходное правило — [END VOTING](../src/global_start_menu.opy#L239).
+**Код:** [вызывающая подпрограмма](../src/game/global_start_menu.opy#L282), [вызов:297](../src/game/global_start_menu.opy#L297), [determineChallenge:321](../src/game/global_start_menu.opy#L321), исходное правило — [END VOTING](../src/game/global_start_menu.opy#L239).
 
 **Цепочка:** `END VOTING ⇢ determineZombieMode ⇢ determineChallenge ⇢ determineObjectiveType ⇢ setObjectiveType`.
 
@@ -136,7 +136,7 @@ END VOTING
 
 ### W03. `determineChallenge` ⇢ `determineObjectiveType`
 
-**Код:** [determineChallenge](../src/global_start_menu.opy#L321), [вызов:351](../src/global_start_menu.opy#L351), [determineObjectiveType:354](../src/global_start_menu.opy#L354); исходное правило — [END VOTING](../src/global_start_menu.opy#L239).
+**Код:** [determineChallenge](../src/game/global_start_menu.opy#L321), [вызов:351](../src/game/global_start_menu.opy#L351), [determineObjectiveType:354](../src/game/global_start_menu.opy#L354); исходное правило — [END VOTING](../src/game/global_start_menu.opy#L239).
 
 **Цепочка:** `END VOTING ⇢ determineZombieMode ⇢ determineChallenge ⇢ determineObjectiveType → selectVoteWinner`, затем `⇢ setObjectiveType`.
 
@@ -152,7 +152,7 @@ END VOTING
 
 ### W04. `determineObjectiveType` ⇢ `setObjectiveType`
 
-**Код:** [вызов:374](../src/global_start_menu.opy#L374), [setObjectiveType:389](../src/global_start_menu.opy#L389), [ожидание старта:393](../src/global_start_menu.opy#L393), [ожидание при выборе позиции:407](../src/global_start_menu.opy#L407), [objectivesManagement:552](../src/subroutines.opy#L552).
+**Код:** [вызов:374](../src/game/global_start_menu.opy#L374), [setObjectiveType:389](../src/game/global_start_menu.opy#L389), [ожидание старта:393](../src/game/global_start_menu.opy#L393), [ожидание при выборе позиции:407](../src/game/global_start_menu.opy#L407), [objectivesManagement:552](../src/core/subroutines.opy#L552).
 
 **Цепочка:** вся цепочка `END VOTING` выше, затем `setObjectiveType → objectivesManagement → globalObjectiveEntityManagementMacro`.
 
@@ -166,7 +166,7 @@ END VOTING
 
 ## 4. Предматчевое меню: таймер и случайные реплики
 
-Общая цель W05/W06/W08/W09/W10 — [setPrematchTimer](../src/subroutines.opy#L498). Она меняет общий таймер, но вызывается в контексте конкретного игрока.
+Общая цель W05/W06/W08/W09/W10 — [setPrematchTimer](../src/core/subroutines.opy#L498). Она меняет общий таймер, но вызывается в контексте конкретного игрока.
 
 Единственное собственное ожидание находится в ветке **после голосования**, когда игрок готов, готовы все игроки Team 1 и время матча > 10:
 
@@ -176,7 +176,7 @@ wait()
 setMatchTime(10)
 ```
 
-См. [ветку:519](../src/subroutines.opy#L519). Пока идёт голосование, либо игрок не готов, ожидания на выбранном пути нет. Поэтому частый вызов этой подпрограммы не обязательно опасен.
+См. [ветку:519](../src/core/subroutines.opy#L519). Пока идёт голосование, либо игрок не готов, ожидания на выбранном пути нет. Поэтому частый вызов этой подпрограммы не обязательно опасен.
 
 Есть и отдельная гонка общего таймера: один игрок может запустить ветку `15 → wait → 10`, а другой изменить готовность и восстановить отсчёт; старое выполнение затем всё равно установит 10. Оно не перепроверяет готовность после `wait`. Это вывод из порядка операций, а не воспроизведённый игровой дефект. `NOOP` на игроке эту межигровую гонку не решает.
 
@@ -186,7 +186,7 @@ setMatchTime(10)
 
 ### W05. Выбор/повторный выбор героя ⇢ `setPrematchTimer`
 
-**Код:** [PLAYER SELECTS/RESELECTS HERO:63](../src/player_start_menu.opy#L63), [вызов:72](../src/player_start_menu.opy#L72), [setPrematchTimer](../src/subroutines.opy#L498).
+**Код:** [PLAYER SELECTS/RESELECTS HERO:63](../src/game/player_start_menu.opy#L63), [вызов:72](../src/game/player_start_menu.opy#L72), [setPrematchTimer](../src/core/subroutines.opy#L498).
 
 **Цепочка:** `выбор/повторное появление героя → PLAYER SELECTS/RESELECTS HERO ⇢ setPrematchTimer`.
 
@@ -202,7 +202,7 @@ setMatchTime(10)
 
 ### W06. Подтверждение готовности Jump ⇢ `setPrematchTimer`
 
-**Код:** [PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY):106](../src/player_start_menu.opy#L106), [вызов:119](../src/player_start_menu.opy#L119), [ожидающая ветка таймера:523](../src/subroutines.opy#L523).
+**Код:** [PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY):106](../src/game/player_start_menu.opy#L106), [вызов:119](../src/game/player_start_menu.opy#L119), [ожидающая ветка таймера:523](../src/core/subroutines.opy#L523).
 
 **Цепочка:** `Jump → pregameState становится READY ⇢ setPrematchTimer`; следом независимо запускается W07, `⇢ randomActions`.
 
@@ -218,7 +218,7 @@ setMatchTime(10)
 
 ### W07. Подтверждение готовности Jump ⇢ `randomActions`
 
-**Код:** [правило меню:106](../src/player_start_menu.opy#L106), [вызов:120](../src/player_start_menu.opy#L120), [randomActions:234](../src/player_start_menu.opy#L234), [wait(1):249](../src/player_start_menu.opy#L249).
+**Код:** [правило меню:106](../src/game/player_start_menu.opy#L106), [вызов:120](../src/game/player_start_menu.opy#L120), [randomActions:234](../src/game/player_start_menu.opy#L234), [wait(1):249](../src/game/player_start_menu.opy#L249).
 
 **Цепочка:** `Jump → READY ⇢ randomActions → случайная эмоция → wait(1) → случайная голосовая реплика`.
 
@@ -234,7 +234,7 @@ setMatchTime(10)
 
 ### W08. Crouch: отмена готовности/смена героя ⇢ `setPrematchTimer`
 
-**Код:** [правило меню:106](../src/player_start_menu.opy#L106), [вызов в ветке Crouch:127](../src/player_start_menu.opy#L127), [setPrematchTimer](../src/subroutines.opy#L498).
+**Код:** [правило меню:106](../src/game/player_start_menu.opy#L106), [вызов в ветке Crouch:127](../src/game/player_start_menu.opy#L127), [setPrematchTimer](../src/core/subroutines.opy#L498).
 
 **Цепочка:** `Crouch → уменьшение pregameState ⇢ setPrematchTimer`; при переходе в `SELECTING_HERO` далее запускается смена героя, затем возможен W05.
 
@@ -250,7 +250,7 @@ setMatchTime(10)
 
 ### W09. Отпускание кнопок голосования ⇢ первый `setPrematchTimer`
 
-**Код:** [UPDATE PREGAME VOTING STATUS:202](../src/player_start_menu.opy#L202), [вызов:211](../src/player_start_menu.opy#L211), источники `isPregameVoting = true`: [Ultimate](../src/player_start_menu.opy#L137), [Ability 1](../src/player_start_menu.opy#L154), [Ability 2](../src/player_start_menu.opy#L171).
+**Код:** [UPDATE PREGAME VOTING STATUS:202](../src/game/player_start_menu.opy#L202), [вызов:211](../src/game/player_start_menu.opy#L211), источники `isPregameVoting = true`: [Ultimate](../src/game/player_start_menu.opy#L137), [Ability 1](../src/game/player_start_menu.opy#L154), [Ability 2](../src/game/player_start_menu.opy#L171).
 
 **Цепочка:** `голос кнопкой → isPregameVoting = true → отпускание всех трёх кнопок → UPDATE PREGAME VOTING STATUS ⇢ setPrematchTimer → wait(2)`; затем W10. Melee выбирает Enhancement и сам не устанавливает этот флаг.
 
@@ -266,7 +266,7 @@ setMatchTime(10)
 
 ### W10. Завершение двухсекундного интервала ⇢ второй `setPrematchTimer`
 
-**Код:** [UPDATE PREGAME VOTING STATUS](../src/player_start_menu.opy#L202), [ожидание:212](../src/player_start_menu.opy#L212), [вызов:214](../src/player_start_menu.opy#L214), [setPrematchTimer](../src/subroutines.opy#L498).
+**Код:** [UPDATE PREGAME VOTING STATUS](../src/game/player_start_menu.opy#L202), [ожидание:212](../src/game/player_start_menu.opy#L212), [вызов:214](../src/game/player_start_menu.opy#L214), [setPrematchTimer](../src/core/subroutines.opy#L498).
 
 **Цепочка:** путь W09 → `wait(2, Wait.ABORT_WHEN_FALSE) → isPregameVoting = false ⇢ setPrematchTimer`.
 
@@ -284,7 +284,7 @@ setMatchTime(10)
 
 ### W11. `OBJECTIVE COMPLETE` ⇢ `objectivesManagement`
 
-**Код:** [OBJECTIVE COMPLETE:123](../src/global_game_in_progress.opy#L123), [вызов:127](../src/global_game_in_progress.opy#L127), [objectivesManagement:552](../src/subroutines.opy#L552), [макрос сущностей:234](../src/subroutines.opy#L234).
+**Код:** [OBJECTIVE COMPLETE:123](../src/game/global_game_in_progress.opy#L123), [вызов:127](../src/game/global_game_in_progress.opy#L127), [objectivesManagement:552](../src/core/subroutines.opy#L552), [макрос сущностей:234](../src/core/subroutines.opy#L234).
 
 **Цепочка:** `задание достигло условия завершения → isObjectiveComplete = true → OBJECTIVE COMPLETE ⇢ objectivesManagement → globalObjectiveEntityManagementMacro`. Правило после старта подпрограммы также добавляет время спасения части погибших игроков. Есть второй, обычный вызов: `setObjectiveType → objectivesManagement` при первоначальной настройке, до `isGameplayActive = true`.
 
@@ -307,9 +307,9 @@ setMatchTime(10)
 
 ## 6. Предметы: общая цепочка и ограничения исправлений
 
-Общий вход для W12–W22 — [PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)](../src/supply_drops.opy#L81): живой настоящий игрок Team 1 удерживает Interact во время `isGameplayActive`.
+Общий вход для W12–W22 — [PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)](../src/items/supply_drops.opy#L81): живой настоящий игрок Team 1 удерживает Interact во время `isGameplayActive`.
 
-В правиле есть приоритеты: сначала открыть подходящий контейнер, затем подобрать предмет, на который направлен взгляд, затем использовать предмет в инвентаре. Для использования нужно попасть в третью ветку и [удержать Interact 0.25 секунды](../src/supply_drops.opy#L127), сохранив условия правила.
+В правиле есть приоритеты: сначала открыть подходящий контейнер, затем подобрать предмет, на который направлен взгляд, затем использовать предмет в инвентаре. Для использования нужно попасть в третью ветку и [удержать Interact 0.25 секунды](../src/items/supply_drops.opy#L127), сохранив условия правила.
 
 ```text
 игрок подбирает предмет
@@ -322,15 +322,15 @@ setMatchTime(10)
           powerUpItemId = 0 [предмет списан]
 ```
 
-Диспетчер: [powerUpUsage:453](../src/supply_drops.opy#L453). Списание: [строка 529](../src/supply_drops.opy#L529). При некоторых неуспешных проверках выполняется `return` до списания.
+Диспетчер: [powerUpUsage:453](../src/items/supply_drops.opy#L453). Списание: [строка 529](../src/items/supply_drops.opy#L529). При некоторых неуспешных проверках выполняется `return` до списания.
 
 **Удержание Interact не создаёт бесконечных запусков из одного предмета:** после принятой активации инвентарь обнуляется. Чтобы получить опасный повтор, **тот же игрок** должен получить ещё один предмет того же типа и применить его до завершения своего старого эффекта. Повторные нажатия без нового предмета недостаточны.
 
 Источники повторных предметов существуют в обычной игре:
 
-- [Открытие контейнера](../src/supply_drops.opy#L89) выбирает каждый ID случайно через `random.randint(1, 13)` без запрета дублей. Следовательно, два одинаковых предмета могут лежать рядом из одного контейнера.
+- [Открытие контейнера](../src/items/supply_drops.opy#L89) выбирает каждый ID случайно через `random.randint(1, 13)` без запрета дублей. Следовательно, два одинаковых предмета могут лежать рядом из одного контейнера.
 - [Biomorphing](../src/objective_types/objective_type_biomorphing.opy#L97) создаёт четыре случайных предмета после завершения цели; дубли также не исключены.
-- [Ручной выброс](../src/power_ups.opy#L82), [выброс после смерти](../src/power_ups.opy#L97) и обмен при подборе позволяют передать второй экземпляр другому игроку.
+- [Ручной выброс](../src/items/power_ups.opy#L82), [выброс после смерти](../src/items/power_ups.opy#L97) и обмен при подборе позволяют передать второй экземпляр другому игроку.
 
 Для повторного входа в правило после завершённой обработки можно отпустить и снова удержать Interact; это надёжнее для проверки, чем предполагать автоматическое повторение при неизменных условиях. Новый контейнер ждать не обязательно.
 
@@ -361,7 +361,7 @@ setMatchTime(10)
 
 ### W12. Revive, ID 2 ⇢ `instantRevive`
 
-**Код:** [правило Interact](../src/supply_drops.opy#L81), [вызов в case 2:472](../src/supply_drops.opy#L472), [instantRevive:132 / Workshop rule `instantRevive (0-9)`](../src/supply_drops.opy#L132).
+**Код:** [правило Interact](../src/items/supply_drops.opy#L81), [вызов в case 2:472](../src/items/supply_drops.opy#L472), [instantRevive:132 / Workshop rule `instantRevive (0-9)`](../src/items/supply_drops.opy#L132).
 
 **Цепочка:** `подбор Revive → Interact → powerUpUsage → проверка погибших в радиусе 5 м ⇢ instantRevive → выбор цели по направлению взгляда → wait() → INVINCIBLE и resurrect → waitUntil(isAlive, 3) → звук/сообщение`.
 
@@ -377,7 +377,7 @@ setMatchTime(10)
 
 ### W13. Force Field, ID 3 ⇢ `playerForceField`
 
-**Код:** [правило Interact](../src/supply_drops.opy#L81), [вызов:476](../src/supply_drops.opy#L476), [playerForceField:144 / rule `playerForceField (10-19)`](../src/supply_drops.opy#L144).
+**Код:** [правило Interact](../src/items/supply_drops.opy#L81), [вызов:476](../src/items/supply_drops.opy#L476), [playerForceField:144 / rule `playerForceField (10-19)`](../src/items/supply_drops.opy#L144).
 
 **Цепочка:** `Force Field → Interact → powerUpUsage(case 3) ⇢ playerForceField → позиция владельца → создание сферы/HUD при необходимости → цикл отталкивания → очистка`.
 
@@ -393,7 +393,7 @@ setMatchTime(10)
 
 ### W14. No Cooldowns, ID 4 ⇢ `noCooldowns`
 
-**Код:** [правило Interact](../src/supply_drops.opy#L81), [вызов:480](../src/supply_drops.opy#L480), [noCooldowns:168 / rule `noCooldowns (20-29)`](../src/supply_drops.opy#L168).
+**Код:** [правило Interact](../src/items/supply_drops.opy#L81), [вызов:480](../src/items/supply_drops.opy#L480), [noCooldowns:168 / rule `noCooldowns (20-29)`](../src/items/supply_drops.opy#L168).
 
 **Цепочка:** `No Cooldowns → Interact → powerUpUsage(case 4) ⇢ noCooldowns → звук/HUD → цикл сброса кулдаунов и восстановления зарядов → удаление HUD`.
 
@@ -409,7 +409,7 @@ setMatchTime(10)
 
 ### W15. Air Strike, ID 5 ⇢ `airStrike`
 
-**Код:** [правило Interact](../src/supply_drops.opy#L81), [проверка поверхности:484](../src/supply_drops.opy#L484), [вызов:487](../src/supply_drops.opy#L487), [airStrike:197 / rule `airStrike (30-39)`](../src/supply_drops.opy#L197).
+**Код:** [правило Interact](../src/items/supply_drops.opy#L81), [проверка поверхности:484](../src/items/supply_drops.opy#L484), [вызов:487](../src/items/supply_drops.opy#L487), [airStrike:197 / rule `airStrike (30-39)`](../src/items/supply_drops.opy#L197).
 
 **Цепочка:** `Air Strike → Interact → powerUpUsage(case 5) → проверка поверхности в пределах 40 м ⇢ airStrike → wait() → выбор точки удара → маркеры → wait(2) → 50 взрывов с wait(0.125) → очистка`.
 
@@ -425,7 +425,7 @@ setMatchTime(10)
 
 ### W16. Beacon of Healing, ID 6 ⇢ `healBeacon`
 
-**Код:** [правило Interact](../src/supply_drops.opy#L81), [вызов:491](../src/supply_drops.opy#L491), [healBeacon:235 / rule `beaconofHealing (40-49)`](../src/supply_drops.opy#L235).
+**Код:** [правило Interact](../src/items/supply_drops.opy#L81), [вызов:491](../src/items/supply_drops.opy#L491), [healBeacon:235 / rule `beaconofHealing (40-49)`](../src/items/supply_drops.opy#L235).
 
 **Цепочка:** `Beacon → Interact → powerUpUsage(case 6) ⇢ healBeacon → позиция → сущности/HUD/аура при необходимости → setHealingDealt(150) → 30 лечебных шагов → очистка и setHealingDealt(100)`.
 
@@ -441,7 +441,7 @@ setMatchTime(10)
 
 ### W17. Sentry Turret, ID 8 ⇢ `sentryTurret`
 
-**Код:** [правило Interact](../src/supply_drops.opy#L81), [вызов:502](../src/supply_drops.opy#L502), [sentryTurret:264 / rule `sentryTurret (50-59)`](../src/supply_drops.opy#L264).
+**Код:** [правило Interact](../src/items/supply_drops.opy#L81), [вызов:502](../src/items/supply_drops.opy#L502), [sentryTurret:264 / rule `sentryTurret (50-59)`](../src/items/supply_drops.opy#L264).
 
 **Цепочка:** `Turret → Interact → powerUpUsage(case 8) ⇢ sentryTurret → позиция с поправкой на землю → корпус/опоры/ствол/HUD → выбор целей и стрельба → очистка`.
 
@@ -457,7 +457,7 @@ setMatchTime(10)
 
 ### W18. Cloaking Device, ID 9 ⇢ `cloakingDevice`
 
-**Код:** [правило Interact](../src/supply_drops.opy#L81), [вызов:506](../src/supply_drops.opy#L506), [cloakingDevice:302 / rule `cloakingDevice (60-69)`](../src/supply_drops.opy#L302).
+**Код:** [правило Interact](../src/items/supply_drops.opy#L81), [вызов:506](../src/items/supply_drops.opy#L506), [cloakingDevice:302 / rule `cloakingDevice (60-69)`](../src/items/supply_drops.opy#L302).
 
 **Цепочка:** `Cloaking → Interact → powerUpUsage(case 9) ⇢ cloakingDevice → первая инициализация скорости/сферы/HUD/invisibilityCount → цикл до 25 секунд → финальное уменьшение invisibilityCount, очистка, восстановление множителя скорости`.
 
@@ -473,7 +473,7 @@ setMatchTime(10)
 
 ### W19. Super Nano, ID 10 ⇢ `superNano`
 
-**Код:** [правило Interact](../src/supply_drops.opy#L81), [вызов:510](../src/supply_drops.opy#L510), [superNano:335 / rule `superNano (70-79)`](../src/supply_drops.opy#L335).
+**Код:** [правило Interact](../src/items/supply_drops.opy#L81), [вызов:510](../src/items/supply_drops.opy#L510), [superNano:335 / rule `superNano (70-79)`](../src/items/supply_drops.opy#L335).
 
 **Цепочка:** `Super Nano → Interact → powerUpUsage(case 10) ⇢ superNano → первая инициализация скорости/аур/HUD/модификаторов урона → лечение и снижение входящего урона → цикл → wait(0.25) → очистка и откат параметров`.
 
@@ -489,7 +489,7 @@ setMatchTime(10)
 
 ### W20. Bounce Pad, ID 11 ⇢ `bouncePad`
 
-**Код:** [правило Interact](../src/supply_drops.opy#L81), [вызов:514](../src/supply_drops.opy#L514), [bouncePad:372 / rule `bouncePad (80-89)`](../src/supply_drops.opy#L372).
+**Код:** [правило Interact](../src/items/supply_drops.opy#L81), [вызов:514](../src/items/supply_drops.opy#L514), [bouncePad:372 / rule `bouncePad (80-89)`](../src/items/supply_drops.opy#L372).
 
 **Цепочка:** `Bounce Pad → Interact → powerUpUsage(case 11) ⇢ bouncePad → позиция площадки и кольцо/HUD → wait(1) → цикл подбрасывания → wait(0.25) → очистка`.
 
@@ -505,7 +505,7 @@ setMatchTime(10)
 
 ### W21. Ultimate Charger, ID 12 ⇢ `ultimateCharger`
 
-**Код:** [правило Interact](../src/supply_drops.opy#L81), [вызов:518](../src/supply_drops.opy#L518), [ultimateCharger:402 / rule `ultimateCharger (90-99)`](../src/supply_drops.opy#L402).
+**Код:** [правило Interact](../src/items/supply_drops.opy#L81), [вызов:518](../src/items/supply_drops.opy#L518), [ultimateCharger:402 / rule `ultimateCharger (90-99)`](../src/items/supply_drops.opy#L402).
 
 **Цепочка:** `Ultimate Charger → Interact → powerUpUsage(case 12) ⇢ ultimateCharger → HUD/звук → добавление заряда по 2 каждые 0.125 секунды → wait(0.25) → удаление HUD`.
 
@@ -521,7 +521,7 @@ setMatchTime(10)
 
 ### W22. Stun, ID 13 ⇢ `stun`
 
-**Код:** [правило Interact](../src/supply_drops.opy#L81), [проверка целей:523](../src/supply_drops.opy#L523), [вызов:524](../src/supply_drops.opy#L524), [stun:418 / rule `stun (100-109)`](../src/supply_drops.opy#L418).
+**Код:** [правило Interact](../src/items/supply_drops.opy#L81), [проверка целей:523](../src/items/supply_drops.opy#L523), [вызов:524](../src/items/supply_drops.opy#L524), [stun:418 / rule `stun (100-109)`](../src/items/supply_drops.opy#L418).
 
 **Цепочка:** `Stun → Interact → powerUpUsage(case 13) → живая цель ближе 15 * sizeScale в угле < 45° ⇢ stun → луч/исходная цель → до 50 переходов → stopChasing и удаление луча`.
 
@@ -550,7 +550,7 @@ setMatchTime(10)
 - `NOOP` не ставит вызов в очередь. Пропущенный запрос нужно сохранить отдельно, если его требуется обработать позднее.
 - Отказ от активного повторного предмета выполняется до списания и до изменения позиции/таймера существующего эффекта.
 - У одного эффекта одного игрока должен быть один владелец жизненного цикла: инициализация, обновления, окончательная очистка.
-- В проекте многие имена являются алиасами общей памяти. Перед введением флагов, сроков и очередей проверить [variables.opy](../src/variables.opy) и действующие временные поля; нельзя размещать состояние долгого эффекта в `tmp0..2` или случайно занять слот другого одновременно работающего эффекта.
+- В проекте многие имена являются алиасами общей памяти. Перед введением флагов, сроков и очередей проверить [variables.opy](../src/core/variables.opy) и действующие временные поля; нельзя размещать состояние долгого эффекта в `tmp0..2` или случайно занять слот другого одновременно работающего эффекта.
 - Добавление ожидания в ранее синхронный подсчёт голосов требует повторного анализа `tmp0..2` и порядка дочерних запусков.
 - Проверять скомпилированный результат: ожидаемое число исполнителей, политики `Start Rule`, сохранение контекста Event Player и отсутствие изменения порядка списания предмета.
 

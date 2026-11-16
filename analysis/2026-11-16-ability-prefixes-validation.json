@@ -1,0 +1,10 @@
+{
+  "compiler": "OverPy 9.7.21",
+  "elements": 30453,
+  "rules": 323,
+  "executableHash": "a02b2bc862a7db94aa4c9d9eeb7432d9a1541a056b6584e8f810658cb38765c0",
+  "warnings": [],
+  "elementDelta": 0,
+  "legacyProbeLoaderEquivalent": true,
+  "verification": "Complete compiled executable text and ordered rules match before relocation; debug source locations and Workshop comments are excluded."
+}

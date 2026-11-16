@@ -119,7 +119,7 @@ async function main() {
         assert(status.includes(`${n}/2 resets`));
         assert.equal(status.includes('Icon(Checkmark)'), n > 0, 'Checkmark requires at least one reset');
     }
-    if (process.argv.includes('--write')) fs.writeFileSync(path.join(src, '..', 'main.ws.txt'), after.result);
+    if (process.argv.includes('--write')) fs.writeFileSync(require('./source-layout.cjs').sourcePath('..', 'main.ws.txt'), after.result);
     console.log(JSON.stringify({before: before.elements, after: after.elements, saved: before.elements - after.elements, colorCases: cases, gameplayActionsUnchanged: true, warnings: after.warnings}, null, 2));
 }
 main().catch(e => { console.error(e); process.exitCode = 1; });

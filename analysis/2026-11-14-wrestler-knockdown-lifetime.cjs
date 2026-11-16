@@ -86,8 +86,8 @@ function bodies(result) {
     }
     assert(after.elements<before.elements);
     const changedFiles=Object.keys(files).filter(n=>files[n]!==candidate[n]);
-    for(const name of changedFiles) fs.writeFileSync(path.join(src,name),candidate[name].replace(/\n/g,'\r\n'));
-    fs.writeFileSync(path.join(src,'..','main.ws.txt'),after.result);
+    for(const name of changedFiles) fs.writeFileSync(require('./source-layout.cjs').sourcePath(name),candidate[name].replace(/\n/g,'\r\n'));
+    fs.writeFileSync(require('./source-layout.cjs').sourcePath('..','main.ws.txt'),after.result);
     const report={compiler:'OverPy 9.7.21',before:before.elements,after:after.elements,saved:before.elements-after.elements,
         changedRules:changed,unchangedRules:oldRules.length-changed.length,changedFiles,warnings:after.warnings,
         carryModelCases:cases,newVariables:0,newSubroutines:0,

@@ -1,6 +1,6 @@
 ﻿const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const {files,compile,compiler}=require('./measure-further-optimizations.cjs');
-const generator=fs.readFileSync('src/create numbers.js','utf8');
+const generator=fs.readFileSync('tools/create numbers.js','utf8');
 const rows=[[4,100,0.4,0.56],[6,45,0.2,0.4],[4,60,0.2,0.456],[5,100,0.15,0],[10,65,0.15,0.45],[2.5,70,0.35,0.35]];
 (async()=>{
     await compiler.readyPromise;

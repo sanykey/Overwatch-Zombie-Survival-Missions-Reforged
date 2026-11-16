@@ -86,10 +86,10 @@ function maskVisualArgs(text) {
 (async () => {
     await compiler.readyPromise;
     const originalExport = fs.readFileSync(path.join(root, 'main.ws.txt'), 'utf8');
-    const testedExport = fs.readFileSync(path.join(src, 'includes.ws.txt'), 'utf8');
-    const input = inline(path.join(src, 'includes.opy'), false);
+    const testedExport = fs.readFileSync(require('./source-layout.cjs').sourcePath('includes.ws.txt'), 'utf8');
+    const input = inline(require('./source-layout.cjs').sourcePath('includes.opy'), false);
     const control = await compiler.compile(input, 'en-US', src.replace(/\\/g, '/') + '/', 'includes.opy');
-    const changedInput = inline(path.join(src, 'includes.opy'), true);
+    const changedInput = inline(require('./source-layout.cjs').sourcePath('includes.opy'), true);
     const variant = await compiler.compile(changedInput, 'en-US', src.replace(/\\/g, '/') + '/', 'includes.opy');
     assert.deepEqual(control.encounteredWarnings, []);
     assert.deepEqual(variant.encounteredWarnings, []);

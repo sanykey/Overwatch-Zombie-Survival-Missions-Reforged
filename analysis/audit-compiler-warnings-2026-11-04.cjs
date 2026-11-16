@@ -11,7 +11,7 @@ const extension = fs.readdirSync(extdir).filter(n => n.startsWith('zezombye.over
     .sort((a, b) => b.localeCompare(a, undefined, {numeric: true}))[0];
 assert(extension, 'OverPy extension was not found');
 const compiler = require(path.join(extdir, extension, 'npm', 'overpy.js'));
-const read = name => fs.readFileSync(path.join(src, name), 'utf8').replace(/\r\n/g, '\n');
+const read = name => fs.readFileSync(require('./source-layout.cjs').sourcePath(name), 'utf8').replace(/\r\n/g, '\n');
 const four = ['w_start_rule_crash', 'w_ow2_rule_condition_chase', 'w_cancel_contrary_motion', 'w_closest_player'];
 const sourceFiles = {};
 function walk(dir, prefix = '') {

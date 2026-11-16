@@ -7,9 +7,8 @@ const crypto = require('node:crypto');
 const root = path.resolve(__dirname, '..');
 const src = path.join(root, 'src');
 const apply = process.argv.includes('--apply');
-const originals = Object.fromEntries(fs.readdirSync(src).filter(n => n.endsWith('.opy'))
-    .map(n => [n, fs.readFileSync(path.join(src, n), 'utf8')]));
-const files = Object.fromEntries(Object.entries(originals).map(([n, s]) => [n, s.replace(/\r\n/g, '\n')]));
+const originals = require('./source-layout.cjs').readLegacyTree({normalize:false});
+const files = Object.fromEntries(Object.entries(originals).map(([n, s]) => [n, require('./source-layout.cjs').probeSource(s.replace(/\r\n/g, '\n'))]));
 const indent = line => line.match(/^ */)[0].length;
 const significant = line => line.trim() && !line.trimStart().startsWith('#');
 
@@ -139,8 +138,8 @@ async function main() {
         for (const [name, text] of Object.entries(files)) {
             const original = originals[name];
             if (text === original.replace(/\r\n/g, '\n')) continue;
-            assert.equal(fs.readFileSync(path.join(src, name), 'utf8'), original, 'Source changed during measurement: ' + name);
-            fs.writeFileSync(path.join(src, name), original.includes('\r\n') ? text.replace(/\n/g, '\r\n') : text);
+            assert.equal(fs.readFileSync(require('./source-layout.cjs').sourcePath(name), 'utf8'), original, 'Source changed during measurement: ' + name);
+            fs.writeFileSync(require('./source-layout.cjs').sourcePath(name), original.includes('\r\n') ? text.replace(/\n/g, '\r\n') : text);
         }
     }
     fs.writeFileSync(path.join(__dirname, 'switch-optimization-results.json'), JSON.stringify(report, null, 2) + '\n');
