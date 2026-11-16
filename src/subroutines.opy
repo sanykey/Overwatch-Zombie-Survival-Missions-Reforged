@@ -937,7 +937,7 @@ def selectPullAimTarget():
     if pullAimMode == PullAimMode.WRESTLER_GRAB:
         # Filter before aim sorting so an ineligible bot cannot hide a valid one.
         # Preserve both live CC and the bot tracker's up-to-0.125s exit grace.
-        pullAimCandidates = pullAimCandidates.filter(lambda target: target not in bossStateList and target not in miniBossList and (target.isCrowdControlled or target.botIsCrowdControlled))
+        pullAimCandidates = pullAimCandidates.filter(lambda target: target.isCrowdControlled or target.botIsCrowdControlled)
     # Mode is dead after candidate filtering; reuse its slot for the eye position.
     pullAimEyePosition = eventPlayer.getEyePosition()
     pullAimOrigin = (eventPlayer.getPosition() + pullAimEyePosition) * 0.5

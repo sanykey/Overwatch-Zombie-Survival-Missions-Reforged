@@ -416,9 +416,11 @@ rule "WRESTLER PULL":
     createBeam(getAllPlayers(), Beam.BAD, augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(wrestlerPullTarget), Color.PURPLE, EffectReeval.NONE)
     eventPlayer.enhancementPullBeamEntity = getLastCreatedEntity()
     wrestlerPullTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, WRESTLER_PULL_KNOCKDOWN)
-    # Strength scales with distance, approaching zero at contact.
-    # Keep the pull's horizontal bearing with a fixed 15-degree upward pitch.
-    wrestlerPullTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(wrestlerPullTarget, eventPlayer)), -15), distance(wrestlerPullTarget, eventPlayer) * WRESTLER_PULL_FORCE_MULTIPLIER, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+    # Bosses and minibosses can be knocked down, but cannot be pulled.
+    if wrestlerPullTarget not in bossStateList and wrestlerPullTarget not in miniBossList:
+        # Strength scales with distance, approaching zero at contact.
+        # Keep the pull's horizontal bearing with a fixed 15-degree upward pitch.
+        wrestlerPullTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(wrestlerPullTarget, eventPlayer)), -15), distance(wrestlerPullTarget, eventPlayer) * WRESTLER_PULL_FORCE_MULTIPLIER, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     # Always clean up, including release, death, hero change or end of gameplay.
     wait(WRESTLER_PULL_BEAM_DURATION, Wait.IGNORE_CONDITION)
     destroyEffect(eventPlayer.enhancementPullBeamEntity)
@@ -444,7 +446,7 @@ def useLivingProjectile():
     if getTotalTimeElapsed() < eventPlayer.enhancementGrabReadyAt or eventPlayer.isAttached or eventPlayer.isCrowdControlled:
         return
     # Body-center cone (50 degrees), LOS and crosshair priority, limited to 5m.
-    # The shared grab mode excludes bosses/minibosses and requires bot CC.
+    # The shared grab mode requires bot CC, including for bosses/minibosses.
     # Synchronous tmp0 result: committed to both actors before any yield.
     #!define livingProjectileCandidate tmp0
     pullAimMode = PullAimMode.WRESTLER_GRAB
@@ -460,7 +462,8 @@ def useLivingProjectile():
     livingProjectileCandidate.botIsAttached = true
     # Knockdown owns the carry lifetime; expiration or early removal releases.
     # Throw damage clears it explicitly after the existing damage delay.
-    livingProjectileCandidate.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, WRESTLER_KNOCKDOWN_DURATION)
+    # Bosses/minibosses have a shorter carry window; ordinary zombies keep 4s.
+    livingProjectileCandidate.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 1 if livingProjectileCandidate in bossStateList or livingProjectileCandidate in miniBossList else WRESTLER_KNOCKDOWN_DURATION)
     # Attachment offsets are local; use eye height to follow hero size changes.
     livingProjectileCandidate.attachTo(eventPlayer, localVector(eventPlayer.getEyePosition(), eventPlayer, Transform.ROTATION_AND_TRANSLATION) + vect(0, 0.6, 1))
 
