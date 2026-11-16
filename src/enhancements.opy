@@ -7,7 +7,7 @@ subroutine applyBulkingSeasonStats
 #!define WRESTLER_RANGE 5
 #!define WRESTLER_KNOCKDOWN_DURATION 4
 #!define WRESTLER_THROW_SPEED 12.5
-#!define WRESTLER_THROW_DAMAGE 50
+#!define WRESTLER_THROW_DAMAGE 75
 #!define WRESTLER_DAMAGE_DELAY 0.75
 
 #!define overchargeEarnedEnergyTotal(player) (player.getStatistic(Stat.HEALING_DEALT) / 3 + 10 * earnedAssists(player))

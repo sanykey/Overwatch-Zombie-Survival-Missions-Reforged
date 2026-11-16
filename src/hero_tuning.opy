@@ -168,20 +168,29 @@ rule "REINHARDT SHIELD SLAM STUN":
     # Event eligibility stays synchronous; WORKSHOP_NATIVE_UI_CORRUPTION.md.
     if (eventPlayer.isFiringSecondaryFire() == true) and (victim != attacker):
         # Shield-active damage is sufficient; no perk or event-ability check.
-        victim.setStatusEffect(attacker, Status.STUNNED, 0.8)
+        victim.setStatusEffect(attacker, Status.STUNNED, 0.6)
 
 
-rule "BRIGITTE SHIELD BASH STUN":
+rule "DMON SHIELD DOWN":
+    @Event eachPlayer
+    @Hero dmon
+    @Team 1
+    @Condition not eventPlayer.isFiringSecondaryFire()
+    eventPlayer.dmonShieldDownTime = getTotalTimeElapsed()
+
+rule "BRIGITTE AND DMON SHIELD STRIKE STUN":
     @Event playerDealtDamage
     @Team 1
-    @Hero brigitte
     @Condition eventAbility == Button.PRIMARY_FIRE
-    @Condition eventPlayer.isFiringSecondaryFire() == true
     @Condition victim != attacker
 
-    # Shield Bash reports Primary Fire while Barrier Shield is active.
-    # The ability filter excludes scripted damage and Whip Shot.
-    victim.setStatusEffect(attacker, Status.STUNNED, 0.8)
+    # Surging Strike hits just after Power Barrier drops; Shield Bash keeps it active.
+    # The ability filter excludes scripted damage and other abilities.
+    # Keep hero eligibility synchronous; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    if eventPlayer.getHero() == Hero.DMON and getTotalTimeElapsed() - eventPlayer.dmonShieldDownTime < 0.3:
+        victim.setStatusEffect(attacker, Status.STUNNED, 0.6)
+    elif eventPlayer.getHero() == Hero.BRIGITTE and eventPlayer.isFiringSecondaryFire() == true:
+        victim.setStatusEffect(attacker, Status.STUNNED, 0.8)
 
 
 rule "CASSIDY FLASHBANG STUN":

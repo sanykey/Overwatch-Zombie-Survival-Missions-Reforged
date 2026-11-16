@@ -721,9 +721,12 @@ playervar visualEntityIdList  # Zombie effects or Team 1 objective icons retaine
 
 playervar visualCleanupIndex  # Per-actor effect/icon cleanup index; the loops yield and cannot use global scratch.
 
-playervar actorLoopSlot  # Ensnarer melee loop index.
+playervar actorLoopSlot  # Team 2 Ensnarer melee index / Team 1 D.Mon shield-down time.
 # Repeated Hazard boss ultimate index.
 #!define botEnsnarerUltimateIndex actorLoopSlot
+# Team 1 D.Mon: last shield-down total elapsed time, retained between damage events.
+# No Team 1 loop, wait, chase or reevaluated UI owns this slot.
+#!define dmonShieldDownTime actorLoopSlot
 
 playervar abilityTargetList  # Zombie special-ability targets or common zombie/Hybrid explosion targets.
 # Targets affected by zombie grabs, clouds, flight and slam abilities.
