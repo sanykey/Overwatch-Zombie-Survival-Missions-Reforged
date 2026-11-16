@@ -445,7 +445,7 @@ def useLivingProjectile():
     # Check only on pickup input, before target selection; throwing stays available.
     if getTotalTimeElapsed() < eventPlayer.enhancementGrabReadyAt or eventPlayer.isAttached or eventPlayer.isCrowdControlled:
         return
-    # Body-center cone (80 degrees), LOS and crosshair priority, limited to 5m.
+    # Body-center cone (90 degrees), LOS and crosshair priority, limited to 5m.
     # The shared grab mode requires bot CC, including for bosses/minibosses.
     # Synchronous tmp0 result: committed to both actors before any yield.
     #!define livingProjectileCandidate tmp0

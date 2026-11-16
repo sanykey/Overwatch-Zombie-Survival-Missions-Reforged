@@ -29,11 +29,11 @@ const state = (targets, extra = {}) => scenario(4, {buttons: new Set(['Crouch', 
         assert(start(push, s, compiled).done());
         assert.deepEqual(s.impulses.map(i => i.target), ['front', 'back', 'left', 'right', 'above']);
         assert.deepEqual(s.impulses.map(i => i.speed), [25, 25, 25, 17.5, 25]);
-        assert.equal(s.player[ready], 116);
+        assert.equal(s.player[ready], 118);
         assert.equal(s.damage.length, 0);
         assert.deepEqual(s.effects, [{effect: 'Ring Explosion', color: 'Color(Red)', position: [0, 0.75, 0], size: 10}]);
-        s.time = 115.999; start(push, s, compiled); assert.equal(s.impulses.length, 5);
-        s.time = 116; start(push, s, compiled); assert.equal(s.impulses.length, 10);
+        s.time = 117.999; start(push, s, compiled); assert.equal(s.impulses.length, 5);
+        s.time = 118; start(push, s, compiled); assert.equal(s.impulses.length, 10);
         checks++;
     }
     for (const extra of [{visible: false}, {alive: false}, {team: 1}, {[scale]: 0},
