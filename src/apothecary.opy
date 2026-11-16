@@ -5,11 +5,7 @@
 #!define APOTHECARY_AUGMENT_ULT_CHARGE 7
 
 macro useApothecaryAugmentTeleportMacro():
-    # Keep both buttons held for 0.25 seconds; interruption preserves the charge.
-    wait(0.25, Wait.ABORT_WHEN_FALSE)
-    if eventPlayer.augmentId != Augment.APOTHECARY:
-        return
-
+    # Called synchronously on the Crouch + Jump input edge after charge validation.
     eventPlayer.augmentApothecaryReady = false
     # Play Effect snapshots departure before Teleport; no scratch or effect entity.
     # Bolt Strike's 1.5 flash scaled by three.

@@ -20,7 +20,7 @@ rule "AUGMENT MENU":
             f"+{AUGMENT_KEVLAR_ARMOR} armor, {AUGMENT_KEVLAR_KNOCKBACK_RESIST}% knockback resistance. {AUGMENT_KEVLAR_RANGED_DMG_RESIST}% resistance to ranged and ability dmg.",
             f"Dash in your movement direction with {DASH_PHASE_DURATION}s invulnerability. Stores {DASH_MAX_CHARGES} charges; restores one every {DASH_COOLDOWN}s.",
             f"Launch upward and gain +{HIGHRISE_DAMAGE_BONUS}% dmg until landing/{HIGHRISE_DAMAGE_DURATION}s +{HIGHRISE_DAMAGE_GRACE_PERIOD}s. cd: 16s.",
-            f"Triple melee reach; weapon hits at extended range deal 75% dmg. Push all visible zombies within {LONG_REACH_MELEE_PUSH_RADIUS}m around you. Push cd: {LONG_REACH_MELEE_PUSH_COOLDOWN}s.",
+            f"Triple melee reach; weapon hits at extended range deal 75% dmg. Push zombies within {LONG_REACH_MELEE_PUSH_RADIUS}m around you. Push cd: {LONG_REACH_MELEE_PUSH_COOLDOWN}s.",
             "Double magazine capacity. Fully reloading restores the extra ammo.",
             f"Grapple to allies or zombies {AUGMENT_GRAPNEL_MIN_RANGE}–{AUGMENT_GRAPNEL_RANGE}m away. 35 dmg; stun grounded zombies or knock airborne ones down for 3s. cd: 16s.",
             f"Deploy a wall that blocks zombies. Hold Crouch + Interact to aim; release Interact to place. cd: {LASER_BARRICADE_AUGMENT_COOLDOWN}s.",
@@ -44,21 +44,16 @@ rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)":
     eventPlayer.augmentId = (eventPlayer.augmentId + (Augment.LEECH if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else 1)) % (Augment.LEECH + 1)
 
 
-rule "CROUCH + INTERACT (APOTHECARY TELEPORT / LASER BARRICADE)":
+rule "CROUCH + INTERACT (LASER BARRICADE)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
     @Condition (eventPlayer.enhancementId != Enhancement.WRESTLER or eventPlayer.enhancementCarryState == WrestlerCarryState.NONE) == true
-    # State slots have different owners for each augment. Guard by augmentId:
-    # Apothecary readiness is boolean; Barricade's shared slot is a vector.
-    @Condition ((eventPlayer.augmentId == Augment.APOTHECARY and eventPlayer.augmentApothecaryReady == true and (eventPlayer.augmentApothecaryPosition != null or healthpackPositionList != [])) or (eventPlayer.augmentId == Augment.LASER_BARRICADE and eventPlayer.augmentBarrierPlacementCooldown == 0)) == true
+    @Condition (eventPlayer.augmentId == Augment.LASER_BARRICADE and eventPlayer.augmentBarrierPlacementCooldown == 0) == true
 
-    if eventPlayer.augmentId == Augment.APOTHECARY:
-        useApothecaryAugmentTeleportMacro()
-    else:
-        placeLaserBarricadeAugmentMacro()
+    placeLaserBarricadeAugmentMacro()
 
 
 rule "KEVLAR RANGED DAMAGE COMPENSATION":
@@ -111,15 +106,22 @@ def useAugmentAirAction():
             useHighriseAirActionMacro()
 
 
-rule "GRAPNEL LAUNCHER":
+rule "CROUCH + JUMP (GRAPNEL LAUNCHER / APOTHECARY TELEPORT)":
     @Event eachPlayer
     @Team 1
     # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
-    @Condition uiPhaseAndId(eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER)
+    @Condition uiPhaseAndId(eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER or eventPlayer.augmentId == Augment.APOTHECARY)
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
     @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
+
+    # Check charge in Actions so recharging while holding cannot teleport.
+    # Only Apothecary owns the shared boolean readiness and saved pack position.
+    if eventPlayer.augmentId == Augment.APOTHECARY:
+        if eventPlayer.augmentApothecaryReady == true and (eventPlayer.augmentApothecaryPosition != null or healthpackPositionList != []):
+            useApothecaryAugmentTeleportMacro()
+        return
 
     # Cooldown is checked on the input edge; holding the chord through expiry
     # cannot auto-launch. A miss does not consume the cooldown.

@@ -1,7 +1,5 @@
 #!mainFile "../main.opy"
 
-#!define BUILD_DATE() __script__("build_date.js")
-
 subroutine determineChallenge
 subroutine determineZombieMode
 subroutine setZombieMode
