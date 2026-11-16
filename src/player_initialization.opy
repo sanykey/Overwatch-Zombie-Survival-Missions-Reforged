@@ -28,7 +28,7 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             "Attacking" if localPlayer.enhancementIsPupBeamActive == true else f"Drone ready {iconString(Icon.CHECKMARK)}",
             "{1} | {0}".format(f"Pull: {ceil(localPlayer.enhancementPullReadyAt - getTotalTimeElapsed())}s" if getTotalTimeElapsed() < localPlayer.enhancementPullReadyAt else f"Pull: hold [{inputBindingString(Button.MELEE)}] {iconString(Icon.CHECKMARK)}", f"Throw: [{inputBindingString(Button.INTERACT)}]" if localPlayer.enhancementCarryState != WrestlerCarryState.NONE else f"Grab: [{inputBindingString(Button.INTERACT)}]"),
             "Hits chain to nearby zombies",
-            f"Scrap {floor(localPlayer.enhancementScrap)}/{ENGINEER_SCRAP_MAX} | Hold [{inputBindingString(Button.CROUCH)}] {ENGINEER_ARMOR_HOLD_DURATION}s: armor +{ENGINEER_ARMOR_STACK} ({ENGINEER_ARMOR_COST}) | Hold [{inputBindingString(Button.MELEE)}]: turret ({ENGINEER_TURRET_COST})",
+            f"Scrap {floor(localPlayer.enhancementScrap)}/{ENGINEER_SCRAP_MAX} | Hold [{inputBindingString(Button.CROUCH)}] {ENGINEER_ARMOR_HOLD_DURATION}s: armor +{ENGINEER_ARMOR_STACK} (ally {ENGINEER_ARMOR_ALLY_COST}/self {ENGINEER_ARMOR_SELF_COST}) | Hold [{inputBindingString(Button.MELEE)}]: turret ({ENGINEER_TURRET_COST})",
             f"Infection removed: {round(localPlayer.enhancementPlagueCureTotal)}",
             "{0} | {1}".format(f"Energy: {floor(localPlayer.enhancementCapacitorEnergy)}", f"Armed: +{floor(localPlayer.enhancementCapacitorCharge)} dmg/hit" if localPlayer.enhancementCapacitorCharge > 0 else f"Double-tap [{inputBindingString(Button.CROUCH)}]: arm")
         ][localPlayer.enhancementId],
@@ -46,9 +46,9 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             Color.RED if localPlayer.enhancementIsPupBeamActive == true else Color.WHITE,
             Color.RED if getTotalTimeElapsed() < localPlayer.enhancementPullReadyAt else Color.GREEN,
             Color.WHITE,
-            # White below armor cost; sky blue when armor is affordable; green
+            # White below ally armor cost; sky blue when ally armor is affordable; green
             # when scrap also covers a turret. Keep thresholds tied to costs.
-            Color.WHITE if localPlayer.enhancementScrap < ENGINEER_ARMOR_COST else Color.SKY_BLUE if localPlayer.enhancementScrap < ENGINEER_TURRET_COST else Color.GREEN,
+            Color.WHITE if localPlayer.enhancementScrap < ENGINEER_ARMOR_ALLY_COST else Color.SKY_BLUE if localPlayer.enhancementScrap < ENGINEER_TURRET_COST else Color.GREEN,
             Color.WHITE,
             Color.YELLOW if localPlayer.enhancementCapacitorCharge > 0 else Color.GREEN if localPlayer.enhancementCapacitorEnergy >= 100 else Color.SKY_BLUE if localPlayer.enhancementCapacitorEnergy >= 50 else Color.WHITE
         ][localPlayer.enhancementId],

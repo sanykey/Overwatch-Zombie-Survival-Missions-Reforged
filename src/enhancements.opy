@@ -572,10 +572,14 @@ rule "ENGINEER ARMOR TRANSFER":
         scrapArmorGrantTarget = eventPlayer
     else:
         return
-    if eventPlayer.enhancementScrap < ENGINEER_ARMOR_COST:
+    # Candidate array is dead after target selection; reuse tmp0 for the cost.
+    # Synchronous through payment, with no waits or reevaluated readers.
+    #!define scrapArmorGrantCost tmp0
+    scrapArmorGrantCost = ENGINEER_ARMOR_SELF_COST if scrapArmorGrantTarget == eventPlayer else ENGINEER_ARMOR_ALLY_COST
+    if eventPlayer.enhancementScrap < scrapArmorGrantCost:
         smallMessage(eventPlayer, "Not enough scrap")
         return
-    eventPlayer.enhancementScrap -= ENGINEER_ARMOR_COST
+    eventPlayer.enhancementScrap -= scrapArmorGrantCost
     # Non-recoverable, fixed pool: healing never restores scrap armor. One
     # throw adds at most ENGINEER_ARMOR_STACK armor and tops the target up to the cap;
     # the wasted remainder of a partial refill is the thrower's loss.
