@@ -7,7 +7,35 @@ subroutine successfulTeleportStatus
 subroutine updateBotSpawnPoints
 subroutine locateAveragePlayerLocation
 subroutine setClosestPlayerTeleportCenter
-subroutine collectEngineerScrap
+
+
+macro collectNearbyZombieLoot():
+    # Called synchronously from BOT DIES: victim is the dead zombie bot. Pays
+    # every living Engineer/Scavenger within the same range, regardless of kill
+    # credit. No waits or nested calls; tmp0-3 expire before bot-handler reuse.
+    #!define zombieLootCollectors tmp0
+    #!define zombieLootCollector tmp1
+    #!define zombieLootCollectorIndex tmp2
+    #!define scavengerLootItemId tmp3
+    zombieLootCollectors = getLivingPlayers(Team.1).filter(lambda player: (player.enhancementId == Enhancement.ENGINEER or player.augmentId == Augment.SCAVENGER) and distance(player, victim) < ENGINEER_COLLECTION_RANGE)
+    for zombieLootCollectorIndex in range(len(zombieLootCollectors)):
+        zombieLootCollector = zombieLootCollectors[zombieLootCollectorIndex]
+        if zombieLootCollector.enhancementId == Enhancement.ENGINEER:
+            zombieLootCollector.enhancementScrap = min(ENGINEER_SCRAP_MAX, zombieLootCollector.enhancementScrap + ENGINEER_COLLECTION_REWARD)
+        # Enhancement and augment can coexist: an Engineer/Scavenger gets both.
+        if zombieLootCollector.augmentId == Augment.SCAVENGER:
+            if random.randint(1, 100) <= 7:
+                scavengerLootItemId = random.randint(PowerUpItem.CURE, PowerUpItem.STUN)
+                # An empty active slot takes the loot; reserves never activate here.
+                if zombieLootCollector.powerUpItemId == PowerUpItem.NONE:
+                    zombieLootCollector.powerUpItemId = scavengerLootItemId
+                    smallMessage(zombieLootCollector, "Scavenger: powerup equipped")
+                elif len(zombieLootCollector.augmentScavengerBackpack) < 2:
+                    zombieLootCollector.augmentScavengerBackpack.append(scavengerLootItemId)
+                    smallMessage(zombieLootCollector, "Scavenger: powerup added to backpack")
+                else:
+                    supplyPowerUpIdList.append(scavengerLootItemId)
+                    supplyPowerUpPositionList.append(nearestWalkablePosition(victim.getPosition()) + offsetUpQuarterConst)
 
 
 macro botTeleportCenterMacro():
@@ -130,8 +158,8 @@ rule "BOT DIES":
     if eventWasEnvironment and attacker.getTeam() == Team.1:
         if attacker.augmentId == Augment.LEECH:
             heal(attacker, attacker, eventDamage * 0.15)
-    # Engineer scrap collection: synchronous, before any death-handler waits.
-    collectEngineerScrap()
+    # Engineer/Scavenger collection: synchronous, before any death-handler waits.
+    collectNearbyZombieLoot()
 
     if eventPlayer.botIsReigniteAttackUsed and eventPlayer.getHero() == Hero.ANRAN and not eventWasEnvironment:
         eventPlayer.setUltCharge(100)
@@ -568,18 +596,3 @@ def removeBotSpawnPoint():
     del botSpawnWaypointList[removedBotSpawnPointIndex]
     del botSpawnPointTimerList[removedBotSpawnPointIndex]
     botSpawnPointList.remove(eventPlayer.botTeleportPosition)
-
-
-def collectEngineerScrap():
-    @Name "collectEngineerScrap"
-
-    # Called synchronously from BOT DIES: victim is the dead zombie bot. Pays
-    # every living Engineer within range; no waits, so the tmp slots are
-    # consumed before any bot-handler scratch reuse.
-    #!define engineerScrapCollectorList tmp0
-    #!define engineerScrapCollector tmp1
-    #!define engineerScrapCollectorListIndex tmp2
-    engineerScrapCollectorList = getLivingPlayers(Team.1).filter(lambda player: player.enhancementId == Enhancement.ENGINEER and distance(player, victim) < ENGINEER_COLLECTION_RANGE)
-    for engineerScrapCollectorListIndex in range(len(engineerScrapCollectorList)):
-        engineerScrapCollector = engineerScrapCollectorList[engineerScrapCollectorListIndex]
-        engineerScrapCollector.enhancementScrap = min(ENGINEER_SCRAP_MAX, engineerScrapCollector.enhancementScrap + ENGINEER_COLLECTION_REWARD)

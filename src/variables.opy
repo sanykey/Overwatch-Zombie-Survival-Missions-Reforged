@@ -25,6 +25,7 @@
 # before enhancements.opy is included.
 #!define ENGINEER_SCRAP_MAX 500
 #!define ENGINEER_SCRAP_PASSIVE_RATE 1
+# Shared nearby-death radius for Engineer and Scavenger.
 #!define ENGINEER_COLLECTION_RANGE 15
 #!define ENGINEER_COLLECTION_REWARD 10
 #!define ENGINEER_ASSIST_SCRAP 15

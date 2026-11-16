@@ -85,23 +85,6 @@ rule "PLAYER EARNED ELIMINATION":
         eventPlayer.enhancementBulkStacks += 1
         applyBulkingSeasonStats()
 
-    if eventPlayer.augmentId == Augment.SCAVENGER:
-        if random.randint(1, 100) <= 7:
-            # One item roll per credited kill or damage participation. No waits or
-            # calls while this scratch value is live; reserves never activate here.
-            #!define scavengerLootItemId tmp0
-            scavengerLootItemId = random.randint(PowerUpItem.CURE, PowerUpItem.STUN)
-            # An empty active slot takes the loot directly; only overflow goes to the backpack.
-            if eventPlayer.powerUpItemId == PowerUpItem.NONE:
-                eventPlayer.powerUpItemId = scavengerLootItemId
-                smallMessage(eventPlayer, "Scavenger: powerup equipped")
-            elif len(eventPlayer.augmentScavengerBackpack) < 2:
-                eventPlayer.augmentScavengerBackpack.append(scavengerLootItemId)
-                smallMessage(eventPlayer, "Scavenger: powerup added to backpack")
-            else:
-                supplyPowerUpIdList.append(scavengerLootItemId)
-                supplyPowerUpPositionList.append(nearestWalkablePosition(victim.getPosition()) + offsetUpQuarterConst)
-
 
 rule "PLAYER DIED":
     @Event playerDied

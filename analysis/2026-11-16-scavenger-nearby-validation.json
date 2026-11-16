@@ -1,0 +1,16 @@
+{
+  "beforeElements": 30428,
+  "afterElements": 30453,
+  "elementDelta": 25,
+  "ruleCount": 322,
+  "changedRules": [
+    "AUGMENT MENU",
+    "BOT DIES",
+    "PLAYER EARNED ELIMINATION",
+    "collectEngineerScrap"
+  ],
+  "replacementRule": "collectNearbyZombieLoot",
+  "warnings": [],
+  "verification": "Full source compilation; all other rule bodies identical except generated label comments; identical variable declarations; living Team 1 collectors at distance <15; 7% roll; one synchronous collection rule with no waits. Shared rule manually inspected: independent Engineer and Scavenger branches, active/backpack/ground routing preserved.",
+  "limitation": "No in-game validation or CPU timing measurement."
+}
