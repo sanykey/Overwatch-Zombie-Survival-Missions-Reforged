@@ -42,11 +42,11 @@
 #!define augmentGrapnelCenter(player) ((player.getPosition() + player.getEyePosition()) * 0.5)
 #!define AUGMENT_GRAPNEL_MIN_RANGE 7
 #!define AUGMENT_GRAPNEL_RANGE 45
-#!define WRESTLER_PULL_RANGE 25
+#!define WRESTLER_PULL_RANGE 20
 #!define WRESTLER_PULL_COOLDOWN 16
-#!define WRESTLER_PULL_SPEED 25
+#!define WRESTLER_PULL_FORCE_MULTIPLIER 1.6
 #!define WRESTLER_PULL_BEAM_DURATION 0.2
-#!define WRESTLER_PULL_KNOCKDOWN 1.8
+#!define WRESTLER_PULL_KNOCKDOWN 2
 # Native offensive + defensive assist count; shared by Overcharge's earned-energy
 # formula and Engineer's assist-scrap snapshot.
 #!define earnedAssists(player) (player.getStatistic(Stat.OFFENSIVE_ASSISTS) + player.getStatistic(Stat.DEFENSIVE_ASSISTS))

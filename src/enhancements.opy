@@ -5,7 +5,7 @@ subroutine startPupDefaultChase
 subroutine applyBulkingSeasonStats
 
 #!define WRESTLER_RANGE 5
-#!define WRESTLER_KNOCKDOWN_DURATION 6
+#!define WRESTLER_KNOCKDOWN_DURATION 4
 #!define WRESTLER_THROW_SPEED 12.5
 #!define WRESTLER_THROW_DAMAGE 50
 #!define WRESTLER_DAMAGE_DELAY 0.75
@@ -417,8 +417,9 @@ rule "WRESTLER PULL":
     createBeam(getAllPlayers(), Beam.BAD, augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(wrestlerPullTarget), Color.PURPLE, EffectReeval.NONE)
     eventPlayer.enhancementPullBeamEntity = getLastCreatedEntity()
     wrestlerPullTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, WRESTLER_PULL_KNOCKDOWN)
+    # Strength scales with distance, approaching zero at contact.
     # Keep the pull's horizontal bearing with a fixed 15-degree upward pitch.
-    wrestlerPullTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(wrestlerPullTarget, eventPlayer)), -15), WRESTLER_PULL_SPEED, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+    wrestlerPullTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(wrestlerPullTarget, eventPlayer)), -15), distance(wrestlerPullTarget, eventPlayer) * WRESTLER_PULL_FORCE_MULTIPLIER, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     # Always clean up, including release, death, hero change or end of gameplay.
     wait(WRESTLER_PULL_BEAM_DURATION, Wait.IGNORE_CONDITION)
     destroyEffect(eventPlayer.enhancementPullBeamEntity)
@@ -469,7 +470,8 @@ def useLivingProjectile():
     # Knockdown owns the carry lifetime; expiration or early removal releases.
     # Throw damage clears it explicitly after the existing damage delay.
     livingProjectileCandidate.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, WRESTLER_KNOCKDOWN_DURATION)
-    livingProjectileCandidate.attachTo(eventPlayer, vect(0, 1.5, 1))
+    # Attachment offsets are local; use eye height to follow hero size changes.
+    livingProjectileCandidate.attachTo(eventPlayer, localVector(eventPlayer.getEyePosition(), eventPlayer, Transform.ROTATION_AND_TRANSLATION) + vect(0, 0.6, 1))
 
 
 # All entries are booleans/default zero; negate this predicate for interruptions.
