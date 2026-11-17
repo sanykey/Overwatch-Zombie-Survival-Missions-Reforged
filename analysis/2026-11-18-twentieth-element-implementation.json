@@ -1,0 +1,21 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "67621877cb36df2cbe004ec42510f2e220c07719",
+  "baseline": 30023,
+  "elements": 30019,
+  "saved": 4,
+  "warnings": [],
+  "compiledRulesMatchAuditedCandidate": true,
+  "variableDeclarationsAndConditionsUnchanged": true,
+  "firstVisibleTargetLoopUnchanged": true,
+  "changedFiles": [
+    "abilities/enhancements.opy",
+    "game/zombie_types.opy"
+  ],
+  "changedRules": [
+    "REIGNITED (ANRAN) ABILITIES #1",
+    "P.U.P. CONTROL #1"
+  ],
+  "inGameValidation": false,
+  "serverLoadMeasured": false
+}
