@@ -115,10 +115,6 @@ macro initializePlayerEnhancement():
     else:
         chaseAtRate(eventPlayer.infectionLevel, 0, 0.015 if eventPlayer.infectionLevel > 0 else 0)
     switch eventPlayer.enhancementId:
-        case Enhancement.BRAIN_KILLER:
-            # No enhancement state slots: bonus damage is calculated directly from the damage event.
-            # HUD lives in ENHANCEMENT HUD (PERMANENT TABLE).
-            break
         #Pyrotechnic
         case Enhancement.PYROTECHNIC:
             # enhancementPyroHitList: hit queue; repeated targets determine their damage per second when the queue is processed.
