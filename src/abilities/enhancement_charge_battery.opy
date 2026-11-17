@@ -1,7 +1,8 @@
 #!mainFile "../../main.opy"
 
 # Charge Battery behavior and initialization.
-# Shared enum IDs, icons and storage contracts remain in variables.opy.
+# Shared IDs and icon tables live in core/enums.opy and core/immutable_variables.opy.
+# Shared storage contracts remain in core/variables.opy.
 # resetAbilityCooldowns and checkEnhancementPlacement are shared with other systems.
 
 macro initializeChargeBatteryMacro():

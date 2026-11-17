@@ -3,132 +3,13 @@
 # Synchronous placement helper output; consume before waits or asynchronous work.
 #!define isEnhancementPlacementInvalid tmp0
 
-#!define BOT_MAX_TELEPORT_RANGE 40
-#!define JETPACK_ACTIVATION_TIME 0.17
 #!define healthpacksCureNormally (difficultySetting < Difficulty.EXPERT or getMatchTime() > matchEndTime)
-#!define BOSS_BASE_SIZE 2.5
-#!define ZOMBIE_BASE_SIZE 1
-#!define BIOMORPHING_RESOURCE_AMOUNT 25
-#!define ELIMINATIONS_NEEDED_PER_OBJECTIVE 50
-#!define HIGHRISE_DAMAGE_BONUS 40
-#!define HIGHRISE_DAMAGE_DURATION 7
-#!define HIGHRISE_DAMAGE_GRACE_PERIOD 0.1
-#!define BOLT_STRIKE_RADIUS 10
-#!define BOLT_STRIKE_CHAIN_TARGETS 2
-#!define BOLT_STRIKE_CHAIN_DAMAGE_RATIO 0.25
-#!define BOLT_STRIKE_CHAIN_DAMAGE_MAX 15
-#!define BOLT_STRIKE_CHAIN_INTERVAL 0.032
-#!define BOLT_STRIKE_FLASH_INTERVAL 0.5
-#!define BOLT_STRIKE_FLASH_SIZE 0.375
-#!define OVERCHARGE_ARM_TAP_WINDOW 0.3
-# Engineer constants live here (not enhancements.opy): BOT DIES collects scrap
-# before enhancements.opy is included.
-#!define ENGINEER_SCRAP_MAX 500
-#!define ENGINEER_SCRAP_PASSIVE_RATE 1
-# Shared nearby-death radius for Engineer and Scavenger.
-#!define ENGINEER_COLLECTION_RANGE 15
-#!define SCAVENGER_LOOT_CHANCE 5
-#!define ENGINEER_COLLECTION_REWARD 10
-#!define ENGINEER_ASSIST_SCRAP 15
-#!define ENGINEER_ARMOR_ALLY_COST 35
-#!define ENGINEER_ARMOR_SELF_COST 50
-#!define ENGINEER_ARMOR_STACK 50
-#!define ENGINEER_ARMOR_MAX 150
-#!define ENGINEER_ARMOR_HOLD_DURATION 0.5
-#!define ENGINEER_TURRET_COST 200
-#!define ENGINEER_BEAM_DURATION 0.7
-#!define ENGINEER_TRANSFER_RANGE 15
-#!define ENGINEER_TRANSFER_ANGLE 60
 
-# Shared Grapnel/Wrestler targeting geometry and Wrestler HUD/menu constants.
+# Shared Grapnel/Wrestler targeting geometry.
 #!define augmentGrapnelCenter(player) ((player.getPosition() + player.getEyePosition()) * 0.5)
-#!define AUGMENT_GRAPNEL_MIN_RANGE 7
-#!define AUGMENT_GRAPNEL_RANGE 45
-#!define WRESTLER_RANGE 5
-#!define WRESTLER_GRAB_ANGLE 90
-#!define WRESTLER_PULL_RANGE 20
-#!define WRESTLER_PULL_COOLDOWN 16
-#!define WRESTLER_PULL_FORCE_MULTIPLIER 1.6
-#!define WRESTLER_PULL_BEAM_DURATION 0.2
-#!define WRESTLER_PULL_KNOCKDOWN 2
 # Native offensive + defensive assist count; shared by Overcharge's earned-energy
 # formula and Engineer's assist-scrap snapshot.
 #!define earnedAssists(player) (player.getStatistic(Stat.OFFENSIVE_ASSISTS) + player.getStatistic(Stat.DEFENSIVE_ASSISTS))
-#!define REVIVE_RADIUS 5
-#!define START_CAM_DISTANCE 6.5
-#!define START_TIME 300
-#!define SUPER_NANO_DURATION 20
-#!define POWERUP_JETPACK_FUEL_MAX 200
-#!define VOTING_END_TIME 30
-# Unique hero-skin budget shared by players and zombies.
-#!define UNIQUE_HERO_SKIN_CAP 11
-
-# Player-count thresholds for difficultySetting; zero is the pregame reset value.
-# Keep the raw player count for scaling: 4 uses Expert stats, 6 uses Legendary stats.
-# Insanity is controlled separately by challengeSetting.
-enum Difficulty:
-    UNSET = 0,
-    NORMAL = 1,
-    HARD = 2,
-    EXPERT = 3,
-    LEGENDARY = 5,
-
-# Challenge IDs also index challengeVoteList and the pregame menu tables.
-# Insanity and Pandora's Box share the Insanity stat tables (IDs >= INSANITY).
-enum Challenge:
-    NO_PREFERENCE = 0,
-    NONE = 1,
-    SWARM_SHOOTOUT = 2,
-    RANDOM_ABILITIES = 3,
-    INSANITY = 4,
-    PANDORAS_BOX = 5,
-
-# Enhancement IDs index enhancementOptionList and the start-menu tables.
-# Zero means no preference; initialization rolls a role-eligible real ID.
-# Tank-only Hybrid/Bulking Season start the random range; support-only Plague Doctor/Overcharge end it.
-# Hitchhiker is last for manual selection only, outside the random range.
-# Keep every indexed menu/HUD/icon table in this same order.
-enum Enhancement:
-    NO_PREFERENCE = 0,
-    ZOMBIE_HYBRID = 1,
-    BULKING_SEASON = 2,
-    BRAIN_KILLER = 3,
-    PYROTECHNIC = 4,
-    BORN_TO_BATTLE = 5,
-    CHARGE_BATTERY = 6,
-    PUP = 7,
-    WRESTLER = 8,
-    BOLT_STRIKE = 9,
-    ENGINEER = 10,
-    PLAGUE_DOCTOR = 11,
-    OVERCHARGE = 12,
-    HITCHHIKER = 13,
-
-# Wrestler holds until Knocked Down ends; manual throws request release.
-enum WrestlerCarryState:
-    NONE = 0,
-    HOLDING = 1,
-    THROW_REQUESTED = 2,
-
-# Indices into selectPullAimTarget's range table; no persistent state.
-enum PullAimMode:
-    GRAPNEL = 0,
-    WRESTLER_PULL = 1,
-    WRESTLER_GRAB = 2,
-
-# Independent secondary enhancement slot. IDs index the augment name, icon and color tables.
-enum Augment:
-    NO_PREFERENCE = 0,
-    KEVLAR = 1,
-    DASH = 2,
-    HIGHRISE = 3,
-    LONG_REACH = 4,
-    AMMO_PACK = 5,
-    GRAPNEL_LAUNCHER = 6,
-    LASER_BARRICADE = 7,
-    APOTHECARY = 8,
-    SCAVENGER = 9,
-    LEECH = 10,
 
 # Icon tables, indexed by their corresponding selection ID.
 #!define ENHANCEMENT_ICONS enhancementIconListConst
@@ -138,83 +19,6 @@ enum Augment:
 #!define AUGMENT_NAMES augmentNameListConst
 #!define LONG_REACH_MELEE_WEAPON_HEROES augmentMeleeWeaponHeroListConst
 #!define LONG_REACH_MELEE_BUTTON_WEAPON_HEROES augmentMeleeBtnHeroListConst
-
-# Objective IDs also index objectiveTypeVoteList and identify entries in objectiveTypeList.
-# Biomorphing and Survivor Rescue are only selectable through the mixed pool.
-# Keep the existing IDs; 8 is unused and Mixed Objectives is a voting option only.
-enum ObjectiveType:
-    NO_PREFERENCE = 0,
-    SHOWDOWN = 1,
-    BOSSES = 2,
-    BIOMORPHING = 3,
-    SURVIVOR_RESCUE = 4,
-    KILL_ZONE = 5,
-    ZOMBIE_EGG = 6,
-    SATELLITE_UPLINK = 7,
-    MIXED_OBJECTIVES = 9,
-
-# Ordered states for pregame hero selection and readiness; jump/crouch move one step at a time.
-enum PregameState:
-    SELECTING_HERO = 0,
-    HERO_SELECTED = 1,
-    READY = 2,
-
-enum CameraMode:
-    NORMAL = 0,
-    PRECISE = 1,
-
-# Fields of playerStatsList[user index] and reconnectRowSnapshot; full-row writes follow this order.
-enum ReconnectField:
-    STATUS = 0,
-    RESCUE_TIME_REMAINING = 1,
-    REVIVE_TIME_REMAINING = 2,
-    REVIVE_DURATION = 3,
-    POSITION = 4,
-
-# Ordered saved statuses: >= DOWNED includes players awaiting revival and permanently dead players.
-enum ReconnectStatus:
-    ALIVE = 0,
-    DOWNED = 1,
-    DEAD = 2,
-
-# Carried and ground item IDs; NONE is the empty active slot.
-# Real IDs are contiguous CURE..STUN; display tables use ID - 1.
-enum PowerUpItem:
-    NONE = 0,
-    CURE = 1,
-    REVIVE = 2,
-    FORCE_FIELD = 3,
-    NO_COOLDOWNS = 4,
-    AIR_STRIKE = 5,
-    HEALING_BEACON = 6,
-    VACCINE = 7,
-    SENTRY_TURRET = 8,
-    CLOAKING_DEVICE = 9,
-    SUPER_NANO = 10,
-    JETPACK = 11,
-    ULTIMATE_CHARGER = 12,
-    STUN = 13,
-
-# Remaining sparse indices in powerUpEntityIdList; frequently used IDs have dedicated player variables below.
-# Turret effect slots 50..54 stay contiguous for creation and cleanup loops.
-enum PowerUpEntitySlot:
-    FORCE_FIELD_HUD = 11,
-    AIR_STRIKE_CLOUD = 31,
-    HEAL_BEACON_RING = 41,
-    HEAL_BEACON_HUD = 42,
-    HEAL_BEACON_AURA = 43,
-    SENTRY_TURRET_BODY = 50,
-    SENTRY_TURRET_LEG_1 = 51,
-    SENTRY_TURRET_LEG_2 = 52,
-    SENTRY_TURRET_LEG_3 = 53,
-    SENTRY_TURRET_BARREL = 54,
-    SENTRY_TURRET_HUD = 55,
-    CLOAKING_DEVICE_HUD = 61,
-    SUPER_NANO_HUD = 71,
-    SUPER_NANO_BAD_AURA = 72,
-    SUPER_NANO_DAMAGE_DEALT_MODIFICATION = 73,
-    SUPER_NANO_DAMAGE_RECEIVED_MODIFICATION = 74,
-    JETPACK_FLIGHT_EFFECT = 82,
 
 # Global variables
 
@@ -242,7 +46,6 @@ globalvar tmp3  # Fourth synchronous scratch value, including barricade impulse 
 #!define enhancementHitHealthBefore tmp2
 #!define enhancementHitDamage tmp2
 #!define enhancementHitVictim tmp3
-
 
 # Synchronous selectPullAimTarget contract: tmp1 inputs PullAimMode;
 # tmp0 returns the selected player (or Null), tmp2/tmp3 are clobbered.
@@ -310,20 +113,6 @@ globalvar phaseSlot10  # Menu spacing/readiness (0 -> 40) -> current objective t
 
 globalvar biomorphingGoalColor  # Initialized at START GAME, independently of the still-active pregame camera.
 globalvar currentObjectivePosition  # Mirrors the objective queue head, including moving eggs.
-
-# Shared immutable colors and positions.
-# Use Vector directions directly for unit offsets; scaling adds a multiplication and scalar.
-# Shared offsets below cache that expression once, saving elements across repeated uses.
-globalvar offsetUpThreeQuartersConst = 0.75 * Vector.UP    # Vertical offset of 0.75 m for labels, icons and visibility checks. Source uses: 7 (excluding declaration).
-globalvar offsetUpHalfConst = 0.5 * Vector.UP              # Vertical offset of 0.5 m for labels and effects. Source uses: 7 (excluding declaration).
-globalvar losOffsetConst = 1.2 * Vector.UP                 # Vertical offset of 1.2 m used by line-of-sight checks. Source uses: 16 (excluding declaration).
-globalvar dummyHoldingPositionConst = vect(500, 500, 500)  # Off-map holding position for newly created or reconfigured dummy bots. Source uses: 6 (excluding declaration).
-globalvar offsetDownHundredConst = -100 * Vector.UP       # Downward offset of 100 m for raycasts, hidden effects and dead-player storage. Source uses: 7 (excluding declaration).
-globalvar offsetUpOneAndHalfConst = 1.5 * Vector.UP       # Vertical offset of 1.5 m for the pregame camera and player labels. Source uses: 6 (excluding declaration).
-globalvar offsetUpQuarterConst = 0.25 * Vector.UP         # Vertical offset of 0.25 m for impulses, power-up drops and effects. Source uses: 5 (excluding declaration).
-
-# Immutable palette indexed by item ID minus one; shared by ground items and their HUD.
-globalvar powerUpColorListConst = [Color.GREEN, Color.YELLOW, Color.BLUE, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.BLUE, Color.RED, Color.PURPLE, Color.RED, Color.WHITE]
 
 # Match state and configuration.
 globalvar isPregameSetup        # Pregame hero selection/voting is active; cleared by START GAME before gameplay activation.
@@ -1090,52 +879,3 @@ playervar botReigniteRisePosition  # Chased Anran emergence position, forced acr
 playervar enhancementPupCooldown  # Chased P.U.P. ability cooldown (1 or 2 seconds); independent of positions.
 
 playervar augmentBarrierHealth  # Chased Laser Barricade health; placement, damage, regeneration and HUD; independent of icon IDs.
-
-# Immutable Augment icons, indexed by selection ID and initialized once before UI rules.
-# Shared by the pregame menu, world labels, personal HUD and roster throughout the match.
-# Keep a dedicated slot: pregame storage is reused by objectives during gameplay.
-enum AugmentIcon:
-    NO_PREFERENCE = iconString(Icon.QUESTION_MARK),
-    KEVLAR = "<TX C0000000004F73E>", # <TX C00000000004120>
-    DASH = iconString(Icon.ARROW_RIGHT),
-    HIGHRISE = iconString(Icon.ARROW_UP),
-    LONG_REACH = abilityIconString(Hero.DOOMFIST, Button.SECONDARY_FIRE),
-    AMMO_PACK = "<TX C0000000004F73A>",
-    GRAPNEL_LAUNCHER = iconString(Icon.DIZZY),
-    LASER_BARRICADE = iconString(Icon.DIAMOND),
-    APOTHECARY = "<TX C0000000004F73B>",
-    SCAVENGER = iconString(Icon.RECYCLE),
-    LEECH = iconString(Icon.ASTERISK),
-
-globalvar augmentIconListConst = [AugmentIcon.NO_PREFERENCE, AugmentIcon.KEVLAR, AugmentIcon.DASH, AugmentIcon.HIGHRISE, AugmentIcon.LONG_REACH, AugmentIcon.AMMO_PACK, AugmentIcon.GRAPNEL_LAUNCHER, AugmentIcon.LASER_BARRICADE, AugmentIcon.APOTHECARY, AugmentIcon.SCAVENGER, AugmentIcon.LEECH]
-
-# Immutable Enhancement icons, indexed by selection ID; shared by pregame options and roster.
-# Keep a dedicated slot: enhancementOptionList becomes Biomorphing text after menu cleanup.
-enum EnhancementIcon:
-    NO_PREFERENCE = iconString(Icon.QUESTION_MARK),
-    ZOMBIE_HYBRID = iconString(Icon.POISON),
-    BULKING_SEASON = "<TX C0000000002A9ED>",
-    BRAIN_KILLER = iconString(Icon.SKULL),
-    PYROTECHNIC = iconString(Icon.FIRE),
-    BORN_TO_BATTLE = "<TX C000000000039D7>",
-    CHARGE_BATTERY = iconString(Icon.SPIRAL),
-    HITCHHIKER = iconString(Icon.FLAG),
-    PUP = iconString(Icon.HAPPY),
-    WRESTLER = iconString(Icon.TRASHCAN),
-    BOLT_STRIKE = iconString(Icon.BOLT),
-    ENGINEER = "<TX C0000000005FA7F>",
-    PLAGUE_DOCTOR = iconString(Icon.PLUS),
-    OVERCHARGE = iconString(Icon.MOON),
-
-globalvar enhancementIconListConst = [EnhancementIcon.NO_PREFERENCE, EnhancementIcon.ZOMBIE_HYBRID, EnhancementIcon.BULKING_SEASON, EnhancementIcon.BRAIN_KILLER, EnhancementIcon.PYROTECHNIC, EnhancementIcon.BORN_TO_BATTLE, EnhancementIcon.CHARGE_BATTERY, EnhancementIcon.PUP, EnhancementIcon.WRESTLER, EnhancementIcon.BOLT_STRIKE, EnhancementIcon.ENGINEER, EnhancementIcon.PLAGUE_DOCTOR, EnhancementIcon.OVERCHARGE, EnhancementIcon.HITCHHIKER]
-
-# Immutable palette shared by the pregame menu and gameplay HUD; indexed by Augment.
-globalvar augmentColorListConst = [Color.AQUA, Color.LIGHT_GRAY, Color.YELLOW, Color.SKY_BLUE, Color.ORANGE, Color.WHITE, Color.TURQUOISE, Color.BLUE, Color.GREEN, Color.LIME_GREEN, Color.RED]
-
-# Immutable augment names, indexed by selection ID; shared by the augment menu and combat HUD.
-# Melee-augment hero tables; the extended list also provides the index for per-hero melee values.
-# Initialized in VARIABLE ASSIGNMENT, not here: module-level initializers let the optimizer
-# fold the string table back into its use sites and drop the assignment as dead code.
-globalvar augmentNameListConst
-globalvar augmentMeleeWeaponHeroListConst
-globalvar augmentMeleeBtnHeroListConst
