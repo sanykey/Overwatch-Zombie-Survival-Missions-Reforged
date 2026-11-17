@@ -132,7 +132,7 @@ rule "EFFECTS/TEXTS":
     # Keep live player reads in the HUD; no temporary slots may be captured here.
     hudText(
         getAllPlayers().filter(lambda _: eventPlayer.rescueTimeRemaining > 0 and not eventPlayer.isAfk),
-        heroIcon(Hero.WINSTON) if isSmolderEventActive else heroIcon(eventPlayer.getHeroOfDuplication()) if eventPlayer.isDuplicatingAHero() else heroIcon(eventPlayer.getHero()),
+        heroIcon(Hero.WINSTON if isSmolderEventActive else eventPlayer.getHeroOfDuplication() if eventPlayer.isDuplicatingAHero() else eventPlayer.getHero()),
         "<fgFFAA40FF>{0}</fg> <fg66FFFFFF>{1}</fg>{2}{3}".format(
             ENHANCEMENT_ICONS[eventPlayer.enhancementId],
             AUGMENT_ICONS[eventPlayer.augmentId],

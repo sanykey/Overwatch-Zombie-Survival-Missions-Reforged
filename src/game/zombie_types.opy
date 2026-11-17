@@ -280,7 +280,7 @@ rule "BEHEMOTH GAS STREAM (BOSS)":
         #!define behemothGasCloudRadius tmp2
         behemothGasCloudPosition = eventPlayer.botGasPositionList[behemothGasCloudIndex]
         behemothGasCloudRadius = eventPlayer.botGasRadiusList[behemothGasCloudIndex]
-        eventPlayer.botSpecialTargetList.append(playerTargetList.filter(lambda x: not x in eventPlayer.botSpecialTargetList and not x.isDotProtected and distance(behemothGasCloudPosition, vect(x.getEyePosition().x, behemothGasCloudPosition.y, x.getEyePosition().z)) < behemothGasCloudRadius and abs(behemothGasCloudPosition.y - x.getEyePosition().y) < behemothGasCloudRadius / 5))
+        eventPlayer.botSpecialTargetList.append(playerTargetList.filter(lambda x: not x in eventPlayer.botSpecialTargetList and not x.isDotProtected and magnitude((behemothGasCloudPosition - x.getEyePosition()) * vect(1, 0, 1)) < behemothGasCloudRadius and abs(behemothGasCloudPosition.y - x.getEyePosition().y) < behemothGasCloudRadius / 5))
     eventPlayer.botSpecialTargetList.startDamageOverTime(eventPlayer, 2.5, eventPlayer.botBiteDamage * 0.1)
     if eventPlayer.damageOverTimeRemaining < 2.5 and eventPlayer.botSpecialTargetList != []:
         eventPlayer.damageOverTimeRemaining = 2.5
@@ -621,7 +621,7 @@ rule "SLIMER (MERCY) TENTACLE GRAB":
     eventPlayer.botIsThrottleOverridden = true
     eventPlayer.stopThrottleInDirection()
     eventPlayer.botAbilityTarget = null
-    eventPlayer.botTentaclePosition = eventPlayer.getEyePosition() + offsetUpHalfConst * eventPlayer.sizeScale if eventPlayer.isInAir() else eventPlayer.getEyePosition()
+    eventPlayer.botTentaclePosition = eventPlayer.getEyePosition() + offsetUpHalfConst * (eventPlayer.sizeScale if eventPlayer.isInAir() else 0)
     eventPlayer.botTentacleTargetPosition = eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 20 * eventPlayer.sizeScale
     #Tentacle extends
     chaseAtRate(eventPlayer.botTentaclePosition, eventPlayer.botTentacleTargetPosition, 50)
@@ -634,7 +634,7 @@ rule "SLIMER (MERCY) TENTACLE GRAB":
         wait(0.032)
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.LIME_GREEN, eventPlayer.botTentaclePosition, 0.25)
     #Tentacle retract
-    chaseAtRate(eventPlayer.botTentaclePosition, eventPlayer.getEyePosition() + offsetUpHalfConst * eventPlayer.sizeScale if eventPlayer.isInAir() else eventPlayer.getEyePosition(), 50)
+    chaseAtRate(eventPlayer.botTentaclePosition, eventPlayer.getEyePosition() + offsetUpHalfConst * (eventPlayer.sizeScale if eventPlayer.isInAir() else 0), 50)
     if eventPlayer.isAlive() and not eventPlayer.botIsCrowdControlled and eventPlayer.botAbilityTarget != null:
         #Knocks target down if facing away from Mercy
         if abs(angleDifference(eventPlayer.botAbilityTarget.getHorizontalFacingAngle(), horizontalAngleOfDirection(directionTowards(eventPlayer, eventPlayer.botAbilityTarget)))) < 75:
@@ -643,7 +643,7 @@ rule "SLIMER (MERCY) TENTACLE GRAB":
         eventPlayer.botAbilityTarget.applyImpulse(directionTowards(eventPlayer.botAbilityTarget.getEyePosition(), eventPlayer.getEyePosition()), eventPlayer.sizeScale * (15 if eventPlayer.botAbilityTarget.getMaxHealth() < 400 else 10), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
         wait(0.35)
         eventPlayer.botAbilityTarget.setGravity(100)
-    while (distance(eventPlayer.botTentaclePosition, eventPlayer.getEyePosition() + offsetUpHalfConst * eventPlayer.sizeScale if eventPlayer.isInAir() else eventPlayer.getEyePosition())) > 0.25:
+    while (distance(eventPlayer.botTentaclePosition, eventPlayer.getEyePosition() + offsetUpHalfConst * (eventPlayer.sizeScale if eventPlayer.isInAir() else 0))) > 0.25:
         wait(0.25)
     eventPlayer.botTentacleTargetPosition = null
     stopChasing(eventPlayer.botTentaclePosition)

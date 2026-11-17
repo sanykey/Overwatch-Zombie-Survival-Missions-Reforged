@@ -191,7 +191,7 @@ macro botEntityManagementMacro():
                 eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
         elif eventPlayer.getHero() == Hero.MERCY:
             #Mercy tentacle
-            createBeam(getAllPlayers().filter(lambda _: eventPlayer.botTentacleTargetPosition != 0), Beam.BAD, eventPlayer.getEyePosition() + offsetUpHalfConst * eventPlayer.sizeScale if eventPlayer.isInAir() else eventPlayer.getEyePosition(), eventPlayer.botTentaclePosition, Color.LIME_GREEN, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            createBeam(getAllPlayers().filter(lambda _: eventPlayer.botTentacleTargetPosition != 0), Beam.BAD, eventPlayer.getEyePosition() + offsetUpHalfConst * (eventPlayer.sizeScale if eventPlayer.isInAir() else 0), eventPlayer.botTentaclePosition, Color.LIME_GREEN, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
             #Tentacle sound effect
             createEffect(getAllPlayers().filter(lambda _: eventPlayer.botTentacleTargetPosition != 0), Effect.ENERGY_SOUND, Color.WHITE, eventPlayer.botTentaclePosition, 400, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -384,10 +384,10 @@ macro globalObjectiveEntityManagementMacro():
         createEffect(getAllPlayers().filter(lambda player: distance(player, killZoneCenter) > objectiveRad), Effect.SPHERE, Color.GRAY, killZoneCenter, objectiveRad, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Kill Zone Ring
-        createEffect(getAllPlayers(), Effect.RING, Color.RED, vect(killZoneCenter.x, localPlayer.getPosition().y, killZoneCenter.z), sqrt(objectiveRad ** 2 - ((abs(localPlayer.getPosition().y - killZoneCenter.y)) ** 2)), EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createEffect(getAllPlayers(), Effect.RING, Color.RED, vect(killZoneCenter.x, localPlayer.getPosition().y, killZoneCenter.z), sqrt(objectiveRad ** 2 - ((localPlayer.getPosition().y - killZoneCenter.y) ** 2)), EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Kill Zone light shaft
-        createEffect(getAllPlayers().filter(lambda player: distance(player, killZoneCenter) < objectiveRad), Effect.LIGHT_SHAFT, Color.RED, vect(killZoneCenter.x, localPlayer.getPosition().y + -29, killZoneCenter.z), sqrt(objectiveRad ** 2 - ((abs(localPlayer.getPosition().y - killZoneCenter.y)) ** 2)), EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createEffect(getAllPlayers().filter(lambda player: distance(player, killZoneCenter) < objectiveRad), Effect.LIGHT_SHAFT, Color.RED, vect(killZoneCenter.x, localPlayer.getPosition().y + -29, killZoneCenter.z), sqrt(objectiveRad ** 2 - ((localPlayer.getPosition().y - killZoneCenter.y) ** 2)), EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         objectiveEntityIdList.append(getLastCreatedEntity())
     #Zombie Egg
     elif objectiveValue == ObjectiveType.ZOMBIE_EGG:

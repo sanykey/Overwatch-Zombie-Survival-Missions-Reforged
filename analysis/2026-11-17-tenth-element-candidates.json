@@ -1,0 +1,112 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "2a9a9272850675cb507ef8f65a03616b936b90a3",
+  "baseline": 30135,
+  "warnings": [],
+  "sourceSha256": "130b69410b3ff1c374a8e7019c139d4d2ed6699b2f2e3d449940edd841c95d47",
+  "results": [
+    {
+      "name": "behemoth_gas_xz",
+      "elements": 30132,
+      "saved": 3,
+      "warnings": [],
+      "changedRules": [
+        "BEHEMOTH GAS STREAM (BOSS) #1"
+      ]
+    },
+    {
+      "name": "slimer_eye_offset",
+      "elements": 30131,
+      "saved": 4,
+      "warnings": [],
+      "changedRules": [
+        "botRespawnInitialization #1",
+        "SLIMER (MERCY) TENTACLE GRAB #1"
+      ]
+    },
+    {
+      "name": "smolder_native_heroes",
+      "elements": 30135,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": []
+    },
+    {
+      "name": "player_icon_common_call",
+      "elements": 30133,
+      "saved": 2,
+      "warnings": [],
+      "changedRules": [
+        "EFFECTS/TEXTS #3"
+      ]
+    },
+    {
+      "name": "killzone_square_abs",
+      "elements": 30133,
+      "saved": 2,
+      "warnings": [],
+      "changedRules": [
+        "objectivesManagement #1"
+      ]
+    },
+    {
+      "name": "bot_damage_percent",
+      "elements": 30129,
+      "saved": 6,
+      "warnings": [],
+      "changedRules": [
+        "botRespawnInitialization #1"
+      ]
+    },
+    {
+      "name": "bot_stats_switch",
+      "elements": 30143,
+      "saved": -8,
+      "warnings": [],
+      "changedRules": [
+        "botRespawnInitialization #1"
+      ]
+    },
+    {
+      "name": "combined_recommended",
+      "elements": 30124,
+      "saved": 11,
+      "warnings": [],
+      "changedRules": [
+        "objectivesManagement #1",
+        "botRespawnInitialization #1",
+        "EFFECTS/TEXTS #3",
+        "BEHEMOTH GAS STREAM (BOSS) #1",
+        "SLIMER (MERCY) TENTACLE GRAB #1"
+      ],
+      "sameDeclarationsAndConditions": true
+    }
+  ],
+  "geometryModelCases": 10000,
+  "offsetModelCases": 120000,
+  "iconModelCases": 36,
+  "damagePercentRoundingAudit": {
+    "entries": 110,
+    "float64Differences": [],
+    "float32Differences": [
+      {
+        "table": "NL_DAMAGE_DEALT_INSANITY_OFFSET",
+        "value": 240,
+        "before": 240.00001525878906,
+        "after": 240
+      },
+      {
+        "table": "NL_DAMAGE_DEALT_NORMAL_OFFSET",
+        "value": 7.5,
+        "before": 7.500000476837158,
+        "after": 7.5
+      },
+      {
+        "table": "NL_DAMAGE_DEALT_NORMAL_OFFSET",
+        "value": 7.5,
+        "before": 7.500000476837158,
+        "after": 7.5
+      }
+    ]
+  }
+}
