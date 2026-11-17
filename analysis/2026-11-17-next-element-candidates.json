@@ -1,0 +1,114 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "e27322c8af23ffb4d2e2cb9e8fba2fef1de1b4f7",
+  "baseline": 30350,
+  "warnings": [],
+  "sourceSha256": "e23d6f52c1f5c68d5c93f5c96deedd7c4e6ec374398252d76bfa58de128da7ba",
+  "results": [
+    {
+      "name": "bot_bite_single_assignment",
+      "elements": 30351,
+      "saved": -1,
+      "warnings": [],
+      "changedRules": [
+        "botRespawnInitialization #1"
+      ]
+    },
+    {
+      "name": "shared_scripted_hit_tail",
+      "elements": 30349,
+      "saved": 1,
+      "warnings": [],
+      "changedRules": [
+        "[LONG_REACH] extendAugmentMelee #1",
+        "CROUCH + JUMP (GRAPNEL LAUNCHER / APOTHECARY TELEPORT) #1",
+        "Subroutine finishScriptedEnhancementHit #1"
+      ]
+    },
+    {
+      "name": "battle_priority_with_fallback",
+      "elements": 30340,
+      "saved": 10,
+      "warnings": [],
+      "changedRules": [
+        "BORN TO BATTLE PLAYER USES ABILITY CHARGE #1"
+      ]
+    },
+    {
+      "name": "battle_priority_loop",
+      "error": "OpyError: Expected the 'range' function for the 2nd operand of the 'in' operator, but got function '__array__'\n    | line 8272, col 99, at includes.opy"
+    },
+    {
+      "name": "enable_abilities_common",
+      "elements": 30357,
+      "saved": -7,
+      "warnings": [],
+      "changedRules": [
+        "enableDisableAbilities #1"
+      ]
+    },
+    {
+      "name": "resist_use_cached_hud_flag",
+      "elements": 30344,
+      "saved": 6,
+      "warnings": [],
+      "changedRules": [
+        "applyDamageReceivedModifier #1"
+      ]
+    },
+    {
+      "name": "pyro_boss_scale_expression",
+      "elements": 30353,
+      "saved": -3,
+      "warnings": [],
+      "changedRules": [
+        "PYROTECHNIC APPLIES DAMAGE #1"
+      ]
+    },
+    {
+      "name": "mutation_name_table",
+      "elements": 30339,
+      "saved": 11,
+      "warnings": [],
+      "changedRules": [
+        "botRespawnInitialization #1"
+      ]
+    },
+    {
+      "name": "mutation_color_table",
+      "elements": 30356,
+      "saved": -6,
+      "warnings": [],
+      "changedRules": [
+        "botRespawnInitialization #1"
+      ]
+    },
+    {
+      "name": "objective_completion_sounds",
+      "elements": 30381,
+      "saved": -31,
+      "warnings": [],
+      "changedRules": [
+        "objectivesManagement #1"
+      ]
+    },
+    {
+      "name": "objective_completion_effect_table",
+      "error": "OpyError: Expected type 'DynamicEffect' for the 2nd argument of function 'playEffect', but got function '__ifThenElse__' of type 'Object,Array'\n    | line 1948, col 41, at includes.opy"
+    },
+    {
+      "name": "combined_best",
+      "elements": 30323,
+      "saved": 27,
+      "warnings": [],
+      "changedRules": [
+        "botRespawnInitialization #1",
+        "applyDamageReceivedModifier #1",
+        "BORN TO BATTLE PLAYER USES ABILITY CHARGE #1"
+      ]
+    }
+  ],
+  "priorityModelCases": 256,
+  "resistModelCases": 8,
+  "mutationNameModelCases": 5
+}
