@@ -81,15 +81,10 @@ rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS":
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     if biomorphingCapturePercent < 100:
         waitUntil(isBiomorphingGoalPending == false, Math.INFINITY)
-        # biowasteCarrierIndex: index of a zombie not holding a full resource, to choose the next resource carrier.
-        #!define biowasteCarrierIndex tmp0
-        biowasteCarrierIndex = getPlayers(Team.2).index((getPlayers(Team.2).filter(lambda player: player.biomorphingResourceAmount != BIOMORPHING_RESOURCE_AMOUNT))[0])
-        # biowasteCarrierCandidateList: current zombie list, to resolve the carrier index in biowasteCarrierIndex to a player.
-        #!define biowasteCarrierCandidateList tmp1
-        biowasteCarrierCandidateList = getPlayers(Team.2)
-        # biowasteCarrier: selected zombie, kept while biowasteOutputMacro replaces biowasteCarrierIndex with its resource type.
+        # biowasteCarrier: first eligible zombie; preserve tmp1 while output uses tmp0.
+        # No waits between selection and both writes. Keep the queue update even if no carrier exists.
         #!define biowasteCarrier tmp1
-        biowasteCarrier = biowasteCarrierCandidateList[biowasteCarrierIndex]
+        biowasteCarrier = getPlayers(Team.2).filter(lambda player: player.biomorphingResourceAmount != BIOMORPHING_RESOURCE_AMOUNT)[0]
         biowasteCarrier.biomorphingResourceAmount = BIOMORPHING_RESOURCE_AMOUNT
         biowasteOutputMacro()
         #!define biowasteAssignedType tmp0
@@ -118,12 +113,10 @@ rule "BIOWASTE IS PICKED UP":
     @Condition (not eventPlayer.isDummy() or eventPlayer.getTeam() == Team.2) == true
     
     wait(0.1, Wait.ABORT_WHEN_FALSE)
-    # biowastePickupPosition: nearest dropped biowaste position, to identify the resource being picked up.
-    #!define biowastePickupPosition tmp0
-    biowastePickupPosition = sorted(biomorphingResourcePositionList, lambda x: distance(eventPlayer, x))[0]
     # biowastePickupIndex: resource index shared by position, type and visual arrays, to pick up and remove the same orb.
+    # Resolve the nearest position directly; keep first-match behavior for duplicate positions.
     #!define biowastePickupIndex tmp1
-    biowastePickupIndex = biomorphingResourcePositionList.index(biowastePickupPosition)
+    biowastePickupIndex = biomorphingResourcePositionList.index(sorted(biomorphingResourcePositionList, lambda x: distance(eventPlayer, x))[0])
     eventPlayer.biomorphingResourceType = biomorphingResourceTypeList[biowastePickupIndex]
     destroyEffect(biomorphingResourceEffectIdList[biowastePickupIndex])
     destroyInWorldText(biomorphingResourceTextIdList[biowastePickupIndex])

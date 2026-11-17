@@ -1,0 +1,14 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baseline": 30250,
+  "elements": 30236,
+  "saved": 14,
+  "warnings": [],
+  "compiledRulesMatchAuditedCandidate": true,
+  "variableDeclarationsUnchanged": true,
+  "changedRules": [
+    "BIOWASTE IS PICKED UP #1",
+    "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS #1"
+  ],
+  "inGameValidation": false
+}
