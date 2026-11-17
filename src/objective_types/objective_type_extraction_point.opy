@@ -13,7 +13,8 @@ rule "PLAYERS IN EXTRACTION POINT CONTROL":
     @Condition currentObjectiveType == ObjectiveType.SHOWDOWN
     @Condition len(objectivePositionList) == 1
     @Condition currentObjectivePosition.y - eventPlayer.getEyePosition().y < 2
-    @Condition distance(eventPlayer, vect(currentObjectivePosition.x, eventPlayer.getPosition().y, currentObjectivePosition.z)) < objectiveRad
+    # Horizontal distance only; preserve the independent eye-height gate above.
+    @Condition magnitude((eventPlayer.getPosition() - currentObjectivePosition) * vect(1, 0, 1)) < objectiveRad
     
     if not eventPlayer in objectivePlayerList:
         objectivePlayerList.append(eventPlayer)
@@ -106,7 +107,7 @@ rule "WIN/LOSS CONDITIONS":
         for lossRoundVictoryIndex in range(5):
             declareRoundVictory(Team.2)
     else:
-        (getPlayers(Team.1).filter(lambda player: player.hasSpawned() and distance(currentObjectivePosition, vect(player.getPosition().x, currentObjectivePosition.y, player.getPosition().z)) < objectiveRad)).resurrect()
+        (getPlayers(Team.1).filter(lambda player: player.hasSpawned() and magnitude((currentObjectivePosition - player.getPosition()) * vect(1, 0, 1)) < objectiveRad)).resurrect()
         getAllPlayers().enableKillFeed()
         wait()
         extractionFlightDestination = currentObjectivePosition + 250 * Vector.UP + directionFromAngles(random.uniform(0, 360), 0) * 500

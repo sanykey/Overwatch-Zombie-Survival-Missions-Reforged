@@ -250,13 +250,20 @@ rule "AMMO PACK REFILL FALLBACK":
     # These temporary inputs are synchronous; the handler has no waits/captures.
     #!define augmentAmmoFallbackClipIndex tmp0
     #!define augmentAmmoNativeCapacity tmp1
+    # Per-clip synchronous reload snapshot; no wait/call/capture before the predicate consumes it.
+    #!define augmentAmmoReloadFinished tmp2
     for augmentAmmoFallbackClipIndex in range(2):
         augmentAmmoNativeCapacity = eventPlayer.getMaxAmmo(augmentAmmoFallbackClipIndex)
-        if augmentAmmoNativeCapacity > 0 and eventPlayer.augmentAmmoLoadout[augmentAmmoFallbackClipIndex + 2] > augmentAmmoNativeCapacity and (eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) == augmentAmmoNativeCapacity and (eventPlayer.augmentAmmoFallbackState[augmentAmmoFallbackClipIndex] or eventPlayer.augmentAmmoFallbackState[2] and not eventPlayer.isReloading()) or eventPlayer.getHero() == Hero.WIDOWMAKER and eventPlayer.augmentAmmoFallbackState[2] and not eventPlayer.isReloading() and eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) < augmentAmmoNativeCapacity and (eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) > eventPlayer.augmentAmmoFallbackState[augmentAmmoFallbackClipIndex + 3] or eventPlayer.augmentAmmoFallbackState[augmentAmmoFallbackClipIndex + 3] > augmentAmmoNativeCapacity)):
+        # Re-read on each clip: the preceding clip's Set Ammo may change native reload state.
+        augmentAmmoReloadFinished = eventPlayer.augmentAmmoFallbackState[2] and not eventPlayer.isReloading()
+        if augmentAmmoNativeCapacity > 0 and eventPlayer.augmentAmmoLoadout[augmentAmmoFallbackClipIndex + 2] > augmentAmmoNativeCapacity and (eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) == augmentAmmoNativeCapacity and (eventPlayer.augmentAmmoFallbackState[augmentAmmoFallbackClipIndex] or augmentAmmoReloadFinished) or eventPlayer.getHero() == Hero.WIDOWMAKER and augmentAmmoReloadFinished and eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) < augmentAmmoNativeCapacity and (eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) > eventPlayer.augmentAmmoFallbackState[augmentAmmoFallbackClipIndex + 3] or eventPlayer.augmentAmmoFallbackState[augmentAmmoFallbackClipIndex + 3] > augmentAmmoNativeCapacity)):
             # A refill rose from below native full, or a completed reload reset
             # an overfilled clip to native full. Descending through native full
             # while firing, and cancelled/partial reloads, must not grant ammo.
             # Widow can fire on the frame her reload finishes. Restore the bonus
             # while preserving those spent rounds (34/35 becomes 69/35).
             eventPlayer.setAmmo(augmentAmmoFallbackClipIndex, eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) + eventPlayer.augmentAmmoLoadout[augmentAmmoFallbackClipIndex + 2] - augmentAmmoNativeCapacity)
-    eventPlayer.augmentAmmoFallbackState = [eventPlayer.getAmmo(0) < eventPlayer.getMaxAmmo(0), eventPlayer.getAmmo(1) < eventPlayer.getMaxAmmo(1), eventPlayer.isReloading(), eventPlayer.augmentAmmoFallbackState[3], eventPlayer.augmentAmmoFallbackState[4]]
+    # Valid state has five fields. Update live flags synchronously; retain reload snapshots 3/4.
+    eventPlayer.augmentAmmoFallbackState[0] = eventPlayer.getAmmo(0) < eventPlayer.getMaxAmmo(0)
+    eventPlayer.augmentAmmoFallbackState[1] = eventPlayer.getAmmo(1) < eventPlayer.getMaxAmmo(1)
+    eventPlayer.augmentAmmoFallbackState[2] = eventPlayer.isReloading()
