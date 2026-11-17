@@ -127,7 +127,8 @@ rule "CREATE PATH":
 
 rule "DELETE PATH":
     @Condition currentObjectiveType == ObjectiveType.SURVIVOR_RESCUE
-    @Condition (rescueSurvivor.rescuePathList.any(lambda x: distance(rescueSurvivor, vect(x.x, rescueSurvivor.getPosition().y, x.z)) < 0.25 and abs(rescueSurvivor.getPosition().y - x.y) < 2)) == true
+    # XZ distance to each waypoint; retain the separate vertical tolerance.
+    @Condition (rescueSurvivor.rescuePathList.any(lambda x: magnitude((rescueSurvivor.getPosition() - x) * vect(1, 0, 1)) < 0.25 and abs(rescueSurvivor.getPosition().y - x.y) < 2)) == true
     
     # rescueReachedPathIndex: reached path index, consumed by the immediate path trim.
     #!define rescueReachedPathIndex tmp0

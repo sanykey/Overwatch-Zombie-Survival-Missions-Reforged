@@ -90,7 +90,7 @@ rule "BASIC (REAPER) SHADOW STEP (BOSS)":
         # shadowStepFloatTargetIndex: floated-player index, to push each affected player upward during the shadow-step ability.
         #!define shadowStepFloatTargetIndex tmp0
         for shadowStepFloatTargetIndex in range(len(eventPlayer.botSpecialTargetList)):
-            eventPlayer.botAbilityTarget = eventPlayer.botSpecialTargetList[shadowStepFloatTargetIndex]
+            selectIndexedAbilityTarget()
             if eventPlayer.botAbilityTarget.getPosition().y < eventPlayer.getPosition().y + 4 * eventPlayer.sizeScale:
                 #Make target float up
                 eventPlayer.botAbilityTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.botAbilityTarget, eventPlayer)), -50), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
@@ -697,7 +697,7 @@ rule "PRIME SLIMER (EMRE) FLIGHT (BOSS)":
             # slimerFlightTargetIndex: floated-player index, to lift low targets and push higher targets away during flight.
             #!define slimerFlightTargetIndex tmp0
             for slimerFlightTargetIndex in range(len(eventPlayer.botSpecialTargetList)):
-                eventPlayer.botAbilityTarget = eventPlayer.botSpecialTargetList[slimerFlightTargetIndex]
+                selectIndexedAbilityTarget()
                 if eventPlayer.botAbilityTarget.getPosition().y < eventPlayer.getPosition().y:
                     #Make target float up
                     eventPlayer.botAbilityTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.botAbilityTarget, eventPlayer)), -75), 0.75, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
@@ -1293,7 +1293,7 @@ rule "SMOLDER SUPER SLAM":
     # smolderShockwaveTargetIndex: shockwave target index, to apply distance-scaled knockback to each affected player.
     #!define smolderShockwaveTargetIndex tmp0
     for smolderShockwaveTargetIndex in range(len(eventPlayer.botSpecialTargetList)):
-        eventPlayer.botAbilityTarget = eventPlayer.botSpecialTargetList[smolderShockwaveTargetIndex]
+        selectIndexedAbilityTarget()
         eventPlayer.botAbilityTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, eventPlayer.botAbilityTarget)), -25), (15 if distance(eventPlayer, eventPlayer.botAbilityTarget) < 5 * eventPlayer.sizeScale else 7.5) * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
 
 

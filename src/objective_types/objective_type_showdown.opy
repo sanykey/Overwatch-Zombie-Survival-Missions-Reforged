@@ -11,7 +11,8 @@ rule "PLAYERS ON OBJECTIVE CONTROL":
     #Objective Cylinder Height As Above, So Below
     @Condition abs(currentObjectivePosition.y - eventPlayer.getPosition().y) < 12
     #Objective Cylinder Radius
-    @Condition distance(vect(currentObjectivePosition.x, eventPlayer.getPosition().y, currentObjectivePosition.z), eventPlayer.getPosition()) < objectiveRad
+    # Project the relative position onto XZ; keep the independent height limit above.
+    @Condition magnitude((currentObjectivePosition - eventPlayer.getPosition()) * vect(1, 0, 1)) < objectiveRad
     
     if eventPlayer.isDummy():
         if not eventPlayer in showdownContestingZombieList:
@@ -46,7 +47,7 @@ rule "INCREASE OBJECTIVE CAPTURE PERCENTAGE":
     playEffect(getPlayers(Team.1), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, currentObjectivePosition, (0.05 * showdownCapturePercent) ** 2)
     if showdownCapturePercent >= showdownNextCheckpoint:
         showdownNextCheckpoint += 25
-        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, currentObjectivePosition, objectiveRad * 2)
+        playShowdownRing()
         if showdownNextCheckpoint >= 100:
             goto lbl_0
         playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, null, currentObjectivePosition, 100)

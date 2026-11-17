@@ -8,7 +8,7 @@ macro biowasteOutputMacro():
     biowasteOutputType = biomorphingQueuedTypeList[0]
     del biomorphingQueuedTypeList[0]
     if biomorphingQueuedTypeList == []:
-        biomorphingQueuedTypeList = random.shuffle([0, 1, 2])
+        shuffleBiowasteQueue()
 
 
 macro biowasteAssignmentMacro():
@@ -38,7 +38,7 @@ rule "BIOMORPHING GOAL START":
     # The resource-type slot belongs to the Rescue NPC after an objective transition.
     if currentObjectiveType != ObjectiveType.BIOMORPHING:
         return
-    biomorphingQueuedTypeList = random.shuffle([0, 1, 2])
+    shuffleBiowasteQueue()
     biomorphingDeferredTypeList = []
     biomorphingDeferredPositionList = []
     biomorphingResourceTypeList = []

@@ -32,6 +32,10 @@ subroutine selectPullAimTarget
 subroutine applyHitEnhancements
 subroutine useChargedUltimate
 subroutine delayZombieRespawns
+subroutine playShowdownRing
+subroutine advanceSpawnRoomIndex
+subroutine shuffleBiowasteQueue
+subroutine selectIndexedAbilityTarget
 
 
 macro damageWithEnhancements(amount, target):
@@ -588,7 +592,7 @@ def objectivesManagement():
         #Checks if current objective is showdown
         switch currentObjectiveType:
             case ObjectiveType.SHOWDOWN:
-                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, currentObjectivePosition, objectiveRad * 2)
+                playShowdownRing()
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, currentObjectivePosition, 200)
                 break
             #Checks if current objective is bosses
@@ -961,3 +965,25 @@ def delayZombieRespawns():
     # Preserve existing queue length, including an empty queue; no new spawn entries.
     getPlayers(Team.2).botRespawnDelay = 12
     botSpawnTimeList = botSpawnTimeList.map(lambda _: 12)
+
+def playShowdownRing():
+    @Name "playShowdownRing"
+    # Synchronous checkpoint/completion flash; sound and scheduling stay with callers.
+    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, currentObjectivePosition, objectiveRad * 2)
+
+def advanceSpawnRoomIndex():
+    @Name "advanceSpawnRoomIndex"
+    # Advance only; each caller retains its team-specific spawn action and safety gate.
+    spawnRoomIndex = (spawnRoomIndex + 1) % len(attackSpawnRooms)
+
+def shuffleBiowasteQueue():
+    @Name "shuffleBiowasteQueue"
+    # Exactly one shuffle per original queue refill, without yielding.
+    biomorphingQueuedTypeList = random.shuffle([0, 1, 2])
+
+def selectIndexedAbilityTarget():
+    @Name "selectIndexedAbilityTarget"
+    # Synchronous input: Reaper/Emre/Smolder callers supply their loop index in tmp0.
+    # Preserve the index and read only this bot's list; no waits or nested calls.
+    #!define indexedAbilityTargetIndex tmp0
+    eventPlayer.botAbilityTarget = eventPlayer.botSpecialTargetList[indexedAbilityTargetIndex]

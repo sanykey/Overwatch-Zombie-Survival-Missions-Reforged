@@ -193,7 +193,7 @@ rule "PREGAME SPAWN ROOM ROTATION":
     destroyAllDummies()
     #Rotates spawn rooms while waiting for game to start
     while isPregameSetup:
-        spawnRoomIndex = (spawnRoomIndex + 1) % len(attackSpawnRooms)
+        advanceSpawnRoomIndex()
         #Open all spawn rooms
         startForcingSpawn(Team.ALL, spawnRoomIndex)
         wait(1)
