@@ -42,6 +42,6 @@ rule "CYCLE PLAYER CAMERA":
     @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
 
     # Ongoing rule retriggers only after a condition becomes false and true again.
-    eventPlayer.cameraMode = (eventPlayer.cameraMode + 1) % 2
+    eventPlayer.cameraMode = eventPlayer.cameraMode != CameraMode.PRECISE
     applyPlayerCamera()
     smallMessage(eventPlayer, f"Camera: {['Normal', 'Precise'][eventPlayer.cameraMode]} | Switch: {CAMERA_HOTKEY}")

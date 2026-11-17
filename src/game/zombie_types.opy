@@ -1,4 +1,5 @@
 #!mainFile "../../main.opy"
+subroutine beginSmolderEnrage
 subroutine daytakerAbortReset
 subroutine applyBriefBurnAndRoot
 subroutine reenableBotWallAndJump
@@ -19,9 +20,7 @@ subroutine explosionWarning
 
 
 macro smolderEnragedMacro():
-    eventPlayer.botSmolderState = 2
-    stopChasing(eventPlayer.botSmolderAnger)
-    eventPlayer.stopForcingButton(Button.CROUCH)
+    beginSmolderEnrage()
     smolderBoost()
     wait(5)
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -1224,9 +1223,7 @@ rule "SMOLDER ACTIVATES FROM DAMAGE":
     @Condition eventPlayer.botSmolderState == 1
     @Condition eventPlayer.botIsCrowdControlled != true
     
-    eventPlayer.botSmolderState = 2
-    stopChasing(eventPlayer.botSmolderAnger)
-    eventPlayer.stopForcingButton(Button.CROUCH)
+    beginSmolderEnrage()
     eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), attacker.getEyePosition()), 9999)
     eventPlayer.botLastTarget = attacker
     eventPlayer.botTarget = attacker
@@ -1557,3 +1554,11 @@ def daytakerAbortReset():
 
     clearBotMovementOverrides()
     eventPlayer.botAbilityTarget.isAttached = false
+
+
+def beginSmolderEnrage():
+    @Name "beginSmolderEnrage"
+    # Synchronous only: retain caller eventPlayer, action order and all surrounding waits.
+    eventPlayer.botSmolderState = 2
+    stopChasing(eventPlayer.botSmolderAnger)
+    eventPlayer.stopForcingButton(Button.CROUCH)

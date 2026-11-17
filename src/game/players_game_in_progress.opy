@@ -61,7 +61,7 @@ rule "PLAYER INITIALIZATION":
     eventPlayer.isInfected = false
     eventPlayer.enableDeathSpectateTargetHud()
     eventPlayer.reviveDuration = 5
-    eventPlayer.reviveTimeRemaining = eventPlayer.reviveDuration
+    eventPlayer.reviveTimeRemaining = 5
     eventPlayer.rescueTimeRemaining = mustReviveTime
     eventPlayer.infectionLevel = 0
     enableDisableAbilities()

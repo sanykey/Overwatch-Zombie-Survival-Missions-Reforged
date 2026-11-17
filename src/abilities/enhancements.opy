@@ -1,4 +1,5 @@
 #!mainFile "../../main.opy"
+subroutine resetPupColorAndBeam
 subroutine resetBattleAbilityCharge
 
 subroutine startPupDefaultChase
@@ -289,9 +290,7 @@ rule "P.U.P. TARGET":
         loop()
     stopChasing(eventPlayer.enhancementPupPosition)
     #Default color
-    eventPlayer.enhancementPupColor = Color.SKY_BLUE
-    #Beam visibility
-    eventPlayer.enhancementIsPupBeamActive = false
+    resetPupColorAndBeam()
     #P.U.P. target null
     eventPlayer.enhancementPupTarget = null
     #Freeze aura visibility
@@ -310,9 +309,7 @@ rule "P.U.P. CONTROL":
     #P.U.P. attack movement
     chaseAtRate(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget.getEyePosition() + directionTowards(eventPlayer.enhancementPupTarget.getEyePosition(), eventPlayer.enhancementPupPosition) * 2, (abs(distance(eventPlayer.enhancementPupTarget.getEyePosition(), eventPlayer.enhancementPupPosition) - 2)) * 1.5)
     #Default color
-    eventPlayer.enhancementPupColor = Color.SKY_BLUE
-    #Beam visibility
-    eventPlayer.enhancementIsPupBeamActive = false
+    resetPupColorAndBeam()
     #Freeze aura visibility
     eventPlayer.enhancementIsPupFreezeAuraActive = false
     waitUntil(distance(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget.getEyePosition()) < 5 or eventPlayer.enhancementPupTarget == null, Math.INFINITY)
@@ -338,9 +335,7 @@ rule "P.U.P. CONTROL":
             #Freeze zombies around target for shorter time
             ((getPlayersInRadius(eventPlayer.enhancementPupTarget, 3, Team.2)).exclude(eventPlayer.enhancementPupTarget)).setStatusEffect(eventPlayer, Status.FROZEN, 0.75)
             #P.U.P. color
-            eventPlayer.enhancementPupColor = Color.SKY_BLUE
-            #Beam visibility
-            eventPlayer.enhancementIsPupBeamActive = false
+            resetPupColorAndBeam()
             #Freeze aura visibility
             eventPlayer.enhancementIsPupFreezeAuraActive = false
         else:
@@ -360,9 +355,7 @@ rule "P.U.P. CONTROL":
             eventPlayer.enhancementPupCooldown = 1
             wait(3, Wait.ABORT_WHEN_FALSE)
             #P.U.P. color
-            eventPlayer.enhancementPupColor = Color.SKY_BLUE
-            #Beam visibility
-            eventPlayer.enhancementIsPupBeamActive = false
+            resetPupColorAndBeam()
         stopChasing(eventPlayer.enhancementPupPosition)
         #P.U.P. target
         eventPlayer.enhancementPupTarget = null
@@ -652,3 +645,10 @@ rule "ENGINEER SCRAP ARMOR DEPLETION":
         # never touches this mirror, and healing cannot refill the non-recoverable
         # pools.
         eventPlayer.scrapArmorAmount = max(0, eventPlayer.scrapArmorAmount - eventDamage)
+
+
+def resetPupColorAndBeam():
+    @Name "resetPupColorAndBeam"
+    # Synchronous only: retain caller eventPlayer, action order and all surrounding waits.
+    eventPlayer.enhancementPupColor = Color.SKY_BLUE
+    eventPlayer.enhancementIsPupBeamActive = false

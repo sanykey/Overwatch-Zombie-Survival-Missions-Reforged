@@ -1,0 +1,97 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "1fff49d4114a55926fd4935a0c51e71ab9f54c9b",
+  "baseline": 30052,
+  "warnings": [],
+  "sourceSha256": "8c03f3bdf42be2782fb65db7eecd47f2d99276ba7125b0b6a2fb74392e9431b7",
+  "results": [
+    {
+      "name": "camera_compare_toggle",
+      "elements": 30051,
+      "saved": 1,
+      "warnings": [],
+      "changedRules": [
+        "CYCLE PLAYER CAMERA #1"
+      ]
+    },
+    {
+      "name": "camera_boolean_toggle",
+      "elements": 30048,
+      "saved": 4,
+      "warnings": [],
+      "changedRules": [
+        "CYCLE PLAYER CAMERA #1"
+      ]
+    },
+    {
+      "name": "revive_initial_constant",
+      "elements": 30051,
+      "saved": 1,
+      "warnings": [],
+      "changedRules": [
+        "PLAYER INITIALIZATION #1"
+      ]
+    },
+    {
+      "name": "pup_common_color_and_beam",
+      "elements": 30046,
+      "saved": 6,
+      "warnings": [],
+      "changedRules": [
+        "P.U.P. TARGET #1",
+        "P.U.P. CONTROL #1",
+        "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION #1",
+        "resetPupColorAndBeam #1"
+      ],
+      "addedSubroutines": [
+        "resetPupColorAndBeam #1"
+      ],
+      "helperExpansionRestoresActionsAndJumps": true
+    },
+    {
+      "name": "smolder_common_enrage_prefix",
+      "elements": 30050,
+      "saved": 2,
+      "warnings": [],
+      "changedRules": [
+        "SMOLDER ACTIVATES FROM DAMAGE #1",
+        "SMOLDER ACTIVATED FROM BOSS EVENT #1",
+        "beginSmolderEnrage #1"
+      ],
+      "addedSubroutines": [
+        "beginSmolderEnrage #1"
+      ],
+      "helperExpansionRestoresActionsAndJumps": true
+    },
+    {
+      "name": "combined_recommended",
+      "elements": 30042,
+      "saved": 10,
+      "warnings": [],
+      "changedRules": [
+        "CYCLE PLAYER CAMERA #1",
+        "PLAYER INITIALIZATION #1",
+        "SMOLDER ACTIVATES FROM DAMAGE #1",
+        "SMOLDER ACTIVATED FROM BOSS EVENT #1",
+        "P.U.P. TARGET #1",
+        "P.U.P. CONTROL #1",
+        "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION #1",
+        "beginSmolderEnrage #1",
+        "resetPupColorAndBeam #1"
+      ],
+      "addedSubroutines": [
+        "beginSmolderEnrage #1",
+        "resetPupColorAndBeam #1"
+      ],
+      "helperExpansionRestoresActionsAndJumps": true,
+      "sameVariablesAndExistingConditions": true,
+      "firstVisibleTargetLoopUnchanged": true
+    }
+  ],
+  "cameraTransitionModelCases": 600,
+  "cameraNotToggleCounterexample": {
+    "initial": 2,
+    "original": 1,
+    "notToggle": 0
+  }
+}

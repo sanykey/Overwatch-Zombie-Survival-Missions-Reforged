@@ -197,9 +197,7 @@ macro initializePlayerEnhancement():
             #Freeze aura
             createEffect(getAllPlayers().filter(lambda _: eventPlayer.enhancementIsPupFreezeAuraActive), Effect.BAD_AURA, Color.SKY_BLUE, eventPlayer.enhancementPupTarget, eventPlayer.enhancementPupTarget.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             #Default color
-            eventPlayer.enhancementPupColor = Color.SKY_BLUE
-            #Beam visibility
-            eventPlayer.enhancementIsPupBeamActive = false
+            resetPupColorAndBeam()
             #P.U.P. target null
             eventPlayer.enhancementPupTarget = null
             #Freeze aura visibility
