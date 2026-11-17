@@ -1,0 +1,90 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "49c782059e0ae8bbae19e6fe3985efd9df8de6a4",
+  "baseline": 30092,
+  "warnings": [],
+  "sourceSha256": "2cfefdf703dbf55531a83e2c3c525393a877b79e07707126f360183d9ec84a24",
+  "results": [
+    {
+      "name": "boss_egg_constant_health",
+      "elements": 30090,
+      "saved": 2,
+      "warnings": [],
+      "changedRules": [
+        "BOT BECOMES BOSS #1",
+        "BOT BECOMES ZOMBIE EGG #1"
+      ]
+    },
+    {
+      "name": "select_first_visible_filter",
+      "elements": 30079,
+      "saved": 13,
+      "warnings": [],
+      "changedRules": [
+        "selectTarget #1"
+      ],
+      "excludedByUser": true
+    },
+    {
+      "name": "carry_condition_owner_binding",
+      "elements": 30086,
+      "saved": 6,
+      "warnings": [],
+      "changedRules": [
+        "LIVING PROJECTILE RELEASE #1"
+      ],
+      "rejectedForImportCompatibility": true
+    },
+    {
+      "name": "carry_valid_and_chain",
+      "elements": 30104,
+      "saved": -12,
+      "warnings": [],
+      "changedRules": [
+        "LIVING PROJECTILE RELEASE #1"
+      ]
+    },
+    {
+      "name": "explosion_los_or",
+      "elements": 30092,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": [
+        "explosionSequence #1"
+      ]
+    },
+    {
+      "name": "combined_recommended",
+      "elements": 30090,
+      "saved": 2,
+      "warnings": [],
+      "changedRules": [
+        "BOT BECOMES BOSS #1",
+        "BOT BECOMES ZOMBIE EGG #1"
+      ],
+      "sameVariablesAndRules": true,
+      "carryActionsAndOwnerGuardUnchanged": true,
+      "otherConditionsUnchanged": true
+    },
+    {
+      "name": "combined_without_full_los_scan",
+      "elements": 30090,
+      "saved": 2,
+      "warnings": [],
+      "changedRules": [
+        "BOT BECOMES BOSS #1",
+        "BOT BECOMES ZOMBIE EGG #1"
+      ],
+      "sameVariablesAndRules": true,
+      "carryActionsAndOwnerGuardUnchanged": true,
+      "otherConditionsUnchanged": true
+    }
+  ],
+  "carryPredicateModelCases": 6144,
+  "targetSelectionModelCases": 2047,
+  "modelLosCalls": {
+    "loop": 4072,
+    "filter": 18434,
+    "note": "Logical call counts, not native CPU measurements"
+  }
+}

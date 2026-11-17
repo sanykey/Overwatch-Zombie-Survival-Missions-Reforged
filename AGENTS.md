@@ -24,6 +24,8 @@ Everything in `analysis/` (reports, temporary scripts, validation results) belon
 - Compiled global and player variable names must not exceed 31 characters; the Workshop rejects longer names at import with "variable is too long" (a 37-character name fails, 31-character names import fine; 32 is often cited but unverified). `#!define` macro aliases are not compiled and are exempt. When a declaration would exceed the limit, shorten the compiled name (e.g. abbreviate a middle word) and keep the descriptive alias in `src/core/variables.opy`.
 - When reusing variables, account for value lifetimes, which player owns each player variable, waits, asynchronous calls, `chase`, and HUD/effect reevaluation. Follow the contracts and comments in `src/core/variables.opy`; use meaningful `#!define` aliases for shared temporary slots and document their purpose near each use.
 
+- Successful OverPy compilation does not establish Workshop import compatibility. Inspect expanded macros before nesting array predicates: `livingProjectileValid()` already uses `all()`, and wrapping it in `any()` produced `Is True For Any(... Is True For All(...))`, rejected by the game with "Cannot nest more than 1 level for some of the values in this script." Keep this predicate outside another collection predicate. The conservative nesting checker in `analysis/2026-11-18-workshop-predicate-nesting.cjs` distinguishes nested predicates from chained array inputs; it is not a complete game-import validator.
+
 ## Workshop Native UI Diagnostics
 
 For disappearing native hero portraits or related Workshop UI corruption, start with

@@ -469,6 +469,8 @@ rule "LIVING PROJECTILE RELEASE":
     @Event eachPlayer
     @Team 2
     @Condition eventPlayer.wrestlerZombieCarrier != null
+    # Keep this outside any()/map()/filter(): livingProjectileValid already uses all().
+    # OverPy accepts nested collection predicates that the Workshop importer rejects.
     @Condition (eventPlayer.wrestlerZombieCarrier.enhancementCarryState == WrestlerCarryState.THROW_REQUESTED or not livingProjectileValid(eventPlayer.wrestlerZombieCarrier)) == true
 
     # Release and cleanup are synchronous; only throw damage waits below.
