@@ -198,7 +198,7 @@ rule "BOT DIES":
         updateBotSpawnPoints()
         destroyDummy(Team.2, eventPlayer.getSlot())
         return
-    elif eventWasEnvironment and distance(eventPlayer, vect(eventPlayer.botTeleportPosition.x, eventPlayer.getPosition().y, eventPlayer.botTeleportPosition.z)) < 10:
+    elif eventWasEnvironment and magnitude((eventPlayer.getPosition() - eventPlayer.botTeleportPosition) * vect(1, 0, 1)) < 10:
         eventPlayer.botIsTeleportConfirmed = false
     eventPlayer.botIsTeleporting = true
     eventPlayer.teleport(vect(500, 50, 500))

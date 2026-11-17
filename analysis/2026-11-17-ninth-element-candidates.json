@@ -1,0 +1,140 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "996bd52dca6bdfcffde6ad39758447422acf655a",
+  "sourceSha256": "e40603ba6117198f2a02c4932c3ed94a8ee64068dacacf411b547d7a8fa75e33",
+  "baseline": 30154,
+  "warnings": [],
+  "results": [
+    {
+      "name": "bot_throttle_xz",
+      "elements": 30150,
+      "saved": 4,
+      "warnings": [],
+      "changedRules": [
+        "restoreDefaultFacingMovement #1"
+      ]
+    },
+    {
+      "name": "rescue_progress_xz",
+      "elements": 30144,
+      "saved": 10,
+      "warnings": [],
+      "changedRules": [
+        "INITIALIZE SURVIVOR TO BE RESCUED #1"
+      ]
+    },
+    {
+      "name": "boss_distance_branch",
+      "elements": 30152,
+      "saved": 2,
+      "warnings": [],
+      "changedRules": [
+        "objectivesManagement #1"
+      ]
+    },
+    {
+      "name": "boss_counter_text",
+      "elements": 30154,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": [
+        "objectivesManagement #1"
+      ]
+    },
+    {
+      "name": "dash_axis_sign",
+      "error": "OpyError: Unknown function 'sign'\n    | line 9181, col 16, at includes.opy"
+    },
+    {
+      "name": "dash_axis_normalize",
+      "elements": 30130,
+      "saved": 24,
+      "warnings": [],
+      "changedRules": [
+        "useAugmentAirAction #1"
+      ]
+    },
+    {
+      "name": "rescue_any",
+      "elements": 30154,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": [
+        "SURVIVOR FOLLOW TARGET #1"
+      ]
+    },
+    {
+      "name": "satellite_any",
+      "elements": 30154,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": [
+        "PLAYERS AT TERMINALS CONTROLS #1"
+      ]
+    },
+    {
+      "name": "revive_any",
+      "elements": 30160,
+      "saved": -6,
+      "warnings": [],
+      "changedRules": [
+        "REVIVE PLAYER OR ADVANCE DEATH TIMER #1"
+      ]
+    },
+    {
+      "name": "spawn_all",
+      "elements": 30155,
+      "saved": -1,
+      "warnings": [],
+      "changedRules": [
+        "ATTACK SPAWN ROOM CONTROL #1"
+      ]
+    },
+    {
+      "name": "idle_teleport_all",
+      "elements": 30154,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": [
+        "TELEPORT BOTS WHEN NOT USED FOR TOO LONG #1"
+      ]
+    },
+    {
+      "name": "hidden_teleport_all",
+      "elements": 30154,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": [
+        "teleportBots #1"
+      ]
+    },
+    {
+      "name": "bot_death_xz",
+      "elements": 30151,
+      "saved": 3,
+      "warnings": [],
+      "changedRules": [
+        "BOT DIES #1"
+      ]
+    },
+    {
+      "name": "supply_range_map",
+      "error": "OpyError: Unknown function name 'x'\n    | line 7455, col 65, at includes.opy"
+    },
+    {
+      "name": "combined_recommended",
+      "elements": 30135,
+      "saved": 19,
+      "warnings": [],
+      "changedRules": [
+        "objectivesManagement #1",
+        "restoreDefaultFacingMovement #1",
+        "INITIALIZE SURVIVOR TO BE RESCUED #1",
+        "BOT DIES #1"
+      ],
+      "sameDeclarationsAndConditions": true
+    }
+  ],
+  "predicateModelCases": 5461,
+  "geometryModelCases": 10000
+}
