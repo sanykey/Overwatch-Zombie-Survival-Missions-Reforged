@@ -471,7 +471,7 @@ def stun():
     
     if eventPlayer.powerUpStunBeamId == 0:
         #Stun beam effect
-        createBeam(getAllPlayers(), Beam.BAD, eventPlayer.powerUpStunBeamPosition, eventPlayer.powerUpStunBeamPosition + ((directionTowards(eventPlayer.powerUpStunBeamPosition, eventPlayer.powerUpStunOrigin.getPosition() + losOffsetConst)) * (min(3, distance(eventPlayer.powerUpStunBeamPosition, eventPlayer.powerUpStunOrigin.getPosition() + losOffsetConst)))), Color.SKY_BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createBeam(getAllPlayers(), Beam.BAD, eventPlayer.powerUpStunBeamPosition, [eventPlayer.powerUpStunOrigin.getPosition() + losOffsetConst].map(lambda origin: eventPlayer.powerUpStunBeamPosition + directionTowards(eventPlayer.powerUpStunBeamPosition, origin) * min(3, distance(eventPlayer.powerUpStunBeamPosition, origin)))[0], Color.SKY_BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.powerUpStunBeamId = getLastCreatedEntity()
     playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.WHITE, eventPlayer.getPosition(), 30)
     #Stun beam lead

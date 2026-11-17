@@ -250,15 +250,18 @@ rule "HITCHHIKER LIFEBONDS":
     #Normalized health difference
     @Condition abs(eventPlayer.getNormalizedHealth() - eventPlayer.enhancementHitchhikerCarrier.getNormalizedHealth()) > 0.01
     
+    # Carrier reference is synchronous through donor selection; tmp3 is dead before either Set Health.
+    #!define hitchhikerHealthCarrier tmp3
+    hitchhikerHealthCarrier = eventPlayer.enhancementHitchhikerCarrier
     # hitchhikerHealthTransferAmount: health to transfer this update; consumed by both setHealth actions before wait.
     #!define hitchhikerHealthTransferAmount tmp0
-    hitchhikerHealthTransferAmount = (abs(eventPlayer.getHealth() * eventPlayer.enhancementHitchhikerCarrier.getMaxHealth() - eventPlayer.enhancementHitchhikerCarrier.getHealth() * eventPlayer.getMaxHealth())) / (eventPlayer.getMaxHealth() + eventPlayer.enhancementHitchhikerCarrier.getMaxHealth())
+    hitchhikerHealthTransferAmount = (abs(eventPlayer.getHealth() * hitchhikerHealthCarrier.getMaxHealth() - hitchhikerHealthCarrier.getHealth() * eventPlayer.getMaxHealth())) / (eventPlayer.getMaxHealth() + hitchhikerHealthCarrier.getMaxHealth())
     # hitchhikerHealthRecipient: player with lower normalized health, receiving the transfer immediately.
     #!define hitchhikerHealthRecipient tmp1
-    hitchhikerHealthRecipient = sorted(eventPlayer.concat(eventPlayer.enhancementHitchhikerCarrier), lambda x: x.getNormalizedHealth())[0]
+    hitchhikerHealthRecipient = sorted(eventPlayer.concat(hitchhikerHealthCarrier), lambda x: x.getNormalizedHealth())[0]
     # hitchhikerHealthDonor: other player, giving the transfer immediately; keep all three scratch values distinct.
     #!define hitchhikerHealthDonor tmp2
-    hitchhikerHealthDonor = eventPlayer.concat(eventPlayer.enhancementHitchhikerCarrier).exclude(hitchhikerHealthRecipient)
+    hitchhikerHealthDonor = eventPlayer.concat(hitchhikerHealthCarrier).exclude(hitchhikerHealthRecipient)
     hitchhikerHealthRecipient.setHealth(hitchhikerHealthRecipient.getHealth() + hitchhikerHealthTransferAmount)
     hitchhikerHealthDonor.setHealth(hitchhikerHealthDonor.getHealth() - hitchhikerHealthTransferAmount)
     wait()
@@ -564,8 +567,12 @@ rule "ENGINEER ARMOR TRANSFER":
     # Non-recoverable, fixed pool: healing never restores scrap armor. One
     # throw adds at most ENGINEER_ARMOR_STACK armor and tops the target up to the cap;
     # the wasted remainder of a partial refill is the thrower's loss.
-    scrapArmorGrantTarget.addHealthPool(Health.ARMOR, min(ENGINEER_ARMOR_STACK, ENGINEER_ARMOR_MAX - scrapArmorGrantTarget.scrapArmorAmount), false, false)
-    scrapArmorGrantTarget.scrapArmorAmount = min(ENGINEER_ARMOR_MAX, scrapArmorGrantTarget.scrapArmorAmount + ENGINEER_ARMOR_STACK)
+    # Payment is complete: reuse tmp0 for the grant, consumed before messages/beam work or waits.
+    # Both Add Health Pool reevaluation/recovery flags stay false.
+    #!define scrapArmorGrantAmount tmp0
+    scrapArmorGrantAmount = min(ENGINEER_ARMOR_STACK, ENGINEER_ARMOR_MAX - scrapArmorGrantTarget.scrapArmorAmount)
+    scrapArmorGrantTarget.addHealthPool(Health.ARMOR, scrapArmorGrantAmount, false, false)
+    scrapArmorGrantTarget.scrapArmorAmount += scrapArmorGrantAmount
     # Received-armor feedback: the transfer-beam-colored ring plus the turret
     # freeze sound, on the grant target (self or ally). One-shot; no scratch or
     # entity to clean up. The message quotes the full stack constant, so a
