@@ -8,8 +8,9 @@ def applyPlayerCamera():
     if eventPlayer.cameraMode == CameraMode.PRECISE:
         # ZSMM-remixed: preserve both nested wall rays and the fast tracking speed.
         # Expression alias only: position must keep reevaluating, never capture a scratch slot.
+        # The singleton map reuses origin within each live evaluation; do not add evalOnce.
         #!define CAMERA_ORIGIN (eventPlayer + Vector.UP * (distance(eventPlayer.getEyePosition(), eventPlayer) + 0.5))
-        eventPlayer.startCamera(raycastHitPosition(CAMERA_ORIGIN, raycastHitPosition(CAMERA_ORIGIN, CAMERA_ORIGIN + eventPlayer.getFacingDirection() * -3, null, eventPlayer, true), null, eventPlayer, true), eventPlayer + eventPlayer.getFacingDirection() * 100, 100)
+        eventPlayer.startCamera([CAMERA_ORIGIN].map(lambda origin: raycastHitPosition(origin, raycastHitPosition(origin, origin + eventPlayer.getFacingDirection() * -3, null, eventPlayer, true), null, eventPlayer, true))[0], eventPlayer + eventPlayer.getFacingDirection() * 100, 100)
     else:
         eventPlayer.stopCamera()
 

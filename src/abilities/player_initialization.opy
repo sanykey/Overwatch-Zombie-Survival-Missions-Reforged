@@ -25,7 +25,7 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             f"Ability resets: {localPlayer.enhancementBattleResetCharges}/2",
             f"Placement: {ceil(localPlayer.enhancementBatteryPlacementCooldown)}s" if localPlayer.enhancementBatteryPlacementCooldown > 0 else f"Hold [{inputBindingString(Button.MELEE)}]: place battery {iconString(Icon.CHECKMARK)}",
             "Attacking" if localPlayer.enhancementIsPupBeamActive == true else f"Drone ready {iconString(Icon.CHECKMARK)}",
-            "{1} | {0}".format(f"Pull: {ceil(localPlayer.enhancementPullReadyAt - getTotalTimeElapsed())}s" if getTotalTimeElapsed() < localPlayer.enhancementPullReadyAt else f"Pull: hold [{inputBindingString(Button.MELEE)}] {iconString(Icon.CHECKMARK)}", f"Throw: [{inputBindingString(Button.INTERACT)}]" if localPlayer.enhancementCarryState != WrestlerCarryState.NONE else f"Grab: [{inputBindingString(Button.INTERACT)}]"),
+            "{1} | {0}".format(f"Pull: {ceil(localPlayer.enhancementPullReadyAt - getTotalTimeElapsed())}s" if getTotalTimeElapsed() < localPlayer.enhancementPullReadyAt else f"Pull: hold [{inputBindingString(Button.MELEE)}] {iconString(Icon.CHECKMARK)}", f"{'Throw' if localPlayer.enhancementCarryState != WrestlerCarryState.NONE else 'Grab'}: [{inputBindingString(Button.INTERACT)}]"),
             "Hits chain to nearby zombies",
             f"Scrap {floor(localPlayer.enhancementScrap)}/{ENGINEER_SCRAP_MAX} | Double-tap [{inputBindingString(Button.CROUCH)}]: armor +{ENGINEER_ARMOR_STACK} (ally {ENGINEER_ARMOR_ALLY_COST}/self {ENGINEER_ARMOR_SELF_COST}) | Hold [{inputBindingString(Button.MELEE)}]: turret ({ENGINEER_TURRET_COST})",
             f"Infection removed: {round(localPlayer.enhancementPlagueCureTotal)}",

@@ -58,8 +58,10 @@ rule "INITIALIZE SURVIVOR TO BE RESCUED":
     for rescuePathMarkerIndex in range(10):
         #Path Markers
         createEffect(getAllPlayers().filter(lambda _: len(eventPlayer.rescuePathList) > evalOnce(rescuePathMarkerIndex * 3)), Effect.RING, Color.VIOLET, eventPlayer.rescuePathList[evalOnce(rescuePathMarkerIndex) * 3], 0.2)
+    # Keep both direction expressions live. Throttle's leading leader is the fallback
+    # when no nearby waypoint follows it; a zero-vector waypoint remains a valid last entry.
     eventPlayer.startFacing(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.getEyePosition(), eventPlayer.rescueLeader.getEyePosition())), 80 if eventPlayer.rescueLeader == null else verticalAngleOfDirection(directionTowards(eventPlayer.getEyePosition(), eventPlayer.rescueLeader.getEyePosition()))), 100)
-    eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, (eventPlayer.rescuePathList.filter(lambda x: distance(eventPlayer, x) < 2)).last() if eventPlayer.rescuePathList.any(lambda x: distance(eventPlayer, x) < 2) else eventPlayer.rescueLeader), 0 if eventPlayer.rescueLeader == null or distance(eventPlayer, eventPlayer.rescueLeader) < 1.5 else eventPlayer.rescueThrottleSpeed, Relativity.TO_WORLD)
+    eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, [eventPlayer.rescueLeader].concat(eventPlayer.rescuePathList.filter(lambda x: distance(eventPlayer, x) < 2)).last()), 0 if eventPlayer.rescueLeader == null or distance(eventPlayer, eventPlayer.rescueLeader) < 1.5 else eventPlayer.rescueThrottleSpeed, Relativity.TO_WORLD)
 
 
 rule "SURVIVOR TO BE RESCUED DIES":

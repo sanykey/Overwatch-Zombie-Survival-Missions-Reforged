@@ -1,0 +1,16 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baseline": 30180,
+  "elements": 30154,
+  "saved": 26,
+  "warnings": [],
+  "compiledRulesMatchAuditedCandidate": true,
+  "variableDeclarationsUnchanged": true,
+  "cameraPreservesTwoRaysAndLiveExpression": true,
+  "changedRules": [
+    "APPLY PLAYER CAMERA #1",
+    "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES) #1",
+    "INITIALIZE SURVIVOR TO BE RESCUED #1"
+  ],
+  "inGameValidation": false
+}
