@@ -7,8 +7,7 @@
 
 # Shared Grapnel/Wrestler targeting geometry.
 #!define augmentGrapnelCenter(player) ((player.getPosition() + player.getEyePosition()) * 0.5)
-# Native offensive + defensive assist count; shared by Overcharge's earned-energy
-# formula and Engineer's assist-scrap snapshot.
+# Native offensive + defensive assist count for Overcharge's earned-energy formula.
 #!define earnedAssists(player) (player.getStatistic(Stat.OFFENSIVE_ASSISTS) + player.getStatistic(Stat.DEFENSIVE_ASSISTS))
 
 # Icon tables, indexed by their corresponding selection ID.
@@ -396,13 +395,7 @@ playervar enhancementCarrierPoolId  # Extra health-pool ID granted to a Hitchhik
 
 # Engineer: an armor grant may target any Team 1 player, so target-side
 # state cannot live in slots owned by the target's own enhancement or augment.
-playervar scrapArmorAmount  # Modeled remaining scrap armor 0-80, topped up toward the cap by grants (at most one 40-armor pool per throw), decremented by damage events (scrap absorbs before the older Kevlar pool, so the decrement is exact). Cleared on death.
-
-# Engineer: baseline of the native offensive + defensive assist count; assists
-# earned above it pay scrap. Seeded on each spawn initialization like
-# Overcharge's stat snapshot, resynced on every payout; native stats persist
-# through death, so death clears nothing.
-playervar engineerScrapAssistSnapshot
+playervar scrapArmorAmount  # Modeled remaining scrap armor 0-200, topped up toward the cap by grants (at most one 75-armor pool per throw), decremented by damage events (scrap absorbs before the older Kevlar pool, so the decrement is exact). Cleared on death.
 
 # Supply power-ups only (powerUp prefix).
 # Team 1 pregame selection and voting.
@@ -706,7 +699,7 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 #!define enhancementHitchhikerCarrier actorTeamSlot22
 # P.U.P. mode color.
 #!define enhancementPupColor actorTeamSlot22
-# Engineer: scrap balance 0-300, earned from eliminations and the income
+# Engineer: scrap balance 0-500, earned from nearby zombie deaths and the income
 # rule, spent on armor grants and turret deployment. Survives death and hero
 # switches; reset to 0 by START GAME, never per spawn.
 #!define enhancementScrap actorTeamSlot22

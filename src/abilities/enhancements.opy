@@ -523,22 +523,6 @@ rule "ENGINEER SCRAP INCOME":
         loop()
 
 
-rule "ENGINEER ASSIST SCRAP":
-    @Event eachPlayer
-    @Team 1
-    # Native UI workaround: retain one phase/ID Condition; docs/WORKSHOP_NATIVE_UI_CORRUPTION.md.
-    @Condition uiPhaseAndId(eventPlayer.enhancementId == Enhancement.ENGINEER)
-    @Condition earnedAssists(eventPlayer) != eventPlayer.engineerScrapAssistSnapshot
-
-    # Overcharge-style stat delta: pay once per new offensive/defensive assist,
-    # then resync. A stat reset resyncs without paying (max 0 delta). Native
-    # stats persist through death, so the snapshot survives it too.
-    #!define engineerCurrentAssists tmp0
-    engineerCurrentAssists = earnedAssists(eventPlayer)
-    eventPlayer.enhancementScrap = min(ENGINEER_SCRAP_MAX, eventPlayer.enhancementScrap + ENGINEER_ASSIST_SCRAP * max(0, engineerCurrentAssists - eventPlayer.engineerScrapAssistSnapshot))
-    eventPlayer.engineerScrapAssistSnapshot = engineerCurrentAssists
-
-
 rule "ENGINEER ARMOR TRANSFER":
     @Event eachPlayer
     @Team 1
@@ -547,15 +531,19 @@ rule "ENGINEER ARMOR TRANSFER":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
 
-    # One armor action per Crouch hold. The long hold (ENGINEER_ARMOR_HOLD_DURATION)
-    # is a deliberate commitment: releasing Crouch aborts, so an Engineer cannot
-    # insta-save themselves mid-fight, and a held channel never repeats. Melee is
-    # not part of this channel; the Turret rule needs Melee without Crouch instead.
-    wait(ENGINEER_ARMOR_HOLD_DURATION, Wait.ABORT_WHEN_FALSE)
-    # The target resolves at completion: the visible ally closest to the crosshair
+    # Same press-release-press sequence as Overcharge; each gap is at most 0.3s.
+    # Holding cannot grant armor. No scratch survives these waits; recheck
+    # gameplay, selection, life and the second press before selecting a target.
+    waitUntil(not eventPlayer.isHoldingButton(Button.CROUCH), ENGINEER_ARMOR_TAP_WINDOW)
+    if eventPlayer.isHoldingButton(Button.CROUCH):
+        return
+    waitUntil(eventPlayer.isHoldingButton(Button.CROUCH), ENGINEER_ARMOR_TAP_WINDOW)
+    if not ruleCondition:
+        return
+    # The target resolves on the second press: the visible ally closest to the crosshair
     # in the wide aim cone (within 15m) receives armor, otherwise it goes to self.
-    # One synchronous query per hold; the candidate array is dead after the target
-    # pick, so both roles share the slot. No waits below.
+    # One synchronous query per press; the candidate slot is reused for cost
+    # after the target pick. No waits below.
     #!define scrapTransferCandidates tmp0
     #!define scrapArmorGrantTarget tmp1
     scrapTransferCandidates = sorted(getPlayersInRadius(eventPlayer, ENGINEER_TRANSFER_RANGE, Team.1, LosCheck.SURFACES).filter(lambda ally: ally != eventPlayer and ally.isAlive() and eventPlayer.isInViewAngle(ally.getEyePosition(), ENGINEER_TRANSFER_ANGLE)), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition())))
@@ -614,7 +602,7 @@ rule "ENGINEER TURRET DEPLOY":
     @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == false
 
-    # Crouch owns the armor hold channel, so the two rules never fire from one
+    # Crouch reserves the armor chord, so the two rules never fire from one
     # hold. The 0.25s Melee hold matches inventory powerups; guards run
     # only after a confirmed hold, so taps stay silent.
     wait(0.25, Wait.ABORT_WHEN_FALSE)
