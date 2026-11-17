@@ -1,0 +1,91 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "8980599cd0c3002aff5e2a53b8ff644e5d5f621f",
+  "baseline": 30412,
+  "warnings": [],
+  "sourceSha256": "4311c20e44ed0348f74cef52ecd6d683010ff5740bcd5adcd1770253fefc004c",
+  "results": [
+    {
+      "name": "objective_shared_range_guard",
+      "elements": 30398,
+      "saved": 14,
+      "warnings": [],
+      "changedRules": [
+        "objectivesManagement #1"
+      ]
+    },
+    {
+      "name": "resist_cached_flag",
+      "elements": 30398,
+      "saved": 14,
+      "warnings": [],
+      "changedRules": [
+        "applyDamageReceivedModifier #1"
+      ]
+    },
+    {
+      "name": "battle_merge_special_cases",
+      "elements": 30425,
+      "saved": -13,
+      "warnings": [],
+      "changedRules": [
+        "BORN TO BATTLE PLAYER USES ABILITY CHARGE #1"
+      ]
+    },
+    {
+      "name": "battle_priority_filter",
+      "elements": 30398,
+      "saved": 14,
+      "warnings": [],
+      "changedRules": [
+        "BORN TO BATTLE PLAYER USES ABILITY CHARGE #1"
+      ]
+    },
+    {
+      "name": "subroutine_applyDamageDealtModifier",
+      "elements": 30412,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": []
+    },
+    {
+      "name": "subroutine_applyDamageReceivedModifier",
+      "elements": 30412,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": []
+    },
+    {
+      "name": "subroutine_applyPlayerCamera",
+      "elements": 30412,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": []
+    },
+    {
+      "name": "share_deselectBotTargetMacro",
+      "elements": 30378,
+      "saved": 34,
+      "warnings": [],
+      "changedRules": [
+        "selectTarget #1",
+        "DESELECT BOT TARGET #1",
+        "Subroutine optDeselectBotTarget #1"
+      ]
+    },
+    {
+      "name": "combined_recommended",
+      "elements": 30350,
+      "saved": 62,
+      "warnings": [],
+      "changedRules": [
+        "objectivesManagement #1",
+        "selectTarget #1",
+        "applyDamageReceivedModifier #1",
+        "DESELECT BOT TARGET #1",
+        "Subroutine optDeselectBotTarget #1"
+      ]
+    }
+  ],
+  "resistTruthTableCases": 8
+}

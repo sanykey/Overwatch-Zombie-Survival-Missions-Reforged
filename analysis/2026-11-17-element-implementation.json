@@ -1,0 +1,16 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baseline": 30412,
+  "elements": 30350,
+  "saved": 62,
+  "warnings": [],
+  "compiledRulesMatchAuditedCandidate": true,
+  "changedRules": [
+    "objectivesManagement #1",
+    "selectTarget #1",
+    "applyDamageReceivedModifier #1",
+    "DESELECT BOT TARGET #1",
+    "deselectBotTarget #1"
+  ],
+  "inGameValidation": false
+}

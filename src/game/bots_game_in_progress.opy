@@ -309,7 +309,7 @@ rule "DESELECT BOT TARGET":
     @Condition eventPlayer.botTarget != null
     @Condition (eventPlayer.botTarget.invisibilityCount or not eventPlayer.botTarget in playerTargetList or not isInLoS(eventPlayer.botTarget.getEyePosition(), eventPlayer.getPosition() + losOffsetConst)) == true
     
-    deselectBotTargetMacro()
+    deselectBotTarget()
     wait(0.125, Wait.RESTART_WHEN_TRUE)
     if ruleCondition:
         loop()

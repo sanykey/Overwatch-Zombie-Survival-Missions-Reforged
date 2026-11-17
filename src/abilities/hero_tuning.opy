@@ -131,7 +131,8 @@ def applyDamageReceivedModifier():
     # read it instead of re-evaluating the predicate per damage event.
     # hasDamageResist: the health-HUD `*` (any active resist from here).
     eventPlayer.isDotProtected = eventPlayer.isUsingUltimate() or (eventPlayer.augmentId == Augment.DASH and eventPlayer.augmentDashSmokeEntity != null)
-    eventPlayer.hasDamageResist = (eventPlayer.augmentId == Augment.DASH and eventPlayer.augmentDashSmokeEntity != null) or eventPlayer.powerUpSuperNanoGoodAuraId != 0 or eventPlayer.isUsingUltimate()
+    # Consume the protection flag just written above; no wait between write and read.
+    eventPlayer.hasDamageResist = eventPlayer.isDotProtected or eventPlayer.powerUpSuperNanoGoodAuraId != 0
 
 
 rule "PLAYER ULTIMATE DAMAGE RESIST":

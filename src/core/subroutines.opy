@@ -20,6 +20,7 @@ subroutine setDifficulty
 subroutine botRespawnInitialization
 subroutine objectivesManagement
 subroutine selectTarget
+subroutine deselectBotTarget
 subroutine restoreDefaultFacingMovement
 subroutine setPrematchTimer
 subroutine shortenPrematchTimer
@@ -640,8 +641,7 @@ def objectivesManagement():
         # Keep the previous description for unsupported objective IDs, as the switch did.
         if currentObjectiveType >= ObjectiveType.SHOWDOWN and currentObjectiveType <= ObjectiveType.SATELLITE_UPLINK:
             objectiveDescription = ["Keep zombies away in the Showdown!", "Eliminate the boss", "Convert biowaste into powerups!", "Rescue survivors", "Clear the kill zone", "Destroy the egg", "Repair satellite control terminals"][currentObjectiveType - 1]
-        # Objective IDs 1..7 are contiguous; unsupported IDs previously produced no start message.
-        if currentObjectiveType >= ObjectiveType.SHOWDOWN and currentObjectiveType <= ObjectiveType.SATELLITE_UPLINK:
+            # The same range guard controls both the description and start message.
             bigMessage(getAllPlayers(), ["Proceed to the Showdown!", "Eliminate the giant zombie!", "Find the indicated material and deposit it!", "Locate survivors and bring them to the extraction site!", "Get to the kill zone and clear zombies!", "Destroy the zombie egg!", "Repair the satellite control terminals!"][currentObjectiveType - 1])
         switch currentObjectiveType:
             case ObjectiveType.SHOWDOWN:
@@ -690,7 +690,9 @@ def objectivesManagement():
     isObjectiveComplete = false
 
 
-macro deselectBotTargetMacro():
+def deselectBotTarget():
+    @Name "deselectBotTarget"
+    # Synchronous shared body: keep the caller's waits and ruleCondition outside.
     eventPlayer.botTarget = null
     if not eventPlayer.botIsThrottleOverridden:
         eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.botLastTarget.getPosition() + normalize(worldVector(eventPlayer.botLastTarget.getThrottle(), eventPlayer.botLastTarget, Transform.ROTATION)) * -2), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
@@ -737,7 +739,7 @@ def selectTarget():
             startRule(restoreDefaultFacingMovement)
         elif eventPlayer.botTarget != null:
             # No visible target: follow the last known target without replacing its history.
-            deselectBotTargetMacro()
+            deselectBotTarget()
     eventPlayer.botIsSelectingTarget = false
 
 
