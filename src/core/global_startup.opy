@@ -37,16 +37,13 @@ macro enableEnhancementsMacro():
 
 
 macro botHeroRandomizationMacro():
-    # spawnedBotHeroList: hero types already present among zombies, to check the unique-skin limit.
-    #!define spawnedBotHeroList tmp0
-    spawnedBotHeroList = botHeroList.filter(lambda x: getNumberOfHeroes(x, Team.2))
-    # botSpawnSelectedHero: selected bot hero after the last use of spawnedBotHeroList.
+    # botSpawnSelectedHero: selected bot hero; only inspect existing skins in the non-Smolder branch.
     #!define botSpawnSelectedHero tmp0
     if isSmolderEventActive:
         botSpawnSelectedHero = Hero.WINSTON
     #Determines if count of current different zombie types is less than the maximum amount allowed
-    elif len(spawnedBotHeroList) < (UNIQUE_HERO_SKIN_CAP - max(getNumberOfSlots(Team.1), getNumberOfPlayers(Team.1))):
-        # botSpawnWeightRoll: random threshold for weighted hero selection; the hero list is no longer needed.
+    elif len(botHeroList.filter(lambda x: getNumberOfHeroes(x, Team.2))) < (UNIQUE_HERO_SKIN_CAP - max(getNumberOfSlots(Team.1), getNumberOfPlayers(Team.1))):
+        # botSpawnWeightRoll: random threshold for weighted hero selection; replaces the selected-hero scratch slot.
         #!define botSpawnWeightRoll tmp0
         botSpawnWeightRoll = random.uniform(0, 100)
         # botSpawnCumulativeWeight: cumulative spawn weight, compared with botSpawnWeightRoll to find the selected hero.

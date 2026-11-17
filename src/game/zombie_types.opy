@@ -373,7 +373,7 @@ rule "REIGNITED (ANRAN) ABILITIES":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer in bossStateList == false
     @Condition eventPlayer.botTarget != null
-    @Condition (eventPlayer.isOnGround() and eventPlayer.botTarget != null and distance(eventPlayer, eventPlayer.botTarget) > 6 * eventPlayer.sizeScale and distance(eventPlayer, eventPlayer.botTarget) < 30 * eventPlayer.sizeScale and angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 20 or eventPlayer.isUsingUltimate()) == true
+    @Condition (eventPlayer.isOnGround() and distance(eventPlayer, eventPlayer.botTarget) > 6 * eventPlayer.sizeScale and distance(eventPlayer, eventPlayer.botTarget) < 30 * eventPlayer.sizeScale and angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 20 or eventPlayer.isUsingUltimate()) == true
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.botIsThrottleOverridden = true
