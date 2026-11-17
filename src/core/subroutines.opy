@@ -838,8 +838,7 @@ def explosionSequence():
         dummyExplosionDotTargets.setStatusEffect(eventPlayer, Status.BURNING, 3)
         #Not scaled damage
         dummyExplosionDotTargets.startDamageOverTime(eventPlayer, 3, eventPlayer.botBiteDamage * 2)
-        if eventPlayer.damageOverTimeRemaining < 3:
-            eventPlayer.damageOverTimeRemaining = 3
+        eventPlayer.damageOverTimeRemaining = max(eventPlayer.damageOverTimeRemaining, 3)
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, eventPlayer.explosionOuterColor, eventPlayer.getPosition(), 6 * eventPlayer.explosionScale)
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, eventPlayer.explosionInnerColor, eventPlayer.getPosition(), 3 * eventPlayer.explosionScale)
     # Both synchronous sounds use the same radius before the wait.

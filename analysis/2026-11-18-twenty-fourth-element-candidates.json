@@ -1,0 +1,61 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "c0438ddd7fd38558d3b97e309551a41a6ff96e81",
+  "baseline": 30004,
+  "results": [
+    {
+      "name": "vote_winner_initializes_result",
+      "elements": 30001,
+      "saved": 3,
+      "warnings": [],
+      "changedRules": [
+        "determineZombieMode #1",
+        "determineObjectiveType #1",
+        "Subroutine selectVoteWinner #1"
+      ],
+      "changesOnlyKnownZeroInitialization": true,
+      "variablesRulesConditionsAndSelectionLogicUnchanged": true,
+      "noNestedArrayPredicates": true
+    },
+    {
+      "name": "zombie_vote_initial_result_constant",
+      "elements": 30003,
+      "saved": 1,
+      "warnings": [],
+      "changedRules": [
+        "determineZombieMode #1"
+      ],
+      "changesOnlyKnownZeroInitialization": true,
+      "variablesRulesConditionsAndSelectionLogicUnchanged": true,
+      "noNestedArrayPredicates": true
+    },
+    {
+      "name": "objective_vote_initial_result_constant",
+      "elements": 30003,
+      "saved": 1,
+      "warnings": [],
+      "changedRules": [
+        "determineObjectiveType #1"
+      ],
+      "changesOnlyKnownZeroInitialization": true,
+      "variablesRulesConditionsAndSelectionLogicUnchanged": true,
+      "noNestedArrayPredicates": true
+    },
+    {
+      "name": "combined_recommended",
+      "elements": 30001,
+      "saved": 3,
+      "warnings": [],
+      "changedRules": [
+        "determineZombieMode #1",
+        "determineObjectiveType #1",
+        "Subroutine selectVoteWinner #1"
+      ],
+      "changesOnlyKnownZeroInitialization": true,
+      "variablesRulesConditionsAndSelectionLogicUnchanged": true,
+      "noNestedArrayPredicates": true
+    }
+  ],
+  "inGameValidation": false,
+  "serverLoadMeasured": false
+}

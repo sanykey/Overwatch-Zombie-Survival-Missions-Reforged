@@ -58,8 +58,8 @@ rule "PLAYER DEALT FINAL BLOW":
     @Team 1
 
     if eventPlayer.enhancementId == Enhancement.BORN_TO_BATTLE:
-        if eventPlayer.enhancementBattleResetCharges < 2:
-            eventPlayer.enhancementBattleResetCharges += 1
+        # Numeric reset counter: comparisons contribute exactly 0 or 1.
+        eventPlayer.enhancementBattleResetCharges += eventPlayer.enhancementBattleResetCharges < 2
 
     if currentObjectiveType != ObjectiveType.KILL_ZONE:
         return

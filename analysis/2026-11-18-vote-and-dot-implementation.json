@@ -1,0 +1,32 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "c0438ddd7fd38558d3b97e309551a41a6ff96e81",
+  "baseline": 30004,
+  "elements": 29971,
+  "saved": 33,
+  "voteInitializationIncluded": true,
+  "warnings": [],
+  "compiledRulesMatchAuditedCandidates": true,
+  "variableDeclarationsUnchanged": true,
+  "allConditionsUnchanged": true,
+  "firstVisibleTargetLoopAndCarryReleaseUnchanged": true,
+  "nestedArrayPredicates": [],
+  "changedFiles": [
+    "abilities/player_events.opy",
+    "core/subroutines.opy",
+    "game/global_start_menu.opy",
+    "game/zombie_types.opy"
+  ],
+  "changedRules": [
+    "explosionSequence #1",
+    "determineZombieMode #1",
+    "determineObjectiveType #1",
+    "Subroutine selectVoteWinner #1",
+    "RUSHER MOLTEN CORE BURNS PLAYERS (BOSS) #1",
+    "BEHEMOTH (ROAD) TOXIC CLOUD #1",
+    "BLASTER ROCKET HITS TARGET #1",
+    "PLAYER DEALT FINAL B­LOW #1"
+  ],
+  "inGameValidation": false,
+  "serverLoadMeasured": false
+}

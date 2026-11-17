@@ -265,7 +265,8 @@ rule "MUSIC/ANNOUNCER CONTROL":
         loop()
 
 
-# Synchronous helper inputs/result; consume them before any wait or asynchronous startRule.
+# Synchronous helper input/output; selectVoteWinner initializes the result to zero.
+# Consume the result before any wait or asynchronous startRule.
 #!define voteWinnerCounts tmp1
 #!define voteWinnerResult tmp2
 #!define voteWinnerIndex tmp0
@@ -281,7 +282,6 @@ def determineZombieMode():
     for zombieModeVoteIndex in range(1, len(zombieVoteList)):
         zombieVoteList[zombieModeVoteIndex] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameZombieVote == zombieModeVoteIndex)) if zombieVoteList[zombieModeVoteIndex] else -1
     voteWinnerCounts = zombieVoteList
-    voteWinnerResult = zombieSetting
     selectVoteWinner()
     zombieSetting = voteWinnerResult
     # Default to All Zombies when no enabled mode received votes.
@@ -357,7 +357,6 @@ def determineObjectiveType():
     for objectiveTypeVoteIndex in range(ObjectiveType.SHOWDOWN, len(objectiveTypeVoteList)):
         objectiveTypeVoteList[objectiveTypeVoteIndex] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameObjectiveVote == objectiveTypeVoteIndex)) if objectiveTypeVoteList[objectiveTypeVoteIndex] else -1
     voteWinnerCounts = objectiveTypeVoteList
-    voteWinnerResult = objectiveTypeSetting
     selectVoteWinner()
     objectiveTypeSetting = voteWinnerResult
     # Default to Mixed Objectives when enabled; otherwise pick an enabled type.
@@ -372,6 +371,8 @@ def determineObjectiveType():
 
 
 def selectVoteWinner():
+    # Both callers start from NO_PREFERENCE (zero); initialize the output here.
+    voteWinnerResult = 0
     # Synchronous only: no waits, asynchronous work, nested calls or reevaluated readers of tmp0..2.
     # Keep the original traversal and sequential coin flips; a uniform pick among tied options differs.
     # Callers publish the result immediately, then handle their own no-preference defaults.
