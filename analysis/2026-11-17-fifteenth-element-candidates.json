@@ -1,0 +1,69 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "7be5c02cb9f9f84589bed4bf19ef535bec1bbaad",
+  "baseline": 30081,
+  "warnings": [],
+  "sourceSha256": "5963d2c0dbb093f93040ef98923cd834eafed040f8ef5c3cef41261abab265c9",
+  "results": [
+    {
+      "name": "dash_sign_boolean_difference",
+      "elements": 30069,
+      "saved": 12,
+      "warnings": [],
+      "changedRules": [
+        "useAugmentAirAction #1"
+      ]
+    },
+    {
+      "name": "dash_zero_vector_false_compare",
+      "elements": 30079,
+      "saved": 2,
+      "warnings": [],
+      "changedRules": [
+        "useAugmentAirAction #1"
+      ]
+    },
+    {
+      "name": "difficulty_shared_tables",
+      "elements": 30084,
+      "saved": -3,
+      "warnings": [],
+      "changedRules": [
+        "setDifficulty #1"
+      ]
+    },
+    {
+      "name": "satellite_local_progress",
+      "elements": 30081,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": [
+        "PLAYERS REPAIR TERMINALS #1"
+      ]
+    },
+    {
+      "name": "mission_spacing_snapshot",
+      "elements": 30082,
+      "saved": -1,
+      "warnings": [],
+      "changedRules": [
+        "setObjectiveType #1"
+      ]
+    },
+    {
+      "name": "combined_recommended",
+      "elements": 30067,
+      "saved": 14,
+      "warnings": [],
+      "changedRules": [
+        "useAugmentAirAction #1"
+      ],
+      "sameVariablesRulesAndConditions": true,
+      "explicitFalseComparisonInCompiledGate": true,
+      "noNormalizationOrDivision": true
+    }
+  ],
+  "axisModelCases": 80012,
+  "directionModelCases": 20000,
+  "vectorGateCases": 9
+}

@@ -26,7 +26,7 @@ macro useDashAirActionMacro():
         # Reduce each axis to -1/0/1: adjacent inputs always make a 45-degree
         # diagonal, independent of their relative strength. Opposite inputs
         # cancel in Workshop's movement vector; zero input grants protection only.
-        augmentDashDirection = vect(1 if augmentDashDirection.x > 0 else -1 if augmentDashDirection.x < 0 else 0, 0, 1 if augmentDashDirection.z > 0 else -1 if augmentDashDirection.z < 0 else 0)
+        augmentDashDirection = vect((augmentDashDirection.x > 0) - (augmentDashDirection.x < 0), 0, (augmentDashDirection.z > 0) - (augmentDashDirection.z < 0))
         # Every successful dash immediately starts a fresh resist window,
         # including while already protected. Do not defer renewal to expiry.
         # 100% damage resist instead of the INVINCIBLE status: that status keys
@@ -49,7 +49,8 @@ macro useDashAirActionMacro():
         # Otherwise a flat horizontal push: a downward pitch would fight the
         # floor when grounded and cancel the rising jump's momentum
         # (CANCEL_CONTRARY_MOTION), leaving an in-place dash without push.
-        if augmentDashDirection != vect(0, 0, 0):
+        # This value is always vect(-1/0/1, 0, -1/0/1); only its zero vector equals False.
+        if augmentDashDirection != false:
             eventPlayer.applyImpulse(directionFromAngles(eventPlayer.getHorizontalFacingAngle() + horizontalAngleOfDirection(augmentDashDirection), 0), DASH_IMPULSE, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
 
 
