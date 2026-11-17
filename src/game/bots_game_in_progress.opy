@@ -433,8 +433,7 @@ rule "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)":
     # Already ticking DoTs and existing infection levels run their course; the
     # direct bite hit is untouched.
     victim.startDamageOverTime(eventPlayer, eventPlayer.botBiteDuration, eventPlayer.botBiteDamage)
-    if eventPlayer.damageOverTimeRemaining < eventPlayer.botBiteDuration:
-        eventPlayer.damageOverTimeRemaining = eventPlayer.botBiteDuration
+    eventPlayer.damageOverTimeRemaining = max(eventPlayer.damageOverTimeRemaining, eventPlayer.botBiteDuration)
     # Bulk stacks raise the infection threshold with native max health; only overheal above it protects.
     # Keep initialMaxHealth native for Hitchhiker pools and Nemesis detection.
     if createWorkshopSettingBool("Infection", "Melee Infection Enabled", true) and not eventPlayer.hasStatus(Status.HACKED) and not victim.isDummy() and (victim.enhancementId == Enhancement.ZOMBIE_HYBRID or victim.getHealth() <= (victim.getMaxHealth() if victim.enhancementHitchhikerPassenger != null else victim.initialMaxHealth * (min(2, 1 + victim.enhancementBulkStacks * 0.005) if victim.enhancementId == Enhancement.BULKING_SEASON else 1))):

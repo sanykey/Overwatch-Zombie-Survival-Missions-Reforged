@@ -1,0 +1,23 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "e7f4fa53b3c336ff97405a2a98f8af81c278f2f9",
+  "baseline": 29971,
+  "elements": 29954,
+  "saved": 17,
+  "warnings": [],
+  "compiledRulesMatchAuditedCandidates": true,
+  "variableDeclarationsUnchanged": true,
+  "allConditionsUnchanged": true,
+  "firstVisibleTargetLoopAndCarryReleaseUnchanged": true,
+  "nestedArrayPredicates": [],
+  "changedFiles": [
+    "game/bots_game_in_progress.opy",
+    "game/zombie_types.opy"
+  ],
+  "changedRules": [
+    "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT) #1",
+    "BEHEMOTH GAS STREAM (BOSS) #1"
+  ],
+  "inGameValidation": false,
+  "serverLoadMeasured": false
+}
