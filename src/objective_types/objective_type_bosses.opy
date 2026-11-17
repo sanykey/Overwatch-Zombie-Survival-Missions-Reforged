@@ -156,7 +156,7 @@ rule "BOSS DIES (ALL BOSS OBJECTIVES)":
             completeBossObjective()
             goto lbl_0
     #Resurrects player if event damage was greater than 1000 and their health still is higher than 0hp.
-    elif eventDamage - 1000 > 0:
+    elif eventDamage > 1000:
         eventPlayer.botBossHealth = eventDamage - 1000
         eventPlayer.resurrect()
         waitUntil(eventPlayer.isAlive(), 5)

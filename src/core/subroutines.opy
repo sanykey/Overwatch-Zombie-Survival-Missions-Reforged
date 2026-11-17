@@ -4,6 +4,8 @@ subroutine clearBotMovementOverrides
 subroutine beginBotThrottleOverride
 subroutine enableBotCollisionAndFlag
 #!mainFile "../../main.opy"
+
+subroutine playPlacementWindupFeedback
 subroutine detachAbilityTarget
 
 # Shared subroutines used by multiple sections (including their dependencies).
@@ -1018,3 +1020,13 @@ def detachTrackedAbilityTarget():
     # Synchronous extraction: preserve action order and caller eventPlayer; no waits or scratch.
     detachAbilityTarget()
     eventPlayer.botAbilityTarget.isAttached = false
+
+
+# Synchronous placement-feedback input: tmp0 is dead before the caller's next wait.
+#!define placementWindupColor tmp0
+
+def playPlacementWindupFeedback():
+    @Name "playPlacementWindupFeedback"
+    # Preserve the two random draws and their order; no waits/calls or live captures.
+    playEffect(eventPlayer, DynamicEffect.GOOD_EXPLOSION, placementWindupColor, eventPlayer.getEyePosition() + ((directionFromAngles(eventPlayer.getHorizontalFacingAngle() + random.uniform(-5, 5), eventPlayer.getVerticalFacingAngle() + random.uniform(-5, 5))) * 1.5), 0.1)
+    playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, placementWindupColor, eventPlayer.getPosition(), 75)

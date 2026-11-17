@@ -1,0 +1,97 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "b5c271c8b8e58d99ccdb48ceac20923f61525a77",
+  "baseline": 29954,
+  "results": [
+    {
+      "name": "rescue_window_minimum",
+      "elements": 29952,
+      "saved": 2,
+      "warnings": [],
+      "changedRules": [
+        "REVIVE PLAYER OR ADVANCE DEATH TIMER #1"
+      ],
+      "rescueChangesOnlyBoundedDecrement": true,
+      "variablesRuleSetConditionsAndCarryReleaseUnchanged": true,
+      "noNestedArrayPredicates": true
+    },
+    {
+      "name": "boss_damage_direct_threshold",
+      "elements": 29952,
+      "saved": 2,
+      "warnings": [],
+      "changedRules": [
+        "BOSS DIES (ALL BOSS OBJECTIVES) #1"
+      ],
+      "bossChangesOnlyThreshold": true,
+      "variablesRuleSetConditionsAndCarryReleaseUnchanged": true,
+      "noNestedArrayPredicates": true
+    },
+    {
+      "name": "revive_conditional_half_increment",
+      "elements": 29955,
+      "saved": -1,
+      "warnings": [],
+      "changedRules": [
+        "REVIVE PLAYER OR ADVANCE DEATH TIMER #1"
+      ],
+      "variablesRuleSetConditionsAndCarryReleaseUnchanged": true,
+      "noNestedArrayPredicates": true
+    },
+    {
+      "name": "infection_flag_direct",
+      "elements": 29953,
+      "saved": 1,
+      "warnings": [],
+      "changedRules": [
+        "PLAYER INFECTION DAMAGE MANAGEMENT #1"
+      ],
+      "variablesRuleSetConditionsAndCarryReleaseUnchanged": true,
+      "noNestedArrayPredicates": true
+    },
+    {
+      "name": "infection_flag_and",
+      "elements": 29957,
+      "saved": -3,
+      "warnings": [],
+      "changedRules": [
+        "PLAYER INFECTION DAMAGE MANAGEMENT #1"
+      ],
+      "variablesRuleSetConditionsAndCarryReleaseUnchanged": true,
+      "noNestedArrayPredicates": true
+    },
+    {
+      "name": "hitchhiker_mirror_and_lift",
+      "elements": 29958,
+      "saved": -4,
+      "warnings": [],
+      "changedRules": [
+        "HITCHHIKER ATTACH/DETATCH #1"
+      ],
+      "variablesRuleSetConditionsAndCarryReleaseUnchanged": true,
+      "noNestedArrayPredicates": true
+    },
+    {
+      "name": "combined_recommended",
+      "elements": 29950,
+      "saved": 4,
+      "warnings": [],
+      "changedRules": [
+        "BOSS DIES (ALL BOSS OBJECTIVES) #1",
+        "REVIVE PLAYER OR ADVANCE DEATH TIMER #1"
+      ],
+      "bossChangesOnlyThreshold": true,
+      "rescueChangesOnlyBoundedDecrement": true,
+      "variablesRuleSetConditionsAndCarryReleaseUnchanged": true,
+      "noNestedArrayPredicates": true
+    }
+  ],
+  "inGameValidation": false,
+  "serverLoadMeasured": false,
+  "rescueWrites": [
+    "mustReviveTime -= 0 if mustReviveTime <= 30 else 10",
+    "mustReviveTime = 60"
+  ],
+  "rescueTransitionModelCases": 8000,
+  "damageThresholdModelCases": 28209
+}

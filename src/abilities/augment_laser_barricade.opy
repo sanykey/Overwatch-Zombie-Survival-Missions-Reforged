@@ -16,8 +16,9 @@ macro placeLaserBarricadeAugmentMacro():
     if not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead():
         eventPlayer.augmentBarrierPlacementCooldown = 0
         return
-    playEffect(eventPlayer, DynamicEffect.GOOD_EXPLOSION, Color.BLUE, eventPlayer.getEyePosition() + ((directionFromAngles(eventPlayer.getHorizontalFacingAngle() + random.uniform(-5, 5), eventPlayer.getVerticalFacingAngle() + random.uniform(-5, 5))) * 1.5), 0.1)
-    playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.BLUE, eventPlayer.getPosition(), 75)
+    # Synchronous feedback color; consumed by both Play Effects before the next wait.
+    placementWindupColor = Color.BLUE
+    playPlacementWindupFeedback()
     waitUntil(not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead(), Math.INFINITY)
     eventPlayer.augmentBarrierPlacementCooldown = 0
     checkEnhancementPlacement()

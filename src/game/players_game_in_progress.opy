@@ -217,7 +217,7 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
         bigMessage(getAllPlayers().exclude(eventPlayer), "{0} {1} died!".format(eventPlayer, heroIcon(eventPlayer.getHero())))
         if mustReviveTime == 60 and len(objectivePositionList) != 1:
             bigMessage(getAllPlayers().exclude(eventPlayer), "Save {0} by finishing the objective!".format(eventPlayer))
-        mustReviveTime -= 0 if mustReviveTime <= 30 else 10
+        mustReviveTime = max(30, mustReviveTime - 10)
         eventPlayer.teleport(offsetDownHundredConst)
         eventPlayer.setInvisibility(Invis.ALL)
         waitUntil(isObjectiveComplete, Math.INFINITY)
