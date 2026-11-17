@@ -891,7 +891,7 @@ rule "BLASTER ROCKET HITS TARGET":
     @Event playerDealtDamage
     @Team 2
     @Hero pharah
-    @Condition (eventAbility == Button.PRIMARY_FIRE or eventAbility == Button.ULTIMATE) == true
+    @Condition (eventAbility in [Button.PRIMARY_FIRE, Button.ULTIMATE]) == true
     @Condition not victim.isDotProtected
 
     #!define blasterRocketBurnDuration tmp0
