@@ -30,6 +30,8 @@ subroutine abilityPlacement
 subroutine createRemainingObjectivesHud
 subroutine selectPullAimTarget
 subroutine applyHitEnhancements
+subroutine useChargedUltimate
+subroutine delayZombieRespawns
 
 
 macro damageWithEnhancements(amount, target):
@@ -947,3 +949,15 @@ def detachAbilityTarget():
     @Name "detachAbilityTarget"
     # Synchronous; reads the caller-owned target without changing it or yielding.
     eventPlayer.botAbilityTarget.detach()
+
+def useChargedUltimate():
+    @Name "useChargedUltimate"
+    # Synchronous pair only; caller retains all waits and native ability timing.
+    eventPlayer.setUltCharge(100)
+    eventPlayer.forceButtonPress(Button.ULTIMATE)
+
+def delayZombieRespawns():
+    @Name "delayZombieRespawns"
+    # Preserve existing queue length, including an empty queue; no new spawn entries.
+    getPlayers(Team.2).botRespawnDelay = 12
+    botSpawnTimeList = botSpawnTimeList.map(lambda _: 12)

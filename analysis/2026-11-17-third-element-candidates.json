@@ -1,0 +1,141 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "17841c26d6a9fbad591a07549fe833477f0cab5b",
+  "baseline": 30323,
+  "warnings": [],
+  "sourceSha256": "507ea55222deb40aa1c867bdf4682fefaa213af79a0c1f3861b3d25fc4557cde",
+  "duplicates": [
+    {
+      "code": "Set Ultimate Charge(Event Player, 100);\nPress Button(Event Player, Button(Ultimate));",
+      "elements": 4,
+      "rules": [
+        "RANDOM ABILITIES",
+        "BOT DIES",
+        "STALKER (MOIRA) FADE",
+        "SMOLDER STAYS ENRAGE DURING BOSS EVENT",
+        "Subroutine smolderBoost"
+      ],
+      "estimatedGrossSaving": 9
+    },
+    {
+      "code": "Set Player Variable(All Players(Team 2), recoveryTimeSlot, 12);\nSet Global Variable(botSpawnTimeList, Mapped Array(Global.botSpawnTimeList, 12));",
+      "elements": 9,
+      "rules": [
+        "PLAYERS REPAIR TERMINALS",
+        "PLAYER DEALT FINAL B­LOW"
+      ],
+      "estimatedGrossSaving": 5
+    },
+    {
+      "code": "Set Player Variable(Event Player, botBaseHealth, 15000);\nSet Player Variable(Event Player, actorTeamSlot12, (Event Player).botBaseHealth);\nSet Player Variable(Event Player, sizeScale, 2.5);",
+      "elements": 7,
+      "rules": [
+        "BOT BECOMES BOSS",
+        "BOT BECOMES ZOMBIE EGG"
+      ],
+      "estimatedGrossSaving": 3
+    },
+    {
+      "code": "Set Player Variable(Event Player, botBaseHealth, 15000);\nSet Player Variable(Event Player, actorTeamSlot12, (Event Player).botBaseHealth);",
+      "elements": 5,
+      "rules": [
+        "BOT BECOMES BOSS",
+        "BOT BECOMES ZOMBIE EGG"
+      ],
+      "estimatedGrossSaving": 1
+    },
+    {
+      "code": "Set Player Variable(Event Player, actorTeamSlot12, (Event Player).botBaseHealth);\nSet Player Variable(Event Player, sizeScale, 2.5);",
+      "elements": 5,
+      "rules": [
+        "BOT BECOMES BOSS",
+        "BOT BECOMES ZOMBIE EGG"
+      ],
+      "estimatedGrossSaving": 1
+    }
+  ],
+  "results": [
+    {
+      "name": "shared_charged_ultimate",
+      "elements": 30313,
+      "saved": 10,
+      "warnings": [],
+      "changedRules": [
+        "RANDOM ABILITIES #1",
+        "BOT DIES #1",
+        "STALKER (MOIRA) FADE #1",
+        "SMOLDER STAYS ENRAGE DURING BOSS EVENT #1",
+        "Subroutine smolderBoost #1",
+        "useChargedUltimate #1"
+      ]
+    },
+    {
+      "name": "shared_long_respawn",
+      "elements": 30317,
+      "saved": 6,
+      "warnings": [],
+      "changedRules": [
+        "PLAYERS REPAIR TERMINALS #1",
+        "PLAYER DEALT FINAL B­LOW #1",
+        "delayZombieRespawns #1"
+      ]
+    },
+    {
+      "name": "shared_boss_health",
+      "elements": 30321,
+      "saved": 2,
+      "warnings": [],
+      "changedRules": [
+        "BOT BECOMES BOSS #1",
+        "BOT BECOMES ZOMBIE EGG #1",
+        "setBossBaseHealth #1"
+      ]
+    },
+    {
+      "name": "barrier_direct_vector_y",
+      "elements": 30321,
+      "saved": 2,
+      "warnings": [],
+      "changedRules": [
+        "[LASER_BARRICADE AUGMENT] BLOCKS ZOMBIES #1"
+      ]
+    },
+    {
+      "name": "barrier_dot_horizontal_projection",
+      "elements": 30313,
+      "saved": 10,
+      "warnings": [],
+      "changedRules": [
+        "[LASER_BARRICADE AUGMENT] BLOCKS ZOMBIES #1"
+      ]
+    },
+    {
+      "name": "barrier_center_horizontal_distance",
+      "elements": 30313,
+      "saved": 10,
+      "warnings": [],
+      "changedRules": [
+        "[LASER_BARRICADE AUGMENT] BLOCKS ZOMBIES #1"
+      ]
+    },
+    {
+      "name": "combined_recommended",
+      "elements": 30287,
+      "saved": 36,
+      "warnings": [],
+      "changedRules": [
+        "RANDOM ABILITIES #1",
+        "PLAYERS REPAIR TERMINALS #1",
+        "BOT DIES #1",
+        "STALKER (MOIRA) FADE #1",
+        "SMOLDER STAYS ENRAGE DURING BOSS EVENT #1",
+        "Subroutine smolderBoost #1",
+        "[LASER_BARRICADE AUGMENT] BLOCKS ZOMBIES #1",
+        "PLAYER DEALT FINAL B­LOW #1",
+        "useChargedUltimate #1",
+        "delayZombieRespawns #1"
+      ]
+    }
+  ],
+  "geometryModelCases": 10000
+}

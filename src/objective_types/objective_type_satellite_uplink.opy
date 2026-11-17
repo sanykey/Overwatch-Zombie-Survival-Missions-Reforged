@@ -64,8 +64,7 @@ macro fireSatelliteMacro():
             getPlayers(Team.2).botRespawnDelay = 1
         else:
             #Give all bots a long respawn time
-            getPlayers(Team.2).botRespawnDelay = 12
-            botSpawnTimeList = botSpawnTimeList.map(lambda _: 12)
+            delayZombieRespawns()
     stopChasing(satelliteLaserPosition)
 
 
