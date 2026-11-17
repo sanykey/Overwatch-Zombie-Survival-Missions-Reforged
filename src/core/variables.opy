@@ -134,6 +134,8 @@ globalvar attackSpawnRooms            # Standard modes: list of spawn-room posit
 globalvar activeAttackSpawnRoom       # Currently activated spawn-room position; may differ from the room being tested.
 globalvar spawnRoomIndex              # Room index during pregame recording/rotation and in-match safe-room selection.
 globalvar botSpawnPointList           # Cached successful zombie spawn/teleport positions.
+# Unique positions: updateBotSpawnPoints checks membership before appending.
+# Timer and waypoint rows stay aligned; teleport filtering uses this original index.
 globalvar botSpawnPointTimerList      # Per-spawn-point cooldown/load values, indexed with botSpawnPointList.
 globalvar botSpawnWaypointList        # Movement waypoint associated with each cached botSpawnPointList entry.
 globalvar customTeleportPositionList  # Special teleport positions transferred from dying bots to replacement bots.

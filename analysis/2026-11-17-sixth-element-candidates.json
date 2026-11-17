@@ -1,0 +1,89 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "031ecfbdb4d612b60a6f1eb8f7a3b6b80974ad06",
+  "baseline": 30236,
+  "warnings": [],
+  "sourceSha256": "e3cfe9fc414f7647948664e90ba67f18fad094b0f83003c16165660b49db4525",
+  "results": [
+    {
+      "name": "teleport_merged_filters",
+      "elements": 30234,
+      "saved": 2,
+      "warnings": [],
+      "changedRules": [
+        "teleportBots #1"
+      ]
+    },
+    {
+      "name": "teleport_indexed_filter",
+      "elements": 30231,
+      "saved": 5,
+      "warnings": [],
+      "changedRules": [
+        "teleportBots #1"
+      ]
+    },
+    {
+      "name": "teleport_redundant_nonempty",
+      "elements": 30230,
+      "saved": 6,
+      "warnings": [],
+      "changedRules": [
+        "teleportBots #1"
+      ]
+    },
+    {
+      "name": "teleport_complement_else",
+      "elements": 30231,
+      "saved": 5,
+      "warnings": [],
+      "changedRules": [
+        "enterExitTeleport #1"
+      ]
+    },
+    {
+      "name": "engineer_direct_target",
+      "elements": 30234,
+      "saved": 2,
+      "warnings": [],
+      "changedRules": [
+        "ENGINEER ARMOR TRANSFER #1"
+      ]
+    },
+    {
+      "name": "pregame_factor_default_condition",
+      "elements": 30225,
+      "saved": 11,
+      "warnings": [],
+      "changedRules": [
+        "PLAYER SELECTS/RESELECTS HERO #1"
+      ]
+    },
+    {
+      "name": "pregame_horizontal_distance",
+      "elements": 30233,
+      "saved": 3,
+      "warnings": [],
+      "changedRules": [
+        "PREVENT PLAYERS FROM LEAVING START EARLY #1"
+      ]
+    },
+    {
+      "name": "combined_recommended",
+      "elements": 30204,
+      "saved": 32,
+      "warnings": [],
+      "changedRules": [
+        "PLAYER SELECTS/RESELECTS HERO #1",
+        "PREVENT PLAYERS FROM LEAVING START EARLY #1",
+        "enterExitTeleport #1",
+        "teleportBots #1",
+        "ENGINEER ARMOR TRANSFER #1"
+      ]
+    }
+  ],
+  "teleportModelCases": 69905,
+  "pregameModelCases": 1728,
+  "engineerModelCases": 192,
+  "geometryModelCases": 10000
+}

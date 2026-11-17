@@ -478,7 +478,7 @@ def enterExitTeleport():
                 eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, botSpawnWaypointList[botSpawnPointList.index(eventPlayer.botTeleportPosition)]), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
             else:
                 eventPlayer.startThrottleInDirection(directionFromAngles(random.randint(-90, 90) + horizontalAngleOfDirection(directionTowards(eventPlayer, sorted(getLivingPlayers(Team.1).filter(lambda player: player.hasSpawned()), lambda x: distance(eventPlayer, x))[0])), 0), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
-        elif eventPlayer.botTarget != null:
+        else:
             startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
 
 
@@ -502,14 +502,13 @@ def teleportBots():
             eventPlayer.botTeleportPosition = 0
             #Teleport with max distance constraint no view angle constraint
             while eventPlayer.botTeleportPosition == 0 or playerTargetList.any(lambda x: distance(eventPlayer.botTeleportPosition, x) < 15) or playerTargetList.all(lambda x: distance(eventPlayer.botTeleportPosition, x) > BOT_MAX_TELEPORT_RANGE):
-                # teleportCandidateSpawnPointList: saved spawn points within teleport range, to choose a nearby destination.
+                # teleportCandidateSpawnPointList: nearby saved points whose cooldown permits use.
+                # Points are unique and timer/waypoint rows remain aligned; i is the original point index.
                 #!define teleportCandidateSpawnPointList tmp0
-                teleportCandidateSpawnPointList = botSpawnPointList.filter(lambda x: distance(x, eventPlayer.botTeleportCenter) < BOT_MAX_TELEPORT_RANGE)
-                #Filter out spawn points on cooldown
-                # teleportCandidateSpawnPointList: nearby spawn points whose cooldown permits use, to choose a ready destination.
-                teleportCandidateSpawnPointList = teleportCandidateSpawnPointList.filter(lambda x: botSpawnPointTimerList[botSpawnPointList.index(x)] < 15)
+                teleportCandidateSpawnPointList = botSpawnPointList.filter(lambda x, i: distance(x, eventPlayer.botTeleportCenter) < BOT_MAX_TELEPORT_RANGE and botSpawnPointTimerList[i] < 15)
                 #Bots utilize saved spawn points
-                if botSpawnPointList != [] and teleportCandidateSpawnPointList != []:
+                # A nonempty filtered list already implies the source list is nonempty.
+                if teleportCandidateSpawnPointList != []:
                     eventPlayer.botTeleportPosition = random.choice(teleportCandidateSpawnPointList)
                     botSpawnPointTimerList[botSpawnPointList.index(eventPlayer.botTeleportPosition)] += 5
                     break

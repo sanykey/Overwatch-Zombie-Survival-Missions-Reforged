@@ -109,7 +109,8 @@ rule "PLAYER SELECTS/RESELECTS HERO":
         #Force players that have not voted or selected an enhancement to lock in their hero
         if not isPregameSetup:
             return
-        if eventPlayer.augmentId == Augment.NO_PREFERENCE and (isVoting and (not eventPlayer.pregameChallengeVote and not eventPlayer.pregameZombieVote and not eventPlayer.pregameObjectiveVote and eventPlayer.enhancementId == Enhancement.NO_PREFERENCE) or not isVoting and eventPlayer.enhancementId == Enhancement.NO_PREFERENCE):
+        # Both selections must be unset; votes matter only while voting is open.
+        if eventPlayer.augmentId == Augment.NO_PREFERENCE and eventPlayer.enhancementId == Enhancement.NO_PREFERENCE and (not isVoting or (not eventPlayer.pregameChallengeVote and not eventPlayer.pregameZombieVote and not eventPlayer.pregameObjectiveVote)):
             eventPlayer.forceButtonPress(Button.JUMP)
     if ruleCondition:
         loop()
@@ -228,7 +229,8 @@ rule "PREVENT PLAYERS FROM LEAVING START EARLY":
     @Condition isPregameSetup == true
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.pregameState > PregameState.SELECTING_HERO
-    @Condition distance(eventPlayer, vect(eventPlayer.pregamePosition.x, eventPlayer.getPosition().y, eventPlayer.pregamePosition.z)) > 0.6
+    # Horizontal displacement only, keeping the original 0.6 m limit.
+    @Condition magnitude((eventPlayer.getPosition() - eventPlayer.pregamePosition) * vect(1, 0, 1)) > 0.6
     
     wait(2, Wait.ABORT_WHEN_FALSE)
     if not isSpecialGameMode:
