@@ -1,0 +1,28 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "bc31f30aefec463b6fe2d4859665529fbdd9202c",
+  "baseline": 30104,
+  "elements": 30092,
+  "saved": 12,
+  "warnings": [],
+  "compiledRulesMatchAuditedCandidate": true,
+  "variableDeclarationsUnchanged": true,
+  "remainingConditionsUnchanged": true,
+  "inlineDropFinishPreservesActions": true,
+  "changedFiles": [
+    "abilities/augments.opy",
+    "game/bots_game_in_progress.opy",
+    "items/power_ups.opy"
+  ],
+  "removedSubroutines": [
+    "finishPowerUpDrop #1",
+    "successfulTeleportStatus #1"
+  ],
+  "changedRules": [
+    "AMMO PACK REFILL FALLBACK #1",
+    "dropCarriedPowerUps #1",
+    "finishPowerUpDrop #1",
+    "successfulTeleportStatus #1"
+  ],
+  "inGameValidation": false
+}

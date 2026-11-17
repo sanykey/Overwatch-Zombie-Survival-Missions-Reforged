@@ -256,7 +256,10 @@ rule "AMMO PACK REFILL FALLBACK":
         augmentAmmoNativeCapacity = eventPlayer.getMaxAmmo(augmentAmmoFallbackClipIndex)
         # Re-read on each clip: the preceding clip's Set Ammo may change native reload state.
         augmentAmmoReloadFinished = eventPlayer.augmentAmmoFallbackState[2] and not eventPlayer.isReloading()
-        if augmentAmmoNativeCapacity > 0 and eventPlayer.augmentAmmoLoadout[augmentAmmoFallbackClipIndex + 2] > augmentAmmoNativeCapacity and (eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) == augmentAmmoNativeCapacity and (eventPlayer.augmentAmmoFallbackState[augmentAmmoFallbackClipIndex] or augmentAmmoReloadFinished) or eventPlayer.getHero() == Hero.WIDOWMAKER and augmentAmmoReloadFinished and eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) < augmentAmmoNativeCapacity and (eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) > eventPlayer.augmentAmmoFallbackState[augmentAmmoFallbackClipIndex + 3] or eventPlayer.augmentAmmoFallbackState[augmentAmmoFallbackClipIndex + 3] > augmentAmmoNativeCapacity)):
+        # Prior-clip reload snapshot: synchronous predicate only, no waits or calls.
+        #!define augmentAmmoPreviousClipAmmo tmp3
+        augmentAmmoPreviousClipAmmo = eventPlayer.augmentAmmoFallbackState[augmentAmmoFallbackClipIndex + 3]
+        if augmentAmmoNativeCapacity > 0 and eventPlayer.augmentAmmoLoadout[augmentAmmoFallbackClipIndex + 2] > augmentAmmoNativeCapacity and (eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) == augmentAmmoNativeCapacity and (eventPlayer.augmentAmmoFallbackState[augmentAmmoFallbackClipIndex] or augmentAmmoReloadFinished) or eventPlayer.getHero() == Hero.WIDOWMAKER and augmentAmmoReloadFinished and eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) < augmentAmmoNativeCapacity and (eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) > augmentAmmoPreviousClipAmmo or augmentAmmoPreviousClipAmmo > augmentAmmoNativeCapacity)):
             # A refill rose from below native full, or a completed reload reset
             # an overfilled clip to native full. Descending through native full
             # while firing, and cancelled/partial reloads, must not grant ammo.

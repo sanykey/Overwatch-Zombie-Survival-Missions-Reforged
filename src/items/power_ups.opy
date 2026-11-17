@@ -1,5 +1,4 @@
 #!mainFile "../../main.opy"
-subroutine finishPowerUpDrop
 subroutine dropCarriedPowerUps
 
 
@@ -128,11 +127,5 @@ def dropCarriedPowerUps():
     supplyPowerUpIdList = supplyPowerUpIdList.concat(droppedPowerUpIds)
     # Spread the items so each can be aimed at independently.
     supplyPowerUpPositionList = supplyPowerUpPositionList.concat(droppedPowerUpIds.map(lambda _, index: droppedPowerUpPosition + index * 0.75 * Vector.RIGHT))
-    finishPowerUpDrop()
-
-
-def finishPowerUpDrop():
-    @Name "finishPowerUpDrop"
-
     eventPlayer.powerUpItemId = PowerUpItem.NONE
     playEffect(eventPlayer, DynamicEffect.DEBUFF_IMPACT_SOUND, Color.WHITE, eventPlayer.getPosition(), 25)
