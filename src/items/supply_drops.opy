@@ -192,8 +192,11 @@ def playerForceField():
         # forceFieldZombieIndex: zombie index, to apply the force-field impulse to each nearby living zombie.
         #!define forceFieldZombieIndex tmp0
         for forceFieldZombieIndex in range(getNumberOfLivingPlayers(Team.2)):
-            if distance(getLivingPlayers(Team.2)[forceFieldZombieIndex], eventPlayer.powerUpForceFieldPosition) <= 7.5:
-                getLivingPlayers(Team.2)[forceFieldZombieIndex].applyImpulse(directionTowards(eventPlayer.powerUpForceFieldPosition, getLivingPlayers(Team.2)[forceFieldZombieIndex]), 6, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+            # Current zombie only: consumed before the next iteration, with no waits/calls/captures.
+            #!define forceFieldZombie tmp1
+            forceFieldZombie = getLivingPlayers(Team.2)[forceFieldZombieIndex]
+            if distance(forceFieldZombie, eventPlayer.powerUpForceFieldPosition) <= 7.5:
+                forceFieldZombie.applyImpulse(directionTowards(eventPlayer.powerUpForceFieldPosition, forceFieldZombie), 6, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
         wait(0.032)
     destroyEffect(eventPlayer.powerUpForceFieldSphereId)
     destroyHudText(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.FORCE_FIELD_HUD])

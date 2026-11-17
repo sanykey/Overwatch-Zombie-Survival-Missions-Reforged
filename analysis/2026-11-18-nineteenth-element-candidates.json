@@ -1,0 +1,89 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "d0cf55e6501091d10a846b2d3381134057d68773",
+  "baseline": 30033,
+  "results": [
+    {
+      "name": "mixed_objective_recent_threshold",
+      "elements": 30029,
+      "saved": 4,
+      "warnings": [],
+      "changedRules": [
+        "setObjectiveType #1"
+      ],
+      "variablesRulesConditionsAndSelectTargetUnchanged": true,
+      "mixedObjectiveChangesOnlyIntegerThreshold": true
+    },
+    {
+      "name": "force_field_zombie_snapshot",
+      "elements": 30027,
+      "saved": 6,
+      "warnings": [],
+      "changedRules": [
+        "playerForceField (10-19) #1"
+      ],
+      "variablesRulesConditionsAndSelectTargetUnchanged": true,
+      "forceFieldSnapshotExpansionRestoresOriginalRule": true,
+      "forceFieldPerZombieLivingQueries": {
+        "beforeOutsideRadius": 1,
+        "beforeInsideRadius": 3,
+        "after": 1
+      }
+    },
+    {
+      "name": "satellite_filter_complement",
+      "elements": 30033,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": [
+        "SET UP TERMINAL POSITIONS #1"
+      ],
+      "variablesRulesConditionsAndSelectTargetUnchanged": true
+    },
+    {
+      "name": "force_field_center_snapshot",
+      "elements": 30034,
+      "saved": -1,
+      "warnings": [],
+      "changedRules": [
+        "playerForceField (10-19) #1"
+      ],
+      "variablesRulesConditionsAndSelectTargetUnchanged": true
+    },
+    {
+      "name": "stuck_bot_wait_ternary",
+      "elements": 30032,
+      "saved": 1,
+      "warnings": [],
+      "changedRules": [
+        "KILL BOTS THAT ARE STUCK OR ARE NOT MOVING #1"
+      ],
+      "variablesRulesConditionsAndSelectTargetUnchanged": true
+    },
+    {
+      "name": "grapnel_status_ternary",
+      "error": "OpyError: Expected type 'Status' for the 3rd argument of function '.setStatusEffect', but got function '__ifThenElse__' of type 'Object,Array'\n    | line 9615, col 58, at includes.opy"
+    },
+    {
+      "name": "combined_recommended",
+      "elements": 30023,
+      "saved": 10,
+      "warnings": [],
+      "changedRules": [
+        "setObjectiveType #1",
+        "playerForceField (10-19) #1"
+      ],
+      "variablesRulesConditionsAndSelectTargetUnchanged": true,
+      "forceFieldSnapshotExpansionRestoresOriginalRule": true,
+      "forceFieldPerZombieLivingQueries": {
+        "beforeOutsideRadius": 1,
+        "beforeInsideRadius": 3,
+        "after": 1
+      },
+      "mixedObjectiveChangesOnlyIntegerThreshold": true
+    }
+  ],
+  "inGameValidation": false,
+  "serverLoadMeasured": false,
+  "recentThresholdModelCases": 83232
+}

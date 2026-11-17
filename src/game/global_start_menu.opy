@@ -394,7 +394,7 @@ def setObjectiveType():
             objectiveTypeList.append(objectiveTypeSetting)
         else:
             #Mixed objective assignment
-            objectiveTypeList.append(random.choice(mixedObjectiveTypeList.exclude(objectiveTypeList.filter(lambda _, i: i > len(objectiveTypeList) - 1 - (len(mixedObjectiveTypeList) - 1)))))
+            objectiveTypeList.append(random.choice(mixedObjectiveTypeList.exclude(objectiveTypeList.filter(lambda _, i: i > len(objectiveTypeList) - len(mixedObjectiveTypeList)))))
         refreshCurrentObjectiveType()
         missionPlacementAttemptCount = 0
         while len(objectivePositionList) < len(objectiveTypeList):

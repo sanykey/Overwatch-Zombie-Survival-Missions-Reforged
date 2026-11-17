@@ -1,0 +1,21 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "d0cf55e6501091d10a846b2d3381134057d68773",
+  "baseline": 30033,
+  "elements": 30023,
+  "saved": 10,
+  "warnings": [],
+  "compiledRulesMatchAuditedCandidate": true,
+  "variableDeclarationsAndConditionsUnchanged": true,
+  "firstVisibleTargetLoopUnchanged": true,
+  "changedFiles": [
+    "game/global_start_menu.opy",
+    "items/supply_drops.opy"
+  ],
+  "changedRules": [
+    "setObjectiveType #1",
+    "playerForceField (10-19) #1"
+  ],
+  "inGameValidation": false,
+  "serverLoadMeasured": false
+}
