@@ -382,8 +382,7 @@ rule "BOTS MOVE THROUGH SPAWN DOORS":
         wait(1)
     if ruleCondition:
         loop()
-    eventPlayer.enableEnvironmentCollision()
-    eventPlayer.botIsWallCollisionEnabled = true
+    enableBotCollisionAndFlag()
     if not eventPlayer in bossStateList:
         wait(5)
 

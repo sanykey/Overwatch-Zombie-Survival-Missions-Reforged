@@ -82,8 +82,7 @@ rule "BOT BECOMES BOSS":
     eventPlayer.clearStatusEffect(Status.ROOTED)
     bossesStateList[1] = distance(eventPlayer, eventPlayer.getEyePosition())
     wait(1)
-    eventPlayer.enableEnvironmentCollision()
-    eventPlayer.botIsWallCollisionEnabled = true
+    enableBotCollisionAndFlag()
 
 
 rule "BOSS STUCK":
@@ -101,8 +100,7 @@ rule "BOSS STUCK":
     eventPlayer.botIsWallCollisionEnabled = false
     eventPlayer.disableEnvironmentCollision(false)
     wait(3)
-    eventPlayer.enableEnvironmentCollision()
-    eventPlayer.botIsWallCollisionEnabled = true
+    enableBotCollisionAndFlag()
     if ruleCondition:
         loop()
 
@@ -179,8 +177,7 @@ rule "BOSS TAKES KNOCKBACK":
     @Condition eventPlayer.botIsWallCollisionEnabled == false
     @Condition eventPlayer in bossesStateList == true
     
-    eventPlayer.enableEnvironmentCollision()
-    eventPlayer.botIsWallCollisionEnabled = true
+    enableBotCollisionAndFlag()
 
 
 rule "BOSS TELEPORT TO TARGET IF NOT USED":

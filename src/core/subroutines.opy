@@ -1,3 +1,8 @@
+subroutine detachTrackedAbilityTarget
+subroutine boostMovementSpeed
+subroutine clearBotMovementOverrides
+subroutine beginBotThrottleOverride
+subroutine enableBotCollisionAndFlag
 #!mainFile "../../main.opy"
 subroutine detachAbilityTarget
 
@@ -116,8 +121,7 @@ macro mutationsMacro():
         # botMutationOutlineColor: outline color; every enabled mutation assigns it before the capture below.
         #Speed
         if eventPlayer.botMutationId == 1:
-            eventPlayer.movementSpeedScale *= 1.5
-            applyScaledMoveSpeed()
+            boostMovementSpeed()
             #!define botMutationOutlineColor tmp2
             botMutationOutlineColor = Color.PURPLE
         #Size Growth
@@ -775,8 +779,7 @@ def botRespawnInitialization():
         eventPlayer.startModifyingVoicelinePitch(0.5 + (1 / (eventPlayer.sizeScale + 1)) + 0.25 * (sinDeg(getTotalTimeElapsed() * evalOnce(random.uniform(360, 720)))))
     eventPlayer.stopForcingButton(Button.CROUCH)
     eventPlayer.stopForcingButton(Button.PRIMARY_FIRE)
-    eventPlayer.enableEnvironmentCollision()
-    eventPlayer.botIsWallCollisionEnabled = true
+    enableBotCollisionAndFlag()
     eventPlayer.enablePlayerCollision()
     eventPlayer.botIsAttached = false
     eventPlayer.botIsFacingOverridden = false
@@ -857,8 +860,7 @@ def explosionSequence():
 def illariUlt():
     @Name "DAYTAKER'S REVENGE (BOSS)"
     
-    detachAbilityTarget()
-    eventPlayer.botAbilityTarget.isAttached = false
+    detachTrackedAbilityTarget()
     eventPlayer.botAbilityTarget = null
     eventPlayer.setAbilityCooldown(Button.ABILITY_1, 10)
     eventPlayer.setUltCharge(100)
@@ -987,3 +989,38 @@ def selectIndexedAbilityTarget():
     # Preserve the index and read only this bot's list; no waits or nested calls.
     #!define indexedAbilityTargetIndex tmp0
     eventPlayer.botAbilityTarget = eventPlayer.botSpecialTargetList[indexedAbilityTargetIndex]
+
+
+def enableBotCollisionAndFlag():
+    @Name "enableBotCollisionAndFlag"
+    # Synchronous extraction: preserve action order and caller eventPlayer; no waits or scratch.
+    eventPlayer.enableEnvironmentCollision()
+    eventPlayer.botIsWallCollisionEnabled = true
+
+
+def beginBotThrottleOverride():
+    @Name "beginBotThrottleOverride"
+    # Synchronous extraction: preserve action order and caller eventPlayer; no waits or scratch.
+    eventPlayer.botIsThrottleOverridden = true
+    eventPlayer.stopThrottleInDirection()
+
+
+def clearBotMovementOverrides():
+    @Name "clearBotMovementOverrides"
+    # Synchronous extraction: preserve action order and caller eventPlayer; no waits or scratch.
+    eventPlayer.botIsThrottleOverridden = false
+    eventPlayer.botIsFacingOverridden = false
+
+
+def boostMovementSpeed():
+    @Name "boostMovementSpeed"
+    # Synchronous extraction: preserve action order and caller eventPlayer; no waits or scratch.
+    eventPlayer.movementSpeedScale *= 1.5
+    applyScaledMoveSpeed()
+
+
+def detachTrackedAbilityTarget():
+    @Name "detachTrackedAbilityTarget"
+    # Synchronous extraction: preserve action order and caller eventPlayer; no waits or scratch.
+    detachAbilityTarget()
+    eventPlayer.botAbilityTarget.isAttached = false

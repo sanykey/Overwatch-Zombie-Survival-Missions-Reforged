@@ -159,8 +159,7 @@ rule "RUSHER MOLTEN CORE (BOSS)":
             return
     eventPlayer.addHealthPool(Health.ARMOR, 1000, false)
     eventPlayer.botRusherHealthPoolId = getLastCreatedHealthPool()
-    eventPlayer.botIsThrottleOverridden = true
-    eventPlayer.stopThrottleInDirection()
+    beginBotThrottleOverride()
     wait(1)
     eventPlayer.botIsFacingOverridden = true
     eventPlayer.startFacing(directionFromAngles(evalOnce(random.uniform(0, 360)), evalOnce(random.uniform(-80, -87))), 0 if eventPlayer.botIsCrowdControlled else 144, Relativity.TO_PLAYER)
@@ -563,8 +562,7 @@ rule "CHARGER (MAUGA) CHARGE":
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.botIsWallPhaseAllowed = false
-    eventPlayer.enableEnvironmentCollision()
-    eventPlayer.botIsWallCollisionEnabled = true
+    enableBotCollisionAndFlag()
     eventPlayer.botIsFacingOverridden = true
     eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition()), 1500 if eventPlayer.botIsAttached else 0 if eventPlayer.botIsCrowdControlled else 100)
     eventPlayer.botIsThrottleOverridden = true
@@ -618,8 +616,7 @@ rule "SLIMER (MERCY) TENTACLE GRAB":
     @Condition angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition())) < 20
     
     wait(0.016 if eventPlayer.isUsingUltimate() else 0.5, Wait.ABORT_WHEN_FALSE)
-    eventPlayer.botIsThrottleOverridden = true
-    eventPlayer.stopThrottleInDirection()
+    beginBotThrottleOverride()
     eventPlayer.botAbilityTarget = null
     eventPlayer.botTentaclePosition = eventPlayer.getEyePosition() + offsetUpHalfConst * (eventPlayer.sizeScale if eventPlayer.isInAir() else 0)
     eventPlayer.botTentacleTargetPosition = eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 20 * eventPlayer.sizeScale
@@ -849,8 +846,7 @@ rule "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES":
     if eventPlayer.isDead():
         eventPlayer.setDamageReceived(100)
         eventPlayer.botBlasterCharge = 0
-        eventPlayer.botIsThrottleOverridden = false
-        eventPlayer.botIsFacingOverridden = false
+        clearBotMovementOverrides()
         return
     else:
         #charge up attack
@@ -858,8 +854,7 @@ rule "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES":
     eventPlayer.setDamageReceived(100)
     waitUntil(eventPlayer.isDead() or not eventPlayer.botBlasterCharge, Math.INFINITY)
     if eventPlayer.isDead():
-        eventPlayer.botIsThrottleOverridden = false
-        eventPlayer.botIsFacingOverridden = false
+        clearBotMovementOverrides()
         return
     if isInLoS(eventPlayer.getPosition(), eventPlayer.getEyePosition() + worldVector(vect(0, 11, 5), eventPlayer, Transform.ROTATION)) and isInLoS(eventPlayer.botLastTarget.getEyePosition(), eventPlayer.getEyePosition() + worldVector(vect(0, 11, 5), eventPlayer, Transform.ROTATION)):
         waitUntil(not eventPlayer.botIsCrowdControlled, Math.INFINITY)
@@ -944,8 +939,7 @@ rule "DOWNFALLEN GRABS PLAYER":
     eventPlayer.botAbilityTarget = eventPlayer.botTarget
     eventPlayer.botIsDownfallenGrabbing = true
     eventPlayer.botAbilityTarget.isCrowdControlCooldownActive = true
-    eventPlayer.botIsThrottleOverridden = true
-    eventPlayer.stopThrottleInDirection()
+    beginBotThrottleOverride()
     eventPlayer.setUltCharge(100)
     eventPlayer.botAbilityTarget.attachTo(eventPlayer, vect(0, 3 if eventPlayer in bossStateList else 0, 1))
     eventPlayer.botIsWallPhaseAllowed = false
@@ -1036,8 +1030,7 @@ rule "DAYTAKER (ILLARI) BURST":
         lbl_0:
         stopChasing(eventPlayer.botDaytakerCharge)
         eventPlayer.botDaytakerCharge = 0
-        detachAbilityTarget()
-        eventPlayer.botAbilityTarget.isAttached = false
+        detachTrackedAbilityTarget()
         goto lbl_1
     #Abort
     if eventPlayer.isDead():
@@ -1055,8 +1048,7 @@ rule "DAYTAKER (ILLARI) BURST":
     eventPlayer.startThrottleInDirection(Vector.FORWARD, 1, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
     #Eject zombies
     if eventPlayer.isAlive() and eventPlayer.botAbilityTarget.isAlive():
-        detachAbilityTarget()
-        eventPlayer.botAbilityTarget.isAttached = false
+        detachTrackedAbilityTarget()
         #Boss Collision
         if eventPlayer in bossStateList:
             eventPlayer.botIsWallPhaseAllowed = false
@@ -1501,8 +1493,7 @@ def spawnGasCloud():
 
 def resumeBotMovementAndFacing():
     # Synchronous reset; preserve the caller's throttle-then-facing order and NOOP start.
-    eventPlayer.botIsThrottleOverridden = false
-    eventPlayer.botIsFacingOverridden = false
+    clearBotMovementOverrides()
     startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
 
 
@@ -1535,8 +1526,7 @@ def playReignitedWarningPair():
 def beginBotOverride():
     @Name "beginBotOverride"
 
-    eventPlayer.botIsThrottleOverridden = true
-    eventPlayer.stopThrottleInDirection()
+    beginBotThrottleOverride()
     eventPlayer.botIsFacingOverridden = true
 
 
@@ -1565,6 +1555,5 @@ def applyBriefBurnAndRoot():
 def daytakerAbortReset():
     @Name "daytakerAbortReset"
 
-    eventPlayer.botIsThrottleOverridden = false
-    eventPlayer.botIsFacingOverridden = false
+    clearBotMovementOverrides()
     eventPlayer.botAbilityTarget.isAttached = false

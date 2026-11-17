@@ -1,0 +1,218 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "36517d8e40e897b02216bbe6b9c872c645df1d1a",
+  "baseline": 30124,
+  "warnings": [],
+  "sourceSha256": "32847a316bc97c8d76041f1770044da29cd2bc9dc2610bb2abd80cd687fb79b2",
+  "results": [
+    {
+      "name": "turret_barrel_scale",
+      "elements": 30121,
+      "saved": 3,
+      "warnings": [],
+      "changedRules": [
+        "sentryTurret (50-59) #1"
+      ],
+      "sameVariablesAndExistingConditions": true
+    },
+    {
+      "name": "hitchhiker_attachment_scale",
+      "elements": 30118,
+      "saved": 6,
+      "warnings": [],
+      "changedRules": [
+        "HITCHHIKER ATTACH/DETATCH #1"
+      ],
+      "sameVariablesAndExistingConditions": true
+    },
+    {
+      "name": "redundant_unit_multipliers",
+      "elements": 30124,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": [],
+      "sameVariablesAndExistingConditions": true
+    },
+    {
+      "name": "collision_native_then_flag",
+      "elements": 30121,
+      "saved": 3,
+      "warnings": [],
+      "changedRules": [
+        "botRespawnInitialization #1",
+        "BOT BECOMES BOSS #1",
+        "BOSS STUCK #1",
+        "BOSS TAKES KNOCKBACK #1",
+        "BOTS MOVE THROUGH SPAWN DOORS #1",
+        "CHARGER (MAUGA) CHARGE #1",
+        "enableBotCollisionAndFlag #1"
+      ],
+      "addedSubroutines": [
+        "enableBotCollisionAndFlag #1"
+      ],
+      "helperExpansionRestoresOriginalActions": true,
+      "sameVariablesAndExistingConditions": true
+    },
+    {
+      "name": "collision_flag_then_native",
+      "elements": 30124,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": [
+        "STRIKER (WRECKING BALL) PILE DRIVER #1",
+        "STALKER (MOIRA) FADE #1",
+        "reenableBotWallAndJump #1",
+        "enableBotFlagAndCollision #1"
+      ],
+      "addedSubroutines": [
+        "enableBotFlagAndCollision #1"
+      ],
+      "helperExpansionRestoresOriginalActions": true,
+      "sameVariablesAndExistingConditions": true
+    },
+    {
+      "name": "begin_throttle_override",
+      "elements": 30123,
+      "saved": 1,
+      "warnings": [],
+      "changedRules": [
+        "RUSHER MOLTEN CORE (BOSS) #1",
+        "SLIMER (MERCY) TENTACLE GRAB #1",
+        "DOWNFALLEN GRABS PLAYER #1",
+        "beginBotOverride #1",
+        "beginBotThrottleOverride #1"
+      ],
+      "addedSubroutines": [
+        "beginBotThrottleOverride #1"
+      ],
+      "helperExpansionRestoresOriginalActions": true,
+      "sameVariablesAndExistingConditions": true
+    },
+    {
+      "name": "clear_movement_overrides",
+      "elements": 30123,
+      "saved": 1,
+      "warnings": [],
+      "changedRules": [
+        "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES #1",
+        "Subroutine resumeBotMovementAndFacing #1",
+        "daytakerAbortReset #1",
+        "clearBotMovementOverrides #1"
+      ],
+      "addedSubroutines": [
+        "clearBotMovementOverrides #1"
+      ],
+      "helperExpansionRestoresOriginalActions": true,
+      "sameVariablesAndExistingConditions": true
+    },
+    {
+      "name": "boost_movement_speed",
+      "elements": 30122,
+      "saved": 2,
+      "warnings": [],
+      "changedRules": [
+        "botRespawnInitialization #1",
+        "cloakingDevice (60-69) #1",
+        "superNano (70-79) #1",
+        "boostMovementSpeed #1"
+      ],
+      "addedSubroutines": [
+        "boostMovementSpeed #1"
+      ],
+      "helperExpansionRestoresOriginalActions": true,
+      "sameVariablesAndExistingConditions": true
+    },
+    {
+      "name": "unboost_movement_speed",
+      "elements": 30124,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": [
+        "cloakingDevice (60-69) #1",
+        "superNano (70-79) #1",
+        "unboostMovementSpeed #1"
+      ],
+      "addedSubroutines": [
+        "unboostMovementSpeed #1"
+      ],
+      "helperExpansionRestoresOriginalActions": true,
+      "sameVariablesAndExistingConditions": true
+    },
+    {
+      "name": "detach_tracked_target",
+      "elements": 30120,
+      "saved": 4,
+      "warnings": [],
+      "changedRules": [
+        "DAYTAKER'S REVENGE (BOSS) #1",
+        "DAYTAKER (ILLARI) BURST #1",
+        "detachTrackedAbilityTarget #1"
+      ],
+      "addedSubroutines": [
+        "detachTrackedAbilityTarget #1"
+      ],
+      "helperExpansionRestoresOriginalActions": true,
+      "sameVariablesAndExistingConditions": true
+    },
+    {
+      "name": "resume_bot_facing_now",
+      "elements": 30124,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": [
+        "BOTS MELEE #1",
+        "ENSNARER (HAZARD) BLOCKS PLAYERS #1",
+        "BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS) #1",
+        "resumeBotFacingNow #1"
+      ],
+      "addedSubroutines": [
+        "resumeBotFacingNow #1"
+      ],
+      "helperExpansionRestoresOriginalActions": true,
+      "sameVariablesAndExistingConditions": true
+    },
+    {
+      "name": "combined_recommended",
+      "elements": 30104,
+      "saved": 20,
+      "warnings": [],
+      "changedRules": [
+        "botRespawnInitialization #1",
+        "DAYTAKER'S REVENGE (BOSS) #1",
+        "BOT BECOMES BOSS #1",
+        "BOSS STUCK #1",
+        "BOSS TAKES KNOCKBACK #1",
+        "BOTS MOVE THROUGH SPAWN DOORS #1",
+        "RUSHER MOLTEN CORE (BOSS) #1",
+        "CHARGER (MAUGA) CHARGE #1",
+        "SLIMER (MERCY) TENTACLE GRAB #1",
+        "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES #1",
+        "DOWNFALLEN GRABS PLAYER #1",
+        "DAYTAKER (ILLARI) BURST #1",
+        "Subroutine resumeBotMovementAndFacing #1",
+        "beginBotOverride #1",
+        "daytakerAbortReset #1",
+        "sentryTurret (50-59) #1",
+        "cloakingDevice (60-69) #1",
+        "superNano (70-79) #1",
+        "HITCHHIKER ATTACH/DETATCH #1",
+        "enableBotCollisionAndFlag #1",
+        "beginBotThrottleOverride #1",
+        "clearBotMovementOverrides #1",
+        "boostMovementSpeed #1",
+        "detachTrackedAbilityTarget #1"
+      ],
+      "addedSubroutines": [
+        "enableBotCollisionAndFlag #1",
+        "beginBotThrottleOverride #1",
+        "clearBotMovementOverrides #1",
+        "boostMovementSpeed #1",
+        "detachTrackedAbilityTarget #1"
+      ],
+      "helperExpansionRestoresOriginalActions": true,
+      "sameVariablesAndExistingConditions": true
+    }
+  ],
+  "attachmentModelCases": 10000,
+  "turretModelCases": 20000
+}
