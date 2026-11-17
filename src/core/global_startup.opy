@@ -322,7 +322,8 @@ def generateMapGrid():
         mapGridCandidatePosition = nearestWalkablePosition((random.choice(mapGridList) if len(mapGridList) > 5 else walkCenter) + directionFromAngles(random.uniform(0, 360), random.uniform(-35, 35)) * random.uniform(10, 100))
         #Keep grid points outside both spawn rooms on these five game modes.
         if not getCurrentGamemode() in [Gamemode.CTF, Gamemode.CLASH, Gamemode.PUSH, Gamemode.CONTROL, Gamemode.FLASHPOINT] or getSpawnPoints(Team.2).all(lambda x: distance(x.getPosition(), mapGridCandidatePosition) > 50) and getSpawnPoints(Team.1).all(lambda x: distance(x.getPosition(), mapGridCandidatePosition) > 40):
-            if mapGridList == [] or mapGridList.all(lambda x: distance(x, mapGridCandidatePosition) > 2.5):
+            # Is True For All is true for an empty array too.
+            if mapGridList.all(lambda x: distance(x, mapGridCandidatePosition) > 2.5):
                 mapGridList.append(mapGridCandidatePosition)
         if isPregameSetup and getMatchTime() + matchEndTime < 2:
             break

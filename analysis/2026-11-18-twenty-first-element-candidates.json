@@ -1,0 +1,71 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "7319276751bd9453720711409d7f461f61ac24f0",
+  "baseline": 30019,
+  "results": [
+    {
+      "name": "battle_common_charge_label",
+      "elements": 30019,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": [
+        "BORN TO BATTLE PLAYER USES ABILITY CHARGE #1"
+      ],
+      "variablesRulesConditionsAndSelectTargetUnchanged": true
+    },
+    {
+      "name": "battle_common_charge_decrement",
+      "elements": 30019,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": [
+        "BORN TO BATTLE PLAYER USES ABILITY CHARGE #1"
+      ],
+      "variablesRulesConditionsAndSelectTargetUnchanged": true
+    },
+    {
+      "name": "supply_landing_single_assignment",
+      "elements": 30017,
+      "saved": 2,
+      "warnings": [],
+      "changedRules": [
+        "GENERATE SUPPLY DROPS #1"
+      ],
+      "variablesRulesConditionsAndSelectTargetUnchanged": true,
+      "sameRayInputsAndRemainingActionsAfterSkipRebasing": true
+    },
+    {
+      "name": "boss_remaining_common_format",
+      "elements": 30019,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": [
+        "objectivesManagement #1"
+      ],
+      "variablesRulesConditionsAndSelectTargetUnchanged": true
+    },
+    {
+      "name": "revive_common_format",
+      "elements": 30026,
+      "saved": -7,
+      "warnings": [],
+      "changedRules": [
+        "EFFECTS/TEXTS #3"
+      ],
+      "variablesRulesConditionsAndSelectTargetUnchanged": true
+    },
+    {
+      "name": "combined_recommended",
+      "elements": 30017,
+      "saved": 2,
+      "warnings": [],
+      "changedRules": [
+        "GENERATE SUPPLY DROPS #1"
+      ],
+      "variablesRulesConditionsAndSelectTargetUnchanged": true,
+      "sameRayInputsAndRemainingActionsAfterSkipRebasing": true
+    }
+  ],
+  "inGameValidation": false,
+  "serverLoadMeasured": false
+}

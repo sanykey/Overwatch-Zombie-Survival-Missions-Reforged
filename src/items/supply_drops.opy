@@ -39,10 +39,9 @@ rule "GENERATE SUPPLY DROPS":
         #!define supplyDropCandidatePosition tmp1
         supplyDropCandidatePosition = random.choice(mapGridList.filter(lambda x: distance(supplyDropClosestPlayer, x) < 35 and distance(supplyDropClosestPlayer, x) > 20))
         if playerTargetList.all(lambda x: distance(supplyDropCandidatePosition, x) > 20):
-            #Sets supply drop location
-            supplyDropLandingPosition = supplyDropCandidatePosition
-            #Sets supply drop location to be placed on ground (in the case that a walkable position is underground for some reason)
-            supplyDropLandingPosition = raycastHitPosition(supplyDropLandingPosition + 2 * Vector.UP, supplyDropLandingPosition + vect(0, 0, 0), getAllPlayers(), getAllPlayers(), false)
+            # Ground the selected candidate before publishing the landing position.
+            # The candidate is synchronous tmp1 input; raycast does not retain it.
+            supplyDropLandingPosition = raycastHitPosition(supplyDropCandidatePosition + 2 * Vector.UP, supplyDropCandidatePosition + vect(0, 0, 0), getAllPlayers(), getAllPlayers(), false)
         wait(0.25)
     supplyDropPosition = supplyDropLandingPosition + 200 * Vector.UP
     chaseOverTime(supplyDropPosition, supplyDropLandingPosition, 15)

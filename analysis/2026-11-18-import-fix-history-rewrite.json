@@ -1,0 +1,62 @@
+{
+  "backupBranch": "backup/before-import-fix-rewrite-2026-11-18",
+  "originalTip": "998c18b3f99f7747234df922b783bdeafa6d0f53",
+  "finalElements": 30011,
+  "inGameValidation": false,
+  "commits": [
+    {
+      "old": "b2c1adf7b077e0d797fe6deb686cb6715c2201b0",
+      "new": "47b34eb31a984493f6720e483d80ac50903fb159",
+      "elements": 30090,
+      "saved": 2
+    },
+    {
+      "old": "5c5df4bdcc5841045fbde1d5eae0bad2706cd58e",
+      "new": "7be5c02cb9f9f84589bed4bf19ef535bec1bbaad",
+      "elements": 30081,
+      "saved": 9
+    },
+    {
+      "old": "b9a076b383cec24cb6f746439c31ef25a8d2345a",
+      "new": "88f8406b7bd566df3dd9c73a5d84e55744cd9017",
+      "elements": 30067,
+      "saved": 14
+    },
+    {
+      "old": "d8eeb14067ad116201818e386de0f63e5f423137",
+      "new": "1fff49d4114a55926fd4935a0c51e71ab9f54c9b",
+      "elements": 30052,
+      "saved": 15
+    },
+    {
+      "old": "df7e9bf650fe664ae7f9738679127caba3e6686b",
+      "new": "82a51f5f3f8661220b511317f3cc4cf3500842c8",
+      "elements": 30042,
+      "saved": 10
+    },
+    {
+      "old": "d8edf3470d541aee880894eb4c8649ad9f6b95d1",
+      "new": "d0cf55e6501091d10a846b2d3381134057d68773",
+      "elements": 30033,
+      "saved": 9
+    },
+    {
+      "old": "88daf4c1be43e529466c3d234caae260cdcda94c",
+      "new": "67621877cb36df2cbe004ec42510f2e220c07719",
+      "elements": 30023,
+      "saved": 10
+    },
+    {
+      "old": "36cd3abd3df07d8e703dc95be6cfbf7c310ed3fd",
+      "new": "7319276751bd9453720711409d7f461f61ac24f0",
+      "elements": 30019,
+      "saved": 4
+    },
+    {
+      "old": "998c18b3f99f7747234df922b783bdeafa6d0f53",
+      "new": "commit containing this report",
+      "elements": 30011,
+      "saved": 8
+    }
+  ]
+}

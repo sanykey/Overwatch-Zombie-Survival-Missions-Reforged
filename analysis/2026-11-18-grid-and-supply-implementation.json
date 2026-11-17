@@ -1,0 +1,21 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "7319276751bd9453720711409d7f461f61ac24f0",
+  "baseline": 30019,
+  "elements": 30011,
+  "saved": 8,
+  "warnings": [],
+  "compiledRulesMatchAuditedCandidates": true,
+  "variableDeclarationsAndConditionsUnchanged": true,
+  "firstVisibleTargetLoopUnchanged": true,
+  "changedFiles": [
+    "core/global_startup.opy",
+    "items/supply_drops.opy"
+  ],
+  "changedRules": [
+    "generateMapGrid #1",
+    "GENERATE SUPPLY DROPS #1"
+  ],
+  "inGameValidation": false,
+  "serverLoadMeasured": false
+}
