@@ -8,7 +8,7 @@
 
 rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
     @Condition isGameplayActive == true
-    # One table-driven call replaces the thirteen per-enhancement HUD cases; the
+    # One table-driven call replaces the per-enhancement HUD cases; the
     # subtitle and color entries hold the same conditional expressions, which
     # reevaluate per viewer exactly as the previous per-player calls did.
     hudText(
@@ -28,11 +28,12 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             "{1} | {0}".format(f"Pull: {ceil(localPlayer.enhancementPullReadyAt - getTotalTimeElapsed())}s" if getTotalTimeElapsed() < localPlayer.enhancementPullReadyAt else f"Pull: hold [{inputBindingString(Button.MELEE)}] {iconString(Icon.CHECKMARK)}", f"{'Throw' if localPlayer.enhancementCarryState != WrestlerCarryState.NONE else 'Grab'}: [{inputBindingString(Button.INTERACT)}]"),
             "Hits chain to nearby zombies",
             f"Scrap {floor(localPlayer.enhancementScrap)}/{ENGINEER_SCRAP_MAX} | Double-tap [{inputBindingString(Button.CROUCH)}]: armor +{ENGINEER_ARMOR_STACK} (ally {ENGINEER_ARMOR_ALLY_COST}/self {ENGINEER_ARMOR_SELF_COST}) | Hold [{inputBindingString(Button.MELEE)}]: turret ({ENGINEER_TURRET_COST})",
+            f"Scan: {ceil(localPlayer.auspexReadyAt - getTotalTimeElapsed())}s" if getTotalTimeElapsed() < localPlayer.auspexReadyAt else f"Double-tap [{inputBindingString(Button.CROUCH)}]: scan",
             f"Infection removed: {round(localPlayer.enhancementPlagueCureTotal)}",
             "{0} | {1}".format(f"Energy: {floor(localPlayer.enhancementCapacitorEnergy)}", f"Armed: +{floor(localPlayer.enhancementCapacitorCharge)} dmg/hit" if localPlayer.enhancementCapacitorCharge > 0 else f"Double-tap [{inputBindingString(Button.CROUCH)}]: arm"),
             f"[{inputBindingString(Button.CROUCH)}]: detach" if localPlayer.enhancementIsHitchhiking else f"[{inputBindingString(Button.CROUCH)}]: attach near ally"
         ][localPlayer.enhancementId],
-        [" ", "Zombie Hybrid", "Bulking Season", "Brain Killer", "Pyrotechnic", "Born to Battle", "Charge Battery", "P.U.P.", "Wrestler", "Bolt Strike", "Engineer", "Plague Doctor", "Overcharge", "Hitchhiker"][localPlayer.enhancementId],
+        [" ", "Zombie Hybrid", "Bulking Season", "Brain Killer", "Pyrotechnic", "Born to Battle", "Charge Battery", "P.U.P.", "Wrestler", "Bolt Strike", "Engineer", "Auspex Scan", "Plague Doctor", "Overcharge", "Hitchhiker"][localPlayer.enhancementId],
         HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE,
         [
             Color.WHITE,
@@ -48,6 +49,7 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             # White below ally armor cost; sky blue when ally armor is affordable; green
             # when scrap also covers a turret. Keep thresholds tied to costs.
             Color.WHITE if localPlayer.enhancementScrap < ENGINEER_ARMOR_ALLY_COST else Color.SKY_BLUE if localPlayer.enhancementScrap < ENGINEER_TURRET_COST else Color.GREEN,
+            Color.RED if getTotalTimeElapsed() < localPlayer.auspexReadyAt else Color.GREEN,
             Color.WHITE,
             Color.YELLOW if localPlayer.enhancementCapacitorCharge > 0 else Color.GREEN if localPlayer.enhancementCapacitorEnergy >= 100 else Color.SKY_BLUE if localPlayer.enhancementCapacitorEnergy >= 50 else Color.WHITE,
             Color.WHITE
@@ -106,10 +108,11 @@ macro initializePlayerEnhancement():
     if eventPlayer.enhancementId == Enhancement.NO_PREFERENCE:
         # No preference and late-join zero state roll once for the current hero.
         # Contiguous IDs exclude Hybrid/Bulking Season for non-tanks and Plague Doctor/Overcharge
-        # for non-supports. Hitchhiker is outside the roll. Explicit choices and later spawns retain the ID.
+        # for non-supports. Hitchhiker is manual only.
+        # Explicit choices and later spawns retain the ID.
         eventPlayer.enhancementId = random.randint(
             Enhancement.ZOMBIE_HYBRID if eventPlayer.getHero() in getTankHeroes() else Enhancement.BRAIN_KILLER,
-            Enhancement.OVERCHARGE if eventPlayer.getHero() in getSupportHeroes() else Enhancement.ENGINEER
+            Enhancement.OVERCHARGE if eventPlayer.getHero() in getSupportHeroes() else Enhancement.AUSPEX_SCAN
         )
     #Zombie Hybrid
     if eventPlayer.enhancementId == Enhancement.ZOMBIE_HYBRID:

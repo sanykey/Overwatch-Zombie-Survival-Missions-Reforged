@@ -229,7 +229,8 @@ numbers.push(
   },
   { // startMenuEnhancementColorList: indices into the shared immutable palette.
     offset: "NL_ENHANCEMENT_MENU_COLORS_OFFSET", len: "NL_ENHANCEMENT_MENU_COLORS_LEN",
-    list: [0, 12, 8, 9, 4, 12, 5, 7, 3, 2, 13, 10, 6, 11],
+    // Light Gray for Wrestler; Sky Blue for Auspex Scan, matching AUSPEX_COLOR.
+    list: [0, 12, 8, 9, 4, 12, 5, 7, 1, 2, 13, 3, 10, 6, 11],
   },
 );
 

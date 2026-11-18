@@ -37,9 +37,10 @@ enum Enhancement:
     WRESTLER = 8,
     BOLT_STRIKE = 9,
     ENGINEER = 10,
-    PLAGUE_DOCTOR = 11,
-    OVERCHARGE = 12,
-    HITCHHIKER = 13,
+    AUSPEX_SCAN = 11,
+    PLAGUE_DOCTOR = 12,
+    OVERCHARGE = 13,
+    HITCHHIKER = 14,
 
 # Wrestler holds until Knocked Down ends; manual throws request release.
 enum WrestlerCarryState:
@@ -169,3 +170,4 @@ enum EnhancementIcon:
     ENGINEER = "<TX C0000000005FA7F>",
     PLAGUE_DOCTOR = iconString(Icon.PLUS),
     OVERCHARGE = iconString(Icon.MOON),
+    AUSPEX_SCAN = iconString(Icon.EYE),
