@@ -29,12 +29,12 @@ rule "[HITCHHIKER] ATTACH OR DETACH":
     @Condition eventPlayer.enhancementId == Enhancement.HITCHHIKER
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
 
-    if not eventPlayer.isAlive():
+    if not eventPlayer.isAlive() or eventPlayer.hitchhikerCarrierPool != null:
         return
 
     # Pick the eligible carrier nearest the passenger's aim.
     eventPlayer.hitchhikerCarrier = (sorted(
-        playerTargetList.exclude(eventPlayer).filter(lambda x: not x.isAttached and not x.isCrowdControlled and distance(eventPlayer, x) < x.sizeScale * HITCHHIKER_ATTACH_RANGE_SCALE),
+        playerTargetList.exclude(eventPlayer).filter(lambda x: not x.isAttached and x.hitchhikerCarrierPool == null and not x.isCrowdControlled and distance(eventPlayer, x) < x.sizeScale * HITCHHIKER_ATTACH_RANGE_SCALE),
         lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition()))
     ))[0]
     if not entityExists(eventPlayer.hitchhikerCarrier):
@@ -60,6 +60,8 @@ rule "[HITCHHIKER] ATTACH OR DETACH":
     smallMessage(eventPlayer, "You are attached")
     eventPlayer.addHealthPool(Health.NORMAL, eventPlayer.hitchhikerCarrier.initialMaxHealth, true, false)
     eventPlayer.hitchhikerPassengerPoolId = getLastCreatedHealthPool()
+    eventPlayer.hitchhikerCarrier.addHealthPool(Health.NORMAL, eventPlayer.initialMaxHealth, true, false)
+    eventPlayer.hitchhikerCarrier.hitchhikerCarrierPool = [getLastCreatedHealthPool()]
     eventPlayer.hitchhikerCarrier.hitchhikerPassenger = eventPlayer
 
     # Forced release and hero switches clear the flag, ending either Crouch wait.
@@ -94,8 +96,6 @@ def detachHitchhikerPassenger():
     if hitchhikerLandAtCarrier and entityExists(eventPlayer.hitchhikerCarrier) and eventPlayer.hasSpawned() and distance(eventPlayer, eventPlayer.hitchhikerCarrier) < HITCHHIKER_DETACH_RANGE_SCALE * eventPlayer.hitchhikerCarrier.sizeScale:
         eventPlayer.teleport(eventPlayer.hitchhikerCarrier.getPosition())
     smallMessage(eventPlayer, "You have detached")
-    if eventPlayer.hitchhikerCarrier.hitchhikerPassenger == eventPlayer:
-        eventPlayer.hitchhikerCarrier.hitchhikerPassenger = null
     eventPlayer.hitchhikerAttached = false
     if eventPlayer.getHero() == Hero.MEI:
         eventPlayer.allowButton(Button.ABILITY_1)
@@ -103,15 +103,19 @@ def detachHitchhikerPassenger():
     removeHealthPool(eventPlayer.hitchhikerPassengerPoolId)
 
 
-rule "[HITCHHIKER] GRANT CARRIER HEALTH POOL":
+rule "[HITCHHIKER] RELEASE CARRIER HEALTH POOL":
     @Event eachPlayer
     @Team 1
-    @Condition eventPlayer.hitchhikerPassenger != null
+    @Condition eventPlayer.hitchhikerCarrierPool != null
 
-    eventPlayer.addHealthPool(Health.NORMAL, eventPlayer.hitchhikerPassenger.initialMaxHealth, true, false)
-    eventPlayer.hitchhikerCarrierPoolId = getLastCreatedHealthPool()
-    waitUntil(not entityExists(eventPlayer.hitchhikerPassenger), Math.INFINITY)
-    removeHealthPool(eventPlayer.hitchhikerCarrierPoolId)
+    waitUntil(not entityExists(eventPlayer.hitchhikerPassenger) or eventPlayer.hitchhikerPassenger.hitchhikerCarrier != eventPlayer, Math.INFINITY)
+    removeHealthPool(eventPlayer.hitchhikerCarrierPool[0])
+    eventPlayer.hitchhikerPassenger = null
+    eventPlayer.hitchhikerCarrierPool = null
+    # Catch a new passenger who boards before this rule can rearm on a false condition.
+    wait()
+    if ruleCondition:
+        loop()
 
 
 rule "[HITCHHIKER] BALANCE LINKED HEALTH":

@@ -378,9 +378,9 @@ playervar augmentState3
 # bite, rocket, Molten Core, gas and explosion rules.
 playervar isDotProtected
 
-playervar hitchhikerPassenger  # Passenger attached to this carrier; null when absent. Infection rules also query it.
+playervar hitchhikerPassenger  # Passenger reference for carrier cleanup, HUD and infection checks.
 
-playervar hitchhikerCarrierPoolId  # Extra health-pool ID on the carrier, retained until removal. The carrier may have any enhancement.
+playervar hitchhikerCarrierPool  # One-element array with the carrier pool ID, or null when free. Reserves the carrier until cleanup even if the passenger entity disappears.
 
 # Engineer: an armor grant may target any Team 1 player, so target-side
 # state cannot live in slots owned by the target's own enhancement or augment.

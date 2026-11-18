@@ -217,9 +217,11 @@ The [code review report](docs/CODE_REVIEW_REPORT.md) provides supporting evidenc
 
 ### Fixed:
 
+- [R10 — Hitchhiker passenger ownership and carrier selection](docs/CODE_REVIEW_REPORT.md#r10). Each player can belong to at most one carrier–passenger pair. If the carrier goes down, the passenger is detached before their attachment state is cleared. The carrier's extra health is removed before another passenger can board, including after a disconnect.
 - [R11 — "Doomfist never releases the simulated block button"](docs/CODE_REVIEW_REPORT.md#r11).
 - [R16 — "Bot selects a target behind a wall or a stale target"](docs/CODE_REVIEW_REPORT.md#r16).
 - [R18 — "Charge Battery selects an ineligible recipient"](docs/CODE_REVIEW_REPORT.md#r18).
+- [R33 — Hitchhiker health balancing](docs/CODE_REVIEW_REPORT.md#r33) now uses a single sorted pair of players.
 
 ## Resources
 

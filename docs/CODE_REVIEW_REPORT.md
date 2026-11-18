@@ -84,7 +84,7 @@ Fixed defects are struck through and marked with the fix date. Verification resu
 | [R07](#r07) | Previous objective's queue writes into the next objective's slot | Lifecycle, shared slots | Medium | C + R |
 | [R08](#r08) | Chase audit: valid checks excluded from defects | Diagnostics | 10 valid; 4 under observation | C; no in-game failures reproduced |
 | [R09](#r09) | Outer loop not bounded by an individual wait's timeout | Lifecycle, waits | Medium | C + R |
-| [R10](#r10) | Hitchhiker: passenger ownership and carrier selection | Logic, attachment | High | C + M; physics: R |
+| ~~[R10](#r10)~~ | ~~Hitchhiker: passenger ownership and carrier selection~~ — **fixed November 18, 2026** | Logic, attachment | ~~High~~ | C + M; in-game verification pending |
 | ~~[R11](#r11)~~ | ~~Doomfist never releases the simulated block button~~ — **fixed 2026-11-05** | Lifecycle, controls | ~~Medium~~ | C |
 | [R12](#r12) | Illari abort path does not detach | Lifecycle, attachment | High | C; physics: R |
 | [R13](#r13) | Incorrect Illari hack check and speed restoration | Logic, lifecycle | Medium/high | C + M; scheduling: R |
@@ -107,7 +107,7 @@ Fixed defects are struck through and marked with the fix date. Verification resu
 | [R30](#r30) | Frequent cooldown and charge writes in No Cooldowns | Performance, controls | Medium; check responsiveness | O |
 | [R31](#r31) | Escorted NPC path growth | Performance, navigation | High as path grows | O |
 | [R32](#r32) | Decorative Bounce Pad and Air Strike effects | Performance, visualization | Medium; check clients | O |
-| [R33](#r33) | Hitchhiker and timer sorting | Performance, minor overhead | Low | O |
+| [R33](#r33) | ~~Hitchhiker~~ and timer sorting — **Hitchhiker optimization implemented November 18, 2026** | Performance, minor overhead | Low | O |
 | [R34](#r34) | Miniboss list grows through empty entries | Resources, long matches | High for long matches | C; load: O |
 | [R35](#r35) | Ground items and the shared visual-object budget | Resources, long matches | High for long matches | C; exhaustion: R |
 | [R36](#r36) | Visibility filters with a condition shared by all viewers | Performance, visibility | Low/medium | O; prototype: C |
@@ -296,6 +296,8 @@ Teleport search and supply-drop search are covered separately in R26 and R37. Em
 ### R10. Hitchhiker: passenger ownership and carrier selection
 
 **Category:** Logic, attachment. **Priority:** High. **Evidence:** C + M; physics: R.
+
+**Fixed November 18, 2026.** A single filter selects an eligible carrier, and the rule checks that the selected entity exists before attaching. Each player can belong to at most one carrier–passenger pair, which prevents overwriting the passenger reference and forming attachment chains. The detach subroutine calls `Detach Players` before clearing passenger state. The carrier slot becomes available after its extra health pool is removed, including when the passenger leaves the match. Verified in the source and compiled Workshop output. In-game verification is pending. The original finding follows. [Selection](../src/abilities/enhancement_hitchhiker.opy#L26) · [Detach and pool cleanup](../src/abilities/enhancement_hitchhiker.opy#L89)
 
 Carrier-admission and selection filters already differed in the original; the single passenger reference and unconditional cleanup could overwrite another player's association. Source: [original:6990](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6990>), [original:6992](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6992>), [original:7006](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7006>), [original:7013](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7013>).
 
@@ -727,6 +729,8 @@ Client-load/traffic candidate: reduce decorative-ring frequency or restrict dist
 ### R33. Hitchhiker and timer sorting
 
 **Category:** Performance, minor overhead. **Priority:** Low. **Evidence:** O.
+
+**Hitchhiker optimization implemented November 18, 2026.** Health balancing uses the first and last entries of one sorted pair and updates the recipient first. This removes the second array construction. The respawn-timer sorting proposal remains open. [Health balancing](../src/abilities/enhancement_hitchhiker.opy#L121) · [Respawn timers](../src/core/global_startup.opy#L113)
 
 Optimization candidates: timer sorting and sorting two Hitchhiker participants already existed in the original. Source: [original:534](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L534>), [original:7042](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7042>), [original:7043](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7043>).
 
