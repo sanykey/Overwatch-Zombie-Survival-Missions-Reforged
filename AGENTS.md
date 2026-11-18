@@ -26,6 +26,24 @@ Everything in `analysis/` (reports, temporary scripts, validation results) belon
 
 - Successful OverPy compilation does not establish Workshop import compatibility. Inspect expanded macros before nesting array predicates: `livingProjectileValid()` already uses `all()`, and wrapping it in `any()` produced `Is True For Any(... Is True For All(...))`, rejected by the game with "Cannot nest more than 1 level for some of the values in this script." Keep this predicate outside another collection predicate. Passing several arrays as chained inputs to one predicate is fine; only predicates nested inside other predicates hit the limit.
 
+## Hero Ability HUD Text
+
+Use these abbreviations and formats in English HUD descriptions of hero abilities.
+
+| Full wording | HUD wording |
+| --- | --- |
+| `damage` | `dmg` |
+| `Cooldown: 20s` | `20s CD` |
+| `Critical hits` | `Crits` |
+| `Double-tap []` | `2x []` |
+| `per` | `/` |
+| `within 15m` | `in 15m` |
+| `resistance` | `resist` |
+| `invulnerability` | `invuln` |
+| `for 3s` | `(3s)` |
+
+Use telegraphic style. Drop articles (`a`, `the`), pronouns (`your`, `you`, `them`), and linking phrases (`that grants`, `while attached`) while keeping any conditions needed to understand the ability. Use direct verbs and place durations in parentheses. For example, shorten `sets them on fire for 3s` to `burn for 3s`, then apply the duration format to get `ignite (3s)`.
+
 ## Workshop Native UI Diagnostics
 
 For disappearing native hero portraits or related Workshop UI corruption, start with
