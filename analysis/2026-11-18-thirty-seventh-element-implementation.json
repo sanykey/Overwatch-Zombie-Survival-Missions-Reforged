@@ -1,0 +1,10 @@
+{
+  "baseline": 29748,
+  "implemented": 29730,
+  "saved": 18,
+  "warnings": [],
+  "changedSources": [
+    "src/items/supply_drops.opy"
+  ],
+  "change": "PLAYER INTERACT: hoist thrice-computed Scavenger+Crouch pair into synchronous tmp3 flag isScavengerCrouchHeld"
+}
