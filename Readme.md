@@ -77,7 +77,7 @@ The **Infection Reduced** HUD counter sums both reductions and the 0.5 cure bonu
 
 Zombie Hybrid gains infection stacks from zombie melee hits even with temporary health or armor above its normal health threshold. The other infection restrictions still apply, including ultimate and Dash protection, hacked attackers, and the Melee Infection Enabled setting.
 
-The Apothecary rule for health-pack pickup at full health remains deferred. This version uses standard beams without the Beam Effects extension. The [feature-port audit](analysis/feature-port-audit.json) records the earlier rebuild before Bolt Strike was restored; see the [Bolt Strike validation](analysis/bolt-strike-validation.json) for the restoration.
+The Apothecary rule for health-pack pickup at full health remains deferred. This version uses standard beams without the Beam Effects extension. See the [Bolt Strike validation](analysis/bolt-strike-validation.json) for the restoration.
 
 Bolt Strike passively chains each damaging hero hit to up to two random other living zombies visible from the original victim within 10m. Each chain deals 25% of the hit, capped at 15 damage. Warning-phase Smolders are excluded. A per-target 0.032s damage gate merges near-simultaneous splash events; ordinary chain-hit flashes use a separate 0.5s gate. Scripted chain damage cannot trigger further chains. All chain settings are defined in `src/core/variables.opy`. Bolt Strike uses Enhancement ID 9; Wrestler uses ID 8. See the [chain-only validation](analysis/2026-11-14-bolt-chain-only-validation.json).
 
