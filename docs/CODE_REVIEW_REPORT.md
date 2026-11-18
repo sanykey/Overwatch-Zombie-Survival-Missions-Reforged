@@ -7,6 +7,8 @@ Analysis baseline: `5ccb8f09a66ee4c5fd4bb07f56c5528d9f975f7a` and the inspected 
 
 **Audit baseline:** the build sizes, included files, and warning counts below refer to this audit's baseline. Following the release documentation work, current measurements and build configuration are published in [README](../Readme.md) and [project-metrics.json](../analysis/project-metrics.json). This register preserves the evidence and classification of findings; its figures do not replace recompiling the current code.
 
+**Evidence files removed:** the `analysis/` scripts, reports, and validation results linked throughout this register were removed from the working tree on November 18, 2026 (commit `2bf5c41`). The links below are historical; each file remains available in git history at any commit before `2bf5c41` (e.g. `git show 2bf5c41^:analysis/<file>`).
+
 The register contains **38 finding groups, R01–R38**. A group may contain several related defects or minor improvements; this is not a count of reproduced bugs or crashes.
 
 **All defects, risks, and optimization candidates described here are inherited from the original ZSMM (786TW).**
