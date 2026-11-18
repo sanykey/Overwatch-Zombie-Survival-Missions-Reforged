@@ -1,0 +1,58 @@
+{
+  "baselineRef": "cfdf808ec3019b648c57e1ac0aaf863659228886",
+  "baseline": 29802,
+  "results": [
+    {
+      "name": "shared_color_indices",
+      "elements": 29768,
+      "saved": 34,
+      "warnings": [],
+      "changedRules": [
+        "Initialize global variables #1",
+        "EFFECTS/TEXTS #1"
+      ]
+    },
+    {
+      "name": "shared_color_indices_with_challenge",
+      "elements": 29767,
+      "saved": 35,
+      "warnings": [],
+      "changedRules": [
+        "Initialize global variables #1",
+        "EFFECTS/TEXTS #1"
+      ]
+    },
+    {
+      "name": "shared_color_indices_challenge_field_0",
+      "elements": 29766,
+      "saved": 36,
+      "warnings": [],
+      "changedRules": [
+        "Initialize global variables #1",
+        "EFFECTS/TEXTS #1"
+      ]
+    },
+    {
+      "name": "shared_color_indices_challenge_field_1",
+      "elements": 29767,
+      "saved": 35,
+      "warnings": [],
+      "changedRules": [
+        "Initialize global variables #1",
+        "EFFECTS/TEXTS #1"
+      ]
+    },
+    {
+      "name": "shared_color_indices_challenge_field_2",
+      "elements": 29766,
+      "saved": 36,
+      "warnings": [],
+      "changedRules": [
+        "Initialize global variables #1",
+        "EFFECTS/TEXTS #1"
+      ]
+    }
+  ],
+  "inGameValidation": false,
+  "serverLoadMeasured": false
+}

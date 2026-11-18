@@ -11,9 +11,6 @@ globalvar offsetDownHundredConst = -100 * Vector.UP       # Downward offset of 1
 globalvar offsetUpOneAndHalfConst = 1.5 * Vector.UP       # Vertical offset of 1.5 m for the pregame camera and player labels. Source uses: 6 (excluding declaration).
 globalvar offsetUpQuarterConst = 0.25 * Vector.UP         # Vertical offset of 0.25 m for impulses, power-up drops and effects. Source uses: 5 (excluding declaration).
 
-# Immutable palette indexed by item ID minus one; shared by ground items and their HUD.
-globalvar powerUpColorListConst = [Color.GREEN, Color.YELLOW, Color.BLUE, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.BLUE, Color.RED, Color.PURPLE, Color.RED, Color.WHITE]
-
 # Immutable Augment icons, indexed by selection ID and initialized once before UI rules.
 # Shared by the pregame menu, world labels, personal HUD and roster throughout the match.
 # Keep a dedicated slot: pregame storage is reused by objectives during gameplay.
@@ -25,8 +22,12 @@ globalvar augmentIconListConst = [AugmentIcon.NO_PREFERENCE, AugmentIcon.KEVLAR,
 
 globalvar enhancementIconListConst = [EnhancementIcon.NO_PREFERENCE, EnhancementIcon.ZOMBIE_HYBRID, EnhancementIcon.BULKING_SEASON, EnhancementIcon.BRAIN_KILLER, EnhancementIcon.PYROTECHNIC, EnhancementIcon.BORN_TO_BATTLE, EnhancementIcon.CHARGE_BATTERY, EnhancementIcon.PUP, EnhancementIcon.WRESTLER, EnhancementIcon.BOLT_STRIKE, EnhancementIcon.ENGINEER, EnhancementIcon.PLAGUE_DOCTOR, EnhancementIcon.OVERCHARGE, EnhancementIcon.HITCHHIKER]
 
-# Immutable palette shared by the pregame menu and gameplay HUD; indexed by Augment.
-globalvar augmentColorListConst = [Color.AQUA, Color.LIGHT_GRAY, Color.YELLOW, Color.SKY_BLUE, Color.ORANGE, Color.WHITE, Color.TURQUOISE, Color.BLUE, Color.GREEN, Color.LIME_GREEN, Color.RED]
+# Shared immutable palette: Augment colors keep indices 0..10 unchanged.
+# Tail 11..14: Purple, Gray, Rose, Null; used to reconstruct the other palettes.
+globalvar augmentColorListConst = [Color.AQUA, Color.LIGHT_GRAY, Color.YELLOW, Color.SKY_BLUE, Color.ORANGE, Color.WHITE, Color.TURQUOISE, Color.BLUE, Color.GREEN, Color.LIME_GREEN, Color.RED, Color.PURPLE, Color.GRAY, Color.ROSE, null]
+
+# Initialize after the shared palette; all original item colors and order are retained.
+globalvar powerUpColorListConst = numbersList.slice(NL_POWERUP_COLORS_OFFSET, NL_POWERUP_COLORS_LEN).map(lambda index: augmentColorListConst[index])
 
 # Immutable augment names, indexed by selection ID; shared by the augment menu and combat HUD.
 # Melee-augment hero tables; the extended list also provides the index for per-hero melee values.

@@ -116,13 +116,13 @@ rule "EFFECTS/TEXTS":
         "Change Vote (Press [{0}])".format(inputBindingString(Button.ULTIMATE)) if isVoting or localPlayer.pregameChallengeVote == Challenge.NO_PREFERENCE else [],
         HudPosition.ACTUALLY_LEFT,
         0,
-        [Color.AQUA, Color.YELLOW, Color.LIME_GREEN, Color.ORANGE, Color.TURQUOISE, Color.PURPLE][localPlayer.pregameChallengeVote],
+        numbersList.slice(NL_CHALLENGE_COLORS_0_OFFSET, NL_CHALLENGE_COLORS_0_LEN).map(lambda index: augmentColorListConst[index])[localPlayer.pregameChallengeVote],
         [Color.AQUA, null, Color.LIME_GREEN, Color.ORANGE, Color.WHITE, Color.WHITE][localPlayer.pregameChallengeVote],
         [Color.AQUA, Color.YELLOW, Color.LIME_GREEN, Color.ORANGE, Color.WHITE, Color.WHITE][localPlayer.pregameChallengeVote],
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Zombie Mode
-    startMenuZombieColorList = [Color.AQUA, Color.ORANGE, Color.RED, Color.PURPLE, Color.LIME_GREEN, Color.BLUE, Color.GRAY]
+    startMenuZombieColorList = numbersList.slice(NL_ZOMBIE_MENU_COLORS_OFFSET, NL_ZOMBIE_MENU_COLORS_LEN).map(lambda index: augmentColorListConst[index])
     hudText(
         getPlayers(Team.1),
         [
@@ -152,7 +152,7 @@ rule "EFFECTS/TEXTS":
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Objective Type: arrays use raw IDs; 3, 4 and 8 have no standalone menu row.
-    startMenuObjectiveColorList = [Color.AQUA, Color.ORANGE, Color.RED, null, null, Color.RED, Color.LIME_GREEN, Color.TURQUOISE, null, Color.PURPLE]
+    startMenuObjectiveColorList = numbersList.slice(NL_OBJECTIVE_MENU_COLORS_OFFSET, NL_OBJECTIVE_MENU_COLORS_LEN).map(lambda index: augmentColorListConst[index])
     hudText(
         getPlayers(Team.1),
         [
@@ -188,7 +188,7 @@ rule "EFFECTS/TEXTS":
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Enhancement
-    startMenuEnhancementColorList = [Color.AQUA, Color.GRAY, Color.LIME_GREEN, Color.RED, Color.ORANGE, Color.GRAY, Color.WHITE, Color.BLUE, Color.SKY_BLUE, Color.YELLOW, Color.ROSE, Color.GREEN, Color.TURQUOISE, Color.PURPLE]
+    startMenuEnhancementColorList = numbersList.slice(NL_ENHANCEMENT_MENU_COLORS_OFFSET, NL_ENHANCEMENT_MENU_COLORS_LEN).map(lambda index: augmentColorListConst[index])
     hudText(
         getPlayers(Team.1),
         "Enhancement: {0}{1}".format(
