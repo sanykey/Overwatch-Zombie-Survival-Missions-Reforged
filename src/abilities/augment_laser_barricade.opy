@@ -6,6 +6,7 @@
 #!define LASER_BARRICADE_AUGMENT_WIDTH 6
 #!define LASER_BARRICADE_AUGMENT_COOLDOWN 25
 #!define LASER_BARRICADE_KNOCKDOWN_DAMAGE_THRESHOLD 4900
+#!define LASER_BARRICADE_CONTACT_DAMAGE_MULTIPLIER 2.5
 
 macro placeLaserBarricadeAugmentMacro():
     # -1 latches aiming until Interact release or death.
@@ -95,13 +96,13 @@ rule "[LASER_BARRICADE AUGMENT] BLOCKS ZOMBIES":
         barrierCollisionTarget = eventPlayer.augmentBarrierTargetList[barrierCollisionTargetIndex]
         if not barrierCollisionTarget.hasStatus(Status.ROOTED):
             #Damage the barricade
-            eventPlayer.augmentBarrierHealth -= barrierCollisionTarget.getMaxHealth() * 2.5
+            eventPlayer.augmentBarrierHealth -= barrierCollisionTarget.getMaxHealth() * LASER_BARRICADE_CONTACT_DAMAGE_MULTIPLIER
             barrierCollisionTarget.setStatusEffect(eventPlayer, Status.ROOTED, 0.5)
-            # Heavy contacts knock the zombie down, including contacts that break the barrier.
-            # Convert the damage threshold to max HP; the compiler folds the constant division.
-            if barrierCollisionTarget.getMaxHealth() >= LASER_BARRICADE_KNOCKDOWN_DAMAGE_THRESHOLD / 2.5:
-                barrierCollisionTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 1)
-            damage(barrierCollisionTarget, eventPlayer, 20)
+            # Each full threshold of contact damage adds one second of knockdown, including on a breaking hit.
+            # The compiler folds the damage threshold conversion to max HP.
+            if barrierCollisionTarget.getMaxHealth() >= LASER_BARRICADE_KNOCKDOWN_DAMAGE_THRESHOLD / LASER_BARRICADE_CONTACT_DAMAGE_MULTIPLIER:
+                barrierCollisionTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, floor(barrierCollisionTarget.getMaxHealth() / (LASER_BARRICADE_KNOCKDOWN_DAMAGE_THRESHOLD / LASER_BARRICADE_CONTACT_DAMAGE_MULTIPLIER)))
+            damage(barrierCollisionTarget, eventPlayer, 25)
         # barrierImpulseVertical: shared vertical angle component of both impulse directions.
         #!define barrierImpulseVertical tmp3
         barrierImpulseVertical = (-1 if barrierCollisionTarget.getPosition().y > eventPlayer.augmentBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(barrierCollisionTarget.getPosition(), barrierCollisionTarget.getPosition() + Vector.DOWN, null, getAllPlayers(), false))))
