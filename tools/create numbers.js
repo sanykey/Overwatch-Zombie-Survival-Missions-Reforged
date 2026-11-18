@@ -175,6 +175,24 @@ const numbers = [
       4.3, 33.75, 0.15, 0.45, // Vendetta: original damage 45; 75% = 33.75; interval 0.6
     ],
   },
+  { // Boss exclusions: botHeroList indices, preserving the existing exclusion order.
+    offset: "NL_BOSS_EXCLUDED_HERO_OFFSET",
+    len: "NL_BOSS_EXCLUDED_HERO_LEN",
+    list: [
+      1, // JUNKRAT
+      5, // ANRAN
+      6, // WIDOWMAKER
+      13, // JUNKER_QUEEN
+      16, // SYMMETRA
+      17, // ANA
+      19, // DOOMFIST
+      20, // KIRIKO
+      7, // MAUGA
+      12, // SIGMA
+      9, // WRECKING_BALL
+      21, // JETPACK_CAT
+    ],
+  },
 ];
 
 let numberIndex = 0;
