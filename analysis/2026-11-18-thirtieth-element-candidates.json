@@ -1,0 +1,37 @@
+{
+  "baselineRef": "55b44985b3597c6ec4c8f2d9d80b5087dd6cc91d",
+  "baseline": 29908,
+  "results": [
+    {
+      "name": "miniboss_indices",
+      "elements": 29900,
+      "saved": 8,
+      "warnings": [],
+      "changedRules": [
+        "Initialize global variables #1",
+        "botRespawnInitialization #1"
+      ]
+    },
+    {
+      "name": "spawn_table_metadata",
+      "elements": 29901,
+      "saved": 7,
+      "warnings": [],
+      "changedRules": [
+        "Initialize global variables #1",
+        "setZombieMode #1"
+      ]
+    },
+    {
+      "name": "combined",
+      "elements": 29889,
+      "saved": 19,
+      "warnings": [],
+      "changedRules": [
+        "Initialize global variables #1",
+        "botRespawnInitialization #1",
+        "setZombieMode #1"
+      ]
+    }
+  ]
+}

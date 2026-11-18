@@ -60,7 +60,7 @@ macro damageWithEnhancements(amount, target):
 
 macro minibossMutationMacro():
     miniBossList.append(eventPlayer)
-    eventPlayer.startForcingHero(random.choice([Hero.REINHARDT, Hero.WRECKING_BALL, Hero.JUNKER_QUEEN, Hero.DOOMFIST, Hero.KIRIKO, Hero.MAUGA, Hero.HAZARD, Hero.REAPER]))
+    eventPlayer.startForcingHero(botHeroList[random.choice(numbersList.slice(NL_MINIBOSS_HERO_OFFSET, NL_MINIBOSS_HERO_LEN))])
     if zombieSetting == 6:
         eventPlayer.startForcingHero(random.choice([Hero.REINHARDT, Hero.WRECKING_BALL]))
     eventPlayer.botBaseHealth = 2500

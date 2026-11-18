@@ -193,7 +193,25 @@ const numbers = [
       21, // JETPACK_CAT
     ],
   },
+  { // MINIBOSS_HERO: appended to preserve existing offsets.
+    offset: "NL_MINIBOSS_HERO_OFFSET",
+    len: "NL_MINIBOSS_HERO_LEN",
+    list: [4, 9, 13, 19, 20, 7, 15, 0],
+  },
 ];
+
+// Mode 3 is constructed in OverPy. Derive metadata from the source groups
+// so changes to a spawn table update both its offset and length automatically.
+const spawnModeGroups = ["NL_SPAWN_RATES_ALL_ZOMBIES_OFFSET","NL_SPAWN_RATES_NEW_BLOOD_OFFSET",null,"NL_SPAWN_RATES_SHUFFLE_OFFSET","NL_SPAWN_RATES_DINNER_RUSH_OFFSET","NL_SPAWN_RATES_HAM_N_HAMMER_OFFSET"].map(id =>
+  id === null ? null : numbers.find(group => group.offset === id));
+if (spawnModeGroups.some(group => group === undefined)) throw new Error("Missing spawn table");
+const spawnModeOffsets = spawnModeGroups.map(group => group === null ? 0 :
+  numbers.slice(0, numbers.indexOf(group)).reduce((sum, entry) => sum + entry.list.length, 0));
+const spawnModeLengths = spawnModeGroups.map(group => group === null ? 0 : group.list.length);
+numbers.push(
+  { offset: "NL_SPAWN_MODE_OFFSETS_OFFSET", len: "NL_SPAWN_MODE_OFFSETS_LEN", list: spawnModeOffsets },
+  { offset: "NL_SPAWN_MODE_LENGTHS_OFFSET", len: "NL_SPAWN_MODE_LENGTHS_LEN", list: spawnModeLengths },
+);
 
 let numberIndex = 0;
 numbers.forEach(group => {
