@@ -1,9 +1,0 @@
-{
-  "mode": "R",
-  "activeHostTextCalls": 4,
-  "disabledHostTextCalls": 1,
-  "inputSha256": "46048412684317e39a0100b616f72c3a29f27bd184d72f0da0d3897c43caf9bd",
-  "outputSha256": "4807bf79190aaa16dd66d73f20f27461d161ce87323fabe972cd8e8cf9a0ac68",
-  "verified": "Only disabled flags of selected actions changed. Original definitions/order, host guard, effects, Conditions/settings preserved. Decompiler accepted output; block recompilation contains expected active text count (disabled actions dropped by OverPy).",
-  "limitation": "No native game test. Disabled actions remain in export; engine internal storage may differ. Does not establish a global text quota. No whole-export element-saving claim."
-}

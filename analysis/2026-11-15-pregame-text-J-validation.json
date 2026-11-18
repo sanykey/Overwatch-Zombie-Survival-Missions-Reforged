@@ -1,9 +1,0 @@
-{
-  "inputSha256": "1d3528a2c1f3c263838d46881dc94b5e6ecadab2c530900d24f30804bf8211d2",
-  "outputSha256": "c79c279e06382777008d1532baa00d06cf8989baf285d1938f10c90efce6445e",
-  "elements": 29545,
-  "deltaFromG": 4,
-  "verified": "Added exactly one If(Event Player == Host Player) / End around five contiguous world-text creation calls in player Pregame visual rule. No Conditions, effects, settings or other actions changed. Decompiled successfully.",
-  "scenario": "Host in Team 1, Malevento, same five standard lobby bots, Shion -> Crouch; no Enhancement/Augment selection.",
-  "limitation": "Host must perform test. Fewer world texts and their evaluations, but all five bots remain. No native game test. Host transfer while rule is active is outside this diagnostic scenario."
-}

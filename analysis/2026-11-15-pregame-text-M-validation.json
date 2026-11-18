@@ -1,8 +1,0 @@
-{
-  "inputSha256": "c79c279e06382777008d1532baa00d06cf8989baf285d1938f10c90efce6445e",
-  "outputSha256": "9a7933c079b89f0f7196b660ddfaf160857d5c06382bde956de46e11ade0be53",
-  "elements": 29545,
-  "deltaFromJ": 0,
-  "verified": "Exactly five Reevaluation arguments changed from Visible To Position and String to None. All other executable content identical. Decompiler accepted output; paired block compilation confirms equal element count.",
-  "limitation": "Diagnostic only. Text visibility, positions and strings may become stale. Hidden-at-creation texts can stay hidden. Effects remain original. No native game test. Retains creation-time expressions and allocated text objects; does not isolate every internal engine operation."
-}

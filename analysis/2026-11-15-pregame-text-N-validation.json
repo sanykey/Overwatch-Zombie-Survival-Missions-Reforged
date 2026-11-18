@@ -1,8 +1,0 @@
-{
-  "inputSha256": "9a7933c079b89f0f7196b660ddfaf160857d5c06382bde956de46e11ade0be53",
-  "outputSha256": "46048412684317e39a0100b616f72c3a29f27bd184d72f0da0d3897c43caf9bd",
-  "elements": 29456,
-  "deltaFromM": -89,
-  "verified": "Only five text-action argument lists replaced. Same creation count, same host guard, no reevaluation, original effects. Decompiler accepted output. Paired block compilation measured delta and verified identical non-text compiled content.",
-  "limitation": "No native game test. Texts located at world origin; not necessarily visible from menu. All Players is evaluated once at creation, other arguments are literals. Positive result may reflect changed expressions, placement, visibility or smaller code; not proof of a specific engine fault."
-}
