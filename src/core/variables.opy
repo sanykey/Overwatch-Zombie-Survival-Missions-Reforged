@@ -427,7 +427,7 @@ playervar recoveryTimeSlot  # Existing Team 1 revive countdown / Team 2 replacem
 
 playervar isCrowdControlled  # Live boolean for both teams, set/reset by CROWD CONTROL STATUS. Excludes Rooted.
 # The bot CC tracker itself and Team 1 consumers (Hitchhiker carriers, Wrestler,
-# Ana self Nano, augments) read this live flag; zombie behavior rules read the
+# augments) read this live flag; zombie behavior rules read the
 # delayed flag below so a recent interruption still counts for up to 0.125s.
 playervar botIsCrowdControlled  # Delayed Team 2 flag, lags CC exit by up to 0.125s. BOT STUN MANAGEMENT refreshes it; botRespawnInitialization resets it.
 
