@@ -1,0 +1,47 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "409b4cadd495678b5fd0c3929368c0ba60c458d7",
+  "baseline": 29847,
+  "candidate": 29802,
+  "saved": 45,
+  "warnings": [],
+  "status": "measured only; gameplay sources unchanged",
+  "changedFiles": [
+    "src/core/subroutines.opy",
+    "src/game/zombie_types.opy",
+    "src/items/supply_drops.opy"
+  ],
+  "changedRules": [
+    "selectPullAimTarget #1",
+    "BRUTE (REIN) SUPER SEISMIC SLAM #1",
+    "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES #1",
+    "sentryTurret (50-59) #1"
+  ],
+  "snapshots": [
+    {
+      "rule": "BRUTE (REIN) SUPER SEISMIC SLAM #1",
+      "slot": "tmp0",
+      "reads": 4
+    },
+    {
+      "rule": "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES #1",
+      "slot": "tmp0",
+      "reads": 2
+    },
+    {
+      "rule": "sentryTurret (50-59) #1",
+      "slot": "tmp1",
+      "reads": 2
+    }
+  ],
+  "allActionsMatchAfterInliningSnapshotsAndRebasingSkips": true,
+  "pullOriginAndEyeExpressionsMatchAfterInlining": true,
+  "conditionsAndVariablesUnchanged": true,
+  "newRules": 0,
+  "newVariables": 0,
+  "newWaits": 0,
+  "nestedArrayPredicates": [],
+  "nativeBaselineMatchesFlattenedModel": true,
+  "inGameValidation": false,
+  "serverLoadMeasured": false
+}

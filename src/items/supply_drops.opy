@@ -333,8 +333,11 @@ def sentryTurret():
             # turretShotImpactPosition: turret shot's impact position with random spread, to place its explosion and damage ray.
             #!define turretShotImpactPosition tmp0
             turretShotImpactPosition = raycastHitPosition(eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + ((directionFromAngles(random.uniform(-1, 1) + horizontalAngleOfDirection(eventPlayer.powerUpTurretDirection), random.uniform(-1, 1) + verticalAngleOfDirection(eventPlayer.powerUpTurretDirection))) * 100), getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())), getPlayers(eventPlayer.getTeam()), true)
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, eventPlayer.powerUpTurretPosition + eventPlayer.powerUpTurretDirection * 0.5, 25)
-            playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer.powerUpTurretPosition + eventPlayer.powerUpTurretDirection * 0.5, 0.1)
+            # Synchronous shot feedback; tmp1 is free and is not retained across damage or waits.
+            #!define turretShotMuzzlePosition tmp1
+            turretShotMuzzlePosition = eventPlayer.powerUpTurretPosition + eventPlayer.powerUpTurretDirection * 0.5
+            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, turretShotMuzzlePosition, 25)
+            playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, turretShotMuzzlePosition, 0.1)
             playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, turretShotImpactPosition, 0.1)
             # The impact position has no live reevaluation readers. Reuse tmp0 for
             # the hit player after the raycast consumes it; freeze and damage finish

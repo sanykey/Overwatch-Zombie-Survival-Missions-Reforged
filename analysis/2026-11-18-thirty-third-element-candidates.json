@@ -1,0 +1,56 @@
+{
+  "baselineRef": "409b4cadd495678b5fd0c3929368c0ba60c458d7",
+  "baseline": 29847,
+  "results": [
+    {
+      "name": "brute_slam_center",
+      "elements": 29822,
+      "saved": 25,
+      "warnings": [],
+      "changedRules": [
+        "BRUTE (REIN) SUPER SEISMIC SLAM #1"
+      ]
+    },
+    {
+      "name": "blaster_launch_point",
+      "elements": 29839,
+      "saved": 8,
+      "warnings": [],
+      "changedRules": [
+        "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES #1"
+      ]
+    },
+    {
+      "name": "pull_origin_early",
+      "elements": 29841,
+      "saved": 6,
+      "warnings": [],
+      "changedRules": [
+        "selectPullAimTarget #1"
+      ]
+    },
+    {
+      "name": "turret_muzzle_point",
+      "elements": 29841,
+      "saved": 6,
+      "warnings": [],
+      "changedRules": [
+        "sentryTurret (50-59) #1"
+      ]
+    },
+    {
+      "name": "combined",
+      "elements": 29802,
+      "saved": 45,
+      "warnings": [],
+      "changedRules": [
+        "selectPullAimTarget #1",
+        "BRUTE (REIN) SUPER SEISMIC SLAM #1",
+        "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES #1",
+        "sentryTurret (50-59) #1"
+      ]
+    }
+  ],
+  "inGameValidation": false,
+  "serverLoadMeasured": false
+}
