@@ -315,7 +315,7 @@ playervar augmentState0
 
 playervar augmentState1
 # Dash smoke effect entity; retained across overlapping dashes, null after DASH
-# SMOKE FADE removes it. Never write augmentIsAirActionReady for Dash: same slot.
+# SMOKE FADE removes it.
 #!define augmentDashSmokeEntity augmentState1
 # Team 2 Wrestler: carrier's 50% damage modifier, from pickup to synchronous
 # release cleanup, before any throw-damage wait. Overwritten on each pickup.
@@ -323,9 +323,6 @@ playervar augmentState1
 #!define wrestlerProtectionId augmentState1
 # Laser Barricade unit edge direction; persists for collision checks.
 #!define augmentBarrierEdgeDirection augmentState1
-# HIGHRISE ONLY: armed after releasing Jump in midair; consumed once, cleared
-# on landing/death. Writing this alias for Dash loses its live smoke entity.
-#!define augmentIsAirActionReady augmentState1
 # Ammo Pack current cached entry, retained through the hero/weapon/respawn wait.
 #!define augmentAmmoLoadout augmentState1
 # Telekinesis hero snapshot; an interrupted attack cannot resume for a different hero.
@@ -356,9 +353,6 @@ playervar augmentState2
 # Dash's current charges; refilled by the recharge rule, spent only in the dash
 # action. Reset to full on augment initialization (each non-hero-switch spawn).
 #!define augmentDashCharges augmentState2
-# HIGHRISE's last first-tap timestamp; zero means no pending tap. Only its
-# Jump-press handler writes it; death clears it. The cooldown remains in state0.
-#!define augmentJumpLastPressedAt augmentState2
 # Grapnel Launcher alone owns a locked target (zombie or ally) and [launch
 # hero, beam entity ID] across its pull waits. The live beam reads the target
 # until it is destroyed; cleanup then clears both slots.

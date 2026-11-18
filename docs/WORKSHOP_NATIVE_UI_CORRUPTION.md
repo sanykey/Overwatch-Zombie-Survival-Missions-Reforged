@@ -209,8 +209,7 @@ Event/Team/Hero остаются прежними. Native event запускае
 | enhancements.opy | `ENGINEER ASSIST SCRAP` | Пара phase/ID |
 | enhancements.opy | `ENGINEER ARMOR TRANSFER` | Пара phase/ID |
 | enhancements.opy | `ENGINEER TURRET DEPLOY` | Пара phase/ID |
-| [augment_highrise.opy](../src/abilities/augment_highrise.opy) | `[HIGHRISE] RECHARGE` | Пара phase/ID |
-| augment_highrise.opy | `[HIGHRISE] DOUBLE TAP` | Пара phase/ID |
+| [augments.opy](../src/abilities/augments.opy) | `DOUBLE TAP JUMP (DASH / HIGHRISE)` | Пара phase/ID |
 | [augment_dash.opy](../src/abilities/augment_dash.opy) | `[DASH] CHARGE RECHARGE` | Пара phase/ID |
 | [augment_apothecary.opy](../src/abilities/augment_apothecary.opy) | `[APOTHECARY AUGMENT] CURE ICON` | Пара phase/ID |
 | [augments.opy](../src/abilities/augments.opy) | `GRAPNEL LAUNCHER` | Пара phase/ID |
@@ -227,6 +226,8 @@ Event/Team/Hero остаются прежними. Native event запускае
 | [player_events.opy](../src/abilities/player_events.opy) | `PLAYER PICKS UP HEALTH PACK` | Event guard |
 
 `KEVLAR RANGED DAMAGE COMPENSATION` и `BRIGITTE SHIELD BASH STUN` оставлены с исходными Conditions. Не следует считать все event guards или все phase/ID пары обязательным архитектурным правилом для всего проекта.
+
+Обновление 18 ноября 2026: способ Highrise «нажатие Jump в воздухе» удалён вместе с правилами `[HIGHRISE] RECHARGE` и `[HIGHRISE] AIR ACTION INPUT` (Highrise активируется только двойным тапом), а правила `[HIGHRISE] DOUBLE TAP` и `[DASH] DOUBLE TAP` объединены в одно `DOUBLE TAP JUMP (DASH / HIGHRISE)` в augments.opy с общей парой phase/ID по обоим ID. Преобразованных правил в исходниках стало 24; исторические числа выше описывают принятый вариант своего времени и не пересчитаны.
 
 Часть cleanup-обработчиков в обычном прогоне до первого Reload вообще не должна выполнять полезные действия. Их участие в успешном пакете нельзя объяснять автоматически экономией на выполняемой очистке; отдельная необходимость каждого такого обработчика не установлена.
 

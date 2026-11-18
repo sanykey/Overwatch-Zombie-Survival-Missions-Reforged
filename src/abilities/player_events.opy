@@ -97,8 +97,6 @@ rule "PLAYER DIED":
         destroyEffect(eventPlayer.enhancementScrapBeamEntity)
         eventPlayer.enhancementScrapBeamEntity = null
 
-    if eventPlayer.augmentId == Augment.HIGHRISE:
-        eventPlayer.augmentJumpLastPressedAt = 0
     if eventPlayer.augmentId == Augment.DASH:
         # A death inside the resist window must not carry the 0% damage intake
         # or the knockback immunity into the next life before the deadline passes.

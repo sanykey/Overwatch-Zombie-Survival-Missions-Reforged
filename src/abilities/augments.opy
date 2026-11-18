@@ -14,7 +14,7 @@ rule "AUGMENT MENU":
             " ",
             f"+{AUGMENT_KEVLAR_ARMOR} armor, {AUGMENT_KEVLAR_KNOCKBACK_RESIST}% knockback resistance. {AUGMENT_KEVLAR_RANGED_DMG_RESIST}% resistance to ranged and ability dmg.",
             f"Dash in your movement direction with {DASH_PHASE_DURATION}s invulnerability. Stores {DASH_MAX_CHARGES} charges; restores one every {DASH_COOLDOWN}s.",
-            f"Launch upward and gain +{HIGHRISE_DAMAGE_BONUS}% dmg until landing/{HIGHRISE_DAMAGE_DURATION}s +{HIGHRISE_DAMAGE_GRACE_PERIOD}s. cd: 16s.",
+            f"Launch upward and gain +{HIGHRISE_DAMAGE_BONUS}% dmg until landing/{HIGHRISE_DAMAGE_DURATION}s +{HIGHRISE_DAMAGE_GRACE_PERIOD}s. cd: {HIGHRISE_COOLDOWN}s.",
             f"Triple melee reach; weapon hits at extended range deal 75% dmg. Push zombies within {TELEKINESIS_MELEE_PUSH_RADIUS}m around you. Push cd: {TELEKINESIS_MELEE_PUSH_COOLDOWN}s.",
             "Double magazine capacity. Fully reloading restores the extra ammo.",
             f"Grapple to allies or zombies {AUGMENT_GRAPNEL_MIN_RANGE}–{AUGMENT_GRAPNEL_RANGE}m away. {AUGMENT_GRAPNEL_DAMAGE} dmg; stun grounded zombies or knock airborne ones down for 3s. cd: 16s.",
@@ -99,6 +99,37 @@ def useAugmentAirAction():
             useDashAirActionMacro()
         elif eventPlayer.augmentId == Augment.HIGHRISE:
             useHighriseAirActionMacro()
+
+
+# Both air-action augments share this one trigger; the per-augment behavior is
+# dispatched by useAugmentAirAction into the owners' macros in their own files.
+#!define AIR_ACTION_TAP_WINDOW 0.3
+
+rule "DOUBLE TAP JUMP (DASH / HIGHRISE)":
+    @Event eachPlayer
+    @Team 1
+    # The menu's Jump confirmation must not start the tap sequence.
+    # Native UI workaround: retain one phase/ID Condition; docs/WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    @Condition uiPhaseAndId(eventPlayer.augmentId == Augment.DASH or eventPlayer.augmentId == Augment.HIGHRISE)
+    @Condition eventPlayer.isAlive() == true
+
+    # Uniform press-release-press trigger on the ground and airborne for both
+    # augments: both gaps use the shared tap window. Holding past a timeout
+    # restarts the sequence, so a held button cannot re-fire; the charge and
+    # cooldown gates live in the augment actions. After an activation, the
+    # triggering press is fully consumed: the sequence waits for its release and
+    # restarts from scratch, so a third quick press is only the FIRST press of
+    # the next pair and cannot spend a second charge/high jump by itself.
+    waitUntil(eventPlayer.isHoldingButton(Button.JUMP), Math.INFINITY)
+    waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), AIR_ACTION_TAP_WINDOW)
+    if not eventPlayer.isHoldingButton(Button.JUMP):
+        waitUntil(eventPlayer.isHoldingButton(Button.JUMP), AIR_ACTION_TAP_WINDOW)
+        if eventPlayer.isHoldingButton(Button.JUMP):
+            useAugmentAirAction()
+            waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), Math.INFINITY)
+    # Selection and the gameplay phase can change while a wait is pending.
+    if ruleCondition:
+        loop()
 
 
 rule "CROUCH + JUMP (GRAPNEL LAUNCHER / APOTHECARY TELEPORT)":
