@@ -1,11 +1,6 @@
 #!mainFile "../../main.opy"
 
-#!define AUGMENT_KEVLAR_ARMOR 75
-#!define AUGMENT_KEVLAR_RANGED_DMG_RESIST 50
-#!define AUGMENT_KEVLAR_KNOCKBACK_RESIST 50
-#!define AUGMENT_GRAPNEL_SPEED 40
-#!define AUGMENT_GRAPNEL_COOLDOWN 16
-#!define AUGMENT_GRAPNEL_TIMEOUT 1.5
+
 #!define AUGMENT_GRAPNEL_MOVEMENT_BLOCKED (eventPlayer.isAttached or eventPlayer.hasStatus(Status.ROOTED) or eventPlayer.isCrowdControlled)
 #!define AUGMENT_GRAPNEL_CAN_MOVE (eventPlayer.hasSpawned() and eventPlayer.isAlive() and not AUGMENT_GRAPNEL_MOVEMENT_BLOCKED)
 
@@ -22,7 +17,7 @@ rule "AUGMENT MENU":
             f"Launch upward and gain +{HIGHRISE_DAMAGE_BONUS}% dmg until landing/{HIGHRISE_DAMAGE_DURATION}s +{HIGHRISE_DAMAGE_GRACE_PERIOD}s. cd: 16s.",
             f"Triple melee reach; weapon hits at extended range deal 75% dmg. Push zombies within {LONG_REACH_MELEE_PUSH_RADIUS}m around you. Push cd: {LONG_REACH_MELEE_PUSH_COOLDOWN}s.",
             "Double magazine capacity. Fully reloading restores the extra ammo.",
-            f"Grapple to allies or zombies {AUGMENT_GRAPNEL_MIN_RANGE}–{AUGMENT_GRAPNEL_RANGE}m away. 35 dmg; stun grounded zombies or knock airborne ones down for 3s. cd: 16s.",
+            f"Grapple to allies or zombies {AUGMENT_GRAPNEL_MIN_RANGE}–{AUGMENT_GRAPNEL_RANGE}m away. {AUGMENT_GRAPNEL_DAMAGE} dmg; stun grounded zombies or knock airborne ones down for 3s. cd: 16s.",
             f"Deploy a wall that blocks zombies. Hold Crouch + Interact to aim; release Interact to place. cd: {LASER_BARRICADE_AUGMENT_COOLDOWN}s.",
             f"Packs: 2x healing, cure 1/3 infection (min 1), +{APOTHECARY_AUGMENT_ULT_CHARGE}% ult. Your latest pack also cures allies. Ult grants a teleport to it.",
             f"Carry 2 extra powerups. Zombie deaths within {ENGINEER_COLLECTION_RANGE}m: {SCAVENGER_LOOT_CHANCE}% chance to gain a powerup. Loot fills your active slot, then backpack.",
@@ -154,7 +149,7 @@ rule "CROUCH + JUMP (GRAPNEL LAUNCHER / APOTHECARY TELEPORT)":
             if eventPlayer.augmentGrapnelTarget.getTeam() == Team.2:
                 # Pull velocity scratch is dead on contact. Read health synchronously;
                 # no scratch value survives a wait or is captured by the cable.
-                damageWithEnhancements(35, eventPlayer.augmentGrapnelTarget)
+                damageWithEnhancements(AUGMENT_GRAPNEL_DAMAGE, eventPlayer.augmentGrapnelTarget)
                 if eventPlayer.augmentGrapnelTarget.isOnGround():
                     eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.STUNNED, 0.5)
                 else:
