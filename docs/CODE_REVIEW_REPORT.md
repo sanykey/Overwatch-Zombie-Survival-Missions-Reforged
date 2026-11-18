@@ -301,13 +301,13 @@ Carrier-admission and selection filters already differed in the original; the si
 
 Locations: [enhancements.opy:458](../src/abilities/enhancements.opy#L458), [enhancements.opy:460](../src/abilities/enhancements.opy#L460), [enhancements.opy:478](../src/abilities/enhancements.opy#L478), [enhancements.opy:485](../src/abilities/enhancements.opy#L485).
 
-A carrier stores one reference, `enhancementHitchhikerPassenger`, but selection does not check whether it is occupied. Passenger Q can therefore select carrier C while P is already attached to C. C's reference is overwritten from P to Q. P then exits and writes `C.enhancementHitchhikerPassenger = null` without checking ownership, although Q remains attached. The carrier's extra-health handler reads this shared reference and may end its health pool at the wrong time.
+A carrier stores one reference, `hitchhikerPassenger`, but selection does not check whether it is occupied. Passenger Q can therefore select carrier C while P is already attached to C. C's reference is overwritten from P to Q. P then exits and writes `C.hitchhikerPassenger = null` without checking ownership, although Q remains attached. The carrier's extra-health handler reads this shared reference and may end its health pool at the wrong time.
 
 A second mismatch: the carrier-existence check excludes `isAttached`, while the actual selection filter excludes only `isCrowdControlled`. These sets differ. If another eligible player exists, an already attached player can be selected. For example, B is attached to A; A looks at B, and a nearby free C permits entry into the branch. The filter can select B and attempt to attach A to B, forming A → B → A. The engine's actual response was not checked; no crash is asserted. Even an operation rejected by the engine can damage state: the flag is set before `attachTo`.
 
 The reverse case: only one free, crowd-controlled player is nearby. The existence check accepts them, but the selection filter excludes them, after which execution continues with an empty result.
 
-Different predicates, a missing occupancy check, and unconditional reference clearing are established. `enhancementIsHitchhiking` and `isAttached` really are aliases: the issue is not a missing flag assignment, but inconsistent filters and ownership.
+Different predicates, a missing occupancy check, and unconditional reference clearing are established. `hitchhikerAttached` and `isAttached` really are aliases: the issue is not a missing flag assignment, but inconsistent filters and ownership.
 
 Fix direction: one carrier list checking availability, occupancy, and absence of cycles; revalidate the selected entity before changing state. On exit, clear the carrier reference only if it points to the exiting passenger. Bind extra health pools to a specific association rather than an ownerless mutable pointer.
 
