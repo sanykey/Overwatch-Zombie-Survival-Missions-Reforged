@@ -114,13 +114,12 @@ enum PowerUpItem:
     NO_COOLDOWNS = 4,
     AIR_STRIKE = 5,
     HEALING_BEACON = 6,
-    VACCINE = 7,
-    SENTRY_TURRET = 8,
-    CLOAKING_DEVICE = 9,
-    SUPER_NANO = 10,
-    JETPACK = 11,
-    ULTIMATE_CHARGER = 12,
-    STUN = 13,
+    SENTRY_TURRET = 7,
+    CLOAKING_DEVICE = 8,
+    SUPER_NANO = 9,
+    JETPACK = 10,
+    ULTIMATE_CHARGER = 11,
+    STUN = 12,
 
 # Remaining sparse indices in powerUpEntityIdList; frequently used IDs have dedicated player variables below.
 # Turret effect slots 50..54 stay contiguous for creation and cleanup loops.

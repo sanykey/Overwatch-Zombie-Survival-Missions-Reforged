@@ -217,7 +217,7 @@ numbers.push(
 numbers.push(
   { // powerUpColorListConst: indices into the shared immutable palette.
     offset: "NL_POWERUP_COLORS_OFFSET", len: "NL_POWERUP_COLORS_LEN",
-    list: [10, 2, 7, 9, 4, 2, 10, 4, 7, 9, 11, 9, 5],
+    list: [10, 2, 7, 9, 4, 2, 4, 7, 9, 11, 9, 5],
   },
   { // startMenuZombieColorList: indices into the shared immutable palette.
     offset: "NL_ZOMBIE_MENU_COLORS_OFFSET", len: "NL_ZOMBIE_MENU_COLORS_LEN",

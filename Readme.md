@@ -40,9 +40,9 @@ While a player is using their ultimate, they take 50% damage. The resist does no
 
 Carrion has approximately 2.91% spawn weight in All Zombies (equal to Reinhardt), 20% in New Blood, and 5% in What'll it be?; the other eligible heroes retain their relative weights. It has no boss variation. Native gameplay still needs verification.
 
-## Vaccine powerup
+## Cure powerup
 
-Vaccine reduces infection by 1.5 levels for allies within 6m, with surface line of sight required.
+Cure clears active infection. If the player is uninfected, it subtracts 1.5 from their infection level, building up resistance to future bites.
 
 ## Jetpack powerup
 

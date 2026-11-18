@@ -518,11 +518,14 @@ def powerUpUsage():
         case PowerUpItem.CURE:
             playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, Color.GREEN, eventPlayer, 1)
             eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 1)
-            if eventPlayer.infectionLevel > 0:
+            if eventPlayer.isInfected:
                 eventPlayer.isInfected = false
                 eventPlayer.infectionLevel = 0
+                smallMessage(eventPlayer, "You are cured!")
+            else:
+                eventPlayer.infectionLevel -= 1.5
+                smallMessage(eventPlayer, "Your resistance to infection increased!")
             eventPlayer.startHealingOverTime(eventPlayer, 5, 20)
-            smallMessage(eventPlayer, "You are cured!")
             playAquaPowerUpSound()
             break
         #Instant Revive
@@ -549,13 +552,6 @@ def powerUpUsage():
         #Beacon of Healing
         case PowerUpItem.HEALING_BEACON:
             startRule(healBeacon)
-            break
-        #Vaccine
-        case PowerUpItem.VACCINE:
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.GREEN, eventPlayer, 6)
-            playAquaPowerUpSound()
-            smallMessage(eventPlayer, "Your infection is reduced!")
-            getPlayersInRadius(eventPlayer, 6, Team.1, LosCheck.SURFACES).infectionLevel -= 1.5
             break
         #Sentry Turret
         case PowerUpItem.SENTRY_TURRET:
