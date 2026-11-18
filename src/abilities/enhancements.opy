@@ -7,7 +7,7 @@ subroutine applyBulkingSeasonStats
 
 #!define WRESTLER_KNOCKDOWN_DURATION 4
 #!define WRESTLER_THROW_SPEED 12.5
-#!define WRESTLER_THROW_DAMAGE 75
+#!define WRESTLER_THROW_DAMAGE 100
 #!define WRESTLER_DAMAGE_DELAY 0.75
 
 #!define overchargeEarnedEnergyTotal(player) (player.getStatistic(Stat.HEALING_DEALT) / 3 + 10 * earnedAssists(player))
@@ -408,7 +408,8 @@ rule "WRESTLER PULL":
     createBeam(getAllPlayers(), Beam.BAD, augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(wrestlerPullTarget), Color.PURPLE, EffectReeval.NONE)
     eventPlayer.enhancementPullBeamEntity = getLastCreatedEntity()
     wrestlerPullTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, WRESTLER_PULL_KNOCKDOWN)
-    # Bosses and minibosses can be knocked down, but cannot be pulled.
+    damage(wrestlerPullTarget, eventPlayer, WRESTLER_PULL_DAMAGE)
+    # Bosses and minibosses take the damage and knockdown, but cannot be pulled.
     if wrestlerPullTarget not in bossStateList and wrestlerPullTarget not in miniBossList:
         # Strength scales with distance, approaching zero at contact.
         # Keep the pull's horizontal bearing with a fixed 15-degree upward pitch.
