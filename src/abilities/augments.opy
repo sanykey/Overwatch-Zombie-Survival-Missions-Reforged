@@ -15,7 +15,7 @@ rule "AUGMENT MENU":
             f"+{AUGMENT_KEVLAR_ARMOR} armor, {AUGMENT_KEVLAR_KNOCKBACK_RESIST}% knockback resistance. {AUGMENT_KEVLAR_RANGED_DMG_RESIST}% resistance to ranged and ability dmg.",
             f"Dash in your movement direction with {DASH_PHASE_DURATION}s invulnerability. Stores {DASH_MAX_CHARGES} charges; restores one every {DASH_COOLDOWN}s.",
             f"Launch upward and gain +{HIGHRISE_DAMAGE_BONUS}% dmg until landing/{HIGHRISE_DAMAGE_DURATION}s +{HIGHRISE_DAMAGE_GRACE_PERIOD}s. cd: 16s.",
-            f"Triple melee reach; weapon hits at extended range deal 75% dmg. Push zombies within {LONG_REACH_MELEE_PUSH_RADIUS}m around you. Push cd: {LONG_REACH_MELEE_PUSH_COOLDOWN}s.",
+            f"Triple melee reach; weapon hits at extended range deal 75% dmg. Push zombies within {TELEKINESIS_MELEE_PUSH_RADIUS}m around you. Push cd: {TELEKINESIS_MELEE_PUSH_COOLDOWN}s.",
             "Double magazine capacity. Fully reloading restores the extra ammo.",
             f"Grapple to allies or zombies {AUGMENT_GRAPNEL_MIN_RANGE}–{AUGMENT_GRAPNEL_RANGE}m away. {AUGMENT_GRAPNEL_DAMAGE} dmg; stun grounded zombies or knock airborne ones down for 3s. cd: 16s.",
             f"Deploy a wall that blocks zombies. Hold Crouch + Interact to aim; release Interact to place. cd: {LASER_BARRICADE_AUGMENT_COOLDOWN}s.",
@@ -36,7 +36,7 @@ rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)":
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
 
-    eventPlayer.augmentId = (eventPlayer.augmentId + (Augment.LEECH if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else 1)) % (Augment.LEECH + 1)
+    eventPlayer.augmentId = (eventPlayer.augmentId + (Augment.SURVIVALIST if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else 1)) % (Augment.SURVIVALIST + 1)
 
 
 rule "CROUCH + INTERACT (LASER BARRICADE)":
@@ -154,7 +154,7 @@ rule "CROUCH + JUMP (GRAPNEL LAUNCHER / APOTHECARY TELEPORT)":
                     eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.STUNNED, 0.5)
                 else:
                     eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 3)
-                playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer.augmentGrapnelTarget.getPosition() + Vector.UP, LONG_REACH_IMPACT_SIZE)
+                playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer.augmentGrapnelTarget.getPosition() + Vector.UP, AUGMENT_IMPACT_SIZE)
             break
         # Synchronous scratch: correct current velocity to the desired velocity,
         # rather than stacking 40-speed impulses every frame. Consumed before wait.

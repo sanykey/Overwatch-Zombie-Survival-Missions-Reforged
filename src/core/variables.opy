@@ -16,8 +16,8 @@
 #!define AUGMENT_COLORS augmentColorListConst
 # Augment name table, indexed by selection ID; melee-augment hero tables, checked by hero.
 #!define AUGMENT_NAMES augmentNameListConst
-#!define LONG_REACH_MELEE_WEAPON_HEROES augmentMeleeWeaponHeroListConst
-#!define LONG_REACH_MELEE_BUTTON_WEAPON_HEROES augmentMeleeBtnHeroListConst
+#!define TELEKINESIS_MELEE_WEAPON_HEROES augmentMeleeWeaponHeroListConst
+#!define TELEKINESIS_MELEE_BUTTON_WEAPON_HEROES augmentMeleeBtnHeroListConst
 
 # Global variables
 
@@ -302,7 +302,7 @@ playervar augmentState0
 #!define augmentBarrierFacing augmentState0
 # HIGHRISE / Grapnel Launcher next allowed activation time; persists across landing and death, read by the HUD.
 #!define augmentMovementReadyAt augmentState0
-# Long Reach: next allowed Melee-button push; persists across death/hero changes.
+# Telekinesis: next allowed Melee-button push; persists across death/hero changes.
 # Only a press with eligible targets writes it; the augment HUD reads it live.
 #!define augmentMeleePushReadyAt augmentState0
 # Dash next charge recharge time; set when the meter first drops below full and
@@ -328,9 +328,9 @@ playervar augmentState1
 #!define augmentIsAirActionReady augmentState1
 # Ammo Pack current cached entry, retained through the hero/weapon/respawn wait.
 #!define augmentAmmoLoadout augmentState1
-# Long Reach hero snapshot; an interrupted attack cannot resume for a different hero.
+# Telekinesis hero snapshot; an interrupted attack cannot resume for a different hero.
 #!define augmentMeleeHero augmentState1
-# Long Reach target-loop index, after the windup's hero snapshot has been consumed; no waits or live captures.
+# Telekinesis target-loop index, after the windup's hero snapshot has been consumed; no waits or live captures.
 #!define augmentMeleeTargetIndex augmentState1
 
 playervar augmentState2
@@ -349,7 +349,7 @@ playervar augmentState2
 # Null for supported native capacities. Otherwise initialized after loadout writes,
 # updated only on native-full boundary / reload edges, and owned by this augment.
 #!define augmentAmmoFallbackState augmentState2
-# Long Reach's additional primary-weapon controller owns this profile across waits.
+# Telekinesis's additional primary-weapon controller owns this profile across waits.
 # D.Mon / Ramattra quick melee cancels the primary windup; other quick-melee users do not
 # enter that controller. The helper does not modify this retained profile.
 #!define augmentWeaponProfile augmentState2

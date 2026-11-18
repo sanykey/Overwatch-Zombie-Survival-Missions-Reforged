@@ -59,13 +59,13 @@ enum Augment:
     KEVLAR = 1,
     DASH = 2,
     HIGHRISE = 3,
-    LONG_REACH = 4,
+    TELEKINESIS = 4,
     AMMO_PACK = 5,
     GRAPNEL_LAUNCHER = 6,
     LASER_BARRICADE = 7,
     APOTHECARY = 8,
     SCAVENGER = 9,
-    LEECH = 10,
+    SURVIVALIST = 10,
 
 # Objective IDs also index objectiveTypeVoteList and identify entries in objectiveTypeList.
 # Biomorphing and Survivor Rescue are only selectable through the mixed pool.
@@ -149,13 +149,13 @@ enum AugmentIcon:
     KEVLAR = "<TX C0000000004F73E>", # <TX C00000000004120>
     DASH = iconString(Icon.ARROW_RIGHT),
     HIGHRISE = iconString(Icon.ARROW_UP),
-    LONG_REACH = abilityIconString(Hero.DOOMFIST, Button.SECONDARY_FIRE),
+    TELEKINESIS = abilityIconString(Hero.DOOMFIST, Button.SECONDARY_FIRE),
     AMMO_PACK = "<TX C0000000004F73A>",
     GRAPNEL_LAUNCHER = iconString(Icon.DIZZY),
     LASER_BARRICADE = iconString(Icon.DIAMOND),
     APOTHECARY = "<TX C0000000004F73B>",
     SCAVENGER = iconString(Icon.RECYCLE),
-    LEECH = iconString(Icon.ASTERISK),
+    SURVIVALIST = iconString(Icon.ASTERISK),
 
 enum EnhancementIcon:
     NO_PREFERENCE = iconString(Icon.QUESTION_MARK),

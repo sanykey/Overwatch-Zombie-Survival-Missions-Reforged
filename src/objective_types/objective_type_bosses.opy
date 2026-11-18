@@ -126,7 +126,7 @@ rule "BOSS DIES (ALL BOSS OBJECTIVES)":
         eventPlayer.stopAllDamageOverTime()
         if attacker.getTeam() == getOppositeTeam(eventPlayer.getTeam()):
             eventPlayer.botBossHealth = eventDamage - BOSS_ENVIRONMENT_DAMAGE
-            if attacker.augmentId == Augment.LEECH:
+            if attacker.augmentId == Augment.SURVIVALIST:
                 # Only the scripted health loss counts, capped by remaining HP.
                 heal(attacker, attacker, min(eventDamage, BOSS_ENVIRONMENT_DAMAGE) * 0.15)
         else:

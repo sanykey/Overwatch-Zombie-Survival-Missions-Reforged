@@ -3,7 +3,7 @@
 # Combat HUD order on the left: roster (player slot), enhancement (97),
 # augment (98), attachment status (98.5), Jetpack fuel (99), carried powerup (100).
 
-# Long Reach's augmentMeleePushReadyAt aliases augmentMovementReadyAt's slot;
+# Telekinesis's augmentMeleePushReadyAt aliases augmentMovementReadyAt's slot;
 # the shared movement HUD reads the selected augment's deadline directly.
 
 rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
@@ -65,11 +65,11 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
         AUGMENT_ICONS[localPlayer.augmentId],
         "{0}{1}".format(f"Hold [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.INTERACT)}]: aim; release [{inputBindingString(Button.INTERACT)}]: place | " if localPlayer.augmentBarrierPlacementCooldown <= 0 else "", "{0}{1}".format(f"{ceil(localPlayer.augmentBarrierHealth)} HP | " if localPlayer.augmentBarrierHealth > 0 else "", f"{localPlayer.augmentBarrierPlacementCooldown}s" if localPlayer.augmentBarrierPlacementCooldown > 0 else iconString(Icon.CHECKMARK))) if localPlayer.augmentId == Augment.LASER_BARRICADE else "{1} | {0}".format(
             (iconString(Icon.CHECKMARK) if localPlayer.augmentDashCharges == DASH_MAX_CHARGES else f"{ceil(localPlayer.augmentDashReadyAt - getTotalTimeElapsed())}s {iconString(Icon.CHECKMARK)}" if localPlayer.augmentDashCharges > 0 else f"{ceil(localPlayer.augmentDashReadyAt - getTotalTimeElapsed())}s") if localPlayer.augmentId == Augment.DASH else (iconString(Icon.CHECKMARK) if getTotalTimeElapsed() >= localPlayer.augmentMovementReadyAt else f"{ceil(localPlayer.augmentMovementReadyAt - getTotalTimeElapsed())}s"),
-            f"3x melee reach | [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.JUMP)}]: push" if localPlayer.augmentId == Augment.LONG_REACH else f"[{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.JUMP)}]: grapple | {AUGMENT_GRAPNEL_MIN_RANGE}-{AUGMENT_GRAPNEL_RANGE}m" if localPlayer.augmentId == Augment.GRAPNEL_LAUNCHER else f"[{inputBindingString(Button.JUMP)}] midair / double-tap" if localPlayer.augmentId == Augment.HIGHRISE else f"Dash: {localPlayer.augmentDashCharges}/2 | Double-tap [{inputBindingString(Button.JUMP)}]"
-        ) if localPlayer.augmentId in [Augment.DASH, Augment.HIGHRISE, Augment.LONG_REACH, Augment.GRAPNEL_LAUNCHER] else (f"[{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.JUMP)}]: teleport {iconString(Icon.CHECKMARK)}" if localPlayer.augmentApothecaryReady and (localPlayer.augmentApothecaryPosition != null or healthpackPositionList != []) else "No known health packs" if localPlayer.augmentApothecaryReady else "Deal ultimate dmg to charge teleport" if localPlayer.getHero() in [Hero.DVA, Hero.DMON] else "Use ultimate to charge teleport") if localPlayer.augmentId == Augment.APOTHECARY else f"Backpack: {len(localPlayer.augmentScavengerBackpack)}/2 | [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.INTERACT)}]: store/swap | Hold [{inputBindingString(Button.RELOAD)}]: drop all" if localPlayer.augmentId == Augment.SCAVENGER else [" ", "+75 armor | 50% ranged/ability dmg resist", " ", " ", " ", "2x magazine | Fully reload to refill", " ", " ", " ", " ", "15% lifesteal | +50 health"][localPlayer.augmentId],
+            f"3x melee reach | [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.JUMP)}]: push" if localPlayer.augmentId == Augment.TELEKINESIS else f"[{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.JUMP)}]: grapple | {AUGMENT_GRAPNEL_MIN_RANGE}-{AUGMENT_GRAPNEL_RANGE}m" if localPlayer.augmentId == Augment.GRAPNEL_LAUNCHER else f"[{inputBindingString(Button.JUMP)}] midair / double-tap" if localPlayer.augmentId == Augment.HIGHRISE else f"Dash: {localPlayer.augmentDashCharges}/2 | Double-tap [{inputBindingString(Button.JUMP)}]"
+        ) if localPlayer.augmentId in [Augment.DASH, Augment.HIGHRISE, Augment.TELEKINESIS, Augment.GRAPNEL_LAUNCHER] else (f"[{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.JUMP)}]: teleport {iconString(Icon.CHECKMARK)}" if localPlayer.augmentApothecaryReady and (localPlayer.augmentApothecaryPosition != null or healthpackPositionList != []) else "No known health packs" if localPlayer.augmentApothecaryReady else "Deal ultimate dmg to charge teleport" if localPlayer.getHero() in [Hero.DVA, Hero.DMON] else "Use ultimate to charge teleport") if localPlayer.augmentId == Augment.APOTHECARY else f"Backpack: {len(localPlayer.augmentScavengerBackpack)}/2 | [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.INTERACT)}]: store/swap | Hold [{inputBindingString(Button.RELOAD)}]: drop all" if localPlayer.augmentId == Augment.SCAVENGER else [" ", "+75 armor | 50% ranged/ability dmg resist", " ", " ", " ", "2x magazine | Fully reload to refill", " ", " ", " ", " ", "15% lifesteal | +50 health"][localPlayer.augmentId],
         AUGMENT_NAMES[localPlayer.augmentId],
         HudPosition.ACTUALLY_LEFT, 98, Color.WHITE, Color.WHITE,
-        (Color.RED if localPlayer.augmentBarrierPlacementCooldown > 0 else Color.GREEN) if localPlayer.augmentId == Augment.LASER_BARRICADE else ([Color.RED, Color.SKY_BLUE, Color.GREEN][localPlayer.augmentDashCharges] if localPlayer.augmentId == Augment.DASH else (Color.RED if getTotalTimeElapsed() < localPlayer.augmentMovementReadyAt else Color.GREEN)) if localPlayer.augmentId in [Augment.DASH, Augment.HIGHRISE, Augment.LONG_REACH, Augment.GRAPNEL_LAUNCHER] else ([Color.WHITE, Color.SKY_BLUE, Color.GREEN][len(localPlayer.augmentScavengerBackpack)] if localPlayer.augmentId == Augment.SCAVENGER else Color.GREEN if localPlayer.augmentId == Augment.APOTHECARY and localPlayer.augmentApothecaryReady == true else Color.WHITE),
+        (Color.RED if localPlayer.augmentBarrierPlacementCooldown > 0 else Color.GREEN) if localPlayer.augmentId == Augment.LASER_BARRICADE else ([Color.RED, Color.SKY_BLUE, Color.GREEN][localPlayer.augmentDashCharges] if localPlayer.augmentId == Augment.DASH else (Color.RED if getTotalTimeElapsed() < localPlayer.augmentMovementReadyAt else Color.GREEN)) if localPlayer.augmentId in [Augment.DASH, Augment.HIGHRISE, Augment.TELEKINESIS, Augment.GRAPNEL_LAUNCHER] else ([Color.WHITE, Color.SKY_BLUE, Color.GREEN][len(localPlayer.augmentScavengerBackpack)] if localPlayer.augmentId == Augment.SCAVENGER else Color.GREEN if localPlayer.augmentId == Augment.APOTHECARY and localPlayer.augmentApothecaryReady == true else Color.WHITE),
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
 
@@ -207,7 +207,7 @@ macro initializePlayerAugment():
     if eventPlayer.augmentId == Augment.NO_PREFERENCE:
         # Menu non-selection and late-join zero state each receive one real
         # random choice. A nonzero ID preserves explicit and previously rolled choices.
-        eventPlayer.augmentId = random.randint(Augment.KEVLAR, Augment.LEECH)
+        eventPlayer.augmentId = random.randint(Augment.KEVLAR, Augment.SURVIVALIST)
     if eventPlayer.augmentId == Augment.SCAVENGER:
         eventPlayer.augmentScavengerBackpack = []
     if eventPlayer.augmentId == Augment.DASH:
@@ -215,7 +215,7 @@ macro initializePlayerAugment():
     if eventPlayer.augmentId == Augment.LASER_BARRICADE:
         initializeLaserBarricadeAugmentMacro()
     # HUD lives in AUGMENT HUD (PERMANENT TABLE).
-    if eventPlayer.augmentId in [Augment.KEVLAR, Augment.LEECH]:
+    if eventPlayer.augmentId in [Augment.KEVLAR, Augment.SURVIVALIST]:
         # Share the native-health readiness gate; keep both pools recoverable.
         waitUntil(eventPlayer.initialMaxHealth > 0, Math.INFINITY)
         if eventPlayer.augmentId == Augment.KEVLAR:
