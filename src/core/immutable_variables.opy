@@ -15,16 +15,16 @@ globalvar offsetUpQuarterConst = 0.25 * Vector.UP         # Vertical offset of 0
 # Shared by the pregame menu, world labels, personal HUD and roster throughout the match.
 # Keep a dedicated slot: pregame storage is reused by objectives during gameplay.
 
-globalvar augmentIconListConst = [AugmentIcon.NO_PREFERENCE, AugmentIcon.KEVLAR, AugmentIcon.DASH, AugmentIcon.HIGHRISE, AugmentIcon.TELEKINESIS, AugmentIcon.AMMO_PACK, AugmentIcon.GRAPNEL_LAUNCHER, AugmentIcon.LASER_BARRICADE, AugmentIcon.APOTHECARY, AugmentIcon.SCAVENGER, AugmentIcon.SURVIVALIST]
+globalvar augmentIconListConst = [AugmentIcon.NO_PREFERENCE, AugmentIcon.KEVLAR, AugmentIcon.DASH, AugmentIcon.HIGHRISE, AugmentIcon.TELEKINESIS, AugmentIcon.AMMO_PACK, AugmentIcon.GRAPNEL_LAUNCHER, AugmentIcon.LASER_BARRICADE, AugmentIcon.SCAVENGER, AugmentIcon.SURVIVALIST]
 
 # Immutable Enhancement icons, indexed by selection ID; shared by pregame options and roster.
 # Keep a dedicated slot: enhancementOptionList becomes Biomorphing text after menu cleanup.
 
 globalvar enhancementIconListConst = [EnhancementIcon.NO_PREFERENCE, EnhancementIcon.ZOMBIE_HYBRID, EnhancementIcon.BULKING_SEASON, EnhancementIcon.BRAIN_KILLER, EnhancementIcon.PYROTECHNIC, EnhancementIcon.BORN_TO_BATTLE, EnhancementIcon.CHARGE_BATTERY, EnhancementIcon.PUP, EnhancementIcon.WRESTLER, EnhancementIcon.BOLT_STRIKE, EnhancementIcon.ENGINEER, EnhancementIcon.PLAGUE_DOCTOR, EnhancementIcon.OVERCHARGE, EnhancementIcon.HITCHHIKER]
 
-# Shared immutable palette: Augment colors keep indices 0..10 unchanged.
-# Tail 11..14: Purple, Gray, Rose, Null; used to reconstruct the other palettes.
-globalvar augmentColorListConst = [Color.AQUA, Color.LIGHT_GRAY, Color.YELLOW, Color.SKY_BLUE, Color.ORANGE, Color.WHITE, Color.TURQUOISE, Color.BLUE, Color.GREEN, Color.LIME_GREEN, Color.RED, Color.PURPLE, Color.GRAY, Color.ROSE, null]
+# Shared immutable palette: indices 0..9 are the Augment colors in selection order.
+# Tail 10..14: Green, Purple, Gray, Rose, Null; used to reconstruct the other palettes.
+globalvar augmentColorListConst = [Color.AQUA, Color.LIGHT_GRAY, Color.YELLOW, Color.SKY_BLUE, Color.ORANGE, Color.WHITE, Color.TURQUOISE, Color.BLUE, Color.LIME_GREEN, Color.RED, Color.GREEN, Color.PURPLE, Color.GRAY, Color.ROSE, null]
 
 # Initialize after the shared palette; all original item colors and order are retained.
 globalvar powerUpColorListConst = numbersList.slice(NL_POWERUP_COLORS_OFFSET, NL_POWERUP_COLORS_LEN).map(lambda index: augmentColorListConst[index])

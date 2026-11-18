@@ -219,7 +219,7 @@ globalvar supplyPowerUpEffectIdList  # Effect IDs for removing item orbs on pick
 globalvar playerTargetList        # Active zombie targets; can temporarily include the NPC being rescued.
 globalvar userNameList            # Recorded player names used to restore state when a user rejoins.
 globalvar playerStatsList         # Per-user death status, timers and last position, indexed with userNameList.
-globalvar healthpackPositionList  # Discovered health-pack positions for cure indicators and Apothecary's fallback teleport.
+globalvar healthpackPositionList  # Discovered health-pack positions for cure indicators.
 globalvar mustReviveTime          # Allowed rescue time; starts at 60 and decreases after permanent player deaths.
 
 # Shared zombie stats, mutations and boss state.
@@ -291,13 +291,6 @@ playervar augmentState0
 # Scavenger: up to two reserve item IDs, separate from the active powerup and primary enhancement.
 # Retained through hero switches; death/manual drop clears it synchronously. Never activated.
 #!define augmentScavengerBackpack augmentState0
-# Apothecary: last pack pickup position, null until first pickup; zero vector is valid.
-# Retained through death/hero switches; also the only shared cure point owned by
-# this Apothecary. Moving it unbinds the old pack unless another owner uses it.
-#!define augmentApothecaryPosition augmentState0
-# Boolean single teleport charge; refreshed on ultimate activation, spent on teleport.
-# Retained through death/hero switches; HUD reevaluates it without a chase.
-#!define augmentApothecaryReady augmentState1
 # Laser Barricade placement facing direction; persists for collision checks.
 #!define augmentBarrierFacing augmentState0
 # HIGHRISE / Grapnel Launcher next allowed activation time; persists across landing and death, read by the HUD.
@@ -331,10 +324,6 @@ playervar augmentState1
 #!define augmentMeleeTargetIndex augmentState1
 
 playervar augmentState2
-# Apothecary: owned cure-location icon ID; created once in gameplay when its
-# first teleport point exists. Position/visibility reevaluate without recreating
-# the icon on pickup, death or hero switch. Destroyed on owner departure.
-#!define augmentApothecaryCureIcon augmentState2
 # Team 2 Wrestler: carrier hero at pickup, retained until release. No human reader.
 #!define wrestlerCarryHero augmentState2
 # Laser Barricade: -1 latches aiming until Interact release/death/cancel; 0 is ready,

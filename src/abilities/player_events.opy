@@ -154,8 +154,6 @@ rule "PLAYER DEALT DAMAGE":
     if eventPlayer.augmentId == Augment.SURVIVALIST:
         # Include damage from the hero, primary enhancement and scripted powerups.
         heal(eventPlayer, eventPlayer, eventDamage * 0.15)
-    elif eventPlayer.augmentId == Augment.APOTHECARY and eventAbility == Button.ULTIMATE and eventPlayer.getHero() in [Hero.DVA, Hero.DMON]:
-        rechargeApothecaryAugmentFromDamageMacro()
 
 
 rule "PLAYER PICKS UP HEALTH PACK":
@@ -166,9 +164,9 @@ rule "PLAYER PICKS UP HEALTH PACK":
     if (eventWasHealthPack == true):
         eventPlayer.startHealingOverTime(null, 5, 20)
         if isGameplayActive and eventPlayer.enhancementId == Enhancement.OVERCHARGE:
-            # Credit the actual pack healing; Apothecary's additional healing is measured below.
+            # Credit the actual pack healing.
             eventPlayer.enhancementCapacitorEnergy += eventHealing / 3
-        # Discover packs even after time expires for the teleport fallback.
+        # Keep discovered packs for the normal cure indicators.
         if healthpackPositionList.all(lambda x: distance(x, eventPlayer) > 5):
             healthpackPositionList.append(eventPlayer.getPosition())
         if healthpacksCureNormally:
@@ -177,9 +175,5 @@ rule "PLAYER PICKS UP HEALTH PACK":
             if eventPlayer.infectionLevel > 0:
                 eventPlayer.isInfected = false
                 eventPlayer.infectionLevel = 0
-        elif eventPlayer.augmentId == Augment.APOTHECARY or getPlayers(Team.1).any(lambda owner: owner.augmentId == Augment.APOTHECARY and owner.augmentApothecaryPosition != null and distance(owner.augmentApothecaryPosition, eventPlayer) <= 5):
-            cureApothecaryAugmentInfectionMacro()
         elif eventPlayer.isInfected:
-            smallMessage(eventPlayer, "Time has run out. Use an Apothecary's health pack to reduce infection.")
-        if eventPlayer.augmentId == Augment.APOTHECARY:
-            pickUpApothecaryAugmentHealthPackMacro()
+            smallMessage(eventPlayer, "Health packs no longer cure infection.")

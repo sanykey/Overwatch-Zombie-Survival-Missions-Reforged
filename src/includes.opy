@@ -38,7 +38,6 @@
 #!include "abilities/augment_telekinesis.opy"
 #!include "abilities/augment_highrise.opy"
 #!include "abilities/augment_dash.opy"
-#!include "abilities/augment_apothecary.opy"
 #!include "abilities/augment_laser_barricade.opy"
 #!include "abilities/augments.opy"
 #!include "abilities/player_initialization.opy"

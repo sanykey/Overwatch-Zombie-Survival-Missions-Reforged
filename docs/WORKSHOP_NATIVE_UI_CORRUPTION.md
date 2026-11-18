@@ -9,7 +9,7 @@
 Найдены два полезных обхода:
 
 1. **Pregame:** распределить создание пяти надписей каждого игрока в мире интервалами 0,25 секунды. Незавершённое создание отменять при окончании Pregame.
-2. **Gameplay:** сохранить несколько проверок допуска в одном Condition у выбранных ongoing-правил и перенести проверки допуска девяти коротких событийных обработчиков в начало Actions. Полный HUD, мировые тексты и эффекты при этом сохраняются.
+2. **Gameplay:** сохранить несколько проверок допуска в одном Condition у выбранных ongoing-правил и перенести проверки допуска коротких событийных обработчиков в начало Actions. Полный HUD, мировые тексты и эффекты при этом сохраняются.
 
 Вариант с полными визуалами и 25 такими изменениями пользователь подтвердил как рабочий. Его логика перенесена в OverPy-исходники. Компиляция установленных исходников прошла без предупреждений; экспорт структурно сопоставлен с проверенным вариантом с учётом описанных ниже особенностей компилятора.
 
@@ -145,7 +145,7 @@ createInWorldText(...)  # Enhancement/Augment.
 
 ## Реализация gameplay-обхода
 
-### 16 ongoing-правил: сохранить пару в одной Condition
+### Ongoing-правила: сохранить пару в одной Condition
 
 Макрос расположен в [src/core/ui_workarounds.opy](../src/core/ui_workarounds.opy) и подключён после переменных, до правил:
 
@@ -176,7 +176,7 @@ Is Alive(Event Player) == True;
 
 Обёртка `== 1` применяется **к уже булевому результату And**. Она нужна для OverPy 9.7.21: обычное `and`, `== true` и проверенные варианты `!= false`/`!= null` компилятор мог снова разделить на отдельные Conditions. Числовое сравнение с единицей сохраняет дерево. Ранее такое поведение наблюдалось и в 9.7.20. При обновлении компилятора нужно проверять готовый экспорт заново.
 
-### 9 событийных обработчиков: проверка допуска в Actions
+### Событийные обработчики: проверка допуска в Actions
 
 Пример из короткого обработчика урона:
 
@@ -194,9 +194,9 @@ Event/Team/Hero остаются прежними. Native event запускае
 
 Это не гарантирует ускорение: в Actions теперь заходят и некоторые события, ранее остановленные Conditions. Цель преобразования — структура обработчика как обход UI-дефекта. Если в такой обработчик впоследствии добавят ожидание, его семантику придётся пересмотреть.
 
-### Полный список gameplay-изменений
+### Gameplay-обходы в текущих исходниках
 
-В следующей таблице перечислены **все 25 правил**, а не только те, которые удалось связать с изменением симптома по отдельности.
+В таблице перечислены **22 правила** с обходами в текущих исходниках.
 
 | Файл | Правило | Приём |
 |---|---|---|
@@ -211,8 +211,7 @@ Event/Team/Hero остаются прежними. Native event запускае
 | enhancements.opy | `ENGINEER TURRET DEPLOY` | Пара phase/ID |
 | [augments.opy](../src/abilities/augments.opy) | `DOUBLE TAP JUMP (DASH / HIGHRISE)` | Пара phase/ID |
 | [augment_dash.opy](../src/abilities/augment_dash.opy) | `[DASH] CHARGE RECHARGE` | Пара phase/ID |
-| [augment_apothecary.opy](../src/abilities/augment_apothecary.opy) | `[APOTHECARY AUGMENT] CURE ICON` | Пара phase/ID |
-| [augments.opy](../src/abilities/augments.opy) | `GRAPNEL LAUNCHER` | Пара phase/ID |
+| [augments.opy](../src/abilities/augments.opy) | `CROUCH + JUMP (GRAPNEL LAUNCHER)` | Пара phase/ID |
 | augments.opy | `AMMO PACK MAGAZINES` | Пара phase/ID |
 | augments.opy | `AMMO PACK REFILL FALLBACK` | Пара phase/ID |
 | [hero_tuning.opy](../src/abilities/hero_tuning.opy) | `SIERRA TRACKING SHOT HACK` | Event guard |
@@ -221,13 +220,12 @@ Event/Team/Hero остаются прежними. Native event запускае
 | enhancements.opy | `WRESTLER PULL DISCONNECT CLEANUP` | Event guard |
 | enhancements.opy | `ENGINEER BEAM DISCONNECT CLEANUP` | Event guard |
 | enhancements.opy | `ENGINEER SCRAP ARMOR DEPLETION` | Event guard |
-| augment_apothecary.opy | `[APOTHECARY AUGMENT] CURE ICON DISCONNECT CLEANUP` | Event guard |
 | augments.opy | `GRAPNEL LAUNCHER DISCONNECT CLEANUP` | Event guard |
 | [player_events.opy](../src/abilities/player_events.opy) | `PLAYER PICKS UP HEALTH PACK` | Event guard |
 
 `KEVLAR RANGED DAMAGE COMPENSATION` и `BRIGITTE SHIELD BASH STUN` оставлены с исходными Conditions. Не следует считать все event guards или все phase/ID пары обязательным архитектурным правилом для всего проекта.
 
-Обновление 18 ноября 2026: способ Highrise «нажатие Jump в воздухе» удалён вместе с правилами `[HIGHRISE] RECHARGE` и `[HIGHRISE] AIR ACTION INPUT` (Highrise активируется только двойным тапом), а правила `[HIGHRISE] DOUBLE TAP` и `[DASH] DOUBLE TAP` объединены в одно `DOUBLE TAP JUMP (DASH / HIGHRISE)` в augments.opy с общей парой phase/ID по обоим ID. Преобразованных правил в исходниках стало 24; исторические числа выше описывают принятый вариант своего времени и не пересчитаны.
+Обновление 18 ноября 2026: способ Highrise «нажатие Jump в воздухе» удалён вместе с правилами `[HIGHRISE] RECHARGE` и `[HIGHRISE] AIR ACTION INPUT` (Highrise активируется только двойным тапом), а правила `[HIGHRISE] DOUBLE TAP` и `[DASH] DOUBLE TAP` объединены в одно `DOUBLE TAP JUMP (DASH / HIGHRISE)` в augments.opy с общей парой phase/ID по обоим ID.
 
 Часть cleanup-обработчиков в обычном прогоне до первого Reload вообще не должна выполнять полезные действия. Их участие в успешном пакете нельзя объяснять автоматически экономией на выполняемой очистке; отдельная необходимость каждого такого обработчика не установлена.
 

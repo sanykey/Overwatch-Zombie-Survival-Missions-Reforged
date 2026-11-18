@@ -19,7 +19,6 @@ rule "AUGMENT MENU":
             "Double magazine capacity. Fully reloading restores the extra ammo.",
             f"Grapple to allies or zombies {AUGMENT_GRAPNEL_MIN_RANGE}–{AUGMENT_GRAPNEL_RANGE}m away. {AUGMENT_GRAPNEL_DAMAGE} dmg; stun grounded zombies or knock airborne ones down for 3s. cd: 16s.",
             f"Deploy a wall that blocks zombies. Hold Crouch + Interact to aim; release Interact to place. cd: {LASER_BARRICADE_AUGMENT_COOLDOWN}s.",
-            f"Packs: 2x healing, cure 1/3 infection (min 1), +{APOTHECARY_AUGMENT_ULT_CHARGE}% ult. Your latest pack also cures allies. Ult grants a teleport to it.",
             f"Carry 2 extra powerups. Zombie deaths within {ENGINEER_COLLECTION_RANGE}m: {SCAVENGER_LOOT_CHANCE}% chance to gain a powerup. Loot fills your active slot, then backpack.",
             "Heal for 15% of dmg dealt. Gain 50 recoverable health."
         ][localPlayer.augmentId],
@@ -132,22 +131,15 @@ rule "DOUBLE TAP JUMP (DASH / HIGHRISE)":
         loop()
 
 
-rule "CROUCH + JUMP (GRAPNEL LAUNCHER / APOTHECARY TELEPORT)":
+rule "CROUCH + JUMP (GRAPNEL LAUNCHER)":
     @Event eachPlayer
     @Team 1
     # Native UI workaround: retain one phase/ID Condition; docs/WORKSHOP_NATIVE_UI_CORRUPTION.md.
-    @Condition uiPhaseAndId(eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER or eventPlayer.augmentId == Augment.APOTHECARY)
+    @Condition uiPhaseAndId(eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER)
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
     @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
-
-    # Check charge in Actions so recharging while holding cannot teleport.
-    # Only Apothecary owns the shared boolean readiness and saved pack position.
-    if eventPlayer.augmentId == Augment.APOTHECARY:
-        if eventPlayer.augmentApothecaryReady == true and (eventPlayer.augmentApothecaryPosition != null or healthpackPositionList != []):
-            useApothecaryAugmentTeleportMacro()
-        return
 
     # Cooldown is checked on the input edge; holding the chord through expiry
     # cannot auto-launch. A miss does not consume the cooldown.

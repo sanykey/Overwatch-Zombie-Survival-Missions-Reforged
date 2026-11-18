@@ -217,26 +217,26 @@ numbers.push(
 numbers.push(
   { // powerUpColorListConst: indices into the shared immutable palette.
     offset: "NL_POWERUP_COLORS_OFFSET", len: "NL_POWERUP_COLORS_LEN",
-    list: [8, 2, 7, 10, 4, 2, 8, 4, 7, 10, 11, 10, 5],
+    list: [10, 2, 7, 9, 4, 2, 10, 4, 7, 9, 11, 9, 5],
   },
   { // startMenuZombieColorList: indices into the shared immutable palette.
     offset: "NL_ZOMBIE_MENU_COLORS_OFFSET", len: "NL_ZOMBIE_MENU_COLORS_LEN",
-    list: [0, 4, 10, 11, 9, 7, 12],
+    list: [0, 4, 9, 11, 8, 7, 12],
   },
   { // startMenuObjectiveColorList: indices into the shared immutable palette.
     offset: "NL_OBJECTIVE_MENU_COLORS_OFFSET", len: "NL_OBJECTIVE_MENU_COLORS_LEN",
-    list: [0, 4, 10, 14, 14, 10, 9, 6, 14, 11],
+    list: [0, 4, 9, 14, 14, 9, 8, 6, 14, 11],
   },
   { // startMenuEnhancementColorList: indices into the shared immutable palette.
     offset: "NL_ENHANCEMENT_MENU_COLORS_OFFSET", len: "NL_ENHANCEMENT_MENU_COLORS_LEN",
-    list: [0, 12, 9, 10, 4, 12, 5, 7, 3, 2, 13, 8, 6, 11],
+    list: [0, 12, 8, 9, 4, 12, 5, 7, 3, 2, 13, 10, 6, 11],
   },
 );
 
 numbers.push(
   { // Challenge HUD color field 0: shared palette indices.
     offset: "NL_CHALLENGE_COLORS_0_OFFSET", len: "NL_CHALLENGE_COLORS_0_LEN",
-    list: [0, 2, 9, 4, 6, 11],
+    list: [0, 2, 8, 4, 6, 11],
   },
 );
 

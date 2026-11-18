@@ -82,8 +82,6 @@ rule "EFFECT/TEXT (PERMANENT)":
 # Workshop workaround: separate gameplay/alive conditions here can make newer
 # heroes disappear when returning to hero selection during voting (map dependent).
 # Grouping them with And prevented reproduction in user tests; the cause is unknown.
-# The same workaround did NOT help "APOTHECARY ALLOW HEALTH PACK PICKUP" in
-# src/augments.opy, reverted by ba8e70de7d4e282b2f90c8ae6c15f6d1d500a342.
 # OverPy 9.7.20 splits And conditions; disable optimization only for this rule.
 # Explicit Null operands below preserve the existing compiled inventory comparisons.
 #!disableOptimizations
