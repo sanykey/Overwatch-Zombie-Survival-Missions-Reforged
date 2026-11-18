@@ -26,12 +26,13 @@ macro fireSatelliteMacro():
     #Laser distance
     createInWorldText(getAllPlayers(), "Danger: {0}m".format(distance(satelliteLaserPosition, localPlayer)), satelliteLaserPosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.SKY_BLUE)
     objectiveEntityIdList.append(getLastCreatedText())
-    #Laser center beam
-    createBeam(getAllPlayers(), Beam.BAD, satelliteLaserPosition + 700 * Vector.UP + directionFromAngles(getTotalTimeElapsed() * 360, 0) * 1, satelliteLaserPosition + -700 * Vector.UP + directionFromAngles(getTotalTimeElapsed() * 360, 0) * 1, Color.SKY_BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    objectiveEntityIdList.append(getLastCreatedEntity())
-    #Laser center beam
-    createBeam(getAllPlayers(), Beam.BAD, satelliteLaserPosition + 700 * Vector.UP + directionFromAngles(getTotalTimeElapsed() * 360, 0) * -1, satelliteLaserPosition + -700 * Vector.UP + directionFromAngles(getTotalTimeElapsed() * 360, 0) * -1, Color.SKY_BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    objectiveEntityIdList.append(getLastCreatedEntity())
+    # Two rotating center beams, preserving creation order: positive, then negative.
+    # Only the side is captured; laser position and rotation keep reevaluating.
+    # Scratch is dead after both Create Beam actions; the shaft loop reuses tmp0 below.
+    #!define satelliteCenterBeamSide tmp0
+    for satelliteCenterBeamSide in range(1, -2, -2):
+        createBeam(getAllPlayers(), Beam.BAD, satelliteLaserPosition + 700 * Vector.UP + directionFromAngles(getTotalTimeElapsed() * 360, 0) * evalOnce(satelliteCenterBeamSide), satelliteLaserPosition + -700 * Vector.UP + directionFromAngles(getTotalTimeElapsed() * 360, 0) * evalOnce(satelliteCenterBeamSide), Color.SKY_BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        objectiveEntityIdList.append(getLastCreatedEntity())
     #Sattellite firing light shafts
     # satelliteLaserShaftLayerIndex: laser light-shaft layer index, to place six shafts at heights -35 through 65.
     #!define satelliteLaserShaftLayerIndex tmp0

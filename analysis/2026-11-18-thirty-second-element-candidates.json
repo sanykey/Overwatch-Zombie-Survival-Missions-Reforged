@@ -1,0 +1,94 @@
+{
+  "baselineRef": "c805b4e3f9a8a6314710082ffcb21c955c22c524",
+  "baseline": 29871,
+  "results": [
+    {
+      "name": "lockBotMovementFlags",
+      "elements": 29871,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": [
+        "REIGNITED (ANRAN) ABILITIES #1",
+        "PRIME SLIMER (EMRE) FLIGHT (BOSS) #1",
+        "DAYTAKER (ILLARI) BURST #1"
+      ],
+      "addedSubroutines": [
+        "lockBotMovementFlags"
+      ],
+      "allOriginalActionsEqualAfterExpansion": true,
+      "conditionsAndVariablesUnchanged": true,
+      "nestedArrayPredicates": []
+    },
+    {
+      "name": "restoreBotWallCollision",
+      "elements": 29871,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": [
+        "STRIKER (WRECKING BALL) PILE DRIVER #1",
+        "STALKER (MOIRA) FADE #1",
+        "reenableBotWallAndJump #1"
+      ],
+      "addedSubroutines": [
+        "restoreBotWallCollision"
+      ],
+      "allOriginalActionsEqualAfterExpansion": true,
+      "conditionsAndVariablesUnchanged": true,
+      "nestedArrayPredicates": []
+    },
+    {
+      "name": "restoreBotFacing",
+      "elements": 29871,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": [
+        "BOTS MELEE #1",
+        "ENSNARER (HAZARD) BLOCKS PLAYERS #1",
+        "BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS) #1"
+      ],
+      "addedSubroutines": [
+        "restoreBotFacing"
+      ],
+      "allOriginalActionsEqualAfterExpansion": true,
+      "conditionsAndVariablesUnchanged": true,
+      "nestedArrayPredicates": []
+    },
+    {
+      "name": "combined",
+      "elements": 29871,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": [
+        "BOTS MELEE #1",
+        "REIGNITED (ANRAN) ABILITIES #1",
+        "PRIME SLIMER (EMRE) FLIGHT (BOSS) #1",
+        "STRIKER (WRECKING BALL) PILE DRIVER #1",
+        "STALKER (MOIRA) FADE #1",
+        "DAYTAKER (ILLARI) BURST #1",
+        "ENSNARER (HAZARD) BLOCKS PLAYERS #1",
+        "BRUTE, GLADIATOR, SUCESSOR, ENSNARER AND PROTECTOR USE ABILITIY (MINIBOSS) #1",
+        "reenableBotWallAndJump #1"
+      ],
+      "addedSubroutines": [
+        "lockBotMovementFlags",
+        "restoreBotWallCollision",
+        "restoreBotFacing"
+      ],
+      "allOriginalActionsEqualAfterExpansion": true,
+      "conditionsAndVariablesUnchanged": true,
+      "nestedArrayPredicates": []
+    },
+    {
+      "name": "satellite_center_beam_loop",
+      "elements": 29847,
+      "saved": 24,
+      "warnings": [],
+      "changedRules": [
+        "PLAYERS REPAIR TERMINALS #1"
+      ],
+      "detailedValidation": "2026-11-18-validate-thirty-second-element-candidates.cjs"
+    }
+  ],
+  "inGameValidation": false,
+  "serverLoadMeasured": false
+}
