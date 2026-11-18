@@ -177,6 +177,51 @@ rule "OVERCHARGE CLEARS CHARGE":
     eventPlayer.enhancementCapacitorDeadline = 0
 
 
+rule "BOLT STRIKE ON DOUBLE CROUCH":
+    @Event eachPlayer
+    @Team 1
+    # Native UI workaround: retain one phase/ID Condition; docs/WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    @Condition uiPhaseAndId(eventPlayer.enhancementId == Enhancement.BOLT_STRIKE)
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
+
+    # Check the first press so holding Crouch through expiry cannot start a tap.
+    if getTotalTimeElapsed() < eventPlayer.enhancementBoltReadyAt:
+        return
+    waitUntil(not eventPlayer.isHoldingButton(Button.CROUCH), BOLT_STRIKE_TAP_WINDOW)
+    if eventPlayer.isHoldingButton(Button.CROUCH):
+        return
+    waitUntil(eventPlayer.isHoldingButton(Button.CROUCH), BOLT_STRIKE_TAP_WINDOW)
+    if not ruleCondition:
+        return
+
+    # The shared selector returns the living zombie closest to the crosshair.
+    # All scratch is consumed before the beam's unconditional cleanup wait.
+    #!define boltStrikeTarget tmp0
+    #!define boltStrikeSplashTargets tmp1
+    pullAimMode = PullAimMode.BOLT_STRIKE
+    selectPullAimTarget()
+    if boltStrikeTarget == null:
+        return
+    eventPlayer.enhancementBoltReadyAt = getTotalTimeElapsed() + BOLT_STRIKE_COOLDOWN
+
+    # Snapshot the splash before the primary can die, and both beam endpoints
+    # before damage or cleanup. Player collision does not block the splash.
+    boltStrikeSplashTargets = getPlayersInRadius(boltStrikeTarget, BOLT_STRIKE_SPLASH_RADIUS, Team.2, LosCheck.SURFACES).filter(lambda target: target != boltStrikeTarget and target.isAlive() and target.isDummy() and not target.botIsTeleporting and not target.botIsInitializing)
+    createBeam(getAllPlayers(), Beam.GOOD, augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(boltStrikeTarget), Color.SKY_BLUE, EffectReeval.NONE)
+    eventPlayer.enhancementAttackBeamEntity = getLastCreatedEntity()
+    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.YELLOW, boltStrikeTarget, BOLT_STRIKE_WAVE_RADIUS)
+    # Play the cue near the caster so a distant target does not muffle it.
+    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.WHITE, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection(), 100)
+    boltStrikeSplashTargets.concat(boltStrikeTarget).setStatusEffect(eventPlayer, Status.STUNNED, BOLT_STRIKE_STUN_DURATION)
+    damage(boltStrikeTarget, eventPlayer, BOLT_STRIKE_DAMAGE)
+    damage(boltStrikeSplashTargets, eventPlayer, BOLT_STRIKE_SPLASH_DAMAGE)
+
+    wait(BOLT_STRIKE_BEAM_DURATION, Wait.IGNORE_CONDITION)
+    destroyEffect(eventPlayer.enhancementAttackBeamEntity)
+    eventPlayer.enhancementAttackBeamEntity = null
+
+
 def checkEnhancementPlacement():
     # Synchronous output only: no waits, asynchronous work or nested calls before the caller reads tmp0.
     # Keep the 31 m validation ray separate from each caller's 30 m placement ray and its player filters.
@@ -324,7 +369,7 @@ rule "WRESTLER PULL":
     eventPlayer.enhancementPullReadyAt = getTotalTimeElapsed() + WRESTLER_PULL_COOLDOWN
     # Slimer's Bad Beam, recolored purple, appears at full length immediately.
     createBeam(getAllPlayers(), Beam.BAD, augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(wrestlerPullTarget), Color.PURPLE, EffectReeval.NONE)
-    eventPlayer.enhancementPullBeamEntity = getLastCreatedEntity()
+    eventPlayer.enhancementAttackBeamEntity = getLastCreatedEntity()
     wrestlerPullTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, WRESTLER_PULL_KNOCKDOWN)
     damage(wrestlerPullTarget, eventPlayer, WRESTLER_PULL_DAMAGE)
     # Bosses and minibosses take the damage and knockdown, but cannot be pulled.
@@ -334,17 +379,17 @@ rule "WRESTLER PULL":
         wrestlerPullTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(wrestlerPullTarget, eventPlayer)), -15), distance(wrestlerPullTarget, eventPlayer) * WRESTLER_PULL_FORCE_MULTIPLIER, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     # Always clean up, including release, death, hero change or end of gameplay.
     wait(WRESTLER_PULL_BEAM_DURATION, Wait.IGNORE_CONDITION)
-    destroyEffect(eventPlayer.enhancementPullBeamEntity)
-    eventPlayer.enhancementPullBeamEntity = null
+    destroyEffect(eventPlayer.enhancementAttackBeamEntity)
+    eventPlayer.enhancementAttackBeamEntity = null
 
 
-rule "WRESTLER PULL DISCONNECT CLEANUP":
+rule "ENHANCEMENT ATTACK BEAM DISCONNECT CLEANUP":
     @Event playerLeft
     @Team 1
 
     # Event eligibility stays synchronous; docs/WORKSHOP_NATIVE_UI_CORRUPTION.md.
-    if (eventPlayer.enhancementId == Enhancement.WRESTLER) and (eventPlayer.enhancementPullBeamEntity != null):
-        destroyEffect(eventPlayer.enhancementPullBeamEntity)
+    if eventPlayer.enhancementId in [Enhancement.WRESTLER, Enhancement.BOLT_STRIKE] and eventPlayer.enhancementAttackBeamEntity != null:
+        destroyEffect(eventPlayer.enhancementAttackBeamEntity)
 
 
 def useLivingProjectile():

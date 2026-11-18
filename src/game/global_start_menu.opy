@@ -210,7 +210,7 @@ rule "EFFECTS/TEXTS":
             "Place a battery that grants 15% ultimate charge on contact. Recharges in 10s; placement cd: 20s. Using ultimate resets all ability cd.",
             "An autonomous drone burns and knocks down nearby zombies, or freezes distant targets and nearby zombies.",
             f"Grab disabled zombies; 50% dmg resist while carrying. Pull and knock down a zombie within {WRESTLER_PULL_RANGE}m ({WRESTLER_PULL_DAMAGE} dmg); cd {WRESTLER_PULL_COOLDOWN}s.",
-            f"Hits chain to {BOLT_STRIKE_CHAIN_TARGETS} zombies within {BOLT_STRIKE_RADIUS}m for {BOLT_STRIKE_CHAIN_DAMAGE_RATIO * 100}% dmg (max {BOLT_STRIKE_CHAIN_DAMAGE_MAX}).",
+            f"Double-tap Crouch: {BOLT_STRIKE_DAMAGE} dmg, {BOLT_STRIKE_SPLASH_DAMAGE} splash within {BOLT_STRIKE_SPLASH_RADIUS}m, {BOLT_STRIKE_STUN_DURATION}s stun. Cooldown: {BOLT_STRIKE_COOLDOWN}s.",
             f"Scrap: +{ENGINEER_COLLECTION_REWARD} per zombie death within {ENGINEER_COLLECTION_RANGE}m, +{ENGINEER_SCRAP_PASSIVE_RATE}/s. Craft armor for yourself or allies (up to {ENGINEER_ARMOR_MAX} each) and freezing turrets.",
             f"Double-tap Crouch to scan a {AUSPEX_RADIUS}m area where you aim for {AUSPEX_SCAN_DURATION}s. Marked zombies take +{AUSPEX_BONUS_DAMAGE * 100}% damage credited to you. Cooldown: {AUSPEX_COOLDOWN}s.",
             "+30% healing, increased to +62.5% on infected allies. Healing reduces infection in you and infected allies.",

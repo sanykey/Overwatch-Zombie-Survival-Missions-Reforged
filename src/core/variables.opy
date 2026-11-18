@@ -39,10 +39,9 @@ globalvar tmp1  # Second synchronous scratch value, including bot teleport pivot
 #!define botTeleportPivot tmp1
 globalvar tmp2  # Third synchronous scratch value, including barricade's current target, mutation color captured with evalOnce for the outline, and the on-hit enhancements' health gate; no live reads across waits/async work.
 globalvar tmp3  # Fourth synchronous scratch value, including barricade impulse vertical angle and the on-hit enhancements' victim; assigned and consumed within the same loop iteration, no reads across waits/async work.
-# applyHitEnhancements inputs for Pyrotechnic, Overcharge and Bolt Strike.
+# Hit inputs for Pyrotechnic and Overcharge.
 # tmp2 is health before scripted Damage, then actual health removed in the macro.
 # Native callers supply eventDamage directly; the handler accepts positive damage.
-# Pyro/Overcharge preserve inputs; Bolt consumes tmp2/tmp3 for chain damage/targets.
 # The handler preserves tmp0/tmp1; consume before waits/async calls.
 #!define enhancementHitHealthBefore tmp2
 #!define enhancementHitDamage tmp2
@@ -680,6 +679,10 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 # Exclusive primary enhancement; its selected human owns the native-stat earnings,
 # charge spending and persistent balance; never write it on an enemy target.
 #!define enhancementCapacitorEnergy actorTeamSlot22
+# Bolt Strike: absolute cooldown deadline after a successful strike.
+# Retained across deaths and hero changes.
+# START GAME clears this slot through the existing enhancementScrap sweep.
+#!define enhancementBoltReadyAt actorTeamSlot22
 # Born to Battle unspent ability resets (0-2); retained through ability waits and reevaluated by its HUD.
 #!define enhancementBattleResetCharges actorTeamSlot22
 # Placed Charge Battery position; zero clears it.
@@ -724,10 +727,10 @@ playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateS
 playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateSlot3. Receivers, not rule teams, own the storage.
 # Movement waypoint associated with the accepted zombie spawn point.
 #!define botSpawnWaypoint actorTeamSlot24
-# Wrestler: short-lived pull beam handle, retained only through its 0.2s
+# Wrestler / Bolt Strike: short-lived attack beam handle, retained through the
 # unconditional cleanup wait; departure cleanup also destroys it. No spawn reset.
 # Beam endpoints are snapshots, so the global target scratch is never captured.
-#!define enhancementPullBeamEntity actorTeamSlot24
+#!define enhancementAttackBeamEntity actorTeamSlot24
 # Overcharge: absolute burst deadline; zero means armed but waiting for its first hit.
 # Set once by the first hit, read by later hits, cleared with the charge on expiry/death.
 #!define enhancementCapacitorDeadline actorTeamSlot24
@@ -766,11 +769,7 @@ playervar actorTeamSlot26  # Teleport permission on Team 2 or first barrier corn
 # Barrier first lower corner.
 #!define augmentBarrierCorner1 actorTeamSlot26
 
-playervar actorTeamSlot27  # Team 2: Bolt Strike flash deadline; Team 1: second barrier corner.
-# Next allowed Bolt Strike flash time on this zombie, shared across attackers.
-# Default 0 permits its first flash; retained across respawns (at most 0.5s).
-# Written only on a flash; no chase, waits or reevaluated visuals own this slot.
-#!define botBoltFlashReadyAt actorTeamSlot27
+playervar actorTeamSlot27  # Team 1: second barrier corner.
 # Barrier second lower corner.
 #!define augmentBarrierCorner2 actorTeamSlot27
 
@@ -796,14 +795,8 @@ playervar objectiveActorKindSlot  # Biomorphing resource type on both teams, or 
 # Rescue NPC mood/status icon: halo, sad, dizzy or extraction celebration.
 #!define rescueMoodIcon objectiveActorKindSlot
 
-playervar menuTradeItemSlot  # Team 1: pregame zombie vote; Team 2: Bolt Strike chain damage deadline.
+playervar menuTradeItemSlot  # Team 1: pregame zombie vote.
 #!define pregameZombieVote menuTradeItemSlot
-# Next allowed chain damage time on this zombie, shared across attackers.
-# Team 2 only; human vote/HUD readers retain their Team 1 value. Default 0
-# permits the first chain; retained across respawns for at most 0.032s.
-# Set before chain Damage, never on a rejected chain. No chase/wait owns it.
-# Discharge is a separate one-shot ability and does not use this deadline.
-#!define botBoltDamageReadyAt menuTradeItemSlot
 
 # Chased variables
 
