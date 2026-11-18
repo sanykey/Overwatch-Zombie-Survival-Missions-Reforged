@@ -45,7 +45,7 @@ rule "INITIALIZE SURVIVOR TO BE RESCUED":
     #Objective/Survivor distance
     createInWorldText(getAllPlayers().filter(lambda _: not eventPlayer.rescueIsExtracting and distance(localPlayer, currentObjectivePosition) > 5), "Distance: {0}m".format(distance(localPlayer, eventPlayer if distance(eventPlayer, localPlayer) > objectiveRad else currentObjectivePosition)), eventPlayer.getPosition() if distance(eventPlayer, localPlayer) > objectiveRad else currentObjectivePosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.VIOLET, SpecVisibility.NEVER)
     #Survivor rescue progress bar
-    progressBarHud(getAllPlayers(), 100 if eventPlayer.rescueIsExtracting else ((magnitude((currentObjectivePosition - eventPlayer.rescueStartPosition) * vect(1, 0, 1)) - magnitude((eventPlayer.getPosition() - currentObjectivePosition) * vect(1, 0, 1))) / magnitude((currentObjectivePosition - eventPlayer.rescueStartPosition) * vect(1, 0, 1))) * 100, "Survivor Rescue Progress", HudPosition.TOP, 2, Color.VIOLET, Color.VIOLET, ProgressHudReeval.VISIBILITY_AND_VALUES)
+    progressBarHud(getAllPlayers(), 100 if eventPlayer.rescueIsExtracting else ((magnitude((currentObjectivePosition - eventPlayer.rescueStartPosition) * horizontalMaskConst) - magnitude((eventPlayer.getPosition() - currentObjectivePosition) * horizontalMaskConst)) / magnitude((currentObjectivePosition - eventPlayer.rescueStartPosition) * horizontalMaskConst)) * 100, "Survivor Rescue Progress", HudPosition.TOP, 2, Color.VIOLET, Color.VIOLET, ProgressHudReeval.VISIBILITY_AND_VALUES)
     #Survivor icon
     createInWorldText(getAllPlayers(), eventPlayer.rescueFollowMessage if eventPlayer.rescueFollowMessage else eventPlayer.rescueMoodIcon, eventPlayer, 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.ALWAYS)
     eventPlayer.rescueMoodIcon = iconString(Icon.HALO)
@@ -130,7 +130,7 @@ rule "CREATE PATH":
 rule "DELETE PATH":
     @Condition currentObjectiveType == ObjectiveType.SURVIVOR_RESCUE
     # XZ distance to each waypoint; retain the separate vertical tolerance.
-    @Condition (rescueSurvivor.rescuePathList.any(lambda x: magnitude((rescueSurvivor.getPosition() - x) * vect(1, 0, 1)) < 0.25 and abs(rescueSurvivor.getPosition().y - x.y) < 2)) == true
+    @Condition (rescueSurvivor.rescuePathList.any(lambda x: magnitude((rescueSurvivor.getPosition() - x) * horizontalMaskConst) < 0.25 and abs(rescueSurvivor.getPosition().y - x.y) < 2)) == true
     
     # rescueReachedPathIndex: reached path index, consumed by the immediate path trim.
     #!define rescueReachedPathIndex tmp0

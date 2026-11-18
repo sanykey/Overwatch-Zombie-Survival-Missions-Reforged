@@ -12,7 +12,7 @@ rule "PLAYERS ON OBJECTIVE CONTROL":
     @Condition abs(currentObjectivePosition.y - eventPlayer.getPosition().y) < 12
     #Objective Cylinder Radius
     # Project the relative position onto XZ; keep the independent height limit above.
-    @Condition magnitude((currentObjectivePosition - eventPlayer.getPosition()) * vect(1, 0, 1)) < objectiveRad
+    @Condition magnitude((currentObjectivePosition - eventPlayer.getPosition()) * horizontalMaskConst) < objectiveRad
     
     if eventPlayer.isDummy():
         if not eventPlayer in showdownContestingZombieList:

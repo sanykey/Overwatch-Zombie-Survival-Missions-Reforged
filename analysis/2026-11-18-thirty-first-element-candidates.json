@@ -1,0 +1,79 @@
+{
+  "baselineRef": "7fd6b7e5ffcdc27622a0092709ca7909515031de",
+  "baseline": 29889,
+  "results": [
+    {
+      "name": "barrier_relative_distance",
+      "elements": 29881,
+      "saved": 8,
+      "warnings": [],
+      "changedRules": [
+        "[LASER_BARRICADE AUGMENT] BLOCKS ZOMBIES #1"
+      ]
+    },
+    {
+      "name": "xz_direction_sum",
+      "elements": 29889,
+      "saved": 0,
+      "warnings": [],
+      "changedRules": []
+    },
+    {
+      "name": "xz_cached_vector",
+      "elements": 29881,
+      "saved": 8,
+      "warnings": [],
+      "changedRules": [
+        "Initialize global variables #1",
+        "restoreDefaultFacingMovement #1",
+        "PREVENT PLAYERS FROM LEAVING START EARLY #1",
+        "PLAYERS IN EXTRACTION POINT CONTROL #1",
+        "WIN/LOSS CONDITIONS #1",
+        "PLAYERS ON OBJECTIVE CONTROL #1",
+        "INITIALIZE SURVIVOR TO BE RESCUED #1",
+        "DELETE PATH #1",
+        "BOT DIES #1",
+        "BEHEMOTH GAS STREAM (BOSS) #1",
+        "[LASER_BARRICADE AUGMENT] BLOCKS ZOMBIES #1"
+      ]
+    },
+    {
+      "name": "xz_cached_direction_sum",
+      "elements": 29881,
+      "saved": 8,
+      "warnings": [],
+      "changedRules": [
+        "Initialize global variables #1",
+        "restoreDefaultFacingMovement #1",
+        "PREVENT PLAYERS FROM LEAVING START EARLY #1",
+        "PLAYERS IN EXTRACTION POINT CONTROL #1",
+        "WIN/LOSS CONDITIONS #1",
+        "PLAYERS ON OBJECTIVE CONTROL #1",
+        "INITIALIZE SURVIVOR TO BE RESCUED #1",
+        "DELETE PATH #1",
+        "BOT DIES #1",
+        "BEHEMOTH GAS STREAM (BOSS) #1",
+        "[LASER_BARRICADE AUGMENT] BLOCKS ZOMBIES #1"
+      ]
+    },
+    {
+      "name": "combined",
+      "elements": 29871,
+      "saved": 18,
+      "warnings": [],
+      "changedRules": [
+        "Initialize global variables #1",
+        "restoreDefaultFacingMovement #1",
+        "PREVENT PLAYERS FROM LEAVING START EARLY #1",
+        "PLAYERS IN EXTRACTION POINT CONTROL #1",
+        "WIN/LOSS CONDITIONS #1",
+        "PLAYERS ON OBJECTIVE CONTROL #1",
+        "INITIALIZE SURVIVOR TO BE RESCUED #1",
+        "DELETE PATH #1",
+        "BOT DIES #1",
+        "BEHEMOTH GAS STREAM (BOSS) #1",
+        "[LASER_BARRICADE AUGMENT] BLOCKS ZOMBIES #1"
+      ]
+    }
+  ]
+}

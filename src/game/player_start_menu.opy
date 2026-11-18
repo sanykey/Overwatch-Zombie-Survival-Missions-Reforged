@@ -230,7 +230,7 @@ rule "PREVENT PLAYERS FROM LEAVING START EARLY":
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.pregameState > PregameState.SELECTING_HERO
     # Horizontal displacement only, keeping the original 0.6 m limit.
-    @Condition magnitude((eventPlayer.getPosition() - eventPlayer.pregamePosition) * vect(1, 0, 1)) > 0.6
+    @Condition magnitude((eventPlayer.getPosition() - eventPlayer.pregamePosition) * horizontalMaskConst) > 0.6
     
     wait(2, Wait.ABORT_WHEN_FALSE)
     if not isSpecialGameMode:

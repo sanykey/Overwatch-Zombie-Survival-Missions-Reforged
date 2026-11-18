@@ -1,0 +1,40 @@
+{
+  "compiler": "zezombye.overpy-9.7.21",
+  "baselineRef": "7fd6b7e5ffcdc27622a0092709ca7909515031de",
+  "baseline": 29889,
+  "candidate": 29871,
+  "saved": 18,
+  "warnings": [],
+  "status": "measured only; gameplay sources unchanged",
+  "changedRules": [
+    "Initialize global variables #1",
+    "restoreDefaultFacingMovement #1",
+    "PREVENT PLAYERS FROM LEAVING START EARLY #1",
+    "PLAYERS IN EXTRACTION POINT CONTROL #1",
+    "WIN/LOSS CONDITIONS #1",
+    "PLAYERS ON OBJECTIVE CONTROL #1",
+    "INITIALIZE SURVIVOR TO BE RESCUED #1",
+    "DELETE PATH #1",
+    "BOT DIES #1",
+    "BEHEMOTH GAS STREAM (BOSS) #1",
+    "[LASER_BARRICADE AUGMENT] BLOCKS ZOMBIES #1"
+  ],
+  "projectionReads": 17,
+  "addedGlobalVariables": 1,
+  "variableCounts": {
+    "global": 112,
+    "player": 99
+  },
+  "otherRulesEqualAfterExpandingConstant": true,
+  "initializationOnlyAddsImmutableVector": true,
+  "barrierOnlyChangesTranslatedDistanceTwice": true,
+  "geometryModel": {
+    "checked": 12084,
+    "maxError": 2.2737367544323206e-13,
+    "workshopFloatingPointTested": false
+  },
+  "nestedArrayPredicates": [],
+  "nativeBaselineMatchesFlattenedModel": true,
+  "inGameValidation": false,
+  "serverLoadMeasured": false
+}

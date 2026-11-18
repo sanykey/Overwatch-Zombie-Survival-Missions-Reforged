@@ -35,3 +35,6 @@ globalvar augmentColorListConst = [Color.AQUA, Color.LIGHT_GRAY, Color.YELLOW, C
 globalvar augmentNameListConst
 globalvar augmentMeleeWeaponHeroListConst
 globalvar augmentMeleeBtnHeroListConst
+
+# Componentwise projection onto XZ; immutable, shared by geometry and live HUDs.
+globalvar horizontalMaskConst = vect(1, 0, 1)

@@ -276,7 +276,7 @@ rule "BEHEMOTH GAS STREAM (BOSS)":
         #!define behemothGasCloudRadius tmp2
         behemothGasCloudPosition = eventPlayer.botGasPositionList[behemothGasCloudIndex]
         behemothGasCloudRadius = eventPlayer.botGasRadiusList[behemothGasCloudIndex]
-        eventPlayer.botSpecialTargetList.append(playerTargetList.filter(lambda x: not x in eventPlayer.botSpecialTargetList and not x.isDotProtected and magnitude((behemothGasCloudPosition - x.getEyePosition()) * vect(1, 0, 1)) < behemothGasCloudRadius and abs(behemothGasCloudPosition.y - x.getEyePosition().y) < behemothGasCloudRadius / 5))
+        eventPlayer.botSpecialTargetList.append(playerTargetList.filter(lambda x: not x in eventPlayer.botSpecialTargetList and not x.isDotProtected and magnitude((behemothGasCloudPosition - x.getEyePosition()) * horizontalMaskConst) < behemothGasCloudRadius and abs(behemothGasCloudPosition.y - x.getEyePosition().y) < behemothGasCloudRadius / 5))
     eventPlayer.botSpecialTargetList.startDamageOverTime(eventPlayer, 2.5, eventPlayer.botBiteDamage * 0.1)
     if eventPlayer.botSpecialTargetList != []:
         eventPlayer.damageOverTimeRemaining = max(eventPlayer.damageOverTimeRemaining, 2.5)

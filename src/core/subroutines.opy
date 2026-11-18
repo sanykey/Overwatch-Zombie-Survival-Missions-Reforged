@@ -754,7 +754,7 @@ def restoreDefaultFacingMovement():
         if not eventPlayer.botIsFacingOverridden:
             eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botTarget.getEyePosition()), 1500 if eventPlayer.botIsAttached else 0 if eventPlayer.botIsCrowdControlled else 100)
         if not eventPlayer.botIsThrottleOverridden:
-            eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.botTarget), eventPlayer.botThrottleSpeed if magnitude((eventPlayer.getPosition() - eventPlayer.botTarget.getPosition()) * vect(1, 0, 1)) > 2 * min(1, eventPlayer.sizeScale) else 0, Relativity.TO_WORLD)
+            eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.botTarget), eventPlayer.botThrottleSpeed if magnitude((eventPlayer.getPosition() - eventPlayer.botTarget.getPosition()) * horizontalMaskConst) > 2 * min(1, eventPlayer.sizeScale) else 0, Relativity.TO_WORLD)
     else:
         eventPlayer.startThrottleInDirection(eventPlayer.getFacingDirection(), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
         faceCurrentThrottle()
