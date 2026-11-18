@@ -7,6 +7,7 @@ subroutine enableBotCollisionAndFlag
 
 subroutine playPlacementWindupFeedback
 subroutine detachAbilityTarget
+subroutine detachHitchhikerPassenger
 
 # Shared subroutines used by multiple sections (including their dependencies).
 

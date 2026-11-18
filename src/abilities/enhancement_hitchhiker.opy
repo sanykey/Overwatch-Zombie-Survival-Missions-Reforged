@@ -6,11 +6,6 @@
 #!define HITCHHIKER_HEALTH_DIFFERENCE_THRESHOLD 0.01
 
 
-macro initializeHitchhikerMacro():
-    eventPlayer.hitchhikerCarrier = 0
-    eventPlayer.hitchhikerCarrier.startGrantingAssistFor(eventPlayer)
-
-
 macro createHitchhikerHudMacro():
     # Attachment status subheaders: one persistent call each for the passenger
     # and the carrier, reevaluated per viewer; the carrier-side text reads the
@@ -32,55 +27,80 @@ rule "[HITCHHIKER] ATTACH OR DETACH":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.enhancementId == Enhancement.HITCHHIKER
-    @Condition (eventPlayer.isHoldingButton(Button.CROUCH) or (eventPlayer.hitchhikerAttached and (
-        not eventPlayer.hasSpawned()
-        or not eventPlayer.hitchhikerCarrier.hasSpawned()
-        or eventPlayer.isDead()
-        or eventPlayer.hitchhikerCarrier.isDead()
-        or not entityExists(eventPlayer.hitchhikerCarrier)
-        or eventPlayer.hasStatus(Status.KNOCKED_DOWN)
-        or eventPlayer.hitchhikerCarrier.hasStatus(Status.KNOCKED_DOWN)
-        or distance(eventPlayer, eventPlayer.hitchhikerCarrier) > HITCHHIKER_DETACH_RANGE_SCALE * eventPlayer.hitchhikerCarrier.sizeScale
-    ))) == true
+    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
 
-    if not eventPlayer.hitchhikerAttached and eventPlayer.isAlive():
-        if playerTargetList.exclude(eventPlayer).any(lambda x: not x.isAttached and distance(eventPlayer, x) < HITCHHIKER_ATTACH_RANGE_SCALE * x.sizeScale):
-            # Select carrier.
-            eventPlayer.hitchhikerCarrier = (sorted(playerTargetList.exclude(eventPlayer).filter(lambda x: not x.isCrowdControlled and distance(eventPlayer, x) < x.sizeScale * HITCHHIKER_ATTACH_RANGE_SCALE), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition()))))[0]
-            # hitchhikerWorldAttachmentPosition: attachment position in world space, converted and captured before any wait.
-            #!define hitchhikerWorldAttachmentPosition tmp0
-            hitchhikerWorldAttachmentPosition = eventPlayer.hitchhikerCarrier.getPosition() + (directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.hitchhikerCarrier, eventPlayer)), 0) + Vector.UP) * eventPlayer.hitchhikerCarrier.sizeScale
-            # hitchhikerLocalAttachmentOffset: convert the attachment position to the carrier's local coordinates.
-            #!define hitchhikerLocalAttachmentOffset tmp0
-            hitchhikerLocalAttachmentOffset = localVector(hitchhikerWorldAttachmentPosition, eventPlayer.hitchhikerCarrier, Transform.ROTATION_AND_TRANSLATION)
-            # Place passenger behind the carrier.
-            if hitchhikerLocalAttachmentOffset.z > 0:
-                # hitchhikerLocalAttachmentOffset: mirror a forward offset behind the carrier.
-                hitchhikerLocalAttachmentOffset *= vect(1, 1, -1)
-            # hitchhikerLocalAttachmentOffset: raise the final local offset before capturing it in attachTo.
-            hitchhikerLocalAttachmentOffset += Vector.UP
-            eventPlayer.hitchhikerAttached = true
-            # Cryo-Freeze while attached breaks the attachment, so Mei may not use Ability 1 while hitchhiking.
-            if eventPlayer.getHero() == Hero.MEI:
-                eventPlayer.disallowButton(Button.ABILITY_1)
-            eventPlayer.attachTo(eventPlayer.hitchhikerCarrier, evalOnce(hitchhikerLocalAttachmentOffset))
-            smallMessage(eventPlayer, "You are attached")
-            eventPlayer.addHealthPool(Health.NORMAL, eventPlayer.hitchhikerCarrier.initialMaxHealth, true, false)
-            eventPlayer.hitchhikerPassengerPoolId = getLastCreatedHealthPool()
-            eventPlayer.hitchhikerCarrier.hitchhikerPassenger = eventPlayer
-    else:
-        if entityExists(eventPlayer.hitchhikerCarrier) and eventPlayer.hasSpawned() and distance(eventPlayer, eventPlayer.hitchhikerCarrier) < HITCHHIKER_DETACH_RANGE_SCALE * eventPlayer.hitchhikerCarrier.sizeScale:
-            eventPlayer.teleport(eventPlayer.hitchhikerCarrier.getPosition())
-        else:
-            eventPlayer.detach()
-        smallMessage(eventPlayer, "You have detached")
+    if not eventPlayer.isAlive():
+        return
+
+    # Pick the eligible carrier nearest the passenger's aim.
+    eventPlayer.hitchhikerCarrier = (sorted(
+        playerTargetList.exclude(eventPlayer).filter(lambda x: not x.isAttached and not x.isCrowdControlled and distance(eventPlayer, x) < x.sizeScale * HITCHHIKER_ATTACH_RANGE_SCALE),
+        lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition()))
+    ))[0]
+    if not entityExists(eventPlayer.hitchhikerCarrier):
+        return
+
+    # hitchhikerLocalAttachmentOffset: rotate the relative displacement into carrier space before any wait.
+    #!define hitchhikerLocalAttachmentOffset tmp0
+    hitchhikerLocalAttachmentOffset = localVector(
+        (directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.hitchhikerCarrier, eventPlayer)), 0) + Vector.UP) * eventPlayer.hitchhikerCarrier.sizeScale,
+        eventPlayer.hitchhikerCarrier, Transform.ROTATION
+    )
+    # Place passenger behind the carrier.
+    if hitchhikerLocalAttachmentOffset.z > 0:
+        # hitchhikerLocalAttachmentOffset: mirror a forward offset behind the carrier.
+        hitchhikerLocalAttachmentOffset *= vect(1, 1, -1)
+    # hitchhikerLocalAttachmentOffset: raise the final local offset before capturing it in attachTo.
+    hitchhikerLocalAttachmentOffset += Vector.UP
+    eventPlayer.hitchhikerAttached = true
+    # Cryo-Freeze while attached breaks the attachment, so Mei may not use Ability 1 while hitchhiking.
+    if eventPlayer.getHero() == Hero.MEI:
+        eventPlayer.disallowButton(Button.ABILITY_1)
+    eventPlayer.attachTo(eventPlayer.hitchhikerCarrier, evalOnce(hitchhikerLocalAttachmentOffset))
+    smallMessage(eventPlayer, "You are attached")
+    eventPlayer.addHealthPool(Health.NORMAL, eventPlayer.hitchhikerCarrier.initialMaxHealth, true, false)
+    eventPlayer.hitchhikerPassengerPoolId = getLastCreatedHealthPool()
+    eventPlayer.hitchhikerCarrier.hitchhikerPassenger = eventPlayer
+
+    # Forced release and hero switches clear the flag, ending either Crouch wait.
+    waitUntil(not eventPlayer.hitchhikerAttached or not eventPlayer.isHoldingButton(Button.CROUCH), Math.INFINITY)
+    waitUntil(not eventPlayer.hitchhikerAttached or eventPlayer.isHoldingButton(Button.CROUCH), Math.INFINITY)
+
+    hitchhikerLandAtCarrier = true
+    detachHitchhikerPassenger()
+    wait(HITCHHIKER_DETACH_COOLDOWN)
+
+
+rule "[HITCHHIKER] FORCE DETACH":
+    @Event eachPlayer
+    @Team 1
+    @Condition eventPlayer.hitchhikerAttached == true
+    @Condition (not entityExists(eventPlayer.hitchhikerCarrier)
+        or eventPlayer.concat(eventPlayer.hitchhikerCarrier).any(lambda player: player.isDead() or not player.hasSpawned() or player.hasStatus(Status.KNOCKED_DOWN))
+        or distance(eventPlayer, eventPlayer.hitchhikerCarrier) > HITCHHIKER_DETACH_RANGE_SCALE * eventPlayer.hitchhikerCarrier.sizeScale
+    ) == true
+
+    hitchhikerLandAtCarrier = true
+    detachHitchhikerPassenger()
+
+
+def detachHitchhikerPassenger():
+    @Name "detachHitchhikerPassenger"
+    # Synchronous: consume hitchhikerLandAtCarrier without yielding or retaining it.
+    if not eventPlayer.hitchhikerAttached:
+        return
+
+    eventPlayer.detach()
+    if hitchhikerLandAtCarrier and entityExists(eventPlayer.hitchhikerCarrier) and eventPlayer.hasSpawned() and distance(eventPlayer, eventPlayer.hitchhikerCarrier) < HITCHHIKER_DETACH_RANGE_SCALE * eventPlayer.hitchhikerCarrier.sizeScale:
+        eventPlayer.teleport(eventPlayer.hitchhikerCarrier.getPosition())
+    smallMessage(eventPlayer, "You have detached")
+    if eventPlayer.hitchhikerCarrier.hitchhikerPassenger == eventPlayer:
         eventPlayer.hitchhikerCarrier.hitchhikerPassenger = null
-        eventPlayer.hitchhikerAttached = false
-        if eventPlayer.getHero() == Hero.MEI:
-            eventPlayer.allowButton(Button.ABILITY_1)
-        eventPlayer.hitchhikerCarrier = 0
-        removeHealthPool(eventPlayer.hitchhikerPassengerPoolId)
-        wait(HITCHHIKER_DETACH_COOLDOWN)
+    eventPlayer.hitchhikerAttached = false
+    if eventPlayer.getHero() == Hero.MEI:
+        eventPlayer.allowButton(Button.ABILITY_1)
+    eventPlayer.hitchhikerCarrier = 0
+    removeHealthPool(eventPlayer.hitchhikerPassengerPoolId)
 
 
 rule "[HITCHHIKER] GRANT CARRIER HEALTH POOL":
@@ -97,26 +117,23 @@ rule "[HITCHHIKER] GRANT CARRIER HEALTH POOL":
 rule "[HITCHHIKER] BALANCE LINKED HEALTH":
     @Event eachPlayer
     @Team 1
-    @Condition eventPlayer.enhancementId == Enhancement.HITCHHIKER
+    # Hitchhiker owns the attachment flag on Team 1.
     @Condition eventPlayer.hitchhikerAttached == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.hitchhikerCarrier.isAlive() == true
     @Condition abs(eventPlayer.getNormalizedHealth() - eventPlayer.hitchhikerCarrier.getNormalizedHealth()) > HITCHHIKER_HEALTH_DIFFERENCE_THRESHOLD
 
-    # Carrier reference is synchronous through donor selection; tmp3 is dead before either Set Health.
+    # Carrier reference stays live until the health-sorted pair replaces it in tmp3.
     #!define hitchhikerHealthCarrier tmp3
     hitchhikerHealthCarrier = eventPlayer.hitchhikerCarrier
-    # hitchhikerHealthTransferAmount: health to transfer this update; consumed by both setHealth actions before wait.
-    #!define hitchhikerHealthTransferAmount tmp0
-    hitchhikerHealthTransferAmount = (abs(eventPlayer.getHealth() * hitchhikerHealthCarrier.getMaxHealth() - hitchhikerHealthCarrier.getHealth() * eventPlayer.getMaxHealth())) / (eventPlayer.getMaxHealth() + hitchhikerHealthCarrier.getMaxHealth())
-    # hitchhikerHealthRecipient: player with lower normalized health, receiving the transfer immediately.
-    #!define hitchhikerHealthRecipient tmp1
-    hitchhikerHealthRecipient = sorted(eventPlayer.concat(hitchhikerHealthCarrier), lambda x: x.getNormalizedHealth())[0]
-    # hitchhikerHealthDonor: other player, giving the transfer immediately; keep all three scratch values distinct.
-    #!define hitchhikerHealthDonor tmp2
-    hitchhikerHealthDonor = eventPlayer.concat(hitchhikerHealthCarrier).exclude(hitchhikerHealthRecipient)
-    hitchhikerHealthRecipient.setHealth(hitchhikerHealthRecipient.getHealth() + hitchhikerHealthTransferAmount)
-    hitchhikerHealthDonor.setHealth(hitchhikerHealthDonor.getHealth() - hitchhikerHealthTransferAmount)
+    # hitchhikerSharedHealthRatio: conserve combined HP at a shared health fraction.
+    #!define hitchhikerSharedHealthRatio tmp0
+    hitchhikerSharedHealthRatio = (eventPlayer.getHealth() + hitchhikerHealthCarrier.getHealth()) / (eventPlayer.getMaxHealth() + hitchhikerHealthCarrier.getMaxHealth())
+    # hitchhikerHealthOrder: capture both players before either update. Give HP before taking it.
+    #!define hitchhikerHealthOrder tmp3
+    hitchhikerHealthOrder = sorted(eventPlayer.concat(hitchhikerHealthCarrier), lambda x: x.getNormalizedHealth())
+    hitchhikerHealthOrder[0].setHealth(hitchhikerHealthOrder[0].getMaxHealth() * hitchhikerSharedHealthRatio)
+    hitchhikerHealthOrder.last().setHealth(hitchhikerHealthOrder.last().getMaxHealth() * hitchhikerSharedHealthRatio)
     wait()
     if ruleCondition:
         loop()

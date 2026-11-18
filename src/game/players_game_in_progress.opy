@@ -46,7 +46,6 @@ rule "PLAYER INITIALIZATION":
     eventPlayer.invisibilityCount = false
     eventPlayer.movementSpeedScale = 1
     applyScaledMoveSpeed()
-    eventPlayer.isAttached = false
     eventPlayer.isAfk = false
     if eventPlayer.isHeroSwitchRespawn == true:
         return
@@ -303,7 +302,12 @@ rule "PLAYER SWITCHES HERO":
     
     wait(5, Wait.ABORT_WHEN_FALSE)
     excludeCurrentHeroFromSelection()
-    eventPlayer.detach()
+    if eventPlayer.hitchhikerAttached:
+        # Keep the hero-switch position. The subroutine consumes this before the next wait.
+        hitchhikerLandAtCarrier = false
+        detachHitchhikerPassenger()
+    else:
+        eventPlayer.detach()
     waitUntil(not eventPlayer.hasSpawned(), 1)
     wait()
     eventPlayer.setAllowedHeroes(getAllHeroes())

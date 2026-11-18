@@ -161,9 +161,6 @@ macro initializePlayerEnhancement():
         case Enhancement.CHARGE_BATTERY:
             initializeChargeBatteryMacro()
             break
-        case Enhancement.HITCHHIKER:
-            initializeHitchhikerMacro()
-            break
         #P.U.P.
         case Enhancement.PUP:
             #Enhancement Selection: P.U.P.
