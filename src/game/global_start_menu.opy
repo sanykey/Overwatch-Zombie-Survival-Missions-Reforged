@@ -311,7 +311,7 @@ def setZombieMode():
         botSpawnRateList[21] = 5
     elif zombieSetting in [1, 2, 4, 5, 6]:
         # Mode 3 has no compressed table. Other mode offsets and lengths retain their original order.
-        botSpawnRateList = numbersList.slice(numbersList.slice(NL_SPAWN_MODE_OFFSETS_OFFSET, NL_SPAWN_MODE_OFFSETS_LEN)[zombieSetting - 1], numbersList.slice(NL_SPAWN_MODE_LENGTHS_OFFSET, NL_SPAWN_MODE_LENGTHS_LEN)[zombieSetting - 1])
+        botSpawnRateList = numbersList.slice(numbersList[(NL_SPAWN_MODE_OFFSETS_OFFSET - 1) + zombieSetting], numbersList[(NL_SPAWN_MODE_LENGTHS_OFFSET - 1) + zombieSetting])
 
 
 def determineChallenge():
