@@ -1,5 +1,8 @@
 #!mainFile "../../main.opy"
 
+# OverPy pads fractional constants to two decimals. Trim the zero for exact tenths.
+#!define compactHudNumber(value) (f'{value}'.substring(0, strLen(f'{value}') - 1) if round((value) * 100) % 100 != 0 and round((value) * 100) % 10 == 0 else f'{value}')
+
 subroutine determineChallenge
 subroutine determineZombieMode
 subroutine setZombieMode
