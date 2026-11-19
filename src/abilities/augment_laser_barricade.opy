@@ -102,7 +102,7 @@ rule "[LASER_BARRICADE AUGMENT] BLOCKS ZOMBIES":
             # The compiler folds the damage threshold conversion to max HP.
             if barrierCollisionTarget.getMaxHealth() >= LASER_BARRICADE_KNOCKDOWN_DAMAGE_THRESHOLD / LASER_BARRICADE_CONTACT_DAMAGE_MULTIPLIER:
                 barrierCollisionTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, floor(barrierCollisionTarget.getMaxHealth() / (LASER_BARRICADE_KNOCKDOWN_DAMAGE_THRESHOLD / LASER_BARRICADE_CONTACT_DAMAGE_MULTIPLIER)))
-            damage(barrierCollisionTarget, eventPlayer, 25)
+            damage(barrierCollisionTarget, eventPlayer, 20)
         # barrierImpulseVertical: shared vertical angle component of both impulse directions.
         #!define barrierImpulseVertical tmp3
         barrierImpulseVertical = (-1 if barrierCollisionTarget.getPosition().y > eventPlayer.augmentBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(barrierCollisionTarget.getPosition(), barrierCollisionTarget.getPosition() + Vector.DOWN, null, getAllPlayers(), false))))
