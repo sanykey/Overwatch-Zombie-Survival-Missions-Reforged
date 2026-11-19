@@ -3,7 +3,7 @@
 # Charge Battery behavior and initialization.
 # Shared IDs and icon tables live in core/enums.opy and core/immutable_variables.opy.
 # Shared storage contracts remain in core/variables.opy.
-# resetAbilityCooldowns and checkEnhancementPlacement are shared with other systems.
+# noCooldowns and checkEnhancementPlacement are shared with other systems.
 
 macro initializeChargeBatteryMacro():
     #Enhancement: Charge Battery
@@ -22,15 +22,18 @@ macro initializeChargeBatteryMacro():
     createProgressBarInWorldText(getAllPlayers().filter(lambda player: eventPlayer.enhancementBatteryPosition != 0 and eventPlayer.enhancementBatteryReuseCooldown > 0 and distance(player, eventPlayer.enhancementBatteryPosition) < 6), 100 - eventPlayer.enhancementBatteryReuseCooldown * (100 / CHARGE_BATTERY_RECHARGE_DURATION), [], eventPlayer.enhancementBatteryPosition + 0.4 * Vector.UP, 0.5, Clip.SURFACES, Color.WHITE, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_POSITION_AND_VALUES)
 
 
-rule "[CHARGE_BATTERY] RESET COOLDOWNS ON ULTIMATE":
+rule "[CHARGE_BATTERY] NO COOLDOWNS ON ULTIMATE":
     @Event eachPlayer
     @Team 1
     # Native UI workaround: retain one phase/ID Condition; docs/WORKSHOP_NATIVE_UI_CORRUPTION.md.
     @Condition uiPhaseAndId(eventPlayer.enhancementId == Enhancement.CHARGE_BATTERY)
     @Condition eventPlayer.isUsingUltimate() == true
 
-    # Run once on the ultimate condition's false-to-true transition.
-    resetAbilityCooldowns()
+    # Keep the active-timer check in Actions so expiry cannot trigger a window mid-ult.
+    if eventPlayer.noCooldownsEndTime <= getTotalTimeElapsed():
+        # Synchronous duration argument, consumed by noCooldowns().
+        noCooldownsDuration = CHARGE_BATTERY_NO_COOLDOWNS_DURATION
+        noCooldowns()
 
 
 rule "[CHARGE_BATTERY] PLACE BATTERY":

@@ -12,7 +12,7 @@ subroutine detachHitchhikerPassenger
 # Shared subroutines used by multiple sections (including their dependencies).
 
 subroutine checkEnhancementPlacement
-subroutine resetAbilityCooldowns
+subroutine noCooldowns
 
 subroutine applyScaledMoveSpeed
 subroutine refreshCurrentObjectivePosition
