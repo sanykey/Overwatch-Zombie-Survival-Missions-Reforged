@@ -50,7 +50,7 @@
 #!define AUSPEX_RING_INTERVAL 1
 #!define AUSPEX_MARK_DURATION 5
 #!define AUSPEX_BONUS_DAMAGE 0.4
-#!define PLAGUE_DOCTOR_HEAL_BONUS_PCT 30
+#!define PLAGUE_DOCTOR_HEAL_BONUS_PCT 40
 #!define PLAGUE_DOCTOR_INFECTED_HEAL_MULTIPLIER_PCT 125
 # Shared Engineer constants are included before BOT DIES collects scrap.
 #!define ENGINEER_SCRAP_MAX 500
