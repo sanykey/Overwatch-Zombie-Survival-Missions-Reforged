@@ -121,7 +121,7 @@ Set Player Allowed Heroes(All Heroes)
 
 ## Реализация Pregame-обхода
 
-Место: [src/game/player_start_menu.opy](../src/game/player_start_menu.opy), правило `EFFECTS/TEXT`.
+Место: [src/start_menu/player_start_menu.opy](../src/start_menu/player_start_menu.opy), правило `EFFECTS/TEXT`.
 
 Пять надписей создаются с четырьмя интервалами:
 

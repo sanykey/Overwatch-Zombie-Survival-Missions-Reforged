@@ -126,7 +126,7 @@ Fixed defects are struck through and marked with the fix date. Verification resu
 
 Repeated startRule calls with default RESTART behavior and waiting targets already existed. All 22 current cases are matched individually below; extracting powerUpUsage into another file did not introduce this risk mechanism. Source: [original:1329](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1329>), [original:1516](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1516>), [original:6503](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6503>), [original:6138](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6138>).
 
-Locations: [supply_drops.opy:472](../src/items/supply_drops.opy#L472), [player_start_menu.opy:120](../src/game/player_start_menu.opy#L120), [includes.opy:8](../src/includes.opy#L8).
+Locations: [supply_drops.opy:472](../src/items/supply_drops.opy#L472), [player_start_menu.opy:120](../src/start_menu/player_start_menu.opy#L120), [includes.opy:8](../src/includes.opy#L8).
 
 In `powerUpUsage`, all 11 asynchronous consumable calls compile to `Start Rule(..., Restart Rule)`. Long-running effects contain waits. A player can obtain and use the same consumable before the previous effect finishes. Another entry path is `randomActions` when repeatedly toggling readiness: that subroutine contains `wait(1)`.
 
@@ -145,7 +145,7 @@ Fix direction: one effect executor with separate extension/transfer requests; an
 
 The original already used the same 19 weights of 5.263, selection over 0–100, and an accumulation loop without an index bound. The 99.997 sum and dangerous range tail are inherited. Source: [original:518](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L518>), [original:521](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L521>), [original:811](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L811>).
 
-Locations: [global_startup.opy:62](../src/core/global_startup.opy#L62), [global_startup.opy:70](../src/core/global_startup.opy#L70), [global_start_menu.opy:309](../src/game/global_start_menu.opy#L309).
+Locations: [global_startup.opy:62](../src/core/global_startup.opy#L62), [global_startup.opy:70](../src/core/global_startup.opy#L70), [global_start_menu.opy:309](../src/start_menu/global_start_menu.opy#L309).
 
 Mode `What'll it be?` creates 19 weights of 5.263. Their sum is **99.997**, but `random.uniform(0, 100)` selects a threshold up to 100. The loop increments the index while the accumulated sum is below the threshold; there is no `index < len(botSpawnRateList)` check. The compiled loop body contains no `Wait`.
 
@@ -187,7 +187,7 @@ Fix direction: use a separate position without division for one item; more robus
 
 Unbounded selection of an allowed objective and selection from Mixed Pool without a nonempty check already existed in the original. Source: [original:947](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L947>), [original:964](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L964>).
 
-Locations: [global_startup.opy:5](../src/core/global_startup.opy#L5), [global_start_menu.opy:367](../src/game/global_start_menu.opy#L367), [global_start_menu.opy:400](../src/game/global_start_menu.opy#L400).
+Locations: [global_startup.opy:5](../src/core/global_startup.opy#L5), [global_start_menu.opy:367](../src/start_menu/global_start_menu.opy#L367), [global_start_menu.opy:400](../src/start_menu/global_start_menu.opy#L400).
 
 If all available objective types, including Mixed Objectives, are disabled, the fallback in `determineObjectiveType` randomly tries only forbidden IDs. The loop has no wait and no prevalidated nonempty list of allowed choices. For this input state, the exit condition cannot become true. The compiler preserves `While` without `Wait`.
 
@@ -897,16 +897,16 @@ For the timer, note another distinction: different players have separate `setPre
 
 | ID | Location | Target | Own Wait actions in target | Severity | Crash risk |
 |---|---|---|---:|---|---|
-| [SR01](#sr01) | [global_start_menu.opy:246](../src/game/global_start_menu.opy#L246) | `determineZombieMode` | 0 | Low | No direct risk established: no own waits; diagnostic is transitive |
-| [SR02](#sr02) | [global_start_menu.opy:297](../src/game/global_start_menu.opy#L297) | `determineChallenge` | 0 | Low | No direct risk established: no own waits; diagnostic is transitive |
-| [SR03](#sr03) | [global_start_menu.opy:351](../src/game/global_start_menu.opy#L351) | `determineObjectiveType` | 0 | Low | No direct risk established: no own waits; diagnostic is transitive |
-| [SR04](#sr04) | [global_start_menu.opy:374](../src/game/global_start_menu.opy#L374) | `setObjectiveType` | 2 | Medium | Conditional: repeated pregame initialization while a global executor waits |
-| [SR05](#sr05) | [player_start_menu.opy:72](../src/game/player_start_menu.opy#L72) | `setPrematchTimer` | 1 | Low | Hero-selection branch is normally wait-free; may restart an earlier short wait |
-| [SR06](#sr06) | [player_start_menu.opy:119](../src/game/player_start_menu.opy#L119) | `setPrematchTimer` | 1 | Medium | Conditional, short window: wait() in the timer transition 15 -> 10 |
-| [SR07](#sr07) | [player_start_menu.opy:120](../src/game/player_start_menu.opy#L120) | `randomActions` | 1 | High | Reachable repetition in wait(1); cumulative risk across repeated restarts |
-| [SR08](#sr08) | [player_start_menu.opy:127](../src/game/player_start_menu.opy#L127) | `setPrematchTimer` | 1 | Medium | Conditional: cancellation may interrupt the previous readiness request's short wait |
-| [SR09](#sr09) | [player_start_menu.opy:211](../src/game/player_start_menu.opy#L211) | `setPrematchTimer` | 1 | Medium | At the voting-end boundary; ordinary branch has no own wait |
-| [SR10](#sr10) | [player_start_menu.opy:214](../src/game/player_start_menu.opy#L214) | `setPrematchTimer` | 1 | Medium | Short target wait when ready; the caller owns the 2 s pause |
+| [SR01](#sr01) | [global_start_menu.opy:246](../src/start_menu/global_start_menu.opy#L246) | `determineZombieMode` | 0 | Low | No direct risk established: no own waits; diagnostic is transitive |
+| [SR02](#sr02) | [global_start_menu.opy:297](../src/start_menu/global_start_menu.opy#L297) | `determineChallenge` | 0 | Low | No direct risk established: no own waits; diagnostic is transitive |
+| [SR03](#sr03) | [global_start_menu.opy:351](../src/start_menu/global_start_menu.opy#L351) | `determineObjectiveType` | 0 | Low | No direct risk established: no own waits; diagnostic is transitive |
+| [SR04](#sr04) | [global_start_menu.opy:374](../src/start_menu/global_start_menu.opy#L374) | `setObjectiveType` | 2 | Medium | Conditional: repeated pregame initialization while a global executor waits |
+| [SR05](#sr05) | [player_start_menu.opy:72](../src/start_menu/player_start_menu.opy#L72) | `setPrematchTimer` | 1 | Low | Hero-selection branch is normally wait-free; may restart an earlier short wait |
+| [SR06](#sr06) | [player_start_menu.opy:119](../src/start_menu/player_start_menu.opy#L119) | `setPrematchTimer` | 1 | Medium | Conditional, short window: wait() in the timer transition 15 -> 10 |
+| [SR07](#sr07) | [player_start_menu.opy:120](../src/start_menu/player_start_menu.opy#L120) | `randomActions` | 1 | High | Reachable repetition in wait(1); cumulative risk across repeated restarts |
+| [SR08](#sr08) | [player_start_menu.opy:127](../src/start_menu/player_start_menu.opy#L127) | `setPrematchTimer` | 1 | Medium | Conditional: cancellation may interrupt the previous readiness request's short wait |
+| [SR09](#sr09) | [player_start_menu.opy:211](../src/start_menu/player_start_menu.opy#L211) | `setPrematchTimer` | 1 | Medium | At the voting-end boundary; ordinary branch has no own wait |
+| [SR10](#sr10) | [player_start_menu.opy:214](../src/start_menu/player_start_menu.opy#L214) | `setPrematchTimer` | 1 | Medium | Short target wait when ready; the caller owns the 2 s pause |
 | [SR11](#sr11) | [global_game_in_progress.opy:127](../src/game/global_game_in_progress.opy#L127) | `objectivesManagement` | 3 | Low in normal operation | No normal repetition found; requires extra reentry into the transition |
 | [SR12](#sr12) | [supply_drops.opy:472](../src/items/supply_drops.opy#L472) | `instantRevive` | 2 | Medium | Present when resurrection operations overlap; window usually shorter than the 3 s timeout |
 | [SR13](#sr13) | [supply_drops.opy:476](../src/items/supply_drops.opy#L476) | `playerForceField` | 1 | High | Same player can repeat during a long wait; cumulative risk |
@@ -940,7 +940,7 @@ The same **startRule(determineZombieMode)** call without **NOOP** existed at [or
 
 **Reproduction control:** Own Waits: 0. Do not treat this as an independent crash reproduction; check that the entire chain does not restart and inspect SR04.
 
-**Code:** [END VOTING rule](../src/game/global_start_menu.opy#L239), [call:246](../src/game/global_start_menu.opy#L246), [subroutine:282](../src/game/global_start_menu.opy#L282).
+**Code:** [END VOTING rule](../src/start_menu/global_start_menu.opy#L239), [call:246](../src/start_menu/global_start_menu.opy#L246), [subroutine:282](../src/start_menu/global_start_menu.opy#L282).
 
 **Chain:** `END VOTING ⇢ determineZombieMode → selectVoteWinner`; then two asynchronous branches: `⇢ determineChallenge ⇢ determineObjectiveType ⇢ setObjectiveType` and `⇢ setZombieMode`.
 
@@ -962,7 +962,7 @@ The same **startRule(determineChallenge)** call without **NOOP** existed at [ori
 
 **Reproduction control:** Own Waits: 0. Descendant policies are analyzed separately. One warning does not prove a waiting context for this subroutine.
 
-**Code:** [calling subroutine](../src/game/global_start_menu.opy#L282), [call:297](../src/game/global_start_menu.opy#L297), [determineChallenge:321](../src/game/global_start_menu.opy#L321); original rule: [END VOTING](../src/game/global_start_menu.opy#L239).
+**Code:** [calling subroutine](../src/start_menu/global_start_menu.opy#L282), [call:297](../src/start_menu/global_start_menu.opy#L297), [determineChallenge:321](../src/start_menu/global_start_menu.opy#L321); original rule: [END VOTING](../src/start_menu/global_start_menu.opy#L239).
 
 **Chain:** `END VOTING ⇢ determineZombieMode ⇢ determineChallenge ⇢ determineObjectiveType ⇢ setObjectiveType`.
 
@@ -984,7 +984,7 @@ The same **startRule(determineObjectiveType)** call without **NOOP** existed at 
 
 **Reproduction control:** Own Waits: 0. R04's forbidden-objective selection loop is a separate issue, not this Start Rule defect.
 
-**Code:** [determineChallenge](../src/game/global_start_menu.opy#L321), [call:351](../src/game/global_start_menu.opy#L351), [determineObjectiveType:354](../src/game/global_start_menu.opy#L354); original rule: [END VOTING](../src/game/global_start_menu.opy#L239).
+**Code:** [determineChallenge](../src/start_menu/global_start_menu.opy#L321), [call:351](../src/start_menu/global_start_menu.opy#L351), [determineObjectiveType:354](../src/start_menu/global_start_menu.opy#L354); original rule: [END VOTING](../src/start_menu/global_start_menu.opy#L239).
 
 **Chain:** `END VOTING ⇢ determineZombieMode ⇢ determineChallenge ⇢ determineObjectiveType → selectVoteWinner`, then `⇢ setObjectiveType`.
 
@@ -1006,7 +1006,7 @@ The same **startRule(setObjectiveType)** call without **NOOP** existed at [origi
 
 **Reproduction control:** Wait for setObjectiveType before START GAME and, if the lobby preserves the pregame session after everyone leaves, trigger another preparation/voting cycle. Record a second entry before the first ends. Fast normal voting alone does not reproduce repetition.
 
-**Code:** [call:374](../src/game/global_start_menu.opy#L374), [setObjectiveType:389](../src/game/global_start_menu.opy#L389), [start wait:393](../src/game/global_start_menu.opy#L393), [position-selection wait:407](../src/game/global_start_menu.opy#L407), [objectivesManagement:552](../src/core/subroutines.opy#L552).
+**Code:** [call:374](../src/start_menu/global_start_menu.opy#L374), [setObjectiveType:389](../src/start_menu/global_start_menu.opy#L389), [start wait:393](../src/start_menu/global_start_menu.opy#L393), [position-selection wait:407](../src/start_menu/global_start_menu.opy#L407), [objectivesManagement:552](../src/core/subroutines.opy#L552).
 
 **Chain:** the entire `END VOTING` chain above, then `setObjectiveType → objectivesManagement → globalObjectiveEntityManagementMacro`.
 
@@ -1028,7 +1028,7 @@ The same **startRule(setPrematchTimer)** call without **NOOP** existed at [origi
 
 **Reproduction control:** A new call during SELECTING_HERO is normally synchronous. Dangerous overlap is possible only if the same player previously left setPrematchTimer in its short wait; there is no separate long wait here.
 
-**Code:** [PLAYER SELECTS/RESELECTS HERO:63](../src/game/player_start_menu.opy#L63), [call:72](../src/game/player_start_menu.opy#L72), [setPrematchTimer](../src/core/subroutines.opy#L498).
+**Code:** [PLAYER SELECTS/RESELECTS HERO:63](../src/start_menu/player_start_menu.opy#L63), [call:72](../src/start_menu/player_start_menu.opy#L72), [setPrematchTimer](../src/core/subroutines.opy#L498).
 
 **Chain:** `hero selection/respawn → PLAYER SELECTS/RESELECTS HERO ⇢ setPrematchTimer`.
 
@@ -1050,7 +1050,7 @@ The same **startRule(setPrematchTimer)** call without **NOOP** existed at [origi
 
 **Reproduction control:** After voting ends, the last player's READY starts 15 -> wait() -> 10. A restart must hit exactly that short wait in the same context; merely waiting 15 seconds does not reproduce the defect.
 
-**Code:** [PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY):106](../src/game/player_start_menu.opy#L106), [call:119](../src/game/player_start_menu.opy#L119), [timer waiting branch:523](../src/core/subroutines.opy#L523).
+**Code:** [PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY):106](../src/start_menu/player_start_menu.opy#L106), [call:119](../src/start_menu/player_start_menu.opy#L119), [timer waiting branch:523](../src/core/subroutines.opy#L523).
 
 **Chain:** `Jump → pregameState becomes READY ⇢ setPrematchTimer`; then [SR07](#sr07) and `⇢ randomActions` launch independently.
 
@@ -1072,7 +1072,7 @@ The same **startRule(randomActions)** call without **NOOP** existed at [original
 
 **Reproduction control:** Jump, release both buttons, Crouch, release both, Jump; the second READY must occur less than 1 s after the first. The randomActions entry log should appear twice before the first pause ends. One sequence demonstrates wait cancellation, not a guaranteed crash.
 
-**Code:** [menu rule:106](../src/game/player_start_menu.opy#L106), [call:120](../src/game/player_start_menu.opy#L120), [randomActions:234](../src/game/player_start_menu.opy#L234), [wait(1):249](../src/game/player_start_menu.opy#L249).
+**Code:** [menu rule:106](../src/start_menu/player_start_menu.opy#L106), [call:120](../src/start_menu/player_start_menu.opy#L120), [randomActions:234](../src/start_menu/player_start_menu.opy#L234), [wait(1):249](../src/start_menu/player_start_menu.opy#L249).
 
 **Chain:** `Jump → READY ⇢ randomActions → random emote → wait(1) → random voice line`.
 
@@ -1094,7 +1094,7 @@ The same **startRule(setPrematchTimer)** call without **NOOP** existed at [origi
 
 **Reproduction control:** Cancel READY for the same player while their previous setPrematchTimer still waits between 15 and 10. The window is short; another player's simultaneous readiness belongs to a different execution entity.
 
-**Code:** [menu rule:106](../src/game/player_start_menu.opy#L106), [Crouch-branch call:127](../src/game/player_start_menu.opy#L127), [setPrematchTimer](../src/core/subroutines.opy#L498).
+**Code:** [menu rule:106](../src/start_menu/player_start_menu.opy#L106), [Crouch-branch call:127](../src/start_menu/player_start_menu.opy#L127), [setPrematchTimer](../src/core/subroutines.opy#L498).
 
 **Chain:** `Crouch → decrease pregameState ⇢ setPrematchTimer`; transitioning to `SELECTING_HERO` then starts hero changing, followed potentially by [SR05](#sr05).
 
@@ -1116,7 +1116,7 @@ The same **startRule(setPrematchTimer)** call without **NOOP** existed at [origi
 
 **Reproduction control:** Release voting buttons at the isVoting true -> false boundary with everyone READY, then call the timer again for the same player. The ordinary isVoting == true branch does not wait.
 
-**Code:** [UPDATE PREGAME VOTING STATUS:202](../src/game/player_start_menu.opy#L202), [call:211](../src/game/player_start_menu.opy#L211); sources of `isPregameVoting = true`: [Ultimate](../src/game/player_start_menu.opy#L137), [Ability 1](../src/game/player_start_menu.opy#L154), [Ability 2](../src/game/player_start_menu.opy#L171).
+**Code:** [UPDATE PREGAME VOTING STATUS:202](../src/start_menu/player_start_menu.opy#L202), [call:211](../src/start_menu/player_start_menu.opy#L211); sources of `isPregameVoting = true`: [Ultimate](../src/start_menu/player_start_menu.opy#L137), [Ability 1](../src/start_menu/player_start_menu.opy#L154), [Ability 2](../src/start_menu/player_start_menu.opy#L171).
 
 **Chain:** `button vote → isPregameVoting = true → release all three buttons → UPDATE PREGAME VOTING STATUS ⇢ setPrematchTimer → wait(2)`; then [SR10](#sr10). Melee selects Enhancement and does not itself set this flag.
 
@@ -1138,7 +1138,7 @@ The same **startRule(setPrematchTimer)** call without **NOOP** existed at [origi
 
 **Reproduction control:** End voting during the local 2 s preceding the second call, then overlap the target's short pause with another call for the same player. Calls at 211/214, separated by 2 s, normally do not restart each other.
 
-**Code:** [UPDATE PREGAME VOTING STATUS](../src/game/player_start_menu.opy#L202), [wait:212](../src/game/player_start_menu.opy#L212), [call:214](../src/game/player_start_menu.opy#L214), [setPrematchTimer](../src/core/subroutines.opy#L498).
+**Code:** [UPDATE PREGAME VOTING STATUS](../src/start_menu/player_start_menu.opy#L202), [wait:212](../src/start_menu/player_start_menu.opy#L212), [call:214](../src/start_menu/player_start_menu.opy#L214), [setPrematchTimer](../src/core/subroutines.opy#L498).
 
 **Chain:** path [SR09](#sr09) → `wait(2, Wait.ABORT_WHEN_FALSE) → isPregameVoting = false ⇢ setPrematchTimer`.
 

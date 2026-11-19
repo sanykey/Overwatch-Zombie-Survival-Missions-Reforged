@@ -124,7 +124,7 @@ Overwatch не запускался. Падения сервера, исчерп
 
 Повторный startRule с поведением RESTART по умолчанию и ожидающие цели уже присутствовали. Все 22 текущих случая сопоставлены ниже отдельно; извлечение powerUpUsage в другой файл не создало этот механизм риска. Источник: [оригинал:1329](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1329>), [оригинал:1516](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1516>), [оригинал:6503](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6503>), [оригинал:6138](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6138>).
 
-Места: [supply_drops.opy:472](../src/items/supply_drops.opy#L472), [player_start_menu.opy:120](../src/game/player_start_menu.opy#L120), [includes.opy:8](../src/includes.opy#L8).
+Места: [supply_drops.opy:472](../src/items/supply_drops.opy#L472), [player_start_menu.opy:120](../src/start_menu/player_start_menu.opy#L120), [includes.opy:8](../src/includes.opy#L8).
 
 В `powerUpUsage` все 11 асинхронных вызовов расходников компилируются в `Start Rule(..., Restart Rule)`. У длительных эффектов есть ожидания. Игрок может получить и применить тот же расходник до завершения предыдущего эффекта. Отдельный вход — `randomActions` при повторных переключениях готовности: внутри этой подпрограммы есть `wait(1)`.
 
@@ -143,7 +143,7 @@ Overwatch не запускался. Падения сервера, исчерп
 
 В оригинале уже были те же 19 весов по 5.263, выбор из 0–100 и цикл накопления без ограничения индекса. Сумма 99.997 и опасный хвост диапазона унаследованы. Источник: [оригинал:518](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L518>), [оригинал:521](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L521>), [оригинал:811](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L811>).
 
-Места: [global_startup.opy:62](../src/core/global_startup.opy#L62), [global_startup.opy:70](../src/core/global_startup.opy#L70), [global_start_menu.opy:309](../src/game/global_start_menu.opy#L309).
+Места: [global_startup.opy:62](../src/core/global_startup.opy#L62), [global_startup.opy:70](../src/core/global_startup.opy#L70), [global_start_menu.opy:309](../src/start_menu/global_start_menu.opy#L309).
 
 Режим `What'll it be?` создаёт 19 весов по 5,263. Сумма — **99,997**, но `random.uniform(0, 100)` выбирает порог до 100. Цикл увеличивает индекс, пока накопленная сумма меньше порога; проверки `index < len(botSpawnRateList)` нет. В скомпилированном теле цикла нет `Wait`.
 
@@ -185,7 +185,7 @@ range(-60, 61, 120 / (supplyDropPowerUpCount - 1))
 
 Неограниченный выбор разрешённого задания и выбор из Mixed Pool без проверки непустоты уже были в оригинале. Источник: [оригинал:947](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L947>), [оригинал:964](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L964>).
 
-Места: [global_startup.opy:5](../src/core/global_startup.opy#L5), [global_start_menu.opy:367](../src/game/global_start_menu.opy#L367), [global_start_menu.opy:400](../src/game/global_start_menu.opy#L400).
+Места: [global_startup.opy:5](../src/core/global_startup.opy#L5), [global_start_menu.opy:367](../src/start_menu/global_start_menu.opy#L367), [global_start_menu.opy:400](../src/start_menu/global_start_menu.opy#L400).
 
 Если отключить все доступные типы задания, включая Mixed Objectives, запасной выбор в `determineObjectiveType` случайно перебирает только запрещённые ID. В цикле нет ожидания и нет заранее проверенного непустого списка разрешённых вариантов. При таком входном состоянии условие выхода не может выполниться. Компилятор сохраняет `While` без `Wait`.
 
@@ -895,16 +895,16 @@ node analysis/audit-original-provenance-2026-11-04.cjs
 
 | ID | Место | Цель | Собственных Wait-действий в цели | Критичность | Риск краша |
 |---|---|---|---:|---|---|
-| [SR01](#sr01) | [global_start_menu.opy:246](../src/game/global_start_menu.opy#L246) | `determineZombieMode` | 0 | Низкая | Прямой риск не установлен: собственных ожиданий нет; диагностика транзитивна |
-| [SR02](#sr02) | [global_start_menu.opy:297](../src/game/global_start_menu.opy#L297) | `determineChallenge` | 0 | Низкая | Прямой риск не установлен: собственных ожиданий нет; диагностика транзитивна |
-| [SR03](#sr03) | [global_start_menu.opy:351](../src/game/global_start_menu.opy#L351) | `determineObjectiveType` | 0 | Низкая | Прямой риск не установлен: собственных ожиданий нет; диагностика транзитивна |
-| [SR04](#sr04) | [global_start_menu.opy:374](../src/game/global_start_menu.opy#L374) | `setObjectiveType` | 2 | Средняя | Условный: повтор предматчевой инициализации при ожидающем глобальном исполнителе |
-| [SR05](#sr05) | [player_start_menu.opy:72](../src/game/player_start_menu.opy#L72) | `setPrematchTimer` | 1 | Низкая | Ветка выбора героя обычно без ожидания; возможен перезапуск прежнего короткого ожидания |
-| [SR06](#sr06) | [player_start_menu.opy:119](../src/game/player_start_menu.opy#L119) | `setPrematchTimer` | 1 | Средняя | Условный, короткое окно: wait() в переходе таймера 15 -> 10 |
-| [SR07](#sr07) | [player_start_menu.opy:120](../src/game/player_start_menu.opy#L120) | `randomActions` | 1 | Высокая | Доступный повтор в wait(1); накопительный риск при серии перезапусков |
-| [SR08](#sr08) | [player_start_menu.opy:127](../src/game/player_start_menu.opy#L127) | `setPrematchTimer` | 1 | Средняя | Условный: отмена может прервать короткий wait предыдущей готовности |
-| [SR09](#sr09) | [player_start_menu.opy:211](../src/game/player_start_menu.opy#L211) | `setPrematchTimer` | 1 | Средняя | На границе конца голосования; в обычной ветке собственного ожидания нет |
-| [SR10](#sr10) | [player_start_menu.opy:214](../src/game/player_start_menu.opy#L214) | `setPrematchTimer` | 1 | Средняя | Короткий wait цели при готовности; пауза 2 с принадлежит вызывающему правилу |
+| [SR01](#sr01) | [global_start_menu.opy:246](../src/start_menu/global_start_menu.opy#L246) | `determineZombieMode` | 0 | Низкая | Прямой риск не установлен: собственных ожиданий нет; диагностика транзитивна |
+| [SR02](#sr02) | [global_start_menu.opy:297](../src/start_menu/global_start_menu.opy#L297) | `determineChallenge` | 0 | Низкая | Прямой риск не установлен: собственных ожиданий нет; диагностика транзитивна |
+| [SR03](#sr03) | [global_start_menu.opy:351](../src/start_menu/global_start_menu.opy#L351) | `determineObjectiveType` | 0 | Низкая | Прямой риск не установлен: собственных ожиданий нет; диагностика транзитивна |
+| [SR04](#sr04) | [global_start_menu.opy:374](../src/start_menu/global_start_menu.opy#L374) | `setObjectiveType` | 2 | Средняя | Условный: повтор предматчевой инициализации при ожидающем глобальном исполнителе |
+| [SR05](#sr05) | [player_start_menu.opy:72](../src/start_menu/player_start_menu.opy#L72) | `setPrematchTimer` | 1 | Низкая | Ветка выбора героя обычно без ожидания; возможен перезапуск прежнего короткого ожидания |
+| [SR06](#sr06) | [player_start_menu.opy:119](../src/start_menu/player_start_menu.opy#L119) | `setPrematchTimer` | 1 | Средняя | Условный, короткое окно: wait() в переходе таймера 15 -> 10 |
+| [SR07](#sr07) | [player_start_menu.opy:120](../src/start_menu/player_start_menu.opy#L120) | `randomActions` | 1 | Высокая | Доступный повтор в wait(1); накопительный риск при серии перезапусков |
+| [SR08](#sr08) | [player_start_menu.opy:127](../src/start_menu/player_start_menu.opy#L127) | `setPrematchTimer` | 1 | Средняя | Условный: отмена может прервать короткий wait предыдущей готовности |
+| [SR09](#sr09) | [player_start_menu.opy:211](../src/start_menu/player_start_menu.opy#L211) | `setPrematchTimer` | 1 | Средняя | На границе конца голосования; в обычной ветке собственного ожидания нет |
+| [SR10](#sr10) | [player_start_menu.opy:214](../src/start_menu/player_start_menu.opy#L214) | `setPrematchTimer` | 1 | Средняя | Короткий wait цели при готовности; пауза 2 с принадлежит вызывающему правилу |
 | [SR11](#sr11) | [global_game_in_progress.opy:127](../src/game/global_game_in_progress.opy#L127) | `objectivesManagement` | 3 | Низкая при штатной работе | Штатный повтор не найден; нужен дополнительный повторный вход в переход |
 | [SR12](#sr12) | [supply_drops.opy:472](../src/items/supply_drops.opy#L472) | `instantRevive` | 2 | Средняя | Есть при перекрытии операции воскрешения; окно обычно короче таймаута 3 с |
 | [SR13](#sr13) | [supply_drops.opy:476](../src/items/supply_drops.opy#L476) | `playerForceField` | 1 | Высокая | Доступен повтор тем же игроком в длительном ожидании; накопительный риск |
@@ -938,7 +938,7 @@ node analysis/audit-original-provenance-2026-11-04.cjs
 
 **Контроль воспроизведения:** Собственных Wait: 0. Не воспроизводить как самостоятельный краш; проверить отсутствие повторного запуска всей цепочки и SR04.
 
-**Код:** [правило END VOTING](../src/game/global_start_menu.opy#L239), [вызов:246](../src/game/global_start_menu.opy#L246), [подпрограмма:282](../src/game/global_start_menu.opy#L282).
+**Код:** [правило END VOTING](../src/start_menu/global_start_menu.opy#L239), [вызов:246](../src/start_menu/global_start_menu.opy#L246), [подпрограмма:282](../src/start_menu/global_start_menu.opy#L282).
 
 **Цепочка:** `END VOTING ⇢ determineZombieMode → selectVoteWinner`; затем две асинхронные ветви: `⇢ determineChallenge ⇢ determineObjectiveType ⇢ setObjectiveType` и `⇢ setZombieMode`.
 
@@ -960,7 +960,7 @@ node analysis/audit-original-provenance-2026-11-04.cjs
 
 **Контроль воспроизведения:** Собственных Wait: 0. Политика потомков анализируется отдельно. Одна выдача предупреждения не доказывает ожидающий контекст этой подпрограммы.
 
-**Код:** [вызывающая подпрограмма](../src/game/global_start_menu.opy#L282), [вызов:297](../src/game/global_start_menu.opy#L297), [determineChallenge:321](../src/game/global_start_menu.opy#L321), исходное правило — [END VOTING](../src/game/global_start_menu.opy#L239).
+**Код:** [вызывающая подпрограмма](../src/start_menu/global_start_menu.opy#L282), [вызов:297](../src/start_menu/global_start_menu.opy#L297), [determineChallenge:321](../src/start_menu/global_start_menu.opy#L321), исходное правило — [END VOTING](../src/start_menu/global_start_menu.opy#L239).
 
 **Цепочка:** `END VOTING ⇢ determineZombieMode ⇢ determineChallenge ⇢ determineObjectiveType ⇢ setObjectiveType`.
 
@@ -982,7 +982,7 @@ node analysis/audit-original-provenance-2026-11-04.cjs
 
 **Контроль воспроизведения:** Собственных Wait: 0. Цикл выбора запрещённого задания из R04 — другая проблема, не этот дефект Start Rule.
 
-**Код:** [determineChallenge](../src/game/global_start_menu.opy#L321), [вызов:351](../src/game/global_start_menu.opy#L351), [determineObjectiveType:354](../src/game/global_start_menu.opy#L354); исходное правило — [END VOTING](../src/game/global_start_menu.opy#L239).
+**Код:** [determineChallenge](../src/start_menu/global_start_menu.opy#L321), [вызов:351](../src/start_menu/global_start_menu.opy#L351), [determineObjectiveType:354](../src/start_menu/global_start_menu.opy#L354); исходное правило — [END VOTING](../src/start_menu/global_start_menu.opy#L239).
 
 **Цепочка:** `END VOTING ⇢ determineZombieMode ⇢ determineChallenge ⇢ determineObjectiveType → selectVoteWinner`, затем `⇢ setObjectiveType`.
 
@@ -1004,7 +1004,7 @@ node analysis/audit-original-provenance-2026-11-04.cjs
 
 **Контроль воспроизведения:** Контроль: дождаться вызова setObjectiveType до START GAME и, если лобби сохраняет предматчевую сессию после ухода всех, инициировать повторную подготовку и завершение голосования. Зафиксировать второй вход до окончания первого. Штатное быстрое голосование само по себе не воспроизводит повтор.
 
-**Код:** [вызов:374](../src/game/global_start_menu.opy#L374), [setObjectiveType:389](../src/game/global_start_menu.opy#L389), [ожидание старта:393](../src/game/global_start_menu.opy#L393), [ожидание при выборе позиции:407](../src/game/global_start_menu.opy#L407), [objectivesManagement:552](../src/core/subroutines.opy#L552).
+**Код:** [вызов:374](../src/start_menu/global_start_menu.opy#L374), [setObjectiveType:389](../src/start_menu/global_start_menu.opy#L389), [ожидание старта:393](../src/start_menu/global_start_menu.opy#L393), [ожидание при выборе позиции:407](../src/start_menu/global_start_menu.opy#L407), [objectivesManagement:552](../src/core/subroutines.opy#L552).
 
 **Цепочка:** вся цепочка `END VOTING` выше, затем `setObjectiveType → objectivesManagement → globalObjectiveEntityManagementMacro`.
 
@@ -1026,7 +1026,7 @@ node analysis/audit-original-provenance-2026-11-04.cjs
 
 **Контроль воспроизведения:** Новый вызов при SELECTING_HERO обычно синхронен. Опасное перекрытие возможно только если тот же игрок ранее оставил setPrematchTimer в коротком wait; отдельного длинного ожидания тут нет.
 
-**Код:** [PLAYER SELECTS/RESELECTS HERO:63](../src/game/player_start_menu.opy#L63), [вызов:72](../src/game/player_start_menu.opy#L72), [setPrematchTimer](../src/core/subroutines.opy#L498).
+**Код:** [PLAYER SELECTS/RESELECTS HERO:63](../src/start_menu/player_start_menu.opy#L63), [вызов:72](../src/start_menu/player_start_menu.opy#L72), [setPrematchTimer](../src/core/subroutines.opy#L498).
 
 **Цепочка:** `выбор/повторное появление героя → PLAYER SELECTS/RESELECTS HERO ⇢ setPrematchTimer`.
 
@@ -1048,7 +1048,7 @@ node analysis/audit-original-provenance-2026-11-04.cjs
 
 **Контроль воспроизведения:** Контроль: после конца голосования READY последнего игрока запускает 15 -> wait() -> 10. Для повторного запуска нужно попасть именно в это короткое ожидание тем же контекстом; простое ожидание 15 секунд не воспроизводит дефект.
 
-**Код:** [PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY):106](../src/game/player_start_menu.opy#L106), [вызов:119](../src/game/player_start_menu.opy#L119), [ожидающая ветка таймера:523](../src/core/subroutines.opy#L523).
+**Код:** [PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY):106](../src/start_menu/player_start_menu.opy#L106), [вызов:119](../src/start_menu/player_start_menu.opy#L119), [ожидающая ветка таймера:523](../src/core/subroutines.opy#L523).
 
 **Цепочка:** `Jump → pregameState становится READY ⇢ setPrematchTimer`; следом независимо запускается [SR07](#sr07), `⇢ randomActions`.
 
@@ -1070,7 +1070,7 @@ node analysis/audit-original-provenance-2026-11-04.cjs
 
 **Контроль воспроизведения:** Контроль: Jump, отпустить обе кнопки, Crouch, отпустить обе, Jump; второй READY — менее чем через 1 с после первого. Лог начала randomActions должен появиться дважды до завершения первой паузы. Одна серия показывает отмену ожидания, а не гарантирует краш.
 
-**Код:** [правило меню:106](../src/game/player_start_menu.opy#L106), [вызов:120](../src/game/player_start_menu.opy#L120), [randomActions:234](../src/game/player_start_menu.opy#L234), [wait(1):249](../src/game/player_start_menu.opy#L249).
+**Код:** [правило меню:106](../src/start_menu/player_start_menu.opy#L106), [вызов:120](../src/start_menu/player_start_menu.opy#L120), [randomActions:234](../src/start_menu/player_start_menu.opy#L234), [wait(1):249](../src/start_menu/player_start_menu.opy#L249).
 
 **Цепочка:** `Jump → READY ⇢ randomActions → случайная эмоция → wait(1) → случайная голосовая реплика`.
 
@@ -1092,7 +1092,7 @@ node analysis/audit-original-provenance-2026-11-04.cjs
 
 **Контроль воспроизведения:** Контроль: отменить READY того же игрока, пока его прежний setPrematchTimer ещё ждёт между 15 и 10. Окно короткое; одновременная готовность другого игрока относится к иной сущности исполнения.
 
-**Код:** [правило меню:106](../src/game/player_start_menu.opy#L106), [вызов в ветке Crouch:127](../src/game/player_start_menu.opy#L127), [setPrematchTimer](../src/core/subroutines.opy#L498).
+**Код:** [правило меню:106](../src/start_menu/player_start_menu.opy#L106), [вызов в ветке Crouch:127](../src/start_menu/player_start_menu.opy#L127), [setPrematchTimer](../src/core/subroutines.opy#L498).
 
 **Цепочка:** `Crouch → уменьшение pregameState ⇢ setPrematchTimer`; при переходе в `SELECTING_HERO` далее запускается смена героя, затем возможен [SR05](#sr05).
 
@@ -1114,7 +1114,7 @@ node analysis/audit-original-provenance-2026-11-04.cjs
 
 **Контроль воспроизведения:** Контроль: отпускание кнопок голосования на границе isVoting true -> false при всех READY; затем повторный вызов таймера тем же игроком. Обычная ветка isVoting == true не ожидает.
 
-**Код:** [UPDATE PREGAME VOTING STATUS:202](../src/game/player_start_menu.opy#L202), [вызов:211](../src/game/player_start_menu.opy#L211), источники `isPregameVoting = true`: [Ultimate](../src/game/player_start_menu.opy#L137), [Ability 1](../src/game/player_start_menu.opy#L154), [Ability 2](../src/game/player_start_menu.opy#L171).
+**Код:** [UPDATE PREGAME VOTING STATUS:202](../src/start_menu/player_start_menu.opy#L202), [вызов:211](../src/start_menu/player_start_menu.opy#L211), источники `isPregameVoting = true`: [Ultimate](../src/start_menu/player_start_menu.opy#L137), [Ability 1](../src/start_menu/player_start_menu.opy#L154), [Ability 2](../src/start_menu/player_start_menu.opy#L171).
 
 **Цепочка:** `голос кнопкой → isPregameVoting = true → отпускание всех трёх кнопок → UPDATE PREGAME VOTING STATUS ⇢ setPrematchTimer → wait(2)`; затем [SR10](#sr10). Melee выбирает Enhancement и сам не устанавливает этот флаг.
 
@@ -1136,7 +1136,7 @@ node analysis/audit-original-provenance-2026-11-04.cjs
 
 **Контроль воспроизведения:** Контроль: закончить голосование в течение локальных 2 с, после которых происходит второй вызов, и пересечь короткую паузу цели другим вызовом того же игрока. Два вызова 211/214, разделённые 2 с, обычно друг друга не перезапускают.
 
-**Код:** [UPDATE PREGAME VOTING STATUS](../src/game/player_start_menu.opy#L202), [ожидание:212](../src/game/player_start_menu.opy#L212), [вызов:214](../src/game/player_start_menu.opy#L214), [setPrematchTimer](../src/core/subroutines.opy#L498).
+**Код:** [UPDATE PREGAME VOTING STATUS](../src/start_menu/player_start_menu.opy#L202), [ожидание:212](../src/start_menu/player_start_menu.opy#L212), [вызов:214](../src/start_menu/player_start_menu.opy#L214), [setPrematchTimer](../src/core/subroutines.opy#L498).
 
 **Цепочка:** путь [SR09](#sr09) → `wait(2, Wait.ABORT_WHEN_FALSE) → isPregameVoting = false ⇢ setPrematchTimer`.
 
