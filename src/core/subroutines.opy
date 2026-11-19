@@ -817,7 +817,7 @@ def explosionSequence():
     # Filter the chosen team for both explosion types; dummy bot explosions also require line of sight.
     eventPlayer.explosionTargetList = (getPlayers(Team.2) if not eventPlayer.isDummy() else getAllPlayers()).filter(lambda x: distance(eventPlayer, x) < eventPlayer.explosionScale * 6 and (isInLoS(x.getEyePosition(), eventPlayer.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) if eventPlayer.isDummy() else true))
     #Scaled
-    damage(eventPlayer.explosionTargetList, eventPlayer, eventPlayer.botBiteDamage * 2.5 if eventPlayer.isDummy() else eventPlayer.infectionLevel * 100)
+    damage(eventPlayer.explosionTargetList, eventPlayer, eventPlayer.botBiteDamage * 2.5 if eventPlayer.isDummy() else eventPlayer.infectionLevel * ZOMBIE_HYBRID_DAMAGE_PER_LEVEL)
     if eventPlayer.isDummy():
         #Scaled
         damage(eventPlayer.explosionTargetList.filter(lambda x: distance(eventPlayer, x) < 3 * eventPlayer.sizeScale), eventPlayer, eventPlayer.botBiteDamage * 5)

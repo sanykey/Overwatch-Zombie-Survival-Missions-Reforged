@@ -29,11 +29,13 @@ globalvar augmentColorListConst = [Color.AQUA, Color.LIGHT_GRAY, Color.YELLOW, C
 # Initialize after the shared palette; all original item colors and order are retained.
 globalvar powerUpColorListConst = numbersList.slice(NL_POWERUP_COLORS_OFFSET, NL_POWERUP_COLORS_LEN).map(lambda index: augmentColorListConst[index])
 
-# Immutable augment names, indexed by selection ID; shared by the augment menu and combat HUD.
-# Melee-augment hero tables; the extended list also provides the index for per-hero melee values.
+# Immutable enhancement and augment names, indexed by selection ID and shared by both HUDs.
 # Initialized in VARIABLE ASSIGNMENT, not here: module-level initializers let the optimizer
 # fold the string table back into its use sites and drop the assignment as dead code.
+globalvar enhancementNameListConst
 globalvar augmentNameListConst
+
+# Melee-augment hero tables; the extended list also provides the index for per-hero melee values.
 globalvar augmentMeleeWeaponHeroListConst
 globalvar augmentMeleeBtnHeroListConst
 

@@ -199,8 +199,8 @@ rule "PREGAME SPAWN ROOM ROTATION":
 
 
 rule "VARIABLE ASSIGNMENT":
-    #Augment name and melee-hero tables live in a rule assignment, not a module-level
-    #initializer: the optimizer folds module-level string tables back into use sites.
+    # Initialize the shared name tables here to keep one array per table in Workshop.
+    enhancementNameListConst = ["No Preference", "Zombie Hybrid", "Bulking Season", "Brain Killer", "Pyrotechnic", "Born to Battle", "Charge Battery", "P.U.P.", "Wrestler", "Bolt Strike", "Engineer", "Auspex Scan", "Plague Doctor", "Overcharge", "Hitchhiker"]
     augmentNameListConst = ["No Preference", "Kevlar", "Dash", "Highrise", "Telekinesis", "Ammo Pack", "Grapnel Launcher", "Laser Barricade", "Scavenger", "Survivalist"]
     augmentMeleeWeaponHeroListConst = [Hero.REINHARDT, Hero.BRIGITTE, Hero.DMON, Hero.GENJI, Hero.RAMATTRA, Hero.TORBJORN, Hero.VENDETTA]
     augmentMeleeBtnHeroListConst = [Hero.REINHARDT, Hero.BRIGITTE, Hero.TORBJORN]

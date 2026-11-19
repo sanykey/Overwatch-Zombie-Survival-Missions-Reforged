@@ -12,6 +12,7 @@
 
 # Icon tables, indexed by their corresponding selection ID.
 #!define ENHANCEMENT_ICONS enhancementIconListConst
+#!define ENHANCEMENT_NAMES enhancementNameListConst
 #!define AUGMENT_ICONS augmentIconListConst
 #!define AUGMENT_COLORS augmentColorListConst
 # Augment name table, indexed by selection ID; melee-augment hero tables, checked by hero.
@@ -734,8 +735,6 @@ playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateS
 # Overcharge: absolute burst deadline; zero means armed but waiting for its first hit.
 # Set once by the first hit, read by later hits, cleared with the charge on expiry/death.
 #!define enhancementCapacitorDeadline actorTeamSlot24
-# Full battery reuse cooldown used for progress scaling (10 seconds).
-#!define enhancementBatteryReuseDuration actorTeamSlot24
 # Auspex: expanding sphere ID across its cleanup wait; the departure rule also destroys it.
 #!define auspexFlashEffect actorTeamSlot24
 # Current P.U.P. enemy target; null while idle.

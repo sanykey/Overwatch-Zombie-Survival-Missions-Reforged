@@ -18,11 +18,11 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
         ENHANCEMENT_ICONS[localPlayer.enhancementId],
         [
             " ",
-            f"Explosion: {ceil(localPlayer.enhancementHybridCooldown)}s" if localPlayer.enhancementHybridCooldown > 0 else f"[{inputBindingString(Button.MELEE)}]: explode for {floor(localPlayer.infectionLevel * 100)} dmg" if localPlayer.infectionLevel >= 1 else "Build infection",
-            f"Stacks: {localPlayer.enhancementBulkStacks} | +{min(100, localPlayer.enhancementBulkStacks * 0.5)}% HP | Size: {round(localPlayer.sizeScale * 100) / 100}x | Hold [{inputBindingString(Button.MELEE)}]: toggle size",
-            "Critical dmg: +60% | Bosses: +20%",
-            "Hits within 15m ignite zombies",
-            f"Ability resets: {localPlayer.enhancementBattleResetCharges}/2",
+            f"Explosion: {ceil(localPlayer.enhancementHybridCooldown)}s" if localPlayer.enhancementHybridCooldown > 0 else f"[{inputBindingString(Button.MELEE)}]: explode for {floor(localPlayer.infectionLevel * ZOMBIE_HYBRID_DAMAGE_PER_LEVEL)} dmg" if localPlayer.infectionLevel >= 1 else "Build infection",
+            f"Stacks: {localPlayer.enhancementBulkStacks} | +{min((BULKING_SEASON_MAX_HP_MULTIPLIER - 1) * 100, localPlayer.enhancementBulkStacks * BULKING_SEASON_HP_PER_STACK_PCT)}% HP | Size: {round(localPlayer.sizeScale * 100) / 100}x | Hold [{inputBindingString(Button.MELEE)}]: toggle size",
+            f"Critical dmg: +{BRAIN_KILLER_CRIT_BONUS_PCT}% | Bosses: +{BRAIN_KILLER_BOSS_CRIT_BONUS_PCT}%",
+            f"Hits within {PYROTECHNIC_IGNITE_RANGE}m ignite zombies",
+            f"Ability resets: {localPlayer.enhancementBattleResetCharges}/{BORN_TO_BATTLE_MAX_RESETS}",
             f"Placement: {ceil(localPlayer.enhancementBatteryPlacementCooldown)}s" if localPlayer.enhancementBatteryPlacementCooldown > 0 else f"Hold [{inputBindingString(Button.MELEE)}]: place battery {iconString(Icon.CHECKMARK)}",
             "Attacking" if localPlayer.enhancementIsPupBeamActive == true else f"Drone ready {iconString(Icon.CHECKMARK)}",
             "{1} | {0}".format(f"Pull: {ceil(localPlayer.enhancementPullReadyAt - getTotalTimeElapsed())}s" if getTotalTimeElapsed() < localPlayer.enhancementPullReadyAt else f"Pull: hold [{inputBindingString(Button.MELEE)}] {iconString(Icon.CHECKMARK)}", f"{'Throw' if localPlayer.enhancementCarryState != WrestlerCarryState.NONE else 'Grab'}: [{inputBindingString(Button.INTERACT)}]"),
@@ -33,7 +33,7 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             "{0} | {1}".format(f"Energy: {floor(localPlayer.enhancementCapacitorEnergy)}", f"Armed: +{floor(localPlayer.enhancementCapacitorCharge)} dmg/hit" if localPlayer.enhancementCapacitorCharge > 0 else f"Double-tap [{inputBindingString(Button.CROUCH)}]: arm"),
             f"[{inputBindingString(Button.CROUCH)}]: detach" if localPlayer.hitchhikerAttached else f"[{inputBindingString(Button.CROUCH)}]: attach near ally"
         ][localPlayer.enhancementId],
-        [" ", "Zombie Hybrid", "Bulking Season", "Brain Killer", "Pyrotechnic", "Born to Battle", "Charge Battery", "P.U.P.", "Wrestler", "Bolt Strike", "Engineer", "Auspex Scan", "Plague Doctor", "Overcharge", "Hitchhiker"][localPlayer.enhancementId],
+        ENHANCEMENT_NAMES[localPlayer.enhancementId],
         HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE,
         [
             Color.WHITE,
@@ -51,7 +51,7 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             Color.WHITE if localPlayer.enhancementScrap < ENGINEER_ARMOR_ALLY_COST else Color.SKY_BLUE if localPlayer.enhancementScrap < ENGINEER_TURRET_COST else Color.GREEN,
             Color.RED if getTotalTimeElapsed() < localPlayer.auspexReadyAt else Color.GREEN,
             Color.WHITE,
-            Color.YELLOW if localPlayer.enhancementCapacitorCharge > 0 else Color.GREEN if localPlayer.enhancementCapacitorEnergy >= 100 else Color.SKY_BLUE if localPlayer.enhancementCapacitorEnergy >= 50 else Color.WHITE,
+            Color.YELLOW if localPlayer.enhancementCapacitorCharge > 0 else Color.GREEN if localPlayer.enhancementCapacitorEnergy >= OVERCHARGE_MAX_CHARGE else Color.SKY_BLUE if localPlayer.enhancementCapacitorEnergy >= 50 else Color.WHITE,
             Color.WHITE
         ][localPlayer.enhancementId],
         HudReeval.VISIBILITY_STRING_AND_COLOR
@@ -121,13 +121,13 @@ macro initializePlayerEnhancement():
         #Plague Doctor
         case Enhancement.PLAGUE_DOCTOR:
             # enhancementPlagueCureTotal: accumulated infection levels removed, including cure bonuses, displayed in the HUD.
-            # Permanent +30% healing; infected targets receive another x1.25 (x1.625 total).
-            eventPlayer.setHealingDealt(130)
-            startHealingModification(getPlayers(Team.1).filter(lambda player: player.isInfected), eventPlayer, 125, HealingReeval.RECEIVERS_AND_HEALERS)
+            # The infected-target modifier multiplies the permanent healing bonus.
+            eventPlayer.setHealingDealt(100 + PLAGUE_DOCTOR_HEAL_BONUS_PCT)
+            startHealingModification(getPlayers(Team.1).filter(lambda player: player.isInfected), eventPlayer, PLAGUE_DOCTOR_INFECTED_HEAL_MULTIPLIER_PCT, HealingReeval.RECEIVERS_AND_HEALERS)
             eventPlayer.enhancementPlagueCureTotal = 0
             break
         case Enhancement.OVERCHARGE:
-            eventPlayer.setHealingDealt(115)
+            eventPlayer.setHealingDealt(100 + OVERCHARGE_HEAL_BONUS_PCT)
             eventPlayer.enhancementCapacitorEnergy = 0
             eventPlayer.enhancementCapacitorCharge = 0
             eventPlayer.enhancementCapacitorDeadline = 0

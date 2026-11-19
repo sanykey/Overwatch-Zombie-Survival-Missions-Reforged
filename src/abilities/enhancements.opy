@@ -7,10 +7,9 @@ subroutine applyBulkingSeasonStats
 
 #!define WRESTLER_KNOCKDOWN_DURATION 4
 #!define WRESTLER_THROW_SPEED 12.5
-#!define WRESTLER_THROW_DAMAGE 100
 #!define WRESTLER_DAMAGE_DELAY 0.75
 
-#!define overchargeEarnedEnergyTotal(player) (player.getStatistic(Stat.HEALING_DEALT) / 3 + 10 * earnedAssists(player))
+#!define overchargeEarnedEnergyTotal(player) (player.getStatistic(Stat.HEALING_DEALT) / OVERCHARGE_HEAL_ENERGY_DIVISOR + OVERCHARGE_ENERGY_PER_ASSIST * earnedAssists(player))
 
 rule "ZOMBIE HYBRID":
     @Event eachPlayer
@@ -47,7 +46,7 @@ rule "PYROTECHNIC APPLIES DAMAGE":
             if pyroBurnTarget in bossStateList:
                 # pyroBurnDamagePerSecond: halve this zombie's damage if it is a boss.
                 pyroBurnDamagePerSecond /= 2
-            pyroBurnTarget.startDamageOverTime(eventPlayer, 3, pyroBurnDamagePerSecond)
+            pyroBurnTarget.startDamageOverTime(eventPlayer, PYROTECHNIC_BURN_DURATION, pyroBurnDamagePerSecond)
         eventPlayer.enhancementPyroHitList.remove(pyroBurnTarget)
     wait(0.5)
     if ruleCondition:
@@ -99,8 +98,8 @@ def applyBulkingSeasonStats():
     @Name "applyBulkingSeasonStats"
 
     # Additive percentages from the native hero baseline; never compound live max health.
-    eventPlayer.setMaxHealth(min(200, 100 + eventPlayer.enhancementBulkStacks * 0.5))
-    eventPlayer.sizeScale = 1 if eventPlayer.enhancementBulkNormalSize else min(2.5, 1 + eventPlayer.enhancementBulkStacks * 0.0075)
+    eventPlayer.setMaxHealth(min(BULKING_SEASON_MAX_HP_MULTIPLIER * 100, 100 + eventPlayer.enhancementBulkStacks * BULKING_SEASON_HP_PER_STACK_PCT))
+    eventPlayer.sizeScale = 1 if eventPlayer.enhancementBulkNormalSize else min(BULKING_SEASON_MAX_SIZE_MULTIPLIER, 1 + eventPlayer.enhancementBulkStacks * (BULKING_SEASON_SIZE_PER_STACK_PCT / 100))
     applyCurrentSizeScale()
     # Map capped size 1..2.5 linearly to pitch 1..0.5 (200 stacks).
     # Reuse the current size so native-size mode also restores native pitch.
@@ -141,9 +140,9 @@ rule "OVERCHARGE ARM ON DOUBLE CROUCH":
     waitUntil(eventPlayer.isHoldingButton(Button.CROUCH), OVERCHARGE_ARM_TAP_WINDOW)
     if not ruleCondition:
         return
-    # Transfer at most 100; retain the remainder in the uncapped bank.
+    # Keep energy above the charge cap in the uncapped bank.
     # Continued healing cannot change this burst's fixed damage.
-    eventPlayer.enhancementCapacitorCharge = min(eventPlayer.enhancementCapacitorEnergy, 100)
+    eventPlayer.enhancementCapacitorCharge = min(eventPlayer.enhancementCapacitorEnergy, OVERCHARGE_MAX_CHARGE)
     eventPlayer.enhancementCapacitorEnergy -= eventPlayer.enhancementCapacitorCharge
 
 
@@ -278,7 +277,7 @@ rule "P.U.P. CONTROL":
     waitUntil(distance(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget.getEyePosition()) < 5 or eventPlayer.enhancementPupTarget == null, Math.INFINITY)
     #If target still exists
     if eventPlayer.enhancementPupTarget != null:
-        if distance(eventPlayer, eventPlayer.enhancementPupTarget) > 6:
+        if distance(eventPlayer, eventPlayer.enhancementPupTarget) > PUP_IGNITE_RANGE:
             #P.U.P. color
             eventPlayer.enhancementPupColor = Color.WHITE
             #Beam visibility
@@ -413,7 +412,7 @@ def useLivingProjectile():
     livingProjectileCandidate.wrestlerCarryHero = eventPlayer.getHero()
     livingProjectileCandidate.wrestlerZombieCarrier = eventPlayer
     # Independent of Super Nano's damage-received settings; bot owns cleanup.
-    startDamageModification(eventPlayer, getAllPlayers(), 50)
+    startDamageModification(eventPlayer, getAllPlayers(), 100 - WRESTLER_CARRY_DMG_RESIST_PCT)
     livingProjectileCandidate.wrestlerProtectionId = getLastDamageModification()
     livingProjectileCandidate.botIsAttached = true
     # Knockdown owns the carry lifetime; expiration or early removal releases.

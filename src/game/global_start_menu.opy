@@ -1,5 +1,8 @@
 #!mainFile "../../main.opy"
 
+# OverPy pads fractional constants to two decimals. Trim the zero for exact tenths.
+#!define compactHudNumber(value) (f'{value}'.substring(0, strLen(f'{value}') - 1) if round((value) * 100) % 100 != 0 and round((value) * 100) % 10 == 0 else f'{value}')
+
 subroutine determineChallenge
 subroutine determineZombieMode
 subroutine setZombieMode
@@ -192,30 +195,25 @@ rule "EFFECTS/TEXTS":
     hudText(
         getPlayers(Team.1),
         "Enhancement: {0}{1}".format(
-            [
-                "No Preference", "Zombie Hybrid ", "Bulking Season ",
-                "Brain Killer ", "Pyrotechnic ", "Born to Battle ",
-                "Charge Battery ", "P.U.P. ", "Wrestler ",
-                "Bolt Strike ", "Engineer ", "Auspex Scan ", "Plague Doctor ", "Overcharge ", "Hitchhiker "
-            ][localPlayer.enhancementId],
-            enhancementOptionList[localPlayer.enhancementId] if localPlayer.enhancementId > Enhancement.NO_PREFERENCE else ""
+            ENHANCEMENT_NAMES[localPlayer.enhancementId],
+            f" {enhancementOptionList[localPlayer.enhancementId]}" if localPlayer.enhancementId > Enhancement.NO_PREFERENCE else ""
         ),
         [
             " ",
-            "Gain infection faster and convert it into an explosion dealing 100 dmg per infection level.",
-            "Each elimination: +0.5% max HP (up to 2x), +0.75% size (up to 2.5x). Lose half your stacks on death.",
-            "Critical hits deal +60% dmg; +20% against bosses.",
-            "Damaging zombies within 15m sets them on fire for 3s.",
-            "Final blows store ability resets, up to 2. Your next ability use consumes a reset.",
-            "Place a battery that grants 15% ultimate charge on contact. Recharges in 10s; placement cd: 20s. Using ultimate resets all ability cd.",
-            "An autonomous drone burns and knocks down nearby zombies, or freezes distant targets and nearby zombies.",
-            f"Grab disabled zombies; 50% dmg resist while carrying. Pull and knock down a zombie within {WRESTLER_PULL_RANGE}m ({WRESTLER_PULL_DAMAGE} dmg); cd {WRESTLER_PULL_COOLDOWN}s.",
-            f"Double-tap Crouch: {BOLT_STRIKE_DAMAGE} dmg, {BOLT_STRIKE_SPLASH_DAMAGE} splash within {BOLT_STRIKE_SPLASH_RADIUS}m, {BOLT_STRIKE_STUN_DURATION}s stun. Cooldown: {BOLT_STRIKE_COOLDOWN}s.",
-            f"Scrap: +{ENGINEER_COLLECTION_REWARD} per zombie death within {ENGINEER_COLLECTION_RANGE}m, +{ENGINEER_SCRAP_PASSIVE_RATE}/s. Craft armor for yourself or allies (up to {ENGINEER_ARMOR_MAX} each) and freezing turrets.",
-            f"Double-tap Crouch to scan a {AUSPEX_RADIUS}m area where you aim for {AUSPEX_SCAN_DURATION}s. Marked zombies take +{AUSPEX_BONUS_DAMAGE * 100}% damage credited to you. Cooldown: {AUSPEX_COOLDOWN}s.",
-            "+30% healing, increased to +62.5% on infected allies. Healing reduces infection in you and infected allies.",
-            "+15% healing. Bank healing/3 (packs included) +10 per assist. Double-tap Crouch: spend up to 100 energy for bonus dmg per hit.",
-            "Ride a nearby teammate and share your combined health while attached."
+            f"Faster infection. Convert to {ZOMBIE_HYBRID_DAMAGE_PER_LEVEL} dmg/lvl explosion.",
+            f"On kill: +{compactHudNumber(BULKING_SEASON_HP_PER_STACK_PCT)}% max HP ({BULKING_SEASON_MAX_HP_MULTIPLIER}x max), +{compactHudNumber(BULKING_SEASON_SIZE_PER_STACK_PCT)}% size ({compactHudNumber(BULKING_SEASON_MAX_SIZE_MULTIPLIER)}x). -{BULKING_SEASON_DEATH_LOSS_PCT}% on death.",
+            f"Crits: +{BRAIN_KILLER_CRIT_BONUS_PCT}% dmg (+{BRAIN_KILLER_BOSS_CRIT_BONUS_PCT}% vs bosses).",
+            f"Dmg within {PYROTECHNIC_IGNITE_RANGE}m ignites zombies ({PYROTECHNIC_BURN_DURATION}s).",
+            f"Final blows store ability resets ({BORN_TO_BATTLE_MAX_RESETS} max), used next cast.",
+            f"Place battery (+{CHARGE_BATTERY_ULT_CHARGE_PCT}% ult on touch; {CHARGE_BATTERY_RECHARGE_DURATION}s recharge, {CHARGE_BATTERY_PLACEMENT_COOLDOWN}s CD). Ult resets all ability CDs.",
+            f"Drone: ignite + knockdown (≤{PUP_IGNITE_RANGE}m from owner), area freeze (>{PUP_IGNITE_RANGE}m).",
+            f"Grab disabled zombies ({WRESTLER_CARRY_DMG_RESIST_PCT}% dmg resist). Throw ({WRESTLER_THROW_DAMAGE} dmg). Pull & knock down ({WRESTLER_PULL_DAMAGE} dmg, {WRESTLER_PULL_COOLDOWN}s CD).",
+            f"Call lightning on aimed target: {BOLT_STRIKE_DAMAGE} dmg, {BOLT_STRIKE_SPLASH_DAMAGE} splash (<{BOLT_STRIKE_SPLASH_RADIUS}m), {BOLT_STRIKE_STUN_DURATION}s stun. {BOLT_STRIKE_COOLDOWN}s CD.",
+            f"Scrap: +{ENGINEER_COLLECTION_REWARD} when zombies die <{ENGINEER_COLLECTION_RANGE}m, +{ENGINEER_SCRAP_PASSIVE_RATE}/s. Craft team armor ({ENGINEER_ARMOR_MAX} max) & freezing turrets",
+            f"Scan {AUSPEX_RADIUS}m around aim point ({AUSPEX_SCAN_DURATION}s). Marked foes take +{AUSPEX_BONUS_DAMAGE * 100}% dmg (credited to you). {AUSPEX_COOLDOWN}s CD.",
+            f"+{PLAGUE_DOCTOR_HEAL_BONUS_PCT}% heal (+{compactHudNumber((100 + PLAGUE_DOCTOR_HEAL_BONUS_PCT) * PLAGUE_DOCTOR_INFECTED_HEAL_MULTIPLIER_PCT / 100 - 100)}% on infected). Healing reduces infection in you and allies.",
+            f"+{OVERCHARGE_HEAL_BONUS_PCT}% heal. Store heal/{OVERCHARGE_HEAL_ENERGY_DIVISOR} (packs incl.) +{OVERCHARGE_ENERGY_PER_ASSIST}/assist. Spend up to {OVERCHARGE_MAX_CHARGE} energy for bonus dmg/hit.",
+            "Ride nearby ally and share combined HP"
         ][localPlayer.enhancementId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)),
         HudPosition.ACTUALLY_LEFT,

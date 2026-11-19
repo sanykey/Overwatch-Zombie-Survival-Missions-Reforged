@@ -9,8 +9,7 @@ macro initializeChargeBatteryMacro():
     #Enhancement: Charge Battery
     # enhancementBatteryPosition: placed battery position in world coordinates, for effects and player proximity checks.
     # enhancementBatteryReuseCooldown: remaining battery reuse cooldown in seconds, for the progress bar and availability visuals.
-    # enhancementBatteryReuseDuration: full battery reuse cooldown in seconds (10), used to start the timer and scale progress.
-    # enhancementBatteryPlacementCooldown: remaining placement cooldown in seconds (20 on placement), for placement checks and HUD.
+    # enhancementBatteryPlacementCooldown: remaining placement cooldown in seconds, for placement checks and HUD.
     #Battery placement visual
     createEffect(eventPlayer.filter(lambda _: eventPlayer.isHoldingButton(Button.MELEE) and eventPlayer.enhancementBatteryPlacementCooldown <= 0 and distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) <= 30), Effect.RING, Color.GREEN, worldVector(0.1 * Vector.UP, eventPlayer, Transform.ROTATION) + (raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)), 0.45, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     #Battery ring
@@ -20,8 +19,7 @@ macro initializeChargeBatteryMacro():
     #Charge battery text
     createInWorldText(getAllPlayers().filter(lambda player: eventPlayer.enhancementBatteryPosition != 0 and eventPlayer.enhancementBatteryReuseCooldown <= 0 and distance(player, eventPlayer.enhancementBatteryPosition) < 6), "Charge Battery", eventPlayer.enhancementBatteryPosition + ((0.5 + sin(getTotalTimeElapsed() * 1) * 0.15) * Vector.UP), 1, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING)
     #Charge battery progress bar
-    createProgressBarInWorldText(getAllPlayers().filter(lambda player: eventPlayer.enhancementBatteryPosition != 0 and eventPlayer.enhancementBatteryReuseCooldown > 0 and distance(player, eventPlayer.enhancementBatteryPosition) < 6), 100 - eventPlayer.enhancementBatteryReuseCooldown / eventPlayer.enhancementBatteryReuseDuration * 100, [], eventPlayer.enhancementBatteryPosition + 0.4 * Vector.UP, 0.5, Clip.SURFACES, Color.WHITE, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_POSITION_AND_VALUES)
-    eventPlayer.enhancementBatteryReuseDuration = 10
+    createProgressBarInWorldText(getAllPlayers().filter(lambda player: eventPlayer.enhancementBatteryPosition != 0 and eventPlayer.enhancementBatteryReuseCooldown > 0 and distance(player, eventPlayer.enhancementBatteryPosition) < 6), 100 - eventPlayer.enhancementBatteryReuseCooldown * (100 / CHARGE_BATTERY_RECHARGE_DURATION), [], eventPlayer.enhancementBatteryPosition + 0.4 * Vector.UP, 0.5, Clip.SURFACES, Color.WHITE, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_POSITION_AND_VALUES)
 
 
 rule "[CHARGE_BATTERY] RESET COOLDOWNS ON ULTIMATE":
@@ -54,7 +52,7 @@ rule "[CHARGE_BATTERY] PLACE BATTERY":
         return
     eventPlayer.enhancementBatteryPosition = raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)
     #Charge Battery cooldown
-    eventPlayer.enhancementBatteryPlacementCooldown = 20
+    eventPlayer.enhancementBatteryPlacementCooldown = CHARGE_BATTERY_PLACEMENT_COOLDOWN
     playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.YELLOW, eventPlayer.enhancementBatteryPosition, 2)
     playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, Color.YELLOW, eventPlayer.enhancementBatteryPosition, 50)
     smallMessage(eventPlayer, "  Battery placed!")
@@ -84,8 +82,8 @@ rule "[CHARGE_BATTERY] USAGE AND COOLDOWNS":
     playEffect(batteryChargeRecipient, DynamicEffect.BUFF_IMPACT_SOUND, Color.YELLOW, batteryChargeRecipient, 50)
     playEffect(batteryChargeRecipient, DynamicEffect.GOOD_EXPLOSION, Color.GRAY, eventPlayer.enhancementBatteryPosition, 3)
     playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, Color.YELLOW, batteryChargeRecipient, 1)
-    batteryChargeRecipient.setUltCharge(batteryChargeRecipient.getUltCharge() + 15)
-    eventPlayer.enhancementBatteryReuseCooldown = eventPlayer.enhancementBatteryReuseDuration
+    batteryChargeRecipient.setUltCharge(batteryChargeRecipient.getUltCharge() + CHARGE_BATTERY_ULT_CHARGE_PCT)
+    eventPlayer.enhancementBatteryReuseCooldown = CHARGE_BATTERY_RECHARGE_DURATION
     while eventPlayer.enhancementBatteryReuseCooldown > 0:
         wait(0.5)
         eventPlayer.enhancementBatteryReuseCooldown += -0.5

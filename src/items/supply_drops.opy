@@ -294,7 +294,7 @@ def healBeacon():
     playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition, 10)
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.powerUpHealBeaconPosition, 50)
     # Beacon adds 50 percentage points to permanent Plague Doctor / Overcharge bonuses.
-    eventPlayer.setHealingDealt(180 if eventPlayer.enhancementId == Enhancement.PLAGUE_DOCTOR else 165 if eventPlayer.enhancementId == Enhancement.OVERCHARGE else 150)
+    eventPlayer.setHealingDealt(150 + PLAGUE_DOCTOR_HEAL_BONUS_PCT if eventPlayer.enhancementId == Enhancement.PLAGUE_DOCTOR else 150 + OVERCHARGE_HEAL_BONUS_PCT if eventPlayer.enhancementId == Enhancement.OVERCHARGE else 150)
     #Heal Beacon duration
     for eventPlayer.powerUpHealBeaconTimeRemaining in range(30, 0, -1):
         wait(1)
@@ -304,7 +304,7 @@ def healBeacon():
     destroyEffect(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_RING])
     destroyHudText(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_HUD])
     destroyEffect(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_AURA])
-    eventPlayer.setHealingDealt(130 if eventPlayer.enhancementId == Enhancement.PLAGUE_DOCTOR else 115 if eventPlayer.enhancementId == Enhancement.OVERCHARGE else 100)
+    eventPlayer.setHealingDealt(100 + PLAGUE_DOCTOR_HEAL_BONUS_PCT if eventPlayer.enhancementId == Enhancement.PLAGUE_DOCTOR else 100 + OVERCHARGE_HEAL_BONUS_PCT if eventPlayer.enhancementId == Enhancement.OVERCHARGE else 100)
     eventPlayer.powerUpHealBeaconPosition = 0
 
 
