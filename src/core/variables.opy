@@ -130,7 +130,7 @@ globalvar zombieSetting         # Selected zombie roster/spawn-rate mode, retain
 globalvar objectiveTypeSetting  # Selected objective mode or Mixed setting; differs from the current objective type.
 globalvar matchEndTime          # Native-gamemode timer offset: zero or 0.1, used as the match-time floor.
 globalvar numberOfBots          # Configured zombie population target, including queued replacements.
-globalvar auspexScanList = []  # Placement order; rows hold [owner, expiry, center, marker effect, next scan, next ring].
+globalvar auspexScanList = []  # Placement order; rows hold [owner, expiry, center, next scan, next ring].
 
 # Map grid and spawn-position caches.
 globalvar walkCenter                  # Walkable map center used for grid generation, the menu and player teleportation.
@@ -276,10 +276,7 @@ playervar invisibilityCount  # Stacking invisibility/untargetability counter; he
 
 playervar infectionDamageOverTimeId  # Active player infection damage-over-time ID; Zombie Hybrid stops this same damage instance.
 
-playervar reconnectUserIndex  # Team 1: index into reconnect data. Team 2 dummies: Auspex eye icon ID.
-# Auspex stores the ID across the mark lifetime. Only the icon rule reads it;
-# the separate Biomorphing icon cleanup handles its own IDs.
-#!define botAuspexEyeIcon reconnectUserIndex
+playervar reconnectUserIndex  # Team 1: index into reconnect data.
 
 playervar isAfk  # Player is treated as inactive/AFK and excluded from objectives or extraction counts.
 
@@ -288,7 +285,7 @@ playervar isHeroSwitchRespawn  # Player has switched heroes; prevents repeating 
 # Enhancements only (enhancement prefix; includes the Rescue Hitchhiker setup).
 playervar enhancementId  # Selected Enhancement enum; pregame selection, runtime behavior and Rescue Hitchhiker initialization.
 playervar botAuspexMark  # Team 2 only: [owner, expiry], set together by scan pulses; cleared on a new zombie life.
-playervar botAuspexBonusUntil  # Team 2 only: short damage-event guard for the scan owner's scripted bonus hit.
+playervar botAuspexBonusUntil  # Team 2 only: damage-event guard expiry per attacker slot.
 
 # Human Augment storage is independent of enhancements and power-ups.
 # Team 2 Wrestler roles are team-exclusive; no bot Augment owns these slots.
@@ -717,8 +714,6 @@ playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateS
 #!define enhancementBattleAbilityButton actorTeamSlot23
 # Battery remaining reuse cooldown.
 #!define enhancementBatteryReuseCooldown actorTeamSlot23
-# Auspex: chased radius read by the placement sphere until its effect is destroyed.
-#!define auspexFlashRadius actorTeamSlot23
 # Extra health-pool ID on the Hitchhiker passenger.
 #!define hitchhikerPassengerPoolId actorTeamSlot23
 # P.U.P. attack beam is active.
@@ -730,15 +725,13 @@ playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateS
 playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateSlot3. Receivers, not rule teams, own the storage.
 # Movement waypoint associated with the accepted zombie spawn point.
 #!define botSpawnWaypoint actorTeamSlot24
-# Wrestler / Bolt Strike: short-lived attack beam handle, retained through the
+# Wrestler / Bolt Strike / Auspex: short-lived attack beam handle, retained through the
 # unconditional cleanup wait; departure cleanup also destroys it. No spawn reset.
 # Beam endpoints are snapshots, so the global target scratch is never captured.
 #!define enhancementAttackBeamEntity actorTeamSlot24
 # Overcharge: absolute burst deadline; zero means armed but waiting for its first hit.
 # Set once by the first hit, read by later hits, cleared with the charge on expiry/death.
 #!define enhancementCapacitorDeadline actorTeamSlot24
-# Auspex: expanding sphere ID across its cleanup wait; the departure rule also destroys it.
-#!define auspexFlashEffect actorTeamSlot24
 # Current P.U.P. enemy target; null while idle.
 #!define enhancementPupTarget actorTeamSlot24
 # Engineer's live beam endpoint; the reevaluating beam reads this slot

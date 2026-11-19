@@ -1,15 +1,20 @@
 #!mainFile "../../main.opy"
 
+subroutine applyAuspexPulse
+
 enum AuspexScanField:
     OWNER = 0,
     EXPIRY = 1,
     CENTER = 2,
-    MARKER_EFFECT = 3,
-    NEXT_PULSE = 4,
-    NEXT_RING = 5,
+    NEXT_PULSE = 3,
+    NEXT_RING = 4,
 
 #!define auspexMarkOwner(bot) bot.botAuspexMark[0]
 #!define auspexMarkExpiry(bot) bot.botAuspexMark[1]
+
+# The pulse reads both scratch inputs synchronously and leaves them intact.
+#!define auspexWaveTime tmp0
+#!define auspexScan tmp1
 
 rule "[AUSPEX SCAN] PLACE ON DOUBLE CROUCH":
     @Event eachPlayer
@@ -27,7 +32,7 @@ rule "[AUSPEX SCAN] PLACE ON DOUBLE CROUCH":
         return
 
     # Sample the second press. Cast beyond the range so the miss endpoint fails the range check.
-    # Consume the hit before waiting; both visuals snapshot the position.
+    # The beam and scan row snapshot the hit before tmp0 becomes the wave time.
     #!define auspexPlacementHit tmp0
     auspexPlacementHit = raycastHitPosition(
         eventPlayer.getEyePosition(),
@@ -37,39 +42,42 @@ rule "[AUSPEX SCAN] PLACE ON DOUBLE CROUCH":
     if distance(eventPlayer.getEyePosition(), auspexPlacementHit) > AUSPEX_RANGE:
         return
 
-    createEffect(getPlayers(Team.1), Effect.SPHERE, AUSPEX_COLOR, auspexPlacementHit,
-        AUSPEX_MARKER_RADIUS, EffectReeval.VISIBILITY)
-    auspexScanList[len(auspexScanList)] = [
+    createBeam(getPlayers(Team.1), Beam.BAD, eventPlayer, auspexPlacementHit, AUSPEX_COLOR, EffectReeval.NONE)
+    eventPlayer.enhancementAttackBeamEntity = getLastCreatedEntity()
+    auspexScan = [
         eventPlayer, getTotalTimeElapsed() + AUSPEX_SCAN_DURATION, auspexPlacementHit,
-        getLastCreatedEntity(), getTotalTimeElapsed() + AUSPEX_SCAN_INTERVAL,
+        getTotalTimeElapsed() + AUSPEX_SCAN_INTERVAL,
         getTotalTimeElapsed() + AUSPEX_RING_INTERVAL
     ]
+    auspexScanList[len(auspexScanList)] = auspexScan
     eventPlayer.auspexReadyAt = getTotalTimeElapsed() + AUSPEX_COOLDOWN
-    eventPlayer.auspexFlashRadius = 0
-    createEffect(getPlayers(Team.1), Effect.SPHERE, AUSPEX_COLOR, evalOnce(auspexPlacementHit),
-        eventPlayer.auspexFlashRadius, EffectReeval.POSITION_AND_RADIUS)
-    eventPlayer.auspexFlashEffect = getLastCreatedEntity()
-    chaseOverTime(eventPlayer.auspexFlashRadius, AUSPEX_RADIUS, AUSPEX_FLASH_DURATION, ChaseTimeReeval.NONE)
-    wait(AUSPEX_FLASH_DURATION)
-    destroyEffect(eventPlayer.auspexFlashEffect)
-    stopChasing(eventPlayer.auspexFlashRadius)
-    eventPlayer.auspexFlashEffect = null
+    auspexWaveTime = getTotalTimeElapsed()
+    applyAuspexPulse()
+
+    wait(BOLT_STRIKE_BEAM_DURATION, Wait.IGNORE_CONDITION)
+    destroyEffect(eventPlayer.enhancementAttackBeamEntity)
+    eventPlayer.enhancementAttackBeamEntity = null
 
 
-rule "[AUSPEX SCAN] FLASH DISCONNECT CLEANUP":
-    @Event playerLeft
-    @Team 1
+def applyAuspexPulse():
+    @Name "applyAuspexPulse"
 
-    if eventPlayer.enhancementId == Enhancement.AUSPEX_SCAN and eventPlayer.auspexFlashEffect != null:
-        destroyEffect(eventPlayer.auspexFlashEffect)
+    (getPlayersInRadius(auspexScan[AuspexScanField.CENTER], AUSPEX_RADIUS, Team.2, LosCheck.OFF)
+        .filter(lambda bot: bot.isAlive() and bot.isDummy() and (
+            auspexMarkExpiry(bot) <= auspexWaveTime
+            or auspexMarkOwner(bot) == auspexScan[AuspexScanField.OWNER]
+        ))).botAuspexMark = [auspexScan[AuspexScanField.OWNER], auspexWaveTime + AUSPEX_MARK_DURATION]
+    # The Bosses objective shares its state slot with the Zombie Egg objective.
+    (getPlayersInRadius(auspexScan[AuspexScanField.CENTER], AUSPEX_RADIUS, Team.2, LosCheck.OFF)
+        .exclude(bossesStateList[0] if currentObjectiveType == ObjectiveType.BOSSES else null)
+        .filter(lambda zombie: zombie.isAlive())).setStatusEffect(
+            auspexScan[AuspexScanField.OWNER], Status.HACKED, AUSPEX_MARK_DURATION)
 
 
-rule "[AUSPEX SCAN] PROCESS ACTIVE SPHERES":
+rule "[AUSPEX SCAN] PROCESS ACTIVE SCANS":
     @Condition auspexScanList != []
 
     # Scratch holds one pass only and is consumed before the scheduler waits.
-    #!define auspexWaveTime tmp0
-    #!define auspexScan tmp1
     #!define auspexNextWave tmp2
     #!define auspexScanIndex tmp3
     auspexWaveTime = getTotalTimeElapsed()
@@ -79,11 +87,7 @@ rule "[AUSPEX SCAN] PROCESS ACTIVE SPHERES":
             auspexScan = auspexScanList[auspexScanIndex]
             if auspexWaveTime >= auspexScan[AuspexScanField.NEXT_PULSE]:
                 if entityExists(auspexScan[AuspexScanField.OWNER]):
-                    (getPlayersInRadius(auspexScan[AuspexScanField.CENTER], AUSPEX_RADIUS, Team.2, LosCheck.OFF)
-                        .filter(lambda bot: bot.isAlive() and bot.isDummy() and (
-                            auspexMarkExpiry(bot) <= auspexWaveTime
-                            or auspexMarkOwner(bot) == auspexScan[AuspexScanField.OWNER]
-                        ))).botAuspexMark = [auspexScan[AuspexScanField.OWNER], auspexWaveTime + AUSPEX_MARK_DURATION]
+                    applyAuspexPulse()
                     if auspexWaveTime >= auspexScan[AuspexScanField.NEXT_RING]:
                         playEffect(getPlayers(Team.1), DynamicEffect.RING_EXPLOSION, AUSPEX_COLOR,
                             auspexScan[AuspexScanField.CENTER], AUSPEX_RADIUS * 2)
@@ -101,32 +105,16 @@ rule "[AUSPEX SCAN] PROCESS ACTIVE SPHERES":
                 auspexScanList[auspexScanIndex] = auspexScan
             auspexNextWave = min(auspexNextWave, auspexScan[AuspexScanField.NEXT_PULSE])
 
-    # Fixed lifetime makes expirations FIFO. Let the final wave apply before destroying the sphere.
+    # Fixed lifetime makes expirations FIFO. Apply the final wave before dropping the scan.
     while auspexScanList != [] and (
         not isGameplayActive or auspexWaveTime >= auspexScanList[0][AuspexScanField.EXPIRY]
     ):
-        destroyEffect(auspexScanList[0][AuspexScanField.MARKER_EFFECT])
         del auspexScanList[0]
 
     if auspexScanList != []:
-        # Any new sphere's first wave is at least one interval after this pass.
+        # New scans pulse at placement. Their next wave is at least one interval after this pass.
         wait(auspexNextWave - getTotalTimeElapsed())
         loop()
-
-
-rule "[AUSPEX SCAN] SHOW MARKED ZOMBIE":
-    @Event eachPlayer
-    @Team 2
-    @Condition uiPhaseAndId(auspexMarkExpiry(eventPlayer) > getTotalTimeElapsed())
-    @Condition eventPlayer.isAlive() == true
-
-    createIcon(getPlayers(Team.1), eventPlayer.getEyePosition() - vect(0, 0.2, 0),
-        Icon.EYE, IconReeval.VISIBILITY_AND_POSITION, AUSPEX_COLOR)
-    eventPlayer.botAuspexEyeIcon = getLastCreatedEntity()
-    # The expiry remains live, so a refresh keeps the existing icon.
-    waitUntil(not isGameplayActive or not eventPlayer.isAlive()
-        or auspexMarkExpiry(eventPlayer) <= getTotalTimeElapsed(), Math.INFINITY)
-    destroyIcon(eventPlayer.botAuspexEyeIcon)
 
 
 rule "[AUSPEX SCAN] CREDIT BONUS DAMAGE":
@@ -138,15 +126,19 @@ rule "[AUSPEX SCAN] CREDIT BONUS DAMAGE":
         return
     if attacker.getTeam() != Team.1 or eventDamage <= 0 or not eventPlayer.isAlive():
         return
-    # Synchronous damage source. Damage() evaluates it before emitting any follow-up event.
-    #!define auspexDamageSource tmp0
-    auspexDamageSource = auspexMarkOwner(eventPlayer)
-    # Damage() has no Event Ability. Guard only the owner's scripted hits on this
-    # victim during the two-tick window in which the bonus can emit a follow-up event.
-    if not entityExists(auspexDamageSource) or (
-        attacker == auspexDamageSource and eventAbility == null
-        and getTotalTimeElapsed() < eventPlayer.botAuspexBonusUntil
-    ):
+    # Separate windows per attacker allow overlapping hits on the same zombie.
+    # Workshop Damage() has no Event Ability, so native hits bypass the guard.
+    if eventAbility == null and getTotalTimeElapsed() < eventPlayer.botAuspexBonusUntil[attacker.getSlot()]:
         return
-    eventPlayer.botAuspexBonusUntil = getTotalTimeElapsed() + 0.032
-    damage(eventPlayer, auspexDamageSource, eventDamage * AUSPEX_BONUS_DAMAGE)
+
+    # Both scratch values are consumed synchronously before damage can emit another event.
+    #!define auspexChargeOwner tmp0
+    #!define auspexBonusDamage tmp1
+    auspexChargeOwner = auspexMarkOwner(eventPlayer)
+    if not entityExists(auspexChargeOwner):
+        return
+    auspexBonusDamage = eventDamage * (AUSPEX_BOSS_BONUS_DAMAGE if eventPlayer in bossStateList or eventPlayer in miniBossList else AUSPEX_BONUS_DAMAGE)
+    if attacker != auspexChargeOwner:
+        auspexChargeOwner.setUltCharge(auspexChargeOwner.getUltCharge() + auspexBonusDamage * AUSPEX_ULT_PCT_PER_BONUS_DAMAGE)
+    eventPlayer.botAuspexBonusUntil[attacker.getSlot()] = getTotalTimeElapsed() + 0.032
+    damage(eventPlayer, attacker, auspexBonusDamage)

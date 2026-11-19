@@ -387,7 +387,7 @@ rule "ENHANCEMENT ATTACK BEAM DISCONNECT CLEANUP":
     @Team 1
 
     # Event eligibility stays synchronous; docs/WORKSHOP_NATIVE_UI_CORRUPTION.md.
-    if eventPlayer.enhancementId in [Enhancement.WRESTLER, Enhancement.BOLT_STRIKE] and eventPlayer.enhancementAttackBeamEntity != null:
+    if eventPlayer.enhancementId in [Enhancement.WRESTLER, Enhancement.BOLT_STRIKE, Enhancement.AUSPEX_SCAN] and eventPlayer.enhancementAttackBeamEntity != null:
         destroyEffect(eventPlayer.enhancementAttackBeamEntity)
 
 
