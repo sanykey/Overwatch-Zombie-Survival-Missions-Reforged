@@ -115,7 +115,7 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         for supplyDropItemAngleOffset in range(-60, 61, 120 / (supplyDropPowerUpCount - 1)):
             supplyPowerUpPositionList.append(supplyDropLandingPosition + ((directionFromAngles(horizontalAngleOfDirection(directionTowards(supplyDropLandingPosition, eventPlayer)) + supplyDropItemAngleOffset, 0)) * 2))
 
-    elif aimedPowerUpPositions != [] and not (isScavengerCrouchHeld and len(eventPlayer.augmentScavengerBackpack) >= 2):
+    elif aimedPowerUpPositions != [] and not (isScavengerCrouchHeld and len(eventPlayer.augmentScavengerBackpack) >= SCAVENGER_BACKPACK_CAPACITY):
         # Commit pickup and all four aligned ground lists without waits: another
         # player's pickup or a Reload drop must never observe a half-finished trade.
         # Synchronous scratch; no subroutine calls or reevaluated captures here.

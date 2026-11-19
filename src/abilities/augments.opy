@@ -151,9 +151,9 @@ rule "CROUCH + JUMP (GRAPNEL LAUNCHER)":
                 # no scratch value survives a wait or is captured by the cable.
                 damageWithEnhancements(AUGMENT_GRAPNEL_DAMAGE, eventPlayer.augmentGrapnelTarget)
                 if eventPlayer.augmentGrapnelTarget.isOnGround():
-                    eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.STUNNED, 0.5)
+                    eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.STUNNED, AUGMENT_GRAPNEL_GROUND_STUN_DURATION)
                 else:
-                    eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 3)
+                    eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, AUGMENT_GRAPNEL_AIR_KNOCKDOWN_DURATION)
                 playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer.augmentGrapnelTarget.getPosition() + Vector.UP, AUGMENT_IMPACT_SIZE)
             break
         # Synchronous scratch: correct current velocity to the desired velocity,
@@ -198,7 +198,7 @@ rule "AMMO PACK MAGAZINES":
         eventPlayer.augmentAmmoLoadoutList = []
     eventPlayer.augmentAmmoLoadout = eventPlayer.augmentAmmoLoadoutList.filter(lambda loadout: loadout[0] == eventPlayer.getHero() and loadout[1] == eventPlayer.getCurrentWeapon())[0]
     if eventPlayer.augmentAmmoLoadout == null:
-        eventPlayer.augmentAmmoLoadout = [eventPlayer.getHero(), eventPlayer.getCurrentWeapon(), eventPlayer.getMaxAmmo(0) * 2, eventPlayer.getMaxAmmo(1) * 2]
+        eventPlayer.augmentAmmoLoadout = [eventPlayer.getHero(), eventPlayer.getCurrentWeapon(), eventPlayer.getMaxAmmo(0) * AMMO_PACK_CAPACITY_MULTIPLIER, eventPlayer.getMaxAmmo(1) * AMMO_PACK_CAPACITY_MULTIPLIER]
         # Workshop Append To Array concatenates arrays; wrap the row to retain nesting.
         eventPlayer.augmentAmmoLoadoutList.append([eventPlayer.augmentAmmoLoadout])
     # Only write real magazines with a readable, positive capacity. In particular,

@@ -75,11 +75,11 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             ) if localPlayer.augmentId == Augment.DASH else
             (f"Launch: {ceil(localPlayer.augmentMovementReadyAt - getTotalTimeElapsed())}s CD" if getTotalTimeElapsed() < localPlayer.augmentMovementReadyAt else f"2x [{inputBindingString(Button.JUMP)}]: launch") if localPlayer.augmentId == Augment.HIGHRISE else
             "{0} | {1}".format(
-                f"3x melee reach | [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.JUMP)}]: push" if localPlayer.augmentId == Augment.TELEKINESIS else f"[{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.JUMP)}]: grapple | {AUGMENT_GRAPNEL_MIN_RANGE}-{AUGMENT_GRAPNEL_RANGE}m",
+                f"{TELEKINESIS_WEAPON_REACH_MULTIPLIER}x melee reach | [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.JUMP)}]: push" if localPlayer.augmentId == Augment.TELEKINESIS else f"[{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.JUMP)}]: grapple | {AUGMENT_GRAPNEL_MIN_RANGE}-{AUGMENT_GRAPNEL_RANGE}m",
                 f"{ceil(localPlayer.augmentMovementReadyAt - getTotalTimeElapsed())}s CD" if getTotalTimeElapsed() < localPlayer.augmentMovementReadyAt else iconString(Icon.CHECKMARK)
             ) if localPlayer.augmentId in [Augment.TELEKINESIS, Augment.GRAPNEL_LAUNCHER] else
-            f"Backpack: {len(localPlayer.augmentScavengerBackpack)}/2 | [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.INTERACT)}]: store/swap | Hold [{inputBindingString(Button.RELOAD)}]: drop all" if localPlayer.augmentId == Augment.SCAVENGER else
-            [" ", "+75 armor | 50% ranged/ability dmg resist", " ", " ", " ", "2x magazine | Fully reload to refill", " ", " ", " ", "15% lifesteal | +50 HP"][localPlayer.augmentId]
+            f"Backpack: {len(localPlayer.augmentScavengerBackpack)}/{SCAVENGER_BACKPACK_CAPACITY} | [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.INTERACT)}]: store/swap | Hold [{inputBindingString(Button.RELOAD)}]: drop all" if localPlayer.augmentId == Augment.SCAVENGER else
+            [" ", f"+{AUGMENT_KEVLAR_ARMOR} armor | {AUGMENT_KEVLAR_RANGED_DMG_RESIST}% ranged/ability dmg resist", " ", " ", " ", f"{AMMO_PACK_CAPACITY_MULTIPLIER}x magazine | Fully reload to refill", " ", " ", " ", f"{SURVIVALIST_LIFESTEAL_PCT}% lifesteal | +{SURVIVALIST_BONUS_HP} HP"][localPlayer.augmentId]
         ),
         AUGMENT_NAMES[localPlayer.augmentId],
         HudPosition.ACTUALLY_LEFT, 98, Color.WHITE, Color.WHITE,
@@ -218,7 +218,7 @@ macro initializePlayerAugment():
             eventPlayer.setKnockbackReceived(100 - AUGMENT_KEVLAR_KNOCKBACK_RESIST)
             eventPlayer.addHealthPool(Health.ARMOR, AUGMENT_KEVLAR_ARMOR, true, false)
         else:
-            eventPlayer.addHealthPool(Health.NORMAL, 50, true, false)
+            eventPlayer.addHealthPool(Health.NORMAL, SURVIVALIST_BONUS_HP, true, false)
 
 
 rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION":

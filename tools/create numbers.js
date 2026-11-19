@@ -1,4 +1,6 @@
-let result = "";
+// Emit the same rate for the HUD and Carnage while packing weapon damage at build time.
+const telekinesisExtendedWeaponDamagePct = 75;
+let result = `\n  #!define TELEKINESIS_EXTENDED_WEAPON_DAMAGE_PCT ${telekinesisExtendedWeaponDamagePct}\n`;
 
 // Carrion is appended at hero index 21; existing indices and zero/missing slots stay unchanged.
 // All Zombies: Carrion matches Reinhardt (3/103, about 2.91%); other relative weights are preserved.
@@ -166,14 +168,16 @@ const numbers = [
     offset: "NL_TELEKINESIS_PROFILE_OFFSET",
     len: "NL_TELEKINESIS_PROFILE_LEN",
     list: [
-      4, 75, 0.4, 0.56, // Reinhardt: original damage 100; 75% = 75
-      6, 33.75, 0.2, 0.4, // Brigitte: original damage 45; 75% = 33.75
-      4, 45, 0.2, 0.456, // D.Mon: original damage 60; 75% = 45
-      5, 75, 0.15, 0, // Genji: original damage 100; 75% = 75: recovery is calculated separately
-      10, 48.75, 0.15, 0.45, // Ramattra: original damage 65; 75% = 48.75
-      2.5, 52.5, 0.35, 0.35, // Torbjorn: original damage 70; 75% = 52.5
-      4.3, 33.75, 0.15, 0.45, // Vendetta: original damage 45; 75% = 33.75; interval 0.6
-    ],
+      [4, 100, 0.4, 0.56], // Reinhardt
+      [6, 45, 0.2, 0.4], // Brigitte
+      [4, 60, 0.2, 0.456], // D.Mon
+      [5, 100, 0.15, 0], // Genji
+      [10, 65, 0.15, 0.45], // Ramattra
+      [2.5, 70, 0.35, 0.35], // Torbjorn
+      [4.3, 45, 0.15, 0.45], // Vendetta
+    ].flatMap(([range, nativeDamage, windup, recovery]) => [
+      range, nativeDamage * telekinesisExtendedWeaponDamagePct / 100, windup, recovery,
+    ]),
   },
   { // Boss exclusions: botHeroList indices, preserving the existing exclusion order.
     offset: "NL_BOSS_EXCLUDED_HERO_OFFSET",

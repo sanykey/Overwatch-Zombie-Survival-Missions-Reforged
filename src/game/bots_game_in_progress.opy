@@ -29,7 +29,7 @@ macro collectNearbyZombieLoot():
                 if zombieLootCollector.powerUpItemId == PowerUpItem.NONE:
                     zombieLootCollector.powerUpItemId = scavengerLootItemId
                     smallMessage(zombieLootCollector, "Scavenger: powerup equipped")
-                elif len(zombieLootCollector.augmentScavengerBackpack) < 2:
+                elif len(zombieLootCollector.augmentScavengerBackpack) < SCAVENGER_BACKPACK_CAPACITY:
                     zombieLootCollector.augmentScavengerBackpack.append(scavengerLootItemId)
                     smallMessage(zombieLootCollector, "Scavenger: powerup added to backpack")
                 else:
@@ -157,7 +157,7 @@ rule "BOT DIES":
     # Heal the credited survivor before any death-handler waits.
     if eventWasEnvironment and attacker.getTeam() == Team.1:
         if attacker.augmentId == Augment.SURVIVALIST:
-            heal(attacker, attacker, eventDamage * 0.15)
+            heal(attacker, attacker, eventDamage * (SURVIVALIST_LIFESTEAL_PCT / 100))
     # Engineer/Scavenger collection: synchronous, before any death-handler waits.
     collectNearbyZombieLoot()
 
