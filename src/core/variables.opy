@@ -130,7 +130,6 @@ globalvar zombieSetting         # Selected zombie roster/spawn-rate mode, retain
 globalvar objectiveTypeSetting  # Selected objective mode or Mixed setting; differs from the current objective type.
 globalvar matchEndTime          # Native-gamemode timer offset: zero or 0.1, used as the match-time floor.
 globalvar numberOfBots          # Configured zombie population target, including queued replacements.
-globalvar auspexScanList = []  # Placement order; rows hold [owner, expiry, center, next scan, next ring].
 
 # Map grid and spawn-position caches.
 globalvar walkCenter                  # Walkable map center used for grid generation, the menu and player teleportation.
@@ -284,7 +283,7 @@ playervar isHeroSwitchRespawn  # Player has switched heroes; prevents repeating 
 
 # Enhancements only (enhancement prefix; includes the Rescue Hitchhiker setup).
 playervar enhancementId  # Selected Enhancement enum; pregame selection, runtime behavior and Rescue Hitchhiker initialization.
-playervar botAuspexMark  # Team 2 only: [owner, expiry], set together by scan pulses; cleared on a new zombie life.
+playervar botAuspexMark  # Team 2 only: [owner, expiry], set by Auspex activation; cleared on a new zombie life.
 playervar botAuspexBonusUntil  # Team 2 only: damage-event guard expiry per attacker slot.
 
 # Human Augment storage is independent of enhancements and power-ups.
