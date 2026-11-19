@@ -101,16 +101,16 @@ rule "PLAYER ULTIMATE DAMAGE RESIST":
     applyDamageReceivedModifier()
 
 
-rule "SIERRA TRACKING SHOT HACK":
-    @Event playerDealtDamage
-    @Team 1
-    @Hero sierra
+# rule "SIERRA TRACKING SHOT HACK":
+#     @Event playerDealtDamage
+#     @Team 1
+#     @Hero sierra
 
-    # Event eligibility stays synchronous; docs/WORKSHOP_NATIVE_UI_CORRUPTION.md.
-    if (eventAbility == Button.SECONDARY_FIRE) and (victim.getTeam() == Team.2):
-        # Match Tracking Shot's base mark duration from impact. No waits: every hit
-        # can apply/refresh Hack, including when another source already hacked it.
-        victim.setStatusEffect(attacker, Status.HACKED, 3)
+#     # Event eligibility stays synchronous; docs/WORKSHOP_NATIVE_UI_CORRUPTION.md.
+#     if (eventAbility == Button.SECONDARY_FIRE) and (victim.getTeam() == Team.2):
+#         # Match Tracking Shot's base mark duration from impact. No waits: every hit
+#         # can apply/refresh Hack, including when another source already hacked it.
+#         victim.setStatusEffect(attacker, Status.HACKED, 3)
 
 
 rule "REINHARDT SHIELD SLAM STUN":
