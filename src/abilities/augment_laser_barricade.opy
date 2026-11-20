@@ -2,12 +2,6 @@
 
 # Owned rules and inline fragments; shared storage contracts stay in variables.opy.
 
-#!define LASER_BARRICADE_AUGMENT_HEIGHT 2
-#!define LASER_BARRICADE_AUGMENT_WIDTH 6
-#!define LASER_BARRICADE_AUGMENT_COOLDOWN 25
-#!define LASER_BARRICADE_KNOCKDOWN_DAMAGE_THRESHOLD 4900
-#!define LASER_BARRICADE_CONTACT_DAMAGE_MULTIPLIER 2.5
-
 macro placeLaserBarricadeAugmentMacro():
     # -1 latches aiming until Interact release or death.
     # After entry, placement and cooldown ignore the common input conditions.

@@ -79,8 +79,6 @@ def useAugmentAirAction():
 
 # Both air-action augments share this one trigger; the per-augment behavior is
 # dispatched by useAugmentAirAction into the owners' macros in their own files.
-#!define AIR_ACTION_TAP_WINDOW 0.3
-
 rule "DOUBLE TAP JUMP (DASH / HIGHRISE)":
     @Event eachPlayer
     @Team 1

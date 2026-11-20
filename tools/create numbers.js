@@ -1,6 +1,4 @@
-// Emit the same rate for the HUD and Carnage while packing weapon damage at build time.
-const telekinesisExtendedWeaponDamagePct = 75;
-let result = `\n  #!define TELEKINESIS_EXTENDED_WEAPON_DAMAGE_PCT ${telekinesisExtendedWeaponDamagePct}\n`;
+let result = "";
 
 // Carrion is appended at hero index 21; existing indices and zero/missing slots stay unchanged.
 // All Zombies: Carrion matches Reinhardt (3/103, about 2.91%); other relative weights are preserved.
@@ -165,6 +163,7 @@ const numbers = [
   { // Telekinesis: [native range, damage, windup, recovery], in TELEKINESIS_MELEE_WEAPON_HEROES order.
     // Append new groups to preserve all earlier offsets. Genji's recovery is a
     // placeholder: compressed() rounds to 3 decimals, so its exact formula stays in OverPy.
+    // OverPy folds the shared damage multiplier from constants.opy before compression.
     offset: "NL_TELEKINESIS_PROFILE_OFFSET",
     len: "NL_TELEKINESIS_PROFILE_LEN",
     list: [
@@ -176,7 +175,7 @@ const numbers = [
       [2.5, 70, 0.35, 0.35], // Torbjorn
       [4.3, 45, 0.15, 0.45], // Vendetta
     ].flatMap(([range, nativeDamage, windup, recovery]) => [
-      range, nativeDamage * telekinesisExtendedWeaponDamagePct / 100, windup, recovery,
+      range, `(${nativeDamage} * TELEKINESIS_EXTENDED_WEAPON_DAMAGE_PCT / 100)`, windup, recovery,
     ]),
   },
   { // Boss exclusions: botHeroList indices, preserving the existing exclusion order.

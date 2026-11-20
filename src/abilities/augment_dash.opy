@@ -4,12 +4,6 @@
 # shared double-tap input rule lives in augments.opy; storage contracts remain
 # in variables.opy; HUDs stay in their owners.
 
-#!define DASH_COOLDOWN 14
-#!define DASH_MAX_CHARGES 2
-#!define DASH_PHASE_DURATION 1.7
-#!define DASH_IMPULSE 22
-#21.25
-
 # Dash samples movement on the second Jump press. This scratch vector is
 # consumed by the impulse immediately; it has no waits or live captures.
 #!define augmentDashDirection tmp0

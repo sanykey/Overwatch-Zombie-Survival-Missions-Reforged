@@ -4,9 +4,6 @@
 # double-tap input rule lives in augments.opy; storage contracts remain in
 # variables.opy; HUDs stay in their owners.
 
-#!define HIGHRISE_JUMP_IMPULSE 16
-#!define HIGHRISE_COOLDOWN 14
-
 macro useHighriseAirActionMacro():
     if getTotalTimeElapsed() >= eventPlayer.augmentMovementReadyAt:
         eventPlayer.augmentMovementReadyAt = getTotalTimeElapsed() + HIGHRISE_COOLDOWN

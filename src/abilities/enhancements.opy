@@ -5,10 +5,6 @@ subroutine resetBattleAbilityCharge
 subroutine startPupDefaultChase
 subroutine applyBulkingSeasonStats
 
-#!define WRESTLER_KNOCKDOWN_DURATION 4
-#!define WRESTLER_THROW_SPEED 12.5
-#!define WRESTLER_DAMAGE_DELAY 0.75
-
 #!define overchargeEarnedEnergyTotal(player) (player.getStatistic(Stat.HEALING_DEALT) / OVERCHARGE_HEAL_ENERGY_DIVISOR + OVERCHARGE_ENERGY_PER_ASSIST * earnedAssists(player))
 
 rule "ZOMBIE HYBRID":
@@ -23,7 +19,7 @@ rule "ZOMBIE HYBRID":
     explosionSequence()
     stopDamageOverTime(eventPlayer.infectionDamageOverTimeId)
     eventPlayer.infectionLevel = 0
-    eventPlayer.enhancementHybridCooldown = 20
+    eventPlayer.enhancementHybridCooldown = ZOMBIE_HYBRID_EXPLOSION_COOLDOWN
     while eventPlayer.enhancementHybridCooldown > 0:
         wait(1)
         eventPlayer.enhancementHybridCooldown += -1
@@ -289,7 +285,7 @@ rule "P.U.P. CONTROL":
             #Time to freeze dependent on max health of target
             wait(min(15, eventPlayer.enhancementPupTarget.getMaxHealth() / 300), Wait.ABORT_WHEN_FALSE)
             #Freeze cooldown
-            eventPlayer.enhancementPupCooldown = 2
+            eventPlayer.enhancementPupCooldown = PUP_FREEZE_COOLDOWN
             eventPlayer.enhancementPupTarget.setStatusEffect(eventPlayer, Status.FROZEN, 1.5)
             while not eventPlayer.enhancementPupTarget.hasStatus(Status.FROZEN):
                 eventPlayer.enhancementPupTarget.setStatusEffect(eventPlayer, Status.FROZEN, 1.5)
@@ -317,7 +313,7 @@ rule "P.U.P. CONTROL":
             eventPlayer.enhancementPupTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(pupImpulseDirection), min(-20, verticalAngleOfDirection(pupImpulseDirection))), min(25, 4200 / eventPlayer.enhancementPupTarget.getMaxHealth()), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
             eventPlayer.enhancementPupTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 1)
             #Laser cooldown
-            eventPlayer.enhancementPupCooldown = 1
+            eventPlayer.enhancementPupCooldown = PUP_LASER_COOLDOWN
             wait(3, Wait.ABORT_WHEN_FALSE)
             #P.U.P. color
             resetPupColorAndBeam()
@@ -451,7 +447,7 @@ rule "LIVING PROJECTILE RELEASE":
     stopDamageModification(eventPlayer.wrestlerProtectionId)
     wrestlerCarrier.enhancementCarryState = WrestlerCarryState.NONE
     # Every release starts the silent pickup cooldown, including interrupted holds.
-    wrestlerCarrier.enhancementGrabReadyAt = getTotalTimeElapsed() + 1.5
+    wrestlerCarrier.enhancementGrabReadyAt = getTotalTimeElapsed() + WRESTLER_GRAB_COOLDOWN
     eventPlayer.wrestlerZombieCarrier = null
     # Death/CC drops the zombie immediately, without throw damage or delay.
     if wrestlerCarrier.isDead() or wrestlerCarrier.isCrowdControlled:

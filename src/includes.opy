@@ -4,15 +4,15 @@
 #!define VERSION "1.0.0"
 
 #!include "settings/settings_defaults.opy"
-#!include "core/compressed numbers.opy"
 #!include "core/directives.opy"
 #!include "core/constants.opy"
+#!include "core/compressed numbers.opy"
 #!include "core/enums.opy"
 #!include "core/immutable_variables.opy"
 #!include "core/variables.opy"
 #!include "core/ui_workarounds.opy"
 
-# Uncomment to override lobby, hero and zombie settings for performance testing.
+# Uncomment to override lobby settings and custom player ability cooldowns for performance testing.
 ##!include "settings/settings_perf_test.opy"
 
 # Uncomment at most one map pool override, then save the root main.opy.

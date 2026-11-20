@@ -1,11 +1,5 @@
 #!mainFile "../../main.opy"
 
-#!define HITCHHIKER_ATTACH_RANGE_SCALE 2
-#!define HITCHHIKER_DETACH_RANGE_SCALE 3
-#!define HITCHHIKER_DETACH_COOLDOWN 1.5
-#!define HITCHHIKER_HEALTH_DIFFERENCE_THRESHOLD 0.01
-
-
 macro createHitchhikerHudMacro():
     # Attachment status subheaders: one persistent call each for the passenger
     # and the carrier, reevaluated per viewer; the carrier-side text reads the
