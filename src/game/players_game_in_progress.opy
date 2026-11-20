@@ -252,8 +252,7 @@ rule "PLAYER INFECTION DAMAGE MANAGEMENT":
     if eventPlayer.infectionLevel < 1:
         eventPlayer.isInfected = false
     eventPlayer.startDamageOverTime(null, 1, (floor(eventPlayer.infectionLevel) if eventPlayer.enhancementId != Enhancement.ZOMBIE_HYBRID else eventPlayer.infectionLevel / 2) ** 2)
-    # Debug team cures also need to stop the current infection tick for other heroes.
-    if DEBUG or eventPlayer.enhancementId == Enhancement.ZOMBIE_HYBRID:
+    if eventPlayer.enhancementId == Enhancement.ZOMBIE_HYBRID:
         eventPlayer.infectionDamageOverTimeId = getLastDamageOverTimeId()
     wait(1)
     if ruleCondition:

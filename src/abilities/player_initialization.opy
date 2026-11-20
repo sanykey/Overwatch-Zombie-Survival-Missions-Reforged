@@ -229,6 +229,12 @@ rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION":
     @Condition eventPlayer.isDummy() == false
     @Condition eventPlayer.isHeroSwitchRespawn == false
 
+    # if DEBUG:
+    #     eventPlayer.enhancementId = Enhancement.AUSPEX_SCAN
+    #     eventPlayer.augmentId = Augment.LASER_BARRICADE
+
     # Initialize the enhancement before the augment's health-readiness wait.
     initializePlayerEnhancement()
     initializePlayerAugment()
+    if DEBUG_ENABLE_INSPECTOR:
+        logToInspector(f"[loadout] {eventPlayer}: {ENHANCEMENT_NAMES[eventPlayer.enhancementId]} / {AUGMENT_NAMES[eventPlayer.augmentId]}")

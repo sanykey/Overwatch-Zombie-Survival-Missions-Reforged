@@ -145,7 +145,7 @@ Fix direction: one effect executor with separate extension/transfer requests; an
 
 The original already used the same 19 weights of 5.263, selection over 0–100, and an accumulation loop without an index bound. The 99.997 sum and dangerous range tail are inherited. Source: [original:518](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L518>), [original:521](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L521>), [original:811](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L811>).
 
-Locations: [global_startup.opy:62](../src/core/global_startup.opy#L62), [global_startup.opy:70](../src/core/global_startup.opy#L70), [global_start_menu.opy:309](../src/start_menu/global_start_menu.opy#L309).
+Locations: [global_startup.opy:62](../src/game/global_startup.opy#L62), [global_startup.opy:70](../src/game/global_startup.opy#L70), [global_start_menu.opy:309](../src/start_menu/global_start_menu.opy#L309).
 
 Mode `What'll it be?` creates 19 weights of 5.263. Their sum is **99.997**, but `random.uniform(0, 100)` selects a threshold up to 100. The loop increments the index while the accumulated sum is below the threshold; there is no `index < len(botSpawnRateList)` check. The compiled loop body contains no `Wait`.
 
@@ -164,7 +164,7 @@ Fix direction: calculate the positive sum of actually eligible weights, choose a
 
 The setting already permitted one item, while placement already divided 120 by count − 1. The dangerous step value was not introduced by optimization. Source: [original:714](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L714>), [original:6000](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6000>).
 
-Locations: [global_startup.opy:270](../src/core/global_startup.opy#L270), [supply_drops.opy:102](../src/items/supply_drops.opy#L102).
+Locations: [global_startup.opy:270](../src/game/global_startup.opy#L270), [supply_drops.opy:102](../src/items/supply_drops.opy#L102).
 
 Setting `Number of Powerups Per Supply Drop` allows **1**. Position placement uses:
 
@@ -187,7 +187,7 @@ Fix direction: use a separate position without division for one item; more robus
 
 Unbounded selection of an allowed objective and selection from Mixed Pool without a nonempty check already existed in the original. Source: [original:947](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L947>), [original:964](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L964>).
 
-Locations: [global_startup.opy:5](../src/core/global_startup.opy#L5), [global_start_menu.opy:367](../src/start_menu/global_start_menu.opy#L367), [global_start_menu.opy:400](../src/start_menu/global_start_menu.opy#L400).
+Locations: [global_startup.opy:5](../src/game/global_startup.opy#L5), [global_start_menu.opy:367](../src/start_menu/global_start_menu.opy#L367), [global_start_menu.opy:400](../src/start_menu/global_start_menu.opy#L400).
 
 If all available objective types, including Mixed Objectives, are disabled, the fallback in `determineObjectiveType` randomly tries only forbidden IDs. The loop has no wait and no prevalidated nonempty list of allowed choices. For this input state, the exit condition cannot become true. The compiler preserves `While` without `Wait`.
 
@@ -248,7 +248,7 @@ Fix direction: track life/hero generations and modifier ownership. An old comple
 
 Even the shared Biomorphing-resource/Satellite-terminal list existed in the original as objectiveResourcePositions. The old queue handler also failed to cancel on objective changes. The new objectivePositionsSlot aliases did not create this risk; reachability of a late write still requires in-game verification. Source: [original:229](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L229>), [original:2588](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2588>), [original:2619](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2619>), [original:2625](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2625>), [original:2957](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2957>).
 
-Locations: [objective_type_biomorphing.opy:193](../src/objective_types/objective_type_biomorphing.opy#L193), [variables.opy:247](../src/core/variables.opy#L247), [subroutines.opy:660](../src/core/subroutines.opy#L660).
+Locations: [objective_type_biomorphing.opy:193](../src/objective_types/objective_type_biomorphing.opy#L193), [variables.opy:247](../src/core/variables.opy#L247), [subroutines.opy:660](../src/game/subroutines.opy#L660).
 
 `BIOWASTE MANAGEMENT` only checks that the queue is nonempty and continues its loop with `wait(0.15)`, without checking the objective type, `isGameplayActive`, or objective generation. The resource-creation macro appends positions to `biomorphingResourcePositionList`. This is the same physical `objectivePositionsSlot` used by Satellite Uplink for its terminal list. In the original, both roles likewise shared one `objectiveResourcePositions`; the new aliases preserve that existing sharing.
 
@@ -360,7 +360,7 @@ Fix direction: a shared release procedure for the specific carried actor, includ
 
 Both comparing an entity with the Boolean hasStatus result and returning after death before restoring speed already existed. Source: [original:5537](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5537>), [original:5539](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5539>), [original:5541](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5541>), [original:5542](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5542>), [original:5547](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5547>).
 
-Locations: [subroutines.opy:822](../src/core/subroutines.opy#L822), [subroutines.opy:825](../src/core/subroutines.opy#L825), [subroutines.opy:827](../src/core/subroutines.opy#L827).
+Locations: [subroutines.opy:822](../src/game/subroutines.opy#L822), [subroutines.opy:825](../src/game/subroutines.opy#L825), [subroutines.opy:827](../src/game/subroutines.opy#L827).
 
 First: `if eventPlayer == eventPlayer.hasStatus(Status.HACKED)` compares a player entity with a Boolean. The compiler preserves `Compare(Event Player, ==, Has Status(...))`, not a status test. Exact engine coercion was not reproduced here; the expression does not directly test `hasStatus`. If the intent is to skip a shot while hacked, express that explicitly.
 
@@ -396,7 +396,7 @@ Fix direction: one eligibility predicate, one list of victims passing it, and se
 
 Comparing meters with seconds, dividing by a fixed 2.5, and accelerating the dome already coexisted in the original. Source: [original:2045](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2045>), [original:3220](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3220>), [original:3221](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3221>).
 
-Locations: [players_game_in_progress.opy:172](../src/game/players_game_in_progress.opy#L172), [objective_type_extraction_point.opy:20](../src/objective_types/objective_type_extraction_point.opy#L20), [subroutines.opy:609](../src/core/subroutines.opy#L609).
+Locations: [players_game_in_progress.opy:172](../src/game/players_game_in_progress.opy#L172), [objective_type_extraction_point.opy:20](../src/objective_types/objective_type_extraction_point.opy#L20), [subroutines.opy:609](../src/game/subroutines.opy#L609).
 
 The rescue rule compares distance `extractionZoneRad - distance(...)` in meters with `rescueTimeRemaining` in seconds. When capping the timer, it divides distance by a fixed 2.5. The dome moves at `extractionSpeedUp`, which increases while players are at extraction.
 
@@ -422,7 +422,7 @@ Fix direction: convert distance to seconds using the current positive speed, com
 
 The former testTarget was already assigned before visibility validation and published after the loop without a success flag/candidate reset. This is the same defect despite the new botCandidateTarget name. Source: [original:3761](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3761>), [original:3762](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3762>), [original:3766](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3766>).
 
-Location: [subroutines.opy:696](../src/core/subroutines.opy#L696).
+Location: [subroutines.opy:696](../src/game/subroutines.opy#L696).
 
 The loop first assigns `botCandidateTarget`, then checks visibility and exits on success. After the loop, `botTarget = botCandidateTarget` executes with only the `eventPlayer.isAlive()` check. There is no separate successful-visibility flag, and `botCandidateTarget` is not cleared before the loop.
 
@@ -528,7 +528,7 @@ The related accumulation of empty miniboss entries is covered in R34.
 
 Optimization candidate: expensive visibility conditions and repeated scans/sorts in selectTarget already existed. Current load estimates are not measurements of the original. Source: [original:3718](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3718>), [original:3755](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3755>), [original:3757](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3757>), [original:3762](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3762>).
 
-Locations: [bots_game_in_progress.opy:235](../src/game/bots_game_in_progress.opy#L235), [bots_game_in_progress.opy:266](../src/game/bots_game_in_progress.opy#L266), [subroutines.opy:670](../src/core/subroutines.opy#L670).
+Locations: [bots_game_in_progress.opy:235](../src/game/bots_game_in_progress.opy#L235), [bots_game_in_progress.opy:266](../src/game/bots_game_in_progress.opy#L266), [subroutines.opy:670](../src/game/subroutines.opy#L670).
 
 `BOT TARGET VISIBLE` scans `playerTargetList` with distances and `isInLoS` directly in rule conditions. `selectTarget()` then rebuilds lists, performs two sorts, and checks candidate visibility. A separate `DESELECT BOT TARGET` rule checks current-target visibility again. The population setting permits up to 23 zombies.
 
@@ -600,7 +600,7 @@ Do not simply merge four `.any()` checks into one: each can currently be satisfi
 
 Optimization candidate: repeated view-angle HUD sorting and barricade-preview rays existed in the original. Source: [original:1566](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1566>), [original:1943](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1943>), [original:6606](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6606>).
 
-Locations: [global_game_in_progress.opy:14](../src/game/global_game_in_progress.opy#L14), [subroutines.opy:332](../src/core/subroutines.opy#L332), [supply_drops.opy:74](../src/items/supply_drops.opy#L74), [enhancements.opy:54](../src/abilities/enhancements.opy#L54).
+Locations: [global_game_in_progress.opy:14](../src/game/global_game_in_progress.opy#L14), [subroutines.opy:332](../src/game/subroutines.opy#L332), [supply_drops.opy:74](../src/items/supply_drops.opy#L74), [enhancements.opy:54](../src/abilities/enhancements.opy#L54).
 
 Health-pack selection by viewing angle is repeated three times across text, text position, and icon. Biomorphing resource selection is repeated in text and position. The pickup hint separately checks for an eligible item and repeats geometry during filtering/sorting. The barricade preview contains two identical raycasts for beam endpoints plus a separate range-check raycast.
 
@@ -636,7 +636,7 @@ That guard also avoids redundant work with an empty target list. This is a known
 
 Optimization candidate: grid generation checking the accumulated array and repeated base filtering for terminals already existed. Source: [original:757](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L757>), [original:761](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L761>), [original:2948](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2948>).
 
-Locations: [global_startup.opy:315](../src/core/global_startup.opy#L315), [objective_type_satellite_uplink.opy:72](../src/objective_types/objective_type_satellite_uplink.opy#L72).
+Locations: [global_startup.opy:315](../src/game/global_startup.opy#L315), [objective_type_satellite_uplink.opy:72](../src/objective_types/objective_type_satellite_uplink.opy#L72).
 
 The generator compares new points with the entire accumulated array. For 900 successful additions without rejections, the sum of pre-insertion array sizes is **404,550**: potential comparisons for full scans, not a measured actual-call count. Rejected candidates add attempts. Each terminal-placement retry filters the grid again by the unchanged distance to the current objective.
 
@@ -730,12 +730,12 @@ Client-load/traffic candidate: reduce decorative-ring frequency or restrict dist
 
 **Category:** Performance, minor overhead. **Priority:** Low. **Evidence:** O.
 
-**Hitchhiker optimization implemented November 18, 2026.** Health balancing uses the first and last entries of one sorted pair and updates the recipient first. This removes the second array construction. The respawn-timer sorting proposal remains open. [Health balancing](../src/abilities/enhancement_hitchhiker.opy#L121) · [Respawn timers](../src/core/global_startup.opy#L113)
+**Hitchhiker optimization implemented November 18, 2026.** Health balancing uses the first and last entries of one sorted pair and updates the recipient first. This removes the second array construction. The respawn-timer sorting proposal remains open. [Health balancing](../src/abilities/enhancement_hitchhiker.opy#L121) · [Respawn timers](../src/game/global_startup.opy#L113)
 
 Optimization candidates: timer sorting and sorting two Hitchhiker participants already existed in the original. Source: [original:534](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L534>), [original:7042](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7042>), [original:7043](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7043>).
 
 - [enhancements.opy:518](../src/abilities/enhancements.opy#L518): Hitchhiker sorts two players, then builds another array through `concat().exclude()`. Recipient/donor selection can use a direct normalized-health comparison. The benefit alone is small; preserve the health-transfer formula.
-- [global_startup.opy:128](../src/core/global_startup.opy#L128): respawn timers are sorted every second after subtracting the same one unit. If ordering is maintained at every queue mutation, re-sorting can be removed. First check every insertion, forced change, and negative value; the array is small, so priority is low.
+- [global_startup.opy:128](../src/game/global_startup.opy#L128): respawn timers are sorted every second after subtracting the same one unit. If ordering is maintained at every queue mutation, re-sorting can be removed. First check every insertion, forced change, and negative value; the array is small, so priority is low.
 
 <a id="r34"></a>
 <a id="p14"></a>
@@ -747,7 +747,7 @@ Optimization candidates: timer sorting and sorting two Hitchhiker participants a
 
 Appending minibosses and replacing entries with zero rather than deleting them already existed; array growth is inherited. Source: [original:3622](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3622>), [original:4332](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L4332>).
 
-Locations: [subroutines.opy:28](../src/core/subroutines.opy#L28), [bots_game_in_progress.opy:150](../src/game/bots_game_in_progress.opy#L150), [subroutines.opy:751](../src/core/subroutines.opy#L751).
+Locations: [subroutines.opy:28](../src/game/subroutines.opy#L28), [bots_game_in_progress.opy:150](../src/game/bots_game_in_progress.opy#L150), [subroutines.opy:751](../src/game/subroutines.opy#L751).
 
 Creating a miniboss performs `miniBossList.append(eventPlayer)`, while the normal death branch replaces the entry with zero. This branch neither removes zeros nor reuses them on the next creation. Thus “create miniboss — kill it — create another” grows the array while the living-miniboss count stays constant. Separate removal when converting one into an objective boss does not clear zeros from normal deaths.
 
@@ -787,7 +787,7 @@ Fix direction: compact lists, centralize item accounting, and control effect ter
 
 Optimization candidate: viewer filters whose condition does not depend on the lambda parameter already existed. The count of 50 refers to the current tree, not a recount of the historical file. Source: [original:5966](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5966>), [original:6593](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6593>), [original:6600](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6600>).
 
-Locations: [players_game_in_progress.opy:122](../src/game/players_game_in_progress.opy#L122), [players_game_in_progress.opy:126](../src/game/players_game_in_progress.opy#L126), [subroutines.opy:149](../src/core/subroutines.opy#L149), [subroutines.opy:170](../src/core/subroutines.opy#L170).
+Locations: [players_game_in_progress.opy:122](../src/game/players_game_in_progress.opy#L122), [players_game_in_progress.opy:126](../src/game/players_game_in_progress.opy#L126), [subroutines.opy:149](../src/game/subroutines.opy#L149), [subroutines.opy:170](../src/game/subroutines.opy#L170).
 
 Source contains 50 expressions of the form `getAllPlayers().filter(lambda _: ...)` that do not use the viewer parameter. Example: `getAllPlayers().filter(lambda _: eventPlayer.isReviving)`. For an unchanged state, the result is either the whole list or an empty list; per-player filtering is unnecessary.
 
@@ -1006,7 +1006,7 @@ The same **startRule(setObjectiveType)** call without **NOOP** existed at [origi
 
 **Reproduction control:** Wait for setObjectiveType before START GAME and, if the lobby preserves the pregame session after everyone leaves, trigger another preparation/voting cycle. Record a second entry before the first ends. Fast normal voting alone does not reproduce repetition.
 
-**Code:** [call:374](../src/start_menu/global_start_menu.opy#L374), [setObjectiveType:389](../src/start_menu/global_start_menu.opy#L389), [start wait:393](../src/start_menu/global_start_menu.opy#L393), [position-selection wait:407](../src/start_menu/global_start_menu.opy#L407), [objectivesManagement:552](../src/core/subroutines.opy#L552).
+**Code:** [call:374](../src/start_menu/global_start_menu.opy#L374), [setObjectiveType:389](../src/start_menu/global_start_menu.opy#L389), [start wait:393](../src/start_menu/global_start_menu.opy#L393), [position-selection wait:407](../src/start_menu/global_start_menu.opy#L407), [objectivesManagement:552](../src/game/subroutines.opy#L552).
 
 **Chain:** the entire `END VOTING` chain above, then `setObjectiveType → objectivesManagement → globalObjectiveEntityManagementMacro`.
 
@@ -1028,7 +1028,7 @@ The same **startRule(setPrematchTimer)** call without **NOOP** existed at [origi
 
 **Reproduction control:** A new call during SELECTING_HERO is normally synchronous. Dangerous overlap is possible only if the same player previously left setPrematchTimer in its short wait; there is no separate long wait here.
 
-**Code:** [PLAYER SELECTS/RESELECTS HERO:63](../src/start_menu/player_start_menu.opy#L63), [call:72](../src/start_menu/player_start_menu.opy#L72), [setPrematchTimer](../src/core/subroutines.opy#L498).
+**Code:** [PLAYER SELECTS/RESELECTS HERO:63](../src/start_menu/player_start_menu.opy#L63), [call:72](../src/start_menu/player_start_menu.opy#L72), [setPrematchTimer](../src/game/subroutines.opy#L498).
 
 **Chain:** `hero selection/respawn → PLAYER SELECTS/RESELECTS HERO ⇢ setPrematchTimer`.
 
@@ -1050,7 +1050,7 @@ The same **startRule(setPrematchTimer)** call without **NOOP** existed at [origi
 
 **Reproduction control:** After voting ends, the last player's READY starts 15 -> wait() -> 10. A restart must hit exactly that short wait in the same context; merely waiting 15 seconds does not reproduce the defect.
 
-**Code:** [PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY):106](../src/start_menu/player_start_menu.opy#L106), [call:119](../src/start_menu/player_start_menu.opy#L119), [timer waiting branch:523](../src/core/subroutines.opy#L523).
+**Code:** [PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY):106](../src/start_menu/player_start_menu.opy#L106), [call:119](../src/start_menu/player_start_menu.opy#L119), [timer waiting branch:523](../src/game/subroutines.opy#L523).
 
 **Chain:** `Jump → pregameState becomes READY ⇢ setPrematchTimer`; then [SR07](#sr07) and `⇢ randomActions` launch independently.
 
@@ -1094,7 +1094,7 @@ The same **startRule(setPrematchTimer)** call without **NOOP** existed at [origi
 
 **Reproduction control:** Cancel READY for the same player while their previous setPrematchTimer still waits between 15 and 10. The window is short; another player's simultaneous readiness belongs to a different execution entity.
 
-**Code:** [menu rule:106](../src/start_menu/player_start_menu.opy#L106), [Crouch-branch call:127](../src/start_menu/player_start_menu.opy#L127), [setPrematchTimer](../src/core/subroutines.opy#L498).
+**Code:** [menu rule:106](../src/start_menu/player_start_menu.opy#L106), [Crouch-branch call:127](../src/start_menu/player_start_menu.opy#L127), [setPrematchTimer](../src/game/subroutines.opy#L498).
 
 **Chain:** `Crouch → decrease pregameState ⇢ setPrematchTimer`; transitioning to `SELECTING_HERO` then starts hero changing, followed potentially by [SR05](#sr05).
 
@@ -1138,7 +1138,7 @@ The same **startRule(setPrematchTimer)** call without **NOOP** existed at [origi
 
 **Reproduction control:** End voting during the local 2 s preceding the second call, then overlap the target's short pause with another call for the same player. Calls at 211/214, separated by 2 s, normally do not restart each other.
 
-**Code:** [UPDATE PREGAME VOTING STATUS](../src/start_menu/player_start_menu.opy#L202), [wait:212](../src/start_menu/player_start_menu.opy#L212), [call:214](../src/start_menu/player_start_menu.opy#L214), [setPrematchTimer](../src/core/subroutines.opy#L498).
+**Code:** [UPDATE PREGAME VOTING STATUS](../src/start_menu/player_start_menu.opy#L202), [wait:212](../src/start_menu/player_start_menu.opy#L212), [call:214](../src/start_menu/player_start_menu.opy#L214), [setPrematchTimer](../src/game/subroutines.opy#L498).
 
 **Chain:** path [SR09](#sr09) → `wait(2, Wait.ABORT_WHEN_FALSE) → isPregameVoting = false ⇢ setPrematchTimer`.
 
@@ -1160,7 +1160,7 @@ The same **startRule(objectivesManagement)** call without **NOOP** existed at [o
 
 **Reproduction control:** No normal human-triggered double-launch scenario was found: isObjectiveComplete remains true until the transition finishes. Testing protection requires explicitly introducing a second entry during transition; do not describe it as an existing normal double transition.
 
-**Code:** [OBJECTIVE COMPLETE:123](../src/game/global_game_in_progress.opy#L123), [call:127](../src/game/global_game_in_progress.opy#L127), [objectivesManagement:552](../src/core/subroutines.opy#L552), [entity macro:234](../src/core/subroutines.opy#L234).
+**Code:** [OBJECTIVE COMPLETE:123](../src/game/global_game_in_progress.opy#L123), [call:127](../src/game/global_game_in_progress.opy#L127), [objectivesManagement:552](../src/game/subroutines.opy#L552), [entity macro:234](../src/game/subroutines.opy#L234).
 
 **Chain:** `objective reaches completion condition → isObjectiveComplete = true → OBJECTIVE COMPLETE ⇢ objectivesManagement → globalObjectiveEntityManagementMacro`. After launching the subroutine, the rule also adds rescue time for some dead players. A second, normal call exists: `setObjectiveType → objectivesManagement` during initial setup, before `isGameplayActive = true`.
 

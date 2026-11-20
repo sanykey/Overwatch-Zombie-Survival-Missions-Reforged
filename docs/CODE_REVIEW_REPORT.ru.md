@@ -143,7 +143,7 @@ Overwatch не запускался. Падения сервера, исчерп
 
 В оригинале уже были те же 19 весов по 5.263, выбор из 0–100 и цикл накопления без ограничения индекса. Сумма 99.997 и опасный хвост диапазона унаследованы. Источник: [оригинал:518](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L518>), [оригинал:521](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L521>), [оригинал:811](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L811>).
 
-Места: [global_startup.opy:62](../src/core/global_startup.opy#L62), [global_startup.opy:70](../src/core/global_startup.opy#L70), [global_start_menu.opy:309](../src/start_menu/global_start_menu.opy#L309).
+Места: [global_startup.opy:62](../src/game/global_startup.opy#L62), [global_startup.opy:70](../src/game/global_startup.opy#L70), [global_start_menu.opy:309](../src/start_menu/global_start_menu.opy#L309).
 
 Режим `What'll it be?` создаёт 19 весов по 5,263. Сумма — **99,997**, но `random.uniform(0, 100)` выбирает порог до 100. Цикл увеличивает индекс, пока накопленная сумма меньше порога; проверки `index < len(botSpawnRateList)` нет. В скомпилированном теле цикла нет `Wait`.
 
@@ -162,7 +162,7 @@ Overwatch не запускался. Падения сервера, исчерп
 
 Настройка уже разрешала один предмет, а размещение уже делило 120 на count − 1. Опасное значение шага не появилось при оптимизации. Источник: [оригинал:714](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L714>), [оригинал:6000](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6000>).
 
-Места: [global_startup.opy:270](../src/core/global_startup.opy#L270), [supply_drops.opy:102](../src/items/supply_drops.opy#L102).
+Места: [global_startup.opy:270](../src/game/global_startup.opy#L270), [supply_drops.opy:102](../src/items/supply_drops.opy#L102).
 
 Настройка `Number of Powerups Per Supply Drop` допускает **1**. Расстановка позиций использует:
 
@@ -185,7 +185,7 @@ range(-60, 61, 120 / (supplyDropPowerUpCount - 1))
 
 Неограниченный выбор разрешённого задания и выбор из Mixed Pool без проверки непустоты уже были в оригинале. Источник: [оригинал:947](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L947>), [оригинал:964](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L964>).
 
-Места: [global_startup.opy:5](../src/core/global_startup.opy#L5), [global_start_menu.opy:367](../src/start_menu/global_start_menu.opy#L367), [global_start_menu.opy:400](../src/start_menu/global_start_menu.opy#L400).
+Места: [global_startup.opy:5](../src/game/global_startup.opy#L5), [global_start_menu.opy:367](../src/start_menu/global_start_menu.opy#L367), [global_start_menu.opy:400](../src/start_menu/global_start_menu.opy#L400).
 
 Если отключить все доступные типы задания, включая Mixed Objectives, запасной выбор в `determineObjectiveType` случайно перебирает только запрещённые ID. В цикле нет ожидания и нет заранее проверенного непустого списка разрешённых вариантов. При таком входном состоянии условие выхода не может выполниться. Компилятор сохраняет `While` без `Wait`.
 
@@ -246,7 +246,7 @@ Cloaking Device: count = 1, speed = 1.5
 
 Даже общий список ресурсов Biomorphing и терминалов Satellite существовал в оригинале: это objectiveResourcePositions. Старый обработчик очереди также не отменялся при смене задания. Новые имена алиасов objectivePositionsSlot не создали описанный риск; достижимость поздней записи по-прежнему требует проверки в игре. Источник: [оригинал:229](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L229>), [оригинал:2588](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2588>), [оригинал:2619](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2619>), [оригинал:2625](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2625>), [оригинал:2957](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2957>).
 
-Места: [objective_type_biomorphing.opy:193](../src/objective_types/objective_type_biomorphing.opy#L193), [variables.opy:247](../src/core/variables.opy#L247), [subroutines.opy:660](../src/core/subroutines.opy#L660).
+Места: [objective_type_biomorphing.opy:193](../src/objective_types/objective_type_biomorphing.opy#L193), [variables.opy:247](../src/core/variables.opy#L247), [subroutines.opy:660](../src/game/subroutines.opy#L660).
 
 `BIOWASTE MANAGEMENT` проверяет только непустоту очереди и продолжает цикл с `wait(0.15)`, не проверяя тип задания, `isGameplayActive` или поколение задания. Макрос создания ресурсов добавляет позиции в `biomorphingResourcePositionList`. Это тот же физический `objectivePositionsSlot`, который Satellite Uplink использует как список терминалов. В оригинале обе роли также делили один `objectiveResourcePositions`; новые алиасы сохраняют старое совместное использование.
 
@@ -358,7 +358,7 @@ Cloaking Device: count = 1, speed = 1.5
 
 И сравнение сущности с булевым результатом hasStatus, и выход после смерти до восстановления скорости уже присутствовали. Источник: [оригинал:5537](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5537>), [оригинал:5539](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5539>), [оригинал:5541](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5541>), [оригинал:5542](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5542>), [оригинал:5547](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5547>).
 
-Места: [subroutines.opy:822](../src/core/subroutines.opy#L822), [subroutines.opy:825](../src/core/subroutines.opy#L825), [subroutines.opy:827](../src/core/subroutines.opy#L827).
+Места: [subroutines.opy:822](../src/game/subroutines.opy#L822), [subroutines.opy:825](../src/game/subroutines.opy#L825), [subroutines.opy:827](../src/game/subroutines.opy#L827).
 
 Первый: `if eventPlayer == eventPlayer.hasStatus(Status.HACKED)` сравнивает сущность игрока с булевым значением. Компилятор сохраняет именно `Compare(Event Player, ==, Has Status(...))`, а не проверку статуса. Точное приведение типов движком здесь не воспроизводилось; такое выражение не реализует прямую проверку `hasStatus`. Если цель — пропускать выстрел при взломе, её нужно выразить явно.
 
@@ -394,7 +394,7 @@ Cloaking Device: count = 1, speed = 1.5
 
 Сравнение метров с секундами, деление на фиксированные 2.5 и ускорение купола уже сосуществовали в оригинале. Источник: [оригинал:2045](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2045>), [оригинал:3220](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3220>), [оригинал:3221](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3221>).
 
-Места: [players_game_in_progress.opy:172](../src/game/players_game_in_progress.opy#L172), [objective_type_extraction_point.opy:20](../src/objective_types/objective_type_extraction_point.opy#L20), [subroutines.opy:609](../src/core/subroutines.opy#L609).
+Места: [players_game_in_progress.opy:172](../src/game/players_game_in_progress.opy#L172), [objective_type_extraction_point.opy:20](../src/objective_types/objective_type_extraction_point.opy#L20), [subroutines.opy:609](../src/game/subroutines.opy#L609).
 
 Правило спасения сравнивает расстояние `extractionZoneRad - distance(...)` в метрах с `rescueTimeRemaining` в секундах. При ограничении таймера оно делит расстояние на фиксированные 2,5. Купол же движется с `extractionSpeedUp`, который увеличивается при нахождении игроков на эвакуации.
 
@@ -420,7 +420,7 @@ Cloaking Device: count = 1, speed = 1.5
 
 Прежний testTarget уже назначался до проверки видимости и публиковался после цикла без признака успешного поиска/сброса кандидата. Это тот же дефект, несмотря на новое имя botCandidateTarget. Источник: [оригинал:3761](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3761>), [оригинал:3762](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3762>), [оригинал:3766](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3766>).
 
-Место: [subroutines.opy:696](../src/core/subroutines.opy#L696).
+Место: [subroutines.opy:696](../src/game/subroutines.opy#L696).
 
 Цикл сначала присваивает `botCandidateTarget`, затем проверяет видимость и выходит при успехе. После завершения цикла `botTarget = botCandidateTarget` выполняется при единственной проверке `eventPlayer.isAlive()`. Отдельного признака успешной проверки видимости нет, а `botCandidateTarget` перед циклом не обнуляется.
 
@@ -526,7 +526,7 @@ NPC уже готовил правильный список кандидатов
 
 Кандидат на оптимизацию: дорогие условия видимости и повторный обход/сортировки в selectTarget уже были. Текущие оценки нагрузки не являются замером оригинала. Источник: [оригинал:3718](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3718>), [оригинал:3755](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3755>), [оригинал:3757](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3757>), [оригинал:3762](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3762>).
 
-Места: [bots_game_in_progress.opy:235](../src/game/bots_game_in_progress.opy#L235), [bots_game_in_progress.opy:266](../src/game/bots_game_in_progress.opy#L266), [subroutines.opy:670](../src/core/subroutines.opy#L670).
+Места: [bots_game_in_progress.opy:235](../src/game/bots_game_in_progress.opy#L235), [bots_game_in_progress.opy:266](../src/game/bots_game_in_progress.opy#L266), [subroutines.opy:670](../src/game/subroutines.opy#L670).
 
 `BOT TARGET VISIBLE` содержит обход `playerTargetList` с расстояниями и `isInLoS` прямо в условиях правила. После этого `selectTarget()` заново строит списки, делает две сортировки и проверяет видимость кандидатов. Отдельное правило `DESELECT BOT TARGET` снова проверяет видимость текущей цели. Настройка популяции допускает до 23 зомби.
 
@@ -598,7 +598,7 @@ NPC уже готовил правильный список кандидатов
 
 Кандидат на оптимизацию: повторные сортировки HUD по направлению взгляда и лучи предпросмотра баррикады присутствовали в оригинале. Источник: [оригинал:1566](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1566>), [оригинал:1943](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1943>), [оригинал:6606](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6606>).
 
-Места: [global_game_in_progress.opy:14](../src/game/global_game_in_progress.opy#L14), [subroutines.opy:332](../src/core/subroutines.opy#L332), [supply_drops.opy:74](../src/items/supply_drops.opy#L74), [enhancements.opy:54](../src/abilities/enhancements.opy#L54).
+Места: [global_game_in_progress.opy:14](../src/game/global_game_in_progress.opy#L14), [subroutines.opy:332](../src/game/subroutines.opy#L332), [supply_drops.opy:74](../src/items/supply_drops.opy#L74), [enhancements.opy:54](../src/abilities/enhancements.opy#L54).
 
 Выбор аптечки по углу взгляда повторен трижды между текстом, его позицией и иконкой. Выбор ресурса Biomorphing повторен в тексте и позиции. Подсказка подбора усиления отдельно проверяет существование подходящего предмета и повторяет геометрию при фильтрации/сортировке. Предпросмотр баррикады содержит два одинаковых raycast для концов луча и отдельный raycast проверки дальности.
 
@@ -634,7 +634,7 @@ NPC уже готовил правильный список кандидатов
 
 Кандидат на оптимизацию: генерация сетки с проверками по накопленному массиву и повторная базовая фильтрация терминалов уже присутствовали. Источник: [оригинал:757](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L757>), [оригинал:761](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L761>), [оригинал:2948](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2948>).
 
-Места: [global_startup.opy:315](../src/core/global_startup.opy#L315), [objective_type_satellite_uplink.opy:72](../src/objective_types/objective_type_satellite_uplink.opy#L72).
+Места: [global_startup.opy:315](../src/game/global_startup.opy#L315), [objective_type_satellite_uplink.opy:72](../src/objective_types/objective_type_satellite_uplink.opy#L72).
 
 Генератор сравнивает новые точки со всем накопленным массивом. Для 900 успешно добавленных точек без отклонений сумма размеров массивов до вставки составляет **404 550**; это объем возможных сравнений при полном проходе, не измеренное число фактических вызовов. Отклоненные кандидаты добавляют попытки. Расстановка терминалов при каждом повторе заново фильтрует сетку по неизменному расстоянию до текущей цели.
 
@@ -728,12 +728,12 @@ Bounce Pad проверяет игроков 480 раз за 60 секунд и 
 
 **Категория:** Производительность, мелкие расходы. **Приоритет:** Низкий. **Подтверждение:** О.
 
-**Оптимизация Hitchhiker внедрена 18.11.2026.** Баланс здоровья использует первый и последний элементы одной отсортированной пары. Получатель обновляется первым. Построение второго массива исключено. Предложение по сортировке таймеров респавна остаётся открытым. [Баланс здоровья](../src/abilities/enhancement_hitchhiker.opy#L121) · [Таймеры респавна](../src/core/global_startup.opy#L113)
+**Оптимизация Hitchhiker внедрена 18.11.2026.** Баланс здоровья использует первый и последний элементы одной отсортированной пары. Получатель обновляется первым. Построение второго массива исключено. Предложение по сортировке таймеров респавна остаётся открытым. [Баланс здоровья](../src/abilities/enhancement_hitchhiker.opy#L121) · [Таймеры респавна](../src/game/global_startup.opy#L113)
 
 Кандидаты на оптимизацию: сортировка таймеров и сортировка двух участников Hitchhiker уже присутствовали в оригинале. Источник: [оригинал:534](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L534>), [оригинал:7042](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7042>), [оригинал:7043](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7043>).
 
 - [enhancements.opy:518](../src/abilities/enhancements.opy#L518): Hitchhiker сортирует массив из двух игроков и затем строит второй массив через `concat().exclude()`. Выбор получателя/донора можно выразить прямым сравнением нормализованного здоровья. Сам по себе эффект небольшой; формулу переноса здоровья сохранять.
-- [global_startup.opy:128](../src/core/global_startup.opy#L128): каждую секунду таймеры респавна сортируются после одинакового вычитания единицы. При поддержании сортировки во всех местах изменения очереди повторную сортировку можно исключить. Сначала проверить все добавления, принудительные изменения и отрицательные значения; массив небольшой, приоритет низкий.
+- [global_startup.opy:128](../src/game/global_startup.opy#L128): каждую секунду таймеры респавна сортируются после одинакового вычитания единицы. При поддержании сортировки во всех местах изменения очереди повторную сортировку можно исключить. Сначала проверить все добавления, принудительные изменения и отрицательные значения; массив небольшой, приоритет низкий.
 
 <a id="r34"></a>
 <a id="p14"></a>
@@ -745,7 +745,7 @@ Bounce Pad проверяет игроков 480 раз за 60 секунд и 
 
 Добавление минибоссов и замена записей нулями вместо удаления уже существовали; рост массива унаследован. Источник: [оригинал:3622](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3622>), [оригинал:4332](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L4332>).
 
-Места: [subroutines.opy:28](../src/core/subroutines.opy#L28), [bots_game_in_progress.opy:150](../src/game/bots_game_in_progress.opy#L150), [subroutines.opy:751](../src/core/subroutines.opy#L751).
+Места: [subroutines.opy:28](../src/game/subroutines.opy#L28), [bots_game_in_progress.opy:150](../src/game/bots_game_in_progress.opy#L150), [subroutines.opy:751](../src/game/subroutines.opy#L751).
 
 Создание минибосса делает `miniBossList.append(eventPlayer)`, а обычная ветка смерти заменяет запись нулем. Нули в этой ветке не удаляются и при следующем создании не переиспользуются. Поэтому последовательность «создать минибосса — убить его — создать следующего» увеличивает длину массива при неизменном количестве живых минибоссов. Есть отдельное удаление при превращении в босса задания; оно не очищает нулевые записи от обычных смертей.
 
@@ -785,7 +785,7 @@ Bounce Pad проверяет игроков 480 раз за 60 секунд и 
 
 Кандидат на оптимизацию: фильтры зрителей с условием, не зависящим от параметра lambda, уже использовались. Число 50 относится к текущему дереву, а не к пересчёту исторического файла. Источник: [оригинал:5966](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5966>), [оригинал:6593](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6593>), [оригинал:6600](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6600>).
 
-Места: [players_game_in_progress.opy:122](../src/game/players_game_in_progress.opy#L122), [players_game_in_progress.opy:126](../src/game/players_game_in_progress.opy#L126), [subroutines.opy:149](../src/core/subroutines.opy#L149), [subroutines.opy:170](../src/core/subroutines.opy#L170).
+Места: [players_game_in_progress.opy:122](../src/game/players_game_in_progress.opy#L122), [players_game_in_progress.opy:126](../src/game/players_game_in_progress.opy#L126), [subroutines.opy:149](../src/game/subroutines.opy#L149), [subroutines.opy:170](../src/game/subroutines.opy#L170).
 
 В исходниках найдено 50 выражений вида `getAllPlayers().filter(lambda _: ...)`, где параметр зрителя не используется. Пример: `getAllPlayers().filter(lambda _: eventPlayer.isReviving)`. При неизменном состоянии результат — либо весь список, либо пустой список; фильтрация по отдельным игрокам не нужна.
 
@@ -1004,7 +1004,7 @@ node analysis/audit-original-provenance-2026-11-04.cjs
 
 **Контроль воспроизведения:** Контроль: дождаться вызова setObjectiveType до START GAME и, если лобби сохраняет предматчевую сессию после ухода всех, инициировать повторную подготовку и завершение голосования. Зафиксировать второй вход до окончания первого. Штатное быстрое голосование само по себе не воспроизводит повтор.
 
-**Код:** [вызов:374](../src/start_menu/global_start_menu.opy#L374), [setObjectiveType:389](../src/start_menu/global_start_menu.opy#L389), [ожидание старта:393](../src/start_menu/global_start_menu.opy#L393), [ожидание при выборе позиции:407](../src/start_menu/global_start_menu.opy#L407), [objectivesManagement:552](../src/core/subroutines.opy#L552).
+**Код:** [вызов:374](../src/start_menu/global_start_menu.opy#L374), [setObjectiveType:389](../src/start_menu/global_start_menu.opy#L389), [ожидание старта:393](../src/start_menu/global_start_menu.opy#L393), [ожидание при выборе позиции:407](../src/start_menu/global_start_menu.opy#L407), [objectivesManagement:552](../src/game/subroutines.opy#L552).
 
 **Цепочка:** вся цепочка `END VOTING` выше, затем `setObjectiveType → objectivesManagement → globalObjectiveEntityManagementMacro`.
 
@@ -1026,7 +1026,7 @@ node analysis/audit-original-provenance-2026-11-04.cjs
 
 **Контроль воспроизведения:** Новый вызов при SELECTING_HERO обычно синхронен. Опасное перекрытие возможно только если тот же игрок ранее оставил setPrematchTimer в коротком wait; отдельного длинного ожидания тут нет.
 
-**Код:** [PLAYER SELECTS/RESELECTS HERO:63](../src/start_menu/player_start_menu.opy#L63), [вызов:72](../src/start_menu/player_start_menu.opy#L72), [setPrematchTimer](../src/core/subroutines.opy#L498).
+**Код:** [PLAYER SELECTS/RESELECTS HERO:63](../src/start_menu/player_start_menu.opy#L63), [вызов:72](../src/start_menu/player_start_menu.opy#L72), [setPrematchTimer](../src/game/subroutines.opy#L498).
 
 **Цепочка:** `выбор/повторное появление героя → PLAYER SELECTS/RESELECTS HERO ⇢ setPrematchTimer`.
 
@@ -1048,7 +1048,7 @@ node analysis/audit-original-provenance-2026-11-04.cjs
 
 **Контроль воспроизведения:** Контроль: после конца голосования READY последнего игрока запускает 15 -> wait() -> 10. Для повторного запуска нужно попасть именно в это короткое ожидание тем же контекстом; простое ожидание 15 секунд не воспроизводит дефект.
 
-**Код:** [PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY):106](../src/start_menu/player_start_menu.opy#L106), [вызов:119](../src/start_menu/player_start_menu.opy#L119), [ожидающая ветка таймера:523](../src/core/subroutines.opy#L523).
+**Код:** [PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY):106](../src/start_menu/player_start_menu.opy#L106), [вызов:119](../src/start_menu/player_start_menu.opy#L119), [ожидающая ветка таймера:523](../src/game/subroutines.opy#L523).
 
 **Цепочка:** `Jump → pregameState становится READY ⇢ setPrematchTimer`; следом независимо запускается [SR07](#sr07), `⇢ randomActions`.
 
@@ -1092,7 +1092,7 @@ node analysis/audit-original-provenance-2026-11-04.cjs
 
 **Контроль воспроизведения:** Контроль: отменить READY того же игрока, пока его прежний setPrematchTimer ещё ждёт между 15 и 10. Окно короткое; одновременная готовность другого игрока относится к иной сущности исполнения.
 
-**Код:** [правило меню:106](../src/start_menu/player_start_menu.opy#L106), [вызов в ветке Crouch:127](../src/start_menu/player_start_menu.opy#L127), [setPrematchTimer](../src/core/subroutines.opy#L498).
+**Код:** [правило меню:106](../src/start_menu/player_start_menu.opy#L106), [вызов в ветке Crouch:127](../src/start_menu/player_start_menu.opy#L127), [setPrematchTimer](../src/game/subroutines.opy#L498).
 
 **Цепочка:** `Crouch → уменьшение pregameState ⇢ setPrematchTimer`; при переходе в `SELECTING_HERO` далее запускается смена героя, затем возможен [SR05](#sr05).
 
@@ -1136,7 +1136,7 @@ node analysis/audit-original-provenance-2026-11-04.cjs
 
 **Контроль воспроизведения:** Контроль: закончить голосование в течение локальных 2 с, после которых происходит второй вызов, и пересечь короткую паузу цели другим вызовом того же игрока. Два вызова 211/214, разделённые 2 с, обычно друг друга не перезапускают.
 
-**Код:** [UPDATE PREGAME VOTING STATUS](../src/start_menu/player_start_menu.opy#L202), [ожидание:212](../src/start_menu/player_start_menu.opy#L212), [вызов:214](../src/start_menu/player_start_menu.opy#L214), [setPrematchTimer](../src/core/subroutines.opy#L498).
+**Код:** [UPDATE PREGAME VOTING STATUS](../src/start_menu/player_start_menu.opy#L202), [ожидание:212](../src/start_menu/player_start_menu.opy#L212), [вызов:214](../src/start_menu/player_start_menu.opy#L214), [setPrematchTimer](../src/game/subroutines.opy#L498).
 
 **Цепочка:** путь [SR09](#sr09) → `wait(2, Wait.ABORT_WHEN_FALSE) → isPregameVoting = false ⇢ setPrematchTimer`.
 
@@ -1158,7 +1158,7 @@ node analysis/audit-original-provenance-2026-11-04.cjs
 
 **Контроль воспроизведения:** Штатного человеческого сценария двойного запуска не найдено: isObjectiveComplete удерживается true до завершения перехода. Для проверки защиты нужен явно созданный второй вход во время перехода; нельзя описывать его как уже существующий штатный двойной переход.
 
-**Код:** [OBJECTIVE COMPLETE:123](../src/game/global_game_in_progress.opy#L123), [вызов:127](../src/game/global_game_in_progress.opy#L127), [objectivesManagement:552](../src/core/subroutines.opy#L552), [макрос сущностей:234](../src/core/subroutines.opy#L234).
+**Код:** [OBJECTIVE COMPLETE:123](../src/game/global_game_in_progress.opy#L123), [вызов:127](../src/game/global_game_in_progress.opy#L127), [objectivesManagement:552](../src/game/subroutines.opy#L552), [макрос сущностей:234](../src/game/subroutines.opy#L234).
 
 **Цепочка:** `задание достигло условия завершения → isObjectiveComplete = true → OBJECTIVE COMPLETE ⇢ objectivesManagement → globalObjectiveEntityManagementMacro`. Правило после старта подпрограммы также добавляет время спасения части погибших игроков. Есть второй, обычный вызов: `setObjectiveType → objectivesManagement` при первоначальной настройке, до `isGameplayActive = true`.
 

@@ -9,17 +9,50 @@ globalvar debugHud # ID of snky's diagnostics HUD, recreated after phase cleanup
 #!define DEBUG_BUTTON_INTERVAL 1
 #!define DEBUG_BUTTON_PULSE min(0.064, DEBUG_BUTTON_INTERVAL / 4)
 #!define DEBUG_BUTTON_HOLD 0.5
-# Mask values in button order:
-# 1 Interact, 2 Crouch, 4 Jump, 8 Melee, 16 Primary Fire, 32 Secondary Fire,
-# 64 Ability 1, 128 Ability 2, 256 Ultimate, 512 Reload.
-#!define DEBUG_BUTTONS [Button.INTERACT, Button.CROUCH, Button.JUMP, Button.MELEE, Button.PRIMARY_FIRE, Button.SECONDARY_FIRE, Button.ABILITY_1, Button.ABILITY_2, Button.ULTIMATE, Button.RELOAD]
-#!define DEBUG_BUTTON_NAMES "Interact,Crouch,Jump,Melee,Primary Fire,Secondary Fire,Ability 1,Ability 2,Ultimate,Reload".split(",")
-#!define DEBUG_BUTTON_MASK_COUNT (2 ** len(DEBUG_BUTTONS) - 1)
+#!define DEBUG_BUTTON_PLACEMENT_HOLD (DEBUG_BUTTON_HOLD + 0.064)
+
+# Rows contain the log label, hold duration, double-tap flag and buttons.
+# A double-tap row contains one button. Damage, healing and proximity passives
+# still rely on the hero, targets and combat events during the test.
+macro DEBUG_BUTTON_CASES = [
+    # Double Crouch arms Auspex Scan, Bolt Strike, Engineer armor and Overcharge.
+    ["Crouch (double tap)", DEBUG_BUTTON_PULSE, true, Button.CROUCH],
+    # Double Jump activates Dash or Highrise.
+    ["Jump (double tap)", DEBUG_BUTTON_PULSE, true, Button.JUMP],
+    # Fire after the jump for Highrise and exercise damage, crit and healing passives.
+    [f"Primary Fire (hold {DEBUG_BUTTON_HOLD}s)", DEBUG_BUTTON_HOLD, false, Button.PRIMARY_FIRE],
+    # Melee covers Zombie Hybrid, Bulking Season, Wrestler pull, Engineer turret
+    # and Charge Battery placement. Keep the button down past the 0.5s windup.
+    [f"Melee (hold {DEBUG_BUTTON_PLACEMENT_HOLD}s)", DEBUG_BUTTON_PLACEMENT_HOLD, false, Button.MELEE],
+    # Crouch + Interact places Laser Barricade on release or operates Scavenger's backpack.
+    [f"Crouch + Interact (hold {DEBUG_BUTTON_PLACEMENT_HOLD}s)", DEBUG_BUTTON_PLACEMENT_HOLD, false, Button.CROUCH, Button.INTERACT],
+    # Interact on its own uses a carried power-up when held.
+    [f"Interact (hold {DEBUG_BUTTON_HOLD}s)", DEBUG_BUTTON_HOLD, false, Button.INTERACT],
+    # Tap Interact to open, pick up, grab or throw.
+    ["Interact", DEBUG_BUTTON_PULSE, false, Button.INTERACT],
+    # Crouch + Jump activates Telekinesis push or Grapnel Launcher.
+    ["Crouch + Jump", DEBUG_BUTTON_PULSE, false, Button.CROUCH, Button.JUMP],
+    # Tap Crouch on its own to attach or detach as Hitchhiker.
+    ["Crouch", DEBUG_BUTTON_PULSE, false, Button.CROUCH],
+    # Fire or heal with the secondary weapon and exercise Born to Battle's secondary slot.
+    [f"Secondary Fire (hold {DEBUG_BUTTON_HOLD}s)", DEBUG_BUTTON_HOLD, false, Button.SECONDARY_FIRE],
+    # Exercise both native ability slots for Born to Battle.
+    ["Ability 1", DEBUG_BUTTON_PULSE, false, Button.ABILITY_1],
+    ["Ability 2", DEBUG_BUTTON_PULSE, false, Button.ABILITY_2],
+    # Use Ultimate for Charge Battery's cooldown reset.
+    ["Ultimate", DEBUG_BUTTON_PULSE, false, Button.ULTIMATE],
+    # Reload exercises Ammo Pack. The hold also lets Scavenger drop its backpack.
+    [f"Reload (hold {DEBUG_BUTTON_HOLD}s)", DEBUG_BUTTON_HOLD, false, Button.RELOAD],
+]
 
 globalvar debugButtonStep
 globalvar debugButtonTargets
-globalvar debugButtonChord
+globalvar debugButtonCase
 
+rule "[debug] init":
+    @Condition DEBUG_ENABLE_INSPECTOR
+
+    logToInspector(f"Map: {__getCurrentMap__()}")
 
 rule "[debug] snky buffs":
     @Event eachPlayer
@@ -29,17 +62,17 @@ rule "[debug] snky buffs":
     @Condition isGameplayActive
 
     # Reapply after respawns, hero changes and power-ups that overwrite healing dealt.
-    # eventPlayer.setDamageDealt(1000)
-    # eventPlayer.setHealingDealt(10000)
-    # eventPlayer.setMaxHealth(10000)
+    eventPlayer.setDamageDealt(1000)
+    eventPlayer.setHealingDealt(10000)
+    eventPlayer.setMaxHealth(10000)
 
     # Refuel during gameplay only: menu HUD cleanup runs before gameplay begins.
     # debug(wrestlerPullTarget)
     wait(3)
     eventPlayer.setKnockbackReceived(0)
     eventPlayer.setUltCharge(100)
-    eventPlayer.powerUpJetpackFuel = 100
-    eventPlayer.powerUpItemId = PowerUpItem.JETPACK
+    # eventPlayer.powerUpJetpackFuel = 100
+    # eventPlayer.powerUpItemId = PowerUpItem.JETPACK
     # The stack slot belongs to other state when a different enhancement is selected.
     if eventPlayer.enhancementId == Enhancement.BULKING_SEASON:
         eventPlayer.enhancementBulkStacks = 300
@@ -62,6 +95,23 @@ rule "[debug] Team 1 unkillable during gameplay":
     eventPlayer.setStatusEffect(null, Status.UNKILLABLE, Math.INFINITY)
     waitUntil(isGameplayActive == false or eventPlayer.isDead() or eventPlayer.getTeam() != Team.1, Math.INFINITY)
     eventPlayer.clearStatusEffect(Status.UNKILLABLE)
+
+
+rule "[debug] Automatically revive downed Team 1 players":
+    @Event playerDied
+    @Team 1
+    @Condition DEBUG
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.isPlayerActive == true
+    @Condition eventPlayer.isDummy() == false
+    @Condition eventPlayer.isDead() == true
+    @Condition eventPlayer.isHeroSwitchRespawn == false
+    @Condition eventPlayer.rescueTimeRemaining > 0
+
+    # Let PLAYER GETS DOWNED reset the timer and recover the body first.
+    # REVIVE PLAYER OR ADVANCE DEATH TIMER handles the resurrection and cleanup.
+    wait(5, Wait.ABORT_WHEN_FALSE)
+    eventPlayer.reviveTimeRemaining = 0
 
 
 rule "[debug] Heal and cure Team 1":
@@ -92,6 +142,10 @@ rule "[debug] Resource usage and server load":
     # START GAME and WIN/LOSS CONDITIONS destroy all HUD texts. Recreate this one
     # after either phase changes, allowing their cleanup actions to finish first.
     wait(0.5)
+
+    if DEBUG_ENABLE_INSPECTOR:
+        logToInspector(f"server load hud init (isPregameSetup: {isPregameSetup}, isGameplayActive: {isGameplayActive})")
+
     hudSubheader(getAllPlayers().filter(lambda player: not player.isDummy() and "{0}".format(player) == "snky"), "Texts: {0}/128 | Effects: {1}/256\nServer load: {2}{3}".format(getNumberOfTextIds(), getNumberOfEntityIds(), "{0} | Avg (2s): {1} | Peak (2s): {2}".format(getServerLoad(), getAverageServerLoad(), getPeakServerLoad()), f"\nMap: {__getCurrentMap__()}\nMap grid: {len(mapGridList)}/900"), HudPosition.RIGHT, -10, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
     debugHud = getLastCreatedText()
     # evalOnce captures the phase at HUD creation; the other operands keep updating.
@@ -100,13 +154,21 @@ rule "[debug] Resource usage and server load":
     loop()
 
 
-# Scratch values are assigned and consumed synchronously on one side of a wait.
-#!define debugButtonMask tmp0
-#!define debugButtonIndex tmp1
-#!define debugButtonLogChord tmp2
+rule "[debug] Log sustained server load":
+    @Condition DEBUG_ENABLE_INSPECTOR
+    @Condition getAverageServerLoad() >= 255
 
-macro debugButtonName(button):
-    DEBUG_BUTTON_NAMES[DEBUG_BUTTONS.index(button)]
+    logToInspector("[server load] Avg (2s) reached 255")
+    waitUntil(getAverageServerLoad() < 255, Math.INFINITY)
+    logToInspector(f"[server load] Avg (2s) recovered to {getAverageServerLoad()}")
+
+
+# The loop index is assigned and consumed synchronously on one side of a wait.
+#!define debugButtonIndex tmp1
+#!define debugButtonLabel debugButtonCase[0]
+#!define debugButtonDuration debugButtonCase[1]
+#!define debugButtonDoubleTap debugButtonCase[2]
+#!define DEBUG_BUTTON_FIRST_INDEX 3
 
 macro logDebugButtonPress(buttonNames):
     logToInspector(f"[debug input] {buttonNames}")
@@ -118,56 +180,31 @@ rule "[debug] Cycle non-host ability inputs":
     wait(1)
 
     while true:
-        # Reserve every 16th step for standalone Interact between consecutive masks.
-        for debugButtonStep in range(-5, DEBUG_BUTTON_MASK_COUNT + ceil(DEBUG_BUTTON_MASK_COUNT / 15)):
+        for debugButtonStep in range(len(DEBUG_BUTTON_CASES)):
             debugButtonTargets = getPlayers(Team.1).filter(lambda player: player != hostPlayer and not player.isDummy())
             if debugButtonTargets == []:
                 wait(DEBUG_BUTTON_INTERVAL)
                 continue
 
-            if debugButtonStep < -3:
-                # Step -5 taps Crouch twice. Step -4 taps Jump twice.
-                debugButtonChord = [Button.CROUCH if debugButtonStep == -5 else Button.JUMP]
-            elif debugButtonStep == -1:
-                # Hold Interact on its own past the power-up's 0.25-second threshold.
-                debugButtonChord = [Button.INTERACT]
-            elif debugButtonStep < 0:
-                # Step -3 holds Melee. Step -2 holds Crouch and Interact together.
-                debugButtonChord = [Button.MELEE] if debugButtonStep == -3 else [Button.CROUCH, Button.INTERACT]
-            elif debugButtonStep % 16 == 0:
-                # Tap Interact on its own.
-                debugButtonChord = [Button.INTERACT]
-            else:
-                # Press the buttons whose values add up to the mask.
-                # Mask 6 presses Crouch + Jump. Mask 129 presses Interact + Ability 2.
-                debugButtonMask = debugButtonStep - floor(debugButtonStep / 16)
-                debugButtonChord = DEBUG_BUTTONS.filter(lambda _, index: floor(debugButtonMask / 2 ** index) % 2 == 1)
-
-            for debugButtonIndex in range(len(debugButtonChord)):
-                debugButtonTargets.startForcingButton(debugButtonChord[debugButtonIndex])
+            debugButtonCase = DEBUG_BUTTON_CASES[debugButtonStep]
+            for debugButtonIndex in range(DEBUG_BUTTON_FIRST_INDEX, len(debugButtonCase)):
+                debugButtonTargets.startForcingButton(debugButtonCase[debugButtonIndex])
             if DEBUG_ENABLE_INSPECTOR:
-                debugButtonLogChord = debugButtonName(debugButtonChord[0])
-                for debugButtonIndex in range(1, len(debugButtonChord)):
-                    debugButtonLogChord = f"{debugButtonLogChord} + {debugButtonName(debugButtonChord[debugButtonIndex])}"
-                if debugButtonStep >= -3 and debugButtonStep < 0:
-                    debugButtonLogChord = f"{debugButtonLogChord} (hold {DEBUG_BUTTON_HOLD}s)"
-                logDebugButtonPress(debugButtonLogChord)
-            wait(DEBUG_BUTTON_HOLD if debugButtonStep >= -3 and debugButtonStep < 0 else DEBUG_BUTTON_PULSE)
+                logDebugButtonPress(debugButtonLabel)
+            wait(debugButtonDuration)
             # Release the exact recipients and buttons from the press, including after a host change.
-            for debugButtonIndex in range(len(debugButtonChord)):
-                debugButtonTargets.stopForcingButton(debugButtonChord[debugButtonIndex])
+            for debugButtonIndex in range(DEBUG_BUTTON_FIRST_INDEX, len(debugButtonCase)):
+                debugButtonTargets.stopForcingButton(debugButtonCase[debugButtonIndex])
 
-            if debugButtonStep < -3:
+            if debugButtonDoubleTap:
                 # Release briefly, then tap the same Crouch or Jump button again.
                 wait(DEBUG_BUTTON_PULSE)
                 debugButtonTargets = debugButtonTargets.filter(lambda player: player.getTeam() == Team.1 and player != hostPlayer)
-                debugButtonTargets.startForcingButton(debugButtonChord[0])
+                debugButtonTargets.startForcingButton(debugButtonCase[DEBUG_BUTTON_FIRST_INDEX])
                 if DEBUG_ENABLE_INSPECTOR and debugButtonTargets != []:
-                    logDebugButtonPress("Crouch (second tap)" if debugButtonStep == -5 else "Jump (second tap)")
+                    logDebugButtonPress(f"{debugButtonLabel}, second tap")
                 wait(DEBUG_BUTTON_PULSE)
-                debugButtonTargets.stopForcingButton(debugButtonChord[0])
+                debugButtonTargets.stopForcingButton(debugButtonCase[DEBUG_BUTTON_FIRST_INDEX])
                 wait(DEBUG_BUTTON_INTERVAL - 3 * DEBUG_BUTTON_PULSE)
-            elif debugButtonStep < 0:
-                wait(max(0.016, DEBUG_BUTTON_INTERVAL - DEBUG_BUTTON_HOLD))
             else:
-                wait(DEBUG_BUTTON_INTERVAL - DEBUG_BUTTON_PULSE)
+                wait(max(0.016, DEBUG_BUTTON_INTERVAL - debugButtonDuration))

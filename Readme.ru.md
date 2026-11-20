@@ -139,9 +139,9 @@ Telekinesis также отталкивает зомби по нажатию Mel
 
 ### Структура проекта
 
-- `src/core/` — переменные, подпрограммы, запуск и обходы ошибок нативного UI.
+- `src/core/` — константы, переменные и обходы ошибок нативного UI.
 - `src/settings/` — настройки лобби, героев и режимов, переопределения для теста производительности и наборы карт.
-- `src/game/` — ход игры, логика игроков и ботов, типы зомби.
+- `src/game/` — запуск, подпрограммы, ход игры, логика игроков и ботов, типы зомби.
 - `src/abilities/`, `src/items/` — меню, камера, способности, инициализация и события игроков, настройка героев и предметы.
 - `src/debug/`, `src/objective_types/` — диагностика и задания.
 - `tools/` — JavaScript, выполняемый при компиляции.
@@ -159,7 +159,7 @@ Telekinesis также отталкивает зомби по нажатию Mel
 Сохраните корневой `main.opy` и импортируйте полученный `main.ws.txt` в Workshop.
 
 - [Перф-тестовый набор](src/settings/perf_test_map_pool.opy) включает Shambali Monastery (Escort), Colosseo (Push), Malevento, Necropolis, Black Forest и Ilios Lighthouse (Team Deathmatch).
-- [Отладочный набор](src/settings/debug_map_pool.opy) содержит только Malevento.
+- [Отладочный набор](src/settings/debug_map_pool.opy) содержит только Rialto (Escort).
 
 Чтобы включить настройки перф-теста с любым набором карт, раскомментируйте подключение `settings_perf_test.opy`. Оба переключателя применяются при компиляции. [Настройки перф-теста](src/settings/settings_perf_test.opy)
 

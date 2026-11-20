@@ -101,6 +101,10 @@ rule "WIN/LOSS CONDITIONS":
         wait(8)
         declareTeamVictory(Team.2)
         setTeamScore(Team.2, 9)
+
+        if DEBUG_ENABLE_INSPECTOR:
+            logToInspector(f"declareRoundVictory Team 2")
+
         # Original author: Flashpoint needs multiple round-victory declarations to force the victory screen.
         # Keep all five calls; the loop replaces repeated actions to reduce the Workshop element count.
         #!define lossRoundVictoryIndex tmp0
@@ -124,6 +128,10 @@ rule "WIN/LOSS CONDITIONS":
         wait(8)
         declareTeamVictory(Team.1)
         setTeamScore(Team.1, 9)
+
+        if DEBUG_ENABLE_INSPECTOR:
+            logToInspector(f"declareRoundVictory Team 1")
+
         # Original author: Flashpoint needs multiple round-victory declarations to force the victory screen.
         # Keep all five calls; the loop replaces repeated actions to reduce the Workshop element count.
         #!define winRoundVictoryIndex tmp0

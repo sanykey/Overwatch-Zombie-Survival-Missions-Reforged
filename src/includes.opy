@@ -1,17 +1,9 @@
-#!define DEBUG true
-#!define DEBUG_ENABLE_INSPECTOR true
-#!define DEBUG_SERVER_LOAD_UI true
+#!define DEBUG false
+#!define DEBUG_ENABLE_INSPECTOR false
+#!define DEBUG_SERVER_LOAD_UI false
 #!define VERSION "1.0.0"
 
 #!include "settings/settings_defaults.opy"
-
-# Uncomment at most one map pool override, then save the root main.opy.
-#!include "settings/perf_test_map_pool.opy"
-##!include "settings/debug_map_pool.opy"
-
-# Uncomment to override lobby, hero and zombie settings for performance testing.
-#!include "settings/settings_perf_test.opy"
-
 #!include "core/compressed numbers.opy"
 #!include "core/directives.opy"
 #!include "core/constants.opy"
@@ -19,8 +11,16 @@
 #!include "core/immutable_variables.opy"
 #!include "core/variables.opy"
 #!include "core/ui_workarounds.opy"
-#!include "core/subroutines.opy"
-#!include "core/global_startup.opy"
+
+# Uncomment to override lobby, hero and zombie settings for performance testing.
+##!include "settings/settings_perf_test.opy"
+
+# Uncomment at most one map pool override, then save the root main.opy.
+##!include "settings/ui_test_map_pool.opy"
+##!include "settings/debug_map_pool.opy"
+
+#!include "game/subroutines.opy"
+#!include "game/global_startup.opy"
 #!include "start_menu/start_menu_enhancements_hud.opy"
 #!include "start_menu/start_menu_augments_hud.opy"
 #!include "start_menu/global_start_menu.opy"

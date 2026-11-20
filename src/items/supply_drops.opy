@@ -42,6 +42,8 @@ rule "GENERATE SUPPLY DROPS":
             # The candidate is synchronous tmp1 input; raycast does not retain it.
             supplyDropLandingPosition = raycastHitPosition(supplyDropCandidatePosition + 2 * Vector.UP, supplyDropCandidatePosition + vect(0, 0, 0), getAllPlayers(), getAllPlayers(), false)
         wait(0.25)
+    if DEBUG_ENABLE_INSPECTOR:
+        logToInspector(f"[supply drop] Starting descent to {supplyDropLandingPosition}")
     supplyDropPosition = supplyDropLandingPosition + 200 * Vector.UP
     chaseOverTime(supplyDropPosition, supplyDropLandingPosition, 15)
     bigMessage(getPlayers(Team.1), "Supply drop incoming!")
@@ -591,6 +593,8 @@ def powerUpUsage():
                 smallMessage(eventPlayer, "Aim at a nearby target")
                 return
             break
+    if DEBUG_ENABLE_INSPECTOR:
+        logToInspector(f"[powerup] {eventPlayer} activated ID {eventPlayer.powerUpItemId}")
     eventPlayer.powerUpItemId = PowerUpItem.NONE
 
 

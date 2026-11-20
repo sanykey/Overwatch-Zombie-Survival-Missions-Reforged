@@ -139,9 +139,9 @@ After changing the source, save the root `main.opy` again to compile the updated
 
 ### Project layout
 
-- `src/core/` — variables, subroutines, startup and native UI workarounds.
+- `src/core/` — constants, variables and native UI workarounds.
 - `src/settings/` — lobby, hero and mode settings, performance-test overrides and map pools.
-- `src/game/` — game flow, menus, camera, player and bot logic, and zombie types.
+- `src/game/` — startup, subroutines, game flow, menus, camera, player and bot logic, and zombie types.
 - `src/abilities/`, `src/items/` — abilities, player initialization and events, hero tuning and items.
 - `src/debug/`, `src/objective_types/` — diagnostics and objectives.
 - `tools/` — JavaScript evaluated during compilation.
@@ -159,7 +159,7 @@ The standard rotation is defined in [src/settings/settings.opy](src/settings/set
 Save the root `main.opy` and import the resulting `main.ws.txt` into Workshop.
 
 - [Performance-test pool](src/settings/perf_test_map_pool.opy) includes Shambali Monastery (Escort), Colosseo (Push), and Malevento, Necropolis, Black Forest and Ilios Lighthouse (Team Deathmatch).
-- [Debug pool](src/settings/debug_map_pool.opy) includes Malevento only.
+- [Debug pool](src/settings/debug_map_pool.opy) includes only Rialto (Escort).
 
 Uncomment the `settings_perf_test.opy` include to enable the performance-test settings with any map pool. Both selections take effect at compile time. [Performance-test settings](src/settings/settings_perf_test.opy)
 
