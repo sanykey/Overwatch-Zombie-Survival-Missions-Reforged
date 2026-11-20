@@ -139,28 +139,29 @@ Telekinesis также отталкивает зомби по нажатию Mel
 
 ### Структура проекта
 
-- `src/core/` — настройки, переменные, подпрограммы, запуск и обходы ошибок нативного UI.
+- `src/core/` — переменные, подпрограммы, запуск и обходы ошибок нативного UI.
+- `src/settings/` — настройки лобби, героев и режимов, переопределения для теста производительности и наборы карт.
 - `src/game/` — ход игры, логика игроков и ботов, типы зомби.
 - `src/abilities/`, `src/items/` — меню, камера, способности, инициализация и события игроков, настройка героев и предметы.
-- `src/debug/`, `src/objective_types/`, `src/map_pools/` — числовые данные, диагностика, задания и пулы карт.
+- `src/debug/`, `src/objective_types/` — диагностика и задания.
 - `tools/` — JavaScript, выполняемый при компиляции.
 - `docs/` — отчёты ревью кода и руководство по диагностике нативного UI.
 - `workshop-snapshots/` — эталонные версии других модов.
 
-### Переключение наборов карт
+### Переключение наборов карт и настроек перф-теста
 
-В [src/includes.opy](src/includes.opy) выберите один набор карт строкой подключения в начале файла:
+Стандартная ротация задана в [src/settings/settings.opy](src/settings/settings.opy). Чтобы переопределить её, раскомментируйте подключение одного пула в [src/includes.opy](src/includes.opy).
 
 ```py
-#!include "map_pools/release.opy"
+#!include "settings/perf_test_map_pool.opy"
 ```
 
-Для тестирования замените `release.opy` на `test.opy`, затем сохраните корневой `main.opy` и импортируйте полученный `main.ws.txt` в Workshop. Перед публикацией релиза верните `release.opy` и пересоберите мод.
+Сохраните корневой `main.opy` и импортируйте полученный `main.ws.txt` в Workshop.
 
-- [Релизный набор](src/map_pools/release.opy): прежняя ротация карт, выбран по умолчанию.
-- [Тестовый набор](src/map_pools/test.opy): Shambali Monastery (Escort), Colosseo (Push), Malevento, Necropolis, Black Forest и Ilios Lighthouse (Team Deathmatch). Остальные режимы отключены.
+- [Перф-тестовый набор](src/settings/perf_test_map_pool.opy) включает Shambali Monastery (Escort), Colosseo (Push), Malevento, Necropolis, Black Forest и Ilios Lighthouse (Team Deathmatch).
+- [Отладочный набор](src/settings/debug_map_pool.opy) содержит только Malevento.
 
-Файлы наборов подставляют фрагменты настроек через текстовые макросы; подключать нужно только один из них. Общие настройки лобби, героев и режимов остаются в `src/core/settings.opy`. Переключение происходит при компиляции и не добавляет элементов Workshop или переменных.
+Чтобы включить настройки перф-теста с любым набором карт, раскомментируйте подключение `settings_perf_test.opy`. Оба переключателя применяются при компиляции. [Настройки перф-теста](src/settings/settings_perf_test.opy)
 
 ### Проблема с пассивной регенерацией
 

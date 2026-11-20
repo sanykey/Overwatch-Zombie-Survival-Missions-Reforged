@@ -139,28 +139,29 @@ After changing the source, save the root `main.opy` again to compile the updated
 
 ### Project layout
 
-- `src/core/` — settings, variables, subroutines, startup and native UI workarounds.
+- `src/core/` — variables, subroutines, startup and native UI workarounds.
+- `src/settings/` — lobby, hero and mode settings, performance-test overrides and map pools.
 - `src/game/` — game flow, menus, camera, player and bot logic, and zombie types.
 - `src/abilities/`, `src/items/` — abilities, player initialization and events, hero tuning and items.
-- `src/debug/`, `src/objective_types/`, `src/map_pools/` — diagnostics, objectives and map pools.
+- `src/debug/`, `src/objective_types/` — diagnostics and objectives.
 - `tools/` — JavaScript evaluated during compilation.
 - `docs/` — code review reports and the native UI troubleshooting guide.
 - `workshop-snapshots/` — reference versions of other mods.
 
-### Switching map pools
+### Switching map pools and performance-test settings
 
-In [src/includes.opy](src/includes.opy), select one map pool with the include near the top:
+The standard rotation is defined in [src/settings/settings.opy](src/settings/settings.opy). To override it, uncomment one map pool include in [src/includes.opy](src/includes.opy).
 
 ```py
-#!include "map_pools/release.opy"
+#!include "settings/perf_test_map_pool.opy"
 ```
 
-Replace `release.opy` with `test.opy` for the regression pool, then save the root `main.opy` and import the resulting `main.ws.txt` into Workshop. Switch back to `release.opy` and rebuild before publishing a release.
+Save the root `main.opy` and import the resulting `main.ws.txt` into Workshop.
 
-- [Release pool](src/map_pools/release.opy): the existing map rotation, selected by default.
-- [Test pool](src/map_pools/test.opy): Shambali Monastery (Escort), Colosseo (Push), and Malevento, Necropolis, Black Forest and Ilios Lighthouse (Team Deathmatch). Other modes are disabled.
+- [Performance-test pool](src/settings/perf_test_map_pool.opy) includes Shambali Monastery (Escort), Colosseo (Push), and Malevento, Necropolis, Black Forest and Ilios Lighthouse (Team Deathmatch).
+- [Debug pool](src/settings/debug_map_pool.opy) includes Malevento only.
 
-The pool files provide settings fragments through text macros; only one can be included at a time. Shared lobby, hero and mode settings stay in `src/core/settings.opy`. Switching happens at compile time and adds no Workshop elements or variables.
+Uncomment the `settings_perf_test.opy` include to enable the performance-test settings with any map pool. Both selections take effect at compile time. [Performance-test settings](src/settings/settings_perf_test.opy)
 
 ### Passive regeneration issue
 

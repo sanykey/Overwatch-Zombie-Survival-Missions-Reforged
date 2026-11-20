@@ -1,14 +1,19 @@
-#!define DEBUG false
-#!define SERVER_LOAD_UI true
+#!define DEBUG true
+#!define DEBUG_ENABLE_INSPECTOR true
+#!define DEBUG_SERVER_LOAD_UI true
+#!define VERSION "1.0.0"
 
-# Select exactly one map pool, then save the root main.opy to rebuild.
-#!include "map_pools/standart.opy"
-##!include "map_pools/perf_test.opy"
-##!include "map_pools/debug_map_pool.opy"
+#!include "settings/settings_defaults.opy"
+
+# Uncomment at most one map pool override, then save the root main.opy.
+#!include "settings/perf_test_map_pool.opy"
+##!include "settings/debug_map_pool.opy"
+
+# Uncomment to override lobby, hero and zombie settings for performance testing.
+#!include "settings/settings_perf_test.opy"
 
 #!include "core/compressed numbers.opy"
 #!include "core/directives.opy"
-#!include "core/settings.opy"
 #!include "core/constants.opy"
 #!include "core/enums.opy"
 #!include "core/immutable_variables.opy"
@@ -46,3 +51,6 @@
 #!include "abilities/player_initialization.opy"
 #!include "abilities/player_events.opy"
 #!include "debug/debug.opy"
+
+# Keep this last so OverPy 9.7.21 resolves other includes before expanding the settings aliases.
+#!include "settings/settings.opy"

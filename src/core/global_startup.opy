@@ -148,7 +148,7 @@ rule "SKIP ASSEMBLING HEROES":
     #Set/Reset to default 0
     objectiveTypeSetting = ObjectiveType.NO_PREFERENCE
     if isAssemblingHeroes():
-        if not DEBUG:
+        if not DEBUG_ENABLE_INSPECTOR:
             disableInspector()
         setMatchTime(0)
         isPregameSetup = true
@@ -286,7 +286,7 @@ rule "START GAME":
     getPlayers(Team.1).enhancementScrapBeamDeadline = 0
     getPlayers(Team.1).scrapArmorAmount = 0
     enableMusic()
-    if not DEBUG:
+    if not DEBUG_ENABLE_INSPECTOR:
         disableInspector()
     destroyAllDummies()
     destroyAllEffects()
