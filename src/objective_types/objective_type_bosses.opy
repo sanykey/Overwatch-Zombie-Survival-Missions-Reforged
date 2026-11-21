@@ -213,7 +213,8 @@ def bossReturn():
     if entityExists(eventPlayer.botReturnTarget):
         # Synchronous scratch: candidate positions are consumed before the next wait.
         #!define bossReturnCandidateList tmp0
-        bossReturnCandidateList = mapGridList.filter(lambda x: isInLoS(x, eventPlayer.botReturnTarget.getEyePosition()) and distance(x, eventPlayer.botReturnTarget) > 5 and distance(x, eventPlayer.botReturnTarget) < 20)
+        # Workshop short-circuits And, so check both distance bounds before tracing visibility.
+        bossReturnCandidateList = mapGridList.filter(lambda point: distance(point, eventPlayer.botReturnTarget) > 5 and distance(point, eventPlayer.botReturnTarget) < 20 and isInLoS(point, eventPlayer.botReturnTarget.getEyePosition()))
         # Keep the walkable recovery position if no valid destination exists.
         if bossReturnCandidateList != []:
             eventPlayer.teleport(Vector.UP + random.choice(bossReturnCandidateList))
