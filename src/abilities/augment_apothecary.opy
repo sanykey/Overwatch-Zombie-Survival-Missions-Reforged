@@ -1,4 +1,4 @@
-#!mainFile "../main.opy"
+#!mainFile "../../main.opy"
 
 # Owned rules and inline fragments; shared storage contracts stay in variables.opy.
 

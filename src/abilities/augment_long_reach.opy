@@ -1,4 +1,4 @@
-#!mainFile "../main.opy"
+#!mainFile "../../main.opy"
 
 # Long Reach attack rules and synchronous hit helper.
 # Player/global storage contracts remain in variables.opy; hero tables initialize

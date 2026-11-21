@@ -1,4 +1,4 @@
-#!mainFile "../main.opy"
+#!mainFile "../../main.opy"
 
 # HIGHRISE input, flight bonus lifetime, and synchronous activation macro.
 # Shared storage contracts remain in variables.opy; HUDs stay in their owners.

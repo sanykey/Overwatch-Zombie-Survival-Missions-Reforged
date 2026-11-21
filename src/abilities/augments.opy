@@ -1,4 +1,4 @@
-#!mainFile "../main.opy"
+#!mainFile "../../main.opy"
 
 #!define AUGMENT_KEVLAR_ARMOR 75
 #!define AUGMENT_KEVLAR_RANGED_DMG_RESIST 50

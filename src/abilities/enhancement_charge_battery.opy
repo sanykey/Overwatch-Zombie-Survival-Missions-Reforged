@@ -1,4 +1,4 @@
-#!mainFile "../main.opy"
+#!mainFile "../../main.opy"
 
 # Charge Battery behavior and initialization.
 # Shared enum IDs, icons and storage contracts remain in variables.opy.

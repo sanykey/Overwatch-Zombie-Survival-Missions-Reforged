@@ -1,4 +1,4 @@
-#!mainFile "../main.opy"
+#!mainFile "../../main.opy"
 
 # DASH input, charge recharge, smoke cleanup, and synchronous activation macro.
 # Shared storage contracts remain in variables.opy; HUDs stay in their owners.

@@ -1,4 +1,4 @@
-#!mainFile "../main.opy"
+#!mainFile "../../main.opy"
 
 # Shared pickup effect, declared here before hero tuning uses it.
 subroutine superNano

@@ -1,4 +1,4 @@
-#!mainFile "../main.opy"
+#!mainFile "../../main.opy"
 
 # Combat HUD order on the left: roster (player slot), enhancement (97),
 # augment (98), attachment status (98.5), Jetpack fuel (99), carried powerup (100).
