@@ -434,7 +434,11 @@ rule "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)":
     # Already ticking DoTs and existing infection levels run their course; the
     # direct bite hit is untouched.
     victim.startDamageOverTime(eventPlayer, eventPlayer.botBiteDuration, eventPlayer.botBiteDamage)
-    eventPlayer.damageOverTimeRemaining = max(eventPlayer.damageOverTimeRemaining, eventPlayer.botBiteDuration)
+    # Keep this guard even though Max saves Workshop elements. It skips writes when
+    # the bite would not extend the timer. Blizzard's February 2020 Workshop write
+    # optimization excluded variables used by Chase.
+    if eventPlayer.damageOverTimeRemaining < eventPlayer.botBiteDuration:
+        eventPlayer.damageOverTimeRemaining = eventPlayer.botBiteDuration
     # Bulk stacks raise the infection threshold with native max health; only overheal above it protects.
     # Keep initialMaxHealth native for Hitchhiker pools and Nemesis detection.
     if createWorkshopSettingBool("Infection", "Melee Infection Enabled", true) and not eventPlayer.hasStatus(Status.HACKED) and not victim.isDummy() and (victim.enhancementId == Enhancement.ZOMBIE_HYBRID or victim.getHealth() <= (victim.getMaxHealth() if victim.hitchhikerPassenger != null else victim.initialMaxHealth * (min(BULKING_SEASON_MAX_HP_MULTIPLIER, 1 + victim.enhancementBulkStacks * (BULKING_SEASON_HP_PER_STACK_PCT / 100)) if victim.enhancementId == Enhancement.BULKING_SEASON else 1))):
