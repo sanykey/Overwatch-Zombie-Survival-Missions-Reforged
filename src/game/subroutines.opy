@@ -28,6 +28,7 @@ subroutine setDifficulty
 subroutine botRespawnInitialization
 subroutine objectivesManagement
 subroutine selectTarget
+subroutine selectBotTarget
 subroutine deselectBotTarget
 subroutine restoreDefaultFacingMovement
 subroutine setPrematchTimer
@@ -697,7 +698,16 @@ def deselectBotTarget():
 
 def selectTarget():
     @Name "selectTarget"
-    
+
+    # Damage and hero abilities request immediate selection. Initialize scratch
+    # here, when the asynchronously started rule is actually running.
+    botTargetProbeVisible = null
+    selectBotTarget()
+
+
+def selectBotTarget():
+    @Name "selectBotTarget"
+
     if DEBUG_BOT_AI_LOGS_ACTIVE:
         debugBotTargetScans++
     eventPlayer.botIsSelectingTarget = true
@@ -726,9 +736,15 @@ def selectTarget():
     # Only a candidate that passed line of sight may become the search result.
     eventPlayer.botCandidateTarget = null
     for botSelectionCandidateIndex in range(len(botSelectionCandidateList)):
-        if isInLoS(botSelectionCandidateList[botSelectionCandidateIndex].getEyePosition(), eventPlayer.getPosition() + losOffsetConst):
-            eventPlayer.botCandidateTarget = botSelectionCandidateList[botSelectionCandidateIndex]
-            break
+        if botTargetProbeVisible != null and botSelectionCandidateList[botSelectionCandidateIndex] in botTargetProbeCandidates:
+            if not botSelectionCandidateList[botSelectionCandidateIndex] in botTargetProbeVisible:
+                continue
+        # The acquisition range only gates the periodic search. Priority
+        # candidates outside the probe still use the ordinary visibility check.
+        elif not isInLoS(botSelectionCandidateList[botSelectionCandidateIndex].getEyePosition(), eventPlayer.getPosition() + losOffsetConst):
+            continue
+        eventPlayer.botCandidateTarget = botSelectionCandidateList[botSelectionCandidateIndex]
+        break
     if DEBUG_BOT_AI_LOGS_ACTIVE and eventPlayer.botCandidateTarget == null:
         debugBotTargetMisses++
     if eventPlayer.isAlive():

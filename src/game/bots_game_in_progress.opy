@@ -282,12 +282,17 @@ rule "BOT TARGET VISIBLE":
     @Condition eventPlayer.botIsInitializing != true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.hasSpawned() == true
+    @Condition playerTargetList != []
     @Condition (eventPlayer.botTarget == null or playerTargetList.exclude(eventPlayer.botTarget).any(lambda x: not x.invisibilityCount and distance(x, eventPlayer) < 7.5)) == true
-    @Condition (playerTargetList.any(lambda x: not x.invisibilityCount and distance(eventPlayer, x) < 150 and isInLoS(x.getEyePosition(), eventPlayer.getPosition() + losOffsetConst))) == true
     
-    wait(0.016, Wait.ABORT_WHEN_FALSE)
-    startRule(selectTarget)
-    wait(1)
+    # Spread probes across bots. Only send the synchronous selector a snapshot
+    # when a target is visible within the original 150 m acquisition range.
+    wait(random.uniform(0.125, 0.25), Wait.ABORT_WHEN_FALSE)
+    botTargetProbeCandidates = playerTargetList.filter(lambda player: not player.invisibilityCount and distance(eventPlayer, player) < 150)
+    botTargetProbeVisible = botTargetProbeCandidates.filter(lambda player: isInLoS(player.getEyePosition(), eventPlayer.getPosition() + losOffsetConst))
+    if botTargetProbeVisible != []:
+        selectBotTarget()
+        wait(1)
     if ruleCondition:
         loop()
 
