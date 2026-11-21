@@ -152,7 +152,7 @@ rule "BOT DIES":
     @Condition eventPlayer.isDead() == true
     @Condition eventPlayer in bossStateList == false
     
-    eventPlayer.botAuspexMark = null
+    eventPlayer.botAuspexExpiry = 0
     # Environmental deaths do not grant normal damage-event lifesteal.
     # Heal the credited survivor before any death-handler waits.
     if eventWasEnvironment and attacker.getTeam() == Team.1:

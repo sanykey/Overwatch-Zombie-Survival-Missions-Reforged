@@ -115,14 +115,24 @@ rule "PLAYER DEALT DAMAGE":
     @Condition victim != attacker
     @Condition eventDamage > 0
 
-    if eventPlayer.enhancementId == Enhancement.BRAIN_KILLER:
-        if eventWasCriticalHit == true:
-            damage(victim, eventPlayer, eventDamage * (BRAIN_KILLER_BOSS_CRIT_BONUS_PCT / 100 if victim in bossStateList else BRAIN_KILLER_CRIT_BONUS_PCT / 100))
-            playEffect(eventPlayer, DynamicEffect.BAD_EXPLOSION, Color.RED, victim.getEyePosition() + directionTowards(eventPlayer.getEyePosition(), victim.getEyePosition()) * victim.sizeScale, 0.1 * victim.sizeScale)
-    elif eventAbility != null:
+    if eventPlayer.enhancementId == Enhancement.BRAIN_KILLER and eventWasCriticalHit == true:
+        damage(victim, eventPlayer, eventDamage * (BRAIN_KILLER_BOSS_CRIT_BONUS_PCT / 100 if victim in bossStateList else BRAIN_KILLER_CRIT_BONUS_PCT / 100))
+        playEffect(eventPlayer, DynamicEffect.BAD_EXPLOSION, Color.RED, victim.getEyePosition() + directionTowards(eventPlayer.getEyePosition(), victim.getEyePosition()) * victim.sizeScale, 0.1 * victim.sizeScale)
+    if eventAbility != null:
         enhancementHitDamage = eventDamage
         enhancementHitVictim = victim
         applyHitEnhancements()
+
+        # Scripted Damage has no Event Ability, so Auspex cannot trigger itself.
+        # Only Auspex writes the mark on Team 2 dummies; an unset expiry fails the check.
+        if victim.botAuspexExpiry > getTotalTimeElapsed():
+            # Consume the bonus damage before Damage emits another event.
+            #!define auspexBonusDamage tmp1
+            if entityExists(victim.botAuspexOwner):
+                auspexBonusDamage = eventDamage * (AUSPEX_BOSS_BONUS_DAMAGE if victim in bossStateList or victim in miniBossList else AUSPEX_BONUS_DAMAGE)
+                if eventPlayer != victim.botAuspexOwner:
+                    victim.botAuspexOwner.setUltCharge(victim.botAuspexOwner.getUltCharge() + auspexBonusDamage * AUSPEX_ULT_PCT_PER_BONUS_DAMAGE)
+                damage(victim, eventPlayer, auspexBonusDamage)
 
     # Augments: Survivalist includes damage from the hero, primary enhancement and
     # scripted powerups. The HIGHRISE airborne bonus is a Set Damage Dealt

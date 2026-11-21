@@ -1,8 +1,5 @@
 #!mainFile "../../main.opy"
 
-#!define auspexMarkOwner(bot) bot.botAuspexMark[0]
-#!define auspexMarkExpiry(bot) bot.botAuspexMark[1]
-
 rule "[AUSPEX SCAN] PLACE ON DOUBLE CROUCH":
     @Event eachPlayer
     @Team 1
@@ -23,6 +20,7 @@ rule "[AUSPEX SCAN] PLACE ON DOUBLE CROUCH":
     #!define auspexPlacementHit tmp0
     #!define auspexPulseTime tmp0
     #!define auspexPulseTargets tmp1
+    #!define auspexMarkTargets tmp2
     auspexPlacementHit = raycastHitPosition(
         eventPlayer.getEyePosition(),
         eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * (AUSPEX_RANGE + 1),
@@ -39,9 +37,10 @@ rule "[AUSPEX SCAN] PLACE ON DOUBLE CROUCH":
     auspexPulseTime = getTotalTimeElapsed()
     eventPlayer.auspexReadyAt = auspexPulseTime + AUSPEX_COOLDOWN
 
-    (auspexPulseTargets.filter(lambda zombie: zombie.isDummy())).botAuspexMark = [
-        eventPlayer, auspexPulseTime + AUSPEX_MARK_DURATION
-    ]
+    # Filter mark recipients once. Hack still uses the full pulse target list below.
+    auspexMarkTargets = auspexPulseTargets.filter(lambda zombie: zombie.isDummy())
+    auspexMarkTargets.botAuspexOwner = eventPlayer
+    auspexMarkTargets.botAuspexExpiry = auspexPulseTime + AUSPEX_MARK_DURATION
     # The Bosses objective shares its state slot with the Zombie Egg objective.
     auspexPulseTargets.exclude(bossesStateList[0] if currentObjectiveType == ObjectiveType.BOSSES else null).setStatusEffect(
         eventPlayer, Status.HACKED, AUSPEX_MARK_DURATION)
@@ -49,30 +48,3 @@ rule "[AUSPEX SCAN] PLACE ON DOUBLE CROUCH":
     wait(BOLT_STRIKE_BEAM_DURATION, Wait.IGNORE_CONDITION)
     destroyEffect(eventPlayer.enhancementAttackBeamEntity)
     eventPlayer.enhancementAttackBeamEntity = null
-
-
-rule "[AUSPEX SCAN] CREDIT BONUS DAMAGE":
-    @Event playerTookDamage
-    @Team 2
-
-    # Event eligibility stays in Actions for the native hero-menu workaround.
-    if not isGameplayActive or auspexMarkExpiry(eventPlayer) <= getTotalTimeElapsed():
-        return
-    if attacker.getTeam() != Team.1 or eventDamage <= 0 or not eventPlayer.isAlive():
-        return
-    # Separate windows per attacker allow overlapping hits on the same zombie.
-    # Workshop Damage() has no Event Ability, so native hits bypass the guard.
-    if eventAbility == null and getTotalTimeElapsed() < eventPlayer.botAuspexBonusUntil[attacker.getSlot()]:
-        return
-
-    # Both scratch values are consumed synchronously before damage can emit another event.
-    #!define auspexChargeOwner tmp0
-    #!define auspexBonusDamage tmp1
-    auspexChargeOwner = auspexMarkOwner(eventPlayer)
-    if not entityExists(auspexChargeOwner):
-        return
-    auspexBonusDamage = eventDamage * (AUSPEX_BOSS_BONUS_DAMAGE if eventPlayer in bossStateList or eventPlayer in miniBossList else AUSPEX_BONUS_DAMAGE)
-    if attacker != auspexChargeOwner:
-        auspexChargeOwner.setUltCharge(auspexChargeOwner.getUltCharge() + auspexBonusDamage * AUSPEX_ULT_PCT_PER_BONUS_DAMAGE)
-    eventPlayer.botAuspexBonusUntil[attacker.getSlot()] = getTotalTimeElapsed() + 0.032
-    damage(eventPlayer, attacker, auspexBonusDamage)

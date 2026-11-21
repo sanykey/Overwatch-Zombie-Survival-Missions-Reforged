@@ -283,8 +283,8 @@ playervar isHeroSwitchRespawn  # Player has switched heroes; prevents repeating 
 
 # Enhancements only (enhancement prefix; includes the Rescue Hitchhiker setup).
 playervar enhancementId  # Selected Enhancement enum; pregame selection, runtime behavior and Rescue Hitchhiker initialization.
-playervar botAuspexMark  # Team 2 only: [owner, expiry], set by Auspex activation; cleared on a new zombie life.
-playervar botAuspexBonusUntil  # Team 2 only: damage-event guard expiry per attacker slot.
+playervar botAuspexOwner  # Team 2 only: mark caster; read only while botAuspexExpiry is in the future.
+playervar botAuspexExpiry  # Team 2 only: absolute expiry time in seconds; cleared on death.
 
 # Human Augment storage is independent of enhancements and power-ups.
 # Team 2 Wrestler roles are team-exclusive; no bot Augment owns these slots.
