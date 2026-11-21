@@ -1,7 +1,7 @@
 #!mainFile "../../main.opy"
 
-#!define AUGMENT_GRAPNEL_MOVEMENT_BLOCKED (eventPlayer.isAttached or eventPlayer.hasStatus(Status.ROOTED) or eventPlayer.isCrowdControlled)
-#!define AUGMENT_GRAPNEL_CAN_MOVE (eventPlayer.hasSpawned() and eventPlayer.isAlive() and not AUGMENT_GRAPNEL_MOVEMENT_BLOCKED)
+macro augmentMovementBlocked = eventPlayer.isAttached or eventPlayer.hasStatus(Status.ROOTED) or eventPlayer.isCrowdControlled
+#!define AUGMENT_GRAPNEL_CAN_MOVE (eventPlayer.hasSpawned() and eventPlayer.isAlive() and not augmentMovementBlocked)
 
 
 rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)":
@@ -63,17 +63,30 @@ rule "KEVLAR RANGED DAMAGE COMPENSATION":
     heal(eventPlayer, null, eventDamage * (1 - AUGMENT_KEVLAR_RANGED_DMG_RESIST / 100))
 
 
-def useAugmentAirAction():
-    @Name "useAugmentAirAction"
+rule "DOUBLE TAP JUMP (DASH / HIGHRISE)":
+    @Event eachPlayer
+    @Team 1
+    # Native UI workaround: retain one phase/ID Condition; docs/WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    @Condition uiPhaseAndId(eventPlayer.augmentId in [Augment.DASH, Augment.HIGHRISE])
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
 
-    # Competing handlers cannot produce two impulses for one input: Dash is only
-    # called from the tap sequence, HIGHRISE checks its cooldown timestamp on
-    # this press (expiry alone must not trigger).
-    if not (eventPlayer.hasStatus(Status.ROOTED) or eventPlayer.isCrowdControlled) and not eventPlayer.isAttached:
+    # The rule starts on the first press. Both input gaps use the same window.
+    waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), AIR_ACTION_TAP_WINDOW)
+    if eventPlayer.isHoldingButton(Button.JUMP):
+        return
+    waitUntil(eventPlayer.isHoldingButton(Button.JUMP), AIR_ACTION_TAP_WINDOW)
+    if not ruleCondition:
+        return
+
+    # Recheck movement restrictions on the second press. Each action owns its cooldown.
+    if not augmentMovementBlocked:
         if eventPlayer.augmentId == Augment.DASH:
             useDashAirActionMacro()
-        elif eventPlayer.augmentId == Augment.HIGHRISE:
+        else:
             useHighriseAirActionMacro()
+    # Consume the second press before the rule can accept a new pair.
+    waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), Math.INFINITY)
 
 
 rule "CROUCH + JUMP (GRAPNEL LAUNCHER)":
@@ -88,7 +101,7 @@ rule "CROUCH + JUMP (GRAPNEL LAUNCHER)":
 
     # Cooldown is checked on the input edge; holding the chord through expiry
     # cannot auto-launch. A miss does not consume the cooldown.
-    if getTotalTimeElapsed() < eventPlayer.augmentMovementReadyAt or AUGMENT_GRAPNEL_MOVEMENT_BLOCKED:
+    if getTotalTimeElapsed() < eventPlayer.augmentMovementReadyAt or augmentMovementBlocked:
         return
     # Zombies and allies are both valid anchors; the candidate closest in the
     # aim cone to the crosshair wins. The all-team query includes this player, so self must go.

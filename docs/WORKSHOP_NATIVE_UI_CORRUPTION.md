@@ -196,7 +196,7 @@ Event/Team/Hero остаются прежними. Native event запускае
 
 ### Gameplay-обходы в текущих исходниках
 
-В таблице перечислены **22 правила** с обходами в текущих исходниках.
+В таблице перечислено **21 правило** с обходами в текущих исходниках.
 
 | Файл | Правило | Приём |
 |---|---|---|
@@ -209,8 +209,7 @@ Event/Team/Hero остаются прежними. Native event запускае
 | enhancements.opy | `ENGINEER SCRAP INCOME` | Пара phase/ID |
 | enhancements.opy | `ENGINEER ARMOR TRANSFER` | Пара phase/ID |
 | enhancements.opy | `ENGINEER TURRET DEPLOY` | Пара phase/ID |
-| [highrise.opy](../src/abilities/augment_highrise.opy) | `[HIGHRISE] RECHARGE` | Пара phase/ID |
-| highrise.opy | `[HIGHRISE] DOUBLE TAP` | Пара phase/ID |
+| [augments.opy](../src/abilities/augments.opy) | `DOUBLE TAP JUMP (DASH / HIGHRISE)` | Пара phase/ID |
 | [dash.opy](../src/abilities/augment_dash.opy) | `[DASH] CHARGE RECHARGE` | Пара phase/ID |
 | [augments.opy](../src/abilities/augments.opy) | `CROUCH + JUMP (GRAPNEL LAUNCHER)` | Пара phase/ID |
 | augments.opy | `AMMO PACK MAGAZINES` | Пара phase/ID |

@@ -1,71 +1,15 @@
 #!mainFile "../../main.opy"
 
-# HIGHRISE input, flight bonus lifetime, and synchronous activation macro.
-# Shared storage contracts remain in variables.opy; HUDs stay in their owners.
-
-# Shared with Dash; declared here before the HIGHRISE input rules.
-subroutine useAugmentAirAction
+# Highrise flight bonus and synchronous activation. Jump input lives in augments.opy.
 
 
 macro useHighriseAirActionMacro():
-    eventPlayer.augmentIsAirActionReady = false
     if getTotalTimeElapsed() >= eventPlayer.augmentMovementReadyAt:
         eventPlayer.augmentMovementReadyAt = getTotalTimeElapsed() + HIGHRISE_COOLDOWN
         eventPlayer.applyImpulse(Vector.UP, HIGHRISE_JUMP_IMPULSE, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
         # Arm the airborne damage bonus; the flight rule keeps it active
         # until landing or the flight timeout, then grants the grace period.
         eventPlayer.augmentJumpDamageActive = true
-
-
-rule "[HIGHRISE] RECHARGE":
-    @Event eachPlayer
-    @Team 1
-    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
-    @Condition uiPhaseAndId(eventPlayer.augmentId == Augment.HIGHRISE)
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isOnGround() == false
-
-    # Arm once per airborne interval, only after the takeoff button is released.
-    # This avoids spending the extra jump on the game's first airborne input tick.
-    eventPlayer.augmentIsAirActionReady = false
-    waitUntil(not eventPlayer.isHoldingButton(Button.JUMP) or eventPlayer.isOnGround() or not eventPlayer.isAlive(), Math.INFINITY)
-    if eventPlayer.isAlive() and not eventPlayer.isOnGround():
-        eventPlayer.augmentIsAirActionReady = true
-    waitUntil(eventPlayer.isOnGround() or not eventPlayer.isAlive(), Math.INFINITY)
-    eventPlayer.augmentIsAirActionReady = false
-    if ruleCondition:
-        loop()
-
-
-rule "[HIGHRISE] AIR ACTION INPUT":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.augmentId == Augment.HIGHRISE
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.augmentIsAirActionReady == true
-    @Condition eventPlayer.isOnGround() == false
-    @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
-
-    useAugmentAirAction()
-
-
-rule "[HIGHRISE] DOUBLE TAP":
-    @Event eachPlayer
-    @Team 1
-    # The menu's Jump confirmation must not leave a timestamp in another augment's cooldown.
-    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
-    @Condition uiPhaseAndId(eventPlayer.augmentId == Augment.HIGHRISE)
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
-
-    # Only press edges update the timestamp. A blocked native jump can leave the
-    # player grounded; its second press still launches without cancelling abilities.
-    if eventPlayer.augmentJumpLastPressedAt > 0 and getTotalTimeElapsed() - eventPlayer.augmentJumpLastPressedAt <= AIR_ACTION_TAP_WINDOW:
-        eventPlayer.augmentJumpLastPressedAt = 0
-        if eventPlayer.isOnGround() or eventPlayer.augmentIsAirActionReady:
-            useAugmentAirAction()
-    else:
-        eventPlayer.augmentJumpLastPressedAt = getTotalTimeElapsed()
 
 
 rule "[HIGHRISE] AIRBORNE DAMAGE":

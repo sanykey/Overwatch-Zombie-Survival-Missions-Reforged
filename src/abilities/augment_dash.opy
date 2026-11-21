@@ -1,8 +1,6 @@
 #!mainFile "../../main.opy"
 
-# DASH input, charge recharge, smoke cleanup, and synchronous activation macro.
-# Shared storage contracts remain in variables.opy; HUDs stay in their owners.
-# Include after highrise.opy, which declares the shared useAugmentAirAction.
+# Dash charge recharge, smoke cleanup, and synchronous activation. Jump input lives in augments.opy.
 
 #21.25
 
@@ -30,8 +28,6 @@ macro useDashAirActionMacro():
         # the recompute pick the strongest active protection (0 beats the
         # Super Nano / ultimate 50; it still clears together with the aura).
         # Keep one aura for overlapping dashes; only its deadline changes.
-        # augmentIsAirActionReady shares this entity slot: only HIGHRISE
-        # may write that alias, including on failed/cooldown activations.
         if eventPlayer.augmentDashSmokeEntity == null:
             createEffect(getAllPlayers(), Effect.BAD_AURA, Color.BLUE, eventPlayer, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             eventPlayer.augmentDashSmokeEntity = getLastCreatedEntity()
@@ -62,30 +58,6 @@ rule "[DASH] CHARGE RECHARGE":
     eventPlayer.augmentDashCharges += 1
     if eventPlayer.augmentDashCharges < DASH_MAX_CHARGES:
         eventPlayer.augmentDashReadyAt = getTotalTimeElapsed() + DASH_COOLDOWN
-
-
-rule "[DASH] DOUBLE TAP":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.augmentId == Augment.DASH
-    @Condition eventPlayer.isAlive() == true
-
-    # Uniform press-release-press trigger on the ground and airborne: both gaps
-    # use the Dash tap window. Holding past a timeout restarts the sequence, so
-    # a held button cannot re-fire; the charges gate lives in the dash action.
-    # After a dash, the triggering press is fully consumed: the sequence waits for
-    # its release and restarts from scratch, so a third quick press is only the
-    # FIRST press of the next pair and cannot spend a second charge by itself.
-    waitUntil(eventPlayer.isHoldingButton(Button.JUMP), Math.INFINITY)
-    waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), AIR_ACTION_TAP_WINDOW)
-    if not eventPlayer.isHoldingButton(Button.JUMP):
-        waitUntil(eventPlayer.isHoldingButton(Button.JUMP), AIR_ACTION_TAP_WINDOW)
-        if eventPlayer.isHoldingButton(Button.JUMP):
-            useAugmentAirAction()
-            waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), Math.INFINITY)
-    # Selection can change while a press/release wait is pending.
-    if ruleCondition:
-        loop()
 
 
 rule "[DASH] SMOKE FADE":
