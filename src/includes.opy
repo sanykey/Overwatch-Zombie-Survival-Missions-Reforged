@@ -14,8 +14,8 @@
 #!include "settings/settings_defaults.opy"
 
 # Select exactly one map pool, then save the root main.opy to rebuild.
-##!include "settings/standard_map_pool.opy"
-#!include "settings/ui_test_map_pool.opy"
+#!include "settings/standard_map_pool.opy"
+##!include "settings/ui_test_map_pool.opy"
 ##!include "settings/debug_map_pool.opy"
 
 # Optional load-test settings. Keep off for the standard build.
