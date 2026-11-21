@@ -278,8 +278,11 @@ rule "BEHEMOTH GAS STREAM (BOSS)":
         behemothGasCloudRadius = eventPlayer.botGasRadiusList[behemothGasCloudIndex]
         eventPlayer.botSpecialTargetList.append(playerTargetList.filter(lambda x: not x in eventPlayer.botSpecialTargetList and not x.isDotProtected and magnitude((behemothGasCloudPosition - x.getEyePosition()) * horizontalMaskConst) < behemothGasCloudRadius and abs(behemothGasCloudPosition.y - x.getEyePosition().y) < behemothGasCloudRadius / 5))
     eventPlayer.botSpecialTargetList.startDamageOverTime(eventPlayer, 2.5, eventPlayer.botBiteDamage * 0.1)
-    if eventPlayer.botSpecialTargetList != []:
-        eventPlayer.damageOverTimeRemaining = max(eventPlayer.damageOverTimeRemaining, 2.5)
+    # Keep this guard even though Max saves Workshop elements. It skips writes when
+    # the gas would not extend the timer. Blizzard's February 2020 Workshop write
+    # optimization excluded variables used by Chase.
+    if eventPlayer.damageOverTimeRemaining < 2.5 and eventPlayer.botSpecialTargetList != []:
+        eventPlayer.damageOverTimeRemaining = 2.5
     wait(0.25)
     if ruleCondition:
         loop()
