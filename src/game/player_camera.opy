@@ -1,4 +1,4 @@
-#!mainFile "../main.opy"
+#!mainFile "../../main.opy"
 
 #!define CAMERA_HOTKEY f"[{inputBindingString(Button.RELOAD)}] + [{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.JUMP)}]"
 

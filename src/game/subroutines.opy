@@ -1,4 +1,4 @@
-#!mainFile "../main.opy"
+#!mainFile "../../main.opy"
 subroutine detachAbilityTarget
 
 # Shared subroutines used by multiple sections (including their dependencies).
