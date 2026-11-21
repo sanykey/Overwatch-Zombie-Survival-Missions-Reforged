@@ -1,5 +1,6 @@
 #!mainFile "../../main.opy"
 subroutine useLivingProjectile
+subroutine findSupplyDropLandingPosition
 
 subroutine playAquaPowerUpSound
 
@@ -13,6 +14,8 @@ subroutine cloakingDevice
 subroutine ultimateCharger
 subroutine stun
 
+#!define SUPPLY_DROP_SEARCH_LIMIT 12
+
 
 rule "GENERATE SUPPLY DROPS":
     #Only activates if last supply drop has been opened
@@ -22,26 +25,22 @@ rule "GENERATE SUPPLY DROPS":
     #Limited to 12 power ups on the ground at a time
     @Condition len(supplyPowerUpPositionList) < 12
     
-    #Standard 30 second wait
-    wait(30)
+    # Stop the next-drop delay early if gameplay ends.
+    waitUntil(not isGameplayActive, 30)
+    if not isGameplayActive:
+        return
     supplyDropLandingPosition = null
     supplyDropPosition = null
     isSupplyDropOpen = false
-    #Wait standard minimum 30 seconds + a random 30 to 90 extra seconds. Total resulting wait time is 2 to 2.5 minutes.
-    wait(random.uniform(1.5, 2) * 60)
-    while supplyDropLandingPosition == null:
-        #Find the closest player to the objective
-        # supplyDropClosestPlayer: player closest to the objective, used as the center for choosing a supply-drop location.
-        #!define supplyDropClosestPlayer tmp0
-        supplyDropClosestPlayer = sorted(playerTargetList, lambda x: distance(x, currentObjectivePosition))[0]
-        # supplyDropCandidatePosition: candidate drop position 20-35m from supplyDropClosestPlayer, to check clearance from all players.
-        #!define supplyDropCandidatePosition tmp1
-        supplyDropCandidatePosition = random.choice(mapGridList.filter(lambda x: distance(supplyDropClosestPlayer, x) < 35 and distance(supplyDropClosestPlayer, x) > 20))
-        if playerTargetList.all(lambda x: distance(supplyDropCandidatePosition, x) > 20):
-            # Ground the selected candidate before publishing the landing position.
-            # The candidate is synchronous tmp1 input; raycast does not retain it.
-            supplyDropLandingPosition = raycastHitPosition(supplyDropCandidatePosition + 2 * Vector.UP, supplyDropCandidatePosition + vect(0, 0, 0), getAllPlayers(), getAllPlayers(), false)
-        wait(0.25)
+    # The full generation delay is 120-150 seconds.
+    waitUntil(not isGameplayActive, random.uniform(1.5, 2) * 60)
+    findSupplyDropLandingPosition()
+    if supplyDropLandingPosition == null:
+        # Release the pending drop and let the next normal cycle try again.
+        isSupplyDropOpen = true
+        if ruleCondition:
+            loop()
+        return
     if DEBUG_ENABLE_INSPECTOR:
         logToInspector(f"[supply drop] Starting descent to {supplyDropLandingPosition}")
     supplyDropPosition = supplyDropLandingPosition + 200 * Vector.UP
@@ -54,6 +53,32 @@ rule "GENERATE SUPPLY DROPS":
     wait(10, Wait.RESTART_WHEN_TRUE)
     if len(supplyPowerUpPositionList) < 12:
         loop()
+
+
+def findSupplyDropLandingPosition():
+    @Name "findSupplyDropLandingPosition"
+
+    if not isGameplayActive or playerTargetList == []:
+        return
+    # Build the grid snapshot once. The closest player and candidate are
+    # synchronous scratch, consumed before the next wait.
+    #!define supplyDropClosestPlayer tmp0
+    #!define supplyDropCandidatePosition tmp1
+    supplyDropClosestPlayer = sorted(playerTargetList, lambda player: distance(player, currentObjectivePosition))[0]
+    supplyDropSearchCandidates = random.shuffle(mapGridList.filter(lambda point: distance(supplyDropClosestPlayer, point) < 35 and distance(supplyDropClosestPlayer, point) > 20)).slice(0, SUPPLY_DROP_SEARCH_LIMIT)
+    while isGameplayActive and playerTargetList != [] and supplyDropSearchCandidates != []:
+        supplyDropCandidatePosition = supplyDropSearchCandidates[0]
+        if playerTargetList.all(lambda player: distance(supplyDropCandidatePosition, player) > 20):
+            # Players or the objective can move during the search. Recheck the
+            # current anchor's range before grounding a point from the snapshot.
+            supplyDropClosestPlayer = sorted(playerTargetList, lambda player: distance(player, currentObjectivePosition))[0]
+            if distance(supplyDropClosestPlayer, supplyDropCandidatePosition) < 35:
+                supplyDropLandingPosition = raycastHitPosition(supplyDropCandidatePosition + 2 * Vector.UP, supplyDropCandidatePosition + vect(0, 0, 0), getAllPlayers(), getAllPlayers(), false)
+                if supplyDropLandingPosition != null:
+                    break
+        del supplyDropSearchCandidates[0]
+        wait(0.25)
+    supplyDropSearchCandidates = []
 
 
 rule "EFFECT/TEXT (GLOBAL)":

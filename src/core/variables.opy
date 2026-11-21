@@ -220,6 +220,7 @@ globalvar evacSurvivorList             # Snapshot of extracted players, also use
 
 # Supply drops and ground power-ups.
 globalvar supplyDropLandingPosition  # Target ground position where the current supply drop will land.
+globalvar supplyDropSearchCandidates # Bounded randomized snapshot owned by the supply-drop search across its waits.
 globalvar isSupplyDropOpen           # Drop is open, or no drop has spawned yet; allows generation of the next drop.
 globalvar supplyDropPowerUpCount     # Configured number of power-ups spawned when a supply drop is opened.
 globalvar supplyPowerUpIdList        # Item type IDs of ground power-ups from supplies, player drops and Biomorphing rewards.
