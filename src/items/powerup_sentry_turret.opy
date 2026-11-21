@@ -49,7 +49,7 @@ def sentryTurret():
             if eventPlayer.enhancementId == Enhancement.ENGINEER and random.randint(0, 20) == 0:
                 turretShotVictim.setStatusEffect(eventPlayer, Status.FROZEN, 2)
             damage(turretShotVictim, eventPlayer, 20)
-        else:
+        elif eventPlayer.powerUpTurretDirection != null:
             eventPlayer.powerUpTurretDirection = null
         wait(0.125)
     # turretCleanupEffectIndex: turret-effect slot 50-54, to destroy the sphere, legs and barrel when the turret expires.

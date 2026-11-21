@@ -642,7 +642,7 @@ playervar actorTeamSlot18  # Team 2: botIsInitializing; Team 1: powerUpStunOrigi
 playervar actorTeamSlot19  # Team 2: botKnockbackScale; Team 1: powerUpTurretDirection. Receivers, not rule teams, own the storage.
 # Zombie knockback-received multiplier, including Brute/mutation adjustments.
 #!define botKnockbackScale actorTeamSlot19
-# Current sentry firing direction, captured by turret visuals and raycasts.
+# Cached sentry firing direction for visuals and raycasts; Null makes the barrel follow its owner.
 #!define powerUpTurretDirection actorTeamSlot19
 
 playervar actorTeamSlot20  # Team 2: botCustomTeleportPosition; Team 1: powerUpAirStrikePosition. Receivers, not rule teams, own the storage.
