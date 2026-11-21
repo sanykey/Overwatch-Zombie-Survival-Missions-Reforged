@@ -86,13 +86,14 @@ rule "[LASER_BARRICADE AUGMENT] BLOCKS ZOMBIES":
         #!define barrierCollisionTarget tmp2
         barrierCollisionTarget = eventPlayer.augmentBarrierTargetList[barrierCollisionTargetIndex]
         if not barrierCollisionTarget.hasStatus(Status.ROOTED):
-            #Damage the barricade
-            eventPlayer.augmentBarrierHealth -= barrierCollisionTarget.getMaxHealth() * 2.5
+            # Reuse the contact damage for the wall debit and knockdown before tmp3 becomes the impulse angle.
+            #!define barrierContactDamage tmp3
+            barrierContactDamage = barrierCollisionTarget.getMaxHealth() * LASER_BARRICADE_CONTACT_DAMAGE_MULTIPLIER
+            eventPlayer.augmentBarrierHealth -= barrierContactDamage
             barrierCollisionTarget.setStatusEffect(eventPlayer, Status.ROOTED, 0.5)
-            # Heavy contacts knock the zombie down, including contacts that break the barrier.
-            # Convert the damage threshold to max HP; the compiler folds the constant division.
-            if barrierCollisionTarget.getMaxHealth() >= LASER_BARRICADE_KNOCKDOWN_DAMAGE_THRESHOLD / 2.5:
-                barrierCollisionTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 1)
+            # Each full threshold adds 1s of knockdown, including a contact that breaks the wall.
+            if barrierContactDamage >= LASER_BARRICADE_KNOCKDOWN_DAMAGE_THRESHOLD:
+                barrierCollisionTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, floor(barrierContactDamage / LASER_BARRICADE_KNOCKDOWN_DAMAGE_THRESHOLD))
             damage(barrierCollisionTarget, eventPlayer, 20)
         # barrierImpulseVertical: shared vertical angle component of both impulse directions.
         #!define barrierImpulseVertical tmp3
