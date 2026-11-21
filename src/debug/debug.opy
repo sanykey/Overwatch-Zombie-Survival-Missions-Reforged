@@ -82,3 +82,6 @@ rule "[debug] Log bot AI activity":
     #!define debugBotTeleportNoTargetBots (len(getPlayers(Team.2).filter(lambda zombie: zombie.botIsTeleporting)) if playerTargetList == [] else 0)
     logToInspector(f"[bot AI] zombies={getNumberOfPlayers(Team.2)} avg={getAverageServerLoad()} peak={getPeakServerLoad()} scans={debugBotTargetScans} misses={debugBotTargetMisses} teleSearch={debugBotTeleportAttempts} teleOk={debugBotTeleportSuccesses} teleNoTargets={debugBotTeleportNoTargets} teleNoTargetBots={debugBotTeleportNoTargetBots}")
     loop()
+
+
+#!include "input_test.opy"
