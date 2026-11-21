@@ -5,14 +5,14 @@ subroutine dropCarriedPowerUps
 
 
 macro powerUpAssignmentMacro():
-    #Names/colors follow item IDs 1-13; effect and text positions keep separate indices.
+    # Names and colors follow item IDs. Effect and text positions have separate indices.
     # Item type ID, not an effect/text handle; refresh and consume it synchronously on each pass.
     # Only visibility reevaluates, so neither the initial color nor the label retains a scratch dependency.
     #!define groundPowerUpItemId tmp0
     groundPowerUpItemId = supplyPowerUpIdList[len(supplyPowerUpEffectIdList)]
     if groundPowerUpItemId >= PowerUpItem.CURE and groundPowerUpItemId <= PowerUpItem.STUN:
         createEffect(getAllPlayers(), Effect.ORB, powerUpColorListConst[groundPowerUpItemId - 1], supplyPowerUpPositionList[len(supplyPowerUpEffectIdList)], 1, EffectReeval.VISIBILITY)
-        createInWorldText(getAllPlayers(), ["CURE", "Revive", "Force Field", "No Cooldowns", "Air Strike", "Beacon of Healing", "Vaccine", "Sentry Turret", "Cloaking Device", "Super Nano", "Jetpack", "Ultimate Charger", "Stun"][groundPowerUpItemId - 1], supplyPowerUpPositionList[len(supplyPowerUpTextIdList)], 1, Clip.SURFACES, WorldTextReeval.VISIBILITY)
+        createInWorldText(getAllPlayers(), ["CURE", "Revive", "Force Field", "No Cooldowns", "Air Strike", "Beacon of Healing", "Sentry Turret", "Cloaking Device", "Super Nano", "Jetpack", "Ultimate Charger", "Stun"][groundPowerUpItemId - 1], supplyPowerUpPositionList[len(supplyPowerUpTextIdList)], 1, Clip.SURFACES, WorldTextReeval.VISIBILITY)
 
 
 rule "POWER UP EFFECT/TEXT MANAGEMENT":
@@ -29,7 +29,7 @@ rule "POWER UP EFFECT/TEXT MANAGEMENT":
 rule "EFFECT/TEXT (PERMANENT)":
     @Condition isGameplayActive == true
     
-    #One row per item ID (1-13); capture the index and the resolved color.
+    # One row per item ID. Capture the index and the resolved color.
     # Capture each row's color directly from the immutable shared item palette.
     # powerUpHudItemIndex: zero-based item index, to choose the row's visibility, name, instructions and color.
     #!define powerUpHudItemIndex tmp0
@@ -43,7 +43,6 @@ rule "EFFECT/TEXT (PERMANENT)":
                 "No Cooldowns",
                 "Air Strike",
                 "Beacon of Healing",
-                "VACCINE",
                 "Sentry Turret",
                 "Cloaking Device",
                 "Super Nano",
@@ -56,13 +55,12 @@ rule "EFFECT/TEXT (PERMANENT)":
                 "Look at a teammate and hold" if evalOnce(powerUpHudItemIndex) == PowerUpItem.REVIVE - 1 else "Hold",
                 inputBindingString(Button.INTERACT),
                 [
-                    "to stop all dmg over time and cure yourself",
+                    "to stop dmg over time and cure infection or vaccinate",
                     "to revive them",
                     "to place a force field",
                     "to get fast cooldowns",
                     "to call in an air strike",
                     "to place a healing beacon and gain bonus healing",
-                    "to increase your resistance to infection",
                     "to place a sentry turret",
                     "to become invisible to enemies",
                     "to increase your dmg and speed",
