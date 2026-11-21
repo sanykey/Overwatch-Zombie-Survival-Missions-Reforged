@@ -52,6 +52,7 @@ enum PullAimMode:
     GRAPNEL = 0,
     WRESTLER_PULL = 1,
     WRESTLER_GRAB = 2,
+    BOLT_STRIKE = 3,
 
 # Independent secondary enhancement slot. IDs index the augment name, icon and color tables.
 enum Augment:

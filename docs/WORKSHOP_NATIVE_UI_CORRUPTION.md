@@ -196,7 +196,7 @@ Event/Team/Hero остаются прежними. Native event запускае
 
 ### Gameplay-обходы в текущих исходниках
 
-В таблице перечислены **22 правила** с обходами в текущих исходниках.
+В таблице перечислены **23 правила** с обходами в текущих исходниках.
 
 | Файл | Правило | Приём |
 |---|---|---|
@@ -204,6 +204,7 @@ Event/Team/Hero остаются прежними. Native event запускае
 | charge_battery.opy | `[CHARGE_BATTERY] USAGE AND COOLDOWNS` | Пара phase/ID |
 | [enhancements.opy](../src/abilities/enhancements.opy) | `BULKING SEASON TOGGLES SIZE` | Пара phase/ID |
 | enhancements.opy | `OVERCHARGE STORES HEALING AND ASSISTS` | Пара phase/ID |
+| enhancements.opy | `BOLT STRIKE ON DOUBLE CROUCH` | Пара phase/ID |
 | enhancements.opy | `WRESTLER PULL` | Пара phase/ID |
 | enhancements.opy | `ENGINEER SCRAP INCOME` | Пара phase/ID |
 | enhancements.opy | `ENGINEER ARMOR TRANSFER` | Пара phase/ID |
@@ -217,7 +218,7 @@ Event/Team/Hero остаются прежними. Native event запускае
 | [hero_tuning.opy](../src/abilities/hero_tuning.opy) | `SIERRA TRACKING SHOT HACK` | Event guard |
 | hero_tuning.opy | `REINHARDT SHIELD SLAM STUN` | Event guard |
 | hero_tuning.opy | `CASSIDY FLASHBANG STUN` | Event guard |
-| enhancements.opy | `WRESTLER PULL DISCONNECT CLEANUP` | Event guard |
+| enhancements.opy | `ENHANCEMENT ATTACK BEAM DISCONNECT CLEANUP` | Event guard |
 | enhancements.opy | `ENGINEER BEAM DISCONNECT CLEANUP` | Event guard |
 | enhancements.opy | `ENGINEER SCRAP ARMOR DEPLETION` | Event guard |
 | augments.opy | `GRAPNEL LAUNCHER DISCONNECT CLEANUP` | Event guard |

@@ -22,7 +22,7 @@ macro createStartMenuEnhancementHud():
             f"Place battery (+{CHARGE_BATTERY_ULT_CHARGE_PCT}% ult on touch, {CHARGE_BATTERY_RECHARGE_DURATION}s recharge, {CHARGE_BATTERY_PLACEMENT_COOLDOWN}s CD). Ult resets ability CDs",
             f"Drone: ignite + knockdown (up to {PUP_IGNITE_RANGE}m from owner), area freeze beyond {PUP_IGNITE_RANGE}m",
             f"Grab disabled zombies ({WRESTLER_CARRY_DMG_RESIST_PCT}% dmg resist while carrying). Throw ({WRESTLER_THROW_DAMAGE} dmg). Pull and knock down in {WRESTLER_PULL_RANGE}m ({WRESTLER_PULL_DAMAGE} dmg, {WRESTLER_PULL_COOLDOWN}s CD)",
-            f"Hits chain to {BOLT_STRIKE_CHAIN_TARGETS} zombies within {BOLT_STRIKE_RADIUS}m for {BOLT_STRIKE_CHAIN_DAMAGE_RATIO * 100}% dmg (max {BOLT_STRIKE_CHAIN_DAMAGE_MAX}).",
+            f"2x Crouch: {BOLT_STRIKE_DAMAGE} dmg, {BOLT_STRIKE_SPLASH_DAMAGE} splash in {BOLT_STRIKE_SPLASH_RADIUS}m, stun ({BOLT_STRIKE_STUN_DURATION}s). {BOLT_STRIKE_COOLDOWN}s CD",
             f"Scrap: +{ENGINEER_COLLECTION_REWARD}/zombie death in {ENGINEER_COLLECTION_RANGE}m, +{ENGINEER_SCRAP_PASSIVE_RATE}/s. Craft team armor ({ENGINEER_ARMOR_MAX}/target) and freezing turrets",
             f"+{PLAGUE_DOCTOR_HEAL_BONUS_PCT}% heal (+{(100 + PLAGUE_DOCTOR_HEAL_BONUS_PCT) * PLAGUE_DOCTOR_INFECTED_HEAL_MULTIPLIER_PCT / 100 - 100}% on infected). Healing reduces infection in you and allies",
             f"+{OVERCHARGE_HEAL_BONUS_PCT}% heal. Gain 1 energy/{OVERCHARGE_HEAL_ENERGY_DIVISOR} healing (incl. packs) +{OVERCHARGE_ENERGY_PER_ASSIST}/assist. 2x Crouch: spend up to {OVERCHARGE_MAX_CHARGE} for bonus dmg/hit",
