@@ -31,7 +31,6 @@ While a player is using their ultimate, they take 50% damage. The resist does no
 - **Brigitte:** Shield Bash damage stuns the target for 0.8 seconds, including outside Rally.
 - **Cassidy:** Flashbang damage stuns the target for 0.8 seconds instead of applying Hack. Each hit applies or refreshes the stun, including against hacked targets.
 - **Reinhardt:** damage dealt while Barrier Field is active stuns the target for 0.8 seconds, supporting Shield Slam. Any damage source qualifies while the shield is active.
-- **Sierra:** hitting an enemy with Tracking Shot applies Hack for 3 seconds, matching the mark's base duration. This timer is independent of early mark cancellation/removal; another Tracking Shot hit refreshes Hack.
 - **Soldier: 76:** deals 50% more damage while Tactical Visor is active. The bonus multiplies damage alongside Super Nano and other damage boosts; Super Nano's 2× damage becomes 3× during Tactical Visor. The bonus ends when Tactical Visor ends or the player changes heroes.
 
 ## Zombie changes
@@ -159,7 +158,7 @@ During pregame voting, selecting a hero and then returning to the native hero-se
 
 The problem can appear or disappear after changing rule Conditions unrelated to hero availability, including in rules whose Actions do not run during voting. The root cause remains unknown; high Server Load, a memory leak and a specific engine resource limit have not been established.
 
-**Current source workaround:** space the five pregame world texts by 0.25 seconds with phase cancellation; retain phase/ID pairs in one compiled Condition in 15 ongoing rules; move eligibility checks into synchronous Actions in eight event handlers. All gameplay HUD/effects are enabled. The user accepted the full-visual reference build; source integration was compared with it and compiled without warnings. Reference build: **30,428 elements**, +8 for Pregame and +133 for gameplay, with no new rules or global/player variables. The internal engine cause remains unknown. The standalone [diagnosis and repair guide](docs/WORKSHOP_NATIVE_UI_CORRUPTION.md) includes the complete findings, exact rule list, compiler caveats, validation limits and a transferable investigation procedure.
+**Current source workaround:** space the five pregame world texts by 0.25 seconds with phase cancellation; retain phase/ID pairs in one compiled Condition in 15 ongoing rules; move eligibility checks into synchronous Actions in seven event handlers. All gameplay HUD/effects are enabled. The user accepted the full-visual reference build; source integration was compared with it and compiled without warnings. Reference build: **30,428 elements**, +8 for Pregame and +133 for gameplay, with no new rules or global/player variables. The internal engine cause remains unknown. The standalone [diagnosis and repair guide](docs/WORKSHOP_NATIVE_UI_CORRUPTION.md) includes the complete findings, exact rule list, compiler caveats, validation limits and a transferable investigation procedure.
 
 **An earlier tested workaround was to combine separate Conditions into a single nested `And` expression.** For example:
 

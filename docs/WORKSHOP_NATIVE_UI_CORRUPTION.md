@@ -178,7 +178,7 @@ Is Alive(Event Player) == True;
 
 ### Событийные обработчики: проверка допуска в Actions
 
-Пример из короткого обработчика урона:
+Пример из короткого обработчика урона в контрольной сборке:
 
 ```python
 rule "SIERRA TRACKING SHOT HACK":
@@ -196,7 +196,7 @@ Event/Team/Hero остаются прежними. Native event запускае
 
 ### Gameplay-обходы в текущих исходниках
 
-В таблице перечислены **23 правила** с обходами в текущих исходниках.
+В таблице перечислены **22 правила** с обходами в текущих исходниках.
 
 | Файл | Правило | Приём |
 |---|---|---|
@@ -215,8 +215,7 @@ Event/Team/Hero остаются прежними. Native event запускае
 | [augments.opy](../src/abilities/augments.opy) | `CROUCH + JUMP (GRAPNEL LAUNCHER)` | Пара phase/ID |
 | augments.opy | `AMMO PACK MAGAZINES` | Пара phase/ID |
 | augments.opy | `AMMO PACK REFILL FALLBACK` | Пара phase/ID |
-| [hero_tuning.opy](../src/abilities/hero_tuning.opy) | `SIERRA TRACKING SHOT HACK` | Event guard |
-| hero_tuning.opy | `REINHARDT SHIELD SLAM STUN` | Event guard |
+| [hero_tuning.opy](../src/abilities/hero_tuning.opy) | `REINHARDT SHIELD SLAM STUN` | Event guard |
 | hero_tuning.opy | `CASSIDY FLASHBANG STUN` | Event guard |
 | enhancements.opy | `ENHANCEMENT ATTACK BEAM DISCONNECT CLEANUP` | Event guard |
 | enhancements.opy | `ENGINEER BEAM DISCONNECT CLEANUP` | Event guard |
