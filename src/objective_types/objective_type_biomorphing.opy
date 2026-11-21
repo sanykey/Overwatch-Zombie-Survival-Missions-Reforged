@@ -158,8 +158,9 @@ rule "PLAYER DELIVERS RESOURCE VALUE":
     if biomorphingGoalQueueList[0] == eventPlayer.biomorphingResourceType:
         # biowasteDepositTimeDivisor: shorter deposit-time divisor for the requested resource, to award faster progress.
         biowasteDepositTimeDivisor = 2.9
-    #Damage player if resource is blood, damage more if above health.
-    damage(eventPlayer, eventPlayer, (50.33 if eventPlayer.getHealth() > 200 else 10.33) if biomorphingGoalQueueList[0] == 3 else 0)
+    # Blood deposits cost health.
+    if biomorphingGoalQueueList[0] == 3:
+        damage(eventPlayer, eventPlayer, 50.33 if eventPlayer.getHealth() > 200 else 10.33)
     #(Amount per resource / dump time) x tick speed
     eventPlayer.biomorphingResourceAmount -= BIOMORPHING_RESOURCE_AMOUNT / 3 * 0.125
     #(Amount per resource / dump time) x tick speed, if resource is blood then this will go slower x the number of players
