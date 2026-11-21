@@ -70,3 +70,5 @@ If the task includes creating a commit, choose a prefix based on the purpose of 
 - `chore: ` — other project maintenance changes.
 
 For other cases, choose an appropriate prefix yourself, using the repository's history as a guide.
+
+If a commit changes the main mod code, end the commit subject with ` (delta|total)` using the compiled Workshop element counts. Calculate `delta` as the new count minus the parent commit's count, and use the new count as `total`. Prefix increases with `+`, decreases with `-`, and use `0` if the count is unchanged. Example: `perf: simplify spawn checks (-19|29861)`.
