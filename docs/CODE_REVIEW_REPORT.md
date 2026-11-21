@@ -5,7 +5,7 @@
 Date: **November 4, 2026**. Project: **Overwatch Zombie Survival Missions Reforged**.
 Analysis baseline: `5ccb8f09a66ee4c5fd4bb07f56c5528d9f975f7a` and the inspected working tree.
 
-**Audit baseline:** the build sizes, included files, and warning counts below refer to this audit's baseline. Following the release documentation work, current measurements and build configuration are published in [README](Readme.md) and [project-metrics.json](analysis/project-metrics.json). This register preserves the evidence and classification of findings; its figures do not replace recompiling the current code.
+**Audit baseline:** the build sizes, included files, and warning counts below refer to this audit's baseline. Following the release documentation work, current measurements and build configuration are published in [README](../Readme.md) and [project-metrics.json](../analysis/project-metrics.json). This register preserves the evidence and classification of findings; its figures do not replace recompiling the current code.
 
 The register contains **38 finding groups, R01–R38**. A group may contain several related defects or minor improvements; this is not a count of reproduced bugs or crashes.
 
@@ -17,26 +17,26 @@ By default, defects and proposed changes have status **“not fixed / not implem
 
 ## Provenance: original ZSMM and Reforged changes
 
-The comparison baseline is specifically [ZSMM (786TW), snapshot from October 30, 2026](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1>), as specified by the user. “Inherited” means that this snapshot already contains the mechanism behind the defect, risk, or redundant work described. Entry conditions, waits, state writes, and cleanup were compared, accounting for renaming and extracted macros. Matching subroutine names alone were not accepted as evidence. For a risk not yet reproduced in-game, this establishes the construct's origin, not a historical server crash.
+The comparison baseline is specifically [ZSMM (786TW), snapshot from October 30, 2026](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1>), as specified by the user. “Inherited” means that this snapshot already contains the mechanism behind the defect, risk, or redundant work described. Entry conditions, waits, state writes, and cleanup were compared, accounting for renaming and extracted macros. Matching subroutine names alone were not accepted as evidence. For a risk not yet reproduced in-game, this establishes the construct's origin, not a historical server crash.
 
 | Provenance | Report groups | Comparison result |
 |---|---|---|
 | **Inherited: 37 groups** | R01–R07, R09–R38 | The mechanism described already existed in the original. For optimization candidates, this is pre-existing redundant work, not necessarily a bug. |
 | **Diagnostic group: 1** | R08 | The inspected constructs have counterparts in the original; 10 valid chase cases are not defects, and four remain under observation. |
 
-**No newly introduced issues were established among the findings reviewed.** Debug rules in `src/debug.opy` are excluded from the defect and optimization register: the project owner has decided they will not be included in the final mod. This conclusion is limited to the contents of this report; the comparison is not an exhaustive search for every possible project regression.
+**No newly introduced issues were established among the findings reviewed.** Debug rules in `src/debug/debug.opy` are excluded from the defect and optimization register: the project owner has decided they will not be included in the final mod. This conclusion is limited to the contents of this report; the comparison is not an exhaustive search for every possible project regression.
 
 **Key points for attribution:**
 
-- **R07 is a pre-existing risk, including shared storage.** In the original, `biowasteAssignment` writes to `objectiveResourcePositions`, as do Satellite terminals: [original:2588](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2588>), [original:2957](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2957>). The queue handler already lacks an objective-change check: [original:2616](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2616>). Attributing this finding to the new slot sharing would be incorrect.
-- **R12 is a pre-existing missing detach.** Extracting `daytakerAbortReset` did not introduce the defect: both earlier abort branches already reset the flag and returned without physically detaching: [original:5464](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5464>), [original:5473](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5473>).
-- **R16 is a pre-existing selection of the last candidate.** The former `testTarget` corresponds to the current `botCandidateTarget`; assigning before LoS validation and publishing after the loop are already present at [original:3761](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3761>) and [original:3766](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3766>).
+- **R07 is a pre-existing risk, including shared storage.** In the original, `biowasteAssignment` writes to `objectiveResourcePositions`, as do Satellite terminals: [original:2588](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2588>), [original:2957](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2957>). The queue handler already lacks an objective-change check: [original:2616](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2616>). Attributing this finding to the new slot sharing would be incorrect.
+- **R12 is a pre-existing missing detach.** Extracting `daytakerAbortReset` did not introduce the defect: both earlier abort branches already reset the flag and returned without physically detaching: [original:5464](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5464>), [original:5473](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5473>).
+- **R16 is a pre-existing selection of the last candidate.** The former `testTarget` corresponds to the current `botCandidateTarget`; assigning before LoS validation and publishing after the loop are already present at [original:3761](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3761>) and [original:3766](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3766>).
 - **Start Rule:** all **22** current sites have an earlier call with default RESTART behavior. Each SR01–SR22 entry links to the original call and target. Severity and conditional risk are preserved; SR01–SR03 are not described as independent crash cases.
 - **Impulse:** all **20** legacy impulses are inherited. **Chase:** all **14** currently diagnosed sites were matched to earlier conditions/assignments, without treating valid checks as bugs. This does not claim that the historical compiler version emitted exactly the same message list.
 
-The original itself [globally suppressed all four warning types discussed here](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1>). Therefore, messages appearing after suppressions are removed do not date the introduction of defects. A decrease in warnings after variable renaming also does not prove that a mechanic has been fixed.
+The original itself [globally suppressed all four warning types discussed here](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1>). Therefore, messages appearing after suppressions are removed do not date the introduction of defects. A decrease in warnings after variable renaming also does not prove that a mechanic has been fixed.
 
-Line-level evidence for all 38 groups, 22 SR, 14 CH, and 20 IM entries: [comparison data](analysis/original-provenance-2026-11-04.json), [check of references to original constructs](analysis/audit-original-provenance-2026-11-04.cjs). Normalized SHA-256 of the original: `5cdf980510c70b7ab7be5648a3cf392bba1ff6071a24b52772826b0091e49571` (UTF-8, CRLF → LF). The original mod and game code were not changed during this comparison.
+Line-level evidence for all 38 groups, 22 SR, 14 CH, and 20 IM entries: [comparison data](../analysis/original-provenance-2026-11-04.json), [check of references to original constructs](../analysis/audit-original-provenance-2026-11-04.cjs). Normalized SHA-256 of the original: `5cdf980510c70b7ab7be5648a3cf392bba1ff6071a24b52772826b0091e49571` (UTF-8, CRLF → LF). The original mod and game code were not changed during this comparison.
 
 ## Categories and evidence
 
@@ -122,9 +122,9 @@ Fixed defects are struck through and marked with the fix date. Verification resu
 
 **Category:** Stability, lifecycle. **Priority:** High. **Evidence:** C + R.
 
-Repeated startRule calls with default RESTART behavior and waiting targets already existed. All 22 current cases are matched individually below; extracting powerUpUsage into another file did not introduce this risk mechanism. Source: [original:1329](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1329>), [original:1516](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1516>), [original:6503](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6503>), [original:6138](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6138>).
+Repeated startRule calls with default RESTART behavior and waiting targets already existed. All 22 current cases are matched individually below; extracting powerUpUsage into another file did not introduce this risk mechanism. Source: [original:1329](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1329>), [original:1516](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1516>), [original:6503](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6503>), [original:6138](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6138>).
 
-Locations: [supply_drops.opy:472](src/supply_drops.opy#L472), [player_start_menu.opy:120](src/player_start_menu.opy#L120), [includes.opy:8](src/includes.opy#L8).
+Locations: [supply_drops.opy:472](../src/items/supply_drops.opy#L472), [player_start_menu.opy:120](../src/start_menu/player_start_menu.opy#L120), [includes.opy:8](../src/includes.opy#L8).
 
 In `powerUpUsage`, all 11 asynchronous consumable calls compile to `Start Rule(..., Restart Rule)`. Long-running effects contain waits. A player can obtain and use the same consumable before the previous effect finishes. Another entry path is `randomActions` when repeatedly toggling readiness: that subroutine contains `wait(1)`.
 
@@ -141,9 +141,9 @@ Fix direction: one effect executor with separate extension/transfer requests; an
 
 **Category:** Loops, settings. **Priority:** High. **Evidence:** C + M; engine behavior: R.
 
-The original already used the same 19 weights of 5.263, selection over 0–100, and an accumulation loop without an index bound. The 99.997 sum and dangerous range tail are inherited. Source: [original:518](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L518>), [original:521](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L521>), [original:811](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L811>).
+The original already used the same 19 weights of 5.263, selection over 0–100, and an accumulation loop without an index bound. The 99.997 sum and dangerous range tail are inherited. Source: [original:518](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L518>), [original:521](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L521>), [original:811](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L811>).
 
-Locations: [global_startup.opy:62](src/global_startup.opy#L62), [global_startup.opy:70](src/global_startup.opy#L70), [global_start_menu.opy:309](src/global_start_menu.opy#L309).
+Locations: [global_startup.opy:62](../src/game/global_startup.opy#L62), [global_startup.opy:70](../src/game/global_startup.opy#L70), [global_start_menu.opy:309](../src/start_menu/global_start_menu.opy#L309).
 
 Mode `What'll it be?` creates 19 weights of 5.263. Their sum is **99.997**, but `random.uniform(0, 100)` selects a threshold up to 100. The loop increments the index while the accumulated sum is below the threshold; there is no `index < len(botSpawnRateList)` check. The compiled loop body contains no `Wait`.
 
@@ -160,9 +160,9 @@ Fix direction: calculate the positive sum of actually eligible weights, choose a
 
 **Category:** Loops, settings. **Priority:** High. **Evidence:** C + M; engine behavior: R.
 
-The setting already permitted one item, while placement already divided 120 by count − 1. The dangerous step value was not introduced by optimization. Source: [original:714](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L714>), [original:6000](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6000>).
+The setting already permitted one item, while placement already divided 120 by count − 1. The dangerous step value was not introduced by optimization. Source: [original:714](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L714>), [original:6000](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6000>).
 
-Locations: [global_startup.opy:270](src/global_startup.opy#L270), [supply_drops.opy:102](src/supply_drops.opy#L102).
+Locations: [global_startup.opy:270](../src/game/global_startup.opy#L270), [supply_drops.opy:102](../src/items/supply_drops.opy#L102).
 
 Setting `Number of Powerups Per Supply Drop` allows **1**. Position placement uses:
 
@@ -183,9 +183,9 @@ Fix direction: use a separate position without division for one item; more robus
 
 **Category:** Loops, settings. **Priority:** High. **Evidence:** C + M.
 
-Unbounded selection of an allowed objective and selection from Mixed Pool without a nonempty check already existed in the original. Source: [original:947](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L947>), [original:964](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L964>).
+Unbounded selection of an allowed objective and selection from Mixed Pool without a nonempty check already existed in the original. Source: [original:947](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L947>), [original:964](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L964>).
 
-Locations: [global_startup.opy:5](src/global_startup.opy#L5), [global_start_menu.opy:367](src/global_start_menu.opy#L367), [global_start_menu.opy:400](src/global_start_menu.opy#L400).
+Locations: [global_startup.opy:5](../src/game/global_startup.opy#L5), [global_start_menu.opy:367](../src/start_menu/global_start_menu.opy#L367), [global_start_menu.opy:400](../src/start_menu/global_start_menu.opy#L400).
 
 If all available objective types, including Mixed Objectives, are disabled, the fallback in `determineObjectiveType` randomly tries only forbidden IDs. The loop has no wait and no prevalidated nonempty list of allowed choices. For this input state, the exit condition cannot become true. The compiler preserves `While` without `Wait`.
 
@@ -200,9 +200,9 @@ Fix direction: validate settings before starting, checking the ordinary and mixe
 
 **Category:** Shared data, items. **Priority:** High. **Evidence:** C + M.
 
-Pickup already separated position selection, index lookup, item grant, and shared-array removal with waits. The cross-player race is inherited. Source: [original:6004](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6004>), [original:6007](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6007>), [original:6009](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6009>), [original:6015](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6015>), [original:6016](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6016>).
+Pickup already separated position selection, index lookup, item grant, and shared-array removal with waits. The cross-player race is inherited. Source: [original:6004](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6004>), [original:6007](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6007>), [original:6009](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6009>), [original:6015](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6015>), [original:6016](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6016>).
 
-Location: [supply_drops.opy:106](src/supply_drops.opy#L106).
+Location: [supply_drops.opy:106](../src/items/supply_drops.opy#L106).
 
 The handler saves a position, waits, calculates an index into a shared array, waits again, grants the item and destroys visuals, waits again, and only then removes entries from four arrays. Another player can execute the same steps between these actions.
 
@@ -219,9 +219,9 @@ Fix direction: recheck that the item exists and read/grant/remove all related en
 
 **Category:** Lifecycle, player state. **Priority:** High. **Evidence:** C + M; scheduling: R.
 
-Initialization already reset invisibility/speed, while old Cloaking Device and Super Nano instances subsequently decremented the counter/divided speed. Renaming variables did not create this lifecycle conflict. Source: [original:3095](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3095>), [original:3096](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3096>), [original:6296](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6296>), [original:6302](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6302>), [original:6339](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6339>).
+Initialization already reset invisibility/speed, while old Cloaking Device and Super Nano instances subsequently decremented the counter/divided speed. Renaming variables did not create this lifecycle conflict. Source: [original:3095](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3095>), [original:3096](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3096>), [original:6296](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6296>), [original:6302](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6302>), [original:6339](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6339>).
 
-Locations: [players_game_in_progress.opy:42](src/players_game_in_progress.opy#L42), [supply_drops.opy:305](src/supply_drops.opy#L305), [supply_drops.opy:325](src/supply_drops.opy#L325), [hero_tuning.opy:22](src/hero_tuning.opy#L22).
+Locations: [players_game_in_progress.opy:42](../src/game/players_game_in_progress.opy#L42), [supply_drops.opy:305](../src/items/supply_drops.opy#L305), [supply_drops.opy:325](../src/items/supply_drops.opy#L325), [hero_tuning.opy:22](../src/abilities/hero_tuning.opy#L22).
 
 During initialization after spawn, `invisibilityCount` is reset to 0 and `movementSpeedScale` to 1, before the early return on `isHeroSwitchRespawn`. Existing Cloaking Device and hero abilities later perform their paired decrements; Cloaking Device and Super Nano divide the speed multiplier.
 
@@ -244,9 +244,9 @@ Fix direction: track life/hero generations and modifier ownership. An old comple
 
 **Category:** Lifecycle, shared slots. **Priority:** Medium. **Evidence:** C + R.
 
-Even the shared Biomorphing-resource/Satellite-terminal list existed in the original as objectiveResourcePositions. The old queue handler also failed to cancel on objective changes. The new objectivePositionsSlot aliases did not create this risk; reachability of a late write still requires in-game verification. Source: [original:229](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L229>), [original:2588](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2588>), [original:2619](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2619>), [original:2625](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2625>), [original:2957](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2957>).
+Even the shared Biomorphing-resource/Satellite-terminal list existed in the original as objectiveResourcePositions. The old queue handler also failed to cancel on objective changes. The new objectivePositionsSlot aliases did not create this risk; reachability of a late write still requires in-game verification. Source: [original:229](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L229>), [original:2588](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2588>), [original:2619](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2619>), [original:2625](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2625>), [original:2957](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2957>).
 
-Locations: [objective_type_biomorphing.opy:193](src/objective_types/objective_type_biomorphing.opy#L193), [variables.opy:247](src/variables.opy#L247), [subroutines.opy:660](src/subroutines.opy#L660).
+Locations: [objective_type_biomorphing.opy:193](../src/objective_types/objective_type_biomorphing.opy#L193), [variables.opy:247](../src/core/variables.opy#L247), [subroutines.opy:660](../src/game/subroutines.opy#L660).
 
 `BIOWASTE MANAGEMENT` only checks that the queue is nonempty and continues its loop with `wait(0.15)`, without checking the objective type, `isGameplayActive`, or objective generation. The resource-creation macro appends positions to `biomorphingResourcePositionList`. This is the same physical `objectivePositionsSlot` used by Satellite Uplink for its terminal list. In the original, both roles likewise shared one `objectiveResourcePositions`; the new aliases preserve that existing sharing.
 
@@ -263,7 +263,7 @@ Fix direction: stop or clear the queue when the objective ends and check the obj
 
 **Category:** Rule-condition diagnostics. **Status:** no confirmed chase defect established. **Crash risk:** no direct mechanism found.
 
-The inspected chase constructs and conditions have counterparts in the original. This establishes code provenance, not incorrectness: 10 valid cases are not defects, and four remain under observation. Source: [original:1784](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1784>), [original:1791](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1791>), [original:4263](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L4263>), [original:6684](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6684>).
+The inspected chase constructs and conditions have counterparts in the original. This establishes code provenance, not incorrectness: 10 valid cases are not defects, and four remain under observation. Source: [original:1784](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1784>), [original:1791](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1791>), [original:4263](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L4263>), [original:6684](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6684>).
 
 The current 14 warnings were examined by phase, chase owner, and checked value. **10 sites are accepted as valid**: terminal Hazard/P.U.P. cooldowns, zero damage radius, fixed radii of other objectives, mutually exclusive Zombie Hybrid chase, and the barricade-health threshold guaranteed by direct assignment.
 
@@ -278,9 +278,9 @@ Severity, concrete scenarios, and proposals for all 14 messages appear in [the C
 
 **Category:** Lifecycle, waits. **Priority:** Medium. **Evidence:** C + R.
 
-Repeated boss/NPC resurrection and waiting for a dropped item to land already lacked an overall deadline. Replacing individual durations with Math.INFINITY is not the root cause of the outer repetition. Source: [original:2246](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2246>), [original:2248](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2248>), [original:2357](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2357>), [original:2366](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2366>), [original:2703](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2703>), [original:6101](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6101>).
+Repeated boss/NPC resurrection and waiting for a dropped item to land already lacked an overall deadline. Replacing individual durations with Math.INFINITY is not the root cause of the outer repetition. Source: [original:2246](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2246>), [original:2248](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2248>), [original:2357](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2357>), [original:2366](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2366>), [original:2703](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2703>), [original:6101](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6101>).
 
-Locations: [zombie_types.opy:652](src/zombie_types.opy#L652), [power_ups.opy:102](src/power_ups.opy#L102).
+Locations: [zombie_types.opy:652](../src/game/zombie_types.opy#L652), [power_ups.opy:102](../src/items/power_ups.opy#L102).
 
 There are waits for a dead player to land, repeated jump attempts, and waits for ability states. A timeout on one `waitUntil` does not bound an outer `while`: it may start new waits forever. An overall time/attempt limit is needed, with exits for actor death/destruction, hero changes, and match end.
 
@@ -295,9 +295,9 @@ Teleport search and supply-drop search are covered separately in R26 and R37. Em
 
 **Category:** Logic, attachment. **Priority:** High. **Evidence:** C + M; physics: R.
 
-Carrier-admission and selection filters already differed in the original; the single passenger reference and unconditional cleanup could overwrite another player's association. Source: [original:6990](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6990>), [original:6992](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6992>), [original:7006](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7006>), [original:7013](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7013>).
+Carrier-admission and selection filters already differed in the original; the single passenger reference and unconditional cleanup could overwrite another player's association. Source: [original:6990](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6990>), [original:6992](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6992>), [original:7006](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7006>), [original:7013](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7013>).
 
-Locations: [enhancements.opy:458](src/enhancements.opy#L458), [enhancements.opy:460](src/enhancements.opy#L460), [enhancements.opy:478](src/enhancements.opy#L478), [enhancements.opy:485](src/enhancements.opy#L485).
+Locations: [enhancements.opy:458](../src/abilities/enhancements.opy#L458), [enhancements.opy:460](../src/abilities/enhancements.opy#L460), [enhancements.opy:478](../src/abilities/enhancements.opy#L478), [enhancements.opy:485](../src/abilities/enhancements.opy#L485).
 
 A carrier stores one reference, `enhancementHitchhikerPassenger`, but selection does not check whether it is occupied. Passenger Q can therefore select carrier C while P is already attached to C. C's reference is overwritten from P to Q. P then exits and writes `C.enhancementHitchhikerPassenger = null` without checking ownership, although Q remains attached. The carrier's extra-health handler reads this shared reference and may end its health pool at the wrong time.
 
@@ -318,9 +318,9 @@ Fix direction: one carrier list checking availability, occupancy, and absence of
 
 **Fixed November 5, 2026:** Ability 2 is explicitly released with `stopForcingButton(Button.ABILITY_2)` after `waitUntil(eventPlayer.isDead(), 10)`. Additional target/hero checks, the target snapshot and its alias were removed. OverPy 9.7.20 compiles without warnings; `main.ws.txt` is updated. In-game verification remains pending. The original finding is preserved below.
 
-Holding Doomfist's block without a paired release already existed in the original rule. Source: [original:5842](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5842>), [original:5843](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5843>).
+Holding Doomfist's block without a paired release already existed in the original rule. Source: [original:5842](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5842>), [original:5843](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5843>).
 
-Location: [zombie_types.opy:1334](src/zombie_types.opy#L1334).
+Location: [zombie_types.opy:1334](../src/game/zombie_types.opy#L1334).
 
 `SUCCESSOR (DOOMFIST) HOLDS BLOCK IF TARGET USE ULTIMATE` executes `startForcingButton(Button.ABILITY_2)` and `wait(10)`. The rule then ends without `stopForcingButton(Button.ABILITY_2)`. The pause limits the rule's wait, not the duration of simulated button holding.
 
@@ -337,9 +337,9 @@ Fix direction: explicitly stop holding on expiry, target change/loss, death, or 
 
 **Category:** Lifecycle, attachment. **Priority:** High. **Evidence:** C; physics: R.
 
-Both abort branches already reset the attached flag and returned without detaching. The current daytakerAbortReset extracts earlier assignments; the missing detach was not introduced by extracting the helper. Source: [original:5451](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5451>), [original:5468](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5468>), [original:5469](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5469>), [original:5477](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5477>), [original:5478](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5478>).
+Both abort branches already reset the attached flag and returned without detaching. The current daytakerAbortReset extracts earlier assignments; the missing detach was not introduced by extracting the helper. Source: [original:5451](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5451>), [original:5468](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5468>), [original:5469](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5469>), [original:5477](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5477>), [original:5478](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5478>).
 
-Locations: [zombie_types.opy:1003](src/zombie_types.opy#L1003), [zombie_types.opy:1019](src/zombie_types.opy#L1019), [zombie_types.opy:1539](src/zombie_types.opy#L1539).
+Locations: [zombie_types.opy:1003](../src/game/zombie_types.opy#L1003), [zombie_types.opy:1019](../src/game/zombie_types.opy#L1019), [zombie_types.opy:1539](../src/game/zombie_types.opy#L1539).
 
 During Burst, Illari sets `isAttached = true` on the carried zombie and calls `attachTo`. When Illari dies, two paths call `daytakerAbortReset()`. That subroutine only resets Illari's two flags and `botAbilityTarget.isAttached = false`; it never calls `detach()`. The successful branch and another cancellation branch call it explicitly.
 
@@ -354,9 +354,9 @@ Fix direction: a shared release procedure for the specific carried actor, includ
 
 **Category:** Logic, lifecycle. **Priority:** Medium/high. **Evidence:** C + M; scheduling: R.
 
-Both comparing an entity with the Boolean hasStatus result and returning after death before restoring speed already existed. Source: [original:5537](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5537>), [original:5539](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5539>), [original:5541](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5541>), [original:5542](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5542>), [original:5547](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5547>).
+Both comparing an entity with the Boolean hasStatus result and returning after death before restoring speed already existed. Source: [original:5537](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5537>), [original:5539](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5539>), [original:5541](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5541>), [original:5542](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5542>), [original:5547](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5547>).
 
-Locations: [subroutines.opy:822](src/subroutines.opy#L822), [subroutines.opy:825](src/subroutines.opy#L825), [subroutines.opy:827](src/subroutines.opy#L827).
+Locations: [subroutines.opy:822](../src/game/subroutines.opy#L822), [subroutines.opy:825](../src/game/subroutines.opy#L825), [subroutines.opy:827](../src/game/subroutines.opy#L827).
 
 First: `if eventPlayer == eventPlayer.hasStatus(Status.HACKED)` compares a player entity with a Boolean. The compiler preserves `Compare(Event Player, ==, Has Status(...))`, not a status test. Exact engine coercion was not reproduced here; the expression does not directly test `hasStatus`. If the intent is to skip a shot while hacked, express that explicitly.
 
@@ -371,9 +371,9 @@ Fix direction: correct the hack predicate and remove the slowdown owned by this 
 
 **Category:** Logic, target selection. **Priority:** Medium. **Evidence:** C + M.
 
-The Mercy tentacle's candidate-visibility test and actual filter already used different ray endpoints. Source: [original:5034](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5034>), [original:5035](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5035>).
+The Mercy tentacle's candidate-visibility test and actual filter already used different ray endpoints. Source: [original:5034](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5034>), [original:5035](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5035>).
 
-Locations: [zombie_types.opy:606](src/zombie_types.opy#L606), [zombie_types.opy:607](src/zombie_types.opy#L607).
+Locations: [zombie_types.opy:606](../src/game/zombie_types.opy#L606), [zombie_types.opy:607](../src/game/zombie_types.opy#L607).
 
 The victim-existence check uses `isInLoS(tentaclePosition, x.getEyePosition())`. Actual selection uses a different predicate, `isInLoS(tentaclePosition, eventPlayer.getEyePosition())`. The second point is Mercy's own eyes, not the candidate's.
 
@@ -390,9 +390,9 @@ Fix direction: one eligibility predicate, one list of victims passing it, and se
 
 **Category:** Logic, timers. **Priority:** Medium. **Evidence:** C + M.
 
-Comparing meters with seconds, dividing by a fixed 2.5, and accelerating the dome already coexisted in the original. Source: [original:2045](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2045>), [original:3220](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3220>), [original:3221](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3221>).
+Comparing meters with seconds, dividing by a fixed 2.5, and accelerating the dome already coexisted in the original. Source: [original:2045](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2045>), [original:3220](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3220>), [original:3221](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3221>).
 
-Locations: [players_game_in_progress.opy:172](src/players_game_in_progress.opy#L172), [objective_type_extraction_point.opy:20](src/objective_types/objective_type_extraction_point.opy#L20), [subroutines.opy:609](src/subroutines.opy#L609).
+Locations: [players_game_in_progress.opy:172](../src/game/players_game_in_progress.opy#L172), [objective_type_extraction_point.opy:20](../src/objective_types/objective_type_extraction_point.opy#L20), [subroutines.opy:609](../src/game/subroutines.opy#L609).
 
 The rescue rule compares distance `extractionZoneRad - distance(...)` in meters with `rescueTimeRemaining` in seconds. When capping the timer, it divides distance by a fixed 2.5. The dome moves at `extractionSpeedUp`, which increases while players are at extraction.
 
@@ -414,11 +414,11 @@ Fix direction: convert distance to seconds using the current positive speed, com
 
 **Category:** Logic, target selection. **Priority:** High. **Evidence:** C + M.
 
-**Fixed November 5, 2026:** `selectTarget` initializes its search result to `null` and stores a candidate only after a successful line-of-sight check. An unsuccessful search clears the current target through the shared `DESELECT BOT TARGET` logic, preserving the last known target and respecting movement/facing overrides. [Verification](analysis/verify-bot-target-selection.cjs) executes the compiled logic in 36 scenarios with controlled visibility; the OverPy build has no warnings. In-game verification is still pending. The original finding is retained below.
+**Fixed November 5, 2026:** `selectTarget` initializes its search result to `null` and stores a candidate only after a successful line-of-sight check. An unsuccessful search clears the current target through the shared `DESELECT BOT TARGET` logic, preserving the last known target and respecting movement/facing overrides. [Verification](../analysis/verify-bot-target-selection.cjs) executes the compiled logic in 36 scenarios with controlled visibility; the OverPy build has no warnings. In-game verification is still pending. The original finding is retained below.
 
-The former testTarget was already assigned before visibility validation and published after the loop without a success flag/candidate reset. This is the same defect despite the new botCandidateTarget name. Source: [original:3761](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3761>), [original:3762](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3762>), [original:3766](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3766>).
+The former testTarget was already assigned before visibility validation and published after the loop without a success flag/candidate reset. This is the same defect despite the new botCandidateTarget name. Source: [original:3761](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3761>), [original:3762](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3762>), [original:3766](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3766>).
 
-Location: [subroutines.opy:696](src/subroutines.opy#L696).
+Location: [subroutines.opy:696](../src/game/subroutines.opy#L696).
 
 The loop first assigns `botCandidateTarget`, then checks visibility and exits on success. After the loop, `botTarget = botCandidateTarget` executes with only the `eventPlayer.isAlive()` check. There is no separate successful-visibility flag, and `botCandidateTarget` is not cleared before the loop.
 
@@ -427,7 +427,7 @@ Consequences visible in the code:
 - If candidates A and B are both behind walls, iteration ends at B and publishes B as the target.
 - If the list is empty after invisible players are excluded, the loop never assigns a candidate and the variable's old value is used.
 
-The path is reachable beyond `BOT TARGET VISIBLE`: [bots_game_in_progress.opy:255](src/bots_game_in_progress.opy#L255) starts selection on damage without requiring a currently visible target. Damage can arrive late or from a source without current direct visibility. Subsequently, `DESELECT BOT TARGET` may immediately clear the selected target, causing extra movement/facing transitions. Their frequency was not measured.
+The path is reachable beyond `BOT TARGET VISIBLE`: [bots_game_in_progress.opy:255](../src/game/bots_game_in_progress.opy#L255) starts selection on damage without requiring a currently visible target. Damage can arrive late or from a source without current direct visibility. Subsequently, `DESELECT BOT TARGET` may immediately clear the selected target, causing extra movement/facing transitions. Their frequency was not measured.
 
 Fix direction: a separate search result initialized to `null`, assigned only after a successful check. Explicitly choose a no-eligible-target policy: clear the target or retain a prevalidated current target. Clearing `botCandidateTarget` before the loop alone does not fix selecting the last invisible candidate.
 
@@ -438,9 +438,9 @@ Fix direction: a separate search result initialized to `null`, assigned only aft
 
 **Category:** Logic, escort. **Priority:** High. **Evidence:** C + M.
 
-The NPC already prepared the correct candidate list but selected a leader from another list containing itself. Source: [original:2718](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2718>), [original:2720](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2720>), [original:2723](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2723>).
+The NPC already prepared the correct candidate list but selected a leader from another list containing itself. Source: [original:2718](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2718>), [original:2720](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2720>), [original:2723](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2723>).
 
-Locations: [objective_type_survivor_rescue.opy:88](src/objective_types/objective_type_survivor_rescue.opy#L88), [objective_type_survivor_rescue.opy:91](src/objective_types/objective_type_survivor_rescue.opy#L91).
+Locations: [objective_type_survivor_rescue.opy:88](../src/objective_types/objective_type_survivor_rescue.opy#L88), [objective_type_survivor_rescue.opy:91](../src/objective_types/objective_type_survivor_rescue.opy#L91).
 
 `rescuePotentialLeaderList` correctly excludes the NPC itself and invisible players. When changing leaders, however, the entire `playerTargetList` is sorted again after filtering only by distance. The NPC is added to it on line 94 when escort begins. Actual selection therefore ignores two restrictions in the prepared candidate list.
 
@@ -457,11 +457,11 @@ Fix direction: select the leader from `rescuePotentialLeaderList`, preserving th
 
 **Category:** Logic, recipient selection. **Priority:** High. **Evidence:** C + M.
 
-**Fixed November 5, 2026:** activation and first-recipient selection use `playerTargetList` and the shared `isBatteryChargeEligible` predicate: the player is alive, has spawned, has less than 100% ultimate charge, and is strictly inside radius `1.5 * sizeScale`. If no eligible player remains when actions execute, the rule aborts before feedback, charge, or cooldown. The existing `tmp0` is used only before the first wait; no variables were added. The [check](analysis/verify-charge-battery.cjs) executes compiled logic in 16 scenarios, reproduces both original counterexamples, and verifies that the other 267 rules are unchanged. OverPy 9.7.20 compiles without warnings; `main.ws.txt` is updated: **25,306 → 25,330 elements (+24)** for consistent eligibility checks and the empty-result guard. The activation condition retains `Is True For Any` without building an intermediate filtered array; runtime speed was not measured. In-game verification remains pending. The original finding is preserved below.
+**Fixed November 5, 2026:** activation and first-recipient selection use `playerTargetList` and the shared `isBatteryChargeEligible` predicate: the player is alive, has spawned, has less than 100% ultimate charge, and is strictly inside radius `1.5 * sizeScale`. If no eligible player remains when actions execute, the rule aborts before feedback, charge, or cooldown. The existing `tmp0` is used only before the first wait; no variables were added. The [check](../analysis/verify-charge-battery.cjs) executes compiled logic in 16 scenarios, reproduces both original counterexamples, and verifies that the other 267 rules are unchanged. OverPy 9.7.20 compiles without warnings; `main.ws.txt` is updated: **25,306 → 25,330 elements (+24)** for consistent eligibility checks and the empty-result guard. The activation condition retains `Is True For Any` without building an intermediate filtered array; runtime speed was not measured. In-game verification remains pending. The original finding is preserved below.
 
-Battery eligibility already checked ultimate charge and scale, while recipient selection lost those restrictions and used a different player source. Source: [original:6967](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6967>), [original:6969](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6969>).
+Battery eligibility already checked ultimate charge and scale, while recipient selection lost those restrictions and used a different player source. Source: [original:6967](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6967>), [original:6969](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6969>).
 
-Locations: [enhancements.opy:426](src/enhancements.opy#L426), [enhancements.opy:430](src/enhancements.opy#L430).
+Locations: [enhancements.opy:426](../src/abilities/enhancements.opy#L426), [enhancements.opy:430](../src/abilities/enhancements.opy#L430).
 
 The condition searches `playerTargetList` for a player with ultimate charge below 100% within radius `1.5 * sizeScale`. The recipient, however, is selected from all living Team 1 players using only `hasSpawned()` and a radius of 1.5. The ultimate restriction, original target set, and radius scaling are lost.
 
@@ -479,9 +479,9 @@ Fix direction: one shared eligible-recipient list with consistent source, radius
 
 **Category:** Logic, pickup. **Priority:** Medium. **Evidence:** C + M.
 
-The feet-or-eyes proximity condition and subsequent sorting of the whole list by feet distance alone already differed. Source: [original:2527](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2527>), [original:2531](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2531>).
+The feet-or-eyes proximity condition and subsequent sorting of the whole list by feet distance alone already differed. Source: [original:2527](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2527>), [original:2531](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2531>).
 
-Locations: [objective_type_biomorphing.opy:117](src/objective_types/objective_type_biomorphing.opy#L117), [objective_type_biomorphing.opy:123](src/objective_types/objective_type_biomorphing.opy#L123).
+Locations: [objective_type_biomorphing.opy:117](../src/objective_types/objective_type_biomorphing.opy#L117), [objective_type_biomorphing.opy:123](../src/objective_types/objective_type_biomorphing.opy#L123).
 
 Pickup is allowed when at least one resource is within 2 m of the feet **or eyes**. The nearest resource to the feet is then selected from the whole array, without filtering by the allowed radius.
 
@@ -503,9 +503,9 @@ Fix direction: first filter resources using the same radius condition, then sele
 
 **Category:** Logic, value types. **Priority:** High. **Evidence:** C; coercion: R.
 
-Both filters already indexed lists with a player entity. For extraction, the old list name was evacuatingSurvivorList; the current name is evacSurvivorList. Source: [original:2241](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2241>), [original:2120](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2120>).
+Both filters already indexed lists with a player entity. For extraction, the old list name was evacuatingSurvivorList; the current name is evacSurvivorList. Source: [original:2241](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2241>), [original:2120](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2120>).
 
-Locations: [objective_type_bosses.opy:16](src/objective_types/objective_type_bosses.opy#L16), [objective_type_extraction_point.opy:115](src/objective_types/objective_type_extraction_point.opy#L115).
+Locations: [objective_type_bosses.opy:16](../src/objective_types/objective_type_bosses.opy#L16), [objective_type_extraction_point.opy:115](../src/objective_types/objective_type_extraction_point.opy#L115).
 
 The filters use `not miniBossList[player]` and `not evacSurvivorList[player]`. This is indexing, not testing that a player is absent from a list. Compilation confirms both expressions as `Not(Value In Array(..., Current Array Element))`, where `Current Array Element` is a player entity. They do not become `Array Contains`.
 
@@ -522,9 +522,9 @@ The related accumulation of empty miniboss entries is covered in R34.
 
 **Category:** Performance, bots. **Priority:** High. **Evidence:** O.
 
-Optimization candidate: expensive visibility conditions and repeated scans/sorts in selectTarget already existed. Current load estimates are not measurements of the original. Source: [original:3718](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3718>), [original:3755](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3755>), [original:3757](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3757>), [original:3762](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3762>).
+Optimization candidate: expensive visibility conditions and repeated scans/sorts in selectTarget already existed. Current load estimates are not measurements of the original. Source: [original:3718](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3718>), [original:3755](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3755>), [original:3757](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3757>), [original:3762](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3762>).
 
-Locations: [bots_game_in_progress.opy:235](src/bots_game_in_progress.opy#L235), [bots_game_in_progress.opy:266](src/bots_game_in_progress.opy#L266), [subroutines.opy:670](src/subroutines.opy#L670).
+Locations: [bots_game_in_progress.opy:235](../src/game/bots_game_in_progress.opy#L235), [bots_game_in_progress.opy:266](../src/game/bots_game_in_progress.opy#L266), [subroutines.opy:670](../src/game/subroutines.opy#L670).
 
 `BOT TARGET VISIBLE` scans `playerTargetList` with distances and `isInLoS` directly in rule conditions. `selectTarget()` then rebuilds lists, performs two sorts, and checks candidate visibility. A separate `DESELECT BOT TARGET` rule checks current-target visibility again. The population setting permits up to 23 zombies.
 
@@ -541,9 +541,9 @@ Preserve priorities for minibosses, dummy targets, Pharah, and players below the
 
 **Category:** Performance, consumables. **Priority:** High. **Evidence:** O.
 
-Optimization candidate: the turret already repeated visibility checks in its visual expression, target-existence test, and target sorting. Source: [original:6248](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6248>), [original:6255](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6255>), [original:6256](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6256>), [original:6257](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6257>).
+Optimization candidate: the turret already repeated visibility checks in its visual expression, target-existence test, and target sorting. Source: [original:6248](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6248>), [original:6255](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6255>), [original:6256](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6256>), [original:6257](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6257>).
 
-Location: [supply_drops.opy:264](src/supply_drops.opy#L264).
+Location: [supply_drops.opy:264](../src/items/supply_drops.opy#L264).
 
 During its 30-second lifetime, the loop steps every 0.125 seconds: **240 iterations**, nominally 8 per second excluding execution time. Each iteration runs `.any(isInLoS...)`; if true, the following `.filter(isInLoS...)` scans living zombies again, then sorts the result. The reevaluated barrel expression at line 276 performs another independent visibility scan.
 
@@ -558,9 +558,9 @@ Caveat: the current `.any()` excludes teleporting bots, but aiming's `.filter()`
 
 **Category:** Performance, geometry. **Priority:** Medium; localized change. **Evidence:** O; prototype: C.
 
-Optimization candidate: LoS already preceded spatial filtering in bossReturn. Fixing another getClosestPlayer in this mechanic did not remove these costs. Source: [original:2432](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2432>).
+Optimization candidate: LoS already preceded spatial filtering in bossReturn. Fixing another getClosestPlayer in this mechanic did not remove these costs. Source: [original:2432](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2432>).
 
-Location: [objective_type_bosses.opy:211](src/objective_types/objective_type_bosses.opy#L211).
+Location: [objective_type_bosses.opy:211](../src/objective_types/objective_type_bosses.opy#L211).
 
 `bossReturn()` filters the entire `mapGridList` with a predicate containing `isInLoS` and a 5–20 m distance restriction. The generator aims for up to **900 points**. Compiled code uses one `Filtered Array` with nested `And`.
 
@@ -577,9 +577,9 @@ This operation is relatively infrequent, so its contribution to average load may
 
 **Category:** Performance, collisions. **Priority:** High with crowds. **Evidence:** O.
 
-Optimization candidate: repeated barricade geometry passes, sorting, and raycasts already existed. Source: [original:6771](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6771>), [original:6777](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6777>), [original:6781](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6781>), [original:6800](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6800>).
+Optimization candidate: repeated barricade geometry passes, sorting, and raycasts already existed. Source: [original:6771](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6771>), [original:6777](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6777>), [original:6781](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6781>), [original:6800](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6800>).
 
-Location: [enhancements.opy:223](src/enhancements.opy#L223).
+Location: [enhancements.opy:223](../src/abilities/enhancements.opy#L223).
 
 Conditions contain four independent `.any()` checks over living zombies; one computes distance to a segment. The body then recomputes the full geometric filter. The loop ends with `wait()` without an explicit interval. Each affected zombie also causes a surface-normal raycast and a sort of two anchor points. Work increases with multiple barricades.
 
@@ -594,9 +594,9 @@ Do not simply merge four `.any()` checks into one: each can currently be satisfi
 
 **Category:** Performance, HUD. **Priority:** Medium; check clients. **Evidence:** O.
 
-Optimization candidate: repeated view-angle HUD sorting and barricade-preview rays existed in the original. Source: [original:1566](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1566>), [original:1943](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1943>), [original:6606](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6606>).
+Optimization candidate: repeated view-angle HUD sorting and barricade-preview rays existed in the original. Source: [original:1566](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1566>), [original:1943](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1943>), [original:6606](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6606>).
 
-Locations: [global_game_in_progress.opy:14](src/global_game_in_progress.opy#L14), [subroutines.opy:332](src/subroutines.opy#L332), [supply_drops.opy:74](src/supply_drops.opy#L74), [enhancements.opy:54](src/enhancements.opy#L54).
+Locations: [global_game_in_progress.opy:14](../src/game/global_game_in_progress.opy#L14), [subroutines.opy:332](../src/game/subroutines.opy#L332), [supply_drops.opy:74](../src/items/supply_drops.opy#L74), [enhancements.opy:54](../src/abilities/enhancements.opy#L54).
 
 Health-pack selection by viewing angle is repeated three times across text, text position, and icon. Biomorphing resource selection is repeated in text and position. The pickup hint separately checks for an eligible item and repeats geometry during filtering/sorting. The barricade preview contains two identical raycasts for beam endpoints plus a separate range-check raycast.
 
@@ -613,9 +613,9 @@ Do not replace view-angle selection with nearest-distance selection: that is dif
 
 **Category:** Performance, cancellation. **Priority:** Medium. **Evidence:** O + R.
 
-Repeated point index lookups and a teleport-search loop without explicit cancellation when targets are absent already existed. Source: [original:3979](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3979>), [original:3982](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3982>), [original:3986](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3986>).
+Repeated point index lookups and a teleport-search loop without explicit cancellation when targets are absent already existed. Source: [original:3979](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3979>), [original:3982](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3982>), [original:3986](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3986>).
 
-Location: [bots_game_in_progress.opy:445](src/bots_game_in_progress.opy#L445).
+Location: [bots_game_in_progress.opy:445](../src/game/bots_game_in_progress.opy#L445).
 
 Point search repeats spawn-list filters and `botSpawnPointList.index(x)` for each candidate, then repeats `index` for the selected position. For a large list, these are repeated searches of the same array. Many bots can search simultaneously.
 
@@ -630,9 +630,9 @@ That guard also avoids redundant work with an empty target list. This is a known
 
 **Category:** Performance, setup. **Priority:** Low. **Evidence:** O.
 
-Optimization candidate: grid generation checking the accumulated array and repeated base filtering for terminals already existed. Source: [original:757](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L757>), [original:761](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L761>), [original:2948](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2948>).
+Optimization candidate: grid generation checking the accumulated array and repeated base filtering for terminals already existed. Source: [original:757](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L757>), [original:761](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L761>), [original:2948](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2948>).
 
-Locations: [global_startup.opy:315](src/global_startup.opy#L315), [objective_type_satellite_uplink.opy:72](src/objective_types/objective_type_satellite_uplink.opy#L72).
+Locations: [global_startup.opy:315](../src/game/global_startup.opy#L315), [objective_type_satellite_uplink.opy:72](../src/objective_types/objective_type_satellite_uplink.opy#L72).
 
 The generator compares new points with the entire accumulated array. For 900 successful additions without rejections, the sum of pre-insertion array sizes is **404,550**: potential comparisons for full scans, not a measured actual-call count. Rejected candidates add attempts. Each terminal-placement retry filters the grid again by the unchanged distance to the current objective.
 
@@ -645,9 +645,9 @@ Terminal candidate: precompute base points 10–50 m away, then repeatedly filte
 
 **Category:** Performance, consumables. **Priority:** Medium; localized change. **Evidence:** O; prototype: C.
 
-Optimization candidate: Force Field already fetched living bots repeatedly within each short step. Source: [original:6134](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6134>), [original:6136](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6136>), [original:6137](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6137>).
+Optimization candidate: Force Field already fetched living bots repeatedly within each short step. Source: [original:6134](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6134>), [original:6136](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6136>), [original:6137](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6137>).
 
-Location: [supply_drops.opy:156](src/supply_drops.opy#L156).
+Location: [supply_drops.opy:156](../src/items/supply_drops.opy#L156).
 
 Force Field loops for 10 seconds at 0.032-second steps, approximately 313 iterations. Within the zombie scan, `getLivingPlayers(Team.2)[index]` occurs three times: for distance, impulse recipient, and direction. With a large population, the inner body may execute several thousand times, although the field only affects nearby zombies.
 
@@ -662,9 +662,9 @@ The snapshot prototype passed compilation: **25,305 → 25,305**, with no new va
 
 **Category:** Performance, damage events. **Priority:** Medium. **Evidence:** O.
 
-Optimization candidate: the Pyrotechnic queue already stored repeated references and was refiltered for each victim. Source: [original:6837](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6837>), [original:6851](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6851>), [original:6855](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6855>).
+Optimization candidate: the Pyrotechnic queue already stored repeated references and was refiltered for each victim. Source: [original:6837](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6837>), [original:6851](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6851>), [original:6855](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6855>).
 
-Location: [enhancements.opy:287](src/enhancements.opy#L287).
+Location: [enhancements.opy:287](../src/abilities/enhancements.opy#L287).
 
 Every eligible hit appends its victim to `enhancementPyroHitList`, including duplicates. The handler takes the first target, filters the remaining queue to count repetitions, and removes it from the queue. These are repeated hit-list scans per unique victim; with many distinct victims, work can grow quadratically with queue size. In practice, population bounds the unique-victim count.
 
@@ -679,9 +679,9 @@ Preserve batch processing, the 0.5-second pause, half damage to bosses, and sepa
 
 **Category:** Performance, controls. **Priority:** Medium; check responsiveness. **Evidence:** O.
 
-Optimization candidate: the same frequent cooldown and charge resets already ran in the original. Source: [original:6153](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6153>), [original:6154](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6154>), [original:6167](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6167>).
+Optimization candidate: the same frequent cooldown and charge resets already ran in the original. Source: [original:6153](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6153>), [original:6154](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6154>), [original:6167](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6167>).
 
-Location: [supply_drops.opy:177](src/supply_drops.opy#L177).
+Location: [supply_drops.opy:177](../src/items/supply_drops.opy#L177).
 
 Every 0.032 seconds, the rule resets eight cooldowns and sets three charge values (two for Reaper). Over a full 15 seconds, that is approximately 469 iterations and **5,159 write-action executions** for the ordinary branch. This is arithmetic from source, excluding interruption/restart and actual execution time.
 
@@ -694,9 +694,9 @@ Candidate: prototype updates only for buttons applicable to the hero and charges
 
 **Category:** Performance, navigation. **Priority:** High as path grows. **Evidence:** O.
 
-The NPC path already grew without an explicit bound, was rescanned for movement, and sorted to find the closest point. Source: [original:2691](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2691>), [original:2751](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2751>), [original:2761](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2761>).
+The NPC path already grew without an explicit bound, was rescanned for movement, and sorted to find the closest point. Source: [original:2691](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2691>), [original:2751](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2751>), [original:2761](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2761>).
 
-Locations: [objective_type_survivor_rescue.opy:62](src/objective_types/objective_type_survivor_rescue.opy#L62), [objective_type_survivor_rescue.opy:114](src/objective_types/objective_type_survivor_rescue.opy#L114), [objective_type_survivor_rescue.opy:127](src/objective_types/objective_type_survivor_rescue.opy#L127).
+Locations: [objective_type_survivor_rescue.opy:62](../src/objective_types/objective_type_survivor_rescue.opy#L62), [objective_type_survivor_rescue.opy:114](../src/objective_types/objective_type_survivor_rescue.opy#L114), [objective_type_survivor_rescue.opy:127](../src/objective_types/objective_type_survivor_rescue.opy#L127).
 
 The path grows as the leader moves, with no explicit length bound. If the leader continues while the NPC falls behind or gets stuck, the list can grow. The movement expression contains `.any(...)` and repeated `.filter(...).last()` over the same path; removing the traversed section also sorts the entire path for one closest point, then finds its index.
 
@@ -711,9 +711,9 @@ Naively replacing removal with `slice` needs separate proof: the original `remov
 
 **Category:** Performance, visualization. **Priority:** Medium; check clients. **Evidence:** O.
 
-Optimization candidate: Air Strike already created four dynamic effects over 50 steps, and Bounce Pad a ring every 0.25 seconds of activity. Source: [original:6188](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6188>), [original:6193](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6193>), [original:6196](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6196>), [original:6356](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6356>), [original:6357](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6357>).
+Optimization candidate: Air Strike already created four dynamic effects over 50 steps, and Bounce Pad a ring every 0.25 seconds of activity. Source: [original:6188](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6188>), [original:6193](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6193>), [original:6196](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6196>), [original:6356](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6356>), [original:6357](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6357>).
 
-Locations: [supply_drops.opy:385](src/supply_drops.opy#L385), [supply_drops.opy:211](src/supply_drops.opy#L211).
+Locations: [supply_drops.opy:385](../src/items/supply_drops.opy#L385), [supply_drops.opy:211](../src/items/supply_drops.opy#L211).
 
 Bounce Pad checks players 480 times over 60 seconds and separately sends all players a decorative ring every 0.25 seconds, approximately 240 effect launches per activation. Air Strike makes 50 explosions with four `playEffect` calls each for all players: 200 visual/audio-effect calls.
 
@@ -726,10 +726,10 @@ Client-load/traffic candidate: reduce decorative-ring frequency or restrict dist
 
 **Category:** Performance, minor overhead. **Priority:** Low. **Evidence:** O.
 
-Optimization candidates: timer sorting and sorting two Hitchhiker participants already existed in the original. Source: [original:534](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L534>), [original:7042](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7042>), [original:7043](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7043>).
+Optimization candidates: timer sorting and sorting two Hitchhiker participants already existed in the original. Source: [original:534](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L534>), [original:7042](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7042>), [original:7043](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7043>).
 
-- [enhancements.opy:518](src/enhancements.opy#L518): Hitchhiker sorts two players, then builds another array through `concat().exclude()`. Recipient/donor selection can use a direct normalized-health comparison. The benefit alone is small; preserve the health-transfer formula.
-- [global_startup.opy:128](src/global_startup.opy#L128): respawn timers are sorted every second after subtracting the same one unit. If ordering is maintained at every queue mutation, re-sorting can be removed. First check every insertion, forced change, and negative value; the array is small, so priority is low.
+- [enhancements.opy:518](../src/abilities/enhancements.opy#L518): Hitchhiker sorts two players, then builds another array through `concat().exclude()`. Recipient/donor selection can use a direct normalized-health comparison. The benefit alone is small; preserve the health-transfer formula.
+- [global_startup.opy:128](../src/game/global_startup.opy#L128): respawn timers are sorted every second after subtracting the same one unit. If ordering is maintained at every queue mutation, re-sorting can be removed. First check every insertion, forced change, and negative value; the array is small, so priority is low.
 
 <a id="r34"></a>
 <a id="p14"></a>
@@ -739,15 +739,15 @@ Optimization candidates: timer sorting and sorting two Hitchhiker participants a
 
 **Category:** Resources, long matches. **Priority:** High for long matches. **Evidence:** C; load: O.
 
-Appending minibosses and replacing entries with zero rather than deleting them already existed; array growth is inherited. Source: [original:3622](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3622>), [original:4332](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L4332>).
+Appending minibosses and replacing entries with zero rather than deleting them already existed; array growth is inherited. Source: [original:3622](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3622>), [original:4332](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L4332>).
 
-Locations: [subroutines.opy:28](src/subroutines.opy#L28), [bots_game_in_progress.opy:150](src/bots_game_in_progress.opy#L150), [subroutines.opy:751](src/subroutines.opy#L751).
+Locations: [subroutines.opy:28](../src/game/subroutines.opy#L28), [bots_game_in_progress.opy:150](../src/game/bots_game_in_progress.opy#L150), [subroutines.opy:751](../src/game/subroutines.opy#L751).
 
 Creating a miniboss performs `miniBossList.append(eventPlayer)`, while the normal death branch replaces the entry with zero. This branch neither removes zeros nor reuses them on the next creation. Thus “create miniboss — kill it — create another” grows the array while the living-miniboss count stays constant. Separate removal when converting one into an objective boss does not clear zeros from normal deaths.
 
 The list is read in many bot-rule conditions, damage handlers, target selection, and `.any(entityExists)` checks. More empty entries increase operation input sizes. This candidate is particularly useful for long matches and requires no gameplay-content reduction.
 
-Candidate: remove dead entities or reuse/compact empty entries before appending. First check all readers: [objective_type_bosses.opy:16](src/objective_types/objective_type_bosses.opy#L16) contains suspicious indexed `miniBossList[player]` access instead of ordinary membership testing. Changing the representation without analyzing this site is not proven safe. All other readers found use membership or `.any()`, not a meaningful fixed position for a particular miniboss.
+Candidate: remove dead entities or reuse/compact empty entries before appending. First check all readers: [objective_type_bosses.opy:16](../src/objective_types/objective_type_bosses.opy#L16) contains suspicious indexed `miniBossList[player]` access instead of ordinary membership testing. Changing the representation without analyzing this site is not proven safe. All other readers found use membership or `.any()`, not a meaningful fixed position for a particular miniboss.
 
 The shared object budget and failed-creation consequences are covered in R35. List growth alone does not prove budget exhaustion or server termination.
 
@@ -758,9 +758,9 @@ The shared object budget and failed-creation consequences are covered in R35. Li
 
 **Category:** Resources, long matches. **Priority:** High for long matches. **Evidence:** C; exhaustion: R.
 
-The limit of 12 already applied only to the generator; Biomorphing rewards and drops added items outside it. The original also enabled playMoreEffects: the increased visual-object budget is not a new Reforged difference and does not provide a global item limit. Source: [original:5930](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5930>), [original:2510](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2510>), [original:6090](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6090>), [original:6104](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6104>), [original:451](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L451>).
+The limit of 12 already applied only to the generator; Biomorphing rewards and drops added items outside it. The original also enabled playMoreEffects: the increased visual-object budget is not a new Reforged difference and does not provide a global item limit. Source: [original:5930](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5930>), [original:2510](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2510>), [original:6090](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6090>), [original:6104](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6104>), [original:451](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L451>).
 
-Locations: [supply_drops.opy:24](src/supply_drops.opy#L24), [supply_drops.opy:96](src/supply_drops.opy#L96), [power_ups.opy:90](src/power_ups.opy#L90), [objective_type_biomorphing.opy:100](src/objective_types/objective_type_biomorphing.opy#L100).
+Locations: [supply_drops.opy:24](../src/items/supply_drops.opy#L24), [supply_drops.opy:96](../src/items/supply_drops.opy#L96), [power_ups.opy:90](../src/items/power_ups.opy#L90), [objective_type_biomorphing.opy:100](../src/objective_types/objective_type_biomorphing.opy#L100).
 
 The comment “Limited to 12 power ups” refers to the supply-generation entry condition. It does not bound every addition: manual drops, death drops, and four Biomorphing rewards add items separately. Even opening a crate adds the entire batch without capping it to available places. Waits occur between checking generation entry and opening the crate.
 
@@ -779,9 +779,9 @@ Fix direction: compact lists, centralize item accounting, and control effect ter
 
 **Category:** Performance, visibility. **Priority:** Low/medium. **Evidence:** O; prototype: C.
 
-Optimization candidate: viewer filters whose condition does not depend on the lambda parameter already existed. The count of 50 refers to the current tree, not a recount of the historical file. Source: [original:5966](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5966>), [original:6593](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6593>), [original:6600](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6600>).
+Optimization candidate: viewer filters whose condition does not depend on the lambda parameter already existed. The count of 50 refers to the current tree, not a recount of the historical file. Source: [original:5966](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5966>), [original:6593](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6593>), [original:6600](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6600>).
 
-Locations: [players_game_in_progress.opy:122](src/players_game_in_progress.opy#L122), [players_game_in_progress.opy:126](src/players_game_in_progress.opy#L126), [subroutines.opy:149](src/subroutines.opy#L149), [subroutines.opy:170](src/subroutines.opy#L170).
+Locations: [players_game_in_progress.opy:122](../src/game/players_game_in_progress.opy#L122), [players_game_in_progress.opy:126](../src/game/players_game_in_progress.opy#L126), [subroutines.opy:149](../src/game/subroutines.opy#L149), [subroutines.opy:170](../src/game/subroutines.opy#L170).
 
 Source contains 50 expressions of the form `getAllPlayers().filter(lambda _: ...)` that do not use the viewer parameter. Example: `getAllPlayers().filter(lambda _: eventPlayer.isReviving)`. For an unchanged state, the result is either the whole list or an empty list; per-player filtering is unnecessary.
 
@@ -796,9 +796,9 @@ Seven simple replacements for infection/resurrection, the gas projectile, and th
 
 **Category:** Loops, cancellation, performance. **Priority:** Medium. **Evidence:** C + R.
 
-The supply-drop loop already searched without an overall attempt limit or in-loop checks of the phase/target availability. Source: [original:5939](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5939>), [original:5941](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5941>), [original:5948](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5948>).
+The supply-drop loop already searched without an overall attempt limit or in-loop checks of the phase/target availability. Source: [original:5939](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5939>), [original:5941](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5941>), [original:5948](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5948>).
 
-Location: [supply_drops.opy:34](src/supply_drops.opy#L34).
+Location: [supply_drops.opy:34](../src/items/supply_drops.opy#L34).
 
 The loop continues until it finds a valid position, filtering the map grid each time without checking `isGameplayActive` or target availability inside. A 0.25-second pause already exists, so this is not a tight wait-free loop. But without a valid point, searching may continue consuming resources without a result, including after the match phase changes.
 
@@ -810,7 +810,7 @@ Candidate: a bounded attempt batch, repeated phase/player checks, and a defined 
 
 **Category:** Physics compatibility. **Priority:** Low. **Evidence:** 20 compiler messages and a successful XYZ prototype. **Crash risk:** no direct mechanism found.
 
-All 20 current sites have corresponding legacy impulses in the original. This is inherited physics-compatibility work, not 20 newly proven defects. IM01 changes target selection and guards existence, but the impulse mode itself is unchanged. Source: [original:2363](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2363>), [original:6137](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6137>), [original:7137](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7137>).
+All 20 current sites have corresponding legacy impulses in the original. This is inherited physics-compatibility work, not 20 newly proven defects. IM01 changes target selection and guards existence, but the impulse mode itself is unchanged. Source: [original:2363](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2363>), [original:6137](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6137>), [original:7137](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7137>).
 
 The old `CANCEL_CONTRARY_MOTION` and new `CANCEL_CONTRARY_MOTION_XYZ` handle horizontal and vertical velocities differently. Successful replacement compilation does not prove equivalent trajectories. All 20 sites, individual checks, and proposals are collected in [IM01–IM20](#warning-impulse). Source was not changed; this is compatibility work, not a new Start Rule crash.
 
@@ -824,7 +824,7 @@ The old `CANCEL_CONTRARY_MOTION` and new `CANCEL_CONTRARY_MOTION_XYZ` handle hor
 6. **Localized optimizations — R23 and R28, then R22.** Check boss spatial filtering, Force Field's list snapshot, and turret target reuse.
 7. **Frequent costs — R21, R24–R32, R36–R37.** Compare target search, collisions, HUD, and special mechanics in-game. Address R33 after major costs. Preserve responsiveness, damage/impulse frequency, and target-selection semantics.
 
-[debug.opy](src/debug.opy#L25) contains `Server Load`, `Average`, `Peak`, and text/effect counters; the display is available to a player named `snky`. In the current configuration, the HUD shows budgets of **128 texts** and **256 effects/beams/icons**; `playMoreEffects` is enabled.
+[debug.opy](../src/debug/debug.opy#L25) contains `Server Load`, `Average`, `Peak`, and text/effect counters; the display is available to a player named `snky`. In the current configuration, the HUD shows budgets of **128 texts** and **256 effects/beams/icons**; `playMoreEffects` is enabled.
 
 For performance, compare identical maps/settings with 6 and 23 zombies. Separate scenarios: simultaneous turrets, a crowd at a barricade, boss return, many Pyrotechnic hits, a lagging NPC with a long path, and a long match with item drops/minibosses. Repeat runs because of randomness, recording average load, peaks, array lengths, and object counts; for visuals, FPS and hint latency.
 
@@ -844,10 +844,10 @@ node analysis/audit-original-provenance-2026-11-04.cjs
 
 | Script | Checks |
 |---|---|
-| [probe-runtime-performance](analysis/probe-runtime-performance-2026-11-04.cjs) | Baseline build and the three R23, R28, R36 prototypes |
-| [check-gameplay-selection](analysis/check-gameplay-selection-2026-11-04.cjs) | Selection counterexamples and compiled R16–R20 expressions |
-| [check-runtime-safety](analysis/check-runtime-safety-2026-11-04.cjs) | Hidden warnings, loops, one-item setting, pickup/invisibility-reset models |
-| [check-additional-state-safety](analysis/check-additional-state-safety-2026-11-04.cjs) | Passenger ownership, paired operations, tentacle, and dome timer R10–R15 |
+| [probe-runtime-performance](../analysis/probe-runtime-performance-2026-11-04.cjs) | Baseline build and the three R23, R28, R36 prototypes |
+| [check-gameplay-selection](../analysis/check-gameplay-selection-2026-11-04.cjs) | Selection counterexamples and compiled R16–R20 expressions |
+| [check-runtime-safety](../analysis/check-runtime-safety-2026-11-04.cjs) | Hidden warnings, loops, one-item setting, pickup/invisibility-reset models |
+| [check-additional-state-safety](../analysis/check-additional-state-safety-2026-11-04.cjs) | Passenger ownership, paired operations, tentacle, and dome timer R10–R15 |
 
 `audit-original-provenance` checks line-level provenance evidence for every R/SR/CH/IM entry against the original without compiling the mod. To update the evidence file: `node analysis/audit-original-provenance-2026-11-04.cjs --write`.
 
@@ -867,7 +867,7 @@ Checked after the user removed four suppressions from `main.opy`. These are **wa
 | `w_cancel_contrary_motion` | 20 | All IM01–IM20 sites listed with migration checks; the legacy mode is not equivalent to XYZ | No direct crash mechanism found |
 | `w_closest_player` | 0 | Active code uses two `getRealClosestPlayer` calls with existence checks | No new defect in this category |
 
-These are **56 messages**, not 56 independent defects. Reenabling suppressions in memory removes all 56 while producing byte-identical Workshop code. List, hashes, and original messages: [JSON audit](analysis/compiler-warning-audit-2026-11-04.json). These scenarios were not executed in-game.
+These are **56 messages**, not 56 independent defects. Reenabling suppressions in memory removes all 56 while producing byte-identical Workshop code. List, hashes, and original messages: [JSON audit](../analysis/compiler-warning-audit-2026-11-04.json). These scenarios were not executed in-game.
 
 ### How severity and risk were assessed
 
@@ -891,28 +891,28 @@ For the timer, note another distinction: different players have separate `setPre
 
 | ID | Location | Target | Own Wait actions in target | Severity | Crash risk |
 |---|---|---|---:|---|---|
-| [SR01](#sr01) | [global_start_menu.opy:246](src/global_start_menu.opy#L246) | `determineZombieMode` | 0 | Low | No direct risk established: no own waits; diagnostic is transitive |
-| [SR02](#sr02) | [global_start_menu.opy:297](src/global_start_menu.opy#L297) | `determineChallenge` | 0 | Low | No direct risk established: no own waits; diagnostic is transitive |
-| [SR03](#sr03) | [global_start_menu.opy:351](src/global_start_menu.opy#L351) | `determineObjectiveType` | 0 | Low | No direct risk established: no own waits; diagnostic is transitive |
-| [SR04](#sr04) | [global_start_menu.opy:374](src/global_start_menu.opy#L374) | `setObjectiveType` | 2 | Medium | Conditional: repeated pregame initialization while a global executor waits |
-| [SR05](#sr05) | [player_start_menu.opy:72](src/player_start_menu.opy#L72) | `setPrematchTimer` | 1 | Low | Hero-selection branch is normally wait-free; may restart an earlier short wait |
-| [SR06](#sr06) | [player_start_menu.opy:119](src/player_start_menu.opy#L119) | `setPrematchTimer` | 1 | Medium | Conditional, short window: wait() in the timer transition 15 -> 10 |
-| [SR07](#sr07) | [player_start_menu.opy:120](src/player_start_menu.opy#L120) | `randomActions` | 1 | High | Reachable repetition in wait(1); cumulative risk across repeated restarts |
-| [SR08](#sr08) | [player_start_menu.opy:127](src/player_start_menu.opy#L127) | `setPrematchTimer` | 1 | Medium | Conditional: cancellation may interrupt the previous readiness request's short wait |
-| [SR09](#sr09) | [player_start_menu.opy:211](src/player_start_menu.opy#L211) | `setPrematchTimer` | 1 | Medium | At the voting-end boundary; ordinary branch has no own wait |
-| [SR10](#sr10) | [player_start_menu.opy:214](src/player_start_menu.opy#L214) | `setPrematchTimer` | 1 | Medium | Short target wait when ready; the caller owns the 2 s pause |
-| [SR11](#sr11) | [global_game_in_progress.opy:127](src/global_game_in_progress.opy#L127) | `objectivesManagement` | 3 | Low in normal operation | No normal repetition found; requires extra reentry into the transition |
-| [SR12](#sr12) | [supply_drops.opy:472](src/supply_drops.opy#L472) | `instantRevive` | 2 | Medium | Present when resurrection operations overlap; window usually shorter than the 3 s timeout |
-| [SR13](#sr13) | [supply_drops.opy:476](src/supply_drops.opy#L476) | `playerForceField` | 1 | High | Same player can repeat during a long wait; cumulative risk |
-| [SR14](#sr14) | [supply_drops.opy:480](src/supply_drops.opy#L480) | `noCooldowns` | 1 | High | Same player can repeat during a long wait; cumulative risk |
-| [SR15](#sr15) | [supply_drops.opy:487](src/supply_drops.opy#L487) | `airStrike` | 3 | High | Same player can repeat during a long wait; cumulative risk |
-| [SR16](#sr16) | [supply_drops.opy:491](src/supply_drops.opy#L491) | `healBeacon` | 1 | High | Same player can repeat during a long wait; cumulative risk |
-| [SR17](#sr17) | [supply_drops.opy:502](src/supply_drops.opy#L502) | `sentryTurret` | 1 | High | Same player can repeat during a long wait; cumulative risk |
-| [SR18](#sr18) | [supply_drops.opy:506](src/supply_drops.opy#L506) | `cloakingDevice` | 1 | High | Same player can repeat during a long wait; cumulative risk |
-| [SR19](#sr19) | [supply_drops.opy:510](src/supply_drops.opy#L510) | `superNano` | 2 | High | Same player can repeat during a long wait; cumulative risk |
-| [SR20](#sr20) | [supply_drops.opy:514](src/supply_drops.opy#L514) | `bouncePad` | 3 | High | Same player can repeat during a long wait; cumulative risk |
-| [SR21](#sr21) | [supply_drops.opy:518](src/supply_drops.opy#L518) | `ultimateCharger` | 2 | High | Same player can repeat during a long wait; cumulative risk |
-| [SR22](#sr22) | [supply_drops.opy:524](src/supply_drops.opy#L524) | `stun` | 2 | High | Same player can repeat during a long wait; cumulative risk |
+| [SR01](#sr01) | [global_start_menu.opy:246](../src/start_menu/global_start_menu.opy#L246) | `determineZombieMode` | 0 | Low | No direct risk established: no own waits; diagnostic is transitive |
+| [SR02](#sr02) | [global_start_menu.opy:297](../src/start_menu/global_start_menu.opy#L297) | `determineChallenge` | 0 | Low | No direct risk established: no own waits; diagnostic is transitive |
+| [SR03](#sr03) | [global_start_menu.opy:351](../src/start_menu/global_start_menu.opy#L351) | `determineObjectiveType` | 0 | Low | No direct risk established: no own waits; diagnostic is transitive |
+| [SR04](#sr04) | [global_start_menu.opy:374](../src/start_menu/global_start_menu.opy#L374) | `setObjectiveType` | 2 | Medium | Conditional: repeated pregame initialization while a global executor waits |
+| [SR05](#sr05) | [player_start_menu.opy:72](../src/start_menu/player_start_menu.opy#L72) | `setPrematchTimer` | 1 | Low | Hero-selection branch is normally wait-free; may restart an earlier short wait |
+| [SR06](#sr06) | [player_start_menu.opy:119](../src/start_menu/player_start_menu.opy#L119) | `setPrematchTimer` | 1 | Medium | Conditional, short window: wait() in the timer transition 15 -> 10 |
+| [SR07](#sr07) | [player_start_menu.opy:120](../src/start_menu/player_start_menu.opy#L120) | `randomActions` | 1 | High | Reachable repetition in wait(1); cumulative risk across repeated restarts |
+| [SR08](#sr08) | [player_start_menu.opy:127](../src/start_menu/player_start_menu.opy#L127) | `setPrematchTimer` | 1 | Medium | Conditional: cancellation may interrupt the previous readiness request's short wait |
+| [SR09](#sr09) | [player_start_menu.opy:211](../src/start_menu/player_start_menu.opy#L211) | `setPrematchTimer` | 1 | Medium | At the voting-end boundary; ordinary branch has no own wait |
+| [SR10](#sr10) | [player_start_menu.opy:214](../src/start_menu/player_start_menu.opy#L214) | `setPrematchTimer` | 1 | Medium | Short target wait when ready; the caller owns the 2 s pause |
+| [SR11](#sr11) | [global_game_in_progress.opy:127](../src/game/global_game_in_progress.opy#L127) | `objectivesManagement` | 3 | Low in normal operation | No normal repetition found; requires extra reentry into the transition |
+| [SR12](#sr12) | [supply_drops.opy:472](../src/items/supply_drops.opy#L472) | `instantRevive` | 2 | Medium | Present when resurrection operations overlap; window usually shorter than the 3 s timeout |
+| [SR13](#sr13) | [supply_drops.opy:476](../src/items/supply_drops.opy#L476) | `playerForceField` | 1 | High | Same player can repeat during a long wait; cumulative risk |
+| [SR14](#sr14) | [supply_drops.opy:480](../src/items/supply_drops.opy#L480) | `noCooldowns` | 1 | High | Same player can repeat during a long wait; cumulative risk |
+| [SR15](#sr15) | [supply_drops.opy:487](../src/items/supply_drops.opy#L487) | `airStrike` | 3 | High | Same player can repeat during a long wait; cumulative risk |
+| [SR16](#sr16) | [supply_drops.opy:491](../src/items/supply_drops.opy#L491) | `healBeacon` | 1 | High | Same player can repeat during a long wait; cumulative risk |
+| [SR17](#sr17) | [supply_drops.opy:502](../src/items/supply_drops.opy#L502) | `sentryTurret` | 1 | High | Same player can repeat during a long wait; cumulative risk |
+| [SR18](#sr18) | [supply_drops.opy:506](../src/items/supply_drops.opy#L506) | `cloakingDevice` | 1 | High | Same player can repeat during a long wait; cumulative risk |
+| [SR19](#sr19) | [supply_drops.opy:510](../src/items/supply_drops.opy#L510) | `superNano` | 2 | High | Same player can repeat during a long wait; cumulative risk |
+| [SR20](#sr20) | [supply_drops.opy:514](../src/items/supply_drops.opy#L514) | `bouncePad` | 3 | High | Same player can repeat during a long wait; cumulative risk |
+| [SR21](#sr21) | [supply_drops.opy:518](../src/items/supply_drops.opy#L518) | `ultimateCharger` | 2 | High | Same player can repeat during a long wait; cumulative risk |
+| [SR22](#sr22) | [supply_drops.opy:524](../src/items/supply_drops.opy#L524) | `stun` | 2 | High | Same player can repeat during a long wait; cumulative risk |
 
 ### Common consumable-test procedure SR12–SR22
 
@@ -930,11 +930,11 @@ Holding Interact without a second item does not create arbitrary launches: accep
 
 **Severity:** Low. **Server-crash risk:** No direct risk established: no own waits; diagnostic is transitive.
 
-The same **startRule(determineZombieMode)** call without **NOOP** existed at [original:1164](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1164>); its former target is [original:770](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L770>). The earlier target also has no own waits; waiting-descendant risk is considered separately. The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(determineZombieMode)** call without **NOOP** existed at [original:1164](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1164>); its former target is [original:770](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L770>). The earlier target also has no own waits; waiting-descendant risk is considered separately. The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** Own Waits: 0. Do not treat this as an independent crash reproduction; check that the entire chain does not restart and inspect SR04.
 
-**Code:** [END VOTING rule](src/global_start_menu.opy#L239), [call:246](src/global_start_menu.opy#L246), [subroutine:282](src/global_start_menu.opy#L282).
+**Code:** [END VOTING rule](../src/start_menu/global_start_menu.opy#L239), [call:246](../src/start_menu/global_start_menu.opy#L246), [subroutine:282](../src/start_menu/global_start_menu.opy#L282).
 
 **Chain:** `END VOTING ⇢ determineZombieMode → selectVoteWinner`; then two asynchronous branches: `⇢ determineChallenge ⇢ determineObjectiveType ⇢ setObjectiveType` and `⇢ setZombieMode`.
 
@@ -952,11 +952,11 @@ The same **startRule(determineZombieMode)** call without **NOOP** existed at [or
 
 **Severity:** Low. **Server-crash risk:** No direct risk established: no own waits; diagnostic is transitive.
 
-The same **startRule(determineChallenge)** call without **NOOP** existed at [original:789](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L789>); its former target is [original:826](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L826>). The earlier target also has no own waits; waiting-descendant risk is considered separately. The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(determineChallenge)** call without **NOOP** existed at [original:789](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L789>); its former target is [original:826](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L826>). The earlier target also has no own waits; waiting-descendant risk is considered separately. The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** Own Waits: 0. Descendant policies are analyzed separately. One warning does not prove a waiting context for this subroutine.
 
-**Code:** [calling subroutine](src/global_start_menu.opy#L282), [call:297](src/global_start_menu.opy#L297), [determineChallenge:321](src/global_start_menu.opy#L321); original rule: [END VOTING](src/global_start_menu.opy#L239).
+**Code:** [calling subroutine](../src/start_menu/global_start_menu.opy#L282), [call:297](../src/start_menu/global_start_menu.opy#L297), [determineChallenge:321](../src/start_menu/global_start_menu.opy#L321); original rule: [END VOTING](../src/start_menu/global_start_menu.opy#L239).
 
 **Chain:** `END VOTING ⇢ determineZombieMode ⇢ determineChallenge ⇢ determineObjectiveType ⇢ setObjectiveType`.
 
@@ -974,11 +974,11 @@ The same **startRule(determineChallenge)** call without **NOOP** existed at [ori
 
 **Severity:** Low. **Server-crash risk:** No direct risk established: no own waits; diagnostic is transitive.
 
-The same **startRule(determineObjectiveType)** call without **NOOP** existed at [original:850](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L850>); its former target is [original:926](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L926>). The earlier target also has no own waits; waiting-descendant risk is considered separately. The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(determineObjectiveType)** call without **NOOP** existed at [original:850](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L850>); its former target is [original:926](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L926>). The earlier target also has no own waits; waiting-descendant risk is considered separately. The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** Own Waits: 0. R04's forbidden-objective selection loop is a separate issue, not this Start Rule defect.
 
-**Code:** [determineChallenge](src/global_start_menu.opy#L321), [call:351](src/global_start_menu.opy#L351), [determineObjectiveType:354](src/global_start_menu.opy#L354); original rule: [END VOTING](src/global_start_menu.opy#L239).
+**Code:** [determineChallenge](../src/start_menu/global_start_menu.opy#L321), [call:351](../src/start_menu/global_start_menu.opy#L351), [determineObjectiveType:354](../src/start_menu/global_start_menu.opy#L354); original rule: [END VOTING](../src/start_menu/global_start_menu.opy#L239).
 
 **Chain:** `END VOTING ⇢ determineZombieMode ⇢ determineChallenge ⇢ determineObjectiveType → selectVoteWinner`, then `⇢ setObjectiveType`.
 
@@ -996,11 +996,11 @@ The same **startRule(determineObjectiveType)** call without **NOOP** existed at 
 
 **Severity:** Medium. **Server-crash risk:** Conditional: repeated pregame initialization while a global executor waits.
 
-The same **startRule(setObjectiveType)** call without **NOOP** existed at [original:950](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L950>); its former target is [original:953](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L953>). Waits already existed in that target: [original:957](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L957>), [original:970](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L970>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(setObjectiveType)** call without **NOOP** existed at [original:950](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L950>); its former target is [original:953](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L953>). Waits already existed in that target: [original:957](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L957>), [original:970](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L970>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** Wait for setObjectiveType before START GAME and, if the lobby preserves the pregame session after everyone leaves, trigger another preparation/voting cycle. Record a second entry before the first ends. Fast normal voting alone does not reproduce repetition.
 
-**Code:** [call:374](src/global_start_menu.opy#L374), [setObjectiveType:389](src/global_start_menu.opy#L389), [start wait:393](src/global_start_menu.opy#L393), [position-selection wait:407](src/global_start_menu.opy#L407), [objectivesManagement:552](src/subroutines.opy#L552).
+**Code:** [call:374](../src/start_menu/global_start_menu.opy#L374), [setObjectiveType:389](../src/start_menu/global_start_menu.opy#L389), [start wait:393](../src/start_menu/global_start_menu.opy#L393), [position-selection wait:407](../src/start_menu/global_start_menu.opy#L407), [objectivesManagement:552](../src/game/subroutines.opy#L552).
 
 **Chain:** the entire `END VOTING` chain above, then `setObjectiveType → objectivesManagement → globalObjectiveEntityManagementMacro`.
 
@@ -1018,11 +1018,11 @@ The same **startRule(setObjectiveType)** call without **NOOP** existed at [origi
 
 **Severity:** Low. **Server-crash risk:** Hero-selection branch is normally wait-free; may restart an earlier short wait.
 
-The same **startRule(setPrematchTimer)** call without **NOOP** existed at [original:1286](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1286>); its former target is [original:1174](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1174>). Waits already existed in that target: [original:1201](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1201>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(setPrematchTimer)** call without **NOOP** existed at [original:1286](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1286>); its former target is [original:1174](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1174>). Waits already existed in that target: [original:1201](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1201>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** A new call during SELECTING_HERO is normally synchronous. Dangerous overlap is possible only if the same player previously left setPrematchTimer in its short wait; there is no separate long wait here.
 
-**Code:** [PLAYER SELECTS/RESELECTS HERO:63](src/player_start_menu.opy#L63), [call:72](src/player_start_menu.opy#L72), [setPrematchTimer](src/subroutines.opy#L498).
+**Code:** [PLAYER SELECTS/RESELECTS HERO:63](../src/start_menu/player_start_menu.opy#L63), [call:72](../src/start_menu/player_start_menu.opy#L72), [setPrematchTimer](../src/game/subroutines.opy#L498).
 
 **Chain:** `hero selection/respawn → PLAYER SELECTS/RESELECTS HERO ⇢ setPrematchTimer`.
 
@@ -1040,11 +1040,11 @@ The same **startRule(setPrematchTimer)** call without **NOOP** existed at [origi
 
 **Severity:** Medium. **Server-crash risk:** Conditional, short window: wait() in the timer transition 15 -> 10.
 
-The same **startRule(setPrematchTimer)** call without **NOOP** existed at [original:1328](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1328>); its former target is [original:1174](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1174>). Waits already existed in that target: [original:1201](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1201>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(setPrematchTimer)** call without **NOOP** existed at [original:1328](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1328>); its former target is [original:1174](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1174>). Waits already existed in that target: [original:1201](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1201>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** After voting ends, the last player's READY starts 15 -> wait() -> 10. A restart must hit exactly that short wait in the same context; merely waiting 15 seconds does not reproduce the defect.
 
-**Code:** [PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY):106](src/player_start_menu.opy#L106), [call:119](src/player_start_menu.opy#L119), [timer waiting branch:523](src/subroutines.opy#L523).
+**Code:** [PLAYER MENU CONTROLS (JUMP AND CROUCH, CHANGE HERO/READY):106](../src/start_menu/player_start_menu.opy#L106), [call:119](../src/start_menu/player_start_menu.opy#L119), [timer waiting branch:523](../src/game/subroutines.opy#L523).
 
 **Chain:** `Jump → pregameState becomes READY ⇢ setPrematchTimer`; then [SR07](#sr07) and `⇢ randomActions` launch independently.
 
@@ -1062,11 +1062,11 @@ The same **startRule(setPrematchTimer)** call without **NOOP** existed at [origi
 
 **Severity:** High. **Server-crash risk:** Reachable repetition in wait(1); cumulative risk across repeated restarts.
 
-The same **startRule(randomActions)** call without **NOOP** existed at [original:1329](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1329>); its former target is [original:1503](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1503>). Waits already existed in that target: [original:1516](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1516>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(randomActions)** call without **NOOP** existed at [original:1329](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1329>); its former target is [original:1503](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1503>). Waits already existed in that target: [original:1516](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1516>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** Jump, release both buttons, Crouch, release both, Jump; the second READY must occur less than 1 s after the first. The randomActions entry log should appear twice before the first pause ends. One sequence demonstrates wait cancellation, not a guaranteed crash.
 
-**Code:** [menu rule:106](src/player_start_menu.opy#L106), [call:120](src/player_start_menu.opy#L120), [randomActions:234](src/player_start_menu.opy#L234), [wait(1):249](src/player_start_menu.opy#L249).
+**Code:** [menu rule:106](../src/start_menu/player_start_menu.opy#L106), [call:120](../src/start_menu/player_start_menu.opy#L120), [randomActions:234](../src/start_menu/player_start_menu.opy#L234), [wait(1):249](../src/start_menu/player_start_menu.opy#L249).
 
 **Chain:** `Jump → READY ⇢ randomActions → random emote → wait(1) → random voice line`.
 
@@ -1084,11 +1084,11 @@ The same **startRule(randomActions)** call without **NOOP** existed at [original
 
 **Severity:** Medium. **Server-crash risk:** Conditional: cancellation may interrupt the previous readiness request's short wait.
 
-The same **startRule(setPrematchTimer)** call without **NOOP** existed at [original:1336](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1336>); its former target is [original:1174](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1174>). Waits already existed in that target: [original:1201](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1201>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(setPrematchTimer)** call without **NOOP** existed at [original:1336](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1336>); its former target is [original:1174](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1174>). Waits already existed in that target: [original:1201](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1201>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** Cancel READY for the same player while their previous setPrematchTimer still waits between 15 and 10. The window is short; another player's simultaneous readiness belongs to a different execution entity.
 
-**Code:** [menu rule:106](src/player_start_menu.opy#L106), [Crouch-branch call:127](src/player_start_menu.opy#L127), [setPrematchTimer](src/subroutines.opy#L498).
+**Code:** [menu rule:106](../src/start_menu/player_start_menu.opy#L106), [Crouch-branch call:127](../src/start_menu/player_start_menu.opy#L127), [setPrematchTimer](../src/game/subroutines.opy#L498).
 
 **Chain:** `Crouch → decrease pregameState ⇢ setPrematchTimer`; transitioning to `SELECTING_HERO` then starts hero changing, followed potentially by [SR05](#sr05).
 
@@ -1106,11 +1106,11 @@ The same **startRule(setPrematchTimer)** call without **NOOP** existed at [origi
 
 **Severity:** Medium. **Server-crash risk:** At the voting-end boundary; ordinary branch has no own wait.
 
-The same **startRule(setPrematchTimer)** call without **NOOP** existed at [original:1480](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1480>); its former target is [original:1174](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1174>). Waits already existed in that target: [original:1201](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1201>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(setPrematchTimer)** call without **NOOP** existed at [original:1480](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1480>); its former target is [original:1174](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1174>). Waits already existed in that target: [original:1201](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1201>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** Release voting buttons at the isVoting true -> false boundary with everyone READY, then call the timer again for the same player. The ordinary isVoting == true branch does not wait.
 
-**Code:** [UPDATE PREGAME VOTING STATUS:202](src/player_start_menu.opy#L202), [call:211](src/player_start_menu.opy#L211); sources of `isPregameVoting = true`: [Ultimate](src/player_start_menu.opy#L137), [Ability 1](src/player_start_menu.opy#L154), [Ability 2](src/player_start_menu.opy#L171).
+**Code:** [UPDATE PREGAME VOTING STATUS:202](../src/start_menu/player_start_menu.opy#L202), [call:211](../src/start_menu/player_start_menu.opy#L211); sources of `isPregameVoting = true`: [Ultimate](../src/start_menu/player_start_menu.opy#L137), [Ability 1](../src/start_menu/player_start_menu.opy#L154), [Ability 2](../src/start_menu/player_start_menu.opy#L171).
 
 **Chain:** `button vote → isPregameVoting = true → release all three buttons → UPDATE PREGAME VOTING STATUS ⇢ setPrematchTimer → wait(2)`; then [SR10](#sr10). Melee selects Enhancement and does not itself set this flag.
 
@@ -1128,11 +1128,11 @@ The same **startRule(setPrematchTimer)** call without **NOOP** existed at [origi
 
 **Severity:** Medium. **Server-crash risk:** Short target wait when ready; the caller owns the 2 s pause.
 
-The same **startRule(setPrematchTimer)** call without **NOOP** existed at [original:1483](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1483>); its former target is [original:1174](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1174>). Waits already existed in that target: [original:1201](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1201>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(setPrematchTimer)** call without **NOOP** existed at [original:1483](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1483>); its former target is [original:1174](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1174>). Waits already existed in that target: [original:1201](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1201>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** End voting during the local 2 s preceding the second call, then overlap the target's short pause with another call for the same player. Calls at 211/214, separated by 2 s, normally do not restart each other.
 
-**Code:** [UPDATE PREGAME VOTING STATUS](src/player_start_menu.opy#L202), [wait:212](src/player_start_menu.opy#L212), [call:214](src/player_start_menu.opy#L214), [setPrematchTimer](src/subroutines.opy#L498).
+**Code:** [UPDATE PREGAME VOTING STATUS](../src/start_menu/player_start_menu.opy#L202), [wait:212](../src/start_menu/player_start_menu.opy#L212), [call:214](../src/start_menu/player_start_menu.opy#L214), [setPrematchTimer](../src/game/subroutines.opy#L498).
 
 **Chain:** path [SR09](#sr09) → `wait(2, Wait.ABORT_WHEN_FALSE) → isPregameVoting = false ⇢ setPrematchTimer`.
 
@@ -1150,22 +1150,22 @@ The same **startRule(setPrematchTimer)** call without **NOOP** existed at [origi
 
 **Severity:** Low in normal operation. **Server-crash risk:** No normal repetition found; requires extra reentry into the transition.
 
-The same **startRule(objectivesManagement)** call without **NOOP** existed at [original:1710](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1710>); its former target is [original:1732](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1732>). Waits already existed there: [original:1774](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1774>), [original:1779](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1779>). The assessment concerns current reachability, not a reproduced original crash. The current compiled target's additional third Wait is in the inlined visual-object macro; the original already had that wait in called `globalObjectiveEntityManagement` at [original:1855](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1855>). The own-Wait count differs because an earlier subroutine was inlined.
+The same **startRule(objectivesManagement)** call without **NOOP** existed at [original:1710](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1710>); its former target is [original:1732](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1732>). Waits already existed there: [original:1774](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1774>), [original:1779](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1779>). The assessment concerns current reachability, not a reproduced original crash. The current compiled target's additional third Wait is in the inlined visual-object macro; the original already had that wait in called `globalObjectiveEntityManagement` at [original:1855](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1855>). The own-Wait count differs because an earlier subroutine was inlined.
 
 **Reproduction control:** No normal human-triggered double-launch scenario was found: isObjectiveComplete remains true until the transition finishes. Testing protection requires explicitly introducing a second entry during transition; do not describe it as an existing normal double transition.
 
-**Code:** [OBJECTIVE COMPLETE:123](src/global_game_in_progress.opy#L123), [call:127](src/global_game_in_progress.opy#L127), [objectivesManagement:552](src/subroutines.opy#L552), [entity macro:234](src/subroutines.opy#L234).
+**Code:** [OBJECTIVE COMPLETE:123](../src/game/global_game_in_progress.opy#L123), [call:127](../src/game/global_game_in_progress.opy#L127), [objectivesManagement:552](../src/game/subroutines.opy#L552), [entity macro:234](../src/game/subroutines.opy#L234).
 
 **Chain:** `objective reaches completion condition → isObjectiveComplete = true → OBJECTIVE COMPLETE ⇢ objectivesManagement → globalObjectiveEntityManagementMacro`. After launching the subroutine, the rule also adds rescue time for some dead players. A second, normal call exists: `setObjectiveType → objectivesManagement` during initial setup, before `isGameplayActive = true`.
 
 **In-game completion sources:**
 
-- Hold Showdown to the required percentage: [INCREASE OBJECTIVE CAPTURE PERCENTAGE](src/objective_types/objective_type_showdown.opy#L29).
-- Kill a boss/object registered in the boss list, including relevant Egg targets: [BOSS DIES (ALL BOSS OBJECTIVES)](src/objective_types/objective_type_bosses.opy#L119) → [completeBossObjective](src/objective_types/objective_type_bosses.opy#L221).
-- Finish Biomorphing processing: [ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS](src/objective_types/objective_type_biomorphing.opy#L74).
-- Deliver the survivor and subsequently complete Rescue: [SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE](src/objective_types/objective_type_survivor_rescue.opy#L4).
-- Score kills in Kill Zone: [MODIFY KILL ZONE SCORE](src/objective_types/objective_type_kill_zone.opy#L4).
-- Repair all terminals: [PLAYERS REPAIR TERMINALS](src/objective_types/objective_type_satellite_uplink.opy#L123).
+- Hold Showdown to the required percentage: [INCREASE OBJECTIVE CAPTURE PERCENTAGE](../src/objective_types/objective_type_showdown.opy#L29).
+- Kill a boss/object registered in the boss list, including relevant Egg targets: [BOSS DIES (ALL BOSS OBJECTIVES)](../src/objective_types/objective_type_bosses.opy#L119) → [completeBossObjective](../src/objective_types/objective_type_bosses.opy#L221).
+- Finish Biomorphing processing: [ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS](../src/objective_types/objective_type_biomorphing.opy#L74).
+- Deliver the survivor and subsequently complete Rescue: [SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE](../src/objective_types/objective_type_survivor_rescue.opy#L4).
+- Score kills in Kill Zone: [MODIFY KILL ZONE SCORE](../src/objective_types/objective_type_kill_zone.opy#L4).
+- Repair all terminals: [PLAYERS REPAIR TERMINALS](../src/objective_types/objective_type_satellite_uplink.opy#L123).
 
 **Waits and consequences:** transition includes `wait()` before removing the first objective, `wait(0.25)`, and old-visual cleanup waits. Restarting can interrupt cleanup; repeating the beginning may remove another objective, reset progress, and desynchronize effects/lists. These are conditional consequences of actual reentry, not an observed normal double removal.
 
@@ -1181,11 +1181,11 @@ The same **startRule(objectivesManagement)** call without **NOOP** existed at [o
 
 **Severity:** Medium. **Server-crash risk:** Present when resurrection operations overlap; window usually shorter than the 3 s timeout.
 
-The same **startRule(instantRevive)** call without **NOOP** existed at [original:6500](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6500>); its former target is [original:6110](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6110>). Waits already existed in that target: [original:6114](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6114>), [original:6117](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6117>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(instantRevive)** call without **NOOP** existed at [original:6500](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6500>); its former target is [original:6110](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6110>). Waits already existed in that target: [original:6114](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6114>), [original:6117](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6117>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** The window is unfinished resurrection confirmation, not necessarily 3 s. With rapid successful resurrection, a manual repeat may occur after completion and will not confirm the danger.
 
-**Code:** [Interact rule](src/supply_drops.opy#L81), [case 2 call:472](src/supply_drops.opy#L472), [instantRevive:132 / Workshop rule `instantRevive (0-9)`](src/supply_drops.opy#L132).
+**Code:** [Interact rule](../src/items/supply_drops.opy#L81), [case 2 call:472](../src/items/supply_drops.opy#L472), [instantRevive:132 / Workshop rule `instantRevive (0-9)`](../src/items/supply_drops.opy#L132).
 
 **Chain:** `pick up Revive → Interact → powerUpUsage → check dead players within 5 m ⇢ instantRevive → select target by facing direction → wait() → INVINCIBLE and resurrect → waitUntil(isAlive, 3) → sound/message`.
 
@@ -1203,11 +1203,11 @@ The same **startRule(instantRevive)** call without **NOOP** existed at [original
 
 **Severity:** High. **Server-crash risk:** Same player can repeat during a long wait; cumulative risk.
 
-The same **startRule(playerForceField)** call without **NOOP** existed at [original:6503](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6503>); its former target is [original:6122](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6122>). Waits already existed in that target: [original:6138](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6138>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(playerForceField)** call without **NOOP** existed at [original:6503](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6503>); its former target is [original:6122](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6122>). Waits already existed in that target: [original:6138](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6138>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** Two Force Fields for one owner; repeat within 10 s while the field repels zombies or waits in wait(0.032). Check center relocation and timer refresh.
 
-**Code:** [Interact rule](src/supply_drops.opy#L81), [call:476](src/supply_drops.opy#L476), [playerForceField:144 / rule `playerForceField (10-19)`](src/supply_drops.opy#L144).
+**Code:** [Interact rule](../src/items/supply_drops.opy#L81), [call:476](../src/items/supply_drops.opy#L476), [playerForceField:144 / rule `playerForceField (10-19)`](../src/items/supply_drops.opy#L144).
 
 **Chain:** `Force Field → Interact → powerUpUsage(case 3) ⇢ playerForceField → owner position → create sphere/HUD if needed → repulsion loop → cleanup`.
 
@@ -1225,11 +1225,11 @@ The same **startRule(playerForceField)** call without **NOOP** existed at [origi
 
 **Severity:** High. **Server-crash risk:** Same player can repeat during a long wait; cumulative risk.
 
-The same **startRule(noCooldowns)** call without **NOOP** existed at [original:6506](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6506>); its former target is [original:6144](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6144>). Waits already existed in that target: [original:6168](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6168>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(noCooldowns)** call without **NOOP** existed at [original:6506](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6506>); its former target is [original:6144](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6144>). Waits already existed in that target: [original:6168](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6168>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** Two No Cooldowns items; apply the second before 15 s expire, during a wait(0.032). Check that one executor accepts the new expiry.
 
-**Code:** [Interact rule](src/supply_drops.opy#L81), [call:480](src/supply_drops.opy#L480), [noCooldowns:168 / rule `noCooldowns (20-29)`](src/supply_drops.opy#L168).
+**Code:** [Interact rule](../src/items/supply_drops.opy#L81), [call:480](../src/items/supply_drops.opy#L480), [noCooldowns:168 / rule `noCooldowns (20-29)`](../src/items/supply_drops.opy#L168).
 
 **Chain:** `No Cooldowns → Interact → powerUpUsage(case 4) ⇢ noCooldowns → sound/HUD → cooldown-reset/charge-restoration loop → remove HUD`.
 
@@ -1247,11 +1247,11 @@ The same **startRule(noCooldowns)** call without **NOOP** existed at [original:6
 
 **Severity:** High. **Server-crash risk:** Same player can repeat during a long wait; cumulative risk.
 
-The same **startRule(airStrike)** call without **NOOP** existed at [original:6512](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6512>); its former target is [original:6173](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6173>). Waits already existed in that target: [original:6176](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6176>), [original:6186](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6186>), [original:6200](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6200>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(airStrike)** call without **NOOP** existed at [original:6512](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6512>); its former target is [original:6173](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6173>). Waits already existed in that target: [original:6176](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6176>), [original:6186](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6186>), [original:6200](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6200>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** Two Air Strikes; apply the second during the first 2 s of preparation or between explosions in wait(0.125). This interrupts the old bombardment and starts preparation again.
 
-**Code:** [Interact rule](src/supply_drops.opy#L81), [surface check:484](src/supply_drops.opy#L484), [call:487](src/supply_drops.opy#L487), [airStrike:197 / rule `airStrike (30-39)`](src/supply_drops.opy#L197).
+**Code:** [Interact rule](../src/items/supply_drops.opy#L81), [surface check:484](../src/items/supply_drops.opy#L484), [call:487](../src/items/supply_drops.opy#L487), [airStrike:197 / rule `airStrike (30-39)`](../src/items/supply_drops.opy#L197).
 
 **Chain:** `Air Strike → Interact → powerUpUsage(case 5) → surface check within 40 m ⇢ airStrike → wait() → select strike point → markers → wait(2) → 50 explosions with wait(0.125) → cleanup`.
 
@@ -1269,11 +1269,11 @@ The same **startRule(airStrike)** call without **NOOP** existed at [original:651
 
 **Severity:** High. **Server-crash risk:** Same player can repeat during a long wait; cumulative risk.
 
-The same **startRule(healBeacon)** call without **NOOP** existed at [original:6515](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6515>); its former target is [original:6206](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6206>). Waits already existed in that target: [original:6224](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6224>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(healBeacon)** call without **NOOP** existed at [original:6515](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6515>); its former target is [original:6206](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6206>). Waits already existed in that target: [original:6224](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6224>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** Two Beacons of Healing; apply the second within 30 s during wait(1). Check the new position/duration and exactly-once healing-dealt restoration.
 
-**Code:** [Interact rule](src/supply_drops.opy#L81), [call:491](src/supply_drops.opy#L491), [healBeacon:235 / rule `beaconofHealing (40-49)`](src/supply_drops.opy#L235).
+**Code:** [Interact rule](../src/items/supply_drops.opy#L81), [call:491](../src/items/supply_drops.opy#L491), [healBeacon:235 / rule `beaconofHealing (40-49)`](../src/items/supply_drops.opy#L235).
 
 **Chain:** `Beacon → Interact → powerUpUsage(case 6) ⇢ healBeacon → position → entities/HUD/aura if needed → setHealingDealt(150) → 30 healing steps → cleanup and setHealingDealt(100)`.
 
@@ -1291,11 +1291,11 @@ The same **startRule(healBeacon)** call without **NOOP** existed at [original:65
 
 **Severity:** High. **Server-crash risk:** Same player can repeat during a long wait; cumulative risk.
 
-The same **startRule(sentryTurret)** call without **NOOP** existed at [original:6524](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6524>); its former target is [original:6235](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6235>). Waits already existed in that target: [original:6263](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6263>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(sentryTurret)** call without **NOOP** existed at [original:6524](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6524>); its former target is [original:6235](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6235>). Waits already existed in that target: [original:6263](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6263>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** Two Sentry Turrets; repeat within 30 s between shots during wait(0.125). Check position, expiry, and a single effect/HUD set.
 
-**Code:** [Interact rule](src/supply_drops.opy#L81), [call:502](src/supply_drops.opy#L502), [sentryTurret:264 / rule `sentryTurret (50-59)`](src/supply_drops.opy#L264).
+**Code:** [Interact rule](../src/items/supply_drops.opy#L81), [call:502](../src/items/supply_drops.opy#L502), [sentryTurret:264 / rule `sentryTurret (50-59)`](../src/items/supply_drops.opy#L264).
 
 **Chain:** `Turret → Interact → powerUpUsage(case 8) ⇢ sentryTurret → ground-adjusted position → body/legs/barrel/HUD → target selection and firing → cleanup`.
 
@@ -1313,11 +1313,11 @@ The same **startRule(sentryTurret)** call without **NOOP** existed at [original:
 
 **Severity:** High. **Server-crash risk:** Same player can repeat during a long wait; cumulative risk.
 
-The same **startRule(cloakingDevice)** call without **NOOP** existed at [original:6527](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6527>); its former target is [original:6273](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6273>). Waits already existed in that target: [original:6295](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6295>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(cloakingDevice)** call without **NOOP** existed at [original:6527](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6527>); its former target is [original:6273](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6273>). Waits already existed in that target: [original:6295](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6295>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** Two Cloaking Devices; repeat before 25 s expire during waitUntil(..., 1). Then test manual cancellation and death: remove invisibility-count and speed contributions exactly once.
 
-**Code:** [Interact rule](src/supply_drops.opy#L81), [call:506](src/supply_drops.opy#L506), [cloakingDevice:302 / rule `cloakingDevice (60-69)`](src/supply_drops.opy#L302).
+**Code:** [Interact rule](../src/items/supply_drops.opy#L81), [call:506](../src/items/supply_drops.opy#L506), [cloakingDevice:302 / rule `cloakingDevice (60-69)`](../src/items/supply_drops.opy#L302).
 
 **Chain:** `Cloaking → Interact → powerUpUsage(case 9) ⇢ cloakingDevice → initial speed/sphere/HUD/invisibilityCount setup → loop up to 25 seconds → final invisibilityCount decrement, cleanup, restore speed multiplier`.
 
@@ -1335,11 +1335,11 @@ The same **startRule(cloakingDevice)** call without **NOOP** existed at [origina
 
 **Severity:** High. **Server-crash risk:** Same player can repeat during a long wait; cumulative risk.
 
-The same **startRule(superNano)** call without **NOOP** existed at [original:6530](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6530>); its former target is [original:6306](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6306>). Waits already existed in that target: [original:6329](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6329>), [original:6330](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6330>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(superNano)** call without **NOOP** existed at [original:6530](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6530>); its former target is [original:6306](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6306>). Waits already existed in that target: [original:6329](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6329>), [original:6330](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6330>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** Two Super Nanos; repeat before 20 s expire during wait(1), then separately in the final 0.25 s before cleanup. Check healing, damage modifiers, speed, and effect existence.
 
-**Code:** [Interact rule](src/supply_drops.opy#L81), [call:510](src/supply_drops.opy#L510), [superNano:335 / rule `superNano (70-79)`](src/supply_drops.opy#L335).
+**Code:** [Interact rule](../src/items/supply_drops.opy#L81), [call:510](../src/items/supply_drops.opy#L510), [superNano:335 / rule `superNano (70-79)`](../src/items/supply_drops.opy#L335).
 
 **Chain:** `Super Nano → Interact → powerUpUsage(case 10) ⇢ superNano → initial speed/aura/HUD/damage-modifier setup → healing and incoming-damage reduction → loop → wait(0.25) → cleanup and parameter rollback`.
 
@@ -1357,11 +1357,11 @@ The same **startRule(superNano)** call without **NOOP** existed at [original:653
 
 **Severity:** High. **Server-crash risk:** Same player can repeat during a long wait; cumulative risk.
 
-The same **startRule(bouncePad)** call without **NOOP** existed at [original:6533](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6533>); its former target is [original:6343](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6343>). Waits already existed in that target: [original:6354](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6354>), [original:6368](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6368>), [original:6369](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6369>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(bouncePad)** call without **NOOP** existed at [original:6533](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6533>); its former target is [original:6343](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6343>). Waits already existed in that target: [original:6354](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6354>), [original:6368](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6368>), [original:6369](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6369>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** Two Bounce Pads; repeat within approximately 61 s, including the initial wait(1), loop wait(0.125), and final wait(0.25). Check relocation and that old cleanup does not remove the newly accepted effect.
 
-**Code:** [Interact rule](src/supply_drops.opy#L81), [call:514](src/supply_drops.opy#L514), [bouncePad:372 / rule `bouncePad (80-89)`](src/supply_drops.opy#L372).
+**Code:** [Interact rule](../src/items/supply_drops.opy#L81), [call:514](../src/items/supply_drops.opy#L514), [bouncePad:372 / rule `bouncePad (80-89)`](../src/items/supply_drops.opy#L372).
 
 **Chain:** `Bounce Pad → Interact → powerUpUsage(case 11) ⇢ bouncePad → pad position and ring/HUD → wait(1) → launch loop → wait(0.25) → cleanup`.
 
@@ -1379,11 +1379,11 @@ The same **startRule(bouncePad)** call without **NOOP** existed at [original:653
 
 **Severity:** High. **Server-crash risk:** Same player can repeat during a long wait; cumulative risk.
 
-The same **startRule(ultimateCharger)** call without **NOOP** existed at [original:6536](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6536>); its former target is [original:6375](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6375>). Waits already existed in that target: [original:6385](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6385>), [original:6386](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6386>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(ultimateCharger)** call without **NOOP** existed at [original:6536](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6536>); its former target is [original:6375](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6375>). Waits already existed in that target: [original:6385](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6385>), [original:6386](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6386>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** Two Ultimate Chargers; repeat within 20 s during wait(0.125), then separately during final wait(0.25). Already granted ultimate charge remains; check refreshed expiry and a single charging rate.
 
-**Code:** [Interact rule](src/supply_drops.opy#L81), [call:518](src/supply_drops.opy#L518), [ultimateCharger:402 / rule `ultimateCharger (90-99)`](src/supply_drops.opy#L402).
+**Code:** [Interact rule](../src/items/supply_drops.opy#L81), [call:518](../src/items/supply_drops.opy#L518), [ultimateCharger:402 / rule `ultimateCharger (90-99)`](../src/items/supply_drops.opy#L402).
 
 **Chain:** `Ultimate Charger → Interact → powerUpUsage(case 12) ⇢ ultimateCharger → HUD/sound → add 2 charge every 0.125 seconds → wait(0.25) → remove HUD`.
 
@@ -1401,11 +1401,11 @@ The same **startRule(ultimateCharger)** call without **NOOP** existed at [origin
 
 **Severity:** High. **Server-crash risk:** Same player can repeat during a long wait; cumulative risk.
 
-The same **startRule(stun)** call without **NOOP** existed at [original:6541](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6541>); its former target is [original:6391](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6391>). Waits already existed in that target: [original:6412](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6412>), [original:6416](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6416>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
+The same **startRule(stun)** call without **NOOP** existed at [original:6541](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6541>); its former target is [original:6391](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6391>). Waits already existed in that target: [original:6412](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6412>), [original:6416](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6416>). The assessment above concerns current scenario reachability and does not imply a reproduced crash in the original.
 
 **Reproduction control:** Two Stuns and several living zombies; use the second during waitUntil(beam arrival, 3) or the inter-target wait(). Check origin/target, remaining hops, and beam/chase cleanup.
 
-**Code:** [Interact rule](src/supply_drops.opy#L81), [target check:523](src/supply_drops.opy#L523), [call:524](src/supply_drops.opy#L524), [stun:418 / rule `stun (100-109)`](src/supply_drops.opy#L418).
+**Code:** [Interact rule](../src/items/supply_drops.opy#L81), [target check:523](../src/items/supply_drops.opy#L523), [call:524](../src/items/supply_drops.opy#L524), [stun:418 / rule `stun (100-109)`](../src/items/supply_drops.opy#L418).
 
 **Chain:** `Stun → Interact → powerUpUsage(case 13) → living target within 15 * sizeScale and angle < 45° ⇢ stun → beam/initial target → up to 50 hops → stopChasing and remove beam`.
 
@@ -1427,20 +1427,20 @@ The compiler flags a condition read if it finds a chase of that variable anywher
 
 | ID | Location / variable | Verdict and reason | Severity / crash risk | Proposal | Provenance |
 |---|---|---|---|---|---|
-| CH01 | [objective_types/objective_type_extraction_point.opy:16](src/objective_types/objective_type_extraction_point.opy#L16) / `objectiveRad` | Valid: fixed radius. During extraction, objectiveRad = 10; Showdown stops its chase on completion. Not a defect. | Not a defect; no direct crash risk found | Retain the algorithm. Document local diagnostics if needed; do not restore global suppression. | Inherited condition: [original:2041](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2041>), [original:1785](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1785>). Not a defect. |
-| CH02 | [objective_types/objective_type_extraction_point.opy:34](src/objective_types/objective_type_extraction_point.opy#L34) / `extractionZoneRad` | Intermediate threshold; verify. 300 -> 0 crosses 200 before chase ends. Infection outside may start late. | Under observation; medium if reproduced; no direct crash risk found | Reproduce the scenario below first. If confirmed, use controlled polling/published state rather than intermediate-chase dependence. | Inherited condition: [original:2059](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2059>), [original:1784](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1784>). Risk in an older construct; no in-game failure established. |
-| CH03 | [objective_types/objective_type_extraction_point.opy:35](src/objective_types/objective_type_extraction_point.opy#L35) / `extractionZoneRad` | Intermediate boundary; verify. Radius crosses the distance to a stationary player before reaching zero. Do not claim reproduction without running the game. | Under observation; medium if reproduced; no direct crash risk found | Reproduce the scenario below first. If confirmed, use controlled polling/published state rather than intermediate-chase dependence. | Inherited condition: [original:2060](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2060>), [original:1784](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1784>). Risk in an older construct; no in-game failure established. |
-| CH04 | [objective_types/objective_type_extraction_point.opy:72](src/objective_types/objective_type_extraction_point.opy#L72) / `extractionZoneRad` | Valid: terminal value. Defeat at extractionZoneRad <= 0 checks the chase destination of 0. Not a defect. | Not a defect; no direct crash risk found | Retain the algorithm. Document local diagnostics if needed; do not restore global suppression. | Inherited condition: [original:2077](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2077>), [original:1784](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1784>). Not a defect. |
-| CH05 | [objective_types/objective_type_showdown.opy:14](src/objective_types/objective_type_showdown.opy#L14) / `objectiveRad` | Intermediate boundary; verify. Radius crosses player/bot distance. Completion of individual chase steps may provide the required reevaluation. | Under observation; medium if reproduced; no direct crash risk found | Reproduce the scenario below first. If confirmed, use controlled polling/published state rather than intermediate-chase dependence. | Inherited condition: [original:2156](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2156>), [original:1791](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1791>). Risk in an older construct; no in-game failure established. |
-| CH06 | [objective_types/objective_type_biomorphing.opy:147](src/objective_types/objective_type_biomorphing.opy#L147) / `objectiveRad` | Valid: different lifecycle. Biomorphing uses radius = 3.5, with no active Showdown chase. Not a defect. | Not a defect; no direct crash risk found | Retain the algorithm. Document local diagnostics if needed; do not restore global suppression. | Inherited condition: [original:2553](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2553>), [original:1805](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1805>). Not a defect. |
-| CH07 | [objective_types/objective_type_survivor_rescue.opy:83](src/objective_types/objective_type_survivor_rescue.opy#L83) / `objectiveRad` | Valid: direct assignments. Rescue uses values 10/30 and restores through assignment. Not a chase defect. | Not a defect; no direct crash risk found | Retain the algorithm. Document local diagnostics if needed; do not restore global suppression. | Inherited condition: [original:2712](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2712>), [original:2724](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2724>). Not a defect. |
-| CH08 | [objective_types/objective_type_kill_zone.opy:7](src/objective_types/objective_type_kill_zone.opy#L7) / `objectiveRad` | Valid: fixed value and event. Kill Zone uses radius = 20; the check runs on final blow. Not a chase defect. | Not a defect; no direct crash risk found | Retain the algorithm. Document local diagnostics if needed; do not restore global suppression. | Inherited condition: [original:2832](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2832>), [original:1820](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1820>). Not a defect. |
-| CH09 | [objective_types/objective_type_satellite_uplink.opy:113](src/objective_types/objective_type_satellite_uplink.opy#L113) / `objectiveRad` | Valid: fixed radius. Satellite uses radius = 3. Active Showdown chase should not survive a normal transition. Not a defect. | Not a defect; no direct crash risk found | Retain the algorithm. Document local diagnostics if needed; do not restore global suppression. | Inherited condition: [original:2977](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2977>), [original:1831](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1831>). Not a defect. |
-| CH10 | [zombie_types.opy:1129](src/zombie_types.opy#L1129) / `botAbilityCooldown` | Valid: terminal value. Hazard waits for botAbilityCooldown == 0, and chase also targets 0. An extra boss branch independently permits the action. | Not a defect; no direct crash risk found | Retain the algorithm. Document local diagnostics if needed; do not restore global suppression. | Inherited condition: [original:5607](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5607>), [original:4263](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L4263>). Not a defect. |
-| CH11 | [zombie_types.opy:1390](src/zombie_types.opy#L1390) / `objectiveRad` | Intermediate boundary only during Showdown; verify. Other types use fixed radii; chase-step completion in Showdown may remove the delay. | Under observation; medium if reproduced; no direct crash risk found | Reproduce the scenario below first. If confirmed, use controlled polling/published state rather than intermediate-chase dependence. | Inherited condition: [original:5891](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5891>), [original:1791](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1791>). Risk in an older construct; no in-game failure established. |
-| CH12 | [enhancements.opy:171](src/enhancements.opy#L171) / `infectionLevel` | Valid: mutually exclusive roles. The condition concerns Zombie Hybrid; infectionLevel chase runs in the else branch for other enhancements. Not a defect. | Not a defect; no direct crash risk found | Retain the algorithm. Document local diagnostics if needed; do not restore global suppression. | Inherited condition: [original:6712](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6712>), [original:6600](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6600>). Not a defect. |
-| CH13 | [enhancements.opy:271](src/enhancements.opy#L271) / `enhancementBarrierHealth` | Valid: assignment guarantees the threshold. Before regeneration from 0, HP is set to 1; > 0 is already true. Contact stops chase. Entry does not require waiting for 10000. | Not a defect; no direct crash risk found | Retain the algorithm. Document local diagnostics if needed; do not restore global suppression. | Inherited condition: [original:6769](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6769>), [original:6810](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6810>), [original:6811](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6811>). Not a defect. |
-| CH14 | [enhancements.opy:534](src/enhancements.opy#L534) / `enhancementPupCooldown` | Valid: terminal value. P.U.P. checks cooldown <= 0 with destination 0. Temporary rate 0 while beaming is intentional. Not a defect. | Not a defect; no direct crash risk found | Retain the algorithm. Document local diagnostics if needed; do not restore global suppression. | Inherited condition: [original:7057](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7057>), [original:6684](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6684>). Not a defect. |
+| CH01 | [objective_types/objective_type_extraction_point.opy:16](../src/objective_types/objective_type_extraction_point.opy#L16) / `objectiveRad` | Valid: fixed radius. During extraction, objectiveRad = 10; Showdown stops its chase on completion. Not a defect. | Not a defect; no direct crash risk found | Retain the algorithm. Document local diagnostics if needed; do not restore global suppression. | Inherited condition: [original:2041](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2041>), [original:1785](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1785>). Not a defect. |
+| CH02 | [objective_types/objective_type_extraction_point.opy:34](../src/objective_types/objective_type_extraction_point.opy#L34) / `extractionZoneRad` | Intermediate threshold; verify. 300 -> 0 crosses 200 before chase ends. Infection outside may start late. | Under observation; medium if reproduced; no direct crash risk found | Reproduce the scenario below first. If confirmed, use controlled polling/published state rather than intermediate-chase dependence. | Inherited condition: [original:2059](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2059>), [original:1784](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1784>). Risk in an older construct; no in-game failure established. |
+| CH03 | [objective_types/objective_type_extraction_point.opy:35](../src/objective_types/objective_type_extraction_point.opy#L35) / `extractionZoneRad` | Intermediate boundary; verify. Radius crosses the distance to a stationary player before reaching zero. Do not claim reproduction without running the game. | Under observation; medium if reproduced; no direct crash risk found | Reproduce the scenario below first. If confirmed, use controlled polling/published state rather than intermediate-chase dependence. | Inherited condition: [original:2060](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2060>), [original:1784](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1784>). Risk in an older construct; no in-game failure established. |
+| CH04 | [objective_types/objective_type_extraction_point.opy:72](../src/objective_types/objective_type_extraction_point.opy#L72) / `extractionZoneRad` | Valid: terminal value. Defeat at extractionZoneRad <= 0 checks the chase destination of 0. Not a defect. | Not a defect; no direct crash risk found | Retain the algorithm. Document local diagnostics if needed; do not restore global suppression. | Inherited condition: [original:2077](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2077>), [original:1784](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1784>). Not a defect. |
+| CH05 | [objective_types/objective_type_showdown.opy:14](../src/objective_types/objective_type_showdown.opy#L14) / `objectiveRad` | Intermediate boundary; verify. Radius crosses player/bot distance. Completion of individual chase steps may provide the required reevaluation. | Under observation; medium if reproduced; no direct crash risk found | Reproduce the scenario below first. If confirmed, use controlled polling/published state rather than intermediate-chase dependence. | Inherited condition: [original:2156](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2156>), [original:1791](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1791>). Risk in an older construct; no in-game failure established. |
+| CH06 | [objective_types/objective_type_biomorphing.opy:147](../src/objective_types/objective_type_biomorphing.opy#L147) / `objectiveRad` | Valid: different lifecycle. Biomorphing uses radius = 3.5, with no active Showdown chase. Not a defect. | Not a defect; no direct crash risk found | Retain the algorithm. Document local diagnostics if needed; do not restore global suppression. | Inherited condition: [original:2553](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2553>), [original:1805](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1805>). Not a defect. |
+| CH07 | [objective_types/objective_type_survivor_rescue.opy:83](../src/objective_types/objective_type_survivor_rescue.opy#L83) / `objectiveRad` | Valid: direct assignments. Rescue uses values 10/30 and restores through assignment. Not a chase defect. | Not a defect; no direct crash risk found | Retain the algorithm. Document local diagnostics if needed; do not restore global suppression. | Inherited condition: [original:2712](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2712>), [original:2724](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2724>). Not a defect. |
+| CH08 | [objective_types/objective_type_kill_zone.opy:7](../src/objective_types/objective_type_kill_zone.opy#L7) / `objectiveRad` | Valid: fixed value and event. Kill Zone uses radius = 20; the check runs on final blow. Not a chase defect. | Not a defect; no direct crash risk found | Retain the algorithm. Document local diagnostics if needed; do not restore global suppression. | Inherited condition: [original:2832](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2832>), [original:1820](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1820>). Not a defect. |
+| CH09 | [objective_types/objective_type_satellite_uplink.opy:113](../src/objective_types/objective_type_satellite_uplink.opy#L113) / `objectiveRad` | Valid: fixed radius. Satellite uses radius = 3. Active Showdown chase should not survive a normal transition. Not a defect. | Not a defect; no direct crash risk found | Retain the algorithm. Document local diagnostics if needed; do not restore global suppression. | Inherited condition: [original:2977](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2977>), [original:1831](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1831>). Not a defect. |
+| CH10 | [zombie_types.opy:1129](../src/game/zombie_types.opy#L1129) / `botAbilityCooldown` | Valid: terminal value. Hazard waits for botAbilityCooldown == 0, and chase also targets 0. An extra boss branch independently permits the action. | Not a defect; no direct crash risk found | Retain the algorithm. Document local diagnostics if needed; do not restore global suppression. | Inherited condition: [original:5607](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5607>), [original:4263](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L4263>). Not a defect. |
+| CH11 | [zombie_types.opy:1390](../src/game/zombie_types.opy#L1390) / `objectiveRad` | Intermediate boundary only during Showdown; verify. Other types use fixed radii; chase-step completion in Showdown may remove the delay. | Under observation; medium if reproduced; no direct crash risk found | Reproduce the scenario below first. If confirmed, use controlled polling/published state rather than intermediate-chase dependence. | Inherited condition: [original:5891](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5891>), [original:1791](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1791>). Risk in an older construct; no in-game failure established. |
+| CH12 | [enhancements.opy:171](../src/abilities/enhancements.opy#L171) / `infectionLevel` | Valid: mutually exclusive roles. The condition concerns Zombie Hybrid; infectionLevel chase runs in the else branch for other enhancements. Not a defect. | Not a defect; no direct crash risk found | Retain the algorithm. Document local diagnostics if needed; do not restore global suppression. | Inherited condition: [original:6712](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6712>), [original:6600](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6600>). Not a defect. |
+| CH13 | [enhancements.opy:271](../src/abilities/enhancements.opy#L271) / `enhancementBarrierHealth` | Valid: assignment guarantees the threshold. Before regeneration from 0, HP is set to 1; > 0 is already true. Contact stops chase. Entry does not require waiting for 10000. | Not a defect; no direct crash risk found | Retain the algorithm. Document local diagnostics if needed; do not restore global suppression. | Inherited condition: [original:6769](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6769>), [original:6810](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6810>), [original:6811](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6811>). Not a defect. |
+| CH14 | [enhancements.opy:534](../src/abilities/enhancements.opy#L534) / `enhancementPupCooldown` | Valid: terminal value. P.U.P. checks cooldown <= 0 with destination 0. Temporary rate 0 while beaming is intentional. Not a defect. | Not a defect; no direct crash risk found | Retain the algorithm. Document local diagnostics if needed; do not restore global suppression. | Inherited condition: [original:7057](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7057>), [original:6684](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6684>). Not a defect. |
 
 **CH02–CH03, the dome: the most significant intermediate-value check.** It shrinks from 300 to 0, but infection should begin earlier: after the 200 threshold and when radius crosses player distance. Control: keep a living player stationary outside extraction; log radius and `infectionLevel`, marking passage through 200 and body distance. Infection should increase once outside, allowing for the normal 1 s wait. Repeat with a moving player. If a stationary player triggers a response only at 0/stopping, a defect is then reproduced. This would be medium/high severity for extraction mechanics; it does not explain a process crash. Fix with cheap regular boundary checks inside the body, guarded by active extraction, or a separately published radius; preserve infection period and spawn-room exit handling. Retain CH04 `radius <= 0` as a terminal check.
 
@@ -1458,26 +1458,26 @@ The compiler flags a condition read if it finds a chase of that variable anywher
 
 | ID | Location | Owner | Severity / crash risk | Proposal and check | Provenance |
 |---|---|---|---|---|---|
-| IM01 | [objective_types/objective_type_bosses.opy:142](src/objective_types/objective_type_bosses.opy#L142) | `rule "BOSS DIES (ALL BOSS OBJECTIVES)"` | Low; no direct crash risk found | Boss return: falling down with the target above/below; check height and horizontal approach to the target. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:2363](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2363>). Target selection was refined; the legacy mode is unchanged. |
-| IM02 | [zombie_types.opy:274](src/zombie_types.opy#L274) | `rule "BRUTE (REIN) SUPER SEISMIC SLAM"` | Low; no direct crash risk found | Reinhardt: group launch; compare players running sideways and falling. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:4698](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L4698>). |
-| IM03 | [zombie_types.opy:358](src/zombie_types.opy#L358) | `rule "REIGNITED (ANRAN) ABILITIES"` | Low; no direct crash risk found | Anran: vertical impulse before movement; preserve lateral momentum and height. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:4782](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L4782>). |
-| IM04 | [zombie_types.opy:364](src/zombie_types.opy#L364) | `rule "REIGNITED (ANRAN) ABILITIES"` | Low; no direct crash risk found | Anran: angled dash toward the target; compare opposing motion and platform edges. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:4788](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L4788>). |
-| IM05 | [zombie_types.opy:619](src/zombie_types.opy#L619) | `rule "SLIMER (MERCY) TENTACLE GRAB"` | Low; no direct crash risk found | Mercy: victim pull; check motion perpendicular to the pull and gravity restoration. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:5047](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5047>). |
-| IM06 | [zombie_types.opy:655](src/zombie_types.opy#L655) | `rule "PRIME SLIMER (EMRE) FLIGHT (BOSS)"` | Low; no direct crash risk found | Emre: takeoff; check lateral velocity before the vertical impulse. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:5086](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5086>). |
-| IM07 | [zombie_types.opy:716](src/zombie_types.opy#L716) | `rule "STRIKER (WRECKING BALL) PILE DRIVER"` | Low; no direct crash risk found | Wrecking Ball: launch toward a point above the target; check the angled trajectory. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:5150](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5150>). |
-| IM08 | [zombie_types.opy:805](src/zombie_types.opy#L805) | `rule "STALKER KNOCKBACK BLAST (BOSS)"` | Low; no direct crash risk found | Moira: knockback with lift; compare a running and a falling victim. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:5243](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5243>). |
-| IM09 | [zombie_types.opy:930](src/zombie_types.opy#L930) | `rule "DOWNFALLEN GRABS PLAYER"` | Low; no direct crash risk found | Sigma: self-recoil backward/upward in local coordinates; check orientation. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:5376](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5376>). |
-| IM10 | [zombie_types.opy:940](src/zombie_types.opy#L940) | `rule "DOWNFALLEN GRABS PLAYER"` | Low; no direct crash risk found | Sigma: throw the captured target; check distance, height, and opposing velocity. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:5386](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5386>). |
-| IM11 | [zombie_types.opy:1042](src/zombie_types.opy#L1042) | `rule "DAYTAKER (ILLARI) BURST"` | Low; no direct crash risk found | Illari: throw a zombie toward the active target; check the arc accounting for target elevation. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:5493](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5493>). |
-| IM12 | [zombie_types.opy:1044](src/zombie_types.opy#L1044) | `rule "DAYTAKER (ILLARI) BURST"` | Low; no direct crash risk found | Illari: throw without an active target; check facing-based direction and original range. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:5495](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5495>). |
-| IM13 | [zombie_types.opy:1245](src/zombie_types.opy#L1245) | `rule "SMOLDER BOSS SLAM"` | Low; no direct crash risk found | Winston: accelerated landing; check preservation of horizontal movement. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:5730](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5730>). |
-| IM14 | [zombie_types.opy:1271](src/zombie_types.opy#L1271) | `rule "SMOLDER SUPER SLAM"` | Low; no direct crash risk found | Winston: group shockwave; check near/far force and perpendicular motion. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:5754](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5754>). |
-| IM15 | [zombie_types.opy:1431](src/zombie_types.opy#L1431) | `def abilityThrowdown()` | Low; no direct crash risk found | Hazard abilityThrowdown: launch nearby actors; check targets' lateral momentum. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:4388](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L4388>). |
-| IM16 | [zombie_types.opy:1432](src/zombie_types.opy#L1432) | `def abilityThrowdown()` | Low; no direct crash risk found | Hazard abilityThrowdown: self-jump; compare velocity and height. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:4389](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L4389>). |
-| IM17 | [supply_drops.opy:161](src/supply_drops.opy#L161) | `def playerForceField()` | Low; no direct crash risk found | Force Field: continuous repulsion; check running inward, along the boundary, and jumping. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:6137](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6137>). |
-| IM18 | [supply_drops.opy:393](src/supply_drops.opy#L393) | `def bouncePad()` | Low; no direct crash risk found | Bounce Pad: vertical jump; check for changes in lateral velocity. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:6366](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6366>). |
-| IM19 | [enhancements.opy:260](src/enhancements.opy#L260) | `rule "LASER BARRICADE BLOCKS ZOMBIES"` | Low; no direct crash risk found | Laser Barricade: reflect a moving zombie; check both directions and floor slopes. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:6800](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6800>). |
-| IM20 | [enhancements.opy:614](src/enhancements.opy#L614) | `rule "P.U.P. CONTROL"` | Low; no direct crash risk found | P.U.P.: beam knockback of the target; compare horizontal motion and falling. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:7137](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7137>). |
+| IM01 | [objective_types/objective_type_bosses.opy:142](../src/objective_types/objective_type_bosses.opy#L142) | `rule "BOSS DIES (ALL BOSS OBJECTIVES)"` | Low; no direct crash risk found | Boss return: falling down with the target above/below; check height and horizontal approach to the target. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:2363](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2363>). Target selection was refined; the legacy mode is unchanged. |
+| IM02 | [zombie_types.opy:274](../src/game/zombie_types.opy#L274) | `rule "BRUTE (REIN) SUPER SEISMIC SLAM"` | Low; no direct crash risk found | Reinhardt: group launch; compare players running sideways and falling. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:4698](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L4698>). |
+| IM03 | [zombie_types.opy:358](../src/game/zombie_types.opy#L358) | `rule "REIGNITED (ANRAN) ABILITIES"` | Low; no direct crash risk found | Anran: vertical impulse before movement; preserve lateral momentum and height. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:4782](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L4782>). |
+| IM04 | [zombie_types.opy:364](../src/game/zombie_types.opy#L364) | `rule "REIGNITED (ANRAN) ABILITIES"` | Low; no direct crash risk found | Anran: angled dash toward the target; compare opposing motion and platform edges. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:4788](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L4788>). |
+| IM05 | [zombie_types.opy:619](../src/game/zombie_types.opy#L619) | `rule "SLIMER (MERCY) TENTACLE GRAB"` | Low; no direct crash risk found | Mercy: victim pull; check motion perpendicular to the pull and gravity restoration. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:5047](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5047>). |
+| IM06 | [zombie_types.opy:655](../src/game/zombie_types.opy#L655) | `rule "PRIME SLIMER (EMRE) FLIGHT (BOSS)"` | Low; no direct crash risk found | Emre: takeoff; check lateral velocity before the vertical impulse. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:5086](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5086>). |
+| IM07 | [zombie_types.opy:716](../src/game/zombie_types.opy#L716) | `rule "STRIKER (WRECKING BALL) PILE DRIVER"` | Low; no direct crash risk found | Wrecking Ball: launch toward a point above the target; check the angled trajectory. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:5150](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5150>). |
+| IM08 | [zombie_types.opy:805](../src/game/zombie_types.opy#L805) | `rule "STALKER KNOCKBACK BLAST (BOSS)"` | Low; no direct crash risk found | Moira: knockback with lift; compare a running and a falling victim. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:5243](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5243>). |
+| IM09 | [zombie_types.opy:930](../src/game/zombie_types.opy#L930) | `rule "DOWNFALLEN GRABS PLAYER"` | Low; no direct crash risk found | Sigma: self-recoil backward/upward in local coordinates; check orientation. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:5376](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5376>). |
+| IM10 | [zombie_types.opy:940](../src/game/zombie_types.opy#L940) | `rule "DOWNFALLEN GRABS PLAYER"` | Low; no direct crash risk found | Sigma: throw the captured target; check distance, height, and opposing velocity. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:5386](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5386>). |
+| IM11 | [zombie_types.opy:1042](../src/game/zombie_types.opy#L1042) | `rule "DAYTAKER (ILLARI) BURST"` | Low; no direct crash risk found | Illari: throw a zombie toward the active target; check the arc accounting for target elevation. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:5493](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5493>). |
+| IM12 | [zombie_types.opy:1044](../src/game/zombie_types.opy#L1044) | `rule "DAYTAKER (ILLARI) BURST"` | Low; no direct crash risk found | Illari: throw without an active target; check facing-based direction and original range. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:5495](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5495>). |
+| IM13 | [zombie_types.opy:1245](../src/game/zombie_types.opy#L1245) | `rule "SMOLDER BOSS SLAM"` | Low; no direct crash risk found | Winston: accelerated landing; check preservation of horizontal movement. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:5730](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5730>). |
+| IM14 | [zombie_types.opy:1271](../src/game/zombie_types.opy#L1271) | `rule "SMOLDER SUPER SLAM"` | Low; no direct crash risk found | Winston: group shockwave; check near/far force and perpendicular motion. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:5754](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5754>). |
+| IM15 | [zombie_types.opy:1431](../src/game/zombie_types.opy#L1431) | `def abilityThrowdown()` | Low; no direct crash risk found | Hazard abilityThrowdown: launch nearby actors; check targets' lateral momentum. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:4388](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L4388>). |
+| IM16 | [zombie_types.opy:1432](../src/game/zombie_types.opy#L1432) | `def abilityThrowdown()` | Low; no direct crash risk found | Hazard abilityThrowdown: self-jump; compare velocity and height. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:4389](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L4389>). |
+| IM17 | [supply_drops.opy:161](../src/items/supply_drops.opy#L161) | `def playerForceField()` | Low; no direct crash risk found | Force Field: continuous repulsion; check running inward, along the boundary, and jumping. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:6137](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6137>). |
+| IM18 | [supply_drops.opy:393](../src/items/supply_drops.opy#L393) | `def bouncePad()` | Low; no direct crash risk found | Bounce Pad: vertical jump; check for changes in lateral velocity. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:6366](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6366>). |
+| IM19 | [enhancements.opy:260](../src/abilities/enhancements.opy#L260) | `rule "LASER BARRICADE BLOCKS ZOMBIES"` | Low; no direct crash risk found | Laser Barricade: reflect a moving zombie; check both directions and floor slopes. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:6800](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6800>). |
+| IM20 | [enhancements.opy:614](../src/abilities/enhancements.opy#L614) | `rule "P.U.P. CONTROL"` | Low; no direct crash risk found | P.U.P.: beam knockback of the target; compare horizontal motion and falling. If expected motion is preserved, adopt XYZ; otherwise tune direction/strength or explicitly retain the justified legacy mode. | Inherited: [original:7137](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7137>). |
 
 For every IM scenario, compare the original mode and XYZ on the ground, airborne, with lateral/opposing velocity, and near walls/platform edges. Pay particular attention to continuous Force Field/barricade behavior: small per-impulse differences repeat many times. Do not change `INCORPORATE_CONTRARY_MOTION` alongside these sites: it is a different policy and not the subject of these 20 messages.
 
@@ -1487,7 +1487,7 @@ For every IM scenario, compare the original mode and XYZ on the ground, airborne
 node analysis/audit-compiler-warnings-2026-11-04.cjs --write --list
 ```
 
-The script saves [JSON with 56 messages](analysis/compiler-warning-audit-2026-11-04.json), original include stacks, rule owners, severity/risk, and source hashes. It verifies no own Waits in SR01–SR03, byte-identical Workshop output when suppressions are restored in memory, and successful compilation of 20 impulse replacements. Writes are limited to `analysis/`; dangerous restarts and game loops are not executed.
+The script saves [JSON with 56 messages](../analysis/compiler-warning-audit-2026-11-04.json), original include stacks, rule owners, severity/risk, and source hashes. It verifies no own Waits in SR01–SR03, byte-identical Workshop output when suppressions are restored in memory, and successful compilation of 20 impulse replacements. Writes are limited to `analysis/`; dangerous restarts and game loops are not executed.
 
 Recommended order: SR07; then SR18–SR19 and other long consumables with an explicit reuse contract; jointly fix five timer sites; protect repeated pregame initialization and transitions. Test CH02–CH03 before changing the algorithm; handle CH05/CH11 according to observed behavior. Do not turn terminal/inactive chase checks into defects. Migrate IM01–IM20 as separate physics-verified work without attributing Start Rule crashes to them.
 
@@ -1496,12 +1496,12 @@ Recommended order: SR07; then SR18–SR19 and other long consumables with an exp
 
 Intermediate materials are retained to verify calculations and the provenance of observations.
 
-- [Original performance audit](analysis/runtime-performance-review-2026-11-04.md).
-- [Original target-selection counterexamples](analysis/gameplay-selection-review-2026-11-04.md).
-- [Earlier detailed Start Rule warning audit](analysis/start-rule-crash-report-2026-11-04.md). Its statement about removed suppression refers to its source state. Following the user's latest change, four suppressions were removed; this report analyzes the complete current list of 56 messages.
+- [Original performance audit](../analysis/runtime-performance-review-2026-11-04.md).
+- [Original target-selection counterexamples](../analysis/gameplay-selection-review-2026-11-04.md).
+- [Earlier detailed Start Rule warning audit](../analysis/start-rule-crash-report-2026-11-04.md). Its statement about removed suppression refers to its source state. Following the user's latest change, four suppressions were removed; this report analyzes the complete current list of 56 messages.
 
 Links to documentation by the OverPy author accompany the relevant findings. They describe engine observations; the current game client and the specific crash threshold for this mode were not tested.
 
-Additional materials for the current diagnostics: [full-audit script](analysis/audit-compiler-warnings-2026-11-04.cjs), [56 original messages and classification](analysis/compiler-warning-audit-2026-11-04.json).
+Additional materials for the current diagnostics: [full-audit script](../analysis/audit-compiler-warnings-2026-11-04.cjs), [56 original messages and classification](../analysis/compiler-warning-audit-2026-11-04.json).
 
-Original-comparison materials: [ZSMM (786TW) snapshot](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy>), [line-level provenance evidence](analysis/original-provenance-2026-11-04.json), [verification script](analysis/audit-original-provenance-2026-11-04.cjs).
+Original-comparison materials: [ZSMM (786TW) snapshot](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy>), [line-level provenance evidence](../analysis/original-provenance-2026-11-04.json), [verification script](../analysis/audit-original-provenance-2026-11-04.cjs).

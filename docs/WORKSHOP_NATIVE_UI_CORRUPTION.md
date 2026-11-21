@@ -121,7 +121,7 @@ Set Player Allowed Heroes(All Heroes)
 
 ## Реализация Pregame-обхода
 
-Место: [src/player_start_menu.opy](src/player_start_menu.opy), правило `EFFECTS/TEXT`.
+Место: [src/start_menu/player_start_menu.opy](../src/start_menu/player_start_menu.opy), правило `EFFECTS/TEXT`.
 
 Пять надписей создаются с четырьмя интервалами:
 
@@ -147,7 +147,7 @@ createInWorldText(...)  # Enhancement/Augment.
 
 ### 16 ongoing-правил: сохранить пару в одной Condition
 
-Макрос расположен в [src/ui_workarounds.opy](src/ui_workarounds.opy) и подключён после переменных, до правил:
+Макрос расположен в [src/core/ui_workarounds.opy](../src/core/ui_workarounds.opy) и подключён после переменных, до правил:
 
 ```python
 #!define uiPhaseAndId(idPredicate) ((isGameplayActive and (idPredicate)) == 1)
@@ -200,23 +200,23 @@ Event/Team/Hero остаются прежними. Native event запускае
 
 | Файл | Правило | Приём |
 |---|---|---|
-| [charge_battery.opy](src/charge_battery.opy) | `[CHARGE_BATTERY] RESET COOLDOWNS ON ULTIMATE` | Пара phase/ID |
+| [charge_battery.opy](../src/abilities/enhancement_charge_battery.opy) | `[CHARGE_BATTERY] RESET COOLDOWNS ON ULTIMATE` | Пара phase/ID |
 | charge_battery.opy | `[CHARGE_BATTERY] USAGE AND COOLDOWNS` | Пара phase/ID |
-| [enhancements.opy](src/enhancements.opy) | `BULKING SEASON TOGGLES SIZE` | Пара phase/ID |
+| [enhancements.opy](../src/abilities/enhancements.opy) | `BULKING SEASON TOGGLES SIZE` | Пара phase/ID |
 | enhancements.opy | `OVERCHARGE STORES HEALING AND ASSISTS` | Пара phase/ID |
 | enhancements.opy | `WRESTLER PULL` | Пара phase/ID |
 | enhancements.opy | `ENGINEER SCRAP INCOME` | Пара phase/ID |
 | enhancements.opy | `ENGINEER ASSIST SCRAP` | Пара phase/ID |
 | enhancements.opy | `ENGINEER ARMOR TRANSFER` | Пара phase/ID |
 | enhancements.opy | `ENGINEER TURRET DEPLOY` | Пара phase/ID |
-| [highrise.opy](src/highrise.opy) | `[HIGHRISE] RECHARGE` | Пара phase/ID |
+| [highrise.opy](../src/abilities/augment_highrise.opy) | `[HIGHRISE] RECHARGE` | Пара phase/ID |
 | highrise.opy | `[HIGHRISE] DOUBLE TAP` | Пара phase/ID |
-| [dash.opy](src/dash.opy) | `[DASH] CHARGE RECHARGE` | Пара phase/ID |
-| [apothecary.opy](src/apothecary.opy) | `[APOTHECARY AUGMENT] CURE ICON` | Пара phase/ID |
-| [augments.opy](src/augments.opy) | `GRAPNEL LAUNCHER` | Пара phase/ID |
+| [dash.opy](../src/abilities/augment_dash.opy) | `[DASH] CHARGE RECHARGE` | Пара phase/ID |
+| [apothecary.opy](../src/abilities/augment_apothecary.opy) | `[APOTHECARY AUGMENT] CURE ICON` | Пара phase/ID |
+| [augments.opy](../src/abilities/augments.opy) | `GRAPNEL LAUNCHER` | Пара phase/ID |
 | augments.opy | `AMMO PACK MAGAZINES` | Пара phase/ID |
 | augments.opy | `AMMO PACK REFILL FALLBACK` | Пара phase/ID |
-| [hero_tuning.opy](src/hero_tuning.opy) | `SIERRA TRACKING SHOT HACK` | Event guard |
+| [hero_tuning.opy](../src/abilities/hero_tuning.opy) | `SIERRA TRACKING SHOT HACK` | Event guard |
 | hero_tuning.opy | `REINHARDT SHIELD SLAM STUN` | Event guard |
 | hero_tuning.opy | `CASSIDY FLASHBANG STUN` | Event guard |
 | enhancements.opy | `WRESTLER PULL DISCONNECT CLEANUP` | Event guard |
@@ -224,7 +224,7 @@ Event/Team/Hero остаются прежними. Native event запускае
 | enhancements.opy | `ENGINEER SCRAP ARMOR DEPLETION` | Event guard |
 | apothecary.opy | `[APOTHECARY AUGMENT] CURE ICON DISCONNECT CLEANUP` | Event guard |
 | augments.opy | `GRAPNEL LAUNCHER DISCONNECT CLEANUP` | Event guard |
-| [player_events.opy](src/player_events.opy) | `PLAYER PICKS UP HEALTH PACK` | Event guard |
+| [player_events.opy](../src/abilities/player_events.opy) | `PLAYER PICKS UP HEALTH PACK` | Event guard |
 
 `KEVLAR RANGED DAMAGE COMPENSATION` и `BRIGITTE SHIELD BASH STUN` оставлены с исходными Conditions. Не следует считать все event guards или все phase/ID пары обязательным архитектурным правилом для всего проекта.
 

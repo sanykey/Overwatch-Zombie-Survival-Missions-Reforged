@@ -73,13 +73,13 @@ Every `PLAYER DEALT HEALING` event applies the following infection reductions in
 
 The **Infection Reduced** HUD counter sums both reductions and the 0.5 cure bonuses. For example, 550 actual healing removes 2 levels from an eligible infected ally and 1.1 from an infected doctor, before any cure bonus.
 
-**Synergy with Survivalist (formerly Leech, `Augment.LEECH`):** its `heal(eventPlayer, eventPlayer, eventDamage * 0.15)` credits the doctor as both healer and recipient, triggering one `PLAYER DEALT HEALING` event. Both independent checks above can therefore reduce the same player's infection. The second check uses the level **after the first reduction**: if the first already takes it below 1, the second reduction, 0.5 bonus and cure message are skipped. With enough missing health and no other modifiers, lifesteal restores **19.5% of damage dealt** while uninfected, or **24.375% while infected** (`0.15 × 1.3 × 1.25`). Only actual restored HP contributes to cleansing; unused healing at full health does not provide extra cleansing. Implementation: [healing and Leech handlers](src/player_events.opy), [healing bonuses](src/player_initialization.opy), [Beacon of Healing](src/supply_drops.opy).
+**Synergy with Survivalist (formerly Leech, `Augment.LEECH`):** its `heal(eventPlayer, eventPlayer, eventDamage * 0.15)` credits the doctor as both healer and recipient, triggering one `PLAYER DEALT HEALING` event. Both independent checks above can therefore reduce the same player's infection. The second check uses the level **after the first reduction**: if the first already takes it below 1, the second reduction, 0.5 bonus and cure message are skipped. With enough missing health and no other modifiers, lifesteal restores **19.5% of damage dealt** while uninfected, or **24.375% while infected** (`0.15 × 1.3 × 1.25`). Only actual restored HP contributes to cleansing; unused healing at full health does not provide extra cleansing. Implementation: [healing and Leech handlers](src/abilities/player_events.opy), [healing bonuses](src/abilities/player_initialization.opy), [Beacon of Healing](src/items/supply_drops.opy).
 
 Zombie Hybrid gains infection stacks from zombie melee hits even with temporary health or armor above its normal health threshold. The other infection restrictions still apply, including ultimate and Dash protection, hacked attackers, and the Melee Infection Enabled setting.
 
 The Apothecary rule for health-pack pickup at full health remains deferred. This version uses standard beams without the Beam Effects extension. The [feature-port audit](analysis/feature-port-audit.json) records the earlier rebuild before Bolt Strike was restored; see the [Bolt Strike validation](analysis/bolt-strike-validation.json) for the restoration.
 
-Bolt Strike passively chains each damaging hero hit to up to two random other living zombies visible from the original victim within 10m. Each chain deals 25% of the hit, capped at 15 damage. Warning-phase Smolders are excluded. A per-target 0.032s damage gate merges near-simultaneous splash events; ordinary chain-hit flashes use a separate 0.5s gate. Scripted chain damage cannot trigger further chains. All chain settings are defined in `src/variables.opy`. Bolt Strike remains Enhancement ID 12, preserving Wrestler's ID 11. See the [chain-only validation](analysis/2026-11-14-bolt-chain-only-validation.json).
+Bolt Strike passively chains each damaging hero hit to up to two random other living zombies visible from the original victim within 10m. Each chain deals 25% of the hit, capped at 15 damage. Warning-phase Smolders are excluded. A per-target 0.032s damage gate merges near-simultaneous splash events; ordinary chain-hit flashes use a separate 0.5s gate. Scripted chain damage cannot trigger further chains. All chain settings are defined in `src/core/variables.opy`. Bolt Strike remains Enhancement ID 12, preserving Wrestler's ID 11. See the [chain-only validation](analysis/2026-11-14-bolt-chain-only-validation.json).
 
 Overcharge increases healing dealt by 15%. Beacon of Healing adds 50 percentage points, for 165% healing dealt while active, and restores 115% when it ends. Overcharge stores 1 energy per 3 points added to the native Healing Dealt statistic, without a cap. Health-pack pickups also grant 1 energy per 3 HP actually restored to the player. Apothecary supplemental healing also grants 1 energy per 3 HP actually restored, allowing the two abilities to work together. Each offensive or defensive assist adds 10 energy, including posthumous assists. Healing and assists recorded before initialization grant no energy. Double-tap Crouch (release and press again within 0.3s per step) to spend up to 100 energy and arm a fixed bonus; excess energy remains stored for later charges. Your next damaging hero attack or ability starts a 0.3-second window; every damage event during that window adds the same bonus, including each enemy hit by Ana's grenade. Telekinesis's extended hits can start this window and receive its bonus without extending it. Releasing Crouch does not cancel the armed charge. Healing continues to build a separate next charge; another double-tap of Crouch rearms it after the current window ends. Death clears the armed charge but preserves unspent energy. Turrets, air strikes, other Augments and the bonus damage itself do not trigger this effect.
 
@@ -152,7 +152,7 @@ Replace `release.opy` with `test.opy` for the regression pool, then save the roo
 - [Release pool](src/map_pools/release.opy): the existing map rotation, selected by default.
 - [Test pool](src/map_pools/test.opy): Shambali Monastery (Escort), Colosseo (Push), and Malevento, Necropolis, Black Forest and Ilios Lighthouse (Team Deathmatch). Other modes are disabled.
 
-The pool files provide settings fragments through text macros; only one can be included at a time. Shared lobby, hero and mode settings stay in `src/settings.opy`. Switching happens at compile time and adds no Workshop elements or variables.
+The pool files provide settings fragments through text macros; only one can be included at a time. Shared lobby, hero and mode settings stay in `src/settings/settings.opy`. Switching happens at compile time and adds no Workshop elements or variables.
 
 ### Passive regeneration issue
 
@@ -164,7 +164,7 @@ During pregame voting, selecting a hero and then returning to the native hero-se
 
 The problem can appear or disappear after changing rule Conditions unrelated to hero availability, including in rules whose Actions do not run during voting. The root cause remains unknown; high Server Load, a memory leak and a specific engine resource limit have not been established.
 
-**Current source workaround:** space the five pregame world texts by 0.25 seconds with phase cancellation; retain phase/ID pairs in one compiled Condition in 16 ongoing rules; move eligibility checks into synchronous Actions in nine event handlers. All gameplay HUD/effects are enabled. The user accepted the full-visual reference build; source integration was compared with it and compiled without warnings. Current source: **30,428 elements**, +8 for Pregame and +133 for gameplay, with no new rules or global/player variables. The internal engine cause remains unknown. The standalone [diagnosis and repair guide](WORKSHOP_NATIVE_UI_CORRUPTION.md) includes the complete findings, exact rule list, compiler caveats, validation limits and a transferable investigation procedure.
+**Current source workaround:** space the five pregame world texts by 0.25 seconds with phase cancellation; retain phase/ID pairs in one compiled Condition in 16 ongoing rules; move eligibility checks into synchronous Actions in nine event handlers. All gameplay HUD/effects are enabled. The user accepted the full-visual reference build; source integration was compared with it and compiled without warnings. Current source: **30,428 elements**, +8 for Pregame and +133 for gameplay, with no new rules or global/player variables. The internal engine cause remains unknown. The standalone [diagnosis and repair guide](docs/WORKSHOP_NATIVE_UI_CORRUPTION.md) includes the complete findings, exact rule list, compiler caveats, validation limits and a transferable investigation procedure.
 
 **An earlier tested workaround was to combine separate Conditions into a single nested `And` expression.** For example:
 
@@ -174,7 +174,7 @@ conditions {
 }
 ```
 
-Diagnostic **29a**, based on build 28 (`e23f73d2ac3af65bba98d509f08625eb493b23e3`), reduced condition entries from **850 to 212**, retaining all 305 rule events and action lists. The user reported several runs without the defect, while the matching control still failed intermittently. Both exports used Malevento, Necropolis, Black Forest, Ilios Lighthouse and Colosseo. These results concern hero selection; the white-button and emote symptoms have not been separately verified as fixed. A local `And` change helped Scavenger but did not help the deferred `APOTHECARY ALLOW HEALTH PACK PICKUP` rule in `src/augments.opy`, reverted by `ba8e70de7d4e282b2f90c8ae6c15f6d1d500a342`.
+Diagnostic **29a**, based on build 28 (`e23f73d2ac3af65bba98d509f08625eb493b23e3`), reduced condition entries from **850 to 212**, retaining all 305 rule events and action lists. The user reported several runs without the defect, while the matching control still failed intermittently. Both exports used Malevento, Necropolis, Black Forest, Ilios Lighthouse and Colosseo. These results concern hero selection; the white-button and emote symptoms have not been separately verified as fixed. A local `And` change helped Scavenger but did not help the deferred `APOTHECARY ALLOW HEALTH PACK PICKUP` rule in `src/abilities/augments.opy`, reverted by `ba8e70de7d4e282b2f90c8ae6c15f6d1d500a342`.
 
 **Mode-wide grouping is currently reverted because of its element cost.** Restore functionality first, then investigate a more targeted fix. The experimental versions had the following costs:
 
@@ -188,7 +188,7 @@ The complete source-integrated prototype is preserved at tag **`experiment-hero-
 
 **OverPy 9.7.20 can split `and` back into separate Conditions.** The tagged prototype protected the conjunction by comparing its boolean result with numeric `1`, keeping other optimizations enabled. Comparing with `true` instead lets the optimizer remove the wrapper and split the conjunction. This technique applies only to a boolean result; preserve each predicate's explicit comparison, especially `Null`/zero versus `False`. Fewer Conditions do not prove lower CPU load: nested `And` may evaluate more inputs.
 
-Preserve the earlier local Scavenger workaround in `src/power_ups.opy` and action-body guards for Survivalist (formerly Leech) in `src/augments.opy` and Interact in `src/supply_drops.opy`. Moving Conditions into Actions can change ongoing-rule triggering, `Abort When False` and loops; adding waits to event handlers can drop events. For future fixes, inspect generated Workshop code, measure element cost and repeat native tests on affected maps against a matching control. One successful attempt does not establish that an intermittent defect is gone.
+Preserve the earlier local Scavenger workaround in `src/items/power_ups.opy` and action-body guards for Survivalist (formerly Leech) in `src/abilities/augments.opy` and Interact in `src/items/supply_drops.opy`. Moving Conditions into Actions can change ongoing-rule triggering, `Abort When False` and loops; adding waits to event handlers can drop events. For future fixes, inspect generated Workshop code, measure element cost and repeat native tests on affected maps against a matching control. One successful attempt does not establish that an intermittent defect is gone.
 
 ## Optimization results
 
@@ -205,13 +205,13 @@ Reforged has **7,518 elements**, **23 globalvar slots**, **38 playervar slots**,
 
 ## Known issues and optimization proposals
 
-The [code review report](CODE_REVIEW_REPORT.md) provides supporting evidence, validation status, and recommendations for each finding. The documented defects and risks are inherited from the [ZSMM (786TW) snapshot from October 30, 2026](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).ow>). The proposed optimizations also concern constructs already present in that version.
+The [code review report](docs/CODE_REVIEW_REPORT.md) provides supporting evidence, validation status, and recommendations for each finding. The documented defects and risks are inherited from the [ZSMM (786TW) snapshot from October 30, 2026](<workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).ow>). The proposed optimizations also concern constructs already present in that version.
 
 ### Fixed:
 
-- [R11 — "Doomfist never releases the simulated block button"](CODE_REVIEW_REPORT.md#r11).
-- [R16 — "Bot selects a target behind a wall or a stale target"](CODE_REVIEW_REPORT.md#r16).
-- [R18 — "Charge Battery selects an ineligible recipient"](CODE_REVIEW_REPORT.md#r18).
+- [R11 — "Doomfist never releases the simulated block button"](docs/CODE_REVIEW_REPORT.md#r11).
+- [R16 — "Bot selects a target behind a wall or a stale target"](docs/CODE_REVIEW_REPORT.md#r16).
+- [R18 — "Charge Battery selects an ineligible recipient"](docs/CODE_REVIEW_REPORT.md#r18).
 
 ## Resources
 
