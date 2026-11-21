@@ -333,6 +333,9 @@ def determineObjectiveType():
     #!define objectiveTypeVoteIndex tmp0
     for objectiveTypeVoteIndex in range(ObjectiveType.SHOWDOWN, len(objectiveTypeVoteList)):
         objectiveTypeVoteList[objectiveTypeVoteIndex] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameObjectiveVote == objectiveTypeVoteIndex)) if objectiveTypeVoteList[objectiveTypeVoteIndex] else -1
+    # Mixed needs at least one objective in its pool to participate in the vote.
+    if mixedObjectiveTypeList == []:
+        objectiveTypeVoteList[ObjectiveType.MIXED_OBJECTIVES] = -1
     voteWinnerCounts = objectiveTypeVoteList
     selectVoteWinner()
     objectiveTypeSetting = voteWinnerResult
@@ -341,8 +344,11 @@ def determineObjectiveType():
         if objectiveTypeVoteList[ObjectiveType.MIXED_OBJECTIVES] != -1:
             objectiveTypeSetting = ObjectiveType.MIXED_OBJECTIVES
         else:
-            while objectiveTypeSetting == ObjectiveType.NO_PREFERENCE or objectiveTypeVoteList[objectiveTypeSetting] == -1:
-                objectiveTypeSetting = random.randint(ObjectiveType.SHOWDOWN, len(objectiveTypeVoteList) - 1)
+            # Reuse tmp0 after selectVoteWinner's synchronous loop has finished.
+            #!define enabledObjectiveTypes tmp0
+            enabledObjectiveTypes = objectiveTypeVoteList.map(lambda votes, index: index if votes != -1 else ObjectiveType.NO_PREFERENCE).exclude(ObjectiveType.NO_PREFERENCE)
+            # A lobby can disable every objective. Use Showdown so voting can finish.
+            objectiveTypeSetting = random.choice(enabledObjectiveTypes) if enabledObjectiveTypes != [] else ObjectiveType.SHOWDOWN
     isVoting = false
     startRule(setObjectiveType)
 
