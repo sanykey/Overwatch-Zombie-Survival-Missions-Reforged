@@ -1,6 +1,6 @@
 # Повреждение нативного интерфейса в крупных Workshop-модах
 
-Практический отчёт и инструкция диагностики. Состояние: 16 ноября 2026 года.
+Практический отчёт и инструкция диагностики. Игровые наблюдения относятся к контрольной серии от 16 ноября 2026 года. Структура текущей сборки `stability-rebuild` сверена на `19c704a` 22 ноября 2026 года.
 
 ## Краткий результат
 
@@ -164,11 +164,11 @@ createInWorldText(...)  # Enhancement/Augment.
 
 ```csharp
 And(Global.isGameplayActive,
-    Compare((Event Player).enhancementId, ==, 11)) == 1;
+    Compare((Event Player).enhancementId, ==, 10)) == 1;
 Is Alive(Event Player) == True;
 ```
 
-Идентификатор enum в примере условен для переноса в другой проект. В исходниках используются именованные enum, не вручную скопированные числа.
+В этом экспорте `Enhancement.ENGINEER` имеет ID 10. В исходниках используется именованный enum.
 
 Все остальные Conditions сохраняются, как и Actions. Поэтому полной конъюнкцией по-прежнему управляются запуск, `Abort When False`, `ruleCondition` и циклы. Это существенно безопаснее механического переноса фазы/ID в тело ongoing-правила.
 
@@ -196,12 +196,12 @@ Event/Team/Hero остаются прежними. Native event запускае
 
 ### Gameplay-обходы в текущих исходниках
 
-В таблице перечислено **21 правило** с обходами в текущих исходниках.
+В текущем экспорте подтверждены **14 правил** с объединённой проверкой фазы и ID и **7 событийных обработчиков** с guard в Actions.
 
 | Файл | Правило | Приём |
 |---|---|---|
-| [charge_battery.opy](../src/abilities/enhancement_charge_battery.opy) | `[CHARGE_BATTERY] RESET COOLDOWNS ON ULTIMATE` | Пара phase/ID |
-| charge_battery.opy | `[CHARGE_BATTERY] USAGE AND COOLDOWNS` | Пара phase/ID |
+| [enhancement_charge_battery.opy](../src/abilities/enhancement_charge_battery.opy) | `[CHARGE_BATTERY] NO COOLDOWNS ON ULTIMATE` | Пара phase/ID |
+| enhancement_charge_battery.opy | `[CHARGE_BATTERY] USAGE AND COOLDOWNS` | Пара phase/ID |
 | [enhancements.opy](../src/abilities/enhancements.opy) | `BULKING SEASON TOGGLES SIZE` | Пара phase/ID |
 | enhancements.opy | `OVERCHARGE STORES HEALING AND ASSISTS` | Пара phase/ID |
 | enhancements.opy | `BOLT STRIKE ON DOUBLE CROUCH` | Пара phase/ID |
@@ -210,7 +210,7 @@ Event/Team/Hero остаются прежними. Native event запускае
 | enhancements.opy | `ENGINEER ARMOR TRANSFER` | Пара phase/ID |
 | enhancements.opy | `ENGINEER TURRET DEPLOY` | Пара phase/ID |
 | [augments.opy](../src/abilities/augments.opy) | `DOUBLE TAP JUMP (DASH / HIGHRISE)` | Пара phase/ID |
-| [dash.opy](../src/abilities/augment_dash.opy) | `[DASH] CHARGE RECHARGE` | Пара phase/ID |
+| [augment_dash.opy](../src/abilities/augment_dash.opy) | `[DASH] CHARGE RECHARGE` | Пара phase/ID |
 | [augments.opy](../src/abilities/augments.opy) | `CROUCH + JUMP (GRAPNEL LAUNCHER)` | Пара phase/ID |
 | augments.opy | `AMMO PACK MAGAZINES` | Пара phase/ID |
 | augments.opy | `AMMO PACK REFILL FALLBACK` | Пара phase/ID |
@@ -226,9 +226,18 @@ Event/Team/Hero остаются прежними. Native event запускае
 
 Часть cleanup-обработчиков в обычном прогоне до первого Reload вообще не должна выполнять полезные действия. Их участие в успешном пакете нельзя объяснять автоматически экономией на выполняемой очистке; отдельная необходимость каждого такого обработчика не установлена.
 
+В `94d5f12` Charge Battery получил 10 секунд No Cooldowns при старте ульты. Проверка `Is Using Ultimate` остаётся отдельной Condition, а проверка таймера находится в Actions, чтобы его истечение не запускало эффект посреди той же ульты. После изменения турели Engineer в `0390d8d` объединённая Condition его правила развёртывания сохранилась.
+
+После разделения предметов в `0390d8d` в [power_ups.opy](../src/items/power_ups.opy) находятся ещё два ранее введённых обхода:
+
+- `PLAYER DROPS POWER UP (MANUAL)` компилируется с одной Condition для фазы и состояния `Is Alive`. Директивы локально отключают разделение этого выражения компилятором.
+- `PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP)` проверяет фазу в Actions при входе и после удержания Interact перед активацией предмета. Проверки кнопки, жизни и отсутствия статуса dummy остаются в Conditions.
+
+Запрет повторной активации Revive, Air Strike и Stun в `3914842` расположен внутри `powerUpUsage`. Обе проверки фазы в Actions правила Interact сохранены.
+
 ## Стоимость и проверка переноса
 
-Значения для исследованной сборки и настроек:
+Исторические значения для контрольной серии от 16 ноября:
 
 | Состояние | Compiled elements |
 |---|---:|
@@ -246,7 +255,11 @@ Gameplay-добавка исходников — **+133**, Pregame — **+8**, �
 
 Проверка сравнила каждое из 324 правил с принятым пользователем экспортом. Допущены только эти два преобразования, отсутствие пустого Conditions-блока и обновление даты сборки. Settings, объявления переменных/подпрограмм, число Conditions и все остальные инструкции сопоставлены. Сохранены четыре отменяемых Pregame-ожидания. Проверена длина compiled variable names до 31 символа. Компиляция OverPy 9.7.21 — без предупреждений.
 
-Исходниковый экспорт обновлён в `main.ws.txt` и `src/includes.ws.txt`. Пользователь подтвердил игровой результат ручного варианта; новый source-built экспорт прошёл описанную проверку, но его точное кодирование `== 1`/implicit End требует обычного заключительного импорта в игру. Не подменять статическую проверку заявлением о новом игровом прогоне.
+Пользователь подтвердил игровой результат ручного варианта контрольной серии. Экспорт перенесённых исходников прошёл структурную сверку.
+
+Текущий `main.opy` на `19c704a` собран OverPy 9.7.21 без предупреждений. В сборке **29 797 элементов**. В `EFFECTS/TEXT` сохранены пять мировых надписей и четыре ожидания `Wait(0.25, Abort When False)`. В экспорте после изменений LoS у турели, зомби и возврата босса подтверждены все 14 объединённых Conditions, 7 событийных guards и оба обхода в правилах предметов. Нового игрового прогона на этой сборке нет.
+
+Стандартная сборка использует пул `standard_map_pool.opy`; Inspector и HUD ресурсов отключены. Версия `2.0-d` и дата видны в описании и HUD голосования. Если включён Inspector, `[debug] init` выводит карту, версию, дату, хеш Workshop-кода и число элементов. При сравнении прогонов записывайте состояние обоих отладочных переключателей, так как HUD ресурсов сам добавляет текст. [Настройки сборки](../src/includes.opy) · [Правило диагностики](../src/debug/debug.opy)
 
 Это дешёвый **обход**, а не доказанная CPU-оптимизация. Цена намного меньше широкой группировки +1084. Но итоговая минимальность не доказана: тесты с возвратом изменений останавливались при возвращении симптома, комбинации зависимы от полного окружения и случайности. Не нужно дальше сокращать код только ради более низкого element count без повторного native-теста.
 
