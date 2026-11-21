@@ -151,7 +151,7 @@ rule "SKIP ASSEMBLING HEROES":
     #Set/Reset to default 0
     objectiveTypeSetting = ObjectiveType.NO_PREFERENCE
     if isAssemblingHeroes():
-        if not DEBUG:
+        if not (DEBUG or DEBUG_ENABLE_INSPECTOR):
             disableInspector()
         setMatchTime(0)
         isPregameSetup = true
@@ -289,7 +289,7 @@ rule "START GAME":
     getPlayers(Team.1).enhancementScrapBeamDeadline = 0
     getPlayers(Team.1).scrapArmorAmount = 0
     enableMusic()
-    if not DEBUG:
+    if not (DEBUG or DEBUG_ENABLE_INSPECTOR):
         disableInspector()
     destroyAllDummies()
     destroyAllEffects()
@@ -332,3 +332,5 @@ def generateMapGrid():
         wait()
     #0: Consecutive, 1: Minimum
     objectiveSpacingList = [min(60, len(mapGridList) / 11), min(30, len(mapGridList) / 20)]
+    if DEBUG_ENABLE_INSPECTOR:
+        logToInspector(f"[map grid] Completed points={len(mapGridList)}")

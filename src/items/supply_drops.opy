@@ -44,6 +44,8 @@ rule "GENERATE SUPPLY DROPS":
             #Sets supply drop location to be placed on ground (in the case that a walkable position is underground for some reason)
             supplyDropLandingPosition = raycastHitPosition(supplyDropLandingPosition + 2 * Vector.UP, supplyDropLandingPosition + vect(0, 0, 0), getAllPlayers(), getAllPlayers(), false)
         wait(0.25)
+    if DEBUG_ENABLE_INSPECTOR:
+        logToInspector(f"[supply drop] Starting descent to {supplyDropLandingPosition}")
     supplyDropPosition = supplyDropLandingPosition + 200 * Vector.UP
     chaseOverTime(supplyDropPosition, supplyDropLandingPosition, 15)
     bigMessage(getPlayers(Team.1), "Supply drop incoming!")
@@ -582,6 +584,8 @@ def powerUpUsage():
                 smallMessage(eventPlayer, "Aim at a nearby target")
                 return
             break
+    if DEBUG_ENABLE_INSPECTOR:
+        logToInspector(f"[powerup] {eventPlayer} activated ID {eventPlayer.powerUpItemId}")
     eventPlayer.powerUpItemId = PowerUpItem.NONE
 
 

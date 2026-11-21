@@ -1,4 +1,5 @@
 #!define DEBUG false
+#!define DEBUG_ENABLE_INSPECTOR false
 #!define SERVER_LOAD_UI false
 
 # Select exactly one map pool, then save the root main.opy to rebuild.

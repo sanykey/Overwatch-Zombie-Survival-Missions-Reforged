@@ -688,6 +688,8 @@ def objectivesManagement():
     #Updates global objective entities
     globalObjectiveEntityManagementMacro()
     isObjectiveComplete = false
+    if DEBUG_ENABLE_INSPECTOR:
+        logToInspector(f"[objective] Started {currentObjectiveType}")
 
 
 macro deselectBotTargetMacro():

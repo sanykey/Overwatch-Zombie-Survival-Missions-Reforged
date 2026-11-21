@@ -46,3 +46,24 @@ rule "[debug] Resource usage and server load":
     waitUntil(isPregameSetup != evalOnce(isPregameSetup) or isGameplayActive != evalOnce(isGameplayActive), Math.INFINITY)
     destroyHudText(debugHud)
     loop()
+
+
+rule "[debug] init":
+    @Condition DEBUG_ENABLE_INSPECTOR
+    logToInspector(f"Map: {__getCurrentMap__()}")
+
+
+rule "[debug] Log match completion":
+    @Condition DEBUG_ENABLE_INSPECTOR
+    @Condition isMatchComplete() == true
+
+    logToInspector("[match] Match completed")
+
+
+rule "[debug] Log sustained server load":
+    @Condition DEBUG_ENABLE_INSPECTOR
+    @Condition getAverageServerLoad() >= 255
+
+    logToInspector(f"[server load] Avg (2s) reached 255\nobjective={currentObjectiveType}\nzombies={getNumberOfPlayers(Team.2)}\nqueued={len(botSpawnTimeList)}\neffects={getNumberOfEntityIds()}\ntexts={getNumberOfTextIds()}")
+    waitUntil(getAverageServerLoad() < 255, Math.INFINITY)
+    logToInspector(f"[server load] Avg (2s) recovered to {getAverageServerLoad()}")

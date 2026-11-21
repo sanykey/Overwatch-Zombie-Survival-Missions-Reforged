@@ -216,6 +216,9 @@ macro initializePlayerAugment():
         # Menu non-selection and late-join zero state each receive one real
         # random choice. A nonzero ID preserves explicit and previously rolled choices.
         eventPlayer.augmentId = random.randint(Augment.KEVLAR, Augment.SURVIVALIST)
+    if DEBUG_ENABLE_INSPECTOR:
+        # Use IDs so the log needs no additional table or phase-owned state.
+        logToInspector(f"[loadout] {eventPlayer}: enhancement={eventPlayer.enhancementId} / {AUGMENT_NAMES[eventPlayer.augmentId]}")
     if eventPlayer.augmentId == Augment.SCAVENGER:
         eventPlayer.augmentScavengerBackpack = []
     if eventPlayer.augmentId == Augment.DASH:
