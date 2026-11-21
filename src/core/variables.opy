@@ -28,6 +28,13 @@
 # Shared names remain appropriate where the meaning is common (objectiveRad, objectiveColor, bossStateList).
 # numbersList is owned by compressed numbers.opy; debugHud is owned by debug.opy.
 
+# Optional bot AI diagnostics. The Inspector sampler resets these once per gameplay second.
+globalvar debugBotTargetScans
+globalvar debugBotTargetMisses
+globalvar debugBotTeleportAttempts
+globalvar debugBotTeleportSuccesses
+globalvar debugBotTeleportNoTargets
+
 # Shared scratch slots.
 # Define a semantic #!define alias next to each use; access scratch through that alias.
 # Finish scratch use before wait/waitUntil or async calls; use separate slots for simultaneous values.

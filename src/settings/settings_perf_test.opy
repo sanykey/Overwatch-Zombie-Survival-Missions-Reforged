@@ -15,7 +15,7 @@ macro PERF_WORKSHOP_SETTINGS = {
     "Chance to mutate percentage": 25,
     "Kill Zone.": false,
     "Number of Objectives": 5,
-    "Number of zombies": 10,
+    "Number of zombies": 11,
     "Satellite Uplink.": false,
     "Standoff.": false,
     "Survivor Rescue.": false,

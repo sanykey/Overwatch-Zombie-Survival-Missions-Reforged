@@ -504,6 +504,10 @@ def teleportBots():
             eventPlayer.botTeleportPosition = 0
             #Teleport with max distance constraint no view angle constraint
             while eventPlayer.botTeleportPosition == 0 or playerTargetList.any(lambda x: distance(eventPlayer.botTeleportPosition, x) < 15) or playerTargetList.all(lambda x: distance(eventPlayer.botTeleportPosition, x) > BOT_MAX_TELEPORT_RANGE):
+                if DEBUG_BOT_AI_LOGS_ACTIVE:
+                    debugBotTeleportAttempts++
+                    if playerTargetList == []:
+                        debugBotTeleportNoTargets++
                 # teleportCandidateSpawnPointList: nearby saved points whose cooldown permits use.
                 # Points are unique and timer/waypoint rows remain aligned; i is the original point index.
                 #!define teleportCandidateSpawnPointList tmp0
@@ -520,6 +524,8 @@ def teleportBots():
             if playerTargetList.all(lambda x: distance(eventPlayer.botTeleportPosition, x) > 10) and playerTargetList.filter(lambda x: x.isInViewAngle(eventPlayer.botTeleportPosition, 55)).all(lambda x: not isInLoS(x.getEyePosition(), eventPlayer.botTeleportPosition + losOffsetConst)):
                 eventPlayer.teleport(eventPlayer.botTeleportPosition)
                 eventPlayer.botIsTeleporting = false
+                if DEBUG_BOT_AI_LOGS_ACTIVE:
+                    debugBotTeleportSuccesses++
             #Teleport was unsuccessful due to line of sight and view angle
             elif eventPlayer.botTeleportPosition in botSpawnPointList:
                 removeBotSpawnPoint()
