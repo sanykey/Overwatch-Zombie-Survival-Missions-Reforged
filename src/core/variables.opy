@@ -43,6 +43,9 @@ globalvar tmp1  # Second synchronous scratch value, including bot teleport pivot
 #!define botTeleportPivot tmp1
 globalvar tmp2  # Third synchronous scratch value, including barricade's current target, mutation color captured with evalOnce for the outline, and the on-hit enhancements' health gate; no live reads across waits/async work.
 globalvar tmp3  # Fourth synchronous scratch value, including barricade impulse vertical angle and the on-hit enhancements' victim; assigned and consumed within the same loop iteration, no reads across waits/async work.
+# Synchronous inputs to selectBotTarget(). An empty candidate list requests fresh checks.
+#!define botTargetProbeCandidates tmp2
+#!define botTargetProbeVisible tmp3
 # applyHitEnhancements inputs for Pyrotechnic and Overcharge.
 # tmp2 is health before scripted Damage, then actual health removed in the macro.
 # Native callers supply eventDamage directly; the handler accepts positive damage.

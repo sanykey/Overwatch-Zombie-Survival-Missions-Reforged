@@ -21,6 +21,7 @@ subroutine setDifficulty
 subroutine botRespawnInitialization
 subroutine objectivesManagement
 subroutine selectTarget
+subroutine selectBotTarget
 subroutine restoreDefaultFacingMovement
 subroutine setPrematchTimer
 subroutine shortenPrematchTimer
@@ -703,6 +704,15 @@ macro deselectBotTargetMacro():
 
 def selectTarget():
     @Name "selectTarget"
+
+    # Event-driven selection starts asynchronously; initialize scratch in its own call.
+    botTargetProbeCandidates = []
+    selectBotTarget()
+
+
+def selectBotTarget():
+    @Name "selectBotTarget"
+
     if DEBUG_BOT_AI_LOGS_ACTIVE:
         debugBotTargetScans++
     
@@ -732,9 +742,14 @@ def selectTarget():
     # Only a candidate that passed line of sight may become the search result.
     eventPlayer.botCandidateTarget = null
     for botSelectionCandidateIndex in range(len(botSelectionCandidateList)):
-        if isInLoS(botSelectionCandidateList[botSelectionCandidateIndex].getEyePosition(), eventPlayer.getPosition() + losOffsetConst):
-            eventPlayer.botCandidateTarget = botSelectionCandidateList[botSelectionCandidateIndex]
-            break
+        if botSelectionCandidateList[botSelectionCandidateIndex] in botTargetProbeCandidates:
+            if not botSelectionCandidateList[botSelectionCandidateIndex] in botTargetProbeVisible:
+                continue
+        # Priority candidates outside the periodic probe still get a fresh check.
+        elif not isInLoS(botSelectionCandidateList[botSelectionCandidateIndex].getEyePosition(), eventPlayer.getPosition() + losOffsetConst):
+            continue
+        eventPlayer.botCandidateTarget = botSelectionCandidateList[botSelectionCandidateIndex]
+        break
     if DEBUG_BOT_AI_LOGS_ACTIVE and eventPlayer.botCandidateTarget == null:
         debugBotTargetMisses++
     if eventPlayer.isAlive():
