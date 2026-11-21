@@ -257,7 +257,8 @@ rule "VARIABLE ASSIGNMENT":
     botSpawnTimeList = []
     customTeleportPositionList = []
     enableMutationsMacro()
-    supplyDropPowerUpCount = createWorkshopSettingInt("Power Ups", "Number of Powerups Per Supply Drop", 7, 1, 10, -1)
+    # The item placement loop divides by count - 1, so this setting starts at two.
+    supplyDropPowerUpCount = createWorkshopSettingInt("Power Ups", "Number of Powerups Per Supply Drop", 7, 2, 10, -1)
     #isObjectiveComplete = false  #Uninitialized Workshop variables already compare equal to false at match start.
     numberOfBots = createWorkshopSettingInt("General", "Number of zombies", 8, 1, 23, 1)
 
