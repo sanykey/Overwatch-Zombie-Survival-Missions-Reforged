@@ -21,7 +21,7 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             f"Explosion: {ceil(localPlayer.enhancementHybridCooldown)}s CD" if localPlayer.enhancementHybridCooldown > 0 else f"[{inputBindingString(Button.MELEE)}]: explode for {floor(localPlayer.infectionLevel * ZOMBIE_HYBRID_DAMAGE_PER_LEVEL)} dmg" if localPlayer.infectionLevel >= 1 else "Build infection",
             f"Stacks: {localPlayer.enhancementBulkStacks} | +{min((BULKING_SEASON_MAX_HP_MULTIPLIER - 1) * 100, localPlayer.enhancementBulkStacks * BULKING_SEASON_HP_PER_STACK_PCT)}% HP | Size: {round(localPlayer.sizeScale * 100) / 100}x | Hold [{inputBindingString(Button.MELEE)}]: toggle size",
             f"{100 + BRAIN_KILLER_CRIT_BONUS_PCT}% of crit dmg ({100 + BRAIN_KILLER_BOSS_CRIT_BONUS_PCT}% vs bosses)",
-            f"Hits within {PYROTECHNIC_IGNITE_RANGE}m ignite zombies",
+            f"Hits in {PYROTECHNIC_IGNITE_RANGE}m ignite zombies",
             f"Ability resets: {localPlayer.enhancementBattleResetCharges}/{BORN_TO_BATTLE_MAX_RESETS}",
             f"Place: {ceil(localPlayer.enhancementBatteryPlacementCooldown)}s CD" if localPlayer.enhancementBatteryPlacementCooldown > 0 else f"Hold [{inputBindingString(Button.MELEE)}]: aim | Release: place",
             "Attacking" if localPlayer.enhancementIsPupBeamActive == true else "Drone idle",
@@ -49,7 +49,7 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             # when scrap also covers a turret. Keep thresholds tied to costs.
             Color.WHITE if localPlayer.enhancementScrap < ENGINEER_ARMOR_ALLY_COST else Color.SKY_BLUE if localPlayer.enhancementScrap < ENGINEER_TURRET_COST else Color.GREEN,
             Color.WHITE,
-            Color.YELLOW if localPlayer.enhancementCapacitorCharge > 0 else Color.GREEN if localPlayer.enhancementCapacitorEnergy >= 100 else Color.SKY_BLUE if localPlayer.enhancementCapacitorEnergy >= 50 else Color.WHITE,
+            Color.YELLOW if localPlayer.enhancementCapacitorCharge > 0 else Color.GREEN if localPlayer.enhancementCapacitorEnergy >= OVERCHARGE_MAX_CHARGE else Color.SKY_BLUE if localPlayer.enhancementCapacitorEnergy >= 50 else Color.WHITE,
             Color.WHITE
         ][localPlayer.enhancementId],
         HudReeval.VISIBILITY_STRING_AND_COLOR
@@ -63,17 +63,19 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
         # Gate on the same viewer-owned ID that selects the HUD contents.
         localPlayer if localPlayer.augmentId != Augment.NO_PREFERENCE else null,
         AUGMENT_ICONS[localPlayer.augmentId],
-        "{0}{1}".format(f"Hold [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.INTERACT)}]: aim; release [{inputBindingString(Button.INTERACT)}]: place | " if localPlayer.augmentBarrierPlacementCooldown <= 0 else "", "{0}{1}".format(f"{ceil(localPlayer.augmentBarrierHealth)} HP | " if localPlayer.augmentBarrierHealth > 0 else "", f"Place: {localPlayer.augmentBarrierPlacementCooldown}s CD" if localPlayer.augmentBarrierPlacementCooldown > 0 else iconString(Icon.CHECKMARK))) if localPlayer.augmentId == Augment.LASER_BARRICADE else "{1} | {0}".format(
-            (
-                iconString(Icon.CHECKMARK) if localPlayer.augmentDashCharges == DASH_MAX_CHARGES else "{0}s{1}".format(
-                    ceil(localPlayer.augmentDashReadyAt - getTotalTimeElapsed()),
-                    f" {iconString(Icon.CHECKMARK)}" if localPlayer.augmentDashCharges > 0 else ""
-                )
-            ) if localPlayer.augmentId == Augment.DASH else (
-                iconString(Icon.CHECKMARK) if getTotalTimeElapsed() >= localPlayer.augmentMovementReadyAt else f"{ceil(localPlayer.augmentMovementReadyAt - getTotalTimeElapsed())}s CD"
-            ),
-            f"{TELEKINESIS_WEAPON_REACH_MULTIPLIER}x melee reach | [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.JUMP)}]: push" if localPlayer.augmentId == Augment.TELEKINESIS else f"[{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.JUMP)}]: grapple | {AUGMENT_GRAPNEL_MIN_RANGE}-{AUGMENT_GRAPNEL_RANGE}m" if localPlayer.augmentId == Augment.GRAPNEL_LAUNCHER else f"[{inputBindingString(Button.JUMP)}] midair / 2x to launch" if localPlayer.augmentId == Augment.HIGHRISE else f"Dash: {localPlayer.augmentDashCharges}/{DASH_MAX_CHARGES} | 2x [{inputBindingString(Button.JUMP)}]"
-        ) if localPlayer.augmentId in [Augment.DASH, Augment.HIGHRISE, Augment.TELEKINESIS, Augment.GRAPNEL_LAUNCHER] else f"Backpack: {len(localPlayer.augmentScavengerBackpack)}/{SCAVENGER_BACKPACK_CAPACITY} | [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.INTERACT)}]: store/swap | Hold [{inputBindingString(Button.RELOAD)}]: drop all" if localPlayer.augmentId == Augment.SCAVENGER else [" ", f"+{AUGMENT_KEVLAR_ARMOR} armor | {AUGMENT_KEVLAR_RANGED_DMG_RESIST}% ranged/ability dmg resist", " ", " ", " ", f"{AMMO_PACK_CAPACITY_MULTIPLIER}x mag size | Full reload restores extra ammo", " ", " ", " ", f"{SURVIVALIST_LIFESTEAL_PCT}% lifesteal | +{SURVIVALIST_BONUS_HP} HP"][localPlayer.augmentId],
+        "{0}{1}".format(f"Hold [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.INTERACT)}]: aim; release [{inputBindingString(Button.INTERACT)}]: place | " if localPlayer.augmentBarrierPlacementCooldown <= 0 else "", "{0}{1}".format(f"{ceil(localPlayer.augmentBarrierHealth)} HP | " if localPlayer.augmentBarrierHealth > 0 else "", f"Place: {localPlayer.augmentBarrierPlacementCooldown}s CD" if localPlayer.augmentBarrierPlacementCooldown > 0 else iconString(Icon.CHECKMARK))) if localPlayer.augmentId == Augment.LASER_BARRICADE else (
+            "{0}{1}".format(
+                f"Dash: {localPlayer.augmentDashCharges}/{DASH_MAX_CHARGES} | 2x [{inputBindingString(Button.JUMP)}]",
+                f" | +1 in {ceil(localPlayer.augmentDashReadyAt - getTotalTimeElapsed())}s" if localPlayer.augmentDashCharges < DASH_MAX_CHARGES else ""
+            ) if localPlayer.augmentId == Augment.DASH else
+            (f"Launch: {ceil(localPlayer.augmentMovementReadyAt - getTotalTimeElapsed())}s CD" if getTotalTimeElapsed() < localPlayer.augmentMovementReadyAt else f"[{inputBindingString(Button.JUMP)}] midair / 2x to launch") if localPlayer.augmentId == Augment.HIGHRISE else
+            "{0} | {1}".format(
+                f"{TELEKINESIS_WEAPON_REACH_MULTIPLIER}x melee reach | [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.JUMP)}]: push" if localPlayer.augmentId == Augment.TELEKINESIS else f"[{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.JUMP)}]: grapple | {AUGMENT_GRAPNEL_MIN_RANGE}-{AUGMENT_GRAPNEL_RANGE}m",
+                f"{ceil(localPlayer.augmentMovementReadyAt - getTotalTimeElapsed())}s CD" if getTotalTimeElapsed() < localPlayer.augmentMovementReadyAt else iconString(Icon.CHECKMARK)
+            ) if localPlayer.augmentId in [Augment.TELEKINESIS, Augment.GRAPNEL_LAUNCHER] else
+            f"Backpack: {len(localPlayer.augmentScavengerBackpack)}/{SCAVENGER_BACKPACK_CAPACITY} | [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.INTERACT)}]: store/swap | Hold [{inputBindingString(Button.RELOAD)}]: drop all" if localPlayer.augmentId == Augment.SCAVENGER else
+            [" ", f"+{AUGMENT_KEVLAR_ARMOR} armor | {AUGMENT_KEVLAR_RANGED_DMG_RESIST}% ranged/ability dmg resist", " ", " ", " ", f"{AMMO_PACK_CAPACITY_MULTIPLIER}x magazine | Fully reload to refill", " ", " ", " ", f"{SURVIVALIST_LIFESTEAL_PCT}% lifesteal | +{SURVIVALIST_BONUS_HP} HP"][localPlayer.augmentId]
+        ),
         AUGMENT_NAMES[localPlayer.augmentId],
         HudPosition.ACTUALLY_LEFT, 98, Color.WHITE, Color.WHITE,
         (Color.RED if localPlayer.augmentBarrierPlacementCooldown > 0 else Color.GREEN) if localPlayer.augmentId == Augment.LASER_BARRICADE else ([Color.RED, Color.SKY_BLUE, Color.GREEN][localPlayer.augmentDashCharges] if localPlayer.augmentId == Augment.DASH else (Color.RED if getTotalTimeElapsed() < localPlayer.augmentMovementReadyAt else Color.GREEN)) if localPlayer.augmentId in [Augment.DASH, Augment.HIGHRISE, Augment.TELEKINESIS, Augment.GRAPNEL_LAUNCHER] else ([Color.WHITE, Color.SKY_BLUE, Color.GREEN][len(localPlayer.augmentScavengerBackpack)] if localPlayer.augmentId == Augment.SCAVENGER else Color.WHITE),
