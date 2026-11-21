@@ -36,6 +36,6 @@ rule "NO COOLDOWNS":
             eventPlayer.setAbilityCharge(Button.ABILITY_2, 2)
         eventPlayer.setAbilityCharge(Button.SECONDARY_FIRE, 2)
         eventPlayer.setAbilityCooldown(Button.RELOAD, 0)
-        wait(0.032)
+        wait(0.096)
     destroyHudText(eventPlayer.powerUpNoCooldownsHudId)
     eventPlayer.noCooldownsEndTime = 0
