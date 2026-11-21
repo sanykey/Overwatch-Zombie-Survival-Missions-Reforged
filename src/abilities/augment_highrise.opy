@@ -6,9 +6,6 @@
 # Shared with Dash; declared here before the HIGHRISE input rules.
 subroutine useAugmentAirAction
 
-#!define HIGHRISE_JUMP_IMPULSE 16
-#!define HIGHRISE_TAP_WINDOW 0.3
-#!define HIGHRISE_COOLDOWN 14
 
 macro useHighriseAirActionMacro():
     eventPlayer.augmentIsAirActionReady = false
@@ -63,7 +60,7 @@ rule "[HIGHRISE] DOUBLE TAP":
 
     # Only press edges update the timestamp. A blocked native jump can leave the
     # player grounded; its second press still launches without cancelling abilities.
-    if eventPlayer.augmentJumpLastPressedAt > 0 and getTotalTimeElapsed() - eventPlayer.augmentJumpLastPressedAt <= HIGHRISE_TAP_WINDOW:
+    if eventPlayer.augmentJumpLastPressedAt > 0 and getTotalTimeElapsed() - eventPlayer.augmentJumpLastPressedAt <= AIR_ACTION_TAP_WINDOW:
         eventPlayer.augmentJumpLastPressedAt = 0
         if eventPlayer.isOnGround() or eventPlayer.augmentIsAirActionReady:
             useAugmentAirAction()

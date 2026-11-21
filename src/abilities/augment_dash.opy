@@ -4,11 +4,6 @@
 # Shared storage contracts remain in variables.opy; HUDs stay in their owners.
 # Include after highrise.opy, which declares the shared useAugmentAirAction.
 
-#!define DASH_COOLDOWN 14
-#!define DASH_MAX_CHARGES 2
-#!define DASH_PHASE_DURATION 1.7
-#!define DASH_TAP_WINDOW 0.3
-#!define DASH_IMPULSE 22
 #21.25
 
 # Dash samples movement on the second Jump press. This scratch vector is
@@ -82,9 +77,9 @@ rule "[DASH] DOUBLE TAP":
     # its release and restarts from scratch, so a third quick press is only the
     # FIRST press of the next pair and cannot spend a second charge by itself.
     waitUntil(eventPlayer.isHoldingButton(Button.JUMP), Math.INFINITY)
-    waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), DASH_TAP_WINDOW)
+    waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), AIR_ACTION_TAP_WINDOW)
     if not eventPlayer.isHoldingButton(Button.JUMP):
-        waitUntil(eventPlayer.isHoldingButton(Button.JUMP), DASH_TAP_WINDOW)
+        waitUntil(eventPlayer.isHoldingButton(Button.JUMP), AIR_ACTION_TAP_WINDOW)
         if eventPlayer.isHoldingButton(Button.JUMP):
             useAugmentAirAction()
             waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), Math.INFINITY)

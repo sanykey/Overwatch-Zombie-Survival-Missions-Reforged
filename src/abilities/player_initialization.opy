@@ -232,7 +232,7 @@ macro initializePlayerAugment():
             eventPlayer.setKnockbackReceived(100 - AUGMENT_KEVLAR_KNOCKBACK_RESIST)
             eventPlayer.addHealthPool(Health.ARMOR, AUGMENT_KEVLAR_ARMOR, true, false)
         else:
-            eventPlayer.addHealthPool(Health.NORMAL, 50, true, false)
+            eventPlayer.addHealthPool(Health.NORMAL, SURVIVALIST_BONUS_HP, true, false)
 
 
 rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION":

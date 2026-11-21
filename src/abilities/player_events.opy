@@ -156,7 +156,7 @@ rule "PLAYER DEALT DAMAGE":
     # multiplier, so it stacks with every source already applied above.
     if eventPlayer.augmentId == Augment.SURVIVALIST:
         # Include damage from the hero, primary enhancement and scripted powerups.
-        heal(eventPlayer, eventPlayer, eventDamage * 0.15)
+        heal(eventPlayer, eventPlayer, eventDamage * (SURVIVALIST_LIFESTEAL_PCT / 100))
     elif eventPlayer.augmentId == Augment.APOTHECARY and eventAbility == Button.ULTIMATE and eventPlayer.getHero() in [Hero.DVA, Hero.DMON]:
         rechargeApothecaryAugmentFromDamageMacro()
 
