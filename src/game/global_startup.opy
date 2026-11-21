@@ -37,32 +37,28 @@ macro enableEnhancementsMacro():
 
 
 macro botHeroRandomizationMacro():
-    # spawnedBotHeroList: hero types already present among zombies, to check the unique-skin limit.
-    #!define spawnedBotHeroList tmp0
-    spawnedBotHeroList = botHeroList.filter(lambda x: getNumberOfHeroes(x, Team.2))
-    # botSpawnSelectedHero: selected bot hero after the last use of spawnedBotHeroList.
+    # Scratch values are consumed before the dummy is created.
     #!define botSpawnSelectedHero tmp0
+    #!define botSpawnCumulativeWeight tmp1
+    #!define botSpawnHeroIndex tmp2
+    #!define botSpawnWeightRoll tmp3
     if isSmolderEventActive:
         botSpawnSelectedHero = Hero.WINSTON
-    #Determines if count of current different zombie types is less than the maximum amount allowed
-    elif len(spawnedBotHeroList) < (UNIQUE_HERO_SKIN_CAP - max(getNumberOfSlots(Team.1), getNumberOfPlayers(Team.1))):
-        # botSpawnWeightRoll: random threshold for weighted hero selection; the hero list is no longer needed.
-        #!define botSpawnWeightRoll tmp0
-        botSpawnWeightRoll = random.uniform(0, 100)
-        # botSpawnCumulativeWeight: cumulative spawn weight, compared with botSpawnWeightRoll to find the selected hero.
-        #!define botSpawnCumulativeWeight tmp1
-        botSpawnCumulativeWeight = 0
-        # botSpawnHeroIndex: hero-table index, starting before the first entry so the loop visits index 0.
-        #!define botSpawnHeroIndex tmp2
-        botSpawnHeroIndex = -1
-        while botSpawnWeightRoll > botSpawnCumulativeWeight or botSpawnHeroIndex < 0:
-            # botSpawnHeroIndex: next hero-table index whose spawn weight must be included.
-            botSpawnHeroIndex++
-            # botSpawnCumulativeWeight: cumulative weight including this hero, to test whether botSpawnWeightRoll falls in its range.
-            botSpawnCumulativeWeight += botSpawnRateList[botSpawnHeroIndex]
-        botSpawnSelectedHero = botHeroList[botSpawnHeroIndex]
     else:
-        botSpawnSelectedHero = sorted(botHeroList, lambda _, i: botSpawnRateList[i]).last()
+        botSpawnSelectedHero = null
+        # Use weighted selection while there is room for another zombie skin.
+        if len(botHeroList.filter(lambda hero: getNumberOfHeroes(hero, Team.2))) < (UNIQUE_HERO_SKIN_CAP - max(getNumberOfSlots(Team.1), getNumberOfPlayers(Team.1))):
+            botSpawnCumulativeWeight = 0
+            botSpawnWeightRoll = random.uniform(0, NL_SPAWN_MODE_WEIGHT_TOTALS[zombieSetting])
+            for botSpawnHeroIndex in range(ZOMBIE_SPAWN_HERO_COUNT):
+                botSpawnCumulativeWeight += botSpawnRateList[botSpawnHeroIndex]
+                # Skip leading zero weights even when the roll is zero.
+                if botSpawnCumulativeWeight and botSpawnWeightRoll <= botSpawnCumulativeWeight:
+                    botSpawnSelectedHero = botHeroList[botSpawnHeroIndex]
+                    break
+        # Reuse the skin-cap fallback if the search exhausts the weights.
+        if botSpawnSelectedHero == null:
+            botSpawnSelectedHero = sorted(botHeroList, lambda _, i: botSpawnRateList[i]).last()
     createDummy(botSpawnSelectedHero, Team.2, -1, dummyHoldingPositionConst)
 
 

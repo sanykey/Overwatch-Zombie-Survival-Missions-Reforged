@@ -2,39 +2,43 @@
 const telekinesisExtendedWeaponDamagePct = 75;
 let result = `\n  #!define TELEKINESIS_EXTENDED_WEAPON_DAMAGE_PCT ${telekinesisExtendedWeaponDamagePct}\n`;
 
-// Carrion is appended at hero index 21; existing indices and zero/missing slots stay unchanged.
+// This order also indexes the per-hero stat tables.
+const zombieSpawnHeroes = [
+  "REAPER", "JUNKRAT", "TORBJORN", "ROADHOG", "REINHARDT", "ANRAN",
+  "WIDOWMAKER", "MAUGA", "MERCY", "WRECKING_BALL", "MOIRA", "PHARAH",
+  "SIGMA", "JUNKER_QUEEN", "ILLARI", "HAZARD", "SYMMETRA", "ANA",
+  "WINSTON", "DOOMFIST", "KIRIKO", "JETPACK_CAT",
+];
+
+// Carrion is appended at hero index 21; earlier indices and zero weights stay unchanged.
 // All Zombies: Carrion matches Reinhardt (3/103, about 2.91%); other relative weights are preserved.
 // Six-decimal weights sum to 100; rounding residue is assigned to Reaper. New Blood reserves 20%.
 // Its difficulty stats come from Jetpack Cat (index 5) in the ZSMM-remixed snapshot.
 const numbers = [
   { // Spawn rates: All Zombies
-    offset: "NL_SPAWN_RATES_ALL_ZOMBIES_OFFSET",
-    len: "NL_SPAWN_RATES_ALL_ZOMBIES_LEN",
+    spawnMode: 1,
     list: [10.679613, 9.708738, 4.854369, 3.883495, 2.912621, 4.854369, 3.883495, 3.883495, 5.825243, 2.912621, 4.854369, 5.825243, 2.912621, 3.883495, 3.883495, 5.825243, 3.883495, 8.737864, 3.883495, 0, 0, 2.912621],
   },
 
   { // Spawn rates: New Blood
-    offset: "NL_SPAWN_RATES_NEW_BLOOD_OFFSET",
-    len: "NL_SPAWN_RATES_NEW_BLOOD_LEN",
+    spawnMode: 2,
     list: [0, 0, 0, 0, 0, 8.08, 0, 8, 1.6, 1.6, 1.6, 3.12, 8, 8, 8, 8, 8, 8, 8, 0, 0, 20],
   },
 
   { // Spawn rates: Zombie Shuffle
-    offset: "NL_SPAWN_RATES_SHUFFLE_OFFSET",
-    len: "NL_SPAWN_RATES_SHUFFLE_LEN",
-    list: [50, 25, 15, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    spawnMode: 4,
+    shuffledWeightCount: 19,
+    list: [50, 25, 15, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   },
 
   { // Spawn rates: Dinner Rush
-    offset: "NL_SPAWN_RATES_DINNER_RUSH_OFFSET",
-    len: "NL_SPAWN_RATES_DINNER_RUSH_LEN",
-    list: [0, 0, 15, 0, 0, 16, 15, 4, 0, 3, 15, 9, 0, 3, 10, 0, 10],
+    spawnMode: 5,
+    list: [0, 0, 15, 0, 0, 16, 15, 4, 0, 3, 15, 9, 0, 3, 10, 0, 10, 0, 0, 0, 0, 0],
   },
 
   { // Spawn rates: Ham N Hammer
-    offset: "NL_SPAWN_RATES_HAM_N_HAMMER_OFFSET",
-    len: "NL_SPAWN_RATES_HAM_N_HAMMER_LEN",
-    list: [0, 0, 0, 0, 50, 0, 0, 0, 0, 50],
+    spawnMode: 6,
+    list: [0, 0, 0, 0, 50, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   },
 
   { // Bot health: Insanity
@@ -179,11 +183,31 @@ const numbers = [
       range, damage * telekinesisExtendedWeaponDamagePct / 100, windup, recovery,
     ]),
   },
+  { // Equal spawn rates: 19 original heroes and Carrion at index 21.
+    spawnMode: 3,
+    list: [...Array(19).fill(5), 0, 0, 5],
+  },
 ];
 
+const spawnModeOffsets = [0];
+const spawnModeWeightTotals = [0];
 let numberIndex = 0;
 numbers.forEach(group => {
   result += "\n";
+  if (group.spawnMode) {
+    if (group.list.length !== zombieSpawnHeroes.length) {
+      throw new Error(`Zombie spawn mode ${group.spawnMode} has ${group.list.length} weights for ${zombieSpawnHeroes.length} heroes`);
+    }
+    spawnModeOffsets[group.spawnMode] = numberIndex;
+    // Match compressed() by rounding each weight to three decimal places before summing.
+    const totalInThousandths = group.list.reduce((sum, weight) => sum + Math.round(weight * 1000), 0);
+    spawnModeWeightTotals[group.spawnMode] = totalInThousandths / 1000;
+  }
+  if (group.shuffledWeightCount) {
+    const fixedWeights = group.list.slice(group.shuffledWeightCount);
+    result += `  #!define NL_ZOMBIE_SHUFFLE_WEIGHT_COUNT ${group.shuffledWeightCount}\n`;
+    result += `  #!define NL_ZOMBIE_SHUFFLE_FIXED_WEIGHTS [${fixedWeights.join(", ")}]\n`;
+  }
   if (group.offset) {
     result += `  #!define ${group.offset} ${numberIndex}\n`;
   }
@@ -195,5 +219,10 @@ numbers.forEach(group => {
     result += `  #!define ${group.len} ${group.list.length}\n`;
   }
 });
+
+result += `  #!define ZOMBIE_SPAWN_HEROES [${zombieSpawnHeroes.map(hero => "Hero." + hero).join(", ")}]\n`;
+result += `  #!define ZOMBIE_SPAWN_HERO_COUNT ${zombieSpawnHeroes.length}\n`;
+result += `  #!define NL_SPAWN_MODE_OFFSETS [${spawnModeOffsets.join(", ")}]\n`;
+result += `  #!define NL_SPAWN_MODE_WEIGHT_TOTALS [${spawnModeWeightTotals.join(", ")}]\n`;
 
 result

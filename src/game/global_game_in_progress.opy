@@ -59,8 +59,8 @@ rule "ZOMBIE SHUFFLE":
     @Condition isGameplayActive == true
     @Condition zombieSetting == 4
     
-    #Bot respawn probablities
-    botSpawnRateList = random.shuffle(botSpawnRateList)
+    # Shuffle only the original eligible slots, then restore the fixed tail.
+    botSpawnRateList = random.shuffle(botSpawnRateList.slice(0, NL_ZOMBIE_SHUFFLE_WEIGHT_COUNT)).concat(NL_ZOMBIE_SHUFFLE_FIXED_WEIGHTS)
     bigMessage(getAllPlayers(), "The spawn rates have been shuffled!")
     #1 min 30 sec wait
     wait(90)
