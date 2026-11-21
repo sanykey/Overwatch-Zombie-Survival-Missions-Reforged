@@ -5,7 +5,7 @@ subroutine startPupDefaultChase
 subroutine applyBulkingSeasonStats
 
 
-#!define overchargeEarnedEnergyTotal(player) (player.getStatistic(Stat.HEALING_DEALT) / 3 + 10 * earnedAssists(player))
+#!define overchargeEarnedEnergyTotal(player) (player.getStatistic(Stat.HEALING_DEALT) / OVERCHARGE_HEAL_ENERGY_DIVISOR + OVERCHARGE_ENERGY_PER_ASSIST * earnedAssists(player))
 
 rule "ZOMBIE HYBRID":
     @Event eachPlayer
@@ -19,7 +19,7 @@ rule "ZOMBIE HYBRID":
     explosionSequence()
     stopDamageOverTime(eventPlayer.infectionDamageOverTimeId)
     eventPlayer.infectionLevel = 0
-    eventPlayer.enhancementHybridCooldown = 20
+    eventPlayer.enhancementHybridCooldown = ZOMBIE_HYBRID_EXPLOSION_COOLDOWN
     while eventPlayer.enhancementHybridCooldown > 0:
         wait(1)
         eventPlayer.enhancementHybridCooldown += -1
@@ -42,7 +42,7 @@ rule "PYROTECHNIC APPLIES DAMAGE":
             if pyroBurnTarget in bossStateList:
                 # pyroBurnDamagePerSecond: halve this zombie's damage if it is a boss.
                 pyroBurnDamagePerSecond /= 2
-            pyroBurnTarget.startDamageOverTime(eventPlayer, 3, pyroBurnDamagePerSecond)
+            pyroBurnTarget.startDamageOverTime(eventPlayer, PYROTECHNIC_BURN_DURATION, pyroBurnDamagePerSecond)
         eventPlayer.enhancementPyroHitList.remove(pyroBurnTarget)
     wait(0.5)
     if ruleCondition:
@@ -101,8 +101,8 @@ def applyBulkingSeasonStats():
     @Name "applyBulkingSeasonStats"
 
     # Additive percentages from the native hero baseline; never compound live max health.
-    eventPlayer.setMaxHealth(min(200, 100 + eventPlayer.enhancementBulkStacks * 0.5))
-    eventPlayer.sizeScale = 1 if eventPlayer.enhancementBulkNormalSize else min(2.5, 1 + eventPlayer.enhancementBulkStacks * 0.0075)
+    eventPlayer.setMaxHealth(min(BULKING_SEASON_MAX_HP_MULTIPLIER * 100, 100 + eventPlayer.enhancementBulkStacks * BULKING_SEASON_HP_PER_STACK_PCT))
+    eventPlayer.sizeScale = 1 if eventPlayer.enhancementBulkNormalSize else min(BULKING_SEASON_MAX_SIZE_MULTIPLIER, 1 + eventPlayer.enhancementBulkStacks * (BULKING_SEASON_SIZE_PER_STACK_PCT / 100))
     applyCurrentSizeScale()
     # Map capped size 1..2.5 linearly to pitch 1..0.5 (200 stacks).
     # Reuse the current size so native-size mode also restores native pitch.
@@ -145,7 +145,7 @@ rule "OVERCHARGE ARM ON DOUBLE CROUCH":
         return
     # Transfer at most 100; retain the remainder in the uncapped bank.
     # Continued healing cannot change this burst's fixed damage.
-    eventPlayer.enhancementCapacitorCharge = min(eventPlayer.enhancementCapacitorEnergy, 100)
+    eventPlayer.enhancementCapacitorCharge = min(eventPlayer.enhancementCapacitorEnergy, OVERCHARGE_MAX_CHARGE)
     eventPlayer.enhancementCapacitorEnergy -= eventPlayer.enhancementCapacitorCharge
 
 
@@ -238,7 +238,7 @@ rule "P.U.P. CONTROL":
     waitUntil(distance(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget.getEyePosition()) < 5 or eventPlayer.enhancementPupTarget == null, Math.INFINITY)
     #If target still exists
     if eventPlayer.enhancementPupTarget != null:
-        if distance(eventPlayer, eventPlayer.enhancementPupTarget) > 6:
+        if distance(eventPlayer, eventPlayer.enhancementPupTarget) > PUP_IGNITE_RANGE:
             #P.U.P. color
             eventPlayer.enhancementPupColor = Color.WHITE
             #Beam visibility
@@ -250,7 +250,7 @@ rule "P.U.P. CONTROL":
             #Time to freeze dependent on max health of target
             wait(min(15, eventPlayer.enhancementPupTarget.getMaxHealth() / 300), Wait.ABORT_WHEN_FALSE)
             #Freeze cooldown
-            eventPlayer.enhancementPupCooldown = 2
+            eventPlayer.enhancementPupCooldown = PUP_FREEZE_COOLDOWN
             eventPlayer.enhancementPupTarget.setStatusEffect(eventPlayer, Status.FROZEN, 1.5)
             while not eventPlayer.enhancementPupTarget.hasStatus(Status.FROZEN):
                 eventPlayer.enhancementPupTarget.setStatusEffect(eventPlayer, Status.FROZEN, 1.5)
@@ -277,7 +277,7 @@ rule "P.U.P. CONTROL":
             eventPlayer.enhancementPupTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget)), min(-20, verticalAngleOfDirection(directionTowards(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget)))), min(25, 4200 / eventPlayer.enhancementPupTarget.getMaxHealth()), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
             eventPlayer.enhancementPupTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 1)
             #Laser cooldown
-            eventPlayer.enhancementPupCooldown = 1
+            eventPlayer.enhancementPupCooldown = PUP_LASER_COOLDOWN
             wait(3, Wait.ABORT_WHEN_FALSE)
             #P.U.P. color
             eventPlayer.enhancementPupColor = Color.SKY_BLUE
@@ -373,7 +373,7 @@ def useLivingProjectile():
     livingProjectileCandidate.wrestlerCarryHero = eventPlayer.getHero()
     livingProjectileCandidate.wrestlerZombieCarrier = eventPlayer
     # Independent of Super Nano's damage-received settings; bot owns cleanup.
-    startDamageModification(eventPlayer, getAllPlayers(), 50)
+    startDamageModification(eventPlayer, getAllPlayers(), 100 - WRESTLER_CARRY_DMG_RESIST_PCT)
     livingProjectileCandidate.wrestlerProtectionId = getLastDamageModification()
     livingProjectileCandidate.botIsAttached = true
     # Knockdown owns the carry lifetime; expiration or early removal releases.
@@ -410,7 +410,7 @@ rule "LIVING PROJECTILE RELEASE":
     stopDamageModification(eventPlayer.wrestlerProtectionId)
     wrestlerCarrier.enhancementCarryState = WrestlerCarryState.NONE
     # Every release starts the silent pickup cooldown, including interrupted holds.
-    wrestlerCarrier.enhancementGrabReadyAt = getTotalTimeElapsed() + 1.5
+    wrestlerCarrier.enhancementGrabReadyAt = getTotalTimeElapsed() + WRESTLER_GRAB_COOLDOWN
     eventPlayer.wrestlerZombieCarrier = null
     # Death/CC drops the zombie immediately, without throw damage or delay.
     if wrestlerCarrier.isDead() or wrestlerCarrier.isCrowdControlled:

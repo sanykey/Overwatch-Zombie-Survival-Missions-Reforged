@@ -128,12 +128,12 @@ macro initializePlayerEnhancement():
         case Enhancement.PLAGUE_DOCTOR:
             # enhancementPlagueCureTotal: accumulated infection levels removed, including cure bonuses, displayed in the HUD.
             # Permanent +30% healing; infected targets receive another x1.25 (x1.625 total).
-            eventPlayer.setHealingDealt(130)
-            startHealingModification(getPlayers(Team.1).filter(lambda player: player.isInfected), eventPlayer, 125, HealingReeval.RECEIVERS_AND_HEALERS)
+            eventPlayer.setHealingDealt(100 + PLAGUE_DOCTOR_HEAL_BONUS_PCT)
+            startHealingModification(getPlayers(Team.1).filter(lambda player: player.isInfected), eventPlayer, PLAGUE_DOCTOR_INFECTED_HEAL_MULTIPLIER_PCT, HealingReeval.RECEIVERS_AND_HEALERS)
             eventPlayer.enhancementPlagueCureTotal = 0
             break
         case Enhancement.OVERCHARGE:
-            eventPlayer.setHealingDealt(115)
+            eventPlayer.setHealingDealt(100 + OVERCHARGE_HEAL_BONUS_PCT)
             eventPlayer.enhancementCapacitorEnergy = 0
             eventPlayer.enhancementCapacitorCharge = 0
             eventPlayer.enhancementCapacitorDeadline = 0

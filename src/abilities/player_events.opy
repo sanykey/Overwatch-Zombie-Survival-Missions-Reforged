@@ -11,8 +11,8 @@ def applyHitEnhancements():
     if enhancementHitDamage <= 0:
         return
     if eventPlayer.enhancementId == Enhancement.PYROTECHNIC:
-        if enhancementHitVictim != eventPlayer and distance(eventPlayer, enhancementHitVictim) < 15:
-            enhancementHitVictim.setStatusEffect(eventPlayer, Status.BURNING, 3)
+        if enhancementHitVictim != eventPlayer and distance(eventPlayer, enhancementHitVictim) < PYROTECHNIC_IGNITE_RANGE:
+            enhancementHitVictim.setStatusEffect(eventPlayer, Status.BURNING, PYROTECHNIC_BURN_DURATION)
             eventPlayer.enhancementPyroHitList.append(enhancementHitVictim)
     elif eventPlayer.enhancementId == Enhancement.OVERCHARGE:
         if eventPlayer.enhancementCapacitorCharge > 0 and enhancementHitVictim != eventPlayer:
@@ -58,7 +58,7 @@ rule "PLAYER DEALT FINAL BLOW":
     @Team 1
 
     if eventPlayer.enhancementId == Enhancement.BORN_TO_BATTLE:
-        if eventPlayer.enhancementBattleResetCharges < 2:
+        if eventPlayer.enhancementBattleResetCharges < BORN_TO_BATTLE_MAX_RESETS:
             eventPlayer.enhancementBattleResetCharges += 1
 
     if currentObjectiveType != ObjectiveType.KILL_ZONE:
@@ -91,7 +91,7 @@ rule "PLAYER DIED":
     @Team 1
 
     if eventPlayer.enhancementId == Enhancement.BULKING_SEASON:
-        eventPlayer.enhancementBulkStacks = floor(eventPlayer.enhancementBulkStacks / 2)
+        eventPlayer.enhancementBulkStacks = floor(eventPlayer.enhancementBulkStacks / (100 / (100 - BULKING_SEASON_DEATH_LOSS_PCT)))
         applyBulkingSeasonStats()
     elif eventPlayer.enhancementId == Enhancement.ENGINEER and eventPlayer.enhancementScrapBeamEntity != null:
         # Scrap itself survives death; only the transfer beam is torn down.
@@ -144,7 +144,7 @@ rule "PLAYER DEALT DAMAGE":
     if eventPlayer.enhancementId == Enhancement.BRAIN_KILLER:
         if eventWasCriticalHit == true:
             #Critical hits deal 50% more damage, 20% if vicitm is a boss
-            damage(victim, eventPlayer, eventDamage * (0.2 if victim in bossStateList else 0.6))
+            damage(victim, eventPlayer, eventDamage * (BRAIN_KILLER_BOSS_CRIT_BONUS_PCT / 100 if victim in bossStateList else BRAIN_KILLER_CRIT_BONUS_PCT / 100))
             playEffect(eventPlayer, DynamicEffect.BAD_EXPLOSION, Color.RED, victim.getEyePosition() + directionTowards(eventPlayer.getEyePosition(), victim.getEyePosition()) * victim.sizeScale, 0.1 * victim.sizeScale)
     elif eventAbility != null:
         enhancementHitDamage = eventDamage
@@ -170,7 +170,7 @@ rule "PLAYER PICKS UP HEALTH PACK":
         eventPlayer.startHealingOverTime(null, 5, 20)
         if isGameplayActive and eventPlayer.enhancementId == Enhancement.OVERCHARGE:
             # Credit the actual pack healing; Apothecary's additional healing is measured below.
-            eventPlayer.enhancementCapacitorEnergy += eventHealing / 3
+            eventPlayer.enhancementCapacitorEnergy += eventHealing / OVERCHARGE_HEAL_ENERGY_DIVISOR
         # Discover packs even after time expires for the teleport fallback.
         if healthpackPositionList.all(lambda x: distance(x, eventPlayer) > 5):
             healthpackPositionList.append(eventPlayer.getPosition())

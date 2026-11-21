@@ -4,12 +4,12 @@ rule "HITCHHIKER ATTACH/DETATCH":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.enhancementId == Enhancement.HITCHHIKER
-    @Condition (eventPlayer.isHoldingButton(Button.CROUCH) or (eventPlayer.enhancementIsHitchhiking and (not eventPlayer.hasSpawned() or not eventPlayer.enhancementHitchhikerCarrier.hasSpawned() or eventPlayer.isDead() or eventPlayer.enhancementHitchhikerCarrier.isDead() or not entityExists(eventPlayer.enhancementHitchhikerCarrier) or eventPlayer.hasStatus(Status.KNOCKED_DOWN) or eventPlayer.enhancementHitchhikerCarrier.hasStatus(Status.KNOCKED_DOWN) or distance(eventPlayer, eventPlayer.enhancementHitchhikerCarrier) > 3 * eventPlayer.enhancementHitchhikerCarrier.sizeScale))) == true
+    @Condition (eventPlayer.isHoldingButton(Button.CROUCH) or (eventPlayer.enhancementIsHitchhiking and (not eventPlayer.hasSpawned() or not eventPlayer.enhancementHitchhikerCarrier.hasSpawned() or eventPlayer.isDead() or eventPlayer.enhancementHitchhikerCarrier.isDead() or not entityExists(eventPlayer.enhancementHitchhikerCarrier) or eventPlayer.hasStatus(Status.KNOCKED_DOWN) or eventPlayer.enhancementHitchhikerCarrier.hasStatus(Status.KNOCKED_DOWN) or distance(eventPlayer, eventPlayer.enhancementHitchhikerCarrier) > HITCHHIKER_DETACH_RANGE_SCALE * eventPlayer.enhancementHitchhikerCarrier.sizeScale))) == true
 
     if not eventPlayer.enhancementIsHitchhiking and eventPlayer.isAlive():
         if playerTargetList.exclude(eventPlayer).any(lambda x: not x.isAttached and distance(eventPlayer, x) < 2 * x.sizeScale):
             #Select parent
-            eventPlayer.enhancementHitchhikerCarrier = (sorted(playerTargetList.exclude(eventPlayer).filter(lambda x: not x.isCrowdControlled and distance(eventPlayer, x) < x.sizeScale * 2), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition()))))[0]
+            eventPlayer.enhancementHitchhikerCarrier = (sorted(playerTargetList.exclude(eventPlayer).filter(lambda x: not x.isCrowdControlled and distance(eventPlayer, x) < x.sizeScale * HITCHHIKER_ATTACH_RANGE_SCALE), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition()))))[0]
             # hitchhikerWorldAttachmentPosition: attachment position in world space, converted and captured before any wait.
             #!define hitchhikerWorldAttachmentPosition tmp0
             hitchhikerWorldAttachmentPosition = eventPlayer.enhancementHitchhikerCarrier.getPosition() + directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementHitchhikerCarrier, eventPlayer)), 0) * eventPlayer.enhancementHitchhikerCarrier.sizeScale + eventPlayer.enhancementHitchhikerCarrier.sizeScale * Vector.UP
@@ -32,7 +32,7 @@ rule "HITCHHIKER ATTACH/DETATCH":
             eventPlayer.enhancementHitchhikerPassengerPoolId = getLastCreatedHealthPool()
             eventPlayer.enhancementHitchhikerCarrier.enhancementHitchhikerPassenger = eventPlayer
     else:
-        if entityExists(eventPlayer.enhancementHitchhikerCarrier) and eventPlayer.hasSpawned() and distance(eventPlayer, eventPlayer.enhancementHitchhikerCarrier) < 3 * eventPlayer.enhancementHitchhikerCarrier.sizeScale:
+        if entityExists(eventPlayer.enhancementHitchhikerCarrier) and eventPlayer.hasSpawned() and distance(eventPlayer, eventPlayer.enhancementHitchhikerCarrier) < HITCHHIKER_DETACH_RANGE_SCALE * eventPlayer.enhancementHitchhikerCarrier.sizeScale:
             eventPlayer.teleport(eventPlayer.enhancementHitchhikerCarrier.getPosition())
         else:
             eventPlayer.detach()
@@ -43,7 +43,7 @@ rule "HITCHHIKER ATTACH/DETATCH":
             eventPlayer.allowButton(Button.ABILITY_1)
         eventPlayer.enhancementHitchhikerCarrier = 0
         removeHealthPool(eventPlayer.enhancementHitchhikerPassengerPoolId)
-        wait(1.5)
+        wait(HITCHHIKER_DETACH_COOLDOWN)
 
 
 rule "HITCHHIKER PARENT RECIEVES HEALTH POOL":
@@ -65,7 +65,7 @@ rule "HITCHHIKER LIFEBONDS":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.enhancementHitchhikerCarrier.isAlive() == true
     #Normalized health difference
-    @Condition abs(eventPlayer.getNormalizedHealth() - eventPlayer.enhancementHitchhikerCarrier.getNormalizedHealth()) > 0.01
+    @Condition abs(eventPlayer.getNormalizedHealth() - eventPlayer.enhancementHitchhikerCarrier.getNormalizedHealth()) > HITCHHIKER_HEALTH_DIFFERENCE_THRESHOLD
 
     # hitchhikerHealthTransferAmount: health to transfer this update; consumed by both setHealth actions before wait.
     #!define hitchhikerHealthTransferAmount tmp0
