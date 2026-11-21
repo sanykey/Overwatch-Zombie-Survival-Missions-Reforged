@@ -3,10 +3,6 @@
 # Remove the debug.opy include from main.opy to disable all debug rules.
 # main.opy enables playMoreEffects, raising the shared effect/beam/icon limit to 256.
 
-# Diagnostics.
-globalvar debugHud # ID of snky's diagnostics HUD, recreated after phase cleanup.
-
-
 rule "[debug] snky buffs":
     @Event eachPlayer
     @Condition DEBUG
@@ -67,3 +63,20 @@ rule "[debug] Log sustained server load":
     logToInspector(f"[server load] Avg (2s) reached 255\nobjective={currentObjectiveType}\nzombies={getNumberOfPlayers(Team.2)}\nqueued={len(botSpawnTimeList)}\neffects={getNumberOfEntityIds()}\ntexts={getNumberOfTextIds()}")
     waitUntil(getAverageServerLoad() < 255, Math.INFINITY)
     logToInspector(f"[server load] Avg (2s) recovered to {getAverageServerLoad()}")
+
+
+rule "[debug] Log bot AI activity":
+    @Condition DEBUG_BOT_AI_LOGS_ACTIVE
+    @Condition isGameplayActive == true
+
+    debugBotTargetScans = 0
+    debugBotTargetMisses = 0
+    debugBotTeleportAttempts = 0
+    debugBotTeleportSuccesses = 0
+    debugBotTeleportNoTargets = 0
+    wait(1, Wait.ABORT_WHEN_FALSE)
+    # Sample how many bots are still teleporting with no targets at log time.
+    # teleNoTargets above counts search iterations over the whole interval.
+    #!define debugBotTeleportNoTargetBots (len(getPlayers(Team.2).filter(lambda zombie: zombie.botIsTeleporting)) if playerTargetList == [] else 0)
+    logToInspector(f"[bot AI] zombies={getNumberOfPlayers(Team.2)} avg={getAverageServerLoad()} peak={getPeakServerLoad()} scans={debugBotTargetScans} misses={debugBotTargetMisses} teleSearch={debugBotTeleportAttempts} teleOk={debugBotTeleportSuccesses} teleNoTargets={debugBotTeleportNoTargets} teleNoTargetBots={debugBotTeleportNoTargetBots}")
+    loop()

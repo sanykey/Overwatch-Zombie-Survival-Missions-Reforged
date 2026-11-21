@@ -702,6 +702,8 @@ macro deselectBotTargetMacro():
 
 def selectTarget():
     @Name "selectTarget"
+    if DEBUG_BOT_AI_LOGS_ACTIVE:
+        debugBotTargetScans++
     
     eventPlayer.botIsSelectingTarget = true
     # botSelectionCandidateList: per-call target calculations; preserve the final snapshot below for the boss distance text.
@@ -732,6 +734,8 @@ def selectTarget():
         if isInLoS(botSelectionCandidateList[botSelectionCandidateIndex].getEyePosition(), eventPlayer.getPosition() + losOffsetConst):
             eventPlayer.botCandidateTarget = botSelectionCandidateList[botSelectionCandidateIndex]
             break
+    if DEBUG_BOT_AI_LOGS_ACTIVE and eventPlayer.botCandidateTarget == null:
+        debugBotTargetMisses++
     if eventPlayer.isAlive():
         if eventPlayer.botCandidateTarget != null:
             eventPlayer.botTarget = eventPlayer.botCandidateTarget

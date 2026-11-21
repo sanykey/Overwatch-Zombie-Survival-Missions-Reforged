@@ -1,5 +1,7 @@
 #!define DEBUG false
 #!define DEBUG_ENABLE_INSPECTOR false
+#!define DEBUG_BOT_AI_LOGS false
+#!define DEBUG_BOT_AI_LOGS_ACTIVE (DEBUG_ENABLE_INSPECTOR and DEBUG_BOT_AI_LOGS)
 #!define SERVER_LOAD_UI false
 
 # Select exactly one map pool, then save the root main.opy to rebuild.
@@ -13,6 +15,7 @@
 #!include "core/variables.opy"
 #!include "core/ui_workarounds.opy"
 #!include "core/compressed numbers.opy"
+#!include "debug/variables.opy"
 #!include "game/subroutines.opy"
 #!include "abilities/enhancement_charge_battery.opy"
 
