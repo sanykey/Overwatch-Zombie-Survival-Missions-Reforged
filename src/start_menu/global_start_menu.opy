@@ -281,6 +281,14 @@ def setZombieMode():
         # Mode 3 has no compressed table. Other mode offsets and lengths retain their original order.
         botSpawnRateList = numbersList.slice(numbersList[(NL_SPAWN_MODE_OFFSETS_OFFSET - 1) + zombieSetting], numbersList[(NL_SPAWN_MODE_LENGTHS_OFFSET - 1) + zombieSetting])
 
+    # OverPy compressed() rounds numbers to three decimal places. All Zombies
+    # decodes to 99.997, so use the loaded sum as the upper bound for each roll.
+    # Zombie Shuffle only reorders its weights within the hero table.
+    botSpawnWeightTotal = 0
+    #!define botWeightTotalIndex tmp0
+    for botWeightTotalIndex in range(min(len(botSpawnRateList), len(botHeroList))):
+        botSpawnWeightTotal += botSpawnRateList[botWeightTotalIndex]
+
 
 def determineChallenge():
     @Name "determineChallenge"

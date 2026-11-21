@@ -236,6 +236,7 @@ globalvar mustReviveTime          # Allowed rescue time; starts at 60 and decrea
 # Shared zombie stats, mutations and boss state.
 globalvar botHeroList            # Zombie hero order used to index spawn weights and all per-hero stat tables.
 globalvar botSpawnRateList       # Per-hero spawn weights; Zombie Shuffle can reorder them during gameplay.
+globalvar botSpawnWeightTotal    # Sum of usable weights after loading the selected mode.
 globalvar botBiteDamageList      # Per-hero bite damage selected for the current difficulty.
 globalvar botBiteDurationList    # Per-hero bite damage-over-time durations selected for the current difficulty.
 globalvar botDamageDealtList     # Per-hero damage percentages, also used to calibrate bite damage.

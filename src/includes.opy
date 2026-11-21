@@ -4,7 +4,7 @@
 #!define DEBUG_BOT_AI_LOGS false
 #!define DEBUG_BOT_AI_LOGS_ACTIVE (DEBUG_ENABLE_INSPECTOR and DEBUG_BOT_AI_LOGS)
 #!define DEBUG_SERVER_LOAD_UI false
-#!define VERSION "1.0-d"
+#!define VERSION "2.0-d"
 
 #!include "settings/settings_defaults.opy"
 #!include "core/directives.opy"
