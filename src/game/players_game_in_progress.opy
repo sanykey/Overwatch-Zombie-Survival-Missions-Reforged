@@ -169,6 +169,10 @@ rule "PLAYER GETS DOWNED":
             teleportDownedPlayerToWalkable()
 
 
+macro hasNearbyReviver():
+    playerTargetList.any(lambda player: player != eventPlayer and not player.invisibilityCount and distance(player, eventPlayer) < REVIVE_RADIUS)
+
+
 rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
     @Event eachPlayer
     @Team 1
@@ -180,8 +184,8 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
     
     # Save row in ReconnectField order.
     playerStatsList[eventPlayer.reconnectUserIndex] = [ReconnectStatus.DOWNED, eventPlayer.rescueTimeRemaining, eventPlayer.reviveTimeRemaining, eventPlayer.reviveDuration, eventPlayer.getPosition()]
-    waitUntil(not eventPlayer.isReviving and playerTargetList.exclude(eventPlayer).filter(lambda x: not x.invisibilityCount).any(lambda x: distance(x, eventPlayer) < REVIVE_RADIUS), 0.5)
-    if playerTargetList.exclude(eventPlayer).filter(lambda x: not x.invisibilityCount).any(lambda x: distance(eventPlayer, x) < REVIVE_RADIUS):
+    waitUntil(not eventPlayer.isReviving and hasNearbyReviver(), 0.5)
+    if hasNearbyReviver():
         eventPlayer.isReviving = true
         playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.YELLOW, eventPlayer.getPosition(), REVIVE_RADIUS * 2)
         eventPlayer.reviveTimeRemaining += -0.5
@@ -374,8 +378,10 @@ def teleportToClosestPlayer():
 def teleportDownedPlayerToWalkable():
     @Name "teleportDownedPlayerToWalkable"
 
-    # Both downed-player paths use the same synchronous recovery teleport.
-    eventPlayer.teleport(nearestWalkablePosition(nearestWalkablePosition(eventPlayer.getPosition()) + directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, nearestWalkablePosition(eventPlayer.getPosition()))), 0) * 2))
+    # Reuse the initial walkable point for both the offset and its direction.
+    #!define downedWalkablePosition tmp0
+    downedWalkablePosition = nearestWalkablePosition(eventPlayer.getPosition())
+    eventPlayer.teleport(nearestWalkablePosition(downedWalkablePosition + directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, downedWalkablePosition)), 0) * 2))
 
 
 def updateUsers():
