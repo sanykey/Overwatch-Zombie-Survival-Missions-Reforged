@@ -86,15 +86,9 @@ def applyDamageReceivedModifier():
     # edge calls this recompute; the strongest (lowest) intake wins and the
     # resists never stack. SWARM SHOOTOUT lowers intake through Start Damage
     # Modification, which multiplies on top and stays outside this recompute.
-    eventPlayer.setDamageReceived(0 if eventPlayer.augmentId == Augment.DASH and eventPlayer.augmentDashSmokeEntity != null else 50 if eventPlayer.powerUpSuperNanoGoodAuraId != 0 or eventPlayer.isUsingUltimate() else 100)
-    # Materialize the gate states for cheap readers (same edge coverage as the
-    # intake above: ultimate start/end, Dash activation/fade, death, Nano
-    # start/cleanup — the Nano edges rewrite them with unchanged values).
-    # isDotProtected: the bite, rocket, Molten Core, gas and explosion rules
-    # read it instead of re-evaluating the predicate per damage event.
-    # hasDamageResist: the health-HUD `*` (any active resist from here).
+    # Cache the DoT gate for the bite, rocket, Molten Core, gas and explosion rules.
     eventPlayer.isDotProtected = eventPlayer.isUsingUltimate() or (eventPlayer.augmentId == Augment.DASH and eventPlayer.augmentDashSmokeEntity != null)
-    eventPlayer.hasDamageResist = (eventPlayer.augmentId == Augment.DASH and eventPlayer.augmentDashSmokeEntity != null) or eventPlayer.powerUpSuperNanoGoodAuraId != 0 or eventPlayer.isUsingUltimate()
+    eventPlayer.setDamageReceived(0 if eventPlayer.augmentId == Augment.DASH and eventPlayer.augmentDashSmokeEntity != null else 50 if eventPlayer.isDotProtected or eventPlayer.powerUpSuperNanoGoodAuraId != 0 else 100)
 
 
 rule "PLAYER ULTIMATE DAMAGE RESIST":

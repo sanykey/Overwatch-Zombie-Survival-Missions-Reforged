@@ -375,9 +375,6 @@ playervar augmentState3
 # applyDamageReceivedModifier, which every gate-state edge calls. Read by the
 # bite, rocket, Molten Core, gas and explosion rules.
 playervar isDotProtected
-# Any active resist written by applyDamageReceivedModifier (Dash window,
-# Super Nano or ultimate). Drives the health-HUD `*` marker.
-playervar hasDamageResist
 
 playervar hitchhikerPassenger  # Passenger attached to this carrier; null when absent. Infection rules also query it.
 
