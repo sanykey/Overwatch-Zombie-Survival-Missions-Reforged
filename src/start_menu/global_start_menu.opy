@@ -191,7 +191,7 @@ rule "EFFECTS/TEXTS":
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Enhancement
-    startMenuEnhancementColorList = [Color.AQUA, Color.GRAY, Color.LIME_GREEN, Color.RED, Color.ORANGE, Color.GRAY, Color.WHITE, Color.PURPLE, Color.BLUE, Color.SKY_BLUE, Color.YELLOW, Color.ROSE, Color.GREEN, Color.TURQUOISE]
+    startMenuEnhancementColorList = [Color.AQUA, Color.GRAY, Color.LIME_GREEN, Color.RED, Color.ORANGE, Color.GRAY, Color.WHITE, Color.BLUE, Color.SKY_BLUE, Color.YELLOW, Color.ROSE, Color.GREEN, Color.TURQUOISE, Color.PURPLE]
     createStartMenuEnhancementHud()
 
 

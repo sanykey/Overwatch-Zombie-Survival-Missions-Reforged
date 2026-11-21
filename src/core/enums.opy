@@ -22,7 +22,8 @@ enum Challenge:
 
 # Enhancement IDs index enhancementOptionList and the start-menu tables.
 # Zero means no preference; initialization rolls a role-eligible real ID.
-# Tank-only Hybrid/Bulking Season start the range; support-only Plague Doctor/Overcharge end it.
+# Tank-only Hybrid/Bulking Season start the random range; support-only Plague Doctor/Overcharge end it.
+# Hitchhiker is last in the menu and outside the random range.
 # Keep every indexed menu/HUD/icon table in this same order.
 enum Enhancement:
     NO_PREFERENCE = 0,
@@ -32,13 +33,13 @@ enum Enhancement:
     PYROTECHNIC = 4,
     BORN_TO_BATTLE = 5,
     CHARGE_BATTERY = 6,
-    HITCHHIKER = 7,
-    PUP = 8,
-    WRESTLER = 9,
-    BOLT_STRIKE = 10,
-    ENGINEER = 11,
-    PLAGUE_DOCTOR = 12,
-    OVERCHARGE = 13,
+    PUP = 7,
+    WRESTLER = 8,
+    BOLT_STRIKE = 9,
+    ENGINEER = 10,
+    PLAGUE_DOCTOR = 11,
+    OVERCHARGE = 12,
+    HITCHHIKER = 13,
 
 # Wrestler holds until Knocked Down ends; manual throws request release.
 enum WrestlerCarryState:

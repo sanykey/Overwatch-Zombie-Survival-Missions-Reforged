@@ -24,15 +24,15 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             f"Hits within {PYROTECHNIC_IGNITE_RANGE}m ignite zombies",
             f"Ability resets: {localPlayer.enhancementBattleResetCharges}/{BORN_TO_BATTLE_MAX_RESETS}",
             f"Place: {ceil(localPlayer.enhancementBatteryPlacementCooldown)}s CD" if localPlayer.enhancementBatteryPlacementCooldown > 0 else f"Hold [{inputBindingString(Button.MELEE)}]: aim | Release: place",
-            f"[{inputBindingString(Button.CROUCH)}]: detach" if localPlayer.hitchhikerAttached else f"[{inputBindingString(Button.CROUCH)}]: attach near ally",
             "Attacking" if localPlayer.enhancementIsPupBeamActive == true else "Drone idle",
             "{1} | {0}".format(f"Pull: {ceil(localPlayer.enhancementPullReadyAt - getTotalTimeElapsed())}s CD" if getTotalTimeElapsed() < localPlayer.enhancementPullReadyAt else f"Hold [{inputBindingString(Button.MELEE)}]: pull", f"[{inputBindingString(Button.INTERACT)}]: throw" if localPlayer.enhancementCarryState != WrestlerCarryState.NONE else f"[{inputBindingString(Button.INTERACT)}]: grab"),
             "Hits chain to nearby zombies",
             f"Scrap: {floor(localPlayer.enhancementScrap)}/{ENGINEER_SCRAP_MAX} | Hold [{inputBindingString(Button.CROUCH)}] {ENGINEER_ARMOR_HOLD_DURATION}s: +{ENGINEER_ARMOR_STACK} armor ({ENGINEER_ARMOR_ALLY_COST} ally/{ENGINEER_ARMOR_SELF_COST} self) | Hold [{inputBindingString(Button.MELEE)}]: turret ({ENGINEER_TURRET_COST})",
             f"Infection removed: {round(localPlayer.enhancementPlagueCureTotal)}",
-            "{0} | {1}".format(f"Energy: {floor(localPlayer.enhancementCapacitorEnergy)}", f"Armed: +{floor(localPlayer.enhancementCapacitorCharge)} dmg/hit" if localPlayer.enhancementCapacitorCharge > 0 else f"2x [{inputBindingString(Button.CROUCH)}]: arm")
+            "{0} | {1}".format(f"Energy: {floor(localPlayer.enhancementCapacitorEnergy)}", f"Armed: +{floor(localPlayer.enhancementCapacitorCharge)} dmg/hit" if localPlayer.enhancementCapacitorCharge > 0 else f"2x [{inputBindingString(Button.CROUCH)}]: arm"),
+            f"[{inputBindingString(Button.CROUCH)}]: detach" if localPlayer.hitchhikerAttached else f"[{inputBindingString(Button.CROUCH)}]: attach near ally"
         ][localPlayer.enhancementId],
-        [" ", "Zombie Hybrid", "Bulking Season", "Brain Killer", "Pyrotechnic", "Born to Battle", "Charge Battery", "Hitchhiker", "P.U.P.", "Wrestler", "Bolt Strike", "Engineer", "Plague Doctor", "Overcharge"][localPlayer.enhancementId],
+        [" ", "Zombie Hybrid", "Bulking Season", "Brain Killer", "Pyrotechnic", "Born to Battle", "Charge Battery", "P.U.P.", "Wrestler", "Bolt Strike", "Engineer", "Plague Doctor", "Overcharge", "Hitchhiker"][localPlayer.enhancementId],
         HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE,
         [
             Color.WHITE,
@@ -42,7 +42,6 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             Color.WHITE,
             [Color.WHITE, Color.SKY_BLUE, Color.GREEN][localPlayer.enhancementBattleResetCharges],
             Color.RED if localPlayer.enhancementBatteryPlacementCooldown > 0 else Color.GREEN,
-            Color.WHITE,
             Color.RED if localPlayer.enhancementIsPupBeamActive == true else Color.WHITE,
             Color.RED if getTotalTimeElapsed() < localPlayer.enhancementPullReadyAt else Color.GREEN,
             Color.WHITE,
@@ -50,7 +49,8 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             # when scrap also covers a turret. Keep thresholds tied to costs.
             Color.WHITE if localPlayer.enhancementScrap < ENGINEER_ARMOR_ALLY_COST else Color.SKY_BLUE if localPlayer.enhancementScrap < ENGINEER_TURRET_COST else Color.GREEN,
             Color.WHITE,
-            Color.YELLOW if localPlayer.enhancementCapacitorCharge > 0 else Color.GREEN if localPlayer.enhancementCapacitorEnergy >= 100 else Color.SKY_BLUE if localPlayer.enhancementCapacitorEnergy >= 50 else Color.WHITE
+            Color.YELLOW if localPlayer.enhancementCapacitorCharge > 0 else Color.GREEN if localPlayer.enhancementCapacitorEnergy >= 100 else Color.SKY_BLUE if localPlayer.enhancementCapacitorEnergy >= 50 else Color.WHITE,
+            Color.WHITE
         ][localPlayer.enhancementId],
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
@@ -89,8 +89,8 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
 macro initializePlayerEnhancement():
     if eventPlayer.enhancementId == Enhancement.NO_PREFERENCE:
         # No preference and late-join zero state roll once for the current hero.
-        # Contiguous IDs exclude Hybrid/Bulking Season for non-tanks and the final two support
-        # enhancements for non-supports. Explicit choices and later spawns retain the ID.
+        # Hybrid/Bulking Season are tank-only and Plague Doctor/Overcharge are support-only.
+        # Hitchhiker is after both upper bounds. Explicit choices and later spawns retain the ID.
         eventPlayer.enhancementId = random.randint(
             Enhancement.ZOMBIE_HYBRID if eventPlayer.getHero() in getTankHeroes() else Enhancement.BRAIN_KILLER,
             Enhancement.OVERCHARGE if eventPlayer.getHero() in getSupportHeroes() else Enhancement.ENGINEER
