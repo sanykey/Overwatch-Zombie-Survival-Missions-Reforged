@@ -182,8 +182,7 @@ rule "BOT DIES":
     eventPlayer.stopThrottleInDirection()
     eventPlayer.stopFacing()
     if not eventWasEnvironment or attacker.getTeam() == Team.1:
-        #Remove miniboss from zombie
-        miniBossList[miniBossList.index(eventPlayer)] = 0
+        miniBossList.remove(eventPlayer)
         eventPlayer.disableNameplatesFor(getAllPlayers())
         #Allow for custom revive times
         waitUntil(eventPlayer.botRespawnDelay > 0, 0.125)
