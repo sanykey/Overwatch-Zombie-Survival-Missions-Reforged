@@ -107,12 +107,9 @@ rule "SPAWN BOTS":
 
 
 rule "SPAWN TIME CONTROL":
-    @Condition (botSpawnTimeList != [] or botSpawnPointTimerList > 0) == true
+    @Condition botSpawnTimeList != []
     
-    if botSpawnTimeList != []:
-        botSpawnTimeList = sorted(botSpawnTimeList.map(lambda x: x - 1))
-    if botSpawnPointTimerList != []:
-        botSpawnPointTimerList = botSpawnPointTimerList.map(lambda x: max(0, x - 1))
+    botSpawnTimeList = sorted(botSpawnTimeList.map(lambda x: x - 1))
     wait(1)
     if ruleCondition:
         loop()
@@ -227,7 +224,7 @@ rule "VARIABLE ASSIGNMENT":
     objectiveEntityIdList = []
     botSpawnPointList = []
     botSpawnWaypointList = []
-    botSpawnPointTimerList = []
+    botSpawnPointLoadUntilList = []
     bossStateList = []
     healthpackPositionList = []
     #overtime = false  #Uninitialized Workshop variables already compare equal to false at match start.

@@ -32,6 +32,7 @@
 globalvar debugBotTargetScans
 globalvar debugBotTargetMisses
 globalvar debugBotTeleportAttempts
+globalvar debugBotTeleportCacheHits
 globalvar debugBotTeleportSuccesses
 globalvar debugBotTeleportNoTargets
 
@@ -144,10 +145,10 @@ globalvar mapGridList                 # Cached walkable map positions used by ob
 globalvar attackSpawnRooms            # Standard modes: list of spawn-room positions; the unused CTF fallback stores one position.
 globalvar activeAttackSpawnRoom       # Currently activated spawn-room position; may differ from the room being tested.
 globalvar spawnRoomIndex              # Room index during pregame recording/rotation and in-match safe-room selection.
-globalvar botSpawnPointList           # Cached successful zombie spawn/teleport positions.
+globalvar botSpawnPointList           # Confirmed zombie teleport positions, oldest first and capped.
 # Unique positions: updateBotSpawnPoints checks membership before appending.
-# Timer and waypoint rows stay aligned; teleport filtering uses this original index.
-globalvar botSpawnPointTimerList      # Per-spawn-point cooldown/load values, indexed with botSpawnPointList.
+# Load and waypoint rows stay aligned; teleport filtering uses this original index.
+globalvar botSpawnPointLoadUntilList  # Absolute whole second when a point's reuse penalty reaches zero.
 globalvar botSpawnWaypointList        # Movement waypoint associated with each cached botSpawnPointList entry.
 globalvar customTeleportPositionList  # Special teleport positions transferred from dying bots to replacement bots.
 globalvar botSpawnTimeList            # Remaining delays for queued zombie replacements, decremented once per second.

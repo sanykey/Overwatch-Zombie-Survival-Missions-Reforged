@@ -7,6 +7,10 @@ subroutine updateBotSpawnPoints
 subroutine locateAveragePlayerLocation
 subroutine setClosestPlayerTeleportCenter
 
+# Synchronous cache scratch. removeBotSpawnPoint consumes a valid row index.
+#!define botSpawnCacheIndex tmp0
+#!define botSpawnCacheSecond tmp1
+
 
 macro collectNearbyZombieLoot():
     # Called synchronously from BOT DIES: victim is the dead zombie bot. Pays
@@ -507,15 +511,21 @@ def teleportBots():
                     debugBotTeleportAttempts++
                     if playerTargetList == []:
                         debugBotTeleportNoTargets++
-                # teleportCandidateSpawnPointList: nearby saved points whose cooldown permits use.
-                # Points are unique and timer/waypoint rows remain aligned; i is the original point index.
+                # Compare against an absolute whole second to age reuse penalties without
+                # rewriting the cache. Consume the time and index before the next wait.
                 #!define teleportCandidateSpawnPointList tmp0
-                teleportCandidateSpawnPointList = botSpawnPointList.filter(lambda x, i: distance(x, eventPlayer.botTeleportCenter) < BOT_MAX_TELEPORT_RANGE and botSpawnPointTimerList[i] < 15)
+                #!define botSpawnCacheReuseCutoff tmp2
+                botSpawnCacheSecond = floor(getTotalTimeElapsed())
+                botSpawnCacheReuseCutoff = botSpawnCacheSecond + BOT_SPAWN_POINT_REUSE_THRESHOLD
+                teleportCandidateSpawnPointList = botSpawnPointList.filter(lambda x, i: distance(x, eventPlayer.botTeleportCenter) < BOT_MAX_TELEPORT_RANGE and botSpawnPointLoadUntilList[i] < botSpawnCacheReuseCutoff)
                 #Bots utilize saved spawn points
                 # A nonempty filtered list already implies the source list is nonempty.
                 if teleportCandidateSpawnPointList != []:
                     eventPlayer.botTeleportPosition = random.choice(teleportCandidateSpawnPointList)
-                    botSpawnPointTimerList[botSpawnPointList.index(eventPlayer.botTeleportPosition)] += 5
+                    botSpawnCacheIndex = botSpawnPointList.index(eventPlayer.botTeleportPosition)
+                    botSpawnPointLoadUntilList[botSpawnCacheIndex] = max(botSpawnPointLoadUntilList[botSpawnCacheIndex], botSpawnCacheSecond) + BOT_SPAWN_POINT_USE_PENALTY
+                    if DEBUG_BOT_AI_LOGS_ACTIVE:
+                        debugBotTeleportCacheHits++
                     break
                 else:
                     eventPlayer.botTeleportPosition = nearestWalkablePosition(eventPlayer.botTeleportCenter + directionFromAngles(random.uniform(0, 360), random.uniform(-20, 10)) * random.uniform(0, BOT_MAX_TELEPORT_RANGE))
@@ -526,8 +536,10 @@ def teleportBots():
                 if DEBUG_BOT_AI_LOGS_ACTIVE:
                     debugBotTeleportSuccesses++
             #Teleport was unsuccessful due to line of sight and view angle
-            elif eventPlayer.botTeleportPosition in botSpawnPointList:
-                removeBotSpawnPoint()
+            else:
+                botSpawnCacheIndex = botSpawnPointList.index(eventPlayer.botTeleportPosition)
+                if botSpawnCacheIndex >= 0:
+                    removeBotSpawnPoint()
     else:
         eventPlayer.teleport(eventPlayer.botCustomTeleportPosition)
         eventPlayer.botCustomTeleportPosition = null
@@ -566,11 +578,19 @@ def updateBotSpawnPoints():
     @Name "updateBotSpawnPoints"
     
     if eventPlayer.botIsTeleportConfirmed and eventPlayer.botCustomTeleportPosition == null and not eventPlayer.botTeleportPosition in botSpawnPointList:
+        if len(botSpawnPointList) >= BOT_SPAWN_POINT_CACHE_LIMIT:
+            # Prefer the oldest point with no remaining penalty. If every point
+            # has a penalty, replace the oldest entry to retain the new point.
+            botSpawnCacheSecond = floor(getTotalTimeElapsed())
+            botSpawnCacheIndex = max(0, botSpawnPointLoadUntilList.map(lambda deadline: deadline <= botSpawnCacheSecond).index(true))
+            removeBotSpawnPoint()
         botSpawnPointList.append(eventPlayer.botTeleportPosition)
         botSpawnWaypointList.append(eventPlayer.botSpawnWaypoint)
-        botSpawnPointTimerList.append(0)
-    elif not eventPlayer.botIsTeleportConfirmed and eventPlayer.botTeleportPosition in botSpawnPointList:
-        removeBotSpawnPoint()
+        botSpawnPointLoadUntilList.append(0)
+    elif not eventPlayer.botIsTeleportConfirmed:
+        botSpawnCacheIndex = botSpawnPointList.index(eventPlayer.botTeleportPosition)
+        if botSpawnCacheIndex >= 0:
+            removeBotSpawnPoint()
 
 
 rule "MINIBOSS MESSAGE":
@@ -587,9 +607,7 @@ rule "MINIBOSS MESSAGE":
 
 
 def removeBotSpawnPoint():
-    # Synchronous: retain the original deletion order so parallel arrays stay aligned.
-    #!define removedBotSpawnPointIndex tmp0
-    removedBotSpawnPointIndex = botSpawnPointList.index(eventPlayer.botTeleportPosition)
-    del botSpawnWaypointList[removedBotSpawnPointIndex]
-    del botSpawnPointTimerList[removedBotSpawnPointIndex]
-    botSpawnPointList.remove(eventPlayer.botTeleportPosition)
+    # Delete all fields of the caller's cache row before any other rule can read it.
+    del botSpawnWaypointList[botSpawnCacheIndex]
+    del botSpawnPointLoadUntilList[botSpawnCacheIndex]
+    del botSpawnPointList[botSpawnCacheIndex]
