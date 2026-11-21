@@ -312,7 +312,7 @@ rule "WRESTLER PULL":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
 
-    # Same hold as Engineer. Check cooldown on this input edge: holding through
+    # Same hold as Engineer's turret. Check cooldown on this input edge: holding through
     # expiry cannot auto-cast, and an invalid target never spends the cooldown.
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     if getTotalTimeElapsed() < eventPlayer.enhancementPullReadyAt or eventPlayer.isAttached or eventPlayer.isCrowdControlled:
@@ -332,7 +332,8 @@ rule "WRESTLER PULL":
     createBeam(getAllPlayers(), Beam.BAD, augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(wrestlerPullTarget), Color.PURPLE, EffectReeval.NONE)
     eventPlayer.enhancementPullBeamEntity = getLastCreatedEntity()
     wrestlerPullTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, WRESTLER_PULL_KNOCKDOWN)
-    # Bosses and minibosses can be knocked down, but cannot be pulled.
+    damage(wrestlerPullTarget, eventPlayer, WRESTLER_PULL_DAMAGE)
+    # Bosses and minibosses take damage and knockdown without the impulse.
     if wrestlerPullTarget not in bossStateList and wrestlerPullTarget not in miniBossList:
         # Strength scales with distance, approaching zero at contact.
         # Keep the pull's horizontal bearing with a fixed 15-degree upward pitch.
@@ -439,22 +440,6 @@ rule "ENGINEER SCRAP INCOME":
         loop()
 
 
-rule "ENGINEER ASSIST SCRAP":
-    @Event eachPlayer
-    @Team 1
-    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
-    @Condition uiPhaseAndId(eventPlayer.enhancementId == Enhancement.ENGINEER)
-    @Condition earnedAssists(eventPlayer) != eventPlayer.engineerScrapAssistSnapshot
-
-    # Overcharge-style stat delta: pay once per new offensive/defensive assist,
-    # then resync. A stat reset resyncs without paying (max 0 delta). Native
-    # stats persist through death, so the snapshot survives it too.
-    #!define engineerCurrentAssists tmp0
-    engineerCurrentAssists = earnedAssists(eventPlayer)
-    eventPlayer.enhancementScrap = min(ENGINEER_SCRAP_MAX, eventPlayer.enhancementScrap + ENGINEER_ASSIST_SCRAP * max(0, engineerCurrentAssists - eventPlayer.engineerScrapAssistSnapshot))
-    eventPlayer.engineerScrapAssistSnapshot = engineerCurrentAssists
-
-
 rule "ENGINEER ARMOR TRANSFER":
     @Event eachPlayer
     @Team 1
@@ -463,15 +448,16 @@ rule "ENGINEER ARMOR TRANSFER":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
 
-    # One armor action per Crouch hold. The long hold (ENGINEER_ARMOR_HOLD_DURATION)
-    # is a deliberate commitment: releasing Crouch aborts, so an Engineer cannot
-    # insta-save themselves mid-fight, and a held channel never repeats. Melee is
-    # not part of this channel; the Turret rule needs Melee without Crouch instead.
-    wait(ENGINEER_ARMOR_HOLD_DURATION, Wait.ABORT_WHEN_FALSE)
-    # The target resolves at completion: the visible ally closest to the crosshair
+    # Match Overcharge's press-release-press sequence without retaining scratch.
+    waitUntil(not eventPlayer.isHoldingButton(Button.CROUCH), ENGINEER_ARMOR_TAP_WINDOW)
+    if eventPlayer.isHoldingButton(Button.CROUCH):
+        return
+    waitUntil(eventPlayer.isHoldingButton(Button.CROUCH), ENGINEER_ARMOR_TAP_WINDOW)
+    if not ruleCondition:
+        return
+    # The target resolves on the second press: the visible ally closest to the crosshair
     # in the wide aim cone (within 15m) receives armor, otherwise it goes to self.
-    # One synchronous query per hold; the candidate array is dead after the target
-    # pick, so both roles share the slot. No waits below.
+    # The candidate slot is reused for cost after the target pick. No waits below.
     #!define scrapTransferCandidates tmp0
     #!define scrapArmorGrantTarget tmp1
     scrapTransferCandidates = sorted(getPlayersInRadius(eventPlayer, ENGINEER_TRANSFER_RANGE, Team.1, LosCheck.SURFACES).filter(lambda ally: ally != eventPlayer and ally.isAlive() and eventPlayer.isInViewAngle(ally.getEyePosition(), ENGINEER_TRANSFER_ANGLE)), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition())))
@@ -530,9 +516,8 @@ rule "ENGINEER TURRET DEPLOY":
     @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == false
 
-    # Crouch owns the armor hold channel, so the two rules never fire from one
-    # hold. The 0.25s Melee hold matches inventory powerups; guards run
-    # only after a confirmed hold, so taps stay silent.
+    # Crouch is reserved for armor. The 0.25s Melee hold matches inventory
+    # powerups. Guards run only after a confirmed hold, so taps stay silent.
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     # The turret reuses the powerup effect slots; one live turret per player.
     if entityExists(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SENTRY_TURRET_BODY]):
