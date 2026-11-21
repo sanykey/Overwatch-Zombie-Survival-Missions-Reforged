@@ -1,3 +1,4 @@
 *.ws.txt
 .zcode/
 experiments/
+/analysis/

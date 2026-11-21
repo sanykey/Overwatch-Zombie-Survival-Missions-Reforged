@@ -5,7 +5,7 @@
 Date: **November 4, 2026**. Project: **Overwatch Zombie Survival Missions Reforged**.
 Analysis baseline: `5ccb8f09a66ee4c5fd4bb07f56c5528d9f975f7a` and the inspected working tree.
 
-**Audit baseline:** the build sizes, included files, and warning counts below refer to this audit's baseline. Following the release documentation work, current measurements and build configuration are published in [README](../Readme.md) and [project-metrics.json](../analysis/project-metrics.json). This register preserves the evidence and classification of findings; its figures do not replace recompiling the current code.
+**Audit baseline:** the build sizes, included files, and warning counts below refer to this audit's baseline. Following the release documentation work, current measurements and build configuration are published in [README](../Readme.md). This register preserves the evidence and classification of findings; its figures do not replace recompiling the current code.
 
 The register contains **38 finding groups, R01–R38**. A group may contain several related defects or minor improvements; this is not a count of reproduced bugs or crashes.
 
@@ -36,7 +36,7 @@ The comparison baseline is specifically [ZSMM (786TW), snapshot from October 30,
 
 The original itself [globally suppressed all four warning types discussed here](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1>). Therefore, messages appearing after suppressions are removed do not date the introduction of defects. A decrease in warnings after variable renaming also does not prove that a mechanic has been fixed.
 
-Line-level evidence for all 38 groups, 22 SR, 14 CH, and 20 IM entries: [comparison data](../analysis/original-provenance-2026-11-04.json), [check of references to original constructs](../analysis/audit-original-provenance-2026-11-04.cjs). Normalized SHA-256 of the original: `5cdf980510c70b7ab7be5648a3cf392bba1ff6071a24b52772826b0091e49571` (UTF-8, CRLF → LF). The original mod and game code were not changed during this comparison.
+Line-level evidence for all 38 groups, 22 SR, 14 CH, and 20 IM entries is available in Git at `381a252`. Normalized SHA-256 of the original: `5cdf980510c70b7ab7be5648a3cf392bba1ff6071a24b52772826b0091e49571` (UTF-8, CRLF → LF). The original mod and game code were not changed during this comparison.
 
 ## Categories and evidence
 
@@ -416,7 +416,7 @@ Fix direction: convert distance to seconds using the current positive speed, com
 
 **Category:** Logic, target selection. **Priority:** High. **Evidence:** C + M.
 
-**Fixed November 5, 2026:** `selectTarget` initializes its search result to `null` and stores a candidate only after a successful line-of-sight check. An unsuccessful search clears the current target through the shared `DESELECT BOT TARGET` logic, preserving the last known target and respecting movement/facing overrides. [Verification](../analysis/verify-bot-target-selection.cjs) executes the compiled logic in 36 scenarios with controlled visibility; the OverPy build has no warnings. In-game verification is still pending. The original finding is retained below.
+**Fixed November 5, 2026:** `selectTarget` initializes its search result to `null` and stores a candidate only after a successful line-of-sight check. An unsuccessful search clears the current target through the shared `DESELECT BOT TARGET` logic, preserving the last known target and respecting movement/facing overrides. Verification executes the compiled logic in 36 scenarios with controlled visibility; the OverPy build has no warnings. In-game verification is still pending. The original finding is retained below.
 
 The former testTarget was already assigned before visibility validation and published after the loop without a success flag/candidate reset. This is the same defect despite the new botCandidateTarget name. Source: [original:3761](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3761>), [original:3762](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3762>), [original:3766](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3766>).
 
@@ -459,7 +459,7 @@ Fix direction: select the leader from `rescuePotentialLeaderList`, preserving th
 
 **Category:** Logic, recipient selection. **Priority:** High. **Evidence:** C + M.
 
-**Fixed November 5, 2026:** activation and first-recipient selection use `playerTargetList` and the shared `isBatteryChargeEligible` predicate: the player is alive, has spawned, has less than 100% ultimate charge, and is strictly inside radius `1.5 * sizeScale`. If no eligible player remains when actions execute, the rule aborts before feedback, charge, or cooldown. The existing `tmp0` is used only before the first wait; no variables were added. The [check](../analysis/verify-charge-battery.cjs) executes compiled logic in 16 scenarios, reproduces both original counterexamples, and verifies that the other 267 rules are unchanged. OverPy 9.7.20 compiles without warnings; `main.ws.txt` is updated: **25,306 → 25,330 elements (+24)** for consistent eligibility checks and the empty-result guard. The activation condition retains `Is True For Any` without building an intermediate filtered array; runtime speed was not measured. In-game verification remains pending. The original finding is preserved below.
+**Fixed November 5, 2026:** activation and first-recipient selection use `playerTargetList` and the shared `isBatteryChargeEligible` predicate: the player is alive, has spawned, has less than 100% ultimate charge, and is strictly inside radius `1.5 * sizeScale`. If no eligible player remains when actions execute, the rule aborts before feedback, charge, or cooldown. The existing `tmp0` is used only before the first wait; no variables were added. The check executes compiled logic in 16 scenarios, reproduces both original counterexamples, and verifies that the other 267 rules are unchanged. OverPy 9.7.20 compiles without warnings; `main.ws.txt` is updated: **25,306 → 25,330 elements (+24)** for consistent eligibility checks and the empty-result guard. The activation condition retains `Is True For Any` without building an intermediate filtered array; runtime speed was not measured. In-game verification remains pending. The original finding is preserved below.
 
 Battery eligibility already checked ultimate charge and scale, while recipient selection lost those restrictions and used a different player source. Source: [original:6967](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6967>), [original:6969](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6969>).
 
@@ -834,28 +834,9 @@ For performance, compare identical maps/settings with 6 and 23 zombies. Separate
 
 For stability, start with bounded diagnostics on a separate mode copy: finite iteration limits and logs of indices/sums/generations, followed by in-game recovery checks. Test owner death/disconnection, hero changes, repeated item use, and phase transitions. Early exits must not leave invisibility, disabled gravity, attachment, or held buttons without proper termination.
 
-## Reproducing static checks
+## Historical static checks
 
-From the project root:
-
-```powershell
-node analysis/probe-runtime-performance-2026-11-04.cjs
-node analysis/check-gameplay-selection-2026-11-04.cjs
-node analysis/check-runtime-safety-2026-11-04.cjs
-node analysis/check-additional-state-safety-2026-11-04.cjs
-node analysis/audit-original-provenance-2026-11-04.cjs
-```
-
-| Script | Checks |
-|---|---|
-| [probe-runtime-performance](../analysis/probe-runtime-performance-2026-11-04.cjs) | Baseline build and the three R23, R28, R36 prototypes |
-| [check-gameplay-selection](../analysis/check-gameplay-selection-2026-11-04.cjs) | Selection counterexamples and compiled R16–R20 expressions |
-| [check-runtime-safety](../analysis/check-runtime-safety-2026-11-04.cjs) | Hidden warnings, loops, one-item setting, pickup/invisibility-reset models |
-| [check-additional-state-safety](../analysis/check-additional-state-safety-2026-11-04.cjs) | Passenger ownership, paired operations, tentacle, and dome timer R10–R15 |
-
-`audit-original-provenance` checks line-level provenance evidence for every R/SR/CH/IM entry against the original without compiling the mod. To update the evidence file: `node analysis/audit-original-provenance-2026-11-04.cjs --write`.
-
-The scripts print JSON with source hashes and compiled rules. They do not write `src/` or the Workshop export, run Overwatch, or execute dangerous infinite models. Passing does not prove a speedup, in-game reachability of every state, or absence of other defects.
+The scripts and results are available in Git at `381a252`. The checks covered compilation, target selection, runtime state, and line-level comparison with the original.
 
 
 <a id="compiler-warnings"></a>
@@ -871,7 +852,7 @@ Checked after the user removed four suppressions from `main.opy`. These are **wa
 | `w_cancel_contrary_motion` | 20 | All IM01–IM20 sites listed with migration checks; the legacy mode is not equivalent to XYZ | No direct crash mechanism found |
 | `w_closest_player` | 0 | Active code uses two `getRealClosestPlayer` calls with existence checks | No new defect in this category |
 
-These are **56 messages**, not 56 independent defects. Reenabling suppressions in memory removes all 56 while producing byte-identical Workshop code. List, hashes, and original messages: [JSON audit](../analysis/compiler-warning-audit-2026-11-04.json). These scenarios were not executed in-game.
+These are **56 messages**, not 56 independent defects. Reenabling suppressions in memory removes all 56 while producing byte-identical Workshop code. These scenarios were not executed in-game.
 
 ### How severity and risk were assessed
 
@@ -1485,27 +1466,17 @@ The compiler flags a condition read if it finds a chase of that variable anywher
 
 For every IM scenario, compare the original mode and XYZ on the ground, airborne, with lateral/opposing velocity, and near walls/platform edges. Pay particular attention to continuous Force Field/barricade behavior: small per-impulse differences repeat many times. Do not change `INCORPORATE_CONTRARY_MOTION` alongside these sites: it is a different policy and not the subject of these 20 messages.
 
-### Reproducing the complete list and verification limits
+### Verification limits
 
-```powershell
-node analysis/audit-compiler-warnings-2026-11-04.cjs --write --list
-```
-
-The script saves [JSON with 56 messages](../analysis/compiler-warning-audit-2026-11-04.json), original include stacks, rule owners, severity/risk, and source hashes. It verifies no own Waits in SR01–SR03, byte-identical Workshop output when suppressions are restored in memory, and successful compilation of 20 impulse replacements. Writes are limited to `analysis/`; dangerous restarts and game loops are not executed.
+Static checks confirmed that SR01–SR03 have no waits of their own, that restoring suppressions yields byte-identical Workshop output, and that the 20 impulse replacements compile.
 
 Recommended order: SR07; then SR18–SR19 and other long consumables with an explicit reuse contract; jointly fix five timer sites; protect repeated pregame initialization and transitions. Test CH02–CH03 before changing the algorithm; handle CH05/CH11 according to observed behavior. Do not turn terminal/inactive chase checks into defects. Migrate IM01–IM20 as separate physics-verified work without attributing Start Rule crashes to them.
 
 
 ## Sources and materials
 
-Intermediate materials are retained to verify calculations and the provenance of observations.
-
-- [Original performance audit](../analysis/runtime-performance-review-2026-11-04.md).
-- [Original target-selection counterexamples](../analysis/gameplay-selection-review-2026-11-04.md).
-- [Earlier detailed Start Rule warning audit](../analysis/start-rule-crash-report-2026-11-04.md). Its statement about removed suppression refers to its source state. Following the user's latest change, four suppressions were removed; this report analyzes the complete current list of 56 messages.
+The original performance, target-selection and warning audits, along with the comparison data and verification scripts, are available in Git at `381a252`.
 
 Links to documentation by the OverPy author accompany the relevant findings. They describe engine observations; the current game client and the specific crash threshold for this mode were not tested.
 
-Additional materials for the current diagnostics: [full-audit script](../analysis/audit-compiler-warnings-2026-11-04.cjs), [56 original messages and classification](../analysis/compiler-warning-audit-2026-11-04.json).
-
-Original-comparison materials: [ZSMM (786TW) snapshot](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy>), [line-level provenance evidence](../analysis/original-provenance-2026-11-04.json), [verification script](../analysis/audit-original-provenance-2026-11-04.cjs).
+Original-comparison materials: [ZSMM (786TW) snapshot](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy>).

@@ -37,7 +37,7 @@ While a player is using their ultimate, they take 50% damage. The resist does no
 
 **Carrion (Jetpack Cat)** is a regular zombie ported from the ZSMM-remixed snapshot, with its difficulty stats and ability sequence. At 4–15m times its size, it presses Ability 1, has a 40% chance to charge and use its ultimate (followed by Primary Fire), then holds Secondary Fire for 2s. Other regular zombies with a target farther than 4m times their size press Interact while a cat is present to request transport. These sequences rearm when their conditions become false, as in Remix.
 
-Carrion has approximately 2.91% spawn weight in All Zombies (equal to Reinhardt), 20% in New Blood, and 5% in What'll it be?; the other eligible heroes retain their relative weights. It has no boss variation. Validate tables and compile with `node analysis/verify-carrion.cjs`; add `--write` to regenerate `main.ws.txt`. Native gameplay still needs verification.
+Carrion has approximately 2.91% spawn weight in All Zombies (equal to Reinhardt), 20% in New Blood, and 5% in What'll it be?; the other eligible heroes retain their relative weights. It has no boss variation. Native gameplay still needs verification.
 
 ## Cure powerup
 
@@ -49,7 +49,7 @@ Item 11 is now **Jetpack**, retaining its purple pickup orb. Use it with Interac
 
 The white subheader `jetpack fuel: <number>` sits above the carried powerup HUD and disappears at zero fuel; there is no bar. A small standard purple Bad Aura at the feet appears only during thrust. The donor's visual effects and automatic recharge are omitted. The former Bounce Pad mechanics, state aliases and subroutine are removed.
 
-Run `node analysis/verify-jetpack.cjs` to compile and inspect flight, fuel and cleanup contracts; add `--write` to regenerate `main.ws.txt`. The final replacement adds 35 compiled elements (29,969 → 30,004), excluding debug rules, with no extra variable slots and one fewer subroutine. Fuel uses a chase instead of the old pad's repeating radius checks and impulses; the shared speed helper now calculates the additive flight bonus. Native testing is still required: release/repress Jump, landing, emptying/refilling the tank during flight, death/respawn, HUD ordering, the standard effect, and overlapping Cloaking Device/Super Nano speed bonuses.
+The final replacement adds 35 compiled elements (29,969 → 30,004), excluding debug rules, with no extra variable slots and one fewer subroutine. Fuel uses a chase instead of the old pad's repeating radius checks and impulses; the shared speed helper now calculates the additive flight bonus. Native testing is still required: release/repress Jump, landing, emptying/refilling the tank during flight, death/respawn, HUD ordering, the standard effect, and overlapping Cloaking Device/Super Nano speed bonuses.
 
 For debugging, `[debug] snky buffs` grants snky 100 fuel and a Jetpack item after a 5-second wait when its gameplay/spawn conditions become true; it does not loop. `debug.opy` is currently included. Pharah and Jetpack Cat cannot refuel using the item; rejected uses preserve it.
 
@@ -73,7 +73,7 @@ The **Infection Reduced** HUD counter sums both reductions and the 0.5 cure bonu
 
 Zombie Hybrid gains infection stacks from zombie melee hits even with temporary health or armor above its normal health threshold. The other infection restrictions still apply, including ultimate and Dash protection, hacked attackers, and the Melee Infection Enabled setting.
 
-This version uses standard beams without the Beam Effects extension. The [feature-port audit](analysis/feature-port-audit.json) records the earlier rebuild before Bolt Strike was restored; see the [Bolt Strike validation](analysis/bolt-strike-validation.json) for the restoration.
+This version uses standard beams without the Beam Effects extension.
 
 Double-tap Crouch (0.3s per step) to strike the visible zombie closest to the crosshair within 45m. Bolt Strike deals 200 damage to the primary target and 75 damage to each other visible living zombie within 10m of it. All affected zombies are stunned for 1.5s. A brief lightning beam marks the hit, and a yellow wave spreads 12.5m from the primary target. A successful strike starts a 20s cooldown that persists through death and hero switches. The HUD shows the time remaining and turns green when ready.
 
@@ -178,7 +178,7 @@ Diagnostic **29a**, based on build 28 (`e23f73d2ac3af65bba98d509f08625eb493b23e3
 | Diagnostic 29a | 32,347 | +3,109 |
 | Source-integrated prototype | 31,619 | +2,381 (8.1%) |
 
-The complete source-integrated prototype is preserved at tag **`experiment-hero-selection-grouped-conditions`**, commit `cb2c552`. It retained the original events/actions, variables and map settings and passed static checks and scripted gameplay regression tests. It was not separately verified in game; user-confirmed successful native runs refer to diagnostic 29a. To inspect its compiler workaround: `git show experiment-hero-selection-grouped-conditions:src/rule_conditions.opy`. Its regression check is also available at that tag in `analysis/verify-grouped-conditions.cjs`; neither file is present in the current source tree.
+The complete source-integrated prototype is preserved at tag **`experiment-hero-selection-grouped-conditions`**, commit `cb2c552`. It retained the original events/actions, variables and map settings and passed static checks and scripted gameplay regression tests. It was not separately verified in game; user-confirmed successful native runs refer to diagnostic 29a. To inspect its compiler workaround: `git show experiment-hero-selection-grouped-conditions:src/rule_conditions.opy`. The regression check is also available at that tag.
 
 **OverPy 9.7.20 can split `and` back into separate Conditions.** The tagged prototype protected the conjunction by comparing its boolean result with numeric `1`, keeping other optimizations enabled. Comparing with `true` instead lets the optimizer remove the wrapper and split the conjunction. This technique applies only to a boolean result; preserve each predicate's explicit comparison, especially `Null`/zero versus `False`. Fewer Conditions do not prove lower CPU load: nested `And` may evaluate more inputs.
 
@@ -213,4 +213,4 @@ The [code review report](docs/CODE_REVIEW_REPORT.md) provides supporting evidenc
 
 The [workshop-snapshots](workshop-snapshots/) directory contains exports of ZSMM and other mods, along with their OverPy decompilations. These snapshots are used for comparison and as reference material.
 
-The [analysis](analysis/) directory contains reports, validation results, and technical notes to help AI models and coding agents work on the project and understand earlier decisions.
+Historical reports and validation results are available in Git at `381a252`.
