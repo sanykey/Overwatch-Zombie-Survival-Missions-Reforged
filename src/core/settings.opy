@@ -103,54 +103,46 @@ settings {
     },
     "heroes": {
         "team1": {
-            "ana": {
-                "damageDealt%": 110
-            },
-            "baptiste": {
-                "damageDealt%": 110
-            },
-            "brigitte": {
-                "damageDealt%": 110
-            },
-            "doctrine": {
-                "damageDealt%": 110
-            },
-            "illari": {
-                "damageDealt%": 110
-            },
-            "jetpackCat": {
-                "damageDealt%": 110
-            },
-            "juno": {
-                "damageDealt%": 110
-            },
-            "kiriko": {
-                "damageDealt%": 110
-            },
-            "lifeweaver": {
-                "damageDealt%": 110
-            },
-            "lucio": {
-                "damageDealt%": 110
-            },
-            "mercy": {
-                "damageDealt%": 110
-            },
-            "mizuki": {
-                "damageDealt%": 110
-            },
-            "moira": {
-                "damageDealt%": 110
-            },
-            "sombra": {
-                "damageDealt%": 110
-            },
-            "wuyang": {
-                "damageDealt%": 110
-            },
-            "zenyatta": {
-                "damageDealt%": 110
-            }
+            # Tanks
+            "dmon": {"damageDealt%": 90},
+            "domina": {"damageDealt%": 90},
+            "doomfist": {"damageDealt%": 90},
+            "dva": {"damageDealt%": 90},
+            "hazard": {"damageDealt%": 90},
+            "junkerQueen": {"damageDealt%": 90},
+            "mauga": {"damageDealt%": 90},
+            "orisa": {"damageDealt%": 90},
+            "ramattra": {"damageDealt%": 90},
+            "reinhardt": {"damageDealt%": 90},
+            "roadhog": {"damageDealt%": 90},
+            "sigma": {"damageDealt%": 90},
+            "winston": {"damageDealt%": 90},
+            "wreckingBall": {"damageDealt%": 90},
+            "zarya": {"damageDealt%": 90},
+            # Damage
+            "anran": {"damageDealt%": 95},
+            "ashe": {"damageDealt%": 95},
+            "bastion": {"damageDealt%": 95},
+            "cassidy": {"damageDealt%": 95},
+            "echo": {"damageDealt%": 95},
+            "emre": {"damageDealt%": 95},
+            "freja": {"damageDealt%": 95},
+            "genji": {"damageDealt%": 95},
+            "hanzo": {"damageDealt%": 95},
+            "junkrat": {"damageDealt%": 95},
+            "mei": {"damageDealt%": 95},
+            "pharah": {"damageDealt%": 95},
+            "reaper": {"damageDealt%": 95},
+            "shion": {"damageDealt%": 95},
+            "sierra": {"damageDealt%": 95},
+            "sojourn": {"damageDealt%": 95},
+            "soldier": {"damageDealt%": 95},
+            "symmetra": {"damageDealt%": 95},
+            "torbjorn": {"damageDealt%": 95},
+            "tracer": {"damageDealt%": 95},
+            "vendetta": {"damageDealt%": 95},
+            "venture": {"damageDealt%": 95},
+            "widowmaker": {"damageDealt%": 95}
         },
         "team2": {
             "general": {
