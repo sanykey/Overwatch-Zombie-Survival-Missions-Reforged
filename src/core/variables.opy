@@ -35,6 +35,8 @@
 # Synchronous helper arguments/results require an explicit, audited contract; other calls may overwrite scratch.
 # Capture scratch references in reevaluated visuals with evalOnce, and document each assignment locally.
 globalvar tmp0  # Synchronous scratch, including Rescue path index and Anran spawn source; assign before use, never retain across waits/async work.
+# Duration in seconds, consumed synchronously by noCooldowns().
+#!define noCooldownsDuration tmp0
 # Set immediately before detachHitchhikerPassenger(); read only by that synchronous call.
 #!define hitchhikerLandAtCarrier tmp0
 globalvar tmp1  # Second synchronous scratch value, including bot teleport pivot, selectTarget candidates and barricade push geometry; never retain across waits/async work.
@@ -417,9 +419,9 @@ playervar isCrowdControlled  # Live boolean for both teams, set/reset by CROWD C
 # delayed flag below so a recent interruption still counts for up to 0.125s.
 playervar botIsCrowdControlled  # Delayed Team 2 flag, lags CC exit by up to 0.125s. BOT STUN MANAGEMENT refreshes it; botRespawnInitialization resets it.
 
-playervar actorCountdownSlot  # Existing Team 1 item countdown / Team 2 Charger windup progression.
-# No Cooldowns remaining seconds (15 down to 0).
-#!define powerUpNoCooldownsTimeRemaining actorCountdownSlot
+playervar actorCountdownSlot  # Team 1 No Cooldowns expiry / Team 2 Charger windup progression.
+# Absolute elapsed time in seconds, cleared by the No Cooldowns rule after cleanup.
+#!define noCooldownsEndTime actorCountdownSlot
 # Mauga charge windup progression from 0 to 1.
 #!define botChargerWindupProgress actorCountdownSlot
 
@@ -547,7 +549,7 @@ playervar actorTeamSlot4  # Team 2: botLoopIndexSlot; Team 1: powerUpEntityIdLis
 # Frequently accessed item handles are kept directly on the owning player.
 playervar powerUpForceFieldSphereId
 playervar powerUpHealBeaconLightShaftId
-playervar powerUpNoCooldownsHudId
+playervar powerUpNoCooldownsHudId  # Owned by the No Cooldowns rule from creation to cleanup.
 playervar powerUpAirStrikeRingId
 playervar powerUpCloakingDeviceSphereId
 playervar powerUpSuperNanoGoodAuraId  # Super Nano good-aura entity; nonzero only while the power-up is active, and the flag the shared damage-intake recompute reads.

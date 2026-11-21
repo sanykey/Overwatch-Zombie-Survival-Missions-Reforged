@@ -2,7 +2,7 @@
 
 # Charge Battery behavior and initialization.
 # Shared enum IDs, icons and storage contracts remain in variables.opy.
-# resetAbilityCooldowns and checkEnhancementPlacement are shared with other systems.
+# noCooldowns and checkEnhancementPlacement are shared with other systems.
 
 macro initializeChargeBatteryMacro():
     #Enhancement: Charge Battery
@@ -23,15 +23,17 @@ macro initializeChargeBatteryMacro():
     eventPlayer.enhancementBatteryReuseDuration = CHARGE_BATTERY_RECHARGE_DURATION
 
 
-rule "[CHARGE_BATTERY] RESET COOLDOWNS ON ULTIMATE":
+rule "[CHARGE_BATTERY] NO COOLDOWNS ON ULTIMATE":
     @Event eachPlayer
     @Team 1
     # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
     @Condition uiPhaseAndId(eventPlayer.enhancementId == Enhancement.CHARGE_BATTERY)
     @Condition eventPlayer.isUsingUltimate() == true
 
-    # Run once on the ultimate condition's false-to-true transition.
-    resetAbilityCooldowns()
+    # Check the timer in Actions so expiry cannot start a new window mid-ult.
+    if eventPlayer.noCooldownsEndTime <= getTotalTimeElapsed():
+        noCooldownsDuration = CHARGE_BATTERY_NO_COOLDOWNS_DURATION
+        noCooldowns()
 
 
 rule "[CHARGE_BATTERY] PLACE BATTERY":
