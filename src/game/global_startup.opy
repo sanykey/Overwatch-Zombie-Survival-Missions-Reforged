@@ -260,6 +260,7 @@ rule "VARIABLE ASSIGNMENT":
     supplyDropPowerUpCount = createWorkshopSettingInt("Power Ups", "Number of Powerups Per Supply Drop", 7, 2, 10, -1)
     #isObjectiveComplete = false  #Uninitialized Workshop variables already compare equal to false at match start.
     numberOfBots = createWorkshopSettingInt("General", "Number of zombies", 8, 1, 23, 1)
+    isMeleeInfectionEnabled = createWorkshopSettingBool("Infection", "Melee Infection Enabled", true)
 
 
 rule "START GAME":

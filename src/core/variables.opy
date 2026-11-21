@@ -134,6 +134,7 @@ globalvar zombieSetting         # Selected zombie roster/spawn-rate mode, retain
 globalvar objectiveTypeSetting  # Selected objective mode or Mixed setting; differs from the current objective type.
 globalvar matchEndTime          # Native-gamemode timer offset: zero or 0.1, used as the match-time floor.
 globalvar numberOfBots          # Configured zombie population target, including queued replacements.
+globalvar isMeleeInfectionEnabled # Match setting cached for zombie bites.
 
 # Map grid and spawn-position caches.
 globalvar walkCenter                  # Walkable map center used for grid generation, the menu and player teleportation.
