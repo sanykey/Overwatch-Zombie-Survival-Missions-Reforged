@@ -193,14 +193,15 @@ def playerForceField():
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.powerUpForceFieldPosition, 50)
     #Force field duration
     for eventPlayer.powerUpForceFieldTimeRemaining in range(10, 0, -0.032):
-        # forceFieldZombieIndex: zombie index, to apply the force-field impulse to each nearby living zombie.
+        # Snapshot nearby living zombies once per tick. The list and loop scratch
+        # are consumed before the wait, then rebuilt for the next tick.
+        #!define forceFieldZombies tmp2
         #!define forceFieldZombieIndex tmp0
-        for forceFieldZombieIndex in range(getNumberOfLivingPlayers(Team.2)):
-            # Current zombie only: consumed before the next iteration, with no waits/calls/captures.
-            #!define forceFieldZombie tmp1
-            forceFieldZombie = getLivingPlayers(Team.2)[forceFieldZombieIndex]
-            if distance(forceFieldZombie, eventPlayer.powerUpForceFieldPosition) <= 7.5:
-                forceFieldZombie.applyImpulse(directionTowards(eventPlayer.powerUpForceFieldPosition, forceFieldZombie), 6, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+        #!define forceFieldZombie tmp1
+        forceFieldZombies = getLivingPlayers(Team.2).filter(lambda zombie: distance(zombie, eventPlayer.powerUpForceFieldPosition) <= 7.5)
+        for forceFieldZombieIndex in range(len(forceFieldZombies)):
+            forceFieldZombie = forceFieldZombies[forceFieldZombieIndex]
+            forceFieldZombie.applyImpulse(directionTowards(eventPlayer.powerUpForceFieldPosition, forceFieldZombie), 6, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
         wait(0.032)
     destroyEffect(eventPlayer.powerUpForceFieldSphereId)
     destroyHudText(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.FORCE_FIELD_HUD])
