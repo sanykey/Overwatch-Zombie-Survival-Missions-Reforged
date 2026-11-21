@@ -4,6 +4,7 @@
 #!define DEBUG_BOT_AI_LOGS_ACTIVE (DEBUG_ENABLE_INSPECTOR and DEBUG_BOT_AI_LOGS)
 #!define SERVER_LOAD_UI false
 #!define DEBUG_INPUT_TEST false
+#!define DEBUG_TEAM1_SURVIVAL false
 
 # Select exactly one map pool, then save the root main.opy to rebuild.
 #!include "settings/standard_map_pool.opy"

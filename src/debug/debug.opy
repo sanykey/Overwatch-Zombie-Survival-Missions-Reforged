@@ -85,3 +85,4 @@ rule "[debug] Log bot AI activity":
 
 
 #!include "input_test.opy"
+#!include "team1_survival.opy"
