@@ -11,6 +11,9 @@
 
 #!include "core/directives.opy"
 #!include "core/constants.opy"
+#!include "settings/settings_defaults.opy"
+# Optional load-test settings. Keep off for the standard build.
+##!include "settings/settings_perf_test.opy"
 #!include "settings/settings.opy"
 #!include "core/variables.opy"
 #!include "core/ui_workarounds.opy"

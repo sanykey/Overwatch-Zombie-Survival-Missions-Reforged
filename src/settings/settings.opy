@@ -2,10 +2,6 @@
 
 #!define BUILD_DATE() __script__("../../tools/build_date.js")
 
-#!define SETTINGS_TEAM1_SLOTS 6
-#!define SETTINGS_TEAM1_HEROES STANDARD_TEAM1_HERO_SETTINGS
-#!define SETTINGS_WORKSHOP STANDARD_WORKSHOP_SETTINGS
-
 macro STANDARD_TEAM1_HERO_SETTINGS = {
     # Tanks
     "dmon": {"damageDealt%": 90},
