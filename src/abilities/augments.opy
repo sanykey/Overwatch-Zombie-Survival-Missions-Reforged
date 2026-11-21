@@ -4,14 +4,6 @@
 #!define AUGMENT_GRAPNEL_CAN_MOVE (eventPlayer.hasSpawned() and eventPlayer.isAlive() and not AUGMENT_GRAPNEL_MOVEMENT_BLOCKED)
 
 
-#!include "../start_menu/start_menu_augments_hud.opy"
-
-
-rule "AUGMENT MENU":
-    # Like the primary enhancement HUD, this is created once and reevaluates per viewer.
-    createStartMenuAugmentHud()
-
-
 rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)":
     @Event eachPlayer
     @Team 1

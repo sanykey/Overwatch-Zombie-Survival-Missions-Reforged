@@ -77,6 +77,7 @@ rule "GLOBAL MENU INITIALIZATION":
 
 
 #!include "start_menu_enhancements_hud.opy"
+#!include "start_menu_augments_hud.opy"
 
 
 rule "EFFECTS/TEXTS":
@@ -193,6 +194,7 @@ rule "EFFECTS/TEXTS":
     #Enhancement
     startMenuEnhancementColorList = [Color.AQUA, Color.GRAY, Color.LIME_GREEN, Color.RED, Color.ORANGE, Color.GRAY, Color.WHITE, Color.BLUE, Color.SKY_BLUE, Color.YELLOW, Color.ROSE, Color.GREEN, Color.TURQUOISE, Color.PURPLE]
     createStartMenuEnhancementHud()
+    createStartMenuAugmentHud()
 
 
 rule "END VOTING":
