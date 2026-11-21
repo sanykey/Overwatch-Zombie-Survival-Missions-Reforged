@@ -1,6 +1,6 @@
 #!mainFile "../../main.opy"
 
-#!define BUILD_DATE() __script__("../../tools/build_date.js")
+#!define BUILD_DATE() __script__("../tools/build_date.js")
 
 macro STANDARD_TEAM1_HERO_SETTINGS = {
     # Tanks
