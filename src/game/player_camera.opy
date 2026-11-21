@@ -22,14 +22,14 @@ def applyPlayerCamera():
         eventPlayer.stopCamera()
 
 
-# Scoped aiming (Ana, Ashe, Widowmaker, Emre) needs the native zoom camera:
+# Scoped aiming needs the native zoom camera:
 # stop the 3P camera while secondary fire is held, then restore the current mode.
 rule "DISABLE PLAYER CAMERA WHILE AIMING":
     @Event eachPlayer
     @Team 1
     @Condition isGameplayActive == true
     @Condition eventPlayer.cameraMode == CameraMode.PRECISE
-    @Condition eventPlayer.getHero() in [Hero.ANA, Hero.ASHE, Hero.WIDOWMAKER, Hero.EMRE]
+    @Condition eventPlayer.getHero() in [Hero.ANA, Hero.ASHE, Hero.WIDOWMAKER, Hero.EMRE, Hero.FREJA]
     @Condition eventPlayer.isFiringSecondaryFire() == true
 
     eventPlayer.stopCamera()
