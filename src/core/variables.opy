@@ -391,10 +391,9 @@ playervar isDotProtected
 # Super Nano or ultimate). Drives the health-HUD `*` marker.
 playervar hasDamageResist
 
-playervar enhancementHitchhikerPassenger  # Passenger attached to this carrier; null when absent. Infection rules also query it.
+playervar hitchhikerPassenger  # Passenger attached to this carrier; null when absent. Infection rules also query it.
 
-playervar enhancementCarrierPoolId  # Extra health-pool ID granted to a Hitchhiker carrier, retained for removal. Exported names must fit 32 characters.
-#!define enhancementHitchhikerCarrierPoolId enhancementCarrierPoolId
+playervar hitchhikerCarrierPoolId  # Extra health-pool ID granted to a Hitchhiker carrier, retained for removal. Exported names must fit 32 characters.
 
 # Engineer: an armor grant may target any Team 1 player, so target-side
 # state cannot live in slots owned by the target's own enhancement or augment.
@@ -472,7 +471,7 @@ playervar isAttached  # Actor is attached to a host; zombie attachment and Team 
 # Zombie is attached to another actor.
 #!define botIsAttached isAttached
 # Hitchhiker passenger is attached; shared Team 1 carrier queries use isAttached.
-#!define enhancementIsHitchhiking isAttached
+#!define hitchhikerAttached isAttached
 
 playervar candidateTargetList  # Boss target-visibility snapshot, Rescue leader candidates or barricade collision targets; downed-player cleanup removes invalid candidates.
 # Final selectTarget candidate snapshot, retained for reevaluated boss-distance-text visibility; cleared on bot death/boss initialization.
@@ -705,7 +704,7 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 # Placed Charge Battery position; zero clears it.
 #!define enhancementBatteryPosition actorTeamSlot22
 # Hitchhiker carrier; zero when detached.
-#!define enhancementHitchhikerCarrier actorTeamSlot22
+#!define hitchhikerCarrier actorTeamSlot22
 # P.U.P. mode color.
 #!define enhancementPupColor actorTeamSlot22
 # Engineer: scrap balance 0-300, earned from eliminations and the income
@@ -730,7 +729,7 @@ playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateS
 # Battery remaining reuse cooldown.
 #!define enhancementBatteryReuseCooldown actorTeamSlot23
 # Extra health-pool ID on the Hitchhiker passenger.
-#!define enhancementHitchhikerPassengerPoolId actorTeamSlot23
+#!define hitchhikerPassengerPoolId actorTeamSlot23
 # P.U.P. attack beam is active.
 #!define enhancementIsPupBeamActive actorTeamSlot23
 # Engineer's transfer beam entity; null after BEAM FADE, death and

@@ -440,7 +440,7 @@ rule "BOTS INFLICT DAMAGE OVER TIME (INFECTION LEVEL MANAGEMENT)":
         eventPlayer.damageOverTimeRemaining = eventPlayer.botBiteDuration
     # Bulk stacks raise the infection threshold with native max health; only overheal above it protects.
     # Keep initialMaxHealth native for Hitchhiker pools and Nemesis detection.
-    if createWorkshopSettingBool("Infection", "Melee Infection Enabled", true) and not eventPlayer.hasStatus(Status.HACKED) and not victim.isDummy() and (victim.enhancementId == Enhancement.ZOMBIE_HYBRID or victim.getHealth() <= (victim.getMaxHealth() if victim.enhancementHitchhikerPassenger != null else victim.initialMaxHealth * (min(BULKING_SEASON_MAX_HP_MULTIPLIER, 1 + victim.enhancementBulkStacks * (BULKING_SEASON_HP_PER_STACK_PCT / 100)) if victim.enhancementId == Enhancement.BULKING_SEASON else 1))):
+    if createWorkshopSettingBool("Infection", "Melee Infection Enabled", true) and not eventPlayer.hasStatus(Status.HACKED) and not victim.isDummy() and (victim.enhancementId == Enhancement.ZOMBIE_HYBRID or victim.getHealth() <= (victim.getMaxHealth() if victim.hitchhikerPassenger != null else victim.initialMaxHealth * (min(BULKING_SEASON_MAX_HP_MULTIPLIER, 1 + victim.enhancementBulkStacks * (BULKING_SEASON_HP_PER_STACK_PCT / 100)) if victim.enhancementId == Enhancement.BULKING_SEASON else 1))):
         victim.infectionLevel += (2 if eventPlayer in bossStateList or eventPlayer in miniBossList or eventPlayer.botMutationId == 4 else 1) / ((3 if not victim.isInfected and victim.getHero() in [Hero.REINHARDT, Hero.HAZARD, Hero.VENDETTA, Hero.DMON] else 2) if victim.enhancementId != Enhancement.ZOMBIE_HYBRID else 1)
         if not victim.isInfected and victim.infectionLevel >= 1:
             victim.isInfected = true

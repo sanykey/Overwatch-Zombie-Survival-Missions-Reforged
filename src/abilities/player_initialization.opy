@@ -24,7 +24,7 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             f"Hits within {PYROTECHNIC_IGNITE_RANGE}m ignite zombies",
             f"Ability resets: {localPlayer.enhancementBattleResetCharges}/{BORN_TO_BATTLE_MAX_RESETS}",
             f"Place: {ceil(localPlayer.enhancementBatteryPlacementCooldown)}s CD" if localPlayer.enhancementBatteryPlacementCooldown > 0 else f"Hold [{inputBindingString(Button.MELEE)}]: aim | Release: place",
-            f"[{inputBindingString(Button.CROUCH)}]: detach" if localPlayer.enhancementIsHitchhiking else f"[{inputBindingString(Button.CROUCH)}]: attach near ally",
+            f"[{inputBindingString(Button.CROUCH)}]: detach" if localPlayer.hitchhikerAttached else f"[{inputBindingString(Button.CROUCH)}]: attach near ally",
             "Attacking" if localPlayer.enhancementIsPupBeamActive == true else "Drone idle",
             "{1} | {0}".format(f"Pull: {ceil(localPlayer.enhancementPullReadyAt - getTotalTimeElapsed())}s CD" if getTotalTimeElapsed() < localPlayer.enhancementPullReadyAt else f"Hold [{inputBindingString(Button.MELEE)}]: pull", f"[{inputBindingString(Button.INTERACT)}]: throw" if localPlayer.enhancementCarryState != WrestlerCarryState.NONE else f"[{inputBindingString(Button.INTERACT)}]: grab"),
             "Hits chain to nearby zombies",
@@ -83,16 +83,7 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
     # Attachment status subheaders: one persistent call each for the passenger
     # and the carrier, reevaluated per viewer; the carrier-side text reads the
     # passenger back-reference instead of scanning for it.
-    hudSubheader(
-        getPlayers(Team.1).filter(lambda player: player.enhancementIsHitchhiking),
-        "Attached to {0} {1}".format(heroIcon(localPlayer.enhancementHitchhikerCarrier.getHero()), localPlayer.enhancementHitchhikerCarrier),
-        HudPosition.ACTUALLY_LEFT, 98.5, Color.WHITE, HudReeval.VISIBILITY_AND_STRING
-    )
-    hudSubheader(
-        getPlayers(Team.1).filter(lambda player: player.enhancementHitchhikerPassenger != null and player.enhancementHitchhikerPassenger.enhancementIsHitchhiking),
-        "{0} {1} is attached".format(heroIcon(localPlayer.enhancementHitchhikerPassenger.getHero()), localPlayer.enhancementHitchhikerPassenger),
-        HudPosition.ACTUALLY_LEFT, 98.5, Color.WHITE, HudReeval.VISIBILITY_AND_STRING
-    )
+    createHitchhikerHudMacro()
 
 
 macro initializePlayerEnhancement():
@@ -172,11 +163,10 @@ macro initializePlayerEnhancement():
         #Hitchhiker
         case Enhancement.HITCHHIKER:
             #Enhancement Selection: Hitchhiker
-            # enhancementHitchhikerCarrier: carrier player reference, for attachment, shared health, assists and HUD; 0 when detached.
-            # enhancementHitchhikerPassengerPoolId: extra health pool ID on this passenger, retained to remove that pool when detaching.
+            # hitchhikerCarrier: carrier player reference, for attachment, shared health, assists and HUD; 0 when detached.
+            # hitchhikerPassengerPoolId: extra health pool ID on this passenger, retained to remove that pool when detaching.
             # Shared-health subheaders live in ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES).
-            eventPlayer.enhancementHitchhikerCarrier = 0
-            eventPlayer.enhancementHitchhikerCarrier.startGrantingAssistFor(eventPlayer)
+            initializeHitchhikerMacro()
             break
         #P.U.P.
         case Enhancement.PUP:
