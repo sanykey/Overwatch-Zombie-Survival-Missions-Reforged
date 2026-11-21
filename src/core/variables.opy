@@ -528,11 +528,11 @@ playervar abilityTargetList  # Zombie special-ability targets or common zombie/H
 
 playervar movementSpeedScale  # Movement-speed multiplier used by zombie AI, players/Rescue, crowd control and supply items.
 
-playervar actorTeamSlot0  # Team 2: botTeleportCenter; Team 1: powerUpForceFieldTimeRemaining. Receivers, not rule teams, own the storage.
+playervar actorTeamSlot0  # Team 2: botTeleportCenter; Team 1: powerUpForceFieldEndsAt. Receivers, not rule teams, own the storage.
 # Zombie teleport/search center; bot teleport rules, Egg and boss return.
 #!define botTeleportCenter actorTeamSlot0
 # Remaining Force Field seconds; yielding loop and item HUD in supply_drops.
-#!define powerUpForceFieldTimeRemaining actorTeamSlot0
+#!define powerUpForceFieldEndsAt actorTeamSlot0
 
 playervar actorTeamSlot1  # Team 2: botIsSelectingTarget; Team 1: powerUpReviveTarget. Receivers, not rule teams, own the storage.
 # selectTarget is running; blocks competing zombie target/teleport work.
@@ -579,35 +579,35 @@ playervar actorTeamSlot5  # Team 2: botTarget; Team 1: powerUpAirStrikeIndex. Re
 # Index of 50 air-strike impacts; retained across waits.
 #!define powerUpAirStrikeIndex actorTeamSlot5
 
-playervar actorTeamSlot6  # Team 2: botBiteDuration; Team 1: powerUpHealBeaconTimeRemaining. Receivers, not rule teams, own the storage.
+playervar actorTeamSlot6  # Team 2: botBiteDuration; Team 1: powerUpHealBeaconEndsAt. Receivers, not rule teams, own the storage.
 # Zombie melee damage-over-time duration, including mutation overrides.
 #!define botBiteDuration actorTeamSlot6
 # Remaining healing-beacon seconds; loop and HUD.
-#!define powerUpHealBeaconTimeRemaining actorTeamSlot6
+#!define powerUpHealBeaconEndsAt actorTeamSlot6
 
-playervar actorTeamSlot7  # Team 2: botIsTeleportConfirmed; Team 1: powerUpTurretTimeRemaining. Receivers, not rule teams, own the storage.
+playervar actorTeamSlot7  # Team 2: botIsTeleportConfirmed; Team 1: powerUpTurretEndsAt. Receivers, not rule teams, own the storage.
 # Zombie teleport/spawn position has been accepted and may be added to the spawn cache.
 #!define botIsTeleportConfirmed actorTeamSlot7
 # Remaining sentry-turret seconds; loop and HUD.
-#!define powerUpTurretTimeRemaining actorTeamSlot7
+#!define powerUpTurretEndsAt actorTeamSlot7
 
-playervar actorTeamSlot8  # Team 2: botReigniteDestination; Team 1: powerUpCloakTimeRemaining. Receivers, not rule teams, own the storage.
+playervar actorTeamSlot8  # Team 2: botReigniteDestination; Team 1: powerUpCloakEndsAt. Receivers, not rule teams, own the storage.
 # Zombie emergence destination near Anran; false clears the position after the rise.
 #!define botReigniteDestination actorTeamSlot8
 # Remaining cloak seconds and early-cancel threshold.
-#!define powerUpCloakTimeRemaining actorTeamSlot8
+#!define powerUpCloakEndsAt actorTeamSlot8
 
-playervar actorTeamSlot9  # Team 2: botIsWallPhaseAllowed; Team 1: powerUpSuperNanoTimeRemaining. Receivers, not rule teams, own the storage.
+playervar actorTeamSlot9  # Team 2: botIsWallPhaseAllowed; Team 1: powerUpSuperNanoEndsAt. Receivers, not rule teams, own the storage.
 # Zombie may pass spawn doors; special abilities temporarily disable this permission.
 #!define botIsWallPhaseAllowed actorTeamSlot9
 # Remaining Super Nano seconds; yielding loop and HUD.
-#!define powerUpSuperNanoTimeRemaining actorTeamSlot9
+#!define powerUpSuperNanoEndsAt actorTeamSlot9
 
-playervar actorTeamSlot10  # Team 2: botAbilityTarget; Team 1: powerUpUltimateTimeRemaining. Receivers, not rule teams, own the storage.
+playervar actorTeamSlot10  # Team 2: botAbilityTarget; Team 1: powerUpUltimateEndsAt. Receivers, not rule teams, own the storage.
 # Zombie special-ability target: teleport/grab host, flight target or affected player.
 #!define botAbilityTarget actorTeamSlot10
 # Remaining Ultimate Charger seconds; loop and HUD.
-#!define powerUpUltimateTimeRemaining actorTeamSlot10
+#!define powerUpUltimateEndsAt actorTeamSlot10
 
 playervar actorTeamSlot11  # Team 2: botTeleportPosition; Team 1: powerUpStunBouncesRemaining. Receivers, not rule teams, own the storage.
 # Zombie teleport candidate/accepted position; bot teleport rules, Egg and spawn-cache updates; zero clears it.

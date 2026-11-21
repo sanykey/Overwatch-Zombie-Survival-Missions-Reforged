@@ -9,12 +9,29 @@ subroutine playerForceField
 subroutine airStrike
 subroutine instantRevive
 subroutine healBeacon
+subroutine deploySentryTurret
 subroutine sentryTurret
 subroutine cloakingDevice
+subroutine superNano
 subroutine ultimateCharger
 subroutine stun
 
 #!define SUPPLY_DROP_SEARCH_LIMIT 12
+#!define CLOAKING_DEVICE_DURATION 25
+#!define CLOAKING_DEVICE_CANCEL_DELAY 3
+
+
+# Render the shared expiry without writing a countdown on every worker tick.
+macro powerUpSecondsRemaining(deadline):
+    max(0, ceil(deadline - getTotalTimeElapsed()))
+
+
+macro cloakingCancelDelayElapsed():
+    getTotalTimeElapsed() >= eventPlayer.powerUpCloakEndsAt - (CLOAKING_DEVICE_DURATION - CLOAKING_DEVICE_CANCEL_DELAY)
+
+
+macro canCancelCloakingDevice():
+    cloakingCancelDelayElapsed() and eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.isHoldingButton(Button.INTERACT)
 
 
 rule "GENERATE SUPPLY DROPS":
@@ -207,17 +224,12 @@ def instantRevive():
 
 def playerForceField():
     @Name "playerForceField (10-19)"
-    
-    eventPlayer.powerUpForceFieldPosition = eventPlayer.getPosition()
-    if not entityExists(eventPlayer.powerUpForceFieldSphereId):
-        createEffect(getAllPlayers(), Effect.SPHERE, Color.BLUE, eventPlayer.powerUpForceFieldPosition, 7.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpForceFieldSphereId = getLastCreatedEntity()
-        hudHeader(eventPlayer, "Force Field: {0}s".format(ceil(eventPlayer.powerUpForceFieldTimeRemaining)), HudPosition.RIGHT, 0.2, Color.BLUE, HudReeval.VISIBILITY_AND_STRING)
-        eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.FORCE_FIELD_HUD] = getLastCreatedText()
-    playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.BLUE, eventPlayer.powerUpForceFieldPosition, 3)
-    playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.powerUpForceFieldPosition, 50)
-    #Force field duration
-    for eventPlayer.powerUpForceFieldTimeRemaining in range(10, 0, -0.032):
+
+    createEffect(getAllPlayers(), Effect.SPHERE, Color.BLUE, eventPlayer.powerUpForceFieldPosition, 7.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    eventPlayer.powerUpForceFieldSphereId = getLastCreatedEntity()
+    hudHeader(eventPlayer, "Force Field: {0}s".format(powerUpSecondsRemaining(eventPlayer.powerUpForceFieldEndsAt)), HudPosition.RIGHT, 0.2, Color.BLUE, HudReeval.VISIBILITY_AND_STRING)
+    eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.FORCE_FIELD_HUD] = getLastCreatedText()
+    while getTotalTimeElapsed() < eventPlayer.powerUpForceFieldEndsAt:
         # Snapshot nearby living zombies once per tick. The list and loop scratch
         # are consumed before the wait, then rebuilt for the next tick.
         #!define forceFieldZombies tmp2
@@ -308,23 +320,16 @@ def airStrike():
 
 def healBeacon():
     @Name "beaconofHealing (40-49)"
-    
-    eventPlayer.powerUpHealBeaconPosition = eventPlayer.getPosition()
-    if not entityExists(eventPlayer.powerUpHealBeaconLightShaftId):
-        createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition + -2 * Vector.UP, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpHealBeaconLightShaftId = getLastCreatedEntity()
-        createEffect(getAllPlayers(), Effect.RING, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition, 10, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_RING] = getLastCreatedEntity()
-        hudHeader(eventPlayer, "Beacon of Healing: {0}s".format(ceil(eventPlayer.powerUpHealBeaconTimeRemaining)), HudPosition.RIGHT, 0.2, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)
-        eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_HUD] = getLastCreatedText()
-        createEffect(getAllPlayers(), Effect.GOOD_AURA, Color.YELLOW, eventPlayer, distance(eventPlayer.getEyePosition(), eventPlayer) * 0.9, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_AURA] = getLastCreatedEntity()
-    playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition, 10)
-    playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.powerUpHealBeaconPosition, 50)
-    # Beacon adds 50 percentage points to permanent Plague Doctor / Overcharge bonuses.
-    eventPlayer.setHealingDealt(150 + PLAGUE_DOCTOR_HEAL_BONUS_PCT if eventPlayer.enhancementId == Enhancement.PLAGUE_DOCTOR else 150 + OVERCHARGE_HEAL_BONUS_PCT if eventPlayer.enhancementId == Enhancement.OVERCHARGE else 150)
-    #Heal Beacon duration
-    for eventPlayer.powerUpHealBeaconTimeRemaining in range(30, 0, -1):
+
+    createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition + -2 * Vector.UP, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    eventPlayer.powerUpHealBeaconLightShaftId = getLastCreatedEntity()
+    createEffect(getAllPlayers(), Effect.RING, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition, 10, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_RING] = getLastCreatedEntity()
+    hudHeader(eventPlayer, "Beacon of Healing: {0}s".format(powerUpSecondsRemaining(eventPlayer.powerUpHealBeaconEndsAt)), HudPosition.RIGHT, 0.2, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)
+    eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_HUD] = getLastCreatedText()
+    createEffect(getAllPlayers(), Effect.GOOD_AURA, Color.YELLOW, eventPlayer, distance(eventPlayer.getEyePosition(), eventPlayer) * 0.9, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_AURA] = getLastCreatedEntity()
+    while getTotalTimeElapsed() < eventPlayer.powerUpHealBeaconEndsAt:
         wait(1)
         playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition + Vector.UP, 0.1)
         getPlayersInRadius(eventPlayer.powerUpHealBeaconPosition, 10, eventPlayer.getTeam()).startHealingOverTime(eventPlayer, 2, 30)
@@ -336,27 +341,33 @@ def healBeacon():
     eventPlayer.powerUpHealBeaconPosition = 0
 
 
-def sentryTurret():
-    @Name "sentryTurret (50-59)"
-    
+def deploySentryTurret():
+    @Name "deploySentryTurret"
+
+    # Both the Engineer and the item move the same turret and refresh its expiry.
     eventPlayer.powerUpTurretPosition = (eventPlayer.getPosition() if eventPlayer.isOnGround() else nearestWalkablePosition(eventPlayer.getPosition())) + Vector.UP
     eventPlayer.powerUpTurretDirection = null
-    if not entityExists(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SENTRY_TURRET_BODY]):
-        createEffect(getAllPlayers(), Effect.SPHERE, Color.ORANGE, eventPlayer.powerUpTurretPosition, 0.15, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SENTRY_TURRET_BODY] = getLastCreatedEntity()
-        # turretLegVisualIndex: turret-leg index, to space three beams 120 degrees apart and store their effect IDs.
-        #!define turretLegVisualIndex tmp0
-        for turretLegVisualIndex in range(3):
-            createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + directionFromAngles(evalOnce(turretLegVisualIndex) * 120, 60) * 1.5, Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SENTRY_TURRET_LEG_1 + turretLegVisualIndex] = getLastCreatedEntity()
-        createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + ((eventPlayer.powerUpTurretDirection if eventPlayer.powerUpTurretDirection != null else eventPlayer.getFacingDirection()) * 0.5), Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SENTRY_TURRET_BARREL] = getLastCreatedEntity()
-        hudHeader(eventPlayer, "Sentry Turret: {0}s".format(ceil(eventPlayer.powerUpTurretTimeRemaining)), HudPosition.RIGHT, 0.2, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING)
-        eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SENTRY_TURRET_HUD] = getLastCreatedText()
+    eventPlayer.powerUpTurretEndsAt = getTotalTimeElapsed() + 30
     playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.ORANGE, eventPlayer.powerUpTurretPosition, 5)
     playEffect(getAllPlayers(), DynamicEffect.DEBUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.powerUpTurretPosition, 50)
-    #Sentry Gun Duration
-    for eventPlayer.powerUpTurretTimeRemaining in range(30, 0, -0.125):
+    startRule(sentryTurret, StartRuleBehavior.NOOP)
+
+
+def sentryTurret():
+    @Name "sentryTurret (50-59)"
+
+    createEffect(getAllPlayers(), Effect.SPHERE, Color.ORANGE, eventPlayer.powerUpTurretPosition, 0.15, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SENTRY_TURRET_BODY] = getLastCreatedEntity()
+    # turretLegVisualIndex: turret-leg index, to space three beams 120 degrees apart and store their effect IDs.
+    #!define turretLegVisualIndex tmp0
+    for turretLegVisualIndex in range(3):
+        createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + directionFromAngles(evalOnce(turretLegVisualIndex) * 120, 60) * 1.5, Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SENTRY_TURRET_LEG_1 + turretLegVisualIndex] = getLastCreatedEntity()
+    createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + ((eventPlayer.powerUpTurretDirection if eventPlayer.powerUpTurretDirection != null else eventPlayer.getFacingDirection()) * 0.5), Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SENTRY_TURRET_BARREL] = getLastCreatedEntity()
+    hudHeader(eventPlayer, "Sentry Turret: {0}s".format(powerUpSecondsRemaining(eventPlayer.powerUpTurretEndsAt)), HudPosition.RIGHT, 0.2, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING)
+    eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SENTRY_TURRET_HUD] = getLastCreatedText()
+    while getTotalTimeElapsed() < eventPlayer.powerUpTurretEndsAt:
         # One visible-target snapshot per shot check, consumed before tmp0 becomes the impact.
         # Keep teleporting targets in the aim list; only the firing gate excludes them.
         #!define turretVisibleTargets tmp0
@@ -392,46 +403,50 @@ def sentryTurret():
     eventPlayer.powerUpTurretPosition = 0
 
 
-def cloakingDevice():
-    @Name "cloakingDevice (60-69)"
+def activateCloakingDevice():
+    @Name "activateCloakingDevice"
     
-    if eventPlayer.powerUpCloakingDeviceSphereId == 0:
+    if eventPlayer.powerUpCloakEndsAt == 0:
         boostMovementSpeed()
         createEffect(getAllPlayers(), Effect.SPHERE, Color.BLUE, eventPlayer, distance(eventPlayer.getEyePosition(), eventPlayer) * 0.95, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.powerUpCloakingDeviceSphereId = getLastCreatedEntity()
-        hudText(eventPlayer, "Cloaking Device: {0}s".format(ceil(eventPlayer.powerUpCloakTimeRemaining)), null, "Cancel (Press [{0}] + [{1}])".format(inputBindingString(Button.CROUCH), inputBindingString(Button.INTERACT)) if eventPlayer.powerUpCloakTimeRemaining < 23 else [], HudPosition.RIGHT, 0.2, Color.BLUE, null, Color.BLUE, HudReeval.VISIBILITY_AND_STRING)
+        hudText(eventPlayer, "Cloaking Device: {0}s".format(powerUpSecondsRemaining(eventPlayer.powerUpCloakEndsAt)), null, "Cancel (Press [{0}] + [{1}])".format(inputBindingString(Button.CROUCH), inputBindingString(Button.INTERACT)) if cloakingCancelDelayElapsed() else [], HudPosition.RIGHT, 0.2, Color.BLUE, null, Color.BLUE, HudReeval.VISIBILITY_AND_STRING)
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.CLOAKING_DEVICE_HUD] = getLastCreatedText()
         eventPlayer.invisibilityCount++
+    eventPlayer.powerUpCloakEndsAt = getTotalTimeElapsed() + CLOAKING_DEVICE_DURATION
     if not eventPlayer.invisibilityCount:
         smallMessage(eventPlayer, "Cloaking activated. You are now invisible.")
     playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.BLUE, eventPlayer.getPosition(), distance(eventPlayer.getEyePosition(), eventPlayer) * 0.95)
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.getPosition(), 50)
-    #Cloaking Duration
-    for eventPlayer.powerUpCloakTimeRemaining in range(25, 0, -1):
-        if eventPlayer.powerUpCloakTimeRemaining < 23 and eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.isHoldingButton(Button.INTERACT):
+    startRule(cloakingDevice, StartRuleBehavior.NOOP)
+
+
+def cloakingDevice():
+    @Name "cloakingDevice (60-69)"
+
+    while getTotalTimeElapsed() < eventPlayer.powerUpCloakEndsAt and eventPlayer.isAlive():
+        if canCancelCloakingDevice():
             smallMessage(eventPlayer, "Cloaking deactivated")
             break
-        if eventPlayer.isDead():
-            break
-        waitUntil(eventPlayer.powerUpCloakTimeRemaining < 23 and eventPlayer.isHoldingButton(Button.CROUCH) and eventPlayer.isHoldingButton(Button.INTERACT), 1)
+        waitUntil(canCancelCloakingDevice(), 1)
     eventPlayer.invisibilityCount--
     destroyEffect(eventPlayer.powerUpCloakingDeviceSphereId)
     destroyHudText(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.CLOAKING_DEVICE_HUD])
-    eventPlayer.powerUpCloakingDeviceSphereId = 0
     if not eventPlayer.invisibilityCount:
         smallMessage(eventPlayer, "You are now visible")
     eventPlayer.movementSpeedScale /= 1.5
     applyScaledMoveSpeed()
+    eventPlayer.powerUpCloakEndsAt = 0
 
 
-def superNano():
-    @Name "superNano (70-79)"
+def activateSuperNano():
+    @Name "activateSuperNano"
     
-    if eventPlayer.powerUpSuperNanoGoodAuraId == 0:
+    if eventPlayer.powerUpSuperNanoEndsAt == 0:
         boostMovementSpeed()
         createEffect(getAllPlayers(), Effect.GOOD_AURA, Color.RED, eventPlayer, distance(eventPlayer.getEyePosition(), eventPlayer) * 0.95, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.powerUpSuperNanoGoodAuraId = getLastCreatedEntity()
-        hudHeader(eventPlayer, "Super Nano: {0}s".format(ceil(eventPlayer.powerUpSuperNanoTimeRemaining)), HudPosition.RIGHT, 0.2, Color.RED, HudReeval.VISIBILITY_AND_STRING)
+        hudHeader(eventPlayer, "Super Nano: {0}s".format(powerUpSecondsRemaining(eventPlayer.powerUpSuperNanoEndsAt)), HudPosition.RIGHT, 0.2, Color.RED, HudReeval.VISIBILITY_AND_STRING)
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SUPER_NANO_HUD] = getLastCreatedText()
         createEffect(getAllPlayers(), Effect.BAD_AURA, Color.RED, eventPlayer, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SUPER_NANO_BAD_AURA] = getLastCreatedEntity()
@@ -439,17 +454,29 @@ def superNano():
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SUPER_NANO_DAMAGE_DEALT_MODIFICATION] = getLastDamageModification()
         startDamageModification(eventPlayer, getAllPlayers(), 50)
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SUPER_NANO_DAMAGE_RECEIVED_MODIFICATION] = getLastDamageModification()
+    eventPlayer.powerUpSuperNanoEndsAt = getTotalTimeElapsed() + SUPER_NANO_DURATION
     heal(eventPlayer, null, 100)
     # The aura handle above gates this resist in the shared recompute, which
     # keeps an active Dash window at 0 instead of overwriting it.
     applyDamageReceivedModifier()
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.RED, eventPlayer.getPosition(), distance(eventPlayer.getEyePosition(), eventPlayer) * 0.95)
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.RED, eventPlayer.getPosition(), 50)
-    for eventPlayer.powerUpSuperNanoTimeRemaining in range(SUPER_NANO_DURATION, 0, -1):
+    startRule(superNano, StartRuleBehavior.NOOP)
+
+
+def superNano():
+    @Name "superNano (70-79)"
+
+    while true:
+        while getTotalTimeElapsed() < eventPlayer.powerUpSuperNanoEndsAt and eventPlayer.isAlive():
+            wait(1)
         if eventPlayer.isDead():
+            # Expire on death but keep ownership of the modifiers until cleanup.
+            eventPlayer.powerUpSuperNanoEndsAt = getTotalTimeElapsed()
+        wait(0.25)
+        # A refresh during the cleanup delay keeps the same modifiers and HUD.
+        if getTotalTimeElapsed() >= eventPlayer.powerUpSuperNanoEndsAt:
             break
-        wait(1)
-    wait(0.25)
     destroyEffect(eventPlayer.powerUpSuperNanoGoodAuraId)
     destroyHudText(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SUPER_NANO_HUD])
     destroyEffect(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SUPER_NANO_BAD_AURA])
@@ -461,6 +488,7 @@ def superNano():
     applyDamageReceivedModifier()
     eventPlayer.movementSpeedScale /= 1.5
     applyScaledMoveSpeed()
+    eventPlayer.powerUpSuperNanoEndsAt = 0
 
 
 rule "JETPACK FLIGHT":
@@ -493,17 +521,16 @@ rule "JETPACK FLIGHT":
 def ultimateCharger():
     @Name "ultimateCharger (90-99)"
     
-    if eventPlayer.powerUpUltimateChargerHudId == 0:
-        hudHeader(eventPlayer, "Ultimate Charger: {0}s".format(ceil(eventPlayer.powerUpUltimateTimeRemaining)), HudPosition.RIGHT, 0.2, Color.RED, HudReeval.VISIBILITY_AND_STRING)
-        eventPlayer.powerUpUltimateChargerHudId = getLastCreatedText()
-    playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.RED, eventPlayer.getPosition(), 50)
-    #Ultimate charger duration
-    for eventPlayer.powerUpUltimateTimeRemaining in range(20, 0, -0.125):
-        eventPlayer.setUltCharge(eventPlayer.getUltCharge() + 2)
-        wait(0.125)
-    wait(0.25)
+    hudHeader(eventPlayer, "Ultimate Charger: {0}s".format(powerUpSecondsRemaining(eventPlayer.powerUpUltimateEndsAt)), HudPosition.RIGHT, 0.2, Color.RED, HudReeval.VISIBILITY_AND_STRING)
+    eventPlayer.powerUpUltimateChargerHudId = getLastCreatedText()
+    while true:
+        while getTotalTimeElapsed() < eventPlayer.powerUpUltimateEndsAt:
+            eventPlayer.setUltCharge(eventPlayer.getUltCharge() + 2)
+            wait(0.125)
+        wait(0.25)
+        if getTotalTimeElapsed() >= eventPlayer.powerUpUltimateEndsAt:
+            break
     destroyHudText(eventPlayer.powerUpUltimateChargerHudId)
-    eventPlayer.powerUpUltimateChargerHudId = 0
 
 
 def stun():
@@ -565,9 +592,14 @@ def powerUpUsage():
                 return
             startRule(instantRevive)
             break
-        #Force Field
+        # Publish the new placement and deadline before requesting the worker.
+        # Ignore an already-running worker so it can finish its current wait.
         case PowerUpItem.FORCE_FIELD:
-            startRule(playerForceField)
+            eventPlayer.powerUpForceFieldPosition = eventPlayer.getPosition()
+            eventPlayer.powerUpForceFieldEndsAt = getTotalTimeElapsed() + 10
+            playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.BLUE, eventPlayer.powerUpForceFieldPosition, 3)
+            playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.powerUpForceFieldPosition, 50)
+            startRule(playerForceField, StartRuleBehavior.NOOP)
             break
         #No Cooldowns
         case PowerUpItem.NO_COOLDOWNS:
@@ -584,19 +616,25 @@ def powerUpUsage():
             break
         #Beacon of Healing
         case PowerUpItem.HEALING_BEACON:
-            startRule(healBeacon)
+            eventPlayer.powerUpHealBeaconPosition = eventPlayer.getPosition()
+            eventPlayer.powerUpHealBeaconEndsAt = getTotalTimeElapsed() + 30
+            playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.YELLOW, eventPlayer.powerUpHealBeaconPosition, 10)
+            playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.powerUpHealBeaconPosition, 50)
+            # Beacon adds 50 percentage points to permanent Plague Doctor / Overcharge bonuses.
+            eventPlayer.setHealingDealt(150 + PLAGUE_DOCTOR_HEAL_BONUS_PCT if eventPlayer.enhancementId == Enhancement.PLAGUE_DOCTOR else 150 + OVERCHARGE_HEAL_BONUS_PCT if eventPlayer.enhancementId == Enhancement.OVERCHARGE else 150)
+            startRule(healBeacon, StartRuleBehavior.NOOP)
             break
         #Sentry Turret
         case PowerUpItem.SENTRY_TURRET:
-            startRule(sentryTurret)
+            deploySentryTurret()
             break
         #Cloaking Device
         case PowerUpItem.CLOAKING_DEVICE:
-            startRule(cloakingDevice)
+            activateCloakingDevice()
             break
         #Super Nano
         case PowerUpItem.SUPER_NANO:
-            startRule(superNano)
+            activateSuperNano()
             break
         #Jetpack: add 100 fuel up to POWERUP_JETPACK_FUEL_MAX, including during an active flight chase.
         case PowerUpItem.JETPACK:
@@ -611,7 +649,9 @@ def powerUpUsage():
             break
         #Ultimate Charger
         case PowerUpItem.ULTIMATE_CHARGER:
-            startRule(ultimateCharger)
+            eventPlayer.powerUpUltimateEndsAt = getTotalTimeElapsed() + 20
+            playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.RED, eventPlayer.getPosition(), 50)
+            startRule(ultimateCharger, StartRuleBehavior.NOOP)
             break
         #Stun
         case PowerUpItem.STUN:

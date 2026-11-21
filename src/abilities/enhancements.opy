@@ -561,15 +561,11 @@ rule "ENGINEER TURRET DEPLOY":
     # hold. The 0.25s Melee hold matches inventory powerups; guards run
     # only after a confirmed hold, so taps stay silent.
     wait(0.25, Wait.ABORT_WHEN_FALSE)
-    # The turret reuses the powerup effect slots; one live turret per player.
-    if entityExists(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SENTRY_TURRET_BODY]):
-        smallMessage(eventPlayer, "Turret already deployed")
-        return
     if eventPlayer.enhancementScrap < ENGINEER_TURRET_COST:
         smallMessage(eventPlayer, "Not enough scrap")
         return
     eventPlayer.enhancementScrap -= ENGINEER_TURRET_COST
-    startRule(sentryTurret)
+    deploySentryTurret()
 
 
 rule "ENGINEER BEAM FADE":
