@@ -2,7 +2,7 @@
 #!define DEBUG_ENABLE_INSPECTOR false
 #!define DEBUG_BOT_AI_LOGS false
 #!define DEBUG_BOT_AI_LOGS_ACTIVE (DEBUG_ENABLE_INSPECTOR and DEBUG_BOT_AI_LOGS)
-#!define SERVER_LOAD_UI false
+#!define SERVER_LOAD_UI true
 #!define DEBUG_INPUT_TEST false
 #!define DEBUG_TEAM1_SURVIVAL false
 
@@ -14,8 +14,8 @@
 #!include "settings/settings_defaults.opy"
 
 # Select exactly one map pool, then save the root main.opy to rebuild.
-#!include "settings/standard_map_pool.opy"
-##!include "settings/ui_test_map_pool.opy"
+##!include "settings/standard_map_pool.opy"
+#!include "settings/ui_test_map_pool.opy"
 ##!include "settings/debug_map_pool.opy"
 
 # Optional load-test settings. Keep off for the standard build.

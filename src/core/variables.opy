@@ -35,6 +35,8 @@
 # Synchronous helper arguments/results require an explicit, audited contract; other calls may overwrite scratch.
 # Capture scratch references in reevaluated visuals with evalOnce, and document each assignment locally.
 globalvar tmp0  # Synchronous scratch, including Rescue path index and Anran spawn source; assign before use, never retain across waits/async work.
+# Set immediately before detachHitchhikerPassenger(); read only by that synchronous call.
+#!define hitchhikerLandAtCarrier tmp0
 globalvar tmp1  # Second synchronous scratch value, including bot teleport pivot, selectTarget candidates and barricade push geometry; never retain across waits/async work.
 #!define botTeleportPivot tmp1
 globalvar tmp2  # Third synchronous scratch value, including barricade's current target, mutation color captured with evalOnce for the outline, and the on-hit enhancements' health gate; no live reads across waits/async work.
@@ -376,9 +378,9 @@ playervar augmentState3
 # bite, rocket, Molten Core, gas and explosion rules.
 playervar isDotProtected
 
-playervar hitchhikerPassenger  # Passenger attached to this carrier; null when absent. Infection rules also query it.
+playervar hitchhikerPassenger  # Passenger reference for carrier cleanup, HUD and infection checks.
 
-playervar hitchhikerCarrierPoolId  # Extra health-pool ID granted to a Hitchhiker carrier, retained for removal. Exported names must fit 32 characters.
+playervar hitchhikerCarrierPool  # One-element array with the carrier's extra health-pool ID, or Null when free. The array reserves the carrier until pool cleanup even if the passenger disconnects.
 
 # Engineer: an armor grant may target any Team 1 player, so target-side
 # state cannot live in slots owned by the target's own enhancement or augment.
@@ -682,7 +684,7 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 #!define enhancementBattleResetCharges actorTeamSlot22
 # Placed Charge Battery position; zero clears it.
 #!define enhancementBatteryPosition actorTeamSlot22
-# Hitchhiker carrier; zero when detached.
+# Hitchhiker passenger owns the carrier reference for attachment, health sharing and HUD. Zero when detached.
 #!define hitchhikerCarrier actorTeamSlot22
 # P.U.P. mode color.
 #!define enhancementPupColor actorTeamSlot22

@@ -165,14 +165,6 @@ macro initializePlayerEnhancement():
         case Enhancement.CHARGE_BATTERY:
             initializeChargeBatteryMacro()
             break
-        #Hitchhiker
-        case Enhancement.HITCHHIKER:
-            #Enhancement Selection: Hitchhiker
-            # hitchhikerCarrier: carrier player reference, for attachment, shared health, assists and HUD; 0 when detached.
-            # hitchhikerPassengerPoolId: extra health pool ID on this passenger, retained to remove that pool when detaching.
-            # Shared-health subheaders live in ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES).
-            initializeHitchhikerMacro()
-            break
         #P.U.P.
         case Enhancement.PUP:
             #Enhancement Selection: P.U.P.

@@ -145,7 +145,7 @@ Select exactly one pool near the top of [src/includes.opy](src/includes.opy), th
 
 ### Script Load diagnostics
 
-All test flags are off by default. Set `DEBUG_ENABLE_INSPECTOR` to `true` to record match events and sustained load. Add `DEBUG_BOT_AI_LOGS` for per-second target and teleport counts. `SERVER_LOAD_UI` enables the resource HUD. `DEBUG_INPUT_TEST` cycles inputs for non-host human players. `DEBUG_TEAM1_SURVIVAL` enables Team 1 protection, healing and recovery.
+The six-map UI test pool and the `SERVER_LOAD_UI` resource HUD are enabled in `src/includes.opy`. Set `DEBUG_ENABLE_INSPECTOR` to `true` to record match events and sustained load. Add `DEBUG_BOT_AI_LOGS` for per-second target and teleport counts. `DEBUG_INPUT_TEST` cycles inputs for non-host human players. `DEBUG_TEAM1_SURVIVAL` enables Team 1 protection, healing and recovery.
 
 The optional `settings/settings_perf_test.opy` include overrides the lobby slots, player damage, zombie limit, objective pool, pregame timing and cooldowns. For a matched A/B comparison, use the same map, mode, zombie limit, damage settings, Team 1 roster, live participant count and any bot protection in both builds. Keep the diagnostic flags and profile settings matched as well.
 
@@ -204,9 +204,11 @@ The [code review report](docs/CODE_REVIEW_REPORT.md) provides supporting evidenc
 
 ### Fixed:
 
+- [R10 — Hitchhiker passenger ownership and carrier selection](docs/CODE_REVIEW_REPORT.md#r10). Each player can belong to at most one carrier–passenger pair. The carrier's slot becomes free after its extra health pool is removed, including when the passenger disconnects.
 - [R11 — "Doomfist never releases the simulated block button"](docs/CODE_REVIEW_REPORT.md#r11).
 - [R16 — "Bot selects a target behind a wall or a stale target"](docs/CODE_REVIEW_REPORT.md#r16).
 - [R18 — "Charge Battery selects an ineligible recipient"](docs/CODE_REVIEW_REPORT.md#r18).
+- [R33 — Hitchhiker health balancing](docs/CODE_REVIEW_REPORT.md#r33) uses a single sorted pair of players.
 
 ## Resources
 
