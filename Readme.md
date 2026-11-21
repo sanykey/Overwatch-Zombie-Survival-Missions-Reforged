@@ -141,18 +141,17 @@ After changing the source, save the root `main.opy` again to compile the updated
 
 ### Switching map pools
 
-In [src/includes.opy](src/includes.opy), select one map pool with the include near the top:
+Select exactly one pool near the top of [src/includes.opy](src/includes.opy), then rebuild the root `main.opy`.
 
-```py
-#!include "map_pools/release.opy"
-```
+- `settings/standard_map_pool.opy` uses the standard rotation and is enabled by default.
+- `settings/ui_test_map_pool.opy` includes Shambali Monastery, Colosseo, Malevento, Necropolis, Black Forest and Ilios Lighthouse.
+- `settings/debug_map_pool.opy` limits the rotation to Rialto.
 
-Replace `release.opy` with `test.opy` for the regression pool, then save the root `main.opy` and import the resulting `main.ws.txt` into Workshop. Switch back to `release.opy` and rebuild before publishing a release.
+### Script Load diagnostics
 
-- [Release pool](src/map_pools/release.opy): the existing map rotation, selected by default.
-- [Test pool](src/map_pools/test.opy): Shambali Monastery (Escort), Colosseo (Push), and Malevento, Necropolis, Black Forest and Ilios Lighthouse (Team Deathmatch). Other modes are disabled.
+All test flags are off by default. Set `DEBUG_ENABLE_INSPECTOR` to `true` to record match events and sustained load. Add `DEBUG_BOT_AI_LOGS` for per-second target and teleport counts. `SERVER_LOAD_UI` enables the resource HUD. `DEBUG_INPUT_TEST` cycles inputs for non-host human players. `DEBUG_TEAM1_SURVIVAL` enables Team 1 protection, healing and recovery.
 
-The pool files provide settings fragments through text macros; only one can be included at a time. Shared lobby, hero and mode settings stay in `src/settings/settings.opy`. Switching happens at compile time and adds no Workshop elements or variables.
+The optional `settings/settings_perf_test.opy` include overrides the lobby slots, player damage, zombie limit, objective pool, pregame timing and cooldowns. For a matched A/B comparison, use the same map, mode, zombie limit, damage settings, Team 1 roster, live participant count and any bot protection in both builds. Keep the diagnostic flags and profile settings matched as well.
 
 ### Passive regeneration issue
 

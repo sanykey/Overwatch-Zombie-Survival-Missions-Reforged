@@ -19,10 +19,29 @@ Everything in `analysis/` (reports, temporary scripts, validation results) belon
 ## Overwatch Workshop / OverPy Specifics
 
 - When formatting text, prefer f-strings such as `f"text {value}"` over `"text {}".format(value)`, provided this does not increase the compiled Workshop element count or make the code more complex at the point of use.
+- Define new predicates (reusable expressions that return a boolean) with OverPy's `macro` syntax. When migrating an existing predicate from `#!define`, inspect the compiled Workshop Conditions, especially for native UI workarounds.
 - Comparing a value with zero is not equivalent to checking its truthiness. In Workshop, an empty array and a zero vector are not equal to `0` or `Null`, but are equal to `False`. Therefore, `X != 0` is true for these values, while `X != False` is false. In OverPy, these values are written as `[]`, `vect(0, 0, 0)`, `null`, and `false`. See the [Workshop comparison tables](https://workshop.codes/wiki/articles/comparisons-and-truth).
 - In OverPy 9.7.20, `@Condition X` for an untyped variable compiles to a comparison against `False` using the not-equal operator. When changing conditions, inspect the generated Workshop code; do not replace an explicit comparison with a shorthand check without verifying equivalence for all valid types and values.
 - Compiled global and player variable names must not exceed 31 characters; the Workshop rejects longer names at import with "variable is too long" (a 37-character name fails, 31-character names import fine; 32 is often cited but unverified). `#!define` macro aliases are not compiled and are exempt. When a declaration would exceed the limit, shorten the compiled name (e.g. abbreviate a middle word) and keep the descriptive alias in `src/core/variables.opy`.
 - When reusing variables, account for value lifetimes, which player owns each player variable, waits, asynchronous calls, `chase`, and HUD/effect reevaluation. Follow the contracts and comments in `src/core/variables.opy`; use meaningful `#!define` aliases for shared temporary slots and document their purpose near each use.
+
+## Hero Ability HUD Text
+
+Use these abbreviations and formats in English HUD descriptions of hero abilities.
+
+| Full wording | HUD wording |
+| --- | --- |
+| `damage` | `dmg` |
+| `Cooldown: 20s` | `20s CD` |
+| `Critical hits` | `Crits` |
+| `Double-tap []` | `2x []` |
+| `per` | `/` |
+| `within 15m` | `in 15m` |
+| `resistance` | `resist` |
+| `invulnerability` | `invuln` |
+| `for 3s` | `(3s)` |
+
+Use telegraphic style. Drop articles (`a`, `the`), pronouns (`your`, `you`, `them`), and linking phrases (`that grants`, `while attached`) while keeping any conditions needed to understand the ability. Use direct verbs and place durations in parentheses. For example, shorten `sets them on fire for 3s` to `burn for 3s`, then apply the duration format to get `ignite (3s)`.
 
 ## Workshop Native UI Diagnostics
 

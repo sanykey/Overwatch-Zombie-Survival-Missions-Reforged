@@ -141,18 +141,17 @@ Telekinesis также отталкивает зомби по нажатию Mel
 
 ### Переключение наборов карт
 
-В [src/includes.opy](src/includes.opy) выберите один набор карт строкой подключения в начале файла:
+Выберите один набор в начале [src/includes.opy](src/includes.opy) и пересоберите корневой `main.opy`.
 
-```py
-#!include "map_pools/release.opy"
-```
+- `settings/standard_map_pool.opy` использует обычную ротацию и включён по умолчанию.
+- `settings/ui_test_map_pool.opy` включает Shambali Monastery, Colosseo, Malevento, Necropolis, Black Forest и Ilios Lighthouse.
+- `settings/debug_map_pool.opy` оставляет в ротации Rialto.
 
-Для тестирования замените `release.opy` на `test.opy`, затем сохраните корневой `main.opy` и импортируйте полученный `main.ws.txt` в Workshop. Перед публикацией релиза верните `release.opy` и пересоберите мод.
+### Диагностика Script Load
 
-- [Релизный набор](src/map_pools/release.opy): прежняя ротация карт, выбран по умолчанию.
-- [Тестовый набор](src/map_pools/test.opy): Shambali Monastery (Escort), Colosseo (Push), Malevento, Necropolis, Black Forest и Ilios Lighthouse (Team Deathmatch). Остальные режимы отключены.
+Все тестовые флаги по умолчанию выключены. Установите `DEBUG_ENABLE_INSPECTOR` в `true` для записи событий матча и устойчивой высокой нагрузки. Включите также `DEBUG_BOT_AI_LOGS` для посекундных счётчиков поиска целей и телепортации. `SERVER_LOAD_UI` включает HUD ресурсов. `DEBUG_INPUT_TEST` перебирает нажатия для людей, кроме хоста. `DEBUG_TEAM1_SURVIVAL` включает защиту, лечение и восстановление Team 1.
 
-Файлы наборов подставляют фрагменты настроек через текстовые макросы; подключать нужно только один из них. Общие настройки лобби, героев и режимов остаются в `src/settings/settings.opy`. Переключение происходит при компиляции и не добавляет элементов Workshop или переменных.
+Подключаемый файл `settings/settings_perf_test.opy` задаёт тестовые слоты, урон игроков, лимит зомби, набор целей, время предыгровой фазы и откаты. Для сравнения A/B зафиксируйте одинаковые карту, режим, лимит зомби, урон, состав Team 1, число живых участников и защиту ботов, если она используется. Флаги диагностики и настройки профиля тоже должны совпадать.
 
 ### Проблема с пассивной регенерацией
 
