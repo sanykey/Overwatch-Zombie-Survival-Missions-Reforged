@@ -71,11 +71,11 @@ rule "DOUBLE TAP JUMP (DASH / HIGHRISE)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
 
-    # The rule starts on the first press. Both input gaps use the same window.
-    waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), AIR_ACTION_TAP_WINDOW)
+    # The rule starts on the first press. Time the release and second press separately.
+    waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), AIR_ACTION_RELEASE_WINDOW)
     if eventPlayer.isHoldingButton(Button.JUMP):
         return
-    waitUntil(eventPlayer.isHoldingButton(Button.JUMP), AIR_ACTION_TAP_WINDOW)
+    waitUntil(eventPlayer.isHoldingButton(Button.JUMP), AIR_ACTION_SECOND_PRESS_WINDOW)
     if not ruleCondition:
         return
 
