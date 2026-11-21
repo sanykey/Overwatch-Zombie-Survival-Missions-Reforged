@@ -4,7 +4,8 @@
 macro useStunPowerUp():
     #Check if their are targets nearby and in view angle
     if getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).any(lambda player: distance(eventPlayer, player) < 15 * eventPlayer.sizeScale and angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), player.getEyePosition())) < 45):
-        startRule(stun)
+        eventPlayer.activePowerUpIds.append(PowerUpItem.STUN)
+        startRule(stun, StartRuleBehavior.NOOP)
     else:
         smallMessage(eventPlayer, "Aim at a nearby target")
         return
@@ -13,10 +14,9 @@ macro useStunPowerUp():
 def stun():
     @Name "stun (100-109)"
 
-    if eventPlayer.powerUpStunBeamId == 0:
-        #Stun beam effect
-        createBeam(getAllPlayers(), Beam.BAD, eventPlayer.powerUpStunBeamPosition, eventPlayer.powerUpStunBeamPosition + ((directionTowards(eventPlayer.powerUpStunBeamPosition, eventPlayer.powerUpStunOrigin.getPosition() + losOffsetConst)) * (min(3, distance(eventPlayer.powerUpStunBeamPosition, eventPlayer.powerUpStunOrigin.getPosition() + losOffsetConst)))), Color.SKY_BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpStunBeamId = getLastCreatedEntity()
+    #Stun beam effect
+    createBeam(getAllPlayers(), Beam.BAD, eventPlayer.powerUpStunBeamPosition, eventPlayer.powerUpStunBeamPosition + ((directionTowards(eventPlayer.powerUpStunBeamPosition, eventPlayer.powerUpStunOrigin.getPosition() + losOffsetConst)) * (min(3, distance(eventPlayer.powerUpStunBeamPosition, eventPlayer.powerUpStunOrigin.getPosition() + losOffsetConst)))), Color.SKY_BLUE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    eventPlayer.powerUpStunBeamId = getLastCreatedEntity()
     playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.WHITE, eventPlayer.getPosition(), 30)
     #Stun beam lead
     eventPlayer.powerUpStunBeamPosition = eventPlayer.getPosition() + losOffsetConst
@@ -42,4 +42,4 @@ def stun():
         eventPlayer.powerUpStunTarget = random.choice((getLivingPlayers(Team.2).filter(lambda player: distance(eventPlayer.powerUpStunOrigin, player) < 15 and not player.botIsTeleporting)).exclude(eventPlayer.powerUpStunTarget))
     stopChasing(eventPlayer.powerUpStunBeamPosition)
     destroyEffect(eventPlayer.powerUpStunBeamId)
-    eventPlayer.powerUpStunBeamId = 0
+    eventPlayer.activePowerUpIds.remove(PowerUpItem.STUN)

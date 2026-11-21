@@ -111,6 +111,10 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
 def powerUpUsage():
     @Name "powerUpUsage"
 
+    if eventPlayer.powerUpItemId in eventPlayer.activePowerUpIds:
+        smallMessage(eventPlayer, "This power-up is already active")
+        return
+
     switch eventPlayer.powerUpItemId:
         case PowerUpItem.CURE:
             useCurePowerUp()

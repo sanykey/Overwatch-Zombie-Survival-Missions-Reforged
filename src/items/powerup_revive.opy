@@ -4,7 +4,8 @@
 macro useRevivePowerUp():
     if not getDeadPlayers(Team.1).any(lambda player: distance(eventPlayer, player) <= REVIVE_RADIUS):
         return
-    startRule(instantRevive)
+    eventPlayer.activePowerUpIds.append(PowerUpItem.REVIVE)
+    startRule(instantRevive, StartRuleBehavior.NOOP)
 
 
 def instantRevive():
@@ -17,3 +18,4 @@ def instantRevive():
     waitUntil(eventPlayer.powerUpReviveTarget.isAlive(), 3)
     playAquaPowerUpSound()
     smallMessage([eventPlayer, eventPlayer.powerUpReviveTarget], "{0} {1}: \"I've got you. Now let's move!\"".format(eventPlayer, heroIcon(eventPlayer.getHero())))
+    eventPlayer.activePowerUpIds.remove(PowerUpItem.REVIVE)

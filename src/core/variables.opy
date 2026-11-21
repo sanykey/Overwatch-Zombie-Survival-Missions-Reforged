@@ -546,6 +546,9 @@ playervar actorTeamSlot4  # Team 2: botLoopIndexSlot; Team 1: powerUpEntityIdLis
 # Remaining sparse effect/HUD/damage-modification IDs owned by active items, indexed by PowerUpEntitySlot.
 #!define powerUpEntityIdList actorTeamSlot4
 
+# Item IDs reserved by their owner from accepted activation through cleanup.
+playervar activePowerUpIds
+
 # Frequently accessed item handles are kept directly on the owning player.
 playervar powerUpForceFieldSphereId
 playervar powerUpHealBeaconLightShaftId
