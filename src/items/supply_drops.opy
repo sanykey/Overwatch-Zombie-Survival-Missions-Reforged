@@ -346,7 +346,6 @@ def deploySentryTurret():
 
     # Both the Engineer and the item move the same turret and refresh its expiry.
     eventPlayer.powerUpTurretPosition = (eventPlayer.getPosition() if eventPlayer.isOnGround() else nearestWalkablePosition(eventPlayer.getPosition())) + Vector.UP
-    eventPlayer.powerUpTurretDirection = null
     eventPlayer.powerUpTurretEndsAt = getTotalTimeElapsed() + 30
     playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.ORANGE, eventPlayer.powerUpTurretPosition, 5)
     playEffect(getAllPlayers(), DynamicEffect.DEBUFF_IMPACT_SOUND, Color.BLUE, eventPlayer.powerUpTurretPosition, 50)
@@ -363,7 +362,7 @@ def sentryTurret():
     for turretLegVisualIndex in range(3):
         createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + directionFromAngles(evalOnce(turretLegVisualIndex) * 120, 60) * 1.5, Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SENTRY_TURRET_LEG_1 + turretLegVisualIndex] = getLastCreatedEntity()
-    createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + ((eventPlayer.powerUpTurretDirection if eventPlayer.powerUpTurretDirection != null else eventPlayer.getFacingDirection()) * 0.5), Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    createBeam(getAllPlayers(), Beam.GRAPPLE, eventPlayer.powerUpTurretPosition, eventPlayer.powerUpTurretPosition + ((eventPlayer.powerUpTurretDirection if getLivingPlayers(Team.2).any(lambda player: isInLoS(eventPlayer.powerUpTurretPosition, player) and not player.botIsTeleporting) else eventPlayer.getFacingDirection()) * 0.5), Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SENTRY_TURRET_BARREL] = getLastCreatedEntity()
     hudHeader(eventPlayer, "Sentry Turret: {0}s".format(powerUpSecondsRemaining(eventPlayer.powerUpTurretEndsAt)), HudPosition.RIGHT, 0.2, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING)
     eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SENTRY_TURRET_HUD] = getLastCreatedText()
@@ -392,8 +391,6 @@ def sentryTurret():
             if eventPlayer.enhancementId == Enhancement.ENGINEER and random.randint(0, 20) == 0:
                 turretShotVictim.setStatusEffect(eventPlayer, Status.FROZEN, 2)
             damage(turretShotVictim, eventPlayer, 20)
-        elif eventPlayer.powerUpTurretDirection != null:
-            eventPlayer.powerUpTurretDirection = null
         wait(0.125)
     # turretCleanupEffectIndex: turret-effect slot 50-54, to destroy the sphere, legs and barrel when the turret expires.
     #!define turretCleanupEffectIndex tmp0
