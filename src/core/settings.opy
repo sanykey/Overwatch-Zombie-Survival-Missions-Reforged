@@ -1,6 +1,6 @@
-#!mainFile "../main.opy"
+#!mainFile "../../main.opy"
 
-#!define BUILD_DATE() __script__("build_date.js")
+#!define BUILD_DATE() __script__("../../tools/build_date.js")
 
 settings {
     "main": {

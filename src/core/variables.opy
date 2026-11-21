@@ -1,6 +1,6 @@
-#!mainFile "../main.opy"
+#!mainFile "../../main.opy"
 
-#!include "core/enums.opy"
+#!include "enums.opy"
 
 # Synchronous placement helper output; consume before waits or asynchronous work.
 #!define isEnhancementPlacementInvalid tmp0
@@ -896,4 +896,4 @@ playervar enhancementPupCooldown  # Chased P.U.P. ability cooldown (1 or 2 secon
 
 playervar augmentBarrierHealth  # Chased Laser Barricade health; placement, damage, regeneration and HUD; independent of icon IDs.
 
-#!include "core/immutable_variables.opy"
+#!include "immutable_variables.opy"

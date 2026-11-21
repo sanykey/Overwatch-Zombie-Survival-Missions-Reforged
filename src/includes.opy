@@ -6,12 +6,12 @@
 ##!include "map_pools/perf_test.opy"
 ##!include "map_pools/debug_map_pool.opy"
 
-#!include "directives.opy"
-#!include "settings.opy"
+#!include "core/directives.opy"
+#!include "core/settings.opy"
 #!include "core/constants.opy"
-#!include "variables.opy"
-#!include "ui_workarounds.opy"
-#!include "compressed numbers.opy"
+#!include "core/variables.opy"
+#!include "core/ui_workarounds.opy"
+#!include "core/compressed numbers.opy"
 #!include "subroutines.opy"
 #!include "charge_battery.opy"
 

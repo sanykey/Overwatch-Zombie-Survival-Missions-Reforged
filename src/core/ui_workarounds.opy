@@ -1,4 +1,4 @@
-#!mainFile "../main.opy"
+#!mainFile "../../main.opy"
 
 # Keep a single compiled Condition: OverPy splits ordinary `and` / `== true`.
 # Numeric 1 applies ONLY to the boolean conjunction result, never to raw slots.
