@@ -132,12 +132,7 @@ macro initializePlayerEnhancement():
             eventPlayer.enhancementPlagueCureTotal = 0
             break
         case Enhancement.OVERCHARGE:
-            eventPlayer.setHealingDealt(100 + OVERCHARGE_HEAL_BONUS_PCT)
-            eventPlayer.enhancementCapacitorEnergy = 0
-            eventPlayer.enhancementCapacitorCharge = 0
-            eventPlayer.enhancementCapacitorDeadline = 0
-            # Baseline existing match stats; do not pay for healing/assists before selection/join.
-            eventPlayer.enhancementCapacitorStatsSnapshot = overchargeEarnedEnergyTotal(eventPlayer)
+            initializeOverchargeMacro()
             break
         case Enhancement.BULKING_SEASON:
             eventPlayer.enhancementBulkStacks = 0

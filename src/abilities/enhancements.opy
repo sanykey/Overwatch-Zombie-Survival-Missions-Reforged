@@ -5,8 +5,6 @@ subroutine startPupDefaultChase
 subroutine applyBulkingSeasonStats
 
 
-#!define overchargeEarnedEnergyTotal(player) (player.getStatistic(Stat.HEALING_DEALT) / OVERCHARGE_HEAL_ENERGY_DIVISOR + OVERCHARGE_ENERGY_PER_ASSIST * earnedAssists(player))
-
 rule "ZOMBIE HYBRID":
     @Event eachPlayer
     @Team 1
@@ -102,60 +100,7 @@ rule "BULKING SEASON TOGGLES SIZE":
     applyBulkingSeasonStats()
 
 
-rule "OVERCHARGE ARM ON DOUBLE CROUCH":
-    @Event eachPlayer
-    @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
-    @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
-    @Condition eventPlayer.enhancementCapacitorEnergy > 0
-    @Condition eventPlayer.enhancementCapacitorCharge == 0
-
-    # Press-release-press: each gap is bounded by OVERCHARGE_ARM_TAP_WINDOW.
-    # Holding cannot arm a charge.
-    # No shared scratch survives these waits. Recheck all eligibility on the
-    # second press, including life, selection, readiness and an already armed charge.
-    waitUntil(not eventPlayer.isHoldingButton(Button.CROUCH), OVERCHARGE_ARM_TAP_WINDOW)
-    if eventPlayer.isHoldingButton(Button.CROUCH):
-        return
-    waitUntil(eventPlayer.isHoldingButton(Button.CROUCH), OVERCHARGE_ARM_TAP_WINDOW)
-    if not ruleCondition:
-        return
-    # Transfer at most 100; retain the remainder in the uncapped bank.
-    # Continued healing cannot change this burst's fixed damage.
-    eventPlayer.enhancementCapacitorCharge = min(eventPlayer.enhancementCapacitorEnergy, OVERCHARGE_MAX_CHARGE)
-    eventPlayer.enhancementCapacitorEnergy -= eventPlayer.enhancementCapacitorCharge
-
-
-rule "OVERCHARGE STORES HEALING AND ASSISTS":
-    @Event eachPlayer
-    @Team 1
-    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
-    @Condition uiPhaseAndId(eventPlayer.enhancementId == Enhancement.OVERCHARGE)
-    @Condition overchargeEarnedEnergyTotal(eventPlayer) != eventPlayer.enhancementCapacitorStatsSnapshot
-
-    # Native Healing Dealt is the only healing source; event healing can include passive regeneration.
-    # Combine healing and weighted assists so one existing snapshot covers all earned energy.
-    # Synchronous scratch: consumed before any wait/call/HUD reevaluation can reuse tmp0.
-    #!define overchargeCurrentEarnedEnergy tmp0
-    overchargeCurrentEarnedEnergy = overchargeEarnedEnergyTotal(eventPlayer)
-    eventPlayer.enhancementCapacitorEnergy += max(0, overchargeCurrentEarnedEnergy - eventPlayer.enhancementCapacitorStatsSnapshot)
-    # Resync on a stat reset too, without subtracting energy or paying twice.
-    eventPlayer.enhancementCapacitorStatsSnapshot = overchargeCurrentEarnedEnergy
-
-
-rule "OVERCHARGE CLEARS CHARGE":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.enhancementCapacitorCharge > 0
-    @Condition (eventPlayer.isDead() or eventPlayer.enhancementCapacitorDeadline > 0 and getTotalTimeElapsed() >= eventPlayer.enhancementCapacitorDeadline) == true
-
-    if eventPlayer.enhancementId != Enhancement.OVERCHARGE:
-        return
-
-    eventPlayer.enhancementCapacitorCharge = 0
-    eventPlayer.enhancementCapacitorDeadline = 0
+#!include "enhancement_overcharge.opy"
 
 
 rule "BOLT STRIKE ON DOUBLE CROUCH":

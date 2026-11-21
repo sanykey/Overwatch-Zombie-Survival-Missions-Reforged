@@ -12,11 +12,7 @@ def applyHitEnhancements():
     if eventPlayer.enhancementId == Enhancement.PYROTECHNIC:
         applyPyrotechnicHitMacro()
     elif eventPlayer.enhancementId == Enhancement.OVERCHARGE:
-        if eventPlayer.enhancementCapacitorCharge > 0 and enhancementHitVictim != eventPlayer:
-            if eventPlayer.enhancementCapacitorDeadline == 0:
-                eventPlayer.enhancementCapacitorDeadline = getTotalTimeElapsed() + 0.3
-            if getTotalTimeElapsed() < eventPlayer.enhancementCapacitorDeadline:
-                damage(enhancementHitVictim, eventPlayer, eventPlayer.enhancementCapacitorCharge)
+        applyOverchargeHitMacro()
 
 
 rule "CROWD CONTROL STATUS":
@@ -139,9 +135,7 @@ rule "PLAYER PICKS UP HEALTH PACK":
     # Event eligibility stays synchronous; WORKSHOP_NATIVE_UI_CORRUPTION.md.
     if (eventWasHealthPack == true):
         eventPlayer.startHealingOverTime(null, 5, 20)
-        if isGameplayActive and eventPlayer.enhancementId == Enhancement.OVERCHARGE:
-            # Credit the actual pack healing.
-            eventPlayer.enhancementCapacitorEnergy += eventHealing / OVERCHARGE_HEAL_ENERGY_DIVISOR
+        creditOverchargeHealthPackMacro()
         # Keep discovered packs for the normal cure indicators.
         if healthpackPositionList.all(lambda x: distance(x, eventPlayer) > 5):
             healthpackPositionList.append(eventPlayer.getPosition())
