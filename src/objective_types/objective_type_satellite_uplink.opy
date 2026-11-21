@@ -136,9 +136,9 @@ rule "PLAYERS REPAIR TERMINALS":
             if satelliteRepairPlayerCount:
                 if satelliteRepairPlayerCount > 1:
                     #2 or more players on the terminal
-                    satelliteTerminalProgressList[satelliteRepairTerminalIndex] += 0.4
+                    satelliteTerminalProgressList[satelliteRepairTerminalIndex] += 0.4 * SATELLITE_REPAIR_SPEED_MULTIPLIER
                 #Base Repair Speed
-                satelliteTerminalProgressList[satelliteRepairTerminalIndex] += 1.1
+                satelliteTerminalProgressList[satelliteRepairTerminalIndex] += 1.1 * SATELLITE_REPAIR_SPEED_MULTIPLIER
                 #If terminal is repaired
                 if satelliteTerminalProgressList[satelliteRepairTerminalIndex] >= 100:
                     satelliteTerminalProgressList[satelliteRepairTerminalIndex] = 100

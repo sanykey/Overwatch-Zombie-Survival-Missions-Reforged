@@ -2,6 +2,59 @@
 
 #!define BUILD_DATE() __script__("../../tools/build_date.js")
 
+#!define SETTINGS_TEAM1_SLOTS 6
+#!define SETTINGS_TEAM1_HEROES STANDARD_TEAM1_HERO_SETTINGS
+#!define SETTINGS_WORKSHOP STANDARD_WORKSHOP_SETTINGS
+
+macro STANDARD_TEAM1_HERO_SETTINGS = {
+    # Tanks
+    "dmon": {"damageDealt%": 90},
+    "domina": {"damageDealt%": 90},
+    "doomfist": {"damageDealt%": 90},
+    "dva": {"damageDealt%": 90},
+    "hazard": {"damageDealt%": 90},
+    "junkerQueen": {"damageDealt%": 90},
+    "mauga": {"damageDealt%": 90},
+    "orisa": {"damageDealt%": 90},
+    "ramattra": {"damageDealt%": 90},
+    "reinhardt": {"damageDealt%": 90},
+    "roadhog": {"damageDealt%": 90},
+    "sigma": {"damageDealt%": 90},
+    "winston": {"damageDealt%": 90},
+    "wreckingBall": {"damageDealt%": 90},
+    "zarya": {"damageDealt%": 90},
+    # Damage
+    "anran": {"damageDealt%": 95},
+    "ashe": {"damageDealt%": 95},
+    "bastion": {"damageDealt%": 95},
+    "cassidy": {"damageDealt%": 95},
+    "echo": {"damageDealt%": 95},
+    "emre": {"damageDealt%": 95},
+    "freja": {"damageDealt%": 95},
+    "genji": {"damageDealt%": 95},
+    "hanzo": {"damageDealt%": 95},
+    "junkrat": {"damageDealt%": 95},
+    "mei": {"damageDealt%": 95},
+    "pharah": {"damageDealt%": 95},
+    "reaper": {"damageDealt%": 95},
+    "shion": {"damageDealt%": 95},
+    "sierra": {"damageDealt%": 95},
+    "sojourn": {"damageDealt%": 95},
+    "soldier": {"damageDealt%": 95},
+    "symmetra": {"damageDealt%": 95},
+    "torbjorn": {"damageDealt%": 95},
+    "tracer": {"damageDealt%": 95},
+    "vendetta": {"damageDealt%": 95},
+    "venture": {"damageDealt%": 95},
+    "widowmaker": {"damageDealt%": 95}
+}
+
+macro STANDARD_WORKSHOP_SETTINGS = {
+    "Chance to mutate percentage": 25,
+    "Number of Objectives": 5,
+    "Number of zombies": 7
+}
+
 settings {
     "main": {
         "description": f"Fight against an endless horde of zombies while completing various objectives.\r\nGet to the extraction point and watch the map get nuked. Don't leave anyone behind!\r\n\r\nlast updated: {BUILD_DATE()}\r\nMod Creator: snky#21990\r\n\r\nBased on:\r\n[ZSM Mod: workshop.codes/786TW]\r\n[ZSM Creator: Kamenrider#11346]\r\n\r\n[Original Mod Code: MPJFR]\r\n[Original Mod Creator: Mazattack#1183]\r\n\r\nCommunity ZSM Discord: https://discord.gg/3BhYtNfwMj",
@@ -10,7 +63,7 @@ settings {
     "lobby": {
         "allowPlayersInQueue": true,
         "mapRotation": "afterGame",
-        "team1Slots": 6,
+        "team1Slots": SETTINGS_TEAM1_SLOTS,
         "spectatorSlots": 7,
         "team2Slots": 0,
         "returnToLobby": "never",
@@ -102,48 +155,7 @@ settings {
         }
     },
     "heroes": {
-        "team1": {
-            # Tanks
-            "dmon": {"damageDealt%": 90},
-            "domina": {"damageDealt%": 90},
-            "doomfist": {"damageDealt%": 90},
-            "dva": {"damageDealt%": 90},
-            "hazard": {"damageDealt%": 90},
-            "junkerQueen": {"damageDealt%": 90},
-            "mauga": {"damageDealt%": 90},
-            "orisa": {"damageDealt%": 90},
-            "ramattra": {"damageDealt%": 90},
-            "reinhardt": {"damageDealt%": 90},
-            "roadhog": {"damageDealt%": 90},
-            "sigma": {"damageDealt%": 90},
-            "winston": {"damageDealt%": 90},
-            "wreckingBall": {"damageDealt%": 90},
-            "zarya": {"damageDealt%": 90},
-            # Damage
-            "anran": {"damageDealt%": 95},
-            "ashe": {"damageDealt%": 95},
-            "bastion": {"damageDealt%": 95},
-            "cassidy": {"damageDealt%": 95},
-            "echo": {"damageDealt%": 95},
-            "emre": {"damageDealt%": 95},
-            "freja": {"damageDealt%": 95},
-            "genji": {"damageDealt%": 95},
-            "hanzo": {"damageDealt%": 95},
-            "junkrat": {"damageDealt%": 95},
-            "mei": {"damageDealt%": 95},
-            "pharah": {"damageDealt%": 95},
-            "reaper": {"damageDealt%": 95},
-            "shion": {"damageDealt%": 95},
-            "sierra": {"damageDealt%": 95},
-            "sojourn": {"damageDealt%": 95},
-            "soldier": {"damageDealt%": 95},
-            "symmetra": {"damageDealt%": 95},
-            "torbjorn": {"damageDealt%": 95},
-            "tracer": {"damageDealt%": 95},
-            "vendetta": {"damageDealt%": 95},
-            "venture": {"damageDealt%": 95},
-            "widowmaker": {"damageDealt%": 95}
-        },
+        "team1": SETTINGS_TEAM1_HEROES,
         "team2": {
             "general": {
                 "abilityCooldown%": 0,
@@ -151,9 +163,5 @@ settings {
             }
         }
     },
-    "workshop": {
-        "Chance to mutate percentage": 25,
-        "Number of Objectives": 5,
-        "Number of zombies": 7
-    }
+    "workshop": SETTINGS_WORKSHOP
 }

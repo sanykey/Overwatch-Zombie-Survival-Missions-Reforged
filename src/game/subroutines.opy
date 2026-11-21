@@ -530,10 +530,10 @@ def setPrematchTimer():
         #Event Player is not voting
         else:
             #All players are finished voting
-            if getMatchTime() > 5 + VOTING_END_TIME and getPlayers(Team.1).all(lambda player: player.isPregameVoting == false and player.pregameState > PregameState.SELECTING_HERO):
-                setMatchTime(5 + VOTING_END_TIME)
-            elif getMatchTime() > 20 + VOTING_END_TIME and ((len(getPlayers(Team.1).filter(lambda player: player.isPregameVoting == false and player.pregameState > PregameState.SELECTING_HERO))) == len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive))):
-                setMatchTime(20 + VOTING_END_TIME)
+            if getMatchTime() > 5 + PREGAME_PREPARATION_DURATION and getPlayers(Team.1).all(lambda player: player.isPregameVoting == false and player.pregameState > PregameState.SELECTING_HERO):
+                setMatchTime(5 + PREGAME_PREPARATION_DURATION)
+            elif getMatchTime() > 20 + PREGAME_PREPARATION_DURATION and ((len(getPlayers(Team.1).filter(lambda player: player.isPregameVoting == false and player.pregameState > PregameState.SELECTING_HERO))) == len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive))):
+                setMatchTime(20 + PREGAME_PREPARATION_DURATION)
     #Voting complete
     else:
         #Event Player deselects hero
