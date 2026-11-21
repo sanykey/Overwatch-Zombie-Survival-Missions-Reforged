@@ -146,7 +146,7 @@ globalvar botSpawnPointList           # Cached successful zombie spawn/teleport 
 globalvar botSpawnPointTimerList      # Per-spawn-point cooldown/load values, indexed with botSpawnPointList.
 globalvar botSpawnWaypointList        # Movement waypoint associated with each cached botSpawnPointList entry.
 globalvar customTeleportPositionList  # Special teleport positions transferred from dying bots to replacement bots.
-globalvar botSpawnTimeList            # Remaining delays for queued zombie replacements, decremented once per second.
+globalvar botSpawnTimeList            # Queued zombie replacement deadlines in elapsed game time, earliest first.
 
 # Cameras keep reevaluating these coordinates until each player's initialization finishes.
 # Their lifetime overlaps mission initialization; do not share them with gameplay storage.

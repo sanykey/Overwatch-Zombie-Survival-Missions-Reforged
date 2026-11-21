@@ -191,7 +191,8 @@ rule "BOT DIES":
         if not eventPlayer.botRespawnDelay:
             eventPlayer.botRespawnDelay = 1 + ((getMatchTime() + matchEndTime) / 60)
         if len(botSpawnTimeList) < numberOfBots:
-            botSpawnTimeList.append(eventPlayer.botRespawnDelay)
+            # Keep the earliest deadline at the head. Only enqueueing can reorder the queue.
+            botSpawnTimeList = sorted(botSpawnTimeList.concat(getTotalTimeElapsed() + eventPlayer.botRespawnDelay))
         if eventPlayer.botCustomTeleportPosition:
             customTeleportPositionList.append(eventPlayer.botCustomTeleportPosition)
         wait(1)

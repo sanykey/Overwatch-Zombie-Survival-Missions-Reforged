@@ -42,7 +42,7 @@ rule "PLAYER DEALT FINAL BLOW":
                 isObjectiveComplete = true
                 #Give all bots a long respawn time
                 getPlayers(Team.2).botRespawnDelay = 12
-                botSpawnTimeList = botSpawnTimeList.map(lambda _: 12)
+                botSpawnTimeList = botSpawnTimeList.map(lambda _: getTotalTimeElapsed() + 12)
         #Adjust Kill Zone Positions
         killZoneCenter += 0.5 * directionTowards(killZoneCenter, victim)
 
