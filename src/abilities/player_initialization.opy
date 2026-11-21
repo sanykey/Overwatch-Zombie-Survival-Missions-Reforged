@@ -121,8 +121,7 @@ macro initializePlayerEnhancement():
             break
         #Pyrotechnic
         case Enhancement.PYROTECHNIC:
-            # enhancementPyroHitList: hit queue; repeated targets determine their damage per second when the queue is processed.
-            eventPlayer.enhancementPyroHitList = []
+            initializePyrotechnicMacro()
             break
         #Plague Doctor
         case Enhancement.PLAGUE_DOCTOR:

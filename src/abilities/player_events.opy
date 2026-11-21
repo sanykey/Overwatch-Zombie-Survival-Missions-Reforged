@@ -10,9 +10,7 @@ def applyHitEnhancements():
     if enhancementHitDamage <= 0:
         return
     if eventPlayer.enhancementId == Enhancement.PYROTECHNIC:
-        if enhancementHitVictim != eventPlayer and distance(eventPlayer, enhancementHitVictim) < PYROTECHNIC_IGNITE_RANGE:
-            enhancementHitVictim.setStatusEffect(eventPlayer, Status.BURNING, PYROTECHNIC_BURN_DURATION)
-            eventPlayer.enhancementPyroHitList.append(enhancementHitVictim)
+        applyPyrotechnicHitMacro()
     elif eventPlayer.enhancementId == Enhancement.OVERCHARGE:
         if eventPlayer.enhancementCapacitorCharge > 0 and enhancementHitVictim != eventPlayer:
             if eventPlayer.enhancementCapacitorDeadline == 0:

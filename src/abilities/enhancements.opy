@@ -25,28 +25,7 @@ rule "ZOMBIE HYBRID":
         eventPlayer.enhancementHybridCooldown += -1
 
 
-rule "PYROTECHNIC APPLIES DAMAGE":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.enhancementId == Enhancement.PYROTECHNIC
-    @Condition eventPlayer.enhancementPyroHitList != []
-    
-    while eventPlayer.enhancementPyroHitList != []:
-        # pyroBurnTarget: zombie to burn; consumed within this iteration before the cooldown wait.
-        #!define pyroBurnTarget tmp0
-        pyroBurnTarget = eventPlayer.enhancementPyroHitList[0]
-        if pyroBurnTarget.isAlive():
-            # pyroBurnDamagePerSecond: damage per second based on hits in the last cycle, used immediately.
-            #!define pyroBurnDamagePerSecond tmp1
-            pyroBurnDamagePerSecond = min(4 * (len(eventPlayer.enhancementPyroHitList.filter(lambda x: x == pyroBurnTarget))), 30)
-            if pyroBurnTarget in bossStateList:
-                # pyroBurnDamagePerSecond: halve this zombie's damage if it is a boss.
-                pyroBurnDamagePerSecond /= 2
-            pyroBurnTarget.startDamageOverTime(eventPlayer, PYROTECHNIC_BURN_DURATION, pyroBurnDamagePerSecond)
-        eventPlayer.enhancementPyroHitList.remove(pyroBurnTarget)
-    wait(0.5)
-    if ruleCondition:
-        loop()
+#!include "enhancement_pyrotechnic.opy"
 
 
 # BORN TO BATTLE PLAYER EARNS ELIMINATION moved to "PLAYER DEALT FINAL BLOW" in player_events.opy.
