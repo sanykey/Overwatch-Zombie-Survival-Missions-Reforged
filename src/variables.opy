@@ -3,65 +3,13 @@
 # Synchronous placement helper output; consume before waits or asynchronous work.
 #!define isEnhancementPlacementInvalid tmp0
 
-#!define BOT_MAX_TELEPORT_RANGE 40
-#!define JETPACK_ACTIVATION_TIME 0.17
 #!define healthpacksCureNormally (difficultySetting < Difficulty.EXPERT or getMatchTime() > matchEndTime)
-#!define BOSS_BASE_SIZE 2.5
-#!define ZOMBIE_BASE_SIZE 1
-#!define BIOMORPHING_RESOURCE_AMOUNT 25
-#!define ELIMINATIONS_NEEDED_PER_OBJECTIVE 50
-#!define HIGHRISE_DAMAGE_BONUS 40
-#!define HIGHRISE_DAMAGE_DURATION 7
-#!define HIGHRISE_DAMAGE_GRACE_PERIOD 0.1
-#!define BOLT_STRIKE_RADIUS 10
-#!define BOLT_STRIKE_CHAIN_TARGETS 2
-#!define BOLT_STRIKE_CHAIN_DAMAGE_RATIO 0.25
-#!define BOLT_STRIKE_CHAIN_DAMAGE_MAX 15
-#!define BOLT_STRIKE_CHAIN_INTERVAL 0.032
-#!define BOLT_STRIKE_FLASH_INTERVAL 0.5
-#!define BOLT_STRIKE_FLASH_SIZE 0.375
-#!define OVERCHARGE_ARM_TAP_WINDOW 0.3
-# Engineer constants live here (not enhancements.opy): BOT DIES collects scrap
-# before enhancements.opy is included.
-#!define ENGINEER_SCRAP_MAX 500
-#!define ENGINEER_SCRAP_PASSIVE_RATE 1
-# Shared nearby-death radius for Engineer and Scavenger.
-#!define ENGINEER_COLLECTION_RANGE 15
-#!define SCAVENGER_LOOT_CHANCE 5
-#!define ENGINEER_COLLECTION_REWARD 10
-#!define ENGINEER_ASSIST_SCRAP 15
-#!define ENGINEER_ARMOR_ALLY_COST 35
-#!define ENGINEER_ARMOR_SELF_COST 50
-#!define ENGINEER_ARMOR_STACK 50
-#!define ENGINEER_ARMOR_MAX 150
-#!define ENGINEER_ARMOR_HOLD_DURATION 0.5
-#!define ENGINEER_TURRET_COST 200
-#!define ENGINEER_BEAM_DURATION 0.7
-#!define ENGINEER_TRANSFER_RANGE 15
-#!define ENGINEER_TRANSFER_ANGLE 60
 
-# Shared Grapnel/Wrestler targeting geometry and Wrestler HUD/menu constants.
+# Shared Grapnel/Wrestler targeting geometry.
 #!define augmentGrapnelCenter(player) ((player.getPosition() + player.getEyePosition()) * 0.5)
-#!define AUGMENT_GRAPNEL_MIN_RANGE 7
-#!define AUGMENT_GRAPNEL_RANGE 45
-#!define WRESTLER_RANGE 5
-#!define WRESTLER_GRAB_ANGLE 90
-#!define WRESTLER_PULL_RANGE 20
-#!define WRESTLER_PULL_COOLDOWN 16
-#!define WRESTLER_PULL_FORCE_MULTIPLIER 1.6
-#!define WRESTLER_PULL_BEAM_DURATION 0.2
-#!define WRESTLER_PULL_KNOCKDOWN 2
 # Native offensive + defensive assist count; shared by Overcharge's earned-energy
 # formula and Engineer's assist-scrap snapshot.
 #!define earnedAssists(player) (player.getStatistic(Stat.OFFENSIVE_ASSISTS) + player.getStatistic(Stat.DEFENSIVE_ASSISTS))
-#!define REVIVE_RADIUS 5
-#!define START_CAM_DISTANCE 6.5
-#!define START_TIME 300
-#!define SUPER_NANO_DURATION 20
-#!define POWERUP_JETPACK_FUEL_MAX 200
-#!define VOTING_END_TIME 30
-# Unique hero-skin budget shared by players and zombies.
-#!define UNIQUE_HERO_SKIN_CAP 11
 
 # Player-count thresholds for difficultySetting; zero is the pregame reset value.
 # Keep the raw player count for scaling: 4 uses Expert stats, 6 uses Legendary stats.
@@ -241,7 +189,6 @@ globalvar tmp3  # Fourth synchronous scratch value, including barricade impulse 
 #!define enhancementHitHealthBefore tmp2
 #!define enhancementHitDamage tmp2
 #!define enhancementHitVictim tmp3
-
 
 # Synchronous selectPullAimTarget contract: tmp1 inputs PullAimMode;
 # tmp0 returns the selected player (or Null), tmp2/tmp3 are clobbered.
