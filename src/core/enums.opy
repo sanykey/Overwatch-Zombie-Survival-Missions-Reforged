@@ -63,9 +63,8 @@ enum Augment:
     AMMO_PACK = 5,
     GRAPNEL_LAUNCHER = 6,
     LASER_BARRICADE = 7,
-    APOTHECARY = 8,
-    SCAVENGER = 9,
-    SURVIVALIST = 10,
+    SCAVENGER = 8,
+    SURVIVALIST = 9,
 
 # Objective IDs also index objectiveTypeVoteList and identify entries in objectiveTypeList.
 # Biomorphing and Survivor Rescue are only selectable through the mixed pool.
@@ -153,7 +152,6 @@ enum AugmentIcon:
     AMMO_PACK = "<TX C0000000004F73A>",
     GRAPNEL_LAUNCHER = iconString(Icon.DIZZY),
     LASER_BARRICADE = iconString(Icon.DIAMOND),
-    APOTHECARY = "<TX C0000000004F73B>",
     SCAVENGER = iconString(Icon.RECYCLE),
     SURVIVALIST = iconString(Icon.ASTERISK),
 

@@ -102,10 +102,6 @@ rule "PLAYER ULTIMATE DAMAGE RESIST":
     @Team 1
     @Condition eventPlayer.isUsingUltimate() == true
 
-    # Recharge on the same ultimate activation edge, before the lasting resist wait.
-    # D.Va/D.Mon recharge on ultimate damage in PLAYER DEALT DAMAGE instead.
-    if eventPlayer.augmentId == Augment.APOTHECARY and eventPlayer.getHero() not in [Hero.DVA, Hero.DMON]:
-        eventPlayer.augmentApothecaryReady = true
     applyDamageReceivedModifier()
     waitUntil(not eventPlayer.isUsingUltimate(), Math.INFINITY)
     applyDamageReceivedModifier()

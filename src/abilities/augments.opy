@@ -84,22 +84,15 @@ def useAugmentAirAction():
             useHighriseAirActionMacro()
 
 
-rule "CROUCH + JUMP (GRAPNEL LAUNCHER / APOTHECARY TELEPORT)":
+rule "CROUCH + JUMP (GRAPNEL LAUNCHER)":
     @Event eachPlayer
     @Team 1
     # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
-    @Condition uiPhaseAndId(eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER or eventPlayer.augmentId == Augment.APOTHECARY)
+    @Condition uiPhaseAndId(eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER)
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
     @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
-
-    # Check charge in Actions so recharging while holding cannot teleport.
-    # Only Apothecary owns the shared boolean readiness and saved pack position.
-    if eventPlayer.augmentId == Augment.APOTHECARY:
-        if eventPlayer.augmentApothecaryReady == true and (eventPlayer.augmentApothecaryPosition != null or healthpackPositionList != []):
-            useApothecaryAugmentTeleportMacro()
-        return
 
     # Cooldown is checked on the input edge; holding the chord through expiry
     # cannot auto-launch. A miss does not consume the cooldown.
