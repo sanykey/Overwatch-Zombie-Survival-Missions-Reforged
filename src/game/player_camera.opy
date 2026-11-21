@@ -15,7 +15,7 @@ def applyPlayerCamera():
 
 
 # Scoped aiming (Ana, Ashe, Widowmaker, Emre) needs the native zoom camera:
-# stop the 3D camera while secondary fire is held, then restore the current mode.
+# stop the 3P camera while secondary fire is held, then restore the current mode.
 rule "DISABLE PLAYER CAMERA WHILE AIMING":
     @Event eachPlayer
     @Team 1
@@ -43,4 +43,3 @@ rule "CYCLE PLAYER CAMERA":
     # Ongoing rule retriggers only after a condition becomes false and true again.
     eventPlayer.cameraMode = (eventPlayer.cameraMode + 1) % 2
     applyPlayerCamera()
-    smallMessage(eventPlayer, f"Camera: {['Normal', 'Precise'][eventPlayer.cameraMode]} | Switch: {CAMERA_HOTKEY}")
