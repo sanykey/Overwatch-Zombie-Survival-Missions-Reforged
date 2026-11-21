@@ -8,8 +8,6 @@ rule "[debug] Team 1 unkillable during gameplay":
     @Condition eventPlayer.isAlive() == true
 
     eventPlayer.setStatusEffect(null, Status.UNKILLABLE, Math.INFINITY)
-    waitUntil(isGameplayActive == false or eventPlayer.isDead() or eventPlayer.getTeam() != Team.1, Math.INFINITY)
-    eventPlayer.clearStatusEffect(Status.UNKILLABLE)
 
 
 rule "[debug] Automatically revive downed Team 1 players":

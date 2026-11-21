@@ -6,24 +6,24 @@
 #!define DEBUG_INPUT_TEST false
 #!define DEBUG_TEAM1_SURVIVAL false
 
+#!include "core/directives.opy"
+#!include "core/constants.opy"
+#!include "core/variables.opy"
+#!include "core/ui_workarounds.opy"
+#!include "core/compressed numbers.opy"
+#!include "settings/settings_defaults.opy"
+
 # Select exactly one map pool, then save the root main.opy to rebuild.
 #!include "settings/standard_map_pool.opy"
 ##!include "settings/ui_test_map_pool.opy"
 ##!include "settings/debug_map_pool.opy"
 
-#!include "core/directives.opy"
-#!include "core/constants.opy"
-#!include "settings/settings_defaults.opy"
 # Optional load-test settings. Keep off for the standard build.
 ##!include "settings/settings_perf_test.opy"
+
 #!include "settings/settings.opy"
-#!include "core/variables.opy"
-#!include "core/ui_workarounds.opy"
-#!include "core/compressed numbers.opy"
 #!include "debug/variables.opy"
 #!include "game/subroutines.opy"
-#!include "abilities/enhancement_charge_battery.opy"
-
 #!include "game/global_startup.opy"
 #!include "start_menu/global_start_menu.opy"
 #!include "start_menu/player_start_menu.opy"
@@ -43,6 +43,7 @@
 #!include "items/supply_drops.opy"
 #!include "items/power_ups.opy"
 #!include "abilities/enhancements.opy"
+#!include "abilities/enhancement_charge_battery.opy"
 #!include "abilities/augment_telekinesis.opy"
 #!include "abilities/augment_highrise.opy"
 #!include "abilities/augment_dash.opy"
@@ -51,5 +52,4 @@
 #!include "abilities/augments.opy"
 #!include "abilities/player_initialization.opy"
 #!include "abilities/player_events.opy"
-
 #!include "debug/debug.opy"
