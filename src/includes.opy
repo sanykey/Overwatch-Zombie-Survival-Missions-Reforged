@@ -1,10 +1,13 @@
+#!mainFile "../main.opy"
+
 #!define DEBUG false
 #!define DEBUG_ENABLE_INSPECTOR false
 #!define DEBUG_BOT_AI_LOGS false
 #!define DEBUG_BOT_AI_LOGS_ACTIVE (DEBUG_ENABLE_INSPECTOR and DEBUG_BOT_AI_LOGS)
-#!define SERVER_LOAD_UI true
+#!define SERVER_LOAD_UI false
 #!define DEBUG_INPUT_TEST false
 #!define DEBUG_TEAM1_SURVIVAL false
+#!define VERSION "2.0-d"
 
 #!include "core/directives.opy"
 #!include "core/constants.opy"

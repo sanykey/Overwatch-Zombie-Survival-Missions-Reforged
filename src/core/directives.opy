@@ -1,3 +1,5 @@
+#!mainFile "../../main.opy"
+
 #!extension playMoreEffects
 #!extension spawnMoreDummyBots
 
@@ -5,6 +7,7 @@
 #!optimizeForSize
 #!optimizeForSizeAggressive
 #!debugElementCount
+#!postCompileHook "src/tools/build_metadata.js"
 #!writeToOutputFile
 #!suppressWarnings w_cancel_contrary_motion w_closest_player w_dark_color w_ow2_rule_condition_chase w_start_rule_crash
 # w_wait_until is safe for the bare boolean conditions in these rules:

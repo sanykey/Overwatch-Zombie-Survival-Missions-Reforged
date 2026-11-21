@@ -53,7 +53,7 @@ macro STANDARD_WORKSHOP_SETTINGS = {
 
 settings {
     "main": {
-        "description": f"Fight against an endless horde of zombies while completing various objectives.\r\nGet to the extraction point and watch the map get nuked. Don't leave anyone behind!\r\n\r\nlast updated: {BUILD_DATE()}\r\nMod Creator: snky#21990\r\n\r\nBased on:\r\n[ZSM Mod: workshop.codes/786TW]\r\n[ZSM Creator: Kamenrider#11346]\r\n\r\n[Original Mod Code: MPJFR]\r\n[Original Mod Creator: Mazattack#1183]\r\n\r\nCommunity ZSM Discord: https://discord.gg/3BhYtNfwMj",
+        "description": f"Fight against an endless horde of zombies while completing various objectives.\r\nGet to the extraction point and watch the map get nuked. Don't leave anyone behind!\r\n\r\nver: {VERSION} ({BUILD_DATE()})\r\nMod Creator: snky#21990\r\n\r\nBased on:\r\n[ZSM Mod: workshop.codes/786TW]\r\n[ZSM Creator: Kamenrider#11346]\r\n\r\n[Original Mod Code: MPJFR]\r\n[Original Mod Creator: Mazattack#1183]\r\n\r\nCommunity ZSM Discord: https://discord.gg/3BhYtNfwMj",
         "modeName": "Zombie Survival Missions Re."
     },
     "lobby": {

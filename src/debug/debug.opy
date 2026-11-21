@@ -50,7 +50,8 @@ rule "[debug] Resource usage and server load":
 
 rule "[debug] init":
     @Condition DEBUG_ENABLE_INSPECTOR
-    logToInspector(f"Map: {__getCurrentMap__()}")
+    # The post-compile hook replaces these markers in the exported string.
+    logToInspector(f"Map: {__getCurrentMap__()}\nVersion: {VERSION} ({BUILD_DATE()})\nBuild: __ZSM_BUILD_HASH__\nElements: __ZSM_BUILD_ELEMENTS__")
 
 
 rule "[debug] Log match completion":
