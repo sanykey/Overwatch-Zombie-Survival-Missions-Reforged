@@ -76,12 +76,12 @@ rule "GLOBAL MENU INITIALIZATION":
     if isPregameSetup:
         startMenuSpacingAngle = 40
     #Start screen objective description
-    setObjectiveDescription(getAllPlayers(), "Voting ends in {0}s".format(ceil(getMatchTime() - VOTING_END_TIME)) if isVoting else "Select your hero", HudReeval.VISIBILITY_AND_STRING)
+    setObjectiveDescription(getAllPlayers(), "Voting ends in {0}s".format(ceil(getMatchTime() - PREGAME_PREPARATION_DURATION)) if isVoting else "Select your hero", HudReeval.VISIBILITY_AND_STRING)
 
 
 rule "EFFECTS/TEXTS":
     #Pre game objective description and match timer
-    hudSubtext(getAllPlayers(), "<fgD7D7D7FF>{0} | {1}s</fg>".format("Voting will end in {0}s".format(ceil(getMatchTime() - VOTING_END_TIME)) if isVoting else "Select your hero", ceil(getMatchTime())), HudPosition.TOP, -1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+    hudSubtext(getAllPlayers(), "<fgD7D7D7FF>{0} | {1}s</fg>".format("Voting will end in {0}s".format(ceil(getMatchTime() - PREGAME_PREPARATION_DURATION)) if isVoting else "Select your hero", ceil(getMatchTime())), HudPosition.TOP, -1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
     #Creator/Game Code Promo
     hudSubheader(getAllPlayers(), f"ZSM Reforged (45N5D)\nGame Mode Creator: snky#21990\nver: {VERSION} ({BUILD_DATE()})", HudPosition.RIGHT, 0, Color.BLUE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
     createInWorldText(getAllPlayers().filter(lambda player: player.pregameState < PregameState.READY), "For information on changes: workshop.codes/45N5D", startCamPos + directionFromAngles(horizontalAngleOfDirection(directionTowards(startCamPos, startPos)), 30), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.ORANGE, SpecVisibility.NEVER)
@@ -197,10 +197,10 @@ rule "EFFECTS/TEXTS":
 rule "END VOTING":
     @Condition isVoting == true
     @Condition isPregameSetup == true
-    @Condition getMatchTime() < VOTING_END_TIME
+    @Condition getMatchTime() < PREGAME_PREPARATION_DURATION
     @Condition getPlayers(Team.1).any(lambda player: player.pregameState > PregameState.SELECTING_HERO)
     
-    pregameCountdown = VOTING_END_TIME
+    pregameCountdown = PREGAME_PREPARATION_DURATION
     startRule(determineZombieMode)
     #Waits until votes have been counted
     waitUntil(not isVoting or not isPregameSetup, Math.INFINITY)

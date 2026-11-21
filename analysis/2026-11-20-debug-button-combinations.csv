@@ -1,15 +1,10 @@
 queue_position,rule_step,input,buttons,press_1_s,release_1_s,press_2_s,release_2_s
 1,0,Crouch (double tap),Crouch,1.000,1.064,1.128,1.192
 2,1,Jump (double tap),Jump,2.000,2.064,2.128,2.192
-3,2,Primary Fire (hold 0.50s),Primary Fire,3.000,3.500,,
-4,3,Melee (hold 0.56s),Melee,4.000,4.564,,
-5,4,Crouch + Interact (hold 0.56s),Crouch + Interact,5.000,5.564,,
-6,5,Interact (hold 0.50s),Interact,6.000,6.500,,
-7,6,Interact,Interact,7.000,7.064,,
-8,7,Crouch + Jump,Crouch + Jump,8.000,8.064,,
-9,8,Crouch,Crouch,9.000,9.064,,
-10,9,Secondary Fire (hold 0.50s),Secondary Fire,10.000,10.500,,
-11,10,Ability 1,Ability 1,11.000,11.064,,
-12,11,Ability 2,Ability 2,12.000,12.064,,
-13,12,Ultimate,Ultimate,13.000,13.064,,
-14,13,Reload (hold 0.50s),Reload,14.000,14.500,,
+3,2,Melee (hold 0.56s),Melee,3.000,3.564,,
+4,3,Crouch + Interact (hold 0.56s),Crouch + Interact,4.000,4.564,,
+5,4,Interact (hold 0.50s),Interact,5.000,5.500,,
+6,5,Interact,Interact,6.000,6.064,,
+7,6,Crouch + Jump,Crouch + Jump,7.000,7.064,,
+8,7,Jump (hold 0.50s),Jump,8.000,8.500,,
+9,8,Reload (hold 0.50s),Reload,9.000,9.500,,

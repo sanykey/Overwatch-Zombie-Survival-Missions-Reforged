@@ -4,8 +4,23 @@
 #!define MAP_POOL_CTF "enabled": false,
 
 #!define SETTINGS_TEAM1_SLOTS 7
-#!define SETTINGS_TEAM1_HEROES {"general": {"damageDealt%": 150}}
-#!define SETTINGS_ZOMBIE_COUNT 9
+#!define SETTINGS_TEAM1_HEROES {"general": {"damageDealt%": 50}}
+#!define SETTINGS_WORKSHOP PERF_WORKSHOP_SETTINGS
+#!define PREGAME_VOTING_DURATION 5
+#!define PREGAME_PREPARATION_DURATION 5
+
+# Leave Biomorphing as the only objective in the mixed pool.
+macro PERF_WORKSHOP_SETTINGS = {
+    "Bosses.": false,
+    "Chance to mutate percentage": 25,
+    "Kill Zone.": false,
+    "Number of Objectives": 5,
+    "Number of zombies": 10,
+    "Satellite Uplink.": false,
+    "Standoff.": false,
+    "Survivor Rescue.": false,
+    "Zombie Egg.": false
+}
 
 # Custom player enhancements and augments.
 #!define ZOMBIE_HYBRID_EXPLOSION_COOLDOWN 1

@@ -131,6 +131,7 @@
 #!define START_TIME 300
 #!define SUPER_NANO_DURATION 20
 #!define POWERUP_JETPACK_FUEL_MAX 200
-#!define VOTING_END_TIME 30
+#!define PREGAME_VOTING_DURATION 30
+#!define PREGAME_PREPARATION_DURATION 30
 # Unique hero-skin budget shared by players and zombies.
 #!define UNIQUE_HERO_SKIN_CAP 11

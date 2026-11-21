@@ -56,6 +56,12 @@ macro STANDARD_TEAM1_HERO_SETTINGS = {
     "widowmaker": {"damageDealt%": 95}
 }
 
+macro STANDARD_WORKSHOP_SETTINGS = {
+    "Chance to mutate percentage": 25,
+    "Number of Objectives": 5,
+    "Number of zombies": 7
+}
+
 settings {
     "main": {
         "description": f"Fight against an endless horde of zombies while completing various objectives.\r\nGet to the extraction point and watch the map get nuked. Don't leave anyone behind!\r\n\r\nver: {VERSION} ({BUILD_DATE()})\r\nMod Creator: snky#21990\r\n\r\nBased on:\r\n[ZSM Mod: workshop.codes/786TW]\r\n[ZSM Creator: Kamenrider#11346]\r\n\r\n[Original Mod Code: MPJFR]\r\n[Original Mod Creator: Mazattack#1183]\r\n\r\nCommunity ZSM Discord: https://discord.gg/3BhYtNfwMj",
@@ -164,9 +170,5 @@ settings {
             }
         }
     },
-    "workshop": {
-        "Chance to mutate percentage": 25,
-        "Number of Objectives": 5,
-        "Number of zombies": SETTINGS_ZOMBIE_COUNT
-    }
+    "workshop": SETTINGS_WORKSHOP
 }

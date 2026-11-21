@@ -19,8 +19,6 @@ macro DEBUG_BUTTON_CASES = [
     ["Crouch (double tap)", DEBUG_BUTTON_PULSE, true, Button.CROUCH],
     # Double Jump activates Dash or Highrise.
     ["Jump (double tap)", DEBUG_BUTTON_PULSE, true, Button.JUMP],
-    # Fire after the jump for Highrise and exercise damage, crit and healing passives.
-    [f"Primary Fire (hold {DEBUG_BUTTON_HOLD}s)", DEBUG_BUTTON_HOLD, false, Button.PRIMARY_FIRE],
     # Melee covers Zombie Hybrid, Bulking Season, Wrestler pull, Engineer turret
     # and Charge Battery placement. Keep the button down past the 0.5s windup.
     [f"Melee (hold {DEBUG_BUTTON_PLACEMENT_HOLD}s)", DEBUG_BUTTON_PLACEMENT_HOLD, false, Button.MELEE],
@@ -32,15 +30,8 @@ macro DEBUG_BUTTON_CASES = [
     ["Interact", DEBUG_BUTTON_PULSE, false, Button.INTERACT],
     # Crouch + Jump activates Telekinesis push or Grapnel Launcher.
     ["Crouch + Jump", DEBUG_BUTTON_PULSE, false, Button.CROUCH, Button.JUMP],
-    # Tap Crouch on its own to attach or detach as Hitchhiker.
-    ["Crouch", DEBUG_BUTTON_PULSE, false, Button.CROUCH],
-    # Fire or heal with the secondary weapon and exercise Born to Battle's secondary slot.
-    [f"Secondary Fire (hold {DEBUG_BUTTON_HOLD}s)", DEBUG_BUTTON_HOLD, false, Button.SECONDARY_FIRE],
-    # Exercise both native ability slots for Born to Battle.
-    ["Ability 1", DEBUG_BUTTON_PULSE, false, Button.ABILITY_1],
-    ["Ability 2", DEBUG_BUTTON_PULSE, false, Button.ABILITY_2],
-    # Use Ultimate for Charge Battery's cooldown reset.
-    ["Ultimate", DEBUG_BUTTON_PULSE, false, Button.ULTIMATE],
+    # Hold Jump to activate a fueled Jetpack while airborne.
+    [f"Jump (hold {DEBUG_BUTTON_HOLD}s)", DEBUG_BUTTON_HOLD, false, Button.JUMP],
     # Reload exercises Ammo Pack. The hold also lets Scavenger drop its backpack.
     [f"Reload (hold {DEBUG_BUTTON_HOLD}s)", DEBUG_BUTTON_HOLD, false, Button.RELOAD],
 ]
@@ -51,7 +42,6 @@ globalvar debugButtonCase
 
 rule "[debug] init":
     @Condition DEBUG_ENABLE_INSPECTOR
-
     logToInspector(f"Map: {__getCurrentMap__()}")
 
 rule "[debug] snky buffs":
@@ -65,6 +55,7 @@ rule "[debug] snky buffs":
     eventPlayer.setDamageDealt(1000)
     eventPlayer.setHealingDealt(10000)
     eventPlayer.setMaxHealth(10000)
+    eventPlayer.invisibilityCount++
 
     # Refuel during gameplay only: menu HUD cleanup runs before gameplay begins.
     # debug(wrestlerPullTarget)
@@ -146,7 +137,7 @@ rule "[debug] Resource usage and server load":
     if DEBUG_ENABLE_INSPECTOR:
         logToInspector(f"server load hud init (isPregameSetup: {isPregameSetup}, isGameplayActive: {isGameplayActive})")
 
-    hudSubheader(getAllPlayers().filter(lambda player: not player.isDummy() and "{0}".format(player) == "snky"), "Texts: {0}/128 | Effects: {1}/256\nServer load: {2}{3}".format(getNumberOfTextIds(), getNumberOfEntityIds(), "{0} | Avg (2s): {1} | Peak (2s): {2}".format(getServerLoad(), getAverageServerLoad(), getPeakServerLoad()), f"\nMap: {__getCurrentMap__()}\nMap grid: {len(mapGridList)}/900"), HudPosition.RIGHT, -10, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudSubheader(getAllPlayers().filter(lambda player: not player.isDummy() and "{0}".format(player) == "snky"), "Texts: {0}/128 | Effects: {1}/256\nServer load: {2}{3}".format(getNumberOfTextIds(), getNumberOfEntityIds(), "{0} | Avg (2s): {1} | Peak (2s): {2}".format(getServerLoad(), getAverageServerLoad(), getPeakServerLoad()), f"\nMap: {__getCurrentMap__()} | grid: {len(mapGridList)}/900"), HudPosition.RIGHT, -10, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
     debugHud = getLastCreatedText()
     # evalOnce captures the phase at HUD creation; the other operands keep updating.
     waitUntil(isPregameSetup != evalOnce(isPregameSetup) or isGameplayActive != evalOnce(isGameplayActive), Math.INFINITY)
@@ -158,7 +149,7 @@ rule "[debug] Log sustained server load":
     @Condition DEBUG_ENABLE_INSPECTOR
     @Condition getAverageServerLoad() >= 255
 
-    logToInspector("[server load] Avg (2s) reached 255")
+    logToInspector(f"[server load] Avg (2s) reached 255\nobjective={currentObjectiveType}\nzombies={getNumberOfPlayers(Team.2)}\nqueued={len(botSpawnTimeList)}\neffects={getNumberOfEntityIds()}\ntexts={getNumberOfTextIds()}")
     waitUntil(getAverageServerLoad() < 255, Math.INFINITY)
     logToInspector(f"[server load] Avg (2s) recovered to {getAverageServerLoad()}")
 

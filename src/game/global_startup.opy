@@ -60,6 +60,7 @@ macro botHeroRandomizationMacro():
         botSpawnSelectedHero = botHeroList[botSpawnHeroIndex]
     else:
         botSpawnSelectedHero = sorted(botHeroList, lambda _, i: botSpawnRateList[i]).last()
+    # The respawn path can run every 0.25s. Trace it only during high peak load.
     createDummy(botSpawnSelectedHero, Team.2, -1, dummyHoldingPositionConst)
 
 
@@ -158,7 +159,7 @@ rule "SKIP ASSEMBLING HEROES":
         wait(0.25)
     setMatchTime(3599)
     waitUntil(getPlayers(Team.1).any(lambda player: player.hasSpawned()) and mapGridList != [], Math.INFINITY)
-    setMatchTime(60)
+    setMatchTime(PREGAME_VOTING_DURATION + PREGAME_PREPARATION_DURATION)
     wait()
     pregameCountdown = getMatchTime()
     chaseAtRate(pregameCountdown, 0, 1, ChaseRateReeval.NONE)
@@ -330,3 +331,5 @@ def generateMapGrid():
         wait()
     #0: Consecutive, 1: Minimum
     objectiveSpacingList = [min(60, len(mapGridList) / 11), min(30, len(mapGridList) / 20)]
+    if DEBUG_ENABLE_INSPECTOR:
+        logToInspector(f"[map grid] Completed points={len(mapGridList)}")

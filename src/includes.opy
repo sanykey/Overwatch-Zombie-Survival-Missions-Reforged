@@ -1,7 +1,7 @@
 #!define DEBUG false
 #!define DEBUG_ENABLE_INSPECTOR false
 #!define DEBUG_SERVER_LOAD_UI false
-#!define VERSION "1.0.0"
+#!define VERSION "1.0-d"
 
 #!include "settings/settings_defaults.opy"
 #!include "core/directives.opy"
