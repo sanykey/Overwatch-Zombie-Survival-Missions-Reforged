@@ -156,7 +156,7 @@ rule "BOT DIES":
     # Environmental deaths do not grant normal damage-event lifesteal.
     # Heal the credited survivor before any death-handler waits.
     if eventWasEnvironment and attacker.getTeam() == Team.1:
-        if attacker.augmentId == Augment.LEECH:
+        if attacker.augmentId == Augment.SURVIVALIST:
             heal(attacker, attacker, eventDamage * 0.15)
     # Engineer/Scavenger collection: synchronous, before any death-handler waits.
     collectNearbyZombieLoot()

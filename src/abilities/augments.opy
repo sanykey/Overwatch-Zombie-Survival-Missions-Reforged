@@ -25,7 +25,7 @@ rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)":
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
 
-    eventPlayer.augmentId = (eventPlayer.augmentId + (Augment.LEECH if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else 1)) % (Augment.LEECH + 1)
+    eventPlayer.augmentId = (eventPlayer.augmentId + (Augment.SURVIVALIST if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else 1)) % (Augment.SURVIVALIST + 1)
 
 
 rule "CROUCH + INTERACT (LASER BARRICADE)":
@@ -143,7 +143,7 @@ rule "CROUCH + JUMP (GRAPNEL LAUNCHER / APOTHECARY TELEPORT)":
                     eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.STUNNED, 0.5)
                 else:
                     eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 3)
-                playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer.augmentGrapnelTarget.getPosition() + Vector.UP, LONG_REACH_IMPACT_SIZE)
+                playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer.augmentGrapnelTarget.getPosition() + Vector.UP, AUGMENT_IMPACT_SIZE)
             break
         # Synchronous scratch: correct current velocity to the desired velocity,
         # rather than stacking 40-speed impulses every frame. Consumed before wait.

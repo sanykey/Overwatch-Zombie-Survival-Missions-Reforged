@@ -160,11 +160,11 @@ const numbers = [
     len: "NL_DAMAGE_DEALT_EXPERT_LEN",
     list: [90, 125, 50, 50, 130, 40, 50, 50, 50, 150, 1, 75, 75, 90, 75, 85, 100, 125, 100, 100, 100, 75],
   },
-  { // Long Reach: [native range, damage, windup, recovery], in LONG_REACH_MELEE_WEAPON_HEROES order.
+  { // Telekinesis: [native range, damage, windup, recovery], in TELEKINESIS_MELEE_WEAPON_HEROES order.
     // Append new groups to preserve all earlier offsets. Genji's recovery is a
     // placeholder: compressed() rounds to 3 decimals, so its exact formula stays in OverPy.
-    offset: "NL_LONG_REACH_PROFILE_OFFSET",
-    len: "NL_LONG_REACH_PROFILE_LEN",
+    offset: "NL_TELEKINESIS_PROFILE_OFFSET",
+    len: "NL_TELEKINESIS_PROFILE_LEN",
     list: [
       4, 75, 0.4, 0.56, // Reinhardt: original damage 100; 75% = 75
       6, 33.75, 0.2, 0.4, // Brigitte: original damage 45; 75% = 33.75

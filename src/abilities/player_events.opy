@@ -5,7 +5,7 @@ def applyHitEnhancements():
 
     # Shared synchronous hit inputs: tmp3 is the victim, tmp2 is actual damage.
     # Native callers supply eventDamage; the scripted macro supplies health lost.
-    # No waits/async calls; tmp0/tmp1 (Long Reach targets/damage) survive.
+    # No waits/async calls; tmp0/tmp1 (Telekinesis targets/damage) survive.
     # Only Bolt consumes tmp2/tmp3 for chain damage/targets. Secondary Damage is
     # direct, without Event Ability, and cannot reenter this handler.
     if enhancementHitDamage <= 0:
@@ -154,7 +154,7 @@ rule "PLAYER DEALT DAMAGE":
     # Augments: Leech includes damage from the hero, primary enhancement and
     # scripted powerups. The HIGHRISE airborne bonus is a Set Damage Dealt
     # multiplier, so it stacks with every source already applied above.
-    if eventPlayer.augmentId == Augment.LEECH:
+    if eventPlayer.augmentId == Augment.SURVIVALIST:
         # Include damage from the hero, primary enhancement and scripted powerups.
         heal(eventPlayer, eventPlayer, eventDamage * 0.15)
     elif eventPlayer.augmentId == Augment.APOTHECARY and eventAbility == Button.ULTIMATE and eventPlayer.getHero() in [Hero.DVA, Hero.DMON]:

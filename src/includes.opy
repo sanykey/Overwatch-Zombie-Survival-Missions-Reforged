@@ -34,7 +34,7 @@
 #!include "items/supply_drops.opy"
 #!include "items/power_ups.opy"
 #!include "abilities/enhancements.opy"
-#!include "abilities/augment_long_reach.opy"
+#!include "abilities/augment_telekinesis.opy"
 #!include "abilities/augment_highrise.opy"
 #!include "abilities/augment_dash.opy"
 #!include "abilities/augment_apothecary.opy"

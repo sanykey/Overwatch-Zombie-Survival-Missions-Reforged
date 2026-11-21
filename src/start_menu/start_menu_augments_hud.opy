@@ -9,7 +9,7 @@ macro createStartMenuAugmentHud():
             f"+{AUGMENT_KEVLAR_ARMOR} armor, {AUGMENT_KEVLAR_KNOCKBACK_RESIST}% knockback resistance. {AUGMENT_KEVLAR_RANGED_DMG_RESIST}% resistance to ranged and ability dmg.",
             f"Dash in your movement direction with {DASH_PHASE_DURATION}s invulnerability. Stores {DASH_MAX_CHARGES} charges; restores one every {DASH_COOLDOWN}s.",
             f"Launch upward and gain +{HIGHRISE_DAMAGE_BONUS}% dmg until landing/{HIGHRISE_DAMAGE_DURATION}s +{HIGHRISE_DAMAGE_GRACE_PERIOD}s. cd: 16s.",
-            f"Triple melee reach; weapon hits at extended range deal 75% dmg. Push zombies within {LONG_REACH_MELEE_PUSH_RADIUS}m around you. Push cd: {LONG_REACH_MELEE_PUSH_COOLDOWN}s.",
+            f"Triple melee reach; weapon hits at extended range deal 75% dmg. Push zombies within {TELEKINESIS_MELEE_PUSH_RADIUS}m around you. Push cd: {TELEKINESIS_MELEE_PUSH_COOLDOWN}s.",
             "Double magazine capacity. Fully reloading restores the extra ammo.",
             f"Grapple to allies or zombies {AUGMENT_GRAPNEL_MIN_RANGE}–{AUGMENT_GRAPNEL_RANGE}m away. 35 dmg; stun grounded zombies or knock airborne ones down for 3s. cd: 16s.",
             f"Deploy a wall that blocks zombies. Hold Crouch + Interact to aim; release Interact to place. cd: {LASER_BARRICADE_AUGMENT_COOLDOWN}s.",
