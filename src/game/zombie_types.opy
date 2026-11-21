@@ -433,9 +433,10 @@ rule "REIGNITED USES ULTIMATE NEAR PLAYER":
     @Condition eventPlayer.isUsingUltimate() == true
     
     if eventPlayer.isOnGround() and getLivingPlayers(Team.1).any(lambda player: distance(eventPlayer, player) < 12):
-        eventPlayer.botIsReigniteActive = true
+        # Snapshot the emergence points once for every zombie using this ultimate window.
+        eventPlayer.botReigniteSpawnPoints = mapGridList.filter(lambda point: distance(eventPlayer, point) > 2 and distance(eventPlayer, point) < 7)
     wait(0.25)
-    eventPlayer.botIsReigniteActive = false
+    eventPlayer.botReigniteSpawnPoints = []
     waitUntil(not eventPlayer.isUsingUltimate(), Math.INFINITY)
     eventPlayer.addHealthPool(Health.ARMOR, 100, false, false)
 
@@ -446,20 +447,19 @@ rule "ZOMBIES SPAWN AT REIGNITED":
     @Condition (eventPlayer.isUsingUltimate() and eventPlayer.getHero() == Hero.ANRAN) != true
     @Condition eventPlayer in bossStateList != true
     @Condition eventPlayer in miniBossList != true
-    @Condition getPlayersOnHero(Hero.ANRAN, Team.2).any(lambda player: player.botIsReigniteActive)
+    @Condition getPlayersOnHero(Hero.ANRAN, Team.2).any(lambda player: player.botReigniteSpawnPoints != false)
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.botIsCrowdControlled != true
     @Condition eventPlayer.hasStatus(Status.HACKED) != true
     @Condition eventPlayer.botReigniteDestination == false
     
-    #Scaled
+    # Each zombie rolls independently from the first Anran's nonempty snapshot.
+    eventPlayer.botReigniteDestination = random.choice(getPlayersOnHero(Hero.ANRAN, Team.2).filter(lambda player: player.botReigniteSpawnPoints != false)[0].botReigniteSpawnPoints)
+    if eventPlayer.botReigniteDestination == null:
+        return
     playEffect(getAllPlayers(), DynamicEffect.BAD_PICKUP_EFFECT, Color.ORANGE, eventPlayer, 0.5)
     eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 2)
     eventPlayer.setStatusEffect(null, Status.BURNING, 2.3)
-    # reigniteSpawnSource: active Anran used only by the immediate emergence-destination search.
-    #!define reigniteSpawnSource tmp0
-    reigniteSpawnSource = getPlayersOnHero(Hero.ANRAN, Team.2).filter(lambda player: player.botIsReigniteActive)[0]
-    eventPlayer.botReigniteDestination = random.choice(mapGridList.filter(lambda x: distance(reigniteSpawnSource, x) > 2 and distance(reigniteSpawnSource, x) < 7))
     eventPlayer.botReigniteRisePosition = eventPlayer.botReigniteDestination - 2 * Vector.UP
     eventPlayer.startForcingPosition(eventPlayer.botReigniteRisePosition)
     chaseOverTime(eventPlayer.botReigniteRisePosition, eventPlayer.botReigniteDestination, 1.5)

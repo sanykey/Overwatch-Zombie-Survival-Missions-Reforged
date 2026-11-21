@@ -440,8 +440,8 @@ playervar actorAbilitySlot2  # Existing zombie secondary state or temporary Resc
 #!define botAuxiliaryState actorAbilitySlot2
 # Temporary follower-selection message above the Rescue NPC.
 #!define rescueFollowMessage actorAbilitySlot2
-# Anran resurrection pulse is active; spawning zombies query this flag.
-#!define botIsReigniteActive actorAbilitySlot2
+# Anran's emergence points for the 0.25 s resurrection pulse; other zombies read this list.
+#!define botReigniteSpawnPoints actorAbilitySlot2
 # Hazard boss melee sequence is in progress.
 #!define botIsEnsnarerMeleeActive actorAbilitySlot2
 
