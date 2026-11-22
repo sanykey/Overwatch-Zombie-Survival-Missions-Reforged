@@ -7,27 +7,26 @@ subroutine saveAlivePlayerState
 
 
 macro playerObjectiveEntityManagementMacro():
-    if eventPlayer.objectiveTypeSnapshot != objectiveValue or len(objectivePositionList) == 1:
-        eventPlayer.objectiveTypeSnapshot = currentObjectiveType
+    eventPlayer.objectiveTypeSnapshot = currentObjectiveType
+    if eventPlayer.getTeam() == Team.1:
+        #Destroy all current objective effects and texts
+        for eventPlayer.visualCleanupIndex in range(len(eventPlayer.playerObjectiveIconIdList)):
+            destroyIcon(eventPlayer.playerObjectiveIconIdList[eventPlayer.visualCleanupIndex])
+            wait()
+        eventPlayer.playerObjectiveIconIdList = []
+    else:
+        #Destroy all current objective effects and texts
+        for eventPlayer.visualCleanupIndex in range(len(eventPlayer.botResourceIconIdList)):
+            destroyIcon(eventPlayer.botResourceIconIdList[eventPlayer.visualCleanupIndex])
+            wait()
+        eventPlayer.botResourceIconIdList = []
+    if eventPlayer.objectiveTypeSnapshot == ObjectiveType.BIOMORPHING:
+        #Player carrying resources icon
+        createIcon(getAllPlayers().filter(lambda player: eventPlayer.isAlive() and player != eventPlayer and eventPlayer.biomorphingResourceAmount > 0), eventPlayer, Icon.RECYCLE, IconReeval.VISIBILITY_POSITION_AND_COLOR, biomorphingResourceColorList[eventPlayer.biomorphingResourceType] if eventPlayer.getTeam() == Team.1 else Color.WHITE)
         if eventPlayer.getTeam() == Team.1:
-            #Destroy all current objective effects and texts
-            for eventPlayer.visualCleanupIndex in range(len(eventPlayer.playerObjectiveIconIdList)):
-                destroyIcon(eventPlayer.playerObjectiveIconIdList[eventPlayer.visualCleanupIndex])
-                wait()
-            eventPlayer.playerObjectiveIconIdList = []
+            eventPlayer.playerObjectiveIconIdList.append(getLastCreatedEntity())
         else:
-            #Destroy all current objective effects and texts
-            for eventPlayer.visualCleanupIndex in range(len(eventPlayer.botResourceIconIdList)):
-                destroyIcon(eventPlayer.botResourceIconIdList[eventPlayer.visualCleanupIndex])
-                wait()
-            eventPlayer.botResourceIconIdList = []
-        if eventPlayer.objectiveTypeSnapshot == ObjectiveType.BIOMORPHING:
-            #Player carrying resources icon
-            createIcon(getAllPlayers().filter(lambda player: eventPlayer.isAlive() and player != eventPlayer and eventPlayer.biomorphingResourceAmount > 0), eventPlayer, Icon.RECYCLE, IconReeval.VISIBILITY_POSITION_AND_COLOR, biomorphingResourceColorList[eventPlayer.biomorphingResourceType] if eventPlayer.getTeam() == Team.1 else Color.WHITE)
-            if eventPlayer.getTeam() == Team.1:
-                eventPlayer.playerObjectiveIconIdList.append(getLastCreatedEntity())
-            else:
-                eventPlayer.botResourceIconIdList.append(getLastCreatedEntity())
+            eventPlayer.botResourceIconIdList.append(getLastCreatedEntity())
 
 
 rule "PLAYER INITIALIZATION":
