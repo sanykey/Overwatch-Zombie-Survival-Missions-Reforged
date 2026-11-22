@@ -35,11 +35,10 @@ def activateCloakingDevice():
 def cloakingDevice():
     @Name "cloakingDevice (60-69)"
 
-    while getTotalTimeElapsed() < eventPlayer.powerUpCloakEndsAt and eventPlayer.isAlive():
-        if canCancelCloakingDevice():
-            smallMessage(eventPlayer, "Cloaking deactivated")
-            break
-        waitUntil(canCancelCloakingDevice(), 1)
+    # Refreshes update the deadline read by this wait and by the cancel delay.
+    waitUntil(getTotalTimeElapsed() >= eventPlayer.powerUpCloakEndsAt or eventPlayer.isDead() or canCancelCloakingDevice(), Math.INFINITY)
+    if getTotalTimeElapsed() < eventPlayer.powerUpCloakEndsAt and eventPlayer.isAlive():
+        smallMessage(eventPlayer, "Cloaking deactivated")
     eventPlayer.invisibilityCount--
     destroyEffect(eventPlayer.powerUpCloakingDeviceSphereId)
     destroyHudText(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.CLOAKING_DEVICE_HUD])
