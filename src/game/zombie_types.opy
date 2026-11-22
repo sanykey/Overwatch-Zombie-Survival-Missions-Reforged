@@ -1294,8 +1294,11 @@ rule "SMOLDER SUPER SLAM":
     
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer.getPosition(), 7.5 * eventPlayer.sizeScale)
     playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, eventPlayer.getPosition(), 100)
-    eventPlayer.botSpecialTargetList = playerTargetList.concat(getLivingPlayers(Team.2)).exclude(eventPlayer).filter(lambda x: not x.hasStatus(Status.PHASED_OUT) and distance(eventPlayer, x) < 7.5 * eventPlayer.sizeScale and isInLoS(eventPlayer.getPosition() + losOffsetConst, x.getPosition() + losOffsetConst))
-    (eventPlayer.botSpecialTargetList.filter(lambda x: distance(eventPlayer, x) < 5 * eventPlayer.sizeScale and isInLoS(eventPlayer.getPosition() + losOffsetConst, x.getPosition() + losOffsetConst, BarrierLos.BLOCKED_BY_ENEMY_BARRIERS))).setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 0.35)
+    # Share Winston's LoS origin across both synchronous target filters.
+    #!define smolderShockwaveLoSOrigin tmp1
+    smolderShockwaveLoSOrigin = eventPlayer.getPosition() + losOffsetConst
+    eventPlayer.botSpecialTargetList = playerTargetList.concat(getLivingPlayers(Team.2)).exclude(eventPlayer).filter(lambda x: not x.hasStatus(Status.PHASED_OUT) and distance(eventPlayer, x) < 7.5 * eventPlayer.sizeScale and isInLoS(smolderShockwaveLoSOrigin, x.getPosition() + losOffsetConst))
+    (eventPlayer.botSpecialTargetList.filter(lambda x: distance(eventPlayer, x) < 5 * eventPlayer.sizeScale and isInLoS(smolderShockwaveLoSOrigin, x.getPosition() + losOffsetConst, BarrierLos.BLOCKED_BY_ENEMY_BARRIERS))).setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 0.35)
     # smolderShockwaveTargetIndex: shockwave target index, to apply distance-scaled knockback to each affected player.
     #!define smolderShockwaveTargetIndex tmp0
     for smolderShockwaveTargetIndex in range(len(eventPlayer.botSpecialTargetList)):
