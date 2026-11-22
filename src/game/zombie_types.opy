@@ -437,7 +437,10 @@ rule "REIGNITED USES ULTIMATE NEAR PLAYER":
     
     if eventPlayer.isOnGround() and getLivingPlayers(Team.1).any(lambda player: distance(eventPlayer, player) < 12):
         # Snapshot the emergence points once for every zombie using this ultimate window.
-        eventPlayer.botReigniteSpawnPoints = mapGridList.filter(lambda point: distance(eventPlayer, point) > 2 and distance(eventPlayer, point) < 7)
+        # The open 2–7 m band has midpoint 4.5 m and half-width 2.5 m.
+        eventPlayer.botReigniteSpawnPoints = mapGridList.filter(
+            lambda point: abs(distance(eventPlayer, point) - 4.5) < 2.5
+        )
     wait(0.25)
     eventPlayer.botReigniteSpawnPoints = []
     waitUntil(not eventPlayer.isUsingUltimate(), Math.INFINITY)
