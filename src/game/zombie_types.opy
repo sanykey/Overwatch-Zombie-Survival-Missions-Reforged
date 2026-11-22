@@ -865,7 +865,10 @@ rule "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES":
         eventPlayer.botIsThrottleOverridden = false
         eventPlayer.botIsFacingOverridden = false
         return
-    if isInLoS(eventPlayer.getPosition(), eventPlayer.getEyePosition() + worldVector(vect(0, 11, 5), eventPlayer, Transform.ROTATION)) and isInLoS(eventPlayer.botLastTarget.getEyePosition(), eventPlayer.getEyePosition() + worldVector(vect(0, 11, 5), eventPlayer, Transform.ROTATION)):
+    # Both sight checks use the same point before the next wait.
+    #!define blasterLaunchPoint tmp0
+    blasterLaunchPoint = eventPlayer.getEyePosition() + worldVector(vect(0, 11, 5), eventPlayer, Transform.ROTATION)
+    if isInLoS(eventPlayer.getPosition(), blasterLaunchPoint) and isInLoS(eventPlayer.botLastTarget.getEyePosition(), blasterLaunchPoint):
         waitUntil(not eventPlayer.botIsCrowdControlled, Math.INFINITY)
         eventPlayer.startThrottleInDirection(Vector.FORWARD, 1, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
         eventPlayer.forceButtonPress(Button.ABILITY_1)
