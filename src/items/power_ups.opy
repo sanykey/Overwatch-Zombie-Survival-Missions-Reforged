@@ -195,53 +195,49 @@ rule "EFFECT/TEXT (PERMANENT)":
     # Show the Interact prompt on the aimed ground powerup.
     createInWorldText(localPlayer if supplyPowerUpPositionList.any(lambda x: distance(x, localPlayer.getEyePosition() + localPlayer.getFacingDirection() * distance(localPlayer.getEyePosition(), x)) < 0.5 and distance(localPlayer, x) <= 6) else null, "[{0}]".format(inputBindingString(Button.INTERACT)), offsetUpHalfConst + ((sorted(supplyPowerUpPositionList.filter(lambda x: distance(x, localPlayer.getEyePosition() + localPlayer.getFacingDirection() * distance(localPlayer.getEyePosition(), x)) < 0.5 and distance(localPlayer, x) <= 6), lambda x: angleBetweenVectors(localPlayer.getFacingDirection(), directionTowards(localPlayer.getEyePosition(), x))))[0]), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.GREEN)
     
-    # One row per item ID. Capture the index and the resolved color.
-    # Capture each row's color directly from the immutable shared item palette.
-    # powerUpHudItemIndex: zero-based item index, to choose the row's visibility, name, instructions and color.
-    #!define powerUpHudItemIndex tmp0
-    for powerUpHudItemIndex in range(PowerUpItem.STUN):
-        hudText(
-            getLivingPlayers(Team.1).filter(lambda player: player.powerUpItemId == evalOnce(powerUpHudItemIndex) + 1),
+    # One HUD for all viewers. Text and colors follow each viewer's active item.
+    hudText(
+        localPlayer if localPlayer.getTeam() == Team.1 and localPlayer.isAlive() and localPlayer.powerUpItemId >= PowerUpItem.CURE and localPlayer.powerUpItemId <= PowerUpItem.STUN else null,
+        [
+            "CURE",
+            "REVIVE",
+            "Force Field",
+            "No Cooldowns",
+            "Air Strike",
+            "Beacon of Healing",
+            "Sentry Turret",
+            "Cloaking Device",
+            "Super Nano",
+            "Jetpack",
+            "Ultimate Charger",
+            "Stun"
+        ][localPlayer.powerUpItemId - 1],
+        "Hold [{0}] to drop your power up".format(inputBindingString(Button.RELOAD)),
+        "{0} [{1}] {2}".format(
+            "Look at a teammate and hold" if localPlayer.powerUpItemId == PowerUpItem.REVIVE else "Hold",
+            inputBindingString(Button.INTERACT),
             [
-                "CURE",
-                "REVIVE",
-                "Force Field",
-                "No Cooldowns",
-                "Air Strike",
-                "Beacon of Healing",
-                "Sentry Turret",
-                "Cloaking Device",
-                "Super Nano",
-                "Jetpack",
-                "Ultimate Charger",
-                "Stun"
-            ][evalOnce(powerUpHudItemIndex)],
-            "Hold [{0}] to drop your power up".format(inputBindingString(Button.RELOAD)),
-            "{0} [{1}] {2}".format(
-                "Look at a teammate and hold" if evalOnce(powerUpHudItemIndex) == PowerUpItem.REVIVE - 1 else "Hold",
-                inputBindingString(Button.INTERACT),
-                [
-                    "to stop dmg over time and cure infection or vaccinate",
-                    "to revive them",
-                    "to place a force field",
-                    "to get fast cooldowns",
-                    "to call in an air strike",
-                    "to place a healing beacon and gain bonus healing",
-                    "to place a sentry turret",
-                    "to become invisible to enemies",
-                    "to increase your dmg and speed",
-                    "to refuel your jetpack; hold Jump in the air to fly",
-                    "to rapidly charge your ultimate",
-                    "to stun nearby enemies"
-                ][evalOnce(powerUpHudItemIndex)]
-            ),
-            HudPosition.ACTUALLY_LEFT,
-            100,
-            evalOnce(powerUpColorListConst[powerUpHudItemIndex]),
-            evalOnce(powerUpColorListConst[powerUpHudItemIndex]),
-            evalOnce(powerUpColorListConst[powerUpHudItemIndex]),
-            HudReeval.VISIBILITY_AND_STRING
-        )
+                "to stop dmg over time and cure infection or vaccinate",
+                "to revive them",
+                "to place a force field",
+                "to get fast cooldowns",
+                "to call in an air strike",
+                "to place a healing beacon and gain bonus healing",
+                "to place a sentry turret",
+                "to become invisible to enemies",
+                "to increase your dmg and speed",
+                "to refuel your jetpack; hold Jump in the air to fly",
+                "to rapidly charge your ultimate",
+                "to stun nearby enemies"
+            ][localPlayer.powerUpItemId - 1]
+        ),
+        HudPosition.ACTUALLY_LEFT,
+        100,
+        powerUpColorListConst[localPlayer.powerUpItemId - 1],
+        powerUpColorListConst[localPlayer.powerUpItemId - 1],
+        powerUpColorListConst[localPlayer.powerUpItemId - 1],
+        HudReeval.VISIBILITY_STRING_AND_COLOR
+    )
 
 
 # Workshop workaround: separate gameplay/alive conditions here can make newer
