@@ -76,10 +76,13 @@ rule "SET UP TERMINAL POSITIONS":
     @Condition (len(satelliteTerminalProgressList) != len(satelliteTerminalPositionList) or satelliteTerminalPositionList.any(lambda x: x.x == null)) == true
     
     wait(0.016, Wait.ABORT_WHEN_FALSE)
+    # Cache distances by grid index so both strict bounds use the original distance.
+    #!define satelliteTerminalGridDistances tmp1
+    satelliteTerminalGridDistances = mapGridList.map(lambda point: distance(point, currentObjectivePosition))
     # satelliteTerminalCandidatePositionList: grid points 10-50m from the objective, to choose a terminal location with sufficient spacing.
     #!define satelliteTerminalCandidatePositionList tmp0
-    satelliteTerminalCandidatePositionList = mapGridList.filter(lambda point: (
-        point.x != null and distance(point, currentObjectivePosition) > 10 and distance(point, currentObjectivePosition) < 50
+    satelliteTerminalCandidatePositionList = mapGridList.filter(lambda point, i: (
+        point.x != null and satelliteTerminalGridDistances[i] > 10 and satelliteTerminalGridDistances[i] < 50
     ))
     # Spacing retries cannot help if the base pool cannot fill all terminal slots.
     if len(satelliteTerminalCandidatePositionList) < len(satelliteTerminalProgressList):
