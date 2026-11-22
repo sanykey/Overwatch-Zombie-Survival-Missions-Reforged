@@ -19,12 +19,12 @@ macro initializeOverchargeMacro():
     eventPlayer.enhancementCapacitorStatsSnapshot = overchargeEarnedEnergyTotal(eventPlayer)
 
 
-macro applyOverchargeHitMacro():
-    if eventPlayer.enhancementCapacitorCharge > 0 and enhancementHitVictim != eventPlayer:
+macro applyOverchargeHitMacro(hitTarget):
+    if eventPlayer.enhancementCapacitorCharge > 0:
         if eventPlayer.enhancementCapacitorDeadline == 0:
             eventPlayer.enhancementCapacitorDeadline = getTotalTimeElapsed() + 0.3
         if getTotalTimeElapsed() < eventPlayer.enhancementCapacitorDeadline:
-            damage(enhancementHitVictim, eventPlayer, eventPlayer.enhancementCapacitorCharge)
+            damage(hitTarget, eventPlayer, eventPlayer.enhancementCapacitorCharge)
 
 
 macro creditOverchargeHealthPackMacro():

@@ -5,11 +5,11 @@ macro initializePyrotechnicMacro():
     eventPlayer.enhancementPyroHitList = []
 
 
-macro applyPyrotechnicHitMacro():
-    if enhancementHitVictim != eventPlayer and distance(eventPlayer, enhancementHitVictim) < PYROTECHNIC_IGNITE_RANGE:
-        enhancementHitVictim.setStatusEffect(eventPlayer, Status.BURNING, PYROTECHNIC_BURN_DURATION)
+macro applyPyrotechnicHitMacro(hitTarget):
+    if distance(eventPlayer, hitTarget) < PYROTECHNIC_IGNITE_RANGE:
+        hitTarget.setStatusEffect(eventPlayer, Status.BURNING, PYROTECHNIC_BURN_DURATION)
         # Count repeated hits in the damage rule to keep this event path cheap.
-        eventPlayer.enhancementPyroHitList.append(enhancementHitVictim)
+        eventPlayer.enhancementPyroHitList.append(hitTarget)
 
 
 rule "PYROTECHNIC APPLIES DAMAGE":

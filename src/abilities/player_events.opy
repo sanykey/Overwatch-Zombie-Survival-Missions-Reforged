@@ -3,16 +3,14 @@
 def applyHitEnhancements():
     @Name "applyHitEnhancements"
 
-    # Shared synchronous hit inputs: tmp3 is the victim, tmp2 is actual damage.
-    # Native callers supply eventDamage; the scripted macro supplies health lost.
+    # Scripted hit inputs: tmp3 is the target, tmp2 is actual health lost.
     # No waits/async calls; tmp0/tmp1 (Telekinesis targets/damage) survive.
-    # Overcharge's bonus Damage has no Event Ability and cannot reenter this handler.
     if enhancementHitDamage <= 0:
         return
     if eventPlayer.enhancementId == Enhancement.PYROTECHNIC:
-        applyPyrotechnicHitMacro()
+        applyPyrotechnicHitMacro(enhancementHitVictim)
     elif eventPlayer.enhancementId == Enhancement.OVERCHARGE:
-        applyOverchargeHitMacro()
+        applyOverchargeHitMacro(enhancementHitVictim)
 
 
 rule "CROWD CONTROL STATUS":
@@ -116,9 +114,11 @@ rule "PLAYER DEALT DAMAGE":
             damage(victim, eventPlayer, eventDamage * (BRAIN_KILLER_BOSS_CRIT_BONUS_PCT / 100 if victim in bossStateList else BRAIN_KILLER_CRIT_BONUS_PCT / 100))
             playEffect(eventPlayer, DynamicEffect.BAD_EXPLOSION, Color.RED, victim.getEyePosition() + directionTowards(eventPlayer.getEyePosition(), victim.getEyePosition()) * victim.sizeScale, 0.1 * victim.sizeScale)
     elif eventAbility != null:
-        enhancementHitDamage = eventDamage
-        enhancementHitVictim = victim
-        applyHitEnhancements()
+        # Overcharge's bonus has no Event Ability.
+        if eventPlayer.enhancementId == Enhancement.PYROTECHNIC:
+            applyPyrotechnicHitMacro(victim)
+        elif eventPlayer.enhancementId == Enhancement.OVERCHARGE:
+            applyOverchargeHitMacro(victim)
 
     # Augments: Leech includes damage from the hero, primary enhancement and
     # scripted powerups. The HIGHRISE airborne bonus is a Set Damage Dealt
