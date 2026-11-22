@@ -424,11 +424,9 @@ playervar isCrowdControlled  # Live boolean for both teams, set/reset by CROWD C
 # delayed flag below so a recent interruption still counts for up to 0.125s.
 playervar botIsCrowdControlled  # Delayed Team 2 flag, lags CC exit by up to 0.125s. BOT STUN MANAGEMENT refreshes it; botRespawnInitialization resets it.
 
-playervar actorCountdownSlot  # Team 1 No Cooldowns expiry / Team 2 Charger windup progression.
+playervar actorCountdownSlot  # Team 1 No Cooldowns expiry.
 # Absolute elapsed time in seconds, cleared by the No Cooldowns rule after cleanup.
 #!define noCooldownsEndTime actorCountdownSlot
-# Mauga charge windup progression from 0 to 1.
-#!define botChargerWindupProgress actorCountdownSlot
 
 playervar controlStateSlot  # Player crowd-control immunity flag or zombie boss return target; hero_tuning/zombie abilities/Bosses.
 # Team 1 immunity window after Brute/Downfallen control.

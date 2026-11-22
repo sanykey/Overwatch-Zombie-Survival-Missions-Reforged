@@ -573,13 +573,11 @@ rule "CHARGER (MAUGA) CHARGE":
     eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.botLastTarget.getEyePosition()), 1500 if eventPlayer.botIsAttached else 0 if eventPlayer.botIsCrowdControlled else 100)
     eventPlayer.botIsThrottleOverridden = true
     eventPlayer.startThrottleInDirection(Vector.BACKWARD, 0.35, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
-    #Charger walk backwards duration
-    # Keep recent CC visible between the 0.064s windup samples.
-    for eventPlayer.botChargerWindupProgress in range(0, 1, 0.064):
-        if eventPlayer.botIsCrowdControlled or eventPlayer.isDead():
-            resumeBotFacingAndMovement()
-            return
-        wait(0.064)
+    # Keep the nominal windup of 16 * 0.064s and use the delayed crowd-control flag.
+    waitUntil(eventPlayer.botIsCrowdControlled or eventPlayer.isDead(), 1.024)
+    if eventPlayer.botIsCrowdControlled or eventPlayer.isDead():
+        resumeBotFacingAndMovement()
+        return
     eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.botTarget if eventPlayer.botChargerDestination == null else eventPlayer.botChargerDestination), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
     eventPlayer.botIsFacingOverridden = true
     faceCurrentThrottle()
