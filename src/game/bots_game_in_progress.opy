@@ -377,7 +377,11 @@ rule "BOTS MOVE THROUGH SPAWN DOORS":
     @Condition [eventPlayer.getSpeedInDirection(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION))].any(lambda speed: (
         speed >= 0 and speed < eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale * 3
     )) == true
-    @Condition isInLoS(eventPlayer.getPosition() + offsetUpThreeQuartersConst * eventPlayer.sizeScale, eventPlayer.getPosition() + offsetUpThreeQuartersConst * eventPlayer.sizeScale + normalize(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION)) * 3 * eventPlayer.sizeScale) == true
+    # Use one origin for both ends of the LoS check.
+    @Condition [eventPlayer.getPosition() + offsetUpThreeQuartersConst * eventPlayer.sizeScale].any(lambda origin: isInLoS(
+        origin,
+        origin + normalize(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION)) * 3 * eventPlayer.sizeScale
+    )) == true
     
     wait(0.125, Wait.ABORT_WHEN_FALSE)
     eventPlayer.disableEnvironmentCollision(false)
