@@ -505,11 +505,11 @@ rule "RIDER ATTACH TO TEAMMATES":
     @Condition eventPlayer.botIsAttached != true
     @Condition eventPlayer.isAlive() == true
     #If any valid teammates are within range
-    @Condition (getLivingPlayers(Team.2).exclude(eventPlayer).any(lambda x: not x.botIsTeleporting and x.getHero() != Hero.WIDOWMAKER and distance(eventPlayer, x) < 4 * eventPlayer.sizeScale)) == true
+    @Condition (getLivingPlayers(Team.2).any(lambda x: not x.botIsTeleporting and x.getHero() != Hero.WIDOWMAKER and distance(eventPlayer, x) < 4 * eventPlayer.sizeScale)) == true
     @Condition (eventPlayer.botTarget == null or distance(eventPlayer.getEyePosition(), eventPlayer.botTarget) > 20 or eventPlayer.getAbilityCooldown(Button.ABILITY_1) and distance(eventPlayer, eventPlayer.botTarget) > 7.5) == true
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
-    eventPlayer.botAbilityTarget = (sorted(getLivingPlayers(Team.2).exclude(eventPlayer).filter(lambda x: not x.botIsTeleporting and x.getHero() != eventPlayer.getHero()), lambda x: distance(eventPlayer, x)))[0]
+    eventPlayer.botAbilityTarget = (sorted(getLivingPlayers(Team.2).filter(lambda x: not x.botIsTeleporting and x.getHero() != eventPlayer.getHero()), lambda x: distance(eventPlayer, x)))[0]
     eventPlayer.attachTo(eventPlayer.botAbilityTarget, eventPlayer.botAbilityTarget.sizeScale * vect(random.uniform(-0.5, 0.5), 0.25, -0.75))
     eventPlayer.botIsAttached = true
 
