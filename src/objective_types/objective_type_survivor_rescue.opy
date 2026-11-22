@@ -85,7 +85,11 @@ rule "SURVIVOR FOLLOW TARGET":
     @Condition rescueSurvivor.rescueIsExtracting == false
     @Condition rescueSurvivor.hasSpawned() == true
     @Condition rescueSurvivor.getHealth() > 1
-    @Condition (playerTargetList.filter(lambda x: x != rescueSurvivor and not x.invisibilityCount).any(lambda x: distance(rescueSurvivor, x) < objectiveRad)) == true
+    @Condition playerTargetList.any(lambda player: (
+        player != rescueSurvivor
+        and not player.invisibilityCount
+        and distance(rescueSurvivor, player) < objectiveRad
+    )) == true
     @Condition distance(rescueSurvivor, currentObjectivePosition) >= 5
     
     rescueSurvivor.clearStatusEffect(Status.PHASED_OUT)
