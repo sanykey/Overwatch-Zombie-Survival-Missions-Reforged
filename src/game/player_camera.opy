@@ -22,19 +22,23 @@ def applyPlayerCamera():
         eventPlayer.stopCamera()
 
 
-# Scoped aiming needs the native zoom camera:
-# stop the 3P camera while secondary fire is held, then restore the current mode.
+# Freja's Take Aim needs the secondary-fire input even before she fires a bolt.
+macro isAimingWithScope():
+    eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) if eventPlayer.getHero() == Hero.FREJA else eventPlayer.isFiringSecondaryFire()
+
+
 rule "DISABLE PLAYER CAMERA WHILE AIMING":
     @Event eachPlayer
     @Team 1
     @Condition isGameplayActive == true
     @Condition eventPlayer.cameraMode == CameraMode.PRECISE
     @Condition eventPlayer.getHero() in [Hero.ANA, Hero.ASHE, Hero.WIDOWMAKER, Hero.EMRE, Hero.FREJA]
-    @Condition eventPlayer.isFiringSecondaryFire() == true
+    @Condition isAimingWithScope() == true
 
     eventPlayer.stopCamera()
-    waitUntil(eventPlayer.isFiringSecondaryFire() == false, Math.INFINITY)
-    applyPlayerCamera()
+    waitUntil(not isAimingWithScope() or eventPlayer.cameraMode != CameraMode.PRECISE, Math.INFINITY)
+    if isGameplayActive:
+        applyPlayerCamera()
 
 
 rule "CYCLE PLAYER CAMERA":
