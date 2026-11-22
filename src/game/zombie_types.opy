@@ -1469,9 +1469,15 @@ def abilityThrowdown():
 
 def entityFloat():
     @Name "entityFloat"
-    
-    #Entities that will be floated
-    eventPlayer.botSpecialTargetList = getLivingPlayers(Team.ALL).filter(lambda player: player != eventPlayer and distance(eventPlayer, player) < 12 * eventPlayer.sizeScale and isInLoS(player.getPosition() + losOffsetConst, eventPlayer.getPosition() + losOffsetConst, BarrierLos.BLOCKED_BY_ENEMY_BARRIERS))
+
+    # Capture the bot's LoS endpoint once for this synchronous filter.
+    #!define floatBotLoSEnd tmp0
+    floatBotLoSEnd = eventPlayer.getPosition() + losOffsetConst
+    eventPlayer.botSpecialTargetList = getLivingPlayers(Team.ALL).filter(lambda player: (
+        player != eventPlayer
+        and distance(eventPlayer, player) < 12 * eventPlayer.sizeScale
+        and isInLoS(player.getPosition() + losOffsetConst, floatBotLoSEnd, BarrierLos.BLOCKED_BY_ENEMY_BARRIERS)
+    ))
 
 
 def explosionWarning():
