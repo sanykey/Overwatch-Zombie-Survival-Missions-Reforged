@@ -70,7 +70,7 @@ macro botStatManagementMacro():
     eventPlayer.botBiteDuration = botBiteDurationList[botStatHeroIndex]
     #Range from 0 to 1 in terms of throttle
     eventPlayer.botThrottleSpeed = botThrottleSpeedList[botStatHeroIndex]
-    eventPlayer.setDamageDealt(botDamageDealtList[botStatHeroIndex] / 100 * 100)
+    eventPlayer.setDamageDealt(botDamageDealtList[botStatHeroIndex])
     eventPlayer.setDamageReceived(100)
     eventPlayer.movementSpeedScale = 1
     eventPlayer.setMoveSpeed(100 + ((len(getDeadPlayers(Team.1).filter(lambda player: player.rescueTimeRemaining <= 0))) * 3))
