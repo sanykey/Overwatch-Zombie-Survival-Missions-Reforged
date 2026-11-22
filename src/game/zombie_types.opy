@@ -299,12 +299,10 @@ rule "BRUTE (REIN) SUPER SEISMIC SLAM":
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.ULTIMATE)
-    while not eventPlayer.isUsingUltimate():
-        wait(0.016, Wait.RESTART_WHEN_TRUE)
-        if eventPlayer.isDead():
-            return
-        if eventPlayer.botIsCrowdControlled:
-            return
+    # Bound the wait in case the forced button press fails to start the ultimate.
+    waitUntil(eventPlayer.isUsingUltimate() or eventPlayer.isDead() or eventPlayer.botIsCrowdControlled, 1.5)
+    if not eventPlayer.isUsingUltimate() or eventPlayer.isDead() or eventPlayer.botIsCrowdControlled:
+        return
     # Snapshot the impact center after the ultimate starts. Effects and target filters consume it synchronously.
     #!define bruteSlamCenter tmp0
     bruteSlamCenter = worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION)
