@@ -134,11 +134,14 @@ rule "BOLT STRIKE ON DOUBLE CROUCH":
     # Snapshot the splash before the primary can die, and both beam endpoints
     # before damage or cleanup. Player collision does not block the splash.
     boltStrikeSplashTargets = getPlayersInRadius(boltStrikeTarget, BOLT_STRIKE_SPLASH_RADIUS, Team.2, LosCheck.SURFACES).filter(lambda target: target != boltStrikeTarget and target.isAlive() and target.isDummy() and not target.botIsTeleporting and not target.botIsInitializing)
-    createBeam(getAllPlayers(), Beam.GOOD, augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(boltStrikeTarget), Color.SKY_BLUE, EffectReeval.NONE)
+    # Capture the audience for the static beam and both immediate effects before damage.
+    #!define boltStrikeAudience tmp2
+    boltStrikeAudience = getAllPlayers()
+    createBeam(boltStrikeAudience, Beam.GOOD, augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(boltStrikeTarget), Color.SKY_BLUE, EffectReeval.NONE)
     eventPlayer.enhancementAttackBeamEntity = getLastCreatedEntity()
-    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.YELLOW, boltStrikeTarget, BOLT_STRIKE_WAVE_RADIUS)
+    playEffect(boltStrikeAudience, DynamicEffect.RING_EXPLOSION, Color.YELLOW, boltStrikeTarget, BOLT_STRIKE_WAVE_RADIUS)
     # Play the cue near the caster so a distant target does not muffle it.
-    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.WHITE, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection(), 100)
+    playEffect(boltStrikeAudience, DynamicEffect.RING_EXPLOSION_SOUND, Color.WHITE, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection(), 100)
     boltStrikeSplashTargets.concat(boltStrikeTarget).setStatusEffect(eventPlayer, Status.STUNNED, BOLT_STRIKE_STUN_DURATION)
     damage(boltStrikeTarget, eventPlayer, BOLT_STRIKE_DAMAGE)
     damage(boltStrikeSplashTargets, eventPlayer, BOLT_STRIKE_SPLASH_DAMAGE)
