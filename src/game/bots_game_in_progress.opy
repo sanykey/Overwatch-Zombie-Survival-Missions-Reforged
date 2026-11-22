@@ -3,7 +3,6 @@
 subroutine removeBotSpawnPoint
 subroutine enterExitTeleport
 subroutine teleportBots
-subroutine successfulTeleportStatus
 subroutine updateBotSpawnPoints
 subroutine locateAveragePlayerLocation
 subroutine setClosestPlayerTeleportCenter
@@ -572,14 +571,6 @@ def setClosestPlayerTeleportCenter():
 
     # Synchronous input handoff: callers assign botTeleportPivot immediately before this call.
     eventPlayer.botTeleportCenter = sorted(playerTargetList, lambda x: distance(x, botTeleportPivot))[0].getPosition()
-
-
-def successfulTeleportStatus():
-    @Name "successfulTeleportStatus"
-    
-    #Max teleport distance adjustment
-    if not eventPlayer.botIsTeleportConfirmed:
-        eventPlayer.botIsTeleportConfirmed = true
 
 
 def updateBotSpawnPoints():
