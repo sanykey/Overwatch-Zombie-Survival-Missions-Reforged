@@ -436,11 +436,13 @@ playervar controlStateSlot  # Player crowd-control immunity flag or zombie boss 
 # Boss return target retained across the return animation.
 #!define botReturnTarget controlStateSlot
 
-playervar actorAbilitySlot2  # Existing zombie secondary state or temporary Rescue follow message.
+playervar actorAbilitySlot2  # Zombie secondary state, Rescue NPC follow message or human P.U.P. retry counter.
 # Common reset/secondary zombie state.
 #!define botAuxiliaryState actorAbilitySlot2
 # Temporary follower-selection message above the Rescue NPC.
 #!define rescueFollowMessage actorAbilitySlot2
+# P.U.P. freeze retry counter on the human owner, retained across retry waits.
+#!define enhancementPupFreezeRetryIndex actorAbilitySlot2
 # Anran's emergence points for the 0.25 s resurrection pulse; other zombies read this list.
 #!define botReigniteSpawnPoints actorAbilitySlot2
 # Hazard boss melee sequence is in progress.

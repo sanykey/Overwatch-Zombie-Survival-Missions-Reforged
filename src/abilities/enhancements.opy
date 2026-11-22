@@ -221,11 +221,15 @@ rule "P.U.P. CONTROL":
             #Freeze cooldown
             eventPlayer.enhancementPupCooldown = PUP_FREEZE_COOLDOWN
             eventPlayer.enhancementPupTarget.setStatusEffect(eventPlayer, Status.FROZEN, 1.5)
-            while not eventPlayer.enhancementPupTarget.hasStatus(Status.FROZEN):
+            # A target that never accepts Frozen must still release the drone.
+            for eventPlayer.enhancementPupFreezeRetryIndex in range(PUP_FREEZE_MAX_RETRIES):
+                if eventPlayer.enhancementPupTarget.hasStatus(Status.FROZEN):
+                    break
                 eventPlayer.enhancementPupTarget.setStatusEffect(eventPlayer, Status.FROZEN, 1.5)
                 wait(0.25, Wait.ABORT_WHEN_FALSE)
-            #Freeze zombies around target for shorter time
-            ((getPlayersInRadius(eventPlayer.enhancementPupTarget, 3, Team.2)).exclude(eventPlayer.enhancementPupTarget)).setStatusEffect(eventPlayer, Status.FROZEN, 0.75)
+            if eventPlayer.enhancementPupTarget.hasStatus(Status.FROZEN):
+                # Freeze nearby zombies only after the primary target is frozen.
+                getPlayersInRadius(eventPlayer.enhancementPupTarget, 3, Team.2).exclude(eventPlayer.enhancementPupTarget).setStatusEffect(eventPlayer, Status.FROZEN, 0.75)
             #P.U.P. color
             eventPlayer.enhancementPupColor = Color.SKY_BLUE
             #Beam visibility
