@@ -110,7 +110,11 @@ rule "PLAYERS AT TERMINALS CONTROLS":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.invisibilityCount != true
-    @Condition (satelliteTerminalPositionList.filter(lambda _, i: satelliteTerminalProgressList[i] < 100).any(lambda x: distance(x, eventPlayer) < objectiveRad and x.x != null)) == true
+    @Condition satelliteTerminalPositionList.any(lambda terminal, i: (
+        satelliteTerminalProgressList[i] < 100
+        and distance(terminal, eventPlayer) < objectiveRad
+        and terminal.x != null
+    )) == true
     
     if not eventPlayer in objectivePlayerList:
         objectivePlayerList.append(eventPlayer)
