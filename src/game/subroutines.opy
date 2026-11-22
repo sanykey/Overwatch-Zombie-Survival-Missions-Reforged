@@ -391,7 +391,8 @@ macro globalObjectiveEntityManagementMacro():
         objectiveEntityIdList.append(getLastCreatedEntity())
     #Zombie Egg
     elif objectiveValue == ObjectiveType.ZOMBIE_EGG:
-        #Zombie Egg Progress Bar
+        # Both visibility and health read the egg actor at index 0. The write
+        # to index 1 in BOT BECOMES ZOMBIE EGG was needed for this bar in-game.
         progressBarHud(getAllPlayers().filter(lambda _: zombieEggStateList[0] != null), zombieEggStateList[0].getNormalizedHealth() * 100, "Zombie Egg Health", HudPosition.TOP, 2, Color.LIME_GREEN, Color.LIME_GREEN)
         objectiveEntityIdList.append(getLastCreatedText())
         #Objectives Remaining Hud Text

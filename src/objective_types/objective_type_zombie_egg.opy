@@ -43,6 +43,10 @@ rule "BOT BECOMES ZOMBIE EGG":
     eventPlayer.disableEnvironmentCollision(true)
     eventPlayer.setHealingReceived(0)
     while not isObjectiveComplete:
+        # Keep this write. Removing it broke the Zombie Egg health bar in-game;
+        # restoring it fixed the bar. The HUD reevaluates First Of(bossStateList).
+        # The engine mechanism behind the dependency on index 1 is unconfirmed.
+        zombieEggStateList[1] = distance(eventPlayer, eventPlayer.getEyePosition())
         if not eventPlayer.isUsingAbility1() and eventPlayer.isAlive():
             eventPlayer.forceButtonPress(Button.ABILITY_1)
         wait(0.25)
