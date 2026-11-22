@@ -150,7 +150,7 @@ def nukeMap():
         playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.SKY_BLUE, nukeProjectilePosition, 3)
         wait()
     for finaleExplosionIndex in range(400):
-        kill(getPlayers(Team.1).filter(lambda player: not player in evacSurvivorList))
+        kill(getPlayers(Team.1).exclude(evacSurvivorList))
         playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, rgb(255, random.uniform(100, 255), 0), mapGridList + (directionFromAngles(random.uniform(0, 360), 0) * (random.randint(0, (finaleExplosionIndex / 20) ** 2 + 1))), (finaleExplosionIndex / 18) ** 2)
         wait()
 
