@@ -14,8 +14,9 @@ def ultimateCharger():
     eventPlayer.powerUpUltimateChargerHudId = getLastCreatedText()
     while true:
         while getTotalTimeElapsed() < eventPlayer.powerUpUltimateEndsAt:
-            eventPlayer.setUltCharge(eventPlayer.getUltCharge() + 2)
-            wait(0.125)
+            if eventPlayer.getUltCharge() < 100:
+                eventPlayer.setUltCharge(eventPlayer.getUltCharge() + 4)
+            wait(0.25)
         wait(0.25)
         if getTotalTimeElapsed() >= eventPlayer.powerUpUltimateEndsAt:
             break
