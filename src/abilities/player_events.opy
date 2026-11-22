@@ -32,8 +32,11 @@ rule "PLAYER DEALT FINAL BLOW":
 
     if currentObjectiveType != ObjectiveType.KILL_ZONE:
         return
-    if playerTargetList.concat(victim).any(lambda x: distance(x, killZoneCenter) < objectiveRad) == true:
-        if distance(eventPlayer, killZoneCenter) < objectiveRad or distance(victim, killZoneCenter) < objectiveRad:
+    # Reuse the victim's zone check for scoring and moving the center. Both reads are synchronous.
+    #!define killZoneVictimInside tmp0
+    killZoneVictimInside = distance(victim, killZoneCenter) < objectiveRad
+    if killZoneVictimInside or playerTargetList.any(lambda x: distance(x, killZoneCenter) < objectiveRad):
+        if killZoneVictimInside or distance(eventPlayer, killZoneCenter) < objectiveRad:
             victim.botRespawnDelay = 2
             killZoneEliminationScore += ceil(victim.botBaseHealth / 280)
             if killZoneEliminationScore >= ELIMINATIONS_NEEDED_PER_OBJECTIVE:
