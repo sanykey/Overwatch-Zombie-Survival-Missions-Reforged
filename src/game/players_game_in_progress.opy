@@ -192,14 +192,18 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
             eventPlayer.rescueTimeRemaining += 0.5
     else:
         eventPlayer.isReviving = false
-        #If dome will pass player before their death timer runs out, set the death timer to how long it will take for the dome to reach them
-        if len(objectivePositionList) == 1 and extractionZoneRad - distance(eventPlayer, currentObjectivePosition) < eventPlayer.rescueTimeRemaining:
-            eventPlayer.rescueTimeRemaining = (extractionZoneRad - distance(eventPlayer, currentObjectivePosition)) / 2.5
+        if len(objectivePositionList) == 1:
+            # Positive inside the dome, negative outside. Consume before the next call.
+            #!define downedDomeGap tmp0
+            downedDomeGap = extractionZoneRad - distance(eventPlayer, currentObjectivePosition)
+            if downedDomeGap < 0:
+                eventPlayer.rescueTimeRemaining = 0
+            elif downedDomeGap < eventPlayer.rescueTimeRemaining:
+                eventPlayer.rescueTimeRemaining = downedDomeGap / 2.5
+            else:
+                eventPlayer.rescueTimeRemaining -= 0.5
         else:
-            eventPlayer.rescueTimeRemaining += -0.5
-        #Player is dead outside of extraction zone
-        if len(objectivePositionList) == 1 and distance(currentObjectivePosition, eventPlayer) > extractionZoneRad:
-            eventPlayer.rescueTimeRemaining = 0
+            eventPlayer.rescueTimeRemaining -= 0.5
         #Player's body falls off of map
         if eventPlayer.getPosition().y - nearestWalkablePosition(eventPlayer.getPosition()).y < -0.1:
             teleportDownedPlayerToWalkable()
