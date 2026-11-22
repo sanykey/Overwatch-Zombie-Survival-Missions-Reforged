@@ -78,23 +78,34 @@ rule "SET UP TERMINAL POSITIONS":
     wait(0.016, Wait.ABORT_WHEN_FALSE)
     # satelliteTerminalCandidatePositionList: grid points 10-50m from the objective, to choose a terminal location with sufficient spacing.
     #!define satelliteTerminalCandidatePositionList tmp0
-    satelliteTerminalCandidatePositionList = mapGridList.filter(lambda x: distance(x, currentObjectivePosition) > 10 and distance(x, currentObjectivePosition) < 50)
-    if satelliteTerminalPositionList == []:
-        satelliteTerminalPositionList.append(random.choice(satelliteTerminalCandidatePositionList))
-    else:
+    satelliteTerminalCandidatePositionList = mapGridList.filter(lambda point: (
+        point.x != null and distance(point, currentObjectivePosition) > 10 and distance(point, currentObjectivePosition) < 50
+    ))
+    # Spacing retries cannot help if the base pool cannot fill all terminal slots.
+    if len(satelliteTerminalCandidatePositionList) < len(satelliteTerminalProgressList):
+        isObjectiveComplete = true
+        return
+
+    if satelliteMinTerminalSpacing > 0:
         # satelliteSpacingTerminalIndex: existing terminal index, to exclude nearby candidate locations from satelliteTerminalCandidatePositionList.
         #!define satelliteSpacingTerminalIndex tmp1
         for satelliteSpacingTerminalIndex in range(len(satelliteTerminalPositionList)):
-            #Terminals must be at least x meters apart
-            # satelliteTerminalCandidatePositionList: remaining candidate positions after excluding points too close to terminal satelliteSpacingTerminalIndex.
-            satelliteTerminalCandidatePositionList.remove(satelliteTerminalCandidatePositionList.filter(lambda x: distance(x, satelliteTerminalPositionList[satelliteSpacingTerminalIndex]) < satelliteMinTerminalSpacing))
-        if satelliteTerminalCandidatePositionList != []:
-            #Successfully find new terminal location
-            satelliteTerminalPositionList.append(random.choice(satelliteTerminalCandidatePositionList))
-        else:
-            #Could not find new terminal location. Remove previous
-            del satelliteTerminalPositionList[len(satelliteTerminalPositionList) - 1]
-            satelliteMinTerminalSpacing -= 5
+            satelliteTerminalCandidatePositionList = satelliteTerminalCandidatePositionList.filter(lambda point: (
+                distance(point, satelliteTerminalPositionList[satelliteSpacingTerminalIndex]) >= satelliteMinTerminalSpacing
+            ))
+    else:
+        # With no spacing requirement, the terminals must still occupy distinct points.
+        satelliteTerminalCandidatePositionList = satelliteTerminalCandidatePositionList.exclude(satelliteTerminalPositionList)
+
+    if satelliteTerminalCandidatePositionList != []:
+        satelliteTerminalPositionList.append(random.choice(satelliteTerminalCandidatePositionList))
+    elif satelliteMinTerminalSpacing > 0:
+        del satelliteTerminalPositionList[len(satelliteTerminalPositionList) - 1]
+        satelliteMinTerminalSpacing = max(0, satelliteMinTerminalSpacing - 5)
+    else:
+        isObjectiveComplete = true
+        return
+
     if len(satelliteTerminalPositionList) > 3:
         satelliteTerminalPositionList = []
         satelliteTerminalProgressList = [0, 0, 0]
