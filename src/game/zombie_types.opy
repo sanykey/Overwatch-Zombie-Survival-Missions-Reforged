@@ -1433,7 +1433,7 @@ rule "CHARGER, STRIKER, SUCCESSOR USE ULT ON POINT (MINIBOSS)":
     eventPlayer.forceButtonPress(Button.ULTIMATE)
     if not eventPlayer.isUsingUltimate():
         loop()
-    if eventPlayer.getHero() == Hero.MAUGA and eventPlayer.isUsingUltimate():
+    if eventPlayer.getHero() == Hero.MAUGA:
         eventPlayer.setMaxHealth(30)
         wait(1)
         eventPlayer.forceButtonPress(Button.ABILITY_2)
