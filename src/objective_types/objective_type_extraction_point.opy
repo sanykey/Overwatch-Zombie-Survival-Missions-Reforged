@@ -114,7 +114,7 @@ rule "WIN/LOSS CONDITIONS":
         extractionFlightDestination = currentObjectivePosition + 250 * Vector.UP + directionFromAngles(random.uniform(0, 360), 0) * 500
         extractionFlightSpeed = 2
         evacSurvivorList = objectivePlayerList
-        (getPlayers(Team.1).filter(lambda player: not evacSurvivorList[player])).clearStatusEffect(Status.ROOTED)
+        getPlayers(Team.1).exclude(evacSurvivorList).clearStatusEffect(Status.ROOTED)
         wait(1)
         extractionFlightSpeed = 10
         wait(5)
