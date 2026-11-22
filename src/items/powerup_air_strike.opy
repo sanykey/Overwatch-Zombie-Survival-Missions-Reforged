@@ -30,11 +30,14 @@ def airStrike():
         #Ray Cast downwards
         # airStrikeImpactPosition: ground impact position, shared by this explosion's effects and damage-radius check.
         #!define airStrikeImpactPosition tmp0
-        airStrikeImpactPosition = raycastHitPosition(airStrikeRayStartPosition, airStrikeRayStartPosition + -25 * Vector.UP, null, getAllPlayers(), false)
-        playEffect(getAllPlayers(), DynamicEffect.BAD_PICKUP_EFFECT, Color.ORANGE, airStrikeImpactPosition, 2.5)
-        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, airStrikeImpactPosition, 5)
-        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, airStrikeImpactPosition, 100)
-        playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, Color.ORANGE, airStrikeImpactPosition, 100)
+        # Snapshot the players ignored by the raycast and shown the effects. Consume before damage or waits.
+        #!define airStrikePulsePlayers tmp2
+        airStrikePulsePlayers = getAllPlayers()
+        airStrikeImpactPosition = raycastHitPosition(airStrikeRayStartPosition, airStrikeRayStartPosition + -25 * Vector.UP, null, airStrikePulsePlayers, false)
+        playEffect(airStrikePulsePlayers, DynamicEffect.BAD_PICKUP_EFFECT, Color.ORANGE, airStrikeImpactPosition, 2.5)
+        playEffect(airStrikePulsePlayers, DynamicEffect.RING_EXPLOSION, Color.ORANGE, airStrikeImpactPosition, 5)
+        playEffect(airStrikePulsePlayers, DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, airStrikeImpactPosition, 100)
+        playEffect(airStrikePulsePlayers, DynamicEffect.EXPLOSION_SOUND, Color.ORANGE, airStrikeImpactPosition, 100)
         # airStrikeAffectedZombieList: zombies inside this explosion's radius, to damage them and set their respawn timers.
         #!define airStrikeAffectedZombieList tmp1
         airStrikeAffectedZombieList = getPlayersInRadius(airStrikeImpactPosition, 5, Team.2)
