@@ -305,10 +305,13 @@ rule "BRUTE (REIN) SUPER SEISMIC SLAM":
             return
         if eventPlayer.botIsCrowdControlled:
             return
-    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION), 20 * eventPlayer.sizeScale)
-    (getLivingPlayers(Team.ALL).filter(lambda x: distance(eventPlayer, x) < 20 * eventPlayer.sizeScale and distance(worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION), x) > 1.5 * eventPlayer.sizeScale and isInLoS(eventPlayer.getEyePosition(), x.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) and x != eventPlayer and abs(eventPlayer.getPosition().y - x.getPosition().y) < 2 * eventPlayer.sizeScale)).applyImpulse(Vector.UP, 15 * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
-    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION), 3 * eventPlayer.sizeScale)
-    (null.concat(getLivingPlayers(Team.2)).filter(lambda x: distance(x, worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION)) < 1.5 * eventPlayer.sizeScale and not x.hasStatus(Status.KNOCKED_DOWN))).setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 2.5)
+    # Snapshot the impact center after the ultimate starts. Effects and target filters consume it synchronously.
+    #!define bruteSlamCenter tmp0
+    bruteSlamCenter = worldVector((3 * eventPlayer.sizeScale) * Vector.FORWARD, eventPlayer, Transform.ROTATION_AND_TRANSLATION)
+    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, bruteSlamCenter, 20 * eventPlayer.sizeScale)
+    (getLivingPlayers(Team.ALL).filter(lambda x: distance(eventPlayer, x) < 20 * eventPlayer.sizeScale and distance(bruteSlamCenter, x) > 1.5 * eventPlayer.sizeScale and isInLoS(eventPlayer.getEyePosition(), x.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) and x != eventPlayer and abs(eventPlayer.getPosition().y - x.getPosition().y) < 2 * eventPlayer.sizeScale)).applyImpulse(Vector.UP, 15 * eventPlayer.sizeScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, bruteSlamCenter, 3 * eventPlayer.sizeScale)
+    (null.concat(getLivingPlayers(Team.2)).filter(lambda x: distance(x, bruteSlamCenter) < 1.5 * eventPlayer.sizeScale and not x.hasStatus(Status.KNOCKED_DOWN))).setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 2.5)
 
 
 rule "BRUTE, GLADIATOR, AND SMOLDER ALTERNATE ATTACK CONTROL":
