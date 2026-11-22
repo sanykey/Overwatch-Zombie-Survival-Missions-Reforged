@@ -9,12 +9,26 @@ rule "SPAWN SURVIVOR TO BE RESCUED OR COMPLETE OBJECTIVE":
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     if rescueSurvivor == null:
-        rescueCandidatePosition = null
-        rescueMinSpawnDistance = 115
-        while rescueCandidatePosition == null:
-            rescueCandidatePosition = random.choice(mapGridList.filter(lambda x: distance(x, currentObjectivePosition) > rescueMinSpawnDistance and distance(x, currentObjectivePosition) < 120))
+        # Cache distances by grid index. Both scratch slots are consumed before any wait.
+        #!define rescueSpawnDistances tmp0
+        #!define rescueNearbySpawnDistances tmp1
+        rescueSpawnDistances = mapGridList.map(lambda point: distance(point, currentObjectivePosition))
+        rescueNearbySpawnDistances = sorted(rescueSpawnDistances.filter(lambda spawnDistance: spawnDistance < 120))
+        if rescueNearbySpawnDistances == []:
+            # Use the existing objective completion path when no spawn is possible.
+            isObjectiveComplete = true
+            return
+
+        # The farthest eligible point identifies the first nonempty band in the old
+        # search (115–120 m, then 110–120 m, and so on). Keep both bounds strict.
+        #!define rescueFarthestSpawnDistance tmp1
+        rescueFarthestSpawnDistance = rescueNearbySpawnDistances.last()
+        rescueMinSpawnDistance = floor(rescueFarthestSpawnDistance / 5) * 5
+        if rescueFarthestSpawnDistance <= rescueMinSpawnDistance:
             rescueMinSpawnDistance -= 5
-            wait()
+        rescueCandidatePosition = random.choice(mapGridList.filter(lambda _, i: (
+            rescueSpawnDistances[i] > rescueMinSpawnDistance and rescueSpawnDistances[i] < 120
+        )))
         createDummy(random.choice(getAllHeroes().filter(lambda x: not getNumberOfHeroes(x, Team.1))), Team.1, 20, rescueCandidatePosition)
         rescueSurvivor = getLastCreatedEntity()
     else:
