@@ -373,10 +373,10 @@ rule "BOTS MOVE THROUGH SPAWN DOORS":
     @Condition eventPlayer.hasStatus(Status.ROOTED) == false
     @Condition magnitude(eventPlayer.getThrottle())
     @Condition (eventPlayer.isOnGround() or eventPlayer in bossStateList and eventPlayer.getAltitude() < 10) == true
-    #Allows if bot bumps into something
-    @Condition eventPlayer.getSpeedInDirection(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION)) < eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale * 3
-    #Makes sure bot is moving forward
-    @Condition eventPlayer.getSpeedInDirection(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION)) >= 0
+    # Check both bounds using one sample of speed along the throttle direction.
+    @Condition [eventPlayer.getSpeedInDirection(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION))].any(lambda speed: (
+        speed >= 0 and speed < eventPlayer.botThrottleSpeed * eventPlayer.movementSpeedScale * 3
+    )) == true
     @Condition isInLoS(eventPlayer.getPosition() + offsetUpThreeQuartersConst * eventPlayer.sizeScale, eventPlayer.getPosition() + offsetUpThreeQuartersConst * eventPlayer.sizeScale + normalize(worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION)) * 3 * eventPlayer.sizeScale) == true
     
     wait(0.125, Wait.ABORT_WHEN_FALSE)
