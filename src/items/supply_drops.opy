@@ -53,7 +53,10 @@ def findSupplyDropLandingPosition():
     #!define supplyDropClosestPlayer tmp0
     #!define supplyDropCandidatePosition tmp1
     supplyDropClosestPlayer = sorted(playerTargetList, lambda player: distance(player, currentObjectivePosition))[0]
-    supplyDropSearchCandidates = random.shuffle(mapGridList.filter(lambda point: distance(supplyDropClosestPlayer, point) < 35 and distance(supplyDropClosestPlayer, point) > 20)).slice(0, SUPPLY_DROP_SEARCH_LIMIT)
+    # The open 20–35 m band has midpoint 27.5 m and half-width 7.5 m.
+    supplyDropSearchCandidates = random.shuffle(mapGridList.filter(
+        lambda point: abs(distance(supplyDropClosestPlayer, point) - 27.5) < 7.5
+    )).slice(0, SUPPLY_DROP_SEARCH_LIMIT)
     while isGameplayActive and playerTargetList != [] and supplyDropSearchCandidates != []:
         supplyDropCandidatePosition = supplyDropSearchCandidates[0]
         if playerTargetList.all(lambda player: distance(supplyDropCandidatePosition, player) > 20):
