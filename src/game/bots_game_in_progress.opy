@@ -551,9 +551,8 @@ def locateAveragePlayerLocation():
     eventPlayer.botTeleportCenter = vect(0, 0, 0)
     # Snapshot the selected players once; consume the list synchronously before any wait or call.
     #!define averageTargetPlayerList tmp1
-    if objectivePlayerList == [] and playerTargetList.any(lambda x: magnitude(x.getThrottle())):
-        averageTargetPlayerList = playerTargetList.filter(lambda x: magnitude(x.getThrottle()))
-    else:
+    averageTargetPlayerList = playerTargetList.filter(lambda player: magnitude(player.getThrottle())) if objectivePlayerList == [] else playerTargetList
+    if averageTargetPlayerList == []:
         averageTargetPlayerList = playerTargetList
     # Preserve player order and the original loop counter as the divisor, including an empty list.
     #!define averageTargetPositionIndex tmp0
