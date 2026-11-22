@@ -480,11 +480,14 @@ def enterExitTeleport():
         eventPlayer.setInvisibility(Invis.NONE)
         eventPlayer.setGravity(100)
         if eventPlayer.botTarget == null:
-            if eventPlayer.botTeleportPosition in botSpawnPointList:
-                eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, botSpawnWaypointList[botSpawnPointList.index(eventPlayer.botTeleportPosition)]), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
+            # Use the same synchronous lookup for the cache hit and its waypoint.
+            #!define teleportExitSpawnIndex tmp0
+            teleportExitSpawnIndex = botSpawnPointList.index(eventPlayer.botTeleportPosition)
+            if teleportExitSpawnIndex != -1:
+                eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, botSpawnWaypointList[teleportExitSpawnIndex]), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
             else:
                 eventPlayer.startThrottleInDirection(directionFromAngles(random.randint(-90, 90) + horizontalAngleOfDirection(directionTowards(eventPlayer, sorted(getLivingPlayers(Team.1).filter(lambda player: player.hasSpawned()), lambda x: distance(eventPlayer, x))[0])), 0), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
-        elif eventPlayer.botTarget != null:
+        else:
             startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
 
 
