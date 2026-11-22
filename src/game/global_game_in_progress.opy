@@ -35,8 +35,8 @@ rule "ATTACK SPAWN ROOM CONTROL":
     @Condition playerTargetList.any(lambda x: distance(x, activeAttackSpawnRoom) < 45) == true
     
     spawnRoomIndex = (spawnRoomIndex + 1) % len(attackSpawnRooms)
-    #Make sure players are clear of test spawn room before activating
-    if getPlayers(Team.1).filter(lambda player: player.hasSpawned()).all(lambda x: distance(x, attackSpawnRooms[spawnRoomIndex]) > 45):
+    # Only spawned players can block activation of the candidate spawn room.
+    if getPlayers(Team.1).all(lambda player: not player.hasSpawned() or distance(player, attackSpawnRooms[spawnRoomIndex]) > 45):
         activeAttackSpawnRoom = attackSpawnRooms[spawnRoomIndex]
         startForcingSpawn(Team.2, spawnRoomIndex)
     wait(1)
