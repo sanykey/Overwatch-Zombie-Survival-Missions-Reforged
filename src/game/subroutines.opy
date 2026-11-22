@@ -867,15 +867,18 @@ def explosionSequence():
         dummyExplosionDotTargets.startDamageOverTime(eventPlayer, 3, eventPlayer.botBiteDamage * 2)
         if eventPlayer.damageOverTimeRemaining < 3:
             eventPlayer.damageOverTimeRemaining = 3
-    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, eventPlayer.explosionOuterColor, eventPlayer.getPosition(), 6 * eventPlayer.explosionScale)
-    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, eventPlayer.explosionInnerColor, eventPlayer.getPosition(), 3 * eventPlayer.explosionScale)
+    # Snapshot the audience after damage and consume it before the wait.
+    #!define explosionAudience tmp2
+    explosionAudience = getAllPlayers()
+    playEffect(explosionAudience, DynamicEffect.BAD_EXPLOSION, eventPlayer.explosionOuterColor, eventPlayer.getPosition(), 6 * eventPlayer.explosionScale)
+    playEffect(explosionAudience, DynamicEffect.BAD_EXPLOSION, eventPlayer.explosionInnerColor, eventPlayer.getPosition(), 3 * eventPlayer.explosionScale)
     # Both synchronous sounds use the same radius before the wait.
     #!define explosionSoundRadius tmp1
     explosionSoundRadius = 150 * eventPlayer.explosionScale
     #Scaled
-    playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, Color.YELLOW, eventPlayer.getPosition(), explosionSoundRadius)
+    playEffect(explosionAudience, DynamicEffect.EXPLOSION_SOUND, Color.YELLOW, eventPlayer.getPosition(), explosionSoundRadius)
     #Scaled
-    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.YELLOW, eventPlayer.getPosition(), explosionSoundRadius)
+    playEffect(explosionAudience, DynamicEffect.RING_EXPLOSION_SOUND, Color.YELLOW, eventPlayer.getPosition(), explosionSoundRadius)
     wait(0.25)
 
 
