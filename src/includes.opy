@@ -16,8 +16,8 @@
 #!include "core/compressed numbers.opy"
 #!include "settings/settings_defaults.opy"
 
-# Select exactly one map pool, then save the root main.opy to rebuild.
-#!include "settings/standard_map_pool.opy"
+# Uncomment one include to override the default map pool.
+##!include "settings/lobby_bots_map_pool.opy"
 ##!include "settings/ui_test_map_pool.opy"
 ##!include "settings/debug_map_pool.opy"
 

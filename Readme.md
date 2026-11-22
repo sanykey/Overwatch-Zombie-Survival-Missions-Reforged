@@ -136,9 +136,8 @@ After changing the source, save the root `main.opy` again to compile the updated
 
 ### Switching map pools
 
-Select exactly one pool near the top of [src/includes.opy](src/includes.opy), then rebuild the root `main.opy`.
+The standard rotation comes from `standard_map_pool.opy`, included by `settings_defaults.opy`. To override it, uncomment one of the following includes in [src/includes.opy](src/includes.opy) and rebuild the root `main.opy`. To restore the standard rotation, comment it out and rebuild.
 
-- `settings/standard_map_pool.opy` uses the standard rotation and is enabled by default.
 - `settings/ui_test_map_pool.opy` includes Shambali Monastery, Colosseo, Malevento, Necropolis, Black Forest and Ilios Lighthouse.
 - `settings/debug_map_pool.opy` limits the rotation to Rialto.
 

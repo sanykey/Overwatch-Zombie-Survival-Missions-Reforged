@@ -136,9 +136,8 @@ Engineer получает **+10 лома** за смерть зомби-бота
 
 ### Переключение наборов карт
 
-Выберите один набор в начале [src/includes.opy](src/includes.opy) и пересоберите корневой `main.opy`.
+Стандартную ротацию задаёт `standard_map_pool.opy`, подключённый в `settings_defaults.opy`. Чтобы сменить пул, раскомментируйте одну из следующих строк подключения в [src/includes.opy](src/includes.opy) и пересоберите корневой `main.opy`. Чтобы вернуть стандартную ротацию, закомментируйте эту строку и пересоберите мод.
 
-- `settings/standard_map_pool.opy` использует обычную ротацию и включён по умолчанию.
 - `settings/ui_test_map_pool.opy` включает Shambali Monastery, Colosseo, Malevento, Necropolis, Black Forest и Ilios Lighthouse.
 - `settings/debug_map_pool.opy` оставляет в ротации Rialto.
 
