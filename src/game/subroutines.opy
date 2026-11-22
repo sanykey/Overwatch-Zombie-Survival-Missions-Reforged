@@ -48,9 +48,11 @@ macro damageWithEnhancements(amount, target):
 
 macro minibossMutationMacro():
     miniBossList.append(eventPlayer)
-    eventPlayer.startForcingHero(random.choice([Hero.REINHARDT, Hero.WRECKING_BALL, Hero.JUNKER_QUEEN, Hero.DOOMFIST, Hero.KIRIKO, Hero.MAUGA, Hero.HAZARD, Hero.REAPER]))
-    if zombieSetting == 6:
-        eventPlayer.startForcingHero(random.choice([Hero.REINHARDT, Hero.WRECKING_BALL]))
+    # Ham N' Hammer uses only the first two heroes.
+    eventPlayer.startForcingHero([
+        Hero.REINHARDT, Hero.WRECKING_BALL, Hero.JUNKER_QUEEN, Hero.DOOMFIST,
+        Hero.KIRIKO, Hero.MAUGA, Hero.HAZARD, Hero.REAPER
+    ][random.randint(0, 1 if zombieSetting == 6 else 7)])
     eventPlayer.botBaseHealth = 2500
     eventPlayer.sizeScale *= 1.55
     eventPlayer.startForcingOutlineFor(getAllPlayers(), true, Color.ORANGE)
