@@ -123,13 +123,25 @@ rule "CROUCH + JUMP (GRAPNEL LAUNCHER)":
     # Keep world/player collisions and attack inputs intact. Only an active pull
     # updates movement; every exit reaches cleanup, even after releasing the chord.
     # Teams are fixed for the match, so the locked target's team cannot change.
-    while isGameplayActive and AUGMENT_GRAPNEL_CAN_MOVE and eventPlayer.getHero() == eventPlayer.augmentGrapnelState[0] and eventPlayer.augmentGrapnelTarget.isAlive() and (eventPlayer.augmentGrapnelTarget.getTeam() == Team.1 or not eventPlayer.augmentGrapnelTarget.botIsTeleporting) and isInLoS(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(eventPlayer.augmentGrapnelTarget)) and getTotalTimeElapsed() < eventPlayer.augmentMovementReadyAt - (AUGMENT_GRAPNEL_COOLDOWN - AUGMENT_GRAPNEL_TIMEOUT):
-        if distance(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(eventPlayer.augmentGrapnelTarget)) <= 1.5 * eventPlayer.sizeScale + 0.5 * eventPlayer.augmentGrapnelTarget.sizeScale:
+    while (
+        isGameplayActive and AUGMENT_GRAPNEL_CAN_MOVE
+        and eventPlayer.getHero() == eventPlayer.augmentGrapnelState[0]
+        and eventPlayer.augmentGrapnelTarget.isAlive()
+        and (eventPlayer.augmentGrapnelTarget.getTeam() == Team.1 or not eventPlayer.augmentGrapnelTarget.botIsTeleporting)
+        and getTotalTimeElapsed() < eventPlayer.augmentMovementReadyAt - (AUGMENT_GRAPNEL_COOLDOWN - AUGMENT_GRAPNEL_TIMEOUT)
+    ):
+        # These endpoints are used only in this iteration, before damage or a wait.
+        #!define grapnelPullOrigin tmp1
+        #!define grapnelPullAnchor tmp2
+        grapnelPullOrigin = augmentGrapnelCenter(eventPlayer)
+        grapnelPullAnchor = augmentGrapnelCenter(eventPlayer.augmentGrapnelTarget)
+        if not isInLoS(grapnelPullOrigin, grapnelPullAnchor):
+            break
+        if distance(grapnelPullOrigin, grapnelPullAnchor) <= 1.5 * eventPlayer.sizeScale + 0.5 * eventPlayer.augmentGrapnelTarget.sizeScale:
             # Allies are harmless anchors: the pull simply ends there. Only
             # zombies take the impact damage, burn, crowd control and blast.
             if eventPlayer.augmentGrapnelTarget.getTeam() == Team.2:
-                # Pull velocity scratch is dead on contact. Read health synchronously;
-                # no scratch value survives a wait or is captured by the cable.
+                # The hit handler can reuse tmp2 after the last read of the anchor.
                 damageWithEnhancements(AUGMENT_GRAPNEL_DAMAGE, eventPlayer.augmentGrapnelTarget)
                 if eventPlayer.augmentGrapnelTarget.isOnGround():
                     eventPlayer.augmentGrapnelTarget.setStatusEffect(eventPlayer, Status.STUNNED, AUGMENT_GRAPNEL_GROUND_STUN_DURATION)
@@ -140,7 +152,7 @@ rule "CROUCH + JUMP (GRAPNEL LAUNCHER)":
         # Synchronous scratch: correct current velocity to the desired velocity,
         # rather than stacking 40-speed impulses every frame. Consumed before wait.
         #!define augmentGrapnelVelocityDelta tmp0
-        augmentGrapnelVelocityDelta = directionTowards(augmentGrapnelCenter(eventPlayer), augmentGrapnelCenter(eventPlayer.augmentGrapnelTarget)) * AUGMENT_GRAPNEL_SPEED - eventPlayer.getVelocity()
+        augmentGrapnelVelocityDelta = directionTowards(grapnelPullOrigin, grapnelPullAnchor) * AUGMENT_GRAPNEL_SPEED - eventPlayer.getVelocity()
         eventPlayer.applyImpulse(augmentGrapnelVelocityDelta, magnitude(augmentGrapnelVelocityDelta), Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
         wait(0.05, Wait.IGNORE_CONDITION)
     destroyEffect(eventPlayer.augmentGrapnelState[1])
