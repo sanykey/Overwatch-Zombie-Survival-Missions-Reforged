@@ -50,11 +50,14 @@ macro fireSatelliteMacro():
             #Chase closest living zombie
             chaseSatelliteTarget()
         wait(0.5)
+        # Snapshot the raycast and effect audience. All reads finish before damage.
+        #!define satelliteLaserPlayers tmp1
+        satelliteLaserPlayers = getAllPlayers()
         # satelliteLaserImpactPosition: laser impact position on the ground, shared by explosion visuals and both damage checks.
         #!define satelliteLaserImpactPosition tmp0
-        satelliteLaserImpactPosition = raycastHitPosition(satelliteLaserPosition + 2 * Vector.UP, satelliteLaserPosition + offsetDownHundredConst, getAllPlayers(), getAllPlayers().filter(lambda player: player.isOnGround()), false) + 0.1 * Vector.UP
-        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.SKY_BLUE, satelliteLaserImpactPosition, 5)
-        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.SKY_BLUE, satelliteLaserImpactPosition, 200)
+        satelliteLaserImpactPosition = raycastHitPosition(satelliteLaserPosition + 2 * Vector.UP, satelliteLaserPosition + offsetDownHundredConst, satelliteLaserPlayers, satelliteLaserPlayers.filter(lambda player: player.isOnGround()), false) + 0.1 * Vector.UP
+        playEffect(satelliteLaserPlayers, DynamicEffect.BAD_EXPLOSION, Color.SKY_BLUE, satelliteLaserImpactPosition, 5)
+        playEffect(satelliteLaserPlayers, DynamicEffect.RING_EXPLOSION_SOUND, Color.SKY_BLUE, satelliteLaserImpactPosition, 200)
         #Damage Zombies
         damage(getPlayersInRadius(satelliteLaserImpactPosition, 5, Team.2), null, 500)
         #Damage Players
