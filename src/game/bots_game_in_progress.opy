@@ -265,8 +265,7 @@ rule "UPDATE SUCCESSFUL TELEPORT STATUS":
     @Condition eventPlayer in bossStateList == false
     
     wait(0.5, Wait.ABORT_WHEN_FALSE)
-    if not eventPlayer.botIsTeleportConfirmed:
-        eventPlayer.botIsTeleportConfirmed = true
+    eventPlayer.botIsTeleportConfirmed = true
     if distance(eventPlayer.botTeleportPosition, eventPlayer.botTeleportCenter) < BOT_MAX_TELEPORT_RANGE:
         eventPlayer.botSpawnWaypoint = eventPlayer.getPosition()
         updateBotSpawnPoints()
