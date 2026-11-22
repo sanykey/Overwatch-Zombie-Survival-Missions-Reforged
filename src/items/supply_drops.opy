@@ -80,8 +80,16 @@ rule "EFFECT/TEXT (GLOBAL)":
     createEffect(getAllPlayers().filter(lambda _: supplyDropLandingPosition != null and isSupplyDropOpen), Effect.SPHERE, Color.AQUA, supplyDropPosition, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     #Supply drop landing ring
     createEffect(getAllPlayers().filter(lambda _: supplyDropLandingPosition != null), Effect.RING, Color.AQUA, supplyDropLandingPosition, 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    #Open supply drop text
-    createInWorldText(getLivingPlayers(Team.1).filter(lambda player: supplyDropLandingPosition != null and distance(supplyDropLandingPosition, supplyDropPosition) < 1 and not isSupplyDropOpen and distance(player, supplyDropLandingPosition) <= 6 and distance(supplyDropLandingPosition, player.getEyePosition() + player.getFacingDirection() * distance(player.getEyePosition(), supplyDropLandingPosition)) < 0.5), "[{0}]".format(inputBindingString(Button.INTERACT)), supplyDropPosition + Vector.UP, 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.BLUE)
+    # Check the crate state before filtering viewers by range and aim.
+    createInWorldText(
+        getLivingPlayers(Team.1).filter(lambda player: (
+            distance(player, supplyDropLandingPosition) <= 6
+            and distance(supplyDropLandingPosition, player.getEyePosition() + player.getFacingDirection() * distance(player.getEyePosition(), supplyDropLandingPosition)) < 0.5
+        )) if supplyDropLandingPosition != null and distance(supplyDropLandingPosition, supplyDropPosition) < 1 and not isSupplyDropOpen else [],
+        "[{0}]".format(inputBindingString(Button.INTERACT)),
+        supplyDropPosition + Vector.UP,
+        2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.BLUE
+    )
     #Supply drop landing icon
     createIcon(getAllPlayers().filter(lambda player: supplyDropLandingPosition != null and distance(player, supplyDropPosition) > 5), supplyDropPosition + Vector.UP, Icon.PLUS, IconReeval.VISIBILITY_AND_POSITION, Color.AQUA)
     #Supply drop distance
