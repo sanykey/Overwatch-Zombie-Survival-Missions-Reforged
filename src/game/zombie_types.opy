@@ -831,8 +831,7 @@ rule "STALKER (MOIRA) FADE":
             break
         if eventPlayer in bossStateList:
             wait(0.125)
-            eventPlayer.setUltCharge(100)
-            eventPlayer.forceButtonPress(Button.ULTIMATE)
+            useChargedUltimate()
             eventPlayer.setStatusEffect(null, Status.ROOTED, 1)
             waitUntil(not eventPlayer.isUsingUltimate(), 1.3)
             eventPlayer.cancelPrimaryAction()
@@ -1334,8 +1333,7 @@ rule "SMOLDER STAYS ENRAGE DURING BOSS EVENT":
     @Condition (not eventPlayer.isUsingUltimate()) == true
     @Condition (eventPlayer in bossStateList or eventPlayer.botSmolderState == 2) == true
     
-    eventPlayer.setUltCharge(100)
-    eventPlayer.forceButtonPress(Button.ULTIMATE)
+    useChargedUltimate()
     wait(0.5)
     if ruleCondition:
         loop()
@@ -1523,8 +1521,7 @@ def explosionWarning():
 def smolderBoost():
     playEffect(getAllPlayers(), DynamicEffect.BAD_PICKUP_EFFECT, Color.RED, eventPlayer, 1.5 * eventPlayer.sizeScale)
     eventPlayer.forceButtonPress(Button.ABILITY_1)
-    eventPlayer.setUltCharge(100)
-    eventPlayer.forceButtonPress(Button.ULTIMATE)
+    useChargedUltimate()
     eventPlayer.sizeScale *= 1.5
     applyCurrentSizeScale()
     eventPlayer.movementSpeedScale *= 9

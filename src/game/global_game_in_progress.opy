@@ -105,8 +105,7 @@ rule "RANDOM ABILITIES":
     
     wait(random.uniform(2, 8))
     if eventPlayer.getHero() in [Hero.MERCY]:
-        eventPlayer.setUltCharge(100)
-        eventPlayer.forceButtonPress(Button.ULTIMATE)
+        useChargedUltimate()
     else:
         eventPlayer.forceButtonPress(random.choice([Button.ABILITY_2, Button.ABILITY_1]))
         if eventPlayer.getHero() in [Hero.SYMMETRA] and eventPlayer.isUsingAbility2():

@@ -35,6 +35,7 @@ subroutine abilityPlacement
 subroutine createRemainingObjectivesHud
 subroutine selectPullAimTarget
 subroutine applyHitEnhancements
+subroutine useChargedUltimate
 
 
 def advanceSpawnRoomIndex():
@@ -981,3 +982,10 @@ def detachAbilityTarget():
     @Name "detachAbilityTarget"
     # Synchronous; reads the caller-owned target without changing it or yielding.
     eventPlayer.botAbilityTarget.detach()
+
+
+def useChargedUltimate():
+    @Name "useChargedUltimate"
+
+    eventPlayer.setUltCharge(100)
+    eventPlayer.forceButtonPress(Button.ULTIMATE)

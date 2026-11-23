@@ -166,8 +166,7 @@ rule "BOT DIES":
     collectNearbyZombieLoot()
 
     if eventPlayer.botIsReigniteAttackUsed and eventPlayer.getHero() == Hero.ANRAN and not eventWasEnvironment:
-        eventPlayer.setUltCharge(100)
-        eventPlayer.forceButtonPress(Button.ULTIMATE)
+        useChargedUltimate()
         eventPlayer.botIsReigniteAttackUsed = 0
         wait(random.randint(1, 4))
         eventPlayer.forceButtonPress(Button.ULTIMATE)
