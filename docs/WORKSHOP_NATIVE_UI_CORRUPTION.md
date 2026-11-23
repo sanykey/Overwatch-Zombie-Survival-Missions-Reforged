@@ -211,7 +211,7 @@ Event/Team/Hero остаются прежними. Native event запускае
 | enhancements.opy | `ENGINEER TURRET DEPLOY` | Пара phase/ID |
 | [augments.opy](../src/abilities/augments.opy) | `DOUBLE TAP JUMP (DASH / HIGHRISE)` | Пара phase/ID |
 | [augment_dash.opy](../src/abilities/augment_dash.opy) | `[DASH] CHARGE RECHARGE` | Пара phase/ID |
-| [augments.opy](../src/abilities/augments.opy) | `CROUCH + JUMP (GRAPNEL LAUNCHER)` | Пара phase/ID |
+| [augment_grapnel_launcher.opy](../src/abilities/augment_grapnel_launcher.opy) | `CROUCH + JUMP (GRAPNEL LAUNCHER)` | Пара phase/ID |
 | augments.opy | `AMMO PACK MAGAZINES` | Пара phase/ID |
 | augments.opy | `AMMO PACK REFILL FALLBACK` | Пара phase/ID |
 | [hero_tuning.opy](../src/abilities/hero_tuning.opy) | `REINHARDT SHIELD SLAM STUN` | Event guard |
@@ -219,7 +219,7 @@ Event/Team/Hero остаются прежними. Native event запускае
 | enhancements.opy | `ENHANCEMENT ATTACK BEAM DISCONNECT CLEANUP` | Event guard |
 | enhancements.opy | `ENGINEER BEAM DISCONNECT CLEANUP` | Event guard |
 | enhancements.opy | `ENGINEER SCRAP ARMOR DEPLETION` | Event guard |
-| augments.opy | `GRAPNEL LAUNCHER DISCONNECT CLEANUP` | Event guard |
+| [augment_grapnel_launcher.opy](../src/abilities/augment_grapnel_launcher.opy) | `GRAPNEL LAUNCHER DISCONNECT CLEANUP` | Event guard |
 | [player_events.opy](../src/abilities/player_events.opy) | `PLAYER PICKS UP HEALTH PACK` | Event guard |
 
 `KEVLAR RANGED DAMAGE COMPENSATION` и `BRIGITTE SHIELD BASH STUN` оставлены с исходными Conditions. Не следует считать все event guards или все phase/ID пары обязательным архитектурным правилом для всего проекта.
