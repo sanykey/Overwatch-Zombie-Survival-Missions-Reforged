@@ -617,9 +617,6 @@ def objectivesManagement():
                 playShowdownRing()
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, currentObjectivePosition, 200)
                 break
-            #Checks if current objective is bosses
-            case ObjectiveType.BOSSES:
-                break
             #Checks if current objective is biomorphing
             case ObjectiveType.BIOMORPHING:
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.GREEN, currentObjectivePosition, objectiveRad)
@@ -676,8 +673,6 @@ def objectivesManagement():
                 objectiveColor = Color.ORANGE
                 showdownNextCheckpoint = 25
                 showdownContestingZombieList = []
-                break
-            case ObjectiveType.BOSSES:
                 break
             case ObjectiveType.BIOMORPHING:
                 biomorphingCapturePercent = 0
