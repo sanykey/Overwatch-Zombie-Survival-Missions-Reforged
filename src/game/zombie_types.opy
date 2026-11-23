@@ -191,8 +191,7 @@ rule "RUSHER MOLTEN CORE BURNS PLAYERS (BOSS)":
 
     victim.startDamageOverTime(attacker, 1, eventPlayer.botBiteDamage * 0.5)
     victim.setStatusEffect(attacker, Status.BURNING, 0.5)
-    if victim.damageOverTimeRemaining < 0.5:
-        victim.damageOverTimeRemaining = 0.5
+    victim.damageOverTimeRemaining = max(victim.damageOverTimeRemaining, 0.5)
 
 
 rule "BEHEMOTH (ROAD) TOXIC CLOUD":
@@ -219,8 +218,7 @@ rule "BEHEMOTH (ROAD) TOXIC CLOUD":
         else:
             #Gas Attack
             (playerTargetList.filter(lambda x: not x.isDotProtected and isInLoS(eventPlayer.getEyePosition(), x.getEyePosition(), BarrierLos.BLOCKED_BY_ENEMY_BARRIERS) and distance(eventPlayer, x) < 10 * eventPlayer.sizeScale and x.getEyePosition().y - eventPlayer.getPosition().y > 0 and x.getPosition().y - eventPlayer.getPosition().y < 2 * eventPlayer.sizeScale)).startDamageOverTime(eventPlayer, 2.5, eventPlayer.botBiteDamage * 0.231)
-            if eventPlayer.damageOverTimeRemaining < 2.5:
-                eventPlayer.damageOverTimeRemaining = 2.5
+            eventPlayer.damageOverTimeRemaining = max(eventPlayer.damageOverTimeRemaining, 2.5)
             eventPlayer.setAbilityCooldown(Button.ABILITY_1, 8)
         waitUntil(eventPlayer.getAbilityCooldown(Button.ABILITY_2) > 0, 0.25)
     #Cooldown
@@ -932,8 +930,7 @@ rule "BLASTER ROCKET HITS TARGET":
     blasterRocketBurnDuration = 2 if eventAbility == Button.ULTIMATE else 1
     victim.startDamageOverTime(eventPlayer, blasterRocketBurnDuration, eventPlayer.botBiteDamage * (0.5 if eventAbility == Button.ULTIMATE else 1))
     victim.setStatusEffect(eventPlayer, Status.BURNING, blasterRocketBurnDuration)
-    if eventPlayer.damageOverTimeRemaining < blasterRocketBurnDuration:
-        eventPlayer.damageOverTimeRemaining = blasterRocketBurnDuration
+    eventPlayer.damageOverTimeRemaining = max(eventPlayer.damageOverTimeRemaining, blasterRocketBurnDuration)
 
 
 rule "DOWNFALLEN (SIGMA) FIRES":

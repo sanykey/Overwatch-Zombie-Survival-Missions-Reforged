@@ -854,8 +854,7 @@ def explosionSequence():
         dummyExplosionDotTargets.setStatusEffect(eventPlayer, Status.BURNING, 3)
         #Not scaled damage
         dummyExplosionDotTargets.startDamageOverTime(eventPlayer, 3, eventPlayer.botBiteDamage * 2)
-        if eventPlayer.damageOverTimeRemaining < 3:
-            eventPlayer.damageOverTimeRemaining = 3
+        eventPlayer.damageOverTimeRemaining = max(eventPlayer.damageOverTimeRemaining, 3)
     # Snapshot the audience after damage and consume it before the wait.
     #!define explosionAudience tmp2
     explosionAudience = getAllPlayers()
