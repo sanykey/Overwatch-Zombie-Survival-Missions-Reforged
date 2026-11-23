@@ -7,6 +7,7 @@ subroutine detachHitchhikerPassenger
 subroutine checkEnhancementPlacement
 subroutine playPlacementWindupFeedback
 subroutine advanceSpawnRoomIndex
+subroutine playShowdownRing
 subroutine noCooldowns
 
 subroutine applyScaledMoveSpeed
@@ -40,6 +41,12 @@ def advanceSpawnRoomIndex():
     @Name "advanceSpawnRoomIndex"
 
     spawnRoomIndex = (spawnRoomIndex + 1) % len(attackSpawnRooms)
+
+
+def playShowdownRing():
+    @Name "playShowdownRing"
+
+    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, currentObjectivePosition, objectiveRad * 2)
 
 
 macro slimerTentacleOrigin():
@@ -607,7 +614,7 @@ def objectivesManagement():
         #Checks if current objective is showdown
         switch currentObjectiveType:
             case ObjectiveType.SHOWDOWN:
-                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, currentObjectivePosition, objectiveRad * 2)
+                playShowdownRing()
                 playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, currentObjectivePosition, 200)
                 break
             #Checks if current objective is bosses

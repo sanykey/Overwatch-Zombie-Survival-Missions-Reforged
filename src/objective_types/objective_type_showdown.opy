@@ -46,7 +46,7 @@ rule "INCREASE OBJECTIVE CAPTURE PERCENTAGE":
     playEffect(getPlayers(Team.1), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, currentObjectivePosition, (0.05 * showdownCapturePercent) ** 2)
     if showdownCapturePercent >= showdownNextCheckpoint:
         showdownNextCheckpoint += 25
-        playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.ORANGE, currentObjectivePosition, objectiveRad * 2)
+        playShowdownRing()
         if showdownNextCheckpoint >= 100:
             goto lbl_0
         playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, null, currentObjectivePosition, 100)
