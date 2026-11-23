@@ -428,15 +428,13 @@ rule "ENGINEER ARMOR TRANSFER":
         return
     # The target resolves on the second press: the visible ally closest to the crosshair
     # in the wide aim cone (within 15m) receives armor, otherwise it goes to self.
-    # The candidate slot is reused for cost after the target pick. No waits below.
-    #!define scrapTransferCandidates tmp0
+    # Use the first candidate immediately. No waits below.
     #!define scrapArmorGrantTarget tmp1
-    scrapTransferCandidates = sorted(getPlayersInRadius(eventPlayer, ENGINEER_TRANSFER_RANGE, Team.1, LosCheck.SURFACES).filter(lambda ally: ally != eventPlayer and ally.isAlive() and eventPlayer.isInViewAngle(ally.getEyePosition(), ENGINEER_TRANSFER_ANGLE)), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition())))
-    if scrapTransferCandidates != []:
+    scrapArmorGrantTarget = sorted(getPlayersInRadius(eventPlayer, ENGINEER_TRANSFER_RANGE, Team.1, LosCheck.SURFACES).filter(lambda ally: ally != eventPlayer and ally.isAlive() and eventPlayer.isInViewAngle(ally.getEyePosition(), ENGINEER_TRANSFER_ANGLE)), lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition())))[0]
+    if scrapArmorGrantTarget != null:
         # Aiming at an ally: the action is ally-directed and never falls back to
         # self. Engineer armor caps at ENGINEER_ARMOR_MAX per target across every Engineer
         # donor; a grant is refused only at the full cap.
-        scrapArmorGrantTarget = scrapTransferCandidates[0]
         if scrapArmorGrantTarget.scrapArmorAmount >= ENGINEER_ARMOR_MAX:
             smallMessage(eventPlayer, "Ally armor is full")
             return
@@ -445,7 +443,7 @@ rule "ENGINEER ARMOR TRANSFER":
         scrapArmorGrantTarget = eventPlayer
     else:
         return
-    # Candidate array is dead after target selection; reuse tmp0 for the cost.
+    # Keep the recipient in tmp1 while tmp0 holds the cost.
     # Synchronous through payment, with no waits or reevaluated readers.
     #!define scrapArmorGrantCost tmp0
     scrapArmorGrantCost = ENGINEER_ARMOR_SELF_COST if scrapArmorGrantTarget == eventPlayer else ENGINEER_ARMOR_ALLY_COST
