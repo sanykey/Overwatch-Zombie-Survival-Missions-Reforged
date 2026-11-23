@@ -733,10 +733,11 @@ def selectBotTarget():
     if not eventPlayer in bossStateList and eventPlayer.getHero() == Hero.PHARAH:
         #Players in Air
         botSelectionCandidateList.append(playerTargetList.filter(lambda x: distance(x, nearestWalkablePosition(x.getPosition())) > 5))
-    #Add players who are below bot to target list
-    botSelectionCandidateList.append(sorted(playerTargetList.exclude(botSelectionCandidateList).filter(lambda x: x.getPosition().y - eventPlayer.getPosition().y < 2.5), lambda x: distance(eventPlayer, x)))
-    #Add remaining players
-    botSelectionCandidateList.append(sorted(playerTargetList.exclude(botSelectionCandidateList), lambda x: distance(eventPlayer, x)))
+    # Both height groups keep distance order. Reuse tmp0 for the LoS loop below.
+    #!define botDistanceSortedTargets tmp0
+    botDistanceSortedTargets = sorted(playerTargetList.exclude(botSelectionCandidateList), lambda x: distance(eventPlayer, x))
+    botSelectionCandidateList.append(botDistanceSortedTargets.filter(lambda x: x.getPosition().y - eventPlayer.getPosition().y < 2.5))
+    botSelectionCandidateList.append(botDistanceSortedTargets.exclude(botSelectionCandidateList))
     #Remove invisible players
     botSelectionCandidateList = botSelectionCandidateList.filter(lambda x: not x.invisibilityCount)
     #The reevaluated boss distance-text visibility reads this per-bot snapshot after this call returns.
