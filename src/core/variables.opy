@@ -98,7 +98,8 @@ globalvar phaseSlot5  # Zombie votes (startup/global/player menu) -> resource-ty
 #!define zombieVoteList phaseSlot5
 #!define biomorphingQueuedTypeList phaseSlot5
 
-globalvar phaseSlot6  # Extraction flight destination; WIN/LOSS CONDITIONS sets it before evacSurvivorList.
+globalvar phaseSlot6  # Menu challenge title palette -> extraction flight destination.
+#!define startMenuChallengeTitleColorList phaseSlot6
 #!define extractionFlightDestination phaseSlot6
 
 globalvar phaseSlot7  # Extraction flight speed (2/10/50); WIN/LOSS CONDITIONS initializes it before evacSurvivorList.

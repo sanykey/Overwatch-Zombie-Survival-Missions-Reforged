@@ -9,9 +9,6 @@ globalvar augmentIconListConst = [AugmentIcon.NO_PREFERENCE, AugmentIcon.KEVLAR,
 # Keep a dedicated slot: enhancementOptionList becomes Biomorphing text after menu cleanup.
 globalvar enhancementIconListConst = [EnhancementIcon.NO_PREFERENCE, EnhancementIcon.ZOMBIE_HYBRID, EnhancementIcon.BULKING_SEASON, EnhancementIcon.BRAIN_KILLER, EnhancementIcon.PYROTECHNIC, EnhancementIcon.BORN_TO_BATTLE, EnhancementIcon.CHARGE_BATTERY, EnhancementIcon.PUP, EnhancementIcon.WRESTLER, EnhancementIcon.BOLT_STRIKE, EnhancementIcon.ENGINEER, EnhancementIcon.PLAGUE_DOCTOR, EnhancementIcon.OVERCHARGE, EnhancementIcon.HITCHHIKER]
 
-# Immutable palette shared by the pregame menu and gameplay HUD; indexed by Augment.
-globalvar augmentColorListConst = [Color.AQUA, Color.LIGHT_GRAY, Color.YELLOW, Color.SKY_BLUE, Color.ORANGE, Color.WHITE, Color.TURQUOISE, Color.BLUE, Color.LIME_GREEN, Color.RED]
-
 # Immutable augment names, indexed by selection ID; shared by the augment menu and combat HUD.
 # Melee-augment hero tables; the extended list also provides the index for per-hero melee values.
 # Initialized in VARIABLE ASSIGNMENT, not here: module-level initializers let the optimizer

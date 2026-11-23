@@ -102,6 +102,7 @@ rule "EFFECTS/TEXTS":
     #Empty descriptions must be strings: null selected from an array displays as 0.
     #Team 1 vote IDs are initialized to valid menu entries before players use the menu.
     #Challenge
+    startMenuChallengeTitleColorList = decodeColorPalette(NL_CHALLENGE_TITLE_COLORS_OFFSET, NL_CHALLENGE_TITLE_COLORS_LEN)
     hudText(
         getPlayers(Team.1),
         [
@@ -123,13 +124,13 @@ rule "EFFECTS/TEXTS":
         "Change Vote (Press [{0}])".format(inputBindingString(Button.ULTIMATE)) if isVoting or localPlayer.pregameChallengeVote == Challenge.NO_PREFERENCE else [],
         HudPosition.ACTUALLY_LEFT,
         0,
-        [Color.AQUA, Color.YELLOW, Color.LIME_GREEN, Color.ORANGE, Color.TURQUOISE, Color.PURPLE][localPlayer.pregameChallengeVote],
+        startMenuChallengeTitleColorList[localPlayer.pregameChallengeVote],
         [Color.AQUA, null, Color.LIME_GREEN, Color.ORANGE, Color.WHITE, Color.WHITE][localPlayer.pregameChallengeVote],
         [Color.AQUA, Color.YELLOW, Color.LIME_GREEN, Color.ORANGE, Color.WHITE, Color.WHITE][localPlayer.pregameChallengeVote],
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Zombie Mode
-    startMenuZombieColorList = [Color.AQUA, Color.ORANGE, Color.RED, Color.PURPLE, Color.LIME_GREEN, Color.BLUE, Color.GRAY]
+    startMenuZombieColorList = decodeColorPalette(NL_ZOMBIE_MENU_COLORS_OFFSET, NL_ZOMBIE_MENU_COLORS_LEN)
     hudText(
         getPlayers(Team.1),
         [
@@ -159,7 +160,7 @@ rule "EFFECTS/TEXTS":
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Objective Type: arrays use raw IDs; 3, 4 and 8 have no standalone menu row.
-    startMenuObjectiveColorList = [Color.AQUA, Color.ORANGE, Color.RED, null, null, Color.RED, Color.LIME_GREEN, Color.TURQUOISE, null, Color.PURPLE]
+    startMenuObjectiveColorList = decodeColorPalette(NL_OBJECTIVE_MENU_COLORS_OFFSET, NL_OBJECTIVE_MENU_COLORS_LEN)
     hudText(
         getPlayers(Team.1),
         [
@@ -195,7 +196,7 @@ rule "EFFECTS/TEXTS":
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
     #Enhancement
-    startMenuEnhancementColorList = [Color.AQUA, Color.GRAY, Color.LIME_GREEN, Color.RED, Color.ORANGE, Color.GRAY, Color.WHITE, Color.BLUE, Color.SKY_BLUE, Color.YELLOW, Color.ROSE, Color.GREEN, Color.TURQUOISE, Color.PURPLE]
+    startMenuEnhancementColorList = decodeColorPalette(NL_ENHANCEMENT_MENU_COLORS_OFFSET, NL_ENHANCEMENT_MENU_COLORS_LEN)
     createStartMenuEnhancementHud()
     createStartMenuAugmentHud()
 

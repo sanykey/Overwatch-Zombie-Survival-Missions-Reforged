@@ -189,6 +189,33 @@ const numbers = [
   },
 ];
 
+// Augment IDs still index the first ten colors directly.
+const sharedColorPalette = [
+  "AQUA", "LIGHT_GRAY", "YELLOW", "SKY_BLUE", "ORANGE", "WHITE",
+  "TURQUOISE", "BLUE", "LIME_GREEN", "RED", "GREEN", "PURPLE", "GRAY", "ROSE", null,
+];
+
+// Rows follow item ID - 1 or the raw menu selection ID. Keep the gaps in Objective.
+const colorPalettes = {
+  POWERUP: ["GREEN", "YELLOW", "BLUE", "RED", "ORANGE", "YELLOW", "ORANGE", "BLUE", "RED", "PURPLE", "RED", "WHITE"],
+  ZOMBIE_MENU: ["AQUA", "ORANGE", "RED", "PURPLE", "LIME_GREEN", "BLUE", "GRAY"],
+  OBJECTIVE_MENU: ["AQUA", "ORANGE", "RED", null, null, "RED", "LIME_GREEN", "TURQUOISE", null, "PURPLE"],
+  ENHANCEMENT_MENU: ["AQUA", "GRAY", "LIME_GREEN", "RED", "ORANGE", "GRAY", "WHITE", "BLUE", "SKY_BLUE", "YELLOW", "ROSE", "GREEN", "TURQUOISE", "PURPLE"],
+  CHALLENGE_TITLE: ["AQUA", "YELLOW", "LIME_GREEN", "ORANGE", "TURQUOISE", "PURPLE"],
+};
+
+for (const [name, palette] of Object.entries(colorPalettes)) {
+  const indices = palette.map(color => sharedColorPalette.indexOf(color));
+  if (indices.includes(-1)) {
+    throw new Error(`Color missing from the shared palette: ${name}`);
+  }
+  numbers.push({
+    offset: `NL_${name}_COLORS_OFFSET`,
+    len: `NL_${name}_COLORS_LEN`,
+    list: indices,
+  });
+}
+
 const spawnModeOffsets = [0];
 const spawnModeWeightTotals = [0];
 let numberIndex = 0;
@@ -224,5 +251,6 @@ result += `  #!define ZOMBIE_SPAWN_HEROES [${zombieSpawnHeroes.map(hero => "Hero
 result += `  #!define ZOMBIE_SPAWN_HERO_COUNT ${zombieSpawnHeroes.length}\n`;
 result += `  #!define NL_SPAWN_MODE_OFFSETS [${spawnModeOffsets.join(", ")}]\n`;
 result += `  #!define NL_SPAWN_MODE_WEIGHT_TOTALS [${spawnModeWeightTotals.join(", ")}]\n`;
+result += `  #!define SHARED_COLOR_PALETTE [${sharedColorPalette.map(color => color === null ? "null" : "Color." + color).join(", ")}]\n`;
 
 result
