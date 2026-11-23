@@ -238,9 +238,12 @@ rule "AMMO PACK REFILL FALLBACK":
     # These temporary inputs are synchronous; the handler has no waits/captures.
     #!define augmentAmmoFallbackClipIndex tmp0
     #!define augmentAmmoNativeCapacity tmp1
+    #!define augmentAmmoPreviousClipAmmo tmp3
     for augmentAmmoFallbackClipIndex in range(2):
         augmentAmmoNativeCapacity = eventPlayer.getMaxAmmo(augmentAmmoFallbackClipIndex)
-        if augmentAmmoNativeCapacity > 0 and eventPlayer.augmentAmmoLoadout[augmentAmmoFallbackClipIndex + 2] > augmentAmmoNativeCapacity and (eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) == augmentAmmoNativeCapacity and (eventPlayer.augmentAmmoFallbackState[augmentAmmoFallbackClipIndex] or eventPlayer.augmentAmmoFallbackState[2] and not eventPlayer.isReloading()) or eventPlayer.getHero() == Hero.WIDOWMAKER and eventPlayer.augmentAmmoFallbackState[2] and not eventPlayer.isReloading() and eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) < augmentAmmoNativeCapacity and (eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) > eventPlayer.augmentAmmoFallbackState[augmentAmmoFallbackClipIndex + 3] or eventPlayer.augmentAmmoFallbackState[augmentAmmoFallbackClipIndex + 3] > augmentAmmoNativeCapacity)):
+        # Snapshot the ammo before reload for this clip's Widowmaker fallback.
+        augmentAmmoPreviousClipAmmo = eventPlayer.augmentAmmoFallbackState[augmentAmmoFallbackClipIndex + 3]
+        if augmentAmmoNativeCapacity > 0 and eventPlayer.augmentAmmoLoadout[augmentAmmoFallbackClipIndex + 2] > augmentAmmoNativeCapacity and (eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) == augmentAmmoNativeCapacity and (eventPlayer.augmentAmmoFallbackState[augmentAmmoFallbackClipIndex] or eventPlayer.augmentAmmoFallbackState[2] and not eventPlayer.isReloading()) or eventPlayer.getHero() == Hero.WIDOWMAKER and eventPlayer.augmentAmmoFallbackState[2] and not eventPlayer.isReloading() and eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) < augmentAmmoNativeCapacity and (eventPlayer.getAmmo(augmentAmmoFallbackClipIndex) > augmentAmmoPreviousClipAmmo or augmentAmmoPreviousClipAmmo > augmentAmmoNativeCapacity)):
             # A refill rose from below native full, or a completed reload reset
             # an overfilled clip to native full. Descending through native full
             # while firing, and cancelled/partial reloads, must not grant ammo.
