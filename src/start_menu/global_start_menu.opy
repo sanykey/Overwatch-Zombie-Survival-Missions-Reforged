@@ -256,7 +256,6 @@ def determineZombieMode():
     for zombieModeVoteIndex in range(1, len(zombieVoteList)):
         zombieVoteList[zombieModeVoteIndex] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameZombieVote == zombieModeVoteIndex)) if zombieVoteList[zombieModeVoteIndex] else -1
     voteWinnerCounts = zombieVoteList
-    voteWinnerResult = zombieSetting
     selectVoteWinner()
     zombieSetting = voteWinnerResult
     # Default to All Zombies when no enabled mode received votes.
@@ -320,7 +319,6 @@ def determineObjectiveType():
     for objectiveTypeVoteIndex in range(ObjectiveType.SHOWDOWN, len(objectiveTypeVoteList)):
         objectiveTypeVoteList[objectiveTypeVoteIndex] = len(getPlayers(Team.1).filter(lambda player: player.isPlayerActive and player.pregameObjectiveVote == objectiveTypeVoteIndex)) if objectiveTypeVoteList[objectiveTypeVoteIndex] else -1
     voteWinnerCounts = objectiveTypeVoteList
-    voteWinnerResult = objectiveTypeSetting
     selectVoteWinner()
     objectiveTypeSetting = voteWinnerResult
     # Default to Mixed Objectives when enabled; otherwise pick an enabled type.
@@ -338,6 +336,7 @@ def selectVoteWinner():
     # Synchronous only: no waits, asynchronous work, nested calls or reevaluated readers of tmp0..2.
     # Keep the original traversal and sequential coin flips; a uniform pick among tied options differs.
     # Callers publish the result immediately, then handle their own no-preference defaults.
+    voteWinnerResult = 0
     for voteWinnerIndex in range(1, len(voteWinnerCounts)):
         if voteWinnerCounts[voteWinnerResult] < voteWinnerCounts[voteWinnerIndex]:
             voteWinnerResult = voteWinnerIndex
