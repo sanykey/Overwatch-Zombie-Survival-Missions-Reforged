@@ -34,7 +34,7 @@ rule "ATTACK SPAWN ROOM CONTROL":
     @Condition isSpecialGameMode != true
     @Condition playerTargetList.any(lambda x: distance(x, activeAttackSpawnRoom) < 45) == true
     
-    spawnRoomIndex = (spawnRoomIndex + 1) % len(attackSpawnRooms)
+    advanceSpawnRoomIndex()
     # Only spawned players can block activation of the candidate spawn room.
     if getPlayers(Team.1).all(lambda player: not player.hasSpawned() or distance(player, attackSpawnRooms[spawnRoomIndex]) > 45):
         activeAttackSpawnRoom = attackSpawnRooms[spawnRoomIndex]

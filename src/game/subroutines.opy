@@ -6,6 +6,7 @@ subroutine detachHitchhikerPassenger
 
 subroutine checkEnhancementPlacement
 subroutine playPlacementWindupFeedback
+subroutine advanceSpawnRoomIndex
 subroutine noCooldowns
 
 subroutine applyScaledMoveSpeed
@@ -33,6 +34,12 @@ subroutine abilityPlacement
 subroutine createRemainingObjectivesHud
 subroutine selectPullAimTarget
 subroutine applyHitEnhancements
+
+
+def advanceSpawnRoomIndex():
+    @Name "advanceSpawnRoomIndex"
+
+    spawnRoomIndex = (spawnRoomIndex + 1) % len(attackSpawnRooms)
 
 
 macro slimerTentacleOrigin():
