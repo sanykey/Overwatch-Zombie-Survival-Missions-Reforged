@@ -1,9 +1,5 @@
 #!mainFile "../../main.opy"
 
-subroutine chaseSatelliteTarget
-
-
-
 macro fireSatelliteMacro():
     wait(1)
     smallMessage(getAllPlayers(), "Connecting to satellite...")
@@ -39,15 +35,12 @@ macro fireSatelliteMacro():
         objectiveEntityIdList.append(getLastCreatedEntity())
     wait(5)
     smallMessage(getAllPlayers(), "Firing sequence commenced")
-    #Chase closest living zombie
-    chaseSatelliteTarget()
     #Fire satellite
     for satelliteFiringStepsRemaining in range(40, 0, -1):
         stopChasing(satelliteLaserPosition)
         satelliteLaserTarget = (sorted(getLivingPlayers(Team.2).filter(lambda player: not player.botIsTeleporting), lambda x: distance(x, satelliteLaserPosition)))[0]
         if satelliteLaserTarget != null:
-            #Chase closest living zombie
-            chaseSatelliteTarget()
+            chaseAtRate(satelliteLaserPosition, satelliteLaserTarget.getPosition(), 7.5 if getLivingPlayers(Team.2).any(lambda player: not player.botIsTeleporting) else 0)
         wait(0.5)
         # Snapshot the raycast and effect audience. All reads finish before damage.
         #!define satelliteLaserPlayers tmp1
@@ -175,9 +168,3 @@ rule "PLAYERS REPAIR TERMINALS":
     wait(0.5)
     if ruleCondition:
         loop()
-
-
-def chaseSatelliteTarget():
-    @Name "chaseSatelliteTarget"
-
-    chaseAtRate(satelliteLaserPosition, satelliteLaserTarget.getPosition(), 7.5 if getLivingPlayers(Team.2).any(lambda player: not player.botIsTeleporting) else 0)
