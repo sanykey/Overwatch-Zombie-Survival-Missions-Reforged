@@ -50,7 +50,7 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
     if canOpenSupplyDrop():
         openSupplyDrop()
 
-    elif len(aimedPowerUpPositions) > 0 and not (isScavengerCrouchHeld and len(eventPlayer.augmentScavengerBackpack) >= SCAVENGER_BACKPACK_CAPACITY):
+    elif aimedPowerUpPositions != [] and not (isScavengerCrouchHeld and len(eventPlayer.augmentScavengerBackpack) >= SCAVENGER_BACKPACK_CAPACITY):
         # Commit pickup and all four aligned ground lists without waits: another
         # player's pickup or a Reload drop must never observe a half-finished trade.
         # Synchronous scratch; the removal subroutine only reads the shared index.
