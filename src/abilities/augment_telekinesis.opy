@@ -36,12 +36,10 @@ rule "[LONG_REACH] MELEE PUSH":
         return
     if eventPlayer.isCrowdControlled:
         return
-    # One synchronous spatial query per ready press, independent of native or
-    # scripted damage attribution. Existing global scratch is dead before return;
-    # no waits, damage, asynchronous calls or HUD/effect captures use these roles.
+    # One spatial query per ready press. The synchronous hit helper preserves
+    # the target list and loop index in tmp0/tmp1 and reads its target from tmp3.
     #!define augmentPushTargets tmp0
     #!define augmentPushTargetIndex tmp1
-    #!define augmentPushTarget tmp2
     # Push in every direction within a fixed radius; surfaces block visibility.
     augmentPushTargets = getPlayersInRadius(eventPlayer, TELEKINESIS_MELEE_PUSH_RADIUS, Team.2, LosCheck.SURFACES).filter(lambda zombie: zombie.isAlive() and not zombie.botIsTeleporting and not zombie.botIsAttached and zombie.botKnockbackScale > 0 and zombie not in bossStateList and zombie not in miniBossList)
     if augmentPushTargets == []:
@@ -50,9 +48,10 @@ rule "[LONG_REACH] MELEE PUSH":
     # One expanding ring per push, centered at waist height with the push radius.
     playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.RED, augmentGrapnelCenter(eventPlayer), TELEKINESIS_MELEE_PUSH_RADIUS)
     for augmentPushTargetIndex in range(len(augmentPushTargets)):
-        augmentPushTarget = augmentPushTargets[augmentPushTargetIndex]
-        augmentPushTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, augmentPushTarget)), -15), TELEKINESIS_MELEE_PUSH_IMPULSE * augmentPushTarget.botKnockbackScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
-        augmentPushTarget.setEnvironmentalKillCreditor(eventPlayer)
+        enhancementHitVictim = augmentPushTargets[augmentPushTargetIndex]
+        enhancementHitVictim.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, enhancementHitVictim)), -15), TELEKINESIS_MELEE_PUSH_IMPULSE * enhancementHitVictim.botKnockbackScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+        enhancementHitVictim.setEnvironmentalKillCreditor(eventPlayer)
+        damageWithEnhancements(TELEKINESIS_MELEE_PUSH_DAMAGE, enhancementHitVictim)
 
 
 rule "[LONG_REACH] QUICK MELEE":

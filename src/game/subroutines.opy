@@ -57,8 +57,8 @@ macro slimerTentacleOrigin():
 macro damageWithEnhancements(amount, target):
     # Single target; eventPlayer owns the damage and on-hit enhancements.
     # Consumes tmp2/tmp3 synchronously without waits; preserves tmp0/tmp1.
-    # Arguments must not depend on the overwritten slots. The shared handler
-    # checks actual health loss and applies the selected enhancement once.
+    # The target can already be in tmp3. Amount must stay valid after tmp2/tmp3
+    # are assigned. The handler checks actual health loss before applying bonuses.
     enhancementHitVictim = target
     enhancementHitHealthBefore = enhancementHitVictim.getHealth()
     damage(enhancementHitVictim, eventPlayer, amount)
