@@ -165,7 +165,7 @@ rule "DELETE PATH":
     # rescueReachedPathIndex: reached path index, consumed by the immediate path trim.
     #!define rescueReachedPathIndex tmp0
     rescueReachedPathIndex = rescueSurvivor.rescuePathList.index(sorted(rescueSurvivor.rescuePathList, lambda x: distance(rescueSurvivor, x))[0])
-    rescueSurvivor.rescuePathList.remove(rescueSurvivor.rescuePathList.filter(lambda _, i: i <= rescueReachedPathIndex))
+    rescueSurvivor.rescuePathList.remove(rescueSurvivor.rescuePathList.slice(0, rescueReachedPathIndex + 1))
     wait(0.25, Wait.RESTART_WHEN_TRUE)
     if ruleCondition:
         loop()
