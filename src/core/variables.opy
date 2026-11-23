@@ -16,8 +16,10 @@
 #!define ENHANCEMENT_ICONS enhancementIconListConst
 #!define AUGMENT_ICONS augmentIconListConst
 #!define AUGMENT_COLORS augmentColorListConst
-# Augment name table, indexed by selection ID; melee-augment hero tables, checked by hero.
+# Name tables, indexed by selection ID.
+#!define ENHANCEMENT_NAMES enhancementNameListConst
 #!define AUGMENT_NAMES augmentNameListConst
+# Melee-augment hero tables, checked by hero.
 #!define TELEKINESIS_MELEE_WEAPON_HEROES augmentMeleeWeaponHeroListConst
 #!define TELEKINESIS_MELEE_BUTTON_WEAPON_HEROES augmentMeleeBtnHeroListConst
 

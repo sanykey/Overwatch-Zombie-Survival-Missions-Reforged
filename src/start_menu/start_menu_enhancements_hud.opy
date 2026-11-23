@@ -4,13 +4,8 @@ macro createStartMenuEnhancementHud():
     hudText(
         getPlayers(Team.1),
         "Enhancement: {0}{1}".format(
-            [
-                "No Preference", "Zombie Hybrid ", "Bulking Season ",
-                "Brain Killer ", "Pyrotechnic ", "Born to Battle ",
-                "Charge Battery ", "P.U.P. ", "Wrestler ",
-                "Bolt Strike ", "Engineer ", "Auspex Scan ", "Plague Doctor ", "Overcharge ", "Hitchhiker "
-            ][localPlayer.enhancementId],
-            enhancementOptionList[localPlayer.enhancementId] if localPlayer.enhancementId > Enhancement.NO_PREFERENCE else ""
+            ENHANCEMENT_NAMES[localPlayer.enhancementId],
+            f" {enhancementOptionList[localPlayer.enhancementId]}" if localPlayer.enhancementId > Enhancement.NO_PREFERENCE else ""
         ),
         [
             " ",

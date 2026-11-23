@@ -33,7 +33,7 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             "{0} | {1}".format(f"Energy: {floor(localPlayer.enhancementCapacitorEnergy)}", f"Armed: +{floor(localPlayer.enhancementCapacitorCharge)} dmg/hit" if localPlayer.enhancementCapacitorCharge > 0 else f"2x [{inputBindingString(Button.CROUCH)}]: arm"),
             f"[{inputBindingString(Button.CROUCH)}]: detach" if localPlayer.hitchhikerAttached else f"[{inputBindingString(Button.CROUCH)}]: attach near ally"
         ][localPlayer.enhancementId],
-        [" ", "Zombie Hybrid", "Bulking Season", "Brain Killer", "Pyrotechnic", "Born to Battle", "Charge Battery", "P.U.P.", "Wrestler", "Bolt Strike", "Engineer", "Auspex Scan", "Plague Doctor", "Overcharge", "Hitchhiker"][localPlayer.enhancementId],
+        ENHANCEMENT_NAMES[localPlayer.enhancementId],
         HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE,
         [
             Color.WHITE,
