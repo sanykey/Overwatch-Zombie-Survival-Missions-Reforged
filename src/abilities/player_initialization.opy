@@ -67,8 +67,8 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
         AUGMENT_ICONS[localPlayer.augmentId],
         "{0}{1}".format(f"Hold [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.INTERACT)}]: aim; release [{inputBindingString(Button.INTERACT)}]: place | " if localPlayer.augmentBarrierPlacementCooldown <= 0 else "", "{0}{1}".format(f"{ceil(localPlayer.augmentBarrierHealth)} HP | " if localPlayer.augmentBarrierHealth > 0 else "", f"Place: {localPlayer.augmentBarrierPlacementCooldown}s CD" if localPlayer.augmentBarrierPlacementCooldown > 0 else iconString(Icon.CHECKMARK))) if localPlayer.augmentId == Augment.LASER_BARRICADE else (
             "{0}{1}".format(
-                f"Dash: {localPlayer.augmentDashCharges}/{DASH_MAX_CHARGES} | 2x [{inputBindingString(Button.JUMP)}]",
-                f" | +1 in {ceil(localPlayer.augmentDashReadyAt - getTotalTimeElapsed())}s" if localPlayer.augmentDashCharges < DASH_MAX_CHARGES else ""
+                f"Dash: {localPlayer.augmentDashCharges}/{DASH_MAX_CHARGES} | 2x [{inputBindingString(Button.JUMP)}] + Move",
+                f" | {ceil(localPlayer.augmentDashReadyAt - getTotalTimeElapsed())}s CD" if localPlayer.augmentDashCharges < DASH_MAX_CHARGES else ""
             ) if localPlayer.augmentId == Augment.DASH else
             (f"Launch: {ceil(localPlayer.augmentMovementReadyAt - getTotalTimeElapsed())}s CD" if getTotalTimeElapsed() < localPlayer.augmentMovementReadyAt else f"2x [{inputBindingString(Button.JUMP)}]: launch") if localPlayer.augmentId == Augment.HIGHRISE else
             "{0} | {1}".format(
