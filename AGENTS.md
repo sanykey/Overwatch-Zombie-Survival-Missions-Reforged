@@ -18,6 +18,7 @@ Everything in `analysis/` (reports, temporary scripts, validation results) belon
 
 ## Overwatch Workshop / OverPy Specifics
 
+- For validation and element counts, compile `main.opy` with the standard settings only. Compile alternate profiles only when the user explicitly requests them.
 - When formatting text, prefer f-strings such as `f"text {value}"` over `"text {}".format(value)`, provided this does not increase the compiled Workshop element count or make the code more complex at the point of use.
 - Define new predicates (reusable expressions that return a boolean) with OverPy's `macro` syntax. When migrating an existing predicate from `#!define`, inspect the compiled Workshop Conditions, especially for native UI workarounds.
 - Comparing a value with zero is not equivalent to checking its truthiness. In Workshop, an empty array and a zero vector are not equal to `0` or `Null`, but are equal to `False`. Therefore, `X != 0` is true for these values, while `X != False` is false. In OverPy, these values are written as `[]`, `vect(0, 0, 0)`, `null`, and `false`. See the [Workshop comparison tables](https://workshop.codes/wiki/articles/comparisons-and-truth).
