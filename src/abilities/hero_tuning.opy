@@ -1,5 +1,7 @@
 #!mainFile "../../main.opy"
 
+subroutine applyDamageReceivedModifier
+
 rule "CC COOLDOWN FROM DOWNFALLEN/BRUTE":
     @Event eachPlayer
     @Team 1
@@ -77,21 +79,6 @@ rule "SOLDIER TACTICAL VISOR DAMAGE BONUS":
     applyDamageDealtModifier()
     waitUntil(not eventPlayer.isUsingUltimate() or eventPlayer.getHero() != Hero.SOLDIER, Math.INFINITY)
     applyDamageDealtModifier()
-
-
-def applyDamageReceivedModifier():
-    @Name "applyDamageReceivedModifier"
-    # The only Team 1 Set Damage Received writers are the Dash protection
-    # window, the Super Nano power-up and the ultimate resist. Every state
-    # edge calls this recompute; the strongest (lowest) intake wins and the
-    # resists never stack. SWARM SHOOTOUT lowers intake through Start Damage
-    # Modification, which multiplies on top and stays outside this recompute.
-    # Synchronous tmp3 scratch. Dash activation retains its direction in tmp0.
-    #!define isDashResistActive tmp3
-    isDashResistActive = eventPlayer.augmentId == Augment.DASH and eventPlayer.augmentDashSmokeEntity != null
-    # Cache the DoT gate for the bite, rocket, Molten Core, gas and explosion rules.
-    eventPlayer.isDotProtected = eventPlayer.isUsingUltimate() or isDashResistActive
-    eventPlayer.setDamageReceived(0 if isDashResistActive else 50 if eventPlayer.isDotProtected or eventPlayer.powerUpSuperNanoGoodAuraId != 0 else 100)
 
 
 rule "PLAYER ULTIMATE DAMAGE RESIST":

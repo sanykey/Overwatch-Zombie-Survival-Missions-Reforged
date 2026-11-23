@@ -29,8 +29,8 @@ macro useDashAirActionMacro():
         # 100% damage resist instead of the INVINCIBLE status: that status keys
         # the DoT-clearing rule, which must not purge infection DoT/burning.
         # The smoke entity gates the resist, so open the window first and let
-        # the recompute pick the strongest active protection (0 beats the
-        # Super Nano / ultimate 50; it still clears together with the aura).
+        # the recompute pick the strongest active protection. Dash takes
+        # priority over Super Nano and the ultimate until the aura clears.
         # Keep one aura for overlapping dashes; only its deadline changes.
         if eventPlayer.augmentDashSmokeEntity == null:
             createEffect(getAllPlayers(), Effect.BAD_AURA, Color.BLUE, eventPlayer, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)

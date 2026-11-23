@@ -13,6 +13,22 @@ def applyHitEnhancements():
         applyOverchargeHitMacro(enhancementHitVictim)
 
 
+def applyDamageReceivedModifier():
+    @Name "applyDamageReceivedModifier"
+    # The only Team 1 Set Damage Received writers are the Dash protection
+    # window, the Super Nano power-up and the ultimate resist. Every state
+    # edge calls this recompute; the strongest (lowest) intake wins and the
+    # resists never stack. SWARM SHOOTOUT lowers intake through Start Damage
+    # Modification, which multiplies on top and stays outside this recompute.
+    # Synchronous tmp3 scratch. Dash activation retains its direction in tmp0.
+    #!define isDashResistActive tmp3
+    isDashResistActive = eventPlayer.augmentId == Augment.DASH and eventPlayer.augmentDashSmokeEntity != null
+    # Cache the DoT gate for the bite, rocket, Molten Core, gas and explosion rules.
+    eventPlayer.isDotProtected = eventPlayer.isUsingUltimate() or isDashResistActive
+    # After Dash is handled, isDotProtected reflects the ultimate state.
+    eventPlayer.setDamageReceived(0 if isDashResistActive else 50 if eventPlayer.powerUpSuperNanoGoodAuraId != 0 else 65 if eventPlayer.isDotProtected else 100)
+
+
 rule "CROWD CONTROL STATUS":
     @Event eachPlayer
     @Condition (eventPlayer.hasStatus(Status.KNOCKED_DOWN) or eventPlayer.hasStatus(Status.ASLEEP) or eventPlayer.hasStatus(Status.FROZEN) or eventPlayer.hasStatus(Status.STUNNED)) == true
