@@ -6,16 +6,20 @@ subroutine bossReturn
 #!define BOSS_ENVIRONMENT_DAMAGE 200
 
 
+macro canSpawnAsObjectiveBoss(player):
+    player.hasSpawned() and not player.botIsTeleporting and player.botTarget == null and player not in miniBossList
+
+
 rule "SPAWN BOSS":
     @Condition currentObjectiveType == ObjectiveType.BOSSES
     @Condition isObjectiveComplete == false
     @Condition not bossesStateList.any(lambda x: entityExists(x))
-    @Condition (getLivingPlayers(Team.2).any(lambda player: player.hasSpawned() and not player.botIsTeleporting and player.botTarget == null)) == true
+    @Condition getLivingPlayers(Team.2).any(lambda player: canSpawnAsObjectiveBoss(player)) == true
     #Keeps amount of different bots within the max limit.
     @Condition len(botHeroList.filter(lambda x: getNumberOfHeroes(x, Team.2))) < (UNIQUE_HERO_SKIN_CAP - max(getNumberOfSlots(Team.1), getNumberOfPlayers(Team.1)))
     
     wait(0.25, Wait.ABORT_WHEN_FALSE)
-    bossesStateList[0] = (getLivingPlayers(Team.2).filter(lambda player: player.hasSpawned() and not miniBossList[player] and not player.botIsTeleporting and player.botTarget == null))[0]
+    bossesStateList[0] = getLivingPlayers(Team.2).filter(lambda player: canSpawnAsObjectiveBoss(player))[0]
     bossesStateList.teleport(dummyHoldingPositionConst)
     waitUntil(bossesStateList[0].botIsInitializing, 3)
     waitUntil(not bossesStateList[0].botIsInitializing, 5)

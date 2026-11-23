@@ -48,7 +48,8 @@ macro damageWithEnhancements(amount, target):
 
 
 macro minibossMutationMacro():
-    miniBossList.append(eventPlayer)
+    # The caller has already checked that no miniboss entity exists.
+    miniBossList = [eventPlayer]
     # Ham N' Hammer uses only the first two heroes.
     eventPlayer.startForcingHero([
         Hero.REINHARDT, Hero.WRECKING_BALL, Hero.JUNKER_QUEEN, Hero.DOOMFIST,
