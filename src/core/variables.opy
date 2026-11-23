@@ -288,6 +288,8 @@ playervar isHeroSwitchRespawn  # Player has switched heroes; prevents repeating 
 
 # Enhancements only (enhancement prefix; includes the Rescue Hitchhiker setup).
 playervar enhancementId  # Selected Enhancement enum; pregame selection, runtime behavior and Rescue Hitchhiker initialization.
+playervar botAuspexOwner  # Team 2 only: latest mark caster, read only while the mark is active.
+playervar botAuspexExpiry  # Team 2 only: absolute mark deadline; cleared on normal bot death.
 
 # Human Augment storage is independent of enhancements and power-ups.
 # Team 2 Wrestler roles are team-exclusive; no bot Augment owns these slots.
@@ -687,6 +689,8 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 # Bolt Strike: absolute cooldown deadline, retained across deaths and hero switches.
 # START GAME clears this slot through the existing enhancementScrap sweep.
 #!define enhancementBoltReadyAt actorTeamSlot22
+# Auspex: absolute cooldown deadline with the same lifetime as Bolt Strike.
+#!define enhancementAuspexReadyAt actorTeamSlot22
 # Born to Battle unspent ability resets (0-2); retained through ability waits and reevaluated by its HUD.
 #!define enhancementBattleResetCharges actorTeamSlot22
 # Placed Charge Battery position; zero clears it.
@@ -727,7 +731,7 @@ playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateS
 playervar actorTeamSlot24  # Team 2: botSpawnWaypoint; Team 1: enhancementStateSlot3. Receivers, not rule teams, own the storage.
 # Movement waypoint associated with the accepted zombie spawn point.
 #!define botSpawnWaypoint actorTeamSlot24
-# Wrestler / Bolt Strike: short-lived attack beam handle, retained through the
+# Wrestler / Bolt Strike / Auspex: short-lived attack beam handle, retained through the
 # unconditional cleanup wait; departure cleanup also destroys it. No spawn reset.
 # Beam endpoints are snapshots, so the global target scratch is never captured.
 #!define enhancementAttackBeamEntity actorTeamSlot24

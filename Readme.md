@@ -55,7 +55,9 @@ For debugging, `[debug] snky buffs` grants snky 100 fuel and a Jetpack item afte
 
 ## Enhancements and Augments
 
-Choose one primary **Enhancement** with **Quick Melee** and one independent **Augment** with **Interact** before the match. Hold **Secondary Fire** while choosing to cycle backwards. During gameplay, Interact handles powerups and Wrestler. Each unselected slot receives a random real option when gameplay starts, including for players joining an ongoing match: one of twelve Enhancements eligible by role and one of nine Augments. Hitchhiker is the final option in the manual selection menu and is excluded from the random roll. Explicit choices are preserved, and an assigned option is retained across later spawns. There are no Workshop settings for default selections.
+Choose one primary **Enhancement** with **Quick Melee** and one independent **Augment** with **Interact** before the match. Hold **Secondary Fire** while choosing to cycle backwards. During gameplay, Interact handles powerups and Wrestler. Each unselected slot receives a random real option when gameplay starts, including for players joining an ongoing match. The random pool includes 13 Enhancements across all roles and nine Augments. Hitchhiker is the final option in the manual selection menu and is excluded from the random roll. Explicit choices are preserved, and an assigned option is retained across later spawns. There are no Workshop settings for default selections.
+
+**Auspex Scan.** Aim at a surface or zombie within 30m and double-tap Crouch. A single pulse reaches through walls in 8m and hacks and marks living zombies for 6s. Major bosses receive the mark and resist the hack. Hero hits from survivors deal +40% damage to marked targets (+20% against bosses and minibosses). The attacker gets the damage credit. The latest caster owns the mark, refreshes its duration and gains 0.2 percentage points of ultimate charge per point of bonus damage from other survivors. Successful placement starts a 15s cooldown. Auspex Scan can roll for any role.
 
 Born to Battle stores up to two ability resets. A final blow adds one charge and an ability reset consumes one.
 

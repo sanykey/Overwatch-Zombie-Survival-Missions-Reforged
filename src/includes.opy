@@ -46,6 +46,7 @@
 #!include "items/supply_drops.opy"
 #!include "items/power_ups.opy"
 #!include "abilities/enhancements.opy"
+#!include "abilities/enhancement_auspex_scan.opy"
 #!include "abilities/enhancement_charge_battery.opy"
 #!include "abilities/augment_telekinesis.opy"
 #!include "abilities/augment_highrise.opy"

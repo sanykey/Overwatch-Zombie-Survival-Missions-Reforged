@@ -111,17 +111,24 @@ rule "PLAYER DEALT DAMAGE":
     @Condition victim != attacker
     @Condition eventDamage > 0
 
-    if eventPlayer.enhancementId == Enhancement.BRAIN_KILLER:
-        if eventWasCriticalHit == true:
-            #Critical hits deal 50% more damage, 20% if vicitm is a boss
-            damage(victim, eventPlayer, eventDamage * (BRAIN_KILLER_BOSS_CRIT_BONUS_PCT / 100 if victim in bossStateList else BRAIN_KILLER_CRIT_BONUS_PCT / 100))
-            playEffect(eventPlayer, DynamicEffect.BAD_EXPLOSION, Color.RED, victim.getEyePosition() + directionTowards(eventPlayer.getEyePosition(), victim.getEyePosition()) * victim.sizeScale, 0.1 * victim.sizeScale)
-    elif eventAbility != null:
-        # Overcharge's bonus has no Event Ability.
+    if eventPlayer.enhancementId == Enhancement.BRAIN_KILLER and eventWasCriticalHit == true:
+        # Critical hits deal 50% more damage, 20% if the victim is a boss.
+        damage(victim, eventPlayer, eventDamage * (BRAIN_KILLER_BOSS_CRIT_BONUS_PCT / 100 if victim in bossStateList else BRAIN_KILLER_CRIT_BONUS_PCT / 100))
+        playEffect(eventPlayer, DynamicEffect.BAD_EXPLOSION, Color.RED, victim.getEyePosition() + directionTowards(eventPlayer.getEyePosition(), victim.getEyePosition()) * victim.sizeScale, 0.1 * victim.sizeScale)
+    if eventAbility != null:
+        # Scripted Damage has no Event Ability, keeping both bonuses from triggering themselves.
         if eventPlayer.enhancementId == Enhancement.PYROTECHNIC:
             applyPyrotechnicHitMacro(victim)
         elif eventPlayer.enhancementId == Enhancement.OVERCHARGE:
             applyOverchargeHitMacro(victim)
+
+        if victim.botAuspexExpiry > getTotalTimeElapsed() and entityExists(victim.botAuspexOwner):
+            # Synchronous scratch for the charge award and the ensuing Damage action.
+            #!define auspexBonusDamage tmp1
+            auspexBonusDamage = eventDamage * (AUSPEX_BOSS_BONUS_DAMAGE if victim in bossStateList or victim in miniBossList else AUSPEX_BONUS_DAMAGE)
+            if eventPlayer != victim.botAuspexOwner:
+                victim.botAuspexOwner.setUltCharge(victim.botAuspexOwner.getUltCharge() + auspexBonusDamage * AUSPEX_ULT_PCT_PER_BONUS_DAMAGE)
+            damage(victim, eventPlayer, auspexBonusDamage)
 
     # Augments: Leech includes damage from the hero, primary enhancement and
     # scripted powerups. The HIGHRISE airborne bonus is a Set Damage Dealt
