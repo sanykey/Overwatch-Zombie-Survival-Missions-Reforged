@@ -63,8 +63,8 @@ rule "BOT BECOMES BOSS":
     #Boss throttle speed
     eventPlayer.botThrottleSpeed = 0.9 if eventPlayer.getHero() == Hero.REINHARDT else 0.65
     #Health pool size as boss
-    eventPlayer.botBaseHealth = 15000
-    eventPlayer.botBossHealth = eventPlayer.botBaseHealth
+    eventPlayer.botBaseHealth = BOSS_OBJECTIVE_BASE_HEALTH
+    eventPlayer.botBossHealth = BOSS_OBJECTIVE_BASE_HEALTH
     eventPlayer.sizeScale = BOSS_BASE_SIZE
     eventPlayer.startScalingSize(eventPlayer.sizeScale + 1 if eventPlayer.getHero() == Hero.EMRE else eventPlayer.sizeScale, false)
     #Scale zombie voice lines with size

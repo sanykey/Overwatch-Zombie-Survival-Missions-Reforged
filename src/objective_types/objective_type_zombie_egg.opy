@@ -33,8 +33,8 @@ rule "BOT BECOMES ZOMBIE EGG":
     eventPlayer.setInvisibility(Invis.ALL)
     eventPlayer.startForcingPosition(currentObjectivePosition + -2.5 * Vector.UP)
     eventPlayer.startModifyingVoicelinePitch(0.5, false)
-    eventPlayer.botBaseHealth = 15000
-    eventPlayer.botBossHealth = eventPlayer.botBaseHealth
+    eventPlayer.botBaseHealth = BOSS_OBJECTIVE_BASE_HEALTH
+    eventPlayer.botBossHealth = BOSS_OBJECTIVE_BASE_HEALTH
     eventPlayer.sizeScale = 2.5
     applyCurrentSizeScale()
     eventPlayer.setHealth(eventPlayer.getMaxHealth())
