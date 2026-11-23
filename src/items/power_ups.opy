@@ -14,6 +14,11 @@ subroutine cloakingDevice
 subroutine superNano
 subroutine ultimateCharger
 subroutine stun
+subroutine removeGroundPowerUp
+
+#!define GROUND_POWER_UP_LIMIT 35
+# Synchronous removal index shared by pickup and eviction.
+#!define groundPowerUpRemovalIndex tmp1
 
 # Render the shared expiry without writing a countdown on every worker tick.
 macro powerUpSecondsRemaining(deadline):
@@ -45,24 +50,18 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
     elif len(aimedPowerUpPositions) > 0 and not (eventPlayer.augmentId == Augment.SCAVENGER and eventPlayer.isHoldingButton(Button.CROUCH) and len(eventPlayer.augmentScavengerBackpack) >= SCAVENGER_BACKPACK_CAPACITY):
         # Commit pickup and all four aligned ground lists without waits: another
         # player's pickup or a Reload drop must never observe a half-finished trade.
-        # Synchronous scratch; no subroutine calls or reevaluated captures here.
+        # Synchronous scratch; the removal subroutine only reads the shared index.
         #!define pickedPowerUpPosition tmp0
-        #!define pickedPowerUpIndex tmp1
         #!define tradedPowerUpItemId tmp2
         pickedPowerUpPosition = (sorted(aimedPowerUpPositions, lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x))))[0]
-        pickedPowerUpIndex = supplyPowerUpPositionList.index(pickedPowerUpPosition)
+        groundPowerUpRemovalIndex = supplyPowerUpPositionList.index(pickedPowerUpPosition)
         tradedPowerUpItemId = eventPlayer.powerUpItemId
         if eventPlayer.augmentId == Augment.SCAVENGER and eventPlayer.isHoldingButton(Button.CROUCH):
-            eventPlayer.augmentScavengerBackpack.append(supplyPowerUpIdList[pickedPowerUpIndex])
+            eventPlayer.augmentScavengerBackpack.append(supplyPowerUpIdList[groundPowerUpRemovalIndex])
             tradedPowerUpItemId = PowerUpItem.NONE
         else:
-            eventPlayer.powerUpItemId = supplyPowerUpIdList[pickedPowerUpIndex]
-        destroyEffect(supplyPowerUpEffectIdList[pickedPowerUpIndex])
-        destroyInWorldText(supplyPowerUpTextIdList[pickedPowerUpIndex])
-        del supplyPowerUpIdList[pickedPowerUpIndex]
-        del supplyPowerUpPositionList[pickedPowerUpIndex]
-        del supplyPowerUpEffectIdList[pickedPowerUpIndex]
-        del supplyPowerUpTextIdList[pickedPowerUpIndex]
+            eventPlayer.powerUpItemId = supplyPowerUpIdList[groundPowerUpRemovalIndex]
+        removeGroundPowerUp()
         if tradedPowerUpItemId != PowerUpItem.NONE:
             supplyPowerUpIdList.append(tradedPowerUpItemId)
             supplyPowerUpPositionList.append(pickedPowerUpPosition)
@@ -181,11 +180,29 @@ rule "POWER UP EFFECT/TEXT MANAGEMENT":
     @Condition isGameplayActive == true
     @Condition len(supplyPowerUpPositionList) > len(supplyPowerUpEffectIdList)
     
+    # Every producer appends to these lists. Evict oldest entries before allocating visuals.
+    while len(supplyPowerUpPositionList) > GROUND_POWER_UP_LIMIT:
+        groundPowerUpRemovalIndex = 0
+        removeGroundPowerUp()
+    # The rule starts with pending items. The newest one survives eviction.
     powerUpAssignmentMacro()
     supplyPowerUpEffectIdList.append(getLastCreatedEntity())
     supplyPowerUpTextIdList.append(getLastCreatedText())
     if ruleCondition:
         loop()
+
+
+def removeGroundPowerUp():
+    @Name "removeGroundPowerUp"
+
+    # Only the prefix with created visuals has entries in the two handle lists.
+    if groundPowerUpRemovalIndex < len(supplyPowerUpEffectIdList):
+        destroyEffect(supplyPowerUpEffectIdList[groundPowerUpRemovalIndex])
+        destroyInWorldText(supplyPowerUpTextIdList[groundPowerUpRemovalIndex])
+        del supplyPowerUpEffectIdList[groundPowerUpRemovalIndex]
+        del supplyPowerUpTextIdList[groundPowerUpRemovalIndex]
+    del supplyPowerUpIdList[groundPowerUpRemovalIndex]
+    del supplyPowerUpPositionList[groundPowerUpRemovalIndex]
 
 
 rule "EFFECT/TEXT (PERMANENT)":
