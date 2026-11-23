@@ -660,11 +660,9 @@ def objectivesManagement():
         objectiveRad = 10
         bigMessage(getAllPlayers(), "Get to the extraction point!")
     else:
-        # Keep the previous description for unsupported objective IDs, as the switch did.
+        # Unsupported objective IDs keep the previous description and skip the start message.
         if currentObjectiveType >= ObjectiveType.SHOWDOWN and currentObjectiveType <= ObjectiveType.SATELLITE_UPLINK:
             objectiveDescription = ["Keep zombies away in the Showdown!", "Eliminate the boss", "Convert biowaste into powerups!", "Rescue survivors", "Clear the kill zone", "Destroy the egg", "Repair satellite control terminals"][currentObjectiveType - 1]
-        # Objective IDs 1..7 are contiguous; unsupported IDs previously produced no start message.
-        if currentObjectiveType >= ObjectiveType.SHOWDOWN and currentObjectiveType <= ObjectiveType.SATELLITE_UPLINK:
             bigMessage(getAllPlayers(), ["Proceed to the Showdown!", "Eliminate the giant zombie!", "Find the indicated material and deposit it!", "Locate survivors and bring them to the extraction site!", "Get to the kill zone and clear zombies!", "Destroy the zombie egg!", "Repair the satellite control terminals!"][currentObjectiveType - 1])
         switch currentObjectiveType:
             case ObjectiveType.SHOWDOWN:
