@@ -44,10 +44,13 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
     #!define aimedPowerUpPositions tmp0
     aimedPowerUpPositions = supplyPowerUpPositionList.filter(lambda x: distance(x, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * distance(eventPlayer.getEyePosition(), x)) < 0.5 and distance(eventPlayer, x) <= 6)
 
+    # Snapshot the Scavenger chord for the synchronous pickup and backpack branches.
+    #!define isScavengerCrouchHeld tmp3
+    isScavengerCrouchHeld = eventPlayer.augmentId == Augment.SCAVENGER and eventPlayer.isHoldingButton(Button.CROUCH)
     if canOpenSupplyDrop():
         openSupplyDrop()
 
-    elif len(aimedPowerUpPositions) > 0 and not (eventPlayer.augmentId == Augment.SCAVENGER and eventPlayer.isHoldingButton(Button.CROUCH) and len(eventPlayer.augmentScavengerBackpack) >= SCAVENGER_BACKPACK_CAPACITY):
+    elif len(aimedPowerUpPositions) > 0 and not (isScavengerCrouchHeld and len(eventPlayer.augmentScavengerBackpack) >= SCAVENGER_BACKPACK_CAPACITY):
         # Commit pickup and all four aligned ground lists without waits: another
         # player's pickup or a Reload drop must never observe a half-finished trade.
         # Synchronous scratch; the removal subroutine only reads the shared index.
@@ -56,7 +59,7 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         pickedPowerUpPosition = (sorted(aimedPowerUpPositions, lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x))))[0]
         groundPowerUpRemovalIndex = supplyPowerUpPositionList.index(pickedPowerUpPosition)
         tradedPowerUpItemId = eventPlayer.powerUpItemId
-        if eventPlayer.augmentId == Augment.SCAVENGER and eventPlayer.isHoldingButton(Button.CROUCH):
+        if isScavengerCrouchHeld:
             eventPlayer.augmentScavengerBackpack.append(supplyPowerUpIdList[groundPowerUpRemovalIndex])
             tradedPowerUpItemId = PowerUpItem.NONE
         else:
@@ -70,7 +73,7 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
     # the first reserve with the active slot; an empty backpack stows the active
     # item, an empty slot pulls the first reserve. Reuses the aimed-items scratch.
     #!define scavCycleItemId tmp0
-    elif eventPlayer.augmentId == Augment.SCAVENGER and eventPlayer.isHoldingButton(Button.CROUCH):
+    elif isScavengerCrouchHeld:
         scavCycleItemId = eventPlayer.powerUpItemId
         if len(eventPlayer.augmentScavengerBackpack) > 0:
             eventPlayer.powerUpItemId = eventPlayer.augmentScavengerBackpack[0]
