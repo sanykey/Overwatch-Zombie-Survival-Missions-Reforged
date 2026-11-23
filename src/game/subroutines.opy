@@ -5,6 +5,7 @@ subroutine detachHitchhikerPassenger
 # Shared subroutines used by multiple sections (including their dependencies).
 
 subroutine checkEnhancementPlacement
+subroutine playPlacementWindupFeedback
 subroutine noCooldowns
 
 subroutine applyScaledMoveSpeed
@@ -904,6 +905,17 @@ def illariUlt():
     waitUntil(eventPlayer.isUsingUltimate(), false)
     eventPlayer.movementSpeedScale *= 3
     applyScaledMoveSpeed()
+
+
+#!define placementWindupColor tmp0
+
+def playPlacementWindupFeedback():
+    # Synchronous input from Laser Barricade or Charge Battery, consumed before either caller waits.
+    playEffect(eventPlayer, DynamicEffect.GOOD_EXPLOSION, placementWindupColor, eventPlayer.getEyePosition() + directionFromAngles(
+        eventPlayer.getHorizontalFacingAngle() + random.uniform(-5, 5),
+        eventPlayer.getVerticalFacingAngle() + random.uniform(-5, 5)
+    ) * 1.5, 0.1)
+    playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, placementWindupColor, eventPlayer.getPosition(), 75)
 
 
 def applyScaledMoveSpeed():

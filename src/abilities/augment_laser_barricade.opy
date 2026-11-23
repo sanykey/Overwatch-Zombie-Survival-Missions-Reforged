@@ -12,21 +12,24 @@ macro placeLaserBarricadeAugmentMacro():
     if not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead():
         eventPlayer.augmentBarrierPlacementCooldown = 0
         return
-    playEffect(eventPlayer, DynamicEffect.GOOD_EXPLOSION, Color.BLUE, eventPlayer.getEyePosition() + ((directionFromAngles(eventPlayer.getHorizontalFacingAngle() + random.uniform(-5, 5), eventPlayer.getVerticalFacingAngle() + random.uniform(-5, 5))) * 1.5), 0.1)
-    playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.BLUE, eventPlayer.getPosition(), 75)
+    placementWindupColor = Color.BLUE
+    playPlacementWindupFeedback()
     waitUntil(not eventPlayer.isHoldingButton(Button.INTERACT) or eventPlayer.isDead(), Math.INFINITY)
     eventPlayer.augmentBarrierPlacementCooldown = 0
     checkEnhancementPlacement()
     if isEnhancementPlacementInvalid:
         return
     #Laser Barrier health
+    stopChasing(eventPlayer.augmentBarrierHealth)
+    eventPlayer.augmentBarrierRegenAt = 0
     eventPlayer.augmentBarrierHealth = 10000
     #Barrier center point
     eventPlayer.augmentBarrierPosition = raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 30, null, getAllPlayers(), false)
-    #Barrier corner 1
-    eventPlayer.augmentBarrierCorner1 = eventPlayer.augmentBarrierPosition + worldVector((-0.5 * LASER_BARRICADE_AUGMENT_WIDTH) * Vector.LEFT, eventPlayer, Transform.ROTATION)
-    #Barrier Corner 2
-    eventPlayer.augmentBarrierCorner2 = eventPlayer.augmentBarrierPosition + worldVector((0.5 * LASER_BARRICADE_AUGMENT_WIDTH) * Vector.LEFT, eventPlayer, Transform.ROTATION)
+    # Compute the rotated half-width once and use it for both corners before any wait.
+    #!define barrierCornerOffset tmp0
+    barrierCornerOffset = worldVector((0.5 * LASER_BARRICADE_AUGMENT_WIDTH) * Vector.LEFT, eventPlayer, Transform.ROTATION)
+    eventPlayer.augmentBarrierCorner1 = eventPlayer.augmentBarrierPosition - barrierCornerOffset
+    eventPlayer.augmentBarrierCorner2 = eventPlayer.augmentBarrierPosition + barrierCornerOffset
     # Horizontal push direction captured at placement; reference points are center +/- this vector.
     eventPlayer.augmentBarrierFacing = directionFromAngles(eventPlayer.getHorizontalFacingAngle(), 0)
     # Along-barrier direction, reused by collision checks.
@@ -63,19 +66,24 @@ macro initializeLaserBarricadeAugmentMacro():
     #Barricade health
     createInWorldText(getAllPlayers() if eventPlayer.augmentBarrierHealth > 0 else null, "{0}HP".format(ceil(eventPlayer.augmentBarrierHealth)), eventPlayer.augmentBarrierPosition + Vector.UP, 1.5, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.BLUE)
 
-rule "[LASER_BARRICADE AUGMENT] BLOCKS ZOMBIES":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.augmentId == Augment.LASER_BARRICADE
-    #Barrier health is greater than 0
-    @Condition eventPlayer.augmentBarrierHealth > 0
-    #Blocked zombie: horizontal band, feet below wall top, eyes above wall base and distance from
-    #the wall, all checked on the same zombie (separate gates could be satisfied by four different zombies).
-    @Condition getLivingPlayers(Team.2).any(lambda player: (distance(eventPlayer.augmentBarrierPosition, vect(player.getPosition().x, eventPlayer.augmentBarrierPosition.getPosition().y, player.getPosition().z)) < 0.5 * LASER_BARRICADE_AUGMENT_WIDTH) and (player.getPosition().y < eventPlayer.augmentBarrierPosition.y + LASER_BARRICADE_AUGMENT_HEIGHT) and (player.getEyePosition().y > eventPlayer.augmentBarrierPosition.y) and (distance(vect(player.getPosition().x, eventPlayer.augmentBarrierCorner1.y, player.getPosition().z), eventPlayer.augmentBarrierCorner1 + eventPlayer.augmentBarrierEdgeDirection * (min(LASER_BARRICADE_AUGMENT_WIDTH, abs(dotProduct(eventPlayer.augmentBarrierEdgeDirection, vect(player.getPosition().x, eventPlayer.augmentBarrierCorner1.y, player.getPosition().z) - eventPlayer.augmentBarrierCorner1))))) < 1.5)) == true
+macro barrierHorizontalOffset(target, origin):
+    (target.getPosition() - origin) * vect(1, 0, 1)
 
-    stopChasing(eventPlayer.augmentBarrierHealth)
-    #Filter horizontal distance, feet height, eye height and distance from wall together.
-    eventPlayer.augmentBarrierTargetList = getLivingPlayers(Team.2).filter(lambda target: (distance(eventPlayer.augmentBarrierPosition, vect(target.getPosition().x, eventPlayer.augmentBarrierPosition.getPosition().y, target.getPosition().z)) < 0.5 * LASER_BARRICADE_AUGMENT_WIDTH) and (target.getPosition().y < eventPlayer.augmentBarrierPosition.y + LASER_BARRICADE_AUGMENT_HEIGHT) and (target.getEyePosition().y > eventPlayer.augmentBarrierPosition.y) and (distance(vect(target.getPosition().x, eventPlayer.augmentBarrierCorner1.y, target.getPosition().z), eventPlayer.augmentBarrierCorner1 + eventPlayer.augmentBarrierEdgeDirection * (min(LASER_BARRICADE_AUGMENT_WIDTH, abs(dotProduct(eventPlayer.augmentBarrierEdgeDirection, vect(target.getPosition().x, eventPlayer.augmentBarrierCorner1.y, target.getPosition().z) - eventPlayer.augmentBarrierCorner1))))) < 1.5))
+
+macro isLaserBarricadeContact(target):
+    (
+        magnitude(barrierHorizontalOffset(target, eventPlayer.augmentBarrierPosition)) < 0.5 * LASER_BARRICADE_AUGMENT_WIDTH
+        and target.getPosition().y < eventPlayer.augmentBarrierPosition.y + LASER_BARRICADE_AUGMENT_HEIGHT
+        and target.getEyePosition().y > eventPlayer.augmentBarrierPosition.y
+        # The wall direction keeps its vertical component on slopes. Only the target offset is projected onto XZ.
+        and magnitude(barrierHorizontalOffset(target, eventPlayer.augmentBarrierCorner1) - eventPlayer.augmentBarrierEdgeDirection * min(
+            LASER_BARRICADE_AUGMENT_WIDTH,
+            abs(dotProduct(eventPlayer.augmentBarrierEdgeDirection, barrierHorizontalOffset(target, eventPlayer.augmentBarrierCorner1)))
+        )) < 1.5
+    )
+
+
+macro pushLaserBarricadeContacts():
     # barrierPushReferencePointList: both push reference points, reconstructed from saved geometry and consumed before wait.
     #!define barrierPushReferencePointList tmp1
     barrierPushReferencePointList = [eventPlayer.augmentBarrierPosition + eventPlayer.augmentBarrierFacing, eventPlayer.augmentBarrierPosition + eventPlayer.augmentBarrierFacing * -1]
@@ -95,25 +103,53 @@ rule "[LASER_BARRICADE AUGMENT] BLOCKS ZOMBIES":
             if barrierContactDamage >= LASER_BARRICADE_KNOCKDOWN_DAMAGE_THRESHOLD:
                 barrierCollisionTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, floor(barrierContactDamage / LASER_BARRICADE_KNOCKDOWN_DAMAGE_THRESHOLD))
             damage(barrierCollisionTarget, eventPlayer, 20)
-        # barrierImpulseVertical: shared vertical angle component of both impulse directions.
+        # Reuse the zombie's position for the height check and the ground-normal ray.
+        #!define barrierCollisionPosition tmp3
+        barrierCollisionPosition = barrierCollisionTarget.getPosition()
+        # Reuse its slot for the vertical angle after the ray consumes the position.
         #!define barrierImpulseVertical tmp3
-        barrierImpulseVertical = (-1 if barrierCollisionTarget.getPosition().y > eventPlayer.augmentBarrierPosition.y else 1) * (90 + (verticalAngleOfDirection(raycastHitNormal(barrierCollisionTarget.getPosition(), barrierCollisionTarget.getPosition() + Vector.DOWN, null, getAllPlayers(), false))))
+        barrierImpulseVertical = (-1 if barrierCollisionPosition.y > eventPlayer.augmentBarrierPosition.y else 1) * (
+            90 + verticalAngleOfDirection(raycastHitNormal(barrierCollisionPosition, barrierCollisionPosition + Vector.DOWN, null, getAllPlayers(), false))
+        )
         if not magnitude(barrierCollisionTarget.getThrottle()):
-            #If bot is not throttling
-            barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.augmentBarrierPosition, (sorted(barrierPushReferencePointList, lambda x: distance(barrierCollisionTarget, x)))[0])), barrierImpulseVertical), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
+            # Choose the nearer side. A tie keeps the first reference point.
+            barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.augmentBarrierPosition, barrierPushReferencePointList[
+                1 if distance(barrierCollisionTarget, barrierPushReferencePointList[1]) < distance(barrierCollisionTarget, barrierPushReferencePointList[0]) else 0
+            ])), barrierImpulseVertical), 1, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
         else:
-            #If bot is throttling
-            barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.augmentBarrierPosition, (sorted(barrierPushReferencePointList, lambda x: angleBetweenVectors(worldVector(barrierCollisionTarget.getThrottle(), barrierCollisionTarget, Transform.ROTATION), directionTowards(eventPlayer.augmentBarrierPosition, x)))).last())), barrierImpulseVertical), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
-    wait()
-    if ruleCondition:
-        loop()
+            # Choose the side with the larger angle to the movement input. A tie keeps the last reference point.
+            barrierCollisionTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.augmentBarrierPosition, barrierPushReferencePointList[
+                0 if angleBetweenVectors(worldVector(barrierCollisionTarget.getThrottle(), barrierCollisionTarget, Transform.ROTATION), directionTowards(eventPlayer.augmentBarrierPosition, barrierPushReferencePointList[0]))
+                > angleBetweenVectors(worldVector(barrierCollisionTarget.getThrottle(), barrierCollisionTarget, Transform.ROTATION), directionTowards(eventPlayer.augmentBarrierPosition, barrierPushReferencePointList[1])) else 1
+            ])), barrierImpulseVertical), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+
+
+rule "[LASER_BARRICADE AUGMENT] BLOCKS ZOMBIES":
+    @Event eachPlayer
+    @Team 1
+    @Condition eventPlayer.augmentId == Augment.LASER_BARRICADE
+    @Condition eventPlayer.augmentBarrierPosition != null
+
     if eventPlayer.augmentBarrierHealth > 0:
-        wait(3, Wait.RESTART_WHEN_TRUE)
-    else:
-        wait(6, Wait.RESTART_WHEN_TRUE)
-        #If shield is regenerating from 0HP
+        # Use scratch for the scan. Only contact passes publish the list for the push loop.
+        #!define barrierContacts tmp0
+        barrierContacts = getLivingPlayers(Team.2).filter(lambda target: isLaserBarricadeContact(target))
+        if barrierContacts != []:
+            eventPlayer.augmentBarrierTargetList = barrierContacts
+            if eventPlayer.augmentBarrierRegenAt != -1:
+                stopChasing(eventPlayer.augmentBarrierHealth)
+                eventPlayer.augmentBarrierRegenAt = -1
+            pushLaserBarricadeContacts()
+            wait(0.016, Wait.ABORT_WHEN_FALSE)
+            loop()
+
+    if eventPlayer.augmentBarrierRegenAt == -1:
+        eventPlayer.augmentBarrierRegenAt = getTotalTimeElapsed() + (3 if eventPlayer.augmentBarrierHealth > 0 else 6)
+    if eventPlayer.augmentBarrierRegenAt > 0 and getTotalTimeElapsed() >= eventPlayer.augmentBarrierRegenAt:
+        eventPlayer.augmentBarrierRegenAt = 0
         if eventPlayer.augmentBarrierHealth <= 0:
             eventPlayer.augmentBarrierHealth = 1
-    chaseAtRate(eventPlayer.augmentBarrierHealth, 10000, 500, ChaseRateReeval.NONE)
-    if ruleCondition:
-        loop()
+        chaseAtRate(eventPlayer.augmentBarrierHealth, 10000, 500, ChaseRateReeval.NONE)
+    # Idle walls sample less often. Contacts keep the original minimum wait between impulses.
+    wait(0.064, Wait.ABORT_WHEN_FALSE)
+    loop()

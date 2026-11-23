@@ -46,8 +46,8 @@ rule "[CHARGE_BATTERY] PLACE BATTERY":
     @Condition eventPlayer.enhancementBatteryPlacementCooldown <= 0
     
     wait(0.5, Wait.ABORT_WHEN_FALSE)
-    playEffect(eventPlayer, DynamicEffect.GOOD_EXPLOSION, Color.YELLOW, eventPlayer.getEyePosition() + ((directionFromAngles(eventPlayer.getHorizontalFacingAngle() + random.uniform(-5, 5), eventPlayer.getVerticalFacingAngle() + random.uniform(-5, 5))) * 1.5), 0.1)
-    playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, Color.YELLOW, eventPlayer.getPosition(), 75)
+    placementWindupColor = Color.YELLOW
+    playPlacementWindupFeedback()
     waitUntil(not eventPlayer.isHoldingButton(Button.MELEE) or eventPlayer.isDead(), Math.INFINITY)
     checkEnhancementPlacement()
     if isEnhancementPlacementInvalid:

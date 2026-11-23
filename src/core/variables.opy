@@ -858,5 +858,6 @@ playervar botReigniteRisePosition  # Chased Anran emergence position, forced acr
 playervar enhancementPupCooldown  # Chased P.U.P. ability cooldown (1 or 2 seconds); independent of positions.
 
 playervar augmentBarrierHealth  # Chased Laser Barricade health; placement, damage, regeneration and HUD; independent of icon IDs.
+playervar augmentBarrierRegenAt  # 0 when no recovery is pending, -1 during contact, otherwise the recovery deadline.
 
 #!include "immutable_variables.opy"
