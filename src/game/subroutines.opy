@@ -345,7 +345,7 @@ macro globalObjectiveEntityManagementMacro():
         createIcon(getAllPlayers(), bossesStateList[0].getEyePosition() + Vector.UP if bossesStateList != [] else currentObjectivePosition, Icon.SKULL, IconReeval.VISIBILITY_AND_POSITION, Color.RED)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Boss Distance
-        createInWorldText(getAllPlayers().filter(lambda player: bossesStateList == [] or not player in bossesStateList[0].botPotentialTargetList), "Distance: {0}m".format(distance(localPlayer, bossesStateList[0]) if bossesStateList != [] else distance(localPlayer, currentObjectivePosition)), bossesStateList[0].getPosition() if bossesStateList != [] else currentObjectivePosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.RED, SpecVisibility.NEVER)
+        createInWorldText(getAllPlayers().filter(lambda player: bossesStateList == [] or not player in bossesStateList[0].botPotentialTargetList), "Distance: {0}m".format(distance(localPlayer, bossesStateList[0] if bossesStateList != [] else currentObjectivePosition)), bossesStateList[0].getPosition() if bossesStateList != [] else currentObjectivePosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.RED, SpecVisibility.NEVER)
         objectiveEntityIdList.append(getLastCreatedText())
     #Biomoprhing
     elif objectiveValue == ObjectiveType.BIOMORPHING:
