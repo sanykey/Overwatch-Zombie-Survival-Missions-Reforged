@@ -860,4 +860,6 @@ playervar enhancementPupCooldown  # Chased P.U.P. ability cooldown (1 or 2 secon
 playervar augmentBarrierHealth  # Chased Laser Barricade health; placement, damage, regeneration and HUD; independent of icon IDs.
 playervar augmentBarrierRegenAt  # 0 when no recovery is pending, -1 during contact, otherwise the recovery deadline.
 
+playervar slimerTentacleReturnCheckIndex  # Bounds the retraction loop across its waits.
+
 #!include "immutable_variables.opy"

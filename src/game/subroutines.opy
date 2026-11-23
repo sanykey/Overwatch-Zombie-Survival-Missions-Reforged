@@ -34,6 +34,10 @@ subroutine selectPullAimTarget
 subroutine applyHitEnhancements
 
 
+macro slimerTentacleOrigin():
+    eventPlayer.getEyePosition() + offsetUpHalfConst * (eventPlayer.sizeScale if eventPlayer.isInAir() else 0)
+
+
 macro damageWithEnhancements(amount, target):
     # Single target; eventPlayer owns the damage and on-hit enhancements.
     # Consumes tmp2/tmp3 synchronously without waits; preserves tmp0/tmp1.
@@ -193,7 +197,7 @@ macro botEntityManagementMacro():
                 eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
         elif eventPlayer.getHero() == Hero.MERCY:
             #Mercy tentacle
-            createBeam(getAllPlayers().filter(lambda _: eventPlayer.botTentacleTargetPosition != 0), Beam.BAD, eventPlayer.getEyePosition() + offsetUpHalfConst * eventPlayer.sizeScale if eventPlayer.isInAir() else eventPlayer.getEyePosition(), eventPlayer.botTentaclePosition, Color.LIME_GREEN, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            createBeam(getAllPlayers().filter(lambda _: eventPlayer.botTentacleTargetPosition != 0), Beam.BAD, slimerTentacleOrigin(), eventPlayer.botTentaclePosition, Color.LIME_GREEN, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
             #Tentacle sound effect
             createEffect(getAllPlayers().filter(lambda _: eventPlayer.botTentacleTargetPosition != 0), Effect.ENERGY_SOUND, Color.WHITE, eventPlayer.botTentaclePosition, 400, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
