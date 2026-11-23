@@ -460,8 +460,11 @@ rule "ENGINEER ARMOR TRANSFER":
     # Non-recoverable, fixed pool: healing never restores scrap armor. One
     # throw adds at most ENGINEER_ARMOR_STACK armor and tops the target up to the cap;
     # the wasted remainder of a partial refill is the thrower's loss.
-    scrapArmorGrantTarget.addHealthPool(Health.ARMOR, min(ENGINEER_ARMOR_STACK, ENGINEER_ARMOR_MAX - scrapArmorGrantTarget.scrapArmorAmount), false, false)
-    scrapArmorGrantTarget.scrapArmorAmount = min(ENGINEER_ARMOR_MAX, scrapArmorGrantTarget.scrapArmorAmount + ENGINEER_ARMOR_STACK)
+    # Payment is complete. Reuse tmp0 for the amount applied to both the pool and the counter.
+    #!define scrapArmorGrantAmount tmp0
+    scrapArmorGrantAmount = min(ENGINEER_ARMOR_STACK, ENGINEER_ARMOR_MAX - scrapArmorGrantTarget.scrapArmorAmount)
+    scrapArmorGrantTarget.addHealthPool(Health.ARMOR, scrapArmorGrantAmount, false, false)
+    scrapArmorGrantTarget.scrapArmorAmount += scrapArmorGrantAmount
     # Received-armor feedback: the transfer-beam-colored ring plus the turret
     # freeze sound, on the grant target (self or ally). One-shot; no scratch or
     # entity to clean up. The message quotes the full stack constant, so a
