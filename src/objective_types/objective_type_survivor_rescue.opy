@@ -61,11 +61,10 @@ rule "INITIALIZE SURVIVOR TO BE RESCUED":
     # Reuse the starting distance within each live progress update.
     progressBarHud(
         getAllPlayers(),
-        100 if eventPlayer.rescueIsExtracting else [distance(
-            vect(currentObjectivePosition.x, eventPlayer.rescueStartPosition.y, currentObjectivePosition.z),
-            eventPlayer.rescueStartPosition
+        100 if eventPlayer.rescueIsExtracting else [magnitude(
+            (currentObjectivePosition - eventPlayer.rescueStartPosition) * horizontalMaskConst
         )].map(lambda startDistance: (
-            (startDistance - distance(eventPlayer, vect(currentObjectivePosition.x, eventPlayer.getPosition().y, currentObjectivePosition.z)))
+            (startDistance - magnitude((currentObjectivePosition - eventPlayer.getPosition()) * horizontalMaskConst))
             / startDistance * 100
         ))[0],
         "Survivor Rescue Progress", HudPosition.TOP, 2, Color.VIOLET, Color.VIOLET,
@@ -161,7 +160,7 @@ rule "CREATE PATH":
 
 rule "DELETE PATH":
     @Condition currentObjectiveType == ObjectiveType.SURVIVOR_RESCUE
-    @Condition (rescueSurvivor.rescuePathList.any(lambda x: distance(rescueSurvivor, vect(x.x, rescueSurvivor.getPosition().y, x.z)) < 0.25 and abs(rescueSurvivor.getPosition().y - x.y) < 2)) == true
+    @Condition (rescueSurvivor.rescuePathList.any(lambda point: magnitude((rescueSurvivor.getPosition() - point) * horizontalMaskConst) < 0.25 and abs(rescueSurvivor.getPosition().y - point.y) < 2)) == true
     
     # rescueReachedPathIndex: reached path index, consumed by the immediate path trim.
     #!define rescueReachedPathIndex tmp0

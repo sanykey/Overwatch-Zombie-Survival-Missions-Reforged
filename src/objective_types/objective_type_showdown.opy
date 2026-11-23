@@ -11,7 +11,7 @@ rule "PLAYERS ON OBJECTIVE CONTROL":
     #Objective Cylinder Height As Above, So Below
     @Condition abs(currentObjectivePosition.y - eventPlayer.getPosition().y) < 12
     #Objective Cylinder Radius
-    @Condition distance(vect(currentObjectivePosition.x, eventPlayer.getPosition().y, currentObjectivePosition.z), eventPlayer.getPosition()) < objectiveRad
+    @Condition magnitude((currentObjectivePosition - eventPlayer.getPosition()) * horizontalMaskConst) < objectiveRad
     
     if eventPlayer.isDummy():
         if not eventPlayer in showdownContestingZombieList:

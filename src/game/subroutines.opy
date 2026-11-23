@@ -800,7 +800,7 @@ def restoreDefaultFacingMovement():
             # Keep the movement direction live and use only the XZ distance for the stop threshold.
             eventPlayer.startThrottleInDirection(
                 directionTowards(eventPlayer, eventPlayer.botTarget),
-                eventPlayer.botThrottleSpeed if magnitude((eventPlayer.botTarget.getPosition() - eventPlayer.getPosition()) * vect(1, 0, 1)) > 2 * min(1, eventPlayer.sizeScale) else 0,
+                eventPlayer.botThrottleSpeed if magnitude((eventPlayer.botTarget.getPosition() - eventPlayer.getPosition()) * horizontalMaskConst) > 2 * min(1, eventPlayer.sizeScale) else 0,
                 Relativity.TO_WORLD
             )
     else:

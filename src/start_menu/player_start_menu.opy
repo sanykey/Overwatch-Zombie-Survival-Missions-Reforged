@@ -228,7 +228,7 @@ rule "PREVENT PLAYERS FROM LEAVING START EARLY":
     @Condition isPregameSetup == true
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.pregameState > PregameState.SELECTING_HERO
-    @Condition distance(eventPlayer, vect(eventPlayer.pregamePosition.x, eventPlayer.getPosition().y, eventPlayer.pregamePosition.z)) > 0.6
+    @Condition magnitude((eventPlayer.getPosition() - eventPlayer.pregamePosition) * horizontalMaskConst) > 0.6
     
     wait(2, Wait.ABORT_WHEN_FALSE)
     if not isSpecialGameMode:

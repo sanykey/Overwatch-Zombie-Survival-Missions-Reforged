@@ -16,3 +16,6 @@ globalvar enhancementIconListConst = [EnhancementIcon.NO_PREFERENCE, Enhancement
 globalvar augmentNameListConst
 globalvar augmentMeleeWeaponHeroListConst
 globalvar augmentMeleeBtnHeroListConst
+
+# Componentwise mask for horizontal distances and offsets.
+globalvar horizontalMaskConst = vect(1, 0, 1)

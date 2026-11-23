@@ -67,7 +67,7 @@ macro initializeLaserBarricadeAugmentMacro():
     createInWorldText(getAllPlayers() if eventPlayer.augmentBarrierHealth > 0 else null, "{0}HP".format(ceil(eventPlayer.augmentBarrierHealth)), eventPlayer.augmentBarrierPosition + Vector.UP, 1.5, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.BLUE)
 
 macro barrierHorizontalOffset(target, origin):
-    (target.getPosition() - origin) * vect(1, 0, 1)
+    (target.getPosition() - origin) * horizontalMaskConst
 
 
 macro isLaserBarricadeContact(target):
