@@ -5,7 +5,9 @@
 Date: **November 4, 2026**. Project: **Overwatch Zombie Survival Missions Reforged**.
 Analysis baseline: `5ccb8f09a66ee4c5fd4bb07f56c5528d9f975f7a` and the inspected working tree.
 
-**Audit baseline:** the build sizes, included files, and warning counts below refer to this audit's baseline. Following the release documentation work, current measurements and build configuration are published in [README](../Readme.md). This register preserves the evidence and classification of findings; its figures do not replace recompiling the current code.
+**Status update, November 23, 2026.** Statuses were checked against `stability-rebuild` at `a838d45`. The standard OverPy 9.7.21 build contains **29,560 elements** and emits no warnings with the current suppressions. No in-game measurements were taken.
+
+The original audit baseline, examples, scenarios, and warning counts below are historical. Current finding status appears in the register and at the start of the applicable detailed sections. Open optimization work is tracked in the [backlog](PERFORMANCE_BACKLOG.ru.md).
 
 The register contains **38 finding groups, R01–R38**. A group may contain several related defects or minor improvements; this is not a count of reproduced bugs or crashes.
 
@@ -31,7 +33,7 @@ The comparison baseline is specifically [ZSMM (786TW), snapshot from October 30,
 - **R07 is a pre-existing risk, including shared storage.** In the original, `biowasteAssignment` writes to `objectiveResourcePositions`, as do Satellite terminals: [original:2588](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2588>), [original:2957](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2957>). The queue handler already lacks an objective-change check: [original:2616](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2616>). Attributing this finding to the new slot sharing would be incorrect.
 - **R12 is a pre-existing missing detach.** Extracting `daytakerAbortReset` did not introduce the defect: both earlier abort branches already reset the flag and returned without physically detaching: [original:5464](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5464>), [original:5473](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5473>).
 - **R16 is a pre-existing selection of the last candidate.** The former `testTarget` corresponds to the current `botCandidateTarget`; assigning before LoS validation and publishing after the loop are already present at [original:3761](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3761>) and [original:3766](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3766>).
-- **Start Rule:** all **22** current sites have an earlier call with default RESTART behavior. Each SR01–SR22 entry links to the original call and target. Severity and conditional risk are preserved; SR01–SR03 are not described as independent crash cases.
+- **Start Rule:** all **22** sites in the initial audit were matched to default RESTART calls in the original. See [R01](#r01) for their current status.
 - **Impulse:** all **20** legacy impulses are inherited. **Chase:** all **14** currently diagnosed sites were matched to earlier conditions/assignments, without treating valid checks as bugs. This does not claim that the historical compiler version emitted exactly the same message list.
 
 The original itself [globally suppressed all four warning types discussed here](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1>). Therefore, messages appearing after suppressions are removed do not date the introduction of defects. A decrease in warnings after variable renaming also does not prove that a mechanic has been fixed.
@@ -53,7 +55,7 @@ Overwatch was not run. Server crashes, resource exhaustion, and attachment physi
 
 ## Baseline build and verification results
 
-Compiler: installed **OverPy 9.7.20**. Current build: **25,305 elements, 268 rules, 56 warnings**: 22 Start Rule, 14 chase, 20 legacy impulse, 0 Closest Player. The user removed four suppressions; w_dark_color and the documented w_wait_until remain. Restoring the four suppressions in memory produces 0 messages and byte-identical Workshop code. [Full audit of every message](#compiler-warnings).
+Compiler: installed **OverPy 9.7.20**. Original audit build: **25,305 elements, 268 rules, 56 warnings**: 22 Start Rule, 14 chase, 20 legacy impulse, 0 Closest Player. The user removed four suppressions; w_dark_color and the documented w_wait_until remain. Restoring the four suppressions in memory produces 0 messages and byte-identical Workshop code. [Full audit of every message](#compiler-warnings).
 
 | Independent prototype against the baseline | Elements | Change | Verified result |
 |---|---:|---:|---|
@@ -61,7 +63,7 @@ Compiler: installed **OverPy 9.7.20**. Current build: **25,305 elements, 268 rul
 | R28: snapshot of living zombies for Force Field | 25,305 | 0 | Three list-retrieval nodes replaced by one snapshot assignment |
 | R36: seven simple visibility filters replaced by conditional selection | 25,312 | +7 | Conditional list selection preserved in Workshop code |
 
-The prototype table refers to the earlier stage with suppressions, when these prototypes compiled without warnings. The current main build without four suppressions emits 56 messages; a combined build of the prototypes was not checked. Element-count changes are not performance measurements. Iteration and action counts below are calculated from source, without accounting for execution delays or early termination.
+The prototype table refers to the earlier stage with suppressions, when these prototypes compiled without warnings. The original audit build without four suppressions emitted 56 messages; a combined build of the prototypes was not checked. Element-count changes are not performance measurements. Iteration and action counts below are calculated from source, without accounting for execution delays or early termination.
 
 For the one-item setting, the diagnostic substitution in R03 preserved a zero-step loop. The scripts also checked bounded counterexamples for pickup, target selection, passenger ownership, and old-effect completion. Details and limits of the evidence appear with each finding.
 
@@ -69,48 +71,48 @@ For the one-item setting, the diagnostic substitution in R03 preserved a zero-st
 
 ## Register and priorities
 
-Fixed defects are struck through and marked with the fix date. Verification results and in-game verification status are recorded in the detailed finding linked by its ID.
+Closed findings are struck through. See the current status at the linked ID for partial fixes and updates to open findings. Priority and evidence describe the original finding.
 
 | ID | Finding | Category | Priority | Evidence |
 |---|---|---|---|---|
-| [R01](#r01) | Restarting a waiting subroutine | Stability, lifecycle | High | C + R |
-| [R02](#r02) | Insufficient total spawn weight | Loops, settings | High | C + M; engine behavior: R |
-| [R03](#r03) | Zero loop step with one item per crate | Loops, settings | High | C + M; engine behavior: R |
-| [R04](#r04) | All objective types disabled or Mixed Pool empty | Loops, settings | High | C + M |
-| [R05](#r05) | Player race during item pickup | Shared data, items | High | C + M |
-| [R06](#r06) | Old effect modifies a player's new spawn state | Lifecycle, player state | High | C + M; scheduling: R |
+| [R01](#r01) | Restarting a waiting subroutine — **partial** | Stability, lifecycle | High | C + R |
+| ~~[R02](#r02)~~ | ~~Insufficient total spawn weight~~ — **closed in source** | Loops, settings | ~~High~~ | C + M; engine behavior: R |
+| ~~[R03](#r03)~~ | ~~Zero loop step with one item per crate~~ — **closed in source** | Loops, settings | ~~High~~ | C + M; engine behavior: R |
+| [R04](#r04) | All objective types disabled or Mixed Pool empty — **open** | Loops, settings | High | C + M |
+| ~~[R05](#r05)~~ | ~~Player race during item pickup~~ — **closed in source** | Shared data, items | ~~High~~ | C + M |
+| [R06](#r06) | Old effect modifies a player's new spawn state — **partial** | Lifecycle, player state | High | C + M; scheduling: R |
 | [R07](#r07) | Previous objective's queue writes into the next objective's slot | Lifecycle, shared slots | Medium | C + R |
 | [R08](#r08) | Chase audit: valid checks excluded from defects | Diagnostics | 10 valid; 4 under observation | C; no in-game failures reproduced |
-| [R09](#r09) | Outer loop not bounded by an individual wait's timeout | Lifecycle, waits | Medium | C + R |
+| [R09](#r09) | Outer loop not bounded by an individual wait's timeout — **partial** | Lifecycle, waits | Medium | C + R |
 | ~~[R10](#r10)~~ | ~~Hitchhiker: passenger ownership and carrier selection~~ — **fixed November 21, 2026** | Logic, attachment | ~~High~~ | Source and Workshop output checked. In-game verification pending. |
 | ~~[R11](#r11)~~ | ~~Doomfist never releases the simulated block button~~ — **fixed 2026-11-05** | Lifecycle, controls | ~~Medium~~ | C |
 | [R12](#r12) | Illari abort path does not detach | Lifecycle, attachment | High | C; physics: R |
 | [R13](#r13) | Incorrect Illari hack check and speed restoration | Logic, lifecycle | Medium/high | C + M; scheduling: R |
-| [R14](#r14) | Mercy tentacle uses inconsistent visibility checks | Logic, target selection | Medium | C + M |
-| [R15](#r15) | Inconsistent units and speed in the dome rescue timer | Logic, timers | Medium | C + M |
+| ~~[R14](#r14)~~ | ~~Mercy tentacle uses inconsistent visibility checks~~ — **closed in source** | Logic, target selection | ~~Medium~~ | C + M |
+| [R15](#r15) | Inconsistent units and speed in the dome rescue timer — **open** | Logic, timers | Medium | C + M |
 | ~~[R16](#r16)~~ | ~~Bot selects a target behind a wall or a stale target~~ — **fixed 2026-11-05** | Logic, target selection | ~~High~~ | C + M |
-| [R17](#r17) | Escorted NPC selects itself | Logic, escort | High | C + M |
+| [R17](#r17) | Escorted NPC selects itself — **partial** | Logic, escort | High | C + M |
 | ~~[R18](#r18)~~ | ~~Charge Battery selects an ineligible recipient~~ — **fixed 2026-11-05** | Logic, recipient selection | ~~High~~ | C + M |
 | [R19](#r19) | Biomorphing selects a resource outside the allowed radius | Logic, pickup | Medium | C + M |
-| [R20](#r20) | Player used as an index instead of a membership test | Logic, value types | High | C; coercion: R |
-| [R21](#r21) | Repeated bot target-search and visibility calculations | Performance, bots | High | O |
-| [R22](#r22) | Repeated turret target scans | Performance, consumables | High | O |
-| [R23](#r23) | Spatial filtering before visibility when returning a boss | Performance, geometry | Medium; localized change | O; prototype: C |
-| [R24](#r24) | Repeated Laser Barricade geometry | Performance, collisions | High with crowds | O |
-| [R25](#r25) | Repeated sorting and raycasts in visual expressions | Performance, HUD | Medium; check clients | O |
-| [R26](#r26) | Teleport-point search and absence of targets | Performance, cancellation | Medium | O + R |
-| [R27](#r27) | Repeated map-grid processing and terminal placement | Performance, setup | Low | O |
-| [R28](#r28) | Living-zombie list snapshot for Force Field | Performance, consumables | Medium; localized change | O; prototype: C |
+| ~~[R20](#r20)~~ | ~~Player used as an index instead of a membership test~~ — **closed in source** | Logic, value types | ~~High~~ | C; coercion: R |
+| [R21](#r21) | Repeated bot target-search and visibility calculations — **partial** | Performance, bots | High | O |
+| [R22](#r22) | Repeated turret target scans — **partial** | Performance, consumables | High | O |
+| ~~[R23](#r23)~~ | ~~Spatial filtering before visibility when returning a boss~~ — **closed in source** | Performance, geometry | ~~Medium; localized change~~ | O; prototype: C |
+| ~~[R24](#r24)~~ | ~~Repeated Laser Barricade geometry~~ — **closed in source** | Performance, collisions | ~~High with crowds~~ | O |
+| [R25](#r25) | Repeated sorting and raycasts in visual expressions — **open** | Performance, HUD | Medium; check clients | O |
+| [R26](#r26) | Teleport-point search and absence of targets — **partial** | Performance, cancellation | Medium | O + R |
+| [R27](#r27) | Repeated map-grid processing and terminal placement — **partial** | Performance, setup | Low | O |
+| ~~[R28](#r28)~~ | ~~Living-zombie list snapshot for Force Field~~ — **closed in source** | Performance, consumables | ~~Medium; localized change~~ | O; prototype: C |
 | [R29](#r29) | Repeated Pyrotechnic hit-queue scans | Performance, damage events | Medium | O |
-| [R30](#r30) | Frequent cooldown and charge writes in No Cooldowns | Performance, controls | Medium; check responsiveness | O |
-| [R31](#r31) | Escorted NPC path growth | Performance, navigation | High as path grows | O |
-| [R32](#r32) | Decorative Bounce Pad and Air Strike effects | Performance, visualization | Medium; check clients | O |
-| [R33](#r33) | ~~Hitchhiker~~ and timer sorting — **Hitchhiker optimization implemented November 21, 2026** | Performance, minor overhead | Low | O |
-| [R34](#r34) | Miniboss list grows through empty entries | Resources, long matches | High for long matches | C; load: O |
-| [R35](#r35) | Ground items and the shared visual-object budget | Resources, long matches | High for long matches | C; exhaustion: R |
-| [R36](#r36) | Visibility filters with a condition shared by all viewers | Performance, visibility | Low/medium | O; prototype: C |
-| [R37](#r37) | Unbounded supply-drop point search | Loops, cancellation, performance | Medium | C + R |
-| [R38](#r38) | Migration of 20 legacy impulses | Physics compatibility | Low; no direct crash risk found | C; verify physics |
+| [R30](#r30) | Frequent cooldown and charge writes in No Cooldowns — **partial** | Performance, controls | Medium; check responsiveness | O |
+| [R31](#r31) | Escorted NPC path growth — **partial** | Performance, navigation | High as path grows | O |
+| [R32](#r32) | Decorative Bounce Pad and Air Strike effects — **partial** | Performance, visualization | Medium; check clients | O |
+| ~~[R33](#r33)~~ | ~~Hitchhiker and timer sorting~~ — **closed in source** | Performance, minor overhead | ~~Low~~ | O |
+| ~~[R34](#r34)~~ | ~~Miniboss list grows through empty entries~~ — **closed in source** | Resources, long matches | ~~High for long matches~~ | C; load: O |
+| [R35](#r35) | Ground items and the shared visual-object budget — **partial** | Resources, long matches | High for long matches | C; exhaustion: R |
+| [R36](#r36) | Visibility filters with a condition shared by all viewers — **partial** | Performance, visibility | Low/medium | O; prototype: C |
+| ~~[R37](#r37)~~ | ~~Unbounded supply-drop point search~~ — **closed in source** | Loops, cancellation, performance | ~~Medium~~ | C + R |
+| [R38](#r38) | Migration of 20 legacy impulses — **open** | Physics compatibility | Low; no direct crash risk found | C; verify physics |
 
 ## Detailed findings
 
@@ -120,24 +122,23 @@ Fixed defects are struck through and marked with the fix date. Verification resu
 
 ### R01. Restarting a waiting subroutine
 
+**Consumables are fixed. The prematch timer remains open.** All nine current asynchronous consumable handlers use `Start Rule(..., Do Nothing)` in the standard build. `0390d8d` changed six power-ups to refresh or relocate the active effect. Since `3914842`, repeating Instant Revive, Air Strike, or Stun displays a message and keeps the second item in inventory. No Cooldowns refreshes the deadline of a separate rule, and Jetpack replaced Bounce Pad with its own flight rule. [Consumables](../src/items/power_ups.opy#L113) · [No Cooldowns](../src/items/powerup_no_cooldowns.opy#L9) · [Jetpack](../src/items/powerup_jetpack.opy#L16)
+
 **Category:** Stability, lifecycle. **Priority:** High. **Evidence:** C + R.
 
-Repeated startRule calls with default RESTART behavior and waiting targets already existed. All 22 current cases are matched individually below; extracting powerUpUsage into another file did not introduce this risk mechanism. Source: [original:1329](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1329>), [original:1516](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L1516>), [original:6503](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6503>), [original:6138](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6138>).
-
-Locations: [supply_drops.opy:472](../src/items/supply_drops.opy#L472), [player_start_menu.opy:120](../src/start_menu/player_start_menu.opy#L120), [includes.opy:8](../src/includes.opy#L8).
-
-In `powerUpUsage`, all 11 asynchronous consumable calls compile to `Start Rule(..., Restart Rule)`. Long-running effects contain waits. A player can obtain and use the same consumable before the previous effect finishes. Another entry path is `randomActions` when repeatedly toggling readiness: that subroutine contains `wait(1)`.
+In the initial audit build, all 11 asynchronous consumable launches used `Restart Rule`. Toggling readiness could also restart the waiting `randomActions` subroutine (SR07). That call has been removed. A separate zombie rule now runs random abilities after pregame. [Historical audit SR01–SR22](#warning-start-rule) · [RANDOM ABILITIES](../src/game/global_game_in_progress.opy#L99)
 
 The OverPy author documents server crashes caused by accumulated restarts of subroutines with unfinished waits, including under relatively low load. Applicability to the current game client needs verification. [OverPy documentation](https://github.com/Zezombye/overpy/blob/master/README.md#w_start_rule_crash).
 
-Established: restart policies, waits, reachable reactivation paths, and 22 warnings now visible after removing suppression. Not established: whether this mode has already accumulated enough restarts to crash. The first three warnings for `determineZombieMode`, `determineChallenge`, and `determineObjectiveType` are conservative: waits are inherited through dependencies; these three subroutines have no waits of their own.
-
-Fix direction: one effect executor with separate extension/transfer requests; an explicit restart policy, unified termination, and release of modifiers/objects. Do not mechanically replace every call with `NOOP`: `powerUpUsage` consumes the item after launch, so ignoring activation can lose the item. For `randomActions`, a separate prohibition on restarting is simpler and does not require a consumable-extension contract.
+- **Remaining work (SR05, SR06, SR08–SR10).** Five `setPrematchTimer` calls still compile to `Restart Rule`. After voting, when everyone is ready, `shortenPrematchTimer` sets 15 seconds, waits one tick, and sets 10 seconds. Another call for the same player can interrupt execution in that window. A different player can independently write to the same global match timer. A single global rule could own the deferred write and recheck phase and readiness before setting 10 seconds. Test quick Ready/Unready changes, hero reselection, and near-simultaneous input from two players as voting ends. A match crash has yet to be reproduced for this path. [Menu calls](../src/start_menu/player_start_menu.opy#L118) · [15 → 10 transition](../src/game/subroutines.opy#L561) · [End voting](../src/start_menu/global_start_menu.opy#L204)
+- **SR01–SR04 and SR11.** Vote tallying runs when voting ends once per match. The three tallying subroutines have no waits of their own, and `setObjectiveType` starts after clearing `isVoting`. On objective completion, `isObjectiveComplete` stays true until `objectivesManagement` finishes, preventing the normal transition from starting it again during its waits. Changes to these paths would require evidence of reentry. [Voting chain](../src/start_menu/global_start_menu.opy#L248) · [OBJECTIVE COMPLETE](../src/game/global_game_in_progress.opy#L133) · [Flag reset](../src/game/subroutines.opy#L679)
 
 <a id="r02"></a>
 <a id="s02"></a>
 
 ### R02. Insufficient total spawn weight
+
+**Fixed in source.** `5b24cee` bounds weighted selection, accounts for compressed weight rounding, and retains a fallback. The upper-end roll can no longer leave selection spinning in source.
 
 **Category:** Loops, settings. **Priority:** High. **Evidence:** C + M; engine behavior: R.
 
@@ -157,6 +158,8 @@ Fix direction: calculate the positive sum of actually eligible weights, choose a
 <a id="s03"></a>
 
 ### R03. Zero loop step with one item per crate
+
+**Fixed in source.** `43c2b0f` raises the Workshop setting minimum to two items, excluding the original zero-step configuration.
 
 **Category:** Loops, settings. **Priority:** High. **Evidence:** C + M; engine behavior: R.
 
@@ -181,6 +184,8 @@ Fix direction: use a separate position without division for one item; more robus
 
 ### R04. All objective types disabled or Mixed Pool empty
 
+**Open.** `077c774` simplifies the Mixed history threshold. The Showdown fallback for all-disabled objectives and handling of an empty Mixed pool remain open.
+
 **Category:** Loops, settings. **Priority:** High. **Evidence:** C + M.
 
 Unbounded selection of an allowed objective and selection from Mixed Pool without a nonempty check already existed in the original. Source: [original:947](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L947>), [original:964](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L964>).
@@ -197,6 +202,8 @@ Fix direction: validate settings before starting, checking the ordinary and mixe
 <a id="s05"></a>
 
 ### R05. Player race during item pickup
+
+**Fixed in source.** Pickup grants the item and removes its aligned entries without waits. `f2be43c` uses one synchronous indexed removal for pickup and eviction, closing the illustrated interleaving.
 
 **Category:** Shared data, items. **Priority:** High. **Evidence:** C + M.
 
@@ -216,6 +223,8 @@ Fix direction: recheck that the item exists and read/grant/remove all related en
 <a id="s06"></a>
 
 ### R06. Old effect modifies a player's new spawn state
+
+**Partially implemented.** `0390d8d` gives each effect one owner and ends Cloaking Device and Super Nano on death. Spawn initialization can still reset state before old cleanup, so modifier ownership across spawns remains open.
 
 **Category:** Lifecycle, player state. **Priority:** High. **Evidence:** C + M; scheduling: R.
 
@@ -275,6 +284,8 @@ Severity, concrete scenarios, and proposals for all 14 messages appear in [the C
 <a id="s10"></a>
 
 ### R09. Outer loop not bounded by an individual wait's timeout
+
+**Partially implemented.** `525ccd8` bounds Mercy's tentacle retraction and `d57030f` bounds Brute's ultimate startup wait. The landing wait and other outer loops remain open.
 
 **Category:** Lifecycle, waits. **Priority:** Medium. **Evidence:** C + R.
 
@@ -371,6 +382,8 @@ Fix direction: correct the hack predicate and remove the slowdown owned by this 
 
 ### R14. Mercy tentacle uses inconsistent visibility checks
 
+**Fixed in source.** `525ccd8` finds and grabs the same candidate whose eyes are visible from the tentacle tip. The obstruction check and 0.032 s step remain in place; wall and barrier behavior still needs in-game verification.
+
 **Category:** Logic, target selection. **Priority:** Medium. **Evidence:** C + M.
 
 The Mercy tentacle's candidate-visibility test and actual filter already used different ray endpoints. Source: [original:5034](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5034>), [original:5035](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5035>).
@@ -389,6 +402,8 @@ Fix direction: one eligibility predicate, one list of victims passing it, and se
 <a id="s16"></a>
 
 ### R15. Inconsistent units and speed in the dome rescue timer
+
+**Open.** `43ed7e7` reuses the calculated dome gap. The meters-versus-seconds comparison and fixed 2.5 divisor remain.
 
 **Category:** Logic, timers. **Priority:** Medium. **Evidence:** C + M.
 
@@ -437,6 +452,8 @@ Fix direction: a separate search result initialized to `null`, assigned only aft
 <a id="b02"></a>
 
 ### R17. Escorted NPC selects itself
+
+**Partially implemented.** Group Up selects from `rescuePotentialLeaderList`, which excludes the NPC. `ef2bc5e` streamlines the current leader check. Automatic selection still reads `playerTargetList` without excluding the NPC.
 
 **Category:** Logic, escort. **Priority:** High. **Evidence:** C + M.
 
@@ -503,6 +520,8 @@ Fix direction: first filter resources using the same radius condition, then sele
 
 ### R20. Player used as an index instead of a membership test
 
+**Fixed in source.** `7b04d11` replaces `miniBossList[player]` with a membership test. The boss rule's entry condition and selection use the same predicate.
+
 **Category:** Logic, value types. **Priority:** High. **Evidence:** C; coercion: R.
 
 Both filters already indexed lists with a player entity. For extraction, the old list name was evacuatingSurvivorList; the current name is evacSurvivorList. Source: [original:2241](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2241>), [original:2120](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2120>).
@@ -521,6 +540,8 @@ The related accumulation of empty miniboss entries is covered in R34.
 <a id="p01"></a>
 
 ### R21. Repeated bot target-search and visibility calculations
+
+**Partially implemented.** `8509dd8` reuses a visibility snapshot, `63a7fc1` removes a sort, and `ce23597` checks loss of LoS every 0.125–0.25 s. Repeated ray origins and the temporary neighbor list remain separate candidates.
 
 **Category:** Performance, bots. **Priority:** High. **Evidence:** O.
 
@@ -541,6 +562,8 @@ Preserve priorities for minibosses, dummy targets, Pharah, and players below the
 
 ### R22. Repeated turret target scans
 
+**Partially implemented.** `0390d8d` reuses the visible-target snapshot and removes LoS from the barrel expression. `d98528b` avoids redundant idle direction writes, and `3cad414` uses linear aim selection. `be0a5f4` reuses shot-ray inputs. Aim cadence and the two shot rays remain open.
+
 **Category:** Performance, consumables. **Priority:** High. **Evidence:** O.
 
 Optimization candidate: the turret already repeated visibility checks in its visual expression, target-existence test, and target sorting. Source: [original:6248](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6248>), [original:6255](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6255>), [original:6256](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6256>), [original:6257](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6257>).
@@ -557,6 +580,8 @@ Caveat: the current `.any()` excludes teleporting bots, but aiming's `.filter()`
 <a id="p03"></a>
 
 ### R23. Spatial filtering before visibility when returning a boss
+
+**Fixed in source.** `5b23da4` separates the range and LoS filters; `d66808f` reduces the calculation for the 5–20 m band. Server Load savings were not measured.
 
 **Category:** Performance, geometry. **Priority:** Medium; localized change. **Evidence:** O; prototype: C.
 
@@ -577,6 +602,8 @@ This operation is relatively infrequent, so its contribution to average load may
 
 ### R24. Repeated Laser Barricade geometry
 
+**Fixed in source.** `85eee1d` uses one contact filter and compares the two push directions without sorting. Barricade preview remains part of R25.
+
 **Category:** Performance, collisions. **Priority:** High with crowds. **Evidence:** O.
 
 Optimization candidate: repeated barricade geometry passes, sorting, and raycasts already existed. Source: [original:6771](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6771>), [original:6777](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6777>), [original:6781](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6781>), [original:6800](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6800>).
@@ -593,6 +620,8 @@ Do not simply merge four `.any()` checks into one: each can currently be satisfi
 <a id="p05"></a>
 
 ### R25. Repeated sorting and raycasts in visual expressions
+
+**Open.** Repeated calculations for Cure, Biomorphing, and the ground-item prompt remain. The periodic `[Interact]` snapshot is back in the backlog, as are Laser Barricade's preview rays.
 
 **Category:** Performance, HUD. **Priority:** Medium; check clients. **Evidence:** O.
 
@@ -613,6 +642,8 @@ Do not replace view-angle selection with nearest-distance selection: that is dif
 
 ### R26. Teleport-point search and absence of targets
 
+**Partially implemented.** `fe3eee2` caps the cache at 64 positions, filters by the original index, and replaces the periodic rewrite with an absolute penalty deadline. `97e3de7` reuses the index on exit. Attempt limits and cancellation without targets remain open.
+
 **Category:** Performance, cancellation. **Priority:** Medium. **Evidence:** O + R.
 
 Repeated point index lookups and a teleport-search loop without explicit cancellation when targets are absent already existed. Source: [original:3979](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3979>), [original:3982](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3982>), [original:3986](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L3986>).
@@ -630,6 +661,8 @@ That guard also avoids redundant work with an empty target list. This is a known
 
 ### R27. Repeated map-grid processing and terminal placement
 
+**Partially implemented.** `033c34c` bounds terminal placement and handles an empty pool, and `aee5cde` reuses grid distances. Neighbor checks during grid generation and further pass reductions remain open.
+
 **Category:** Performance, setup. **Priority:** Low. **Evidence:** O.
 
 Optimization candidate: grid generation checking the accumulated array and repeated base filtering for terminals already existed. Source: [original:757](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L757>), [original:761](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L761>), [original:2948](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2948>).
@@ -644,6 +677,8 @@ Terminal candidate: precompute base points 10–50 m away, then repeatedly filte
 <a id="p08"></a>
 
 ### R28. Living-zombie list snapshot for Force Field
+
+**Fixed in source.** `8acbdfd` builds one snapshot of nearby living zombies per tick and reuses it in the push loop.
 
 **Category:** Performance, consumables. **Priority:** Medium; localized change. **Evidence:** O; prototype: C.
 
@@ -679,6 +714,8 @@ Preserve batch processing, the 0.5-second pause, half damage to bosses, and sepa
 
 ### R30. Frequent cooldown and charge writes in No Cooldowns
 
+**Partially implemented.** `50ce2c0` raises the reset interval to 0.096 s. The writes performed within each step remain in place.
+
 **Category:** Performance, controls. **Priority:** Medium; check responsiveness. **Evidence:** O.
 
 Optimization candidate: the same frequent cooldown and charge resets already ran in the original. Source: [original:6153](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6153>), [original:6154](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6154>), [original:6167](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6167>).
@@ -693,6 +730,8 @@ Candidate: prototype updates only for buttons applicable to the hero and charges
 <a id="p11"></a>
 
 ### R31. Escorted NPC path growth
+
+**Partially implemented.** `877da83` removes a repeated steering scan, and `061841c` simplifies the horizontal reached-waypoint check. Unbounded path growth and sorting during trimming remain open.
 
 **Category:** Performance, navigation. **Priority:** High as path grows. **Evidence:** O.
 
@@ -711,6 +750,8 @@ Naively replacing removal with `slice` needs separate proof: the original `remov
 
 ### R32. Decorative Bounce Pad and Air Strike effects
 
+**Partially implemented.** Jetpack occupies the former Bounce Pad slot. `ed960ac` reuses the Air Strike blast audience; cosmetic frequency and effect count remain in place.
+
 **Category:** Performance, visualization. **Priority:** Medium; check clients. **Evidence:** O.
 
 Optimization candidate: Air Strike already created four dynamic effects over 50 steps, and Bounce Pad a ring every 0.25 seconds of activity. Source: [original:6188](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6188>), [original:6193](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6193>), [original:6196](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6196>), [original:6356](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6356>), [original:6357](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6357>).
@@ -726,9 +767,11 @@ Client-load/traffic candidate: reduce decorative-ring frequency or restrict dist
 
 ### R33. Hitchhiker and timer sorting
 
+**Fixed in source.** `c8d9cc1` uses one sorted Hitchhiker pair. `d81b6d2` switches respawns to absolute deadlines: the queue is sorted on insertion, with no once-per-second sort.
+
 **Category:** Performance, minor overhead. **Priority:** Low. **Evidence:** O.
 
-**Hitchhiker optimization implemented November 21, 2026.** Health balancing uses the first and last entries of one sorted pair and updates the recipient first. The respawn-timer sorting proposal remains open. [Health balancing](../src/abilities/enhancement_hitchhiker.opy#L116)
+**Hitchhiker optimization implemented November 21, 2026.** Health balancing uses the first and last entries of one sorted pair and updates the recipient first. [Health balancing](../src/abilities/enhancement_hitchhiker.opy#L116)
 
 Optimization candidates: timer sorting and sorting two Hitchhiker participants already existed in the original. Source: [original:534](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L534>), [original:7042](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7042>), [original:7043](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7043>).
 
@@ -740,6 +783,8 @@ Optimization candidates: timer sorting and sorting two Hitchhiker participants a
 <a id="s09"></a>
 
 ### R34. Miniboss list grows through empty entries
+
+**Fixed in source.** `7b04d11` removes a dead miniboss by value and replaces stale entries with one new entry. Empty entries can no longer accumulate.
 
 **Category:** Resources, long matches. **Priority:** High for long matches. **Evidence:** C; load: O.
 
@@ -759,6 +804,8 @@ The shared object budget and failed-creation consequences are covered in R35. Li
 <a id="p15"></a>
 
 ### R35. Ground items and the shared visual-object budget
+
+**Partially implemented.** `f2be43c` caps all ground power-ups at 35 and evicts the oldest items and their visuals. Handling failed effect or text creation still needs verification.
 
 **Category:** Resources, long matches. **Priority:** High for long matches. **Evidence:** C; exhaustion: R.
 
@@ -781,6 +828,8 @@ Fix direction: compact lists, centralize item accounting, and control effect ter
 
 ### R36. Visibility filters with a condition shared by all viewers
 
+**Partially implemented.** `ee4041c` checks Supply Drop state before scanning prompt viewers. Wider replacement of bot visibility filters, including Slimer's effects, remains a candidate.
+
 **Category:** Performance, visibility. **Priority:** Low/medium. **Evidence:** O; prototype: C.
 
 Optimization candidate: viewer filters whose condition does not depend on the lambda parameter already existed. The count of 50 refers to the current tree, not a recount of the historical file. Source: [original:5966](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5966>), [original:6593](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6593>), [original:6600](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6600>).
@@ -798,6 +847,8 @@ Seven simple replacements for infection/resurrection, the gas projectile, and th
 
 ### R37. Unbounded supply-drop point search
 
+**Fixed in source.** `80fcb68` bounds landing-point search, handles candidate exhaustion, and releases the next drop cycle. `40622a7` simplifies the distance-band check.
+
 **Category:** Loops, cancellation, performance. **Priority:** Medium. **Evidence:** C + R.
 
 The supply-drop loop already searched without an overall attempt limit or in-loop checks of the phase/target availability. Source: [original:5939](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5939>), [original:5941](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5941>), [original:5948](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L5948>).
@@ -812,13 +863,15 @@ Candidate: a bounded attempt batch, repeated phase/player checks, and a defined 
 
 ### R38. Migrating the legacy impulse mode
 
+**Open.** The legacy mode remains in source and its warning is suppressed. The historical 20 messages are not a current count.
+
 **Category:** Physics compatibility. **Priority:** Low. **Evidence:** 20 compiler messages and a successful XYZ prototype. **Crash risk:** no direct mechanism found.
 
 All 20 current sites have corresponding legacy impulses in the original. This is inherited physics-compatibility work, not 20 newly proven defects. IM01 changes target selection and guards existence, but the impulse mode itself is unchanged. Source: [original:2363](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L2363>), [original:6137](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6137>), [original:7137](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7137>).
 
 The old `CANCEL_CONTRARY_MOTION` and new `CANCEL_CONTRARY_MOTION_XYZ` handle horizontal and vertical velocities differently. Successful replacement compilation does not prove equivalent trajectories. All 20 sites, individual checks, and proposals are collected in [IM01–IM20](#warning-impulse). Source was not changed; this is compatibility work, not a new Start Rule crash.
 
-## Order of fixes and measurements
+## Original audit fix order and measurements
 
 1. **Loop bounds and settings — R02–R04.** Every input state needs a finite result or controlled cancellation. Check zero/empty sets and minimum settings.
 2. **Restarts and shared items — R01, R05.** Define consumable extension and cleanup, prevent restarting a waiting `randomActions`, and make item read/grant/removal indivisible between waits.
@@ -841,7 +894,7 @@ The scripts and results are available in Git at `381a252`. The checks covered co
 
 <a id="compiler-warnings"></a>
 
-## Full warning audit of the current compilation
+## Full warning audit of the original compilation
 
 Checked after the user removed four suppressions from `main.opy`. These are **warnings**; the build succeeds: **25,305 elements, 268 rules**. Diagnostics use the original `#!include`, so links point to actual files and lines. `#!writeToOutputFile` was removed only from the in-memory string; game source and export were not written.
 
@@ -872,7 +925,9 @@ The compiler propagates `hasWaitFunction` transitively through calls, including 
 
 For the timer, note another distinction: different players have separate `setPrematchTimer` executions but write one global match timer. One player's `NOOP` does not order other players' writes. Prefer a single recalculation owner with requests and state revalidation before a delayed write.
 
-### Summary of all 22 Start Rule calls
+### Historical summary of 22 Start Rule calls
+
+The table and scenarios below describe the initial audit build. See [R01](#r01) for the current status and remaining work.
 
 | ID | Location | Target | Own Wait actions in target | Severity | Crash risk |
 |---|---|---|---:|---|---|
