@@ -138,24 +138,20 @@ macro mutationsMacro():
             applyScaledMoveSpeed()
             #!define botMutationOutlineColor tmp2
             botMutationOutlineColor = Color.PURPLE
-            eventPlayer.startForcingName("SPEED")
         #Size Growth
         elif eventPlayer.botMutationId == 2:
             eventPlayer.sizeScale *= 1.5
             eventPlayer.botBaseHealth *= eventPlayer.sizeScale
             botMutationOutlineColor = Color.VIOLET
-            eventPlayer.startForcingName("XL")
         #Size Reduction
         elif eventPlayer.botMutationId == 3:
             eventPlayer.sizeScale *= 0.6
             eventPlayer.botBaseHealth *= eventPlayer.sizeScale
             botMutationOutlineColor = Color.ROSE
-            eventPlayer.startForcingName("XS")
         #Radioactive
         elif eventPlayer.botMutationId == 4:
             eventPlayer.botBiteDuration *= 1.5
             botMutationOutlineColor = Color.LIME_GREEN
-            eventPlayer.startForcingName("Radioactive")
         #Heavy: enabled mutation IDs are 1..5, so the remaining case is 5.
         else:
             eventPlayer.botKnockbackScale *= 0.5
@@ -166,7 +162,8 @@ macro mutationsMacro():
             #Scale health
             eventPlayer.botBaseHealth /= eventPlayer.botKnockbackScale
             botMutationOutlineColor = Color.BLACK
-            eventPlayer.startForcingName("Heavy")
+        # Enabled mutation IDs are 1 through 5, in the same order as the names.
+        eventPlayer.startForcingName(["SPEED", "XL", "XS", "Radioactive", "Heavy"][eventPlayer.botMutationId - 1])
         #Capture the color so later scratch writes cannot change this persistent outline.
         eventPlayer.startForcingOutlineFor(getAllPlayers(), true, evalOnce(botMutationOutlineColor))
     else:
