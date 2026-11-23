@@ -1,5 +1,13 @@
 #!mainFile "../../main.opy"
 
+subroutine shuffleBiowasteQueue
+
+
+def shuffleBiowasteQueue():
+    @Name "shuffleBiowasteQueue"
+
+    # Synchronous, preserving the caller's resource type and carrier scratch.
+    biomorphingQueuedTypeList = random.shuffle([0, 1, 2])
 
 
 macro biowasteOutputMacro():
@@ -8,7 +16,7 @@ macro biowasteOutputMacro():
     biowasteOutputType = biomorphingQueuedTypeList[0]
     del biomorphingQueuedTypeList[0]
     if biomorphingQueuedTypeList == []:
-        biomorphingQueuedTypeList = random.shuffle([0, 1, 2])
+        shuffleBiowasteQueue()
 
 
 macro biowasteAssignmentMacro():
@@ -38,7 +46,7 @@ rule "BIOMORPHING GOAL START":
     # The resource-type slot belongs to the Rescue NPC after an objective transition.
     if currentObjectiveType != ObjectiveType.BIOMORPHING:
         return
-    biomorphingQueuedTypeList = random.shuffle([0, 1, 2])
+    shuffleBiowasteQueue()
     biomorphingDeferredTypeList = []
     biomorphingDeferredPositionList = []
     biomorphingResourceTypeList = []
@@ -81,15 +89,9 @@ rule "ZOMBIE GETS RESOURCE VALUE/OBJECTIVE GIVES POWERUPS":
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     if biomorphingCapturePercent < 100:
         waitUntil(isBiomorphingGoalPending == false, Math.INFINITY)
-        # biowasteCarrierIndex: index of a zombie not holding a full resource, to choose the next resource carrier.
-        #!define biowasteCarrierIndex tmp0
-        biowasteCarrierIndex = getPlayers(Team.2).index((getPlayers(Team.2).filter(lambda player: player.biomorphingResourceAmount != BIOMORPHING_RESOURCE_AMOUNT))[0])
-        # biowasteCarrierCandidateList: current zombie list, to resolve the carrier index in biowasteCarrierIndex to a player.
-        #!define biowasteCarrierCandidateList tmp1
-        biowasteCarrierCandidateList = getPlayers(Team.2)
-        # biowasteCarrier: selected zombie, kept while biowasteOutputMacro replaces biowasteCarrierIndex with its resource type.
+        # biowasteCarrier: first eligible zombie, retained while the output macro uses tmp0.
         #!define biowasteCarrier tmp1
-        biowasteCarrier = biowasteCarrierCandidateList[biowasteCarrierIndex]
+        biowasteCarrier = getPlayers(Team.2).filter(lambda player: player.biomorphingResourceAmount != BIOMORPHING_RESOURCE_AMOUNT)[0]
         biowasteCarrier.biomorphingResourceAmount = BIOMORPHING_RESOURCE_AMOUNT
         biowasteOutputMacro()
         #!define biowasteAssignedType tmp0
@@ -118,12 +120,9 @@ rule "BIOWASTE IS PICKED UP":
     @Condition (not eventPlayer.isDummy() or eventPlayer.getTeam() == Team.2) == true
     
     wait(0.1, Wait.ABORT_WHEN_FALSE)
-    # biowastePickupPosition: nearest dropped biowaste position, to identify the resource being picked up.
-    #!define biowastePickupPosition tmp0
-    biowastePickupPosition = sorted(biomorphingResourcePositionList, lambda x: distance(eventPlayer, x))[0]
-    # biowastePickupIndex: resource index shared by position, type and visual arrays, to pick up and remove the same orb.
+    # biowastePickupIndex: shared by the resource arrays; index returns the first matching position.
     #!define biowastePickupIndex tmp1
-    biowastePickupIndex = biomorphingResourcePositionList.index(biowastePickupPosition)
+    biowastePickupIndex = biomorphingResourcePositionList.index(sorted(biomorphingResourcePositionList, lambda x: distance(eventPlayer, x))[0])
     eventPlayer.biomorphingResourceType = biomorphingResourceTypeList[biowastePickupIndex]
     destroyEffect(biomorphingResourceEffectIdList[biowastePickupIndex])
     destroyInWorldText(biomorphingResourceTextIdList[biowastePickupIndex])
