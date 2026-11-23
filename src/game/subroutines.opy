@@ -609,35 +609,24 @@ def objectivesManagement():
         objectiveNextCheckpoint = 0
         isBiomorphingGoalPending = false
         #Checks if current objective is showdown
-        switch currentObjectiveType:
-            case ObjectiveType.SHOWDOWN:
-                playShowdownRing()
-                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, currentObjectivePosition, 200)
-                break
-            #Checks if current objective is biomorphing
-            case ObjectiveType.BIOMORPHING:
-                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.GREEN, currentObjectivePosition, objectiveRad)
-                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ROSE, currentObjectivePosition, 200)
-                break
-            #Checks if current objective is survivor rescue
-            case ObjectiveType.SURVIVOR_RESCUE:
-                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.VIOLET, currentObjectivePosition, objectiveRad)
-                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.VIOLET, currentObjectivePosition, 200)
-                break
-            #Checks if current objective is kill zone
-            case ObjectiveType.KILL_ZONE:
-                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.RED, killZoneCenter, 200)
-                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.RED, killZoneCenter, objectiveRad * 2)
-                break
-            #Checks if current objective is Zombie Egg
-            case ObjectiveType.ZOMBIE_EGG:
-                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.LIME_GREEN, currentObjectivePosition, 200)
-                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.LIME_GREEN, currentObjectivePosition, objectiveRad * 2)
-                playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.LIME_GREEN, currentObjectivePosition, 3)
-                break
-            #Checks if current objective is Satellite Uplink
-            case ObjectiveType.SATELLITE_UPLINK:
-                playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.LIME_GREEN, currentObjectivePosition, 200)
+        if currentObjectiveType == ObjectiveType.SHOWDOWN:
+            playShowdownRing()
+            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ORANGE, currentObjectivePosition, 200)
+        elif currentObjectiveType == ObjectiveType.BIOMORPHING:
+            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.GREEN, currentObjectivePosition, objectiveRad)
+            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.ROSE, currentObjectivePosition, 200)
+        elif currentObjectiveType == ObjectiveType.SURVIVOR_RESCUE:
+            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.VIOLET, currentObjectivePosition, objectiveRad)
+            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.VIOLET, currentObjectivePosition, 200)
+        elif currentObjectiveType == ObjectiveType.KILL_ZONE:
+            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.RED, killZoneCenter, 200)
+            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.RED, killZoneCenter, objectiveRad * 2)
+        elif currentObjectiveType == ObjectiveType.ZOMBIE_EGG:
+            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.LIME_GREEN, currentObjectivePosition, 200)
+            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.LIME_GREEN, currentObjectivePosition, objectiveRad * 2)
+            playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.LIME_GREEN, currentObjectivePosition, 3)
+        elif currentObjectiveType == ObjectiveType.SATELLITE_UPLINK:
+            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.LIME_GREEN, currentObjectivePosition, 200)
         # Objective IDs 1..7 are contiguous; unsupported IDs previously produced no completion message.
         if currentObjectiveType >= ObjectiveType.SHOWDOWN and currentObjectiveType <= ObjectiveType.SATELLITE_UPLINK:
             bigMessage(getAllPlayers(), ["Showdown Conquered!", "Giant zombie eliminated!", "Biomorphing completed!", "The survivors have been rescued!", "The kill zone has been cleared!", "The egg has been destroyed!", "Firing sequence complete!"][currentObjectiveType - 1])
@@ -661,46 +650,40 @@ def objectivesManagement():
         if currentObjectiveType >= ObjectiveType.SHOWDOWN and currentObjectiveType <= ObjectiveType.SATELLITE_UPLINK:
             objectiveDescription = ["Keep zombies away in the Showdown!", "Eliminate the boss", "Convert biowaste into powerups!", "Rescue survivors", "Clear the kill zone", "Destroy the egg", "Repair satellite control terminals"][currentObjectiveType - 1]
             bigMessage(getAllPlayers(), ["Proceed to the Showdown!", "Eliminate the giant zombie!", "Find the indicated material and deposit it!", "Locate survivors and bring them to the extraction site!", "Get to the kill zone and clear zombies!", "Destroy the zombie egg!", "Repair the satellite control terminals!"][currentObjectiveType - 1])
-        switch currentObjectiveType:
-            case ObjectiveType.SHOWDOWN:
-                showdownCapturePercent = 0
-                chaseAtRate(objectiveRad, max(5, showdownCapturePercent / 4), 1)
-                objectiveColor = Color.ORANGE
-                showdownNextCheckpoint = 25
-                showdownContestingZombieList = []
-                break
-            case ObjectiveType.BIOMORPHING:
-                biomorphingCapturePercent = 0
-                biomorphingResourcePositionList = []
-                getAllPlayers().biomorphingResourceAmount = 0
-                objectiveColor = Color.SKY_BLUE
-                objectiveRad = 3.5
-                biomorphingResourceColorList = [Color.BLUE, Color.TURQUOISE, Color.SKY_BLUE, Color.RED]
-                biomorphingResourceNameList = ["Head", "Arm", "Leg"]
-                biomorphingGoalQueueList = random.shuffle([0, 1, 2, 3])
-                isBiomorphingGoalPending = true
-                biomorphingNextCheckpoint = 25
-                break
-            case ObjectiveType.SURVIVOR_RESCUE:
-                rescueSurvivor = null
-                objectiveRad = 10
-                rescueSavedRadius = objectiveRad
-                break
-            case ObjectiveType.KILL_ZONE:
-                objectiveRad = 20
-                killZoneCenter = currentObjectivePosition
-                killZoneEliminationScore = 0
-                break
-            case ObjectiveType.ZOMBIE_EGG:
-                objectiveRad = 0
-                break
-            case ObjectiveType.SATELLITE_UPLINK:
-                objectiveRad = 3
-                objectiveColor = Color.BLUE
-                satelliteTerminalPositionList = []
-                satelliteTerminalProgressList = [0, 0, 0]
-                #Initial terminal spacing
-                satelliteMinTerminalSpacing = 50
+        if currentObjectiveType == ObjectiveType.SHOWDOWN:
+            showdownCapturePercent = 0
+            chaseAtRate(objectiveRad, max(5, showdownCapturePercent / 4), 1)
+            objectiveColor = Color.ORANGE
+            showdownNextCheckpoint = 25
+            showdownContestingZombieList = []
+        elif currentObjectiveType == ObjectiveType.BIOMORPHING:
+            biomorphingCapturePercent = 0
+            biomorphingResourcePositionList = []
+            getAllPlayers().biomorphingResourceAmount = 0
+            objectiveColor = Color.SKY_BLUE
+            objectiveRad = 3.5
+            biomorphingResourceColorList = [Color.BLUE, Color.TURQUOISE, Color.SKY_BLUE, Color.RED]
+            biomorphingResourceNameList = ["Head", "Arm", "Leg"]
+            biomorphingGoalQueueList = random.shuffle([0, 1, 2, 3])
+            isBiomorphingGoalPending = true
+            biomorphingNextCheckpoint = 25
+        elif currentObjectiveType == ObjectiveType.SURVIVOR_RESCUE:
+            rescueSurvivor = null
+            objectiveRad = 10
+            rescueSavedRadius = objectiveRad
+        elif currentObjectiveType == ObjectiveType.KILL_ZONE:
+            objectiveRad = 20
+            killZoneCenter = currentObjectivePosition
+            killZoneEliminationScore = 0
+        elif currentObjectiveType == ObjectiveType.ZOMBIE_EGG:
+            objectiveRad = 0
+        elif currentObjectiveType == ObjectiveType.SATELLITE_UPLINK:
+            objectiveRad = 3
+            objectiveColor = Color.BLUE
+            satelliteTerminalPositionList = []
+            satelliteTerminalProgressList = [0, 0, 0]
+            #Initial terminal spacing
+            satelliteMinTerminalSpacing = 50
     #Updates global objective entities
     globalObjectiveEntityManagementMacro()
     isObjectiveComplete = false
