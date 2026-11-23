@@ -313,10 +313,25 @@ rule "DESELECT BOT TARGET":
     @Team 2
     @Condition eventPlayer.botIsTeleporting != true
     @Condition eventPlayer.botTarget != null
-    @Condition (eventPlayer.botTarget.invisibilityCount or not eventPlayer.botTarget in playerTargetList or not isInLoS(eventPlayer.botTarget.getEyePosition(), eventPlayer.getPosition() + losOffsetConst)) == true
+    @Condition (eventPlayer.botTarget.invisibilityCount or not eventPlayer.botTarget in playerTargetList) == true
     
-    deselectBotTargetMacro()
+    deselectBotTarget()
     wait(0.125, Wait.RESTART_WHEN_TRUE)
+    if ruleCondition:
+        loop()
+
+
+rule "CHECK BOT TARGET LINE OF SIGHT":
+    @Event eachPlayer
+    @Team 2
+    @Condition eventPlayer.botIsTeleporting != true
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.botTarget != null
+
+    # Stagger the probes and check the current target after the wait.
+    wait(random.uniform(0.125, 0.25), Wait.ABORT_WHEN_FALSE)
+    if not isInLoS(eventPlayer.botTarget.getEyePosition(), eventPlayer.getPosition() + losOffsetConst):
+        deselectBotTarget()
     if ruleCondition:
         loop()
 

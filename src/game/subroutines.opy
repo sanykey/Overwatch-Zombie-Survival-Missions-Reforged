@@ -23,6 +23,7 @@ subroutine botRespawnInitialization
 subroutine objectivesManagement
 subroutine selectTarget
 subroutine selectBotTarget
+subroutine deselectBotTarget
 subroutine restoreDefaultFacingMovement
 subroutine setPrematchTimer
 subroutine shortenPrematchTimer
@@ -703,7 +704,9 @@ def objectivesManagement():
         logToInspector(f"[objective] Started {currentObjectiveType}")
 
 
-macro deselectBotTargetMacro():
+def deselectBotTarget():
+    @Name "deselectBotTarget"
+
     eventPlayer.botTarget = null
     if not eventPlayer.botIsThrottleOverridden:
         eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.botLastTarget.getPosition() + normalize(worldVector(eventPlayer.botLastTarget.getThrottle(), eventPlayer.botLastTarget, Transform.ROTATION)) * -2), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
@@ -769,7 +772,7 @@ def selectBotTarget():
             startRule(restoreDefaultFacingMovement)
         elif eventPlayer.botTarget != null:
             # No visible target: follow the last known target without replacing its history.
-            deselectBotTargetMacro()
+            deselectBotTarget()
     eventPlayer.botIsSelectingTarget = false
 
 
