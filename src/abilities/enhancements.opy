@@ -249,7 +249,10 @@ rule "P.U.P. CONTROL":
             #Beam hits P.U.P.'s target
             playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.RED, eventPlayer.enhancementPupTarget, 1)
             eventPlayer.enhancementPupTarget.setStatusEffect(eventPlayer, Status.BURNING, 3)
-            eventPlayer.enhancementPupTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget)), min(-20, verticalAngleOfDirection(directionTowards(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget)))), min(25, 4200 / eventPlayer.enhancementPupTarget.getMaxHealth()), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+            # Synchronous direction shared by the horizontal and vertical angles.
+            #!define pupImpulseDirection tmp0
+            pupImpulseDirection = directionTowards(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget)
+            eventPlayer.enhancementPupTarget.applyImpulse(directionFromAngles(horizontalAngleOfDirection(pupImpulseDirection), min(-20, verticalAngleOfDirection(pupImpulseDirection))), min(25, 4200 / eventPlayer.enhancementPupTarget.getMaxHealth()), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
             eventPlayer.enhancementPupTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, 1)
             #Laser cooldown
             eventPlayer.enhancementPupCooldown = PUP_LASER_COOLDOWN

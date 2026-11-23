@@ -397,7 +397,10 @@ rule "REIGNITED (ANRAN) ABILITIES":
         eventPlayer.cancelPrimaryAction()
         if not eventPlayer.botIsCrowdControlled and eventPlayer.botTarget != null:
             eventPlayer.forceButtonPress(Button.ABILITY_1)
-            eventPlayer.applyImpulse(normalize(directionTowards(eventPlayer, eventPlayer.botTarget) + offsetUpQuarterConst), eventPlayer.sizeScale * (15 + 25 * abs(cosDeg(verticalAngleOfDirection(directionTowards(eventPlayer, eventPlayer.botTarget))))), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+            # The impulse consumes this direction before any movement call or wait.
+            #!define reignitedImpulseDirection tmp0
+            reignitedImpulseDirection = directionTowards(eventPlayer, eventPlayer.botTarget)
+            eventPlayer.applyImpulse(normalize(reignitedImpulseDirection + offsetUpQuarterConst), eventPlayer.sizeScale * (15 + 25 * abs(cosDeg(verticalAngleOfDirection(reignitedImpulseDirection)))), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
             eventPlayer.botIsThrottleOverridden = false
             eventPlayer.botIsFacingOverridden = true
             startRule(restoreDefaultFacingMovement, StartRuleBehavior.NOOP)
