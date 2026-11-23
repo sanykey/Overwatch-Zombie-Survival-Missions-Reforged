@@ -826,6 +826,8 @@ playervar actorMotionSlot1  # Existing per-hero numeric/vector chase or Rescue e
 #!define botBlasterCharge actorMotionSlot1
 # Illari burst charging progression.
 #!define botDaytakerCharge actorMotionSlot1
+# Shared charge aura reads the active hero's progression from the same slot.
+#!define botChargeVisualScale actorMotionSlot1
 # Winston anger/enrage progression; initialized to 2.
 #!define botSmolderAnger actorMotionSlot1
 # Hazard boss melee aiming offset, chased from -20 to 25.

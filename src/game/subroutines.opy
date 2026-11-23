@@ -238,16 +238,11 @@ macro botEntityManagementMacro():
                 #Using Wraith Form
                 createEffect(getAllPlayers().filter(lambda _: eventPlayer.isUsingAbility1()), Effect.CLOUD, Color.WHITE, eventPlayer, 12 * eventPlayer.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
                 eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
-        elif eventPlayer.getHero() == Hero.PHARAH:
-            #Charging attack effect
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botBlasterCharge), Effect.GOOD_AURA, Color.BLUE, eventPlayer, eventPlayer.botBlasterCharge * eventPlayer.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        elif eventPlayer.getHero() in [Hero.PHARAH, Hero.ILLARI]:
+            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botChargeVisualScale), Effect.GOOD_AURA, Color.BLUE if eventPlayer.getHero() == Hero.PHARAH else Color.ORANGE, eventPlayer, eventPlayer.botChargeVisualScale * eventPlayer.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
         elif eventPlayer.getHero() == Hero.SIGMA:
             createEffect(getAllPlayers().filter(lambda _: eventPlayer.isUsingAbility1()), Effect.CLOUD, Color.TURQUOISE, eventPlayer.botTarget.getEyePosition(), 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
-        elif eventPlayer.getHero() == Hero.ILLARI:
-            #Charging attack effect
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.botDaytakerCharge), Effect.GOOD_AURA, Color.ORANGE, eventPlayer, eventPlayer.botDaytakerCharge * eventPlayer.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
         elif eventPlayer.getHero() == Hero.WINSTON:
             #Charging attack effect
