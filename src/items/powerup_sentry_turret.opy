@@ -33,7 +33,17 @@ def sentryTurret():
         #!define turretVisibleTargets tmp0
         turretVisibleTargets = getLivingPlayers(Team.2).filter(lambda player: isInLoS(eventPlayer.powerUpTurretPosition, player))
         if turretVisibleTargets.any(lambda player: not player.botIsTeleporting):
-            eventPlayer.powerUpTurretDirection = directionTowards(eventPlayer.powerUpTurretPosition, sorted(turretVisibleTargets, lambda x: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), x.getEyePosition())))[0].getPosition() + Vector.UP)
+            # Score each visible target once. A strict comparison keeps the first
+            # candidate on ties. These scratch slots are free again before the rays.
+            #!define turretTargetAngles tmp1
+            #!define turretTargetIndex tmp2
+            #!define turretBestTargetIndex tmp3
+            turretTargetAngles = turretVisibleTargets.map(lambda target: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), target.getEyePosition())))
+            turretBestTargetIndex = 0
+            for turretTargetIndex in range(1, len(turretVisibleTargets)):
+                if turretTargetAngles[turretTargetIndex] < turretTargetAngles[turretBestTargetIndex]:
+                    turretBestTargetIndex = turretTargetIndex
+            eventPlayer.powerUpTurretDirection = directionTowards(eventPlayer.powerUpTurretPosition, turretVisibleTargets[turretBestTargetIndex].getPosition() + Vector.UP)
             # Both rays use the same player lists. The effects and rays consume this scratch before damage or waits.
             #!define turretRayTargets tmp1
             #!define turretRayIgnoredPlayers tmp2
