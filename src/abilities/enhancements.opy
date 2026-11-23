@@ -2,7 +2,15 @@
 subroutine resetBattleAbilityCharge
 
 subroutine startPupDefaultChase
+subroutine resetPupColorAndBeam
 subroutine applyBulkingSeasonStats
+
+
+def resetPupColorAndBeam():
+    @Name "resetPupColorAndBeam"
+
+    eventPlayer.enhancementPupColor = Color.SKY_BLUE
+    eventPlayer.enhancementIsPupBeamActive = false
 
 
 rule "ZOMBIE HYBRID":
@@ -180,10 +188,7 @@ rule "P.U.P. TARGET":
     if ruleCondition:
         loop()
     stopChasing(eventPlayer.enhancementPupPosition)
-    #Default color
-    eventPlayer.enhancementPupColor = Color.SKY_BLUE
-    #Beam visibility
-    eventPlayer.enhancementIsPupBeamActive = false
+    resetPupColorAndBeam()
     #P.U.P. target null
     eventPlayer.enhancementPupTarget = null
     #Freeze aura visibility
@@ -201,10 +206,7 @@ rule "P.U.P. CONTROL":
     
     #P.U.P. attack movement
     chaseAtRate(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget.getEyePosition() + directionTowards(eventPlayer.enhancementPupTarget.getEyePosition(), eventPlayer.enhancementPupPosition) * 2, (abs(distance(eventPlayer.enhancementPupTarget.getEyePosition(), eventPlayer.enhancementPupPosition) - 2)) * 1.5)
-    #Default color
-    eventPlayer.enhancementPupColor = Color.SKY_BLUE
-    #Beam visibility
-    eventPlayer.enhancementIsPupBeamActive = false
+    resetPupColorAndBeam()
     #Freeze aura visibility
     eventPlayer.enhancementIsPupFreezeAuraActive = false
     waitUntil(distance(eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget.getEyePosition()) < 5 or eventPlayer.enhancementPupTarget == null, Math.INFINITY)
@@ -233,10 +235,7 @@ rule "P.U.P. CONTROL":
             if eventPlayer.enhancementPupTarget.hasStatus(Status.FROZEN):
                 # Freeze nearby zombies only after the primary target is frozen.
                 getPlayersInRadius(eventPlayer.enhancementPupTarget, 3, Team.2).exclude(eventPlayer.enhancementPupTarget).setStatusEffect(eventPlayer, Status.FROZEN, 0.75)
-            #P.U.P. color
-            eventPlayer.enhancementPupColor = Color.SKY_BLUE
-            #Beam visibility
-            eventPlayer.enhancementIsPupBeamActive = false
+            resetPupColorAndBeam()
             #Freeze aura visibility
             eventPlayer.enhancementIsPupFreezeAuraActive = false
         else:
@@ -255,10 +254,7 @@ rule "P.U.P. CONTROL":
             #Laser cooldown
             eventPlayer.enhancementPupCooldown = PUP_LASER_COOLDOWN
             wait(3, Wait.ABORT_WHEN_FALSE)
-            #P.U.P. color
-            eventPlayer.enhancementPupColor = Color.SKY_BLUE
-            #Beam visibility
-            eventPlayer.enhancementIsPupBeamActive = false
+            resetPupColorAndBeam()
         stopChasing(eventPlayer.enhancementPupPosition)
         #P.U.P. target
         eventPlayer.enhancementPupTarget = null
