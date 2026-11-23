@@ -11,7 +11,7 @@ macro createStartMenuEnhancementHud():
             " ",
             f"Faster infection. Spend infection: {ZOMBIE_HYBRID_DAMAGE_PER_LEVEL} dmg/lvl explosion",
             f"On elimination: +{compactHudNumber(BULKING_SEASON_HP_PER_STACK_PCT)}% max HP ({BULKING_SEASON_MAX_HP_MULTIPLIER}x max), +{compactHudNumber(BULKING_SEASON_SIZE_PER_STACK_PCT)}% size ({compactHudNumber(BULKING_SEASON_MAX_SIZE_MULTIPLIER)}x max). Lose {BULKING_SEASON_DEATH_LOSS_PCT}% of stacks on death",
-            f"{100 + BRAIN_KILLER_CRIT_BONUS_PCT}% of crit dmg ({100 + BRAIN_KILLER_BOSS_CRIT_BONUS_PCT}% vs bosses)",
+            f"+{BRAIN_KILLER_CRIT_BONUS_PCT}% crit dmg (+{BRAIN_KILLER_BOSS_CRIT_BONUS_PCT}% vs bosses)",
             f"Dmg in {PYROTECHNIC_IGNITE_RANGE}m ignites zombies ({PYROTECHNIC_BURN_DURATION}s)",
             f"Final blows store ability resets ({BORN_TO_BATTLE_MAX_RESETS} max), used next cast",
             f"Place battery (+{CHARGE_BATTERY_ULT_CHARGE_PCT}% ult on touch, {CHARGE_BATTERY_RECHARGE_DURATION}s recharge, {CHARGE_BATTERY_PLACEMENT_COOLDOWN}s CD). No Cooldowns ({CHARGE_BATTERY_NO_COOLDOWNS_DURATION}s) at ult start",

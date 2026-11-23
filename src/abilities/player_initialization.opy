@@ -20,7 +20,7 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             " ",
             f"Explosion: {ceil(localPlayer.enhancementHybridCooldown)}s CD" if localPlayer.enhancementHybridCooldown > 0 else f"[{inputBindingString(Button.MELEE)}]: explode for {floor(localPlayer.infectionLevel * ZOMBIE_HYBRID_DAMAGE_PER_LEVEL)} dmg" if localPlayer.infectionLevel >= 1 else "Build infection",
             f"Stacks: {localPlayer.enhancementBulkStacks} | +{min((BULKING_SEASON_MAX_HP_MULTIPLIER - 1) * 100, localPlayer.enhancementBulkStacks * BULKING_SEASON_HP_PER_STACK_PCT)}% HP | Size: {round(localPlayer.sizeScale * 100) / 100}x | Hold [{inputBindingString(Button.MELEE)}]: toggle size",
-            f"{100 + BRAIN_KILLER_CRIT_BONUS_PCT}% of crit dmg ({100 + BRAIN_KILLER_BOSS_CRIT_BONUS_PCT}% vs bosses)",
+            f"+{BRAIN_KILLER_CRIT_BONUS_PCT}% crit dmg (+{BRAIN_KILLER_BOSS_CRIT_BONUS_PCT}% vs bosses)",
             f"Hits in {PYROTECHNIC_IGNITE_RANGE}m ignite zombies",
             f"Ability resets: {localPlayer.enhancementBattleResetCharges}/{BORN_TO_BATTLE_MAX_RESETS}",
             f"Place: {ceil(localPlayer.enhancementBatteryPlacementCooldown)}s CD" if localPlayer.enhancementBatteryPlacementCooldown > 0 else f"Hold [{inputBindingString(Button.MELEE)}]: aim | Release: place",
