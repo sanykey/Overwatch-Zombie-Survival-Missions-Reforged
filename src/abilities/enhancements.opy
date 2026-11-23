@@ -44,16 +44,12 @@ rule "BORN TO BATTLE PLAYER USES ABILITY CHARGE":
     @Condition eventPlayer.enhancementBattleResetCharges > 0
     @Condition [Button.SECONDARY_FIRE, Button.ABILITY_1, Button.ABILITY_2, Button.CROUCH, Button.JUMP].any(lambda x: eventPlayer.isHoldingButton(x)) == true
     
-    if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE):
-        eventPlayer.enhancementBattleAbilityButton = Button.SECONDARY_FIRE
-    elif eventPlayer.isHoldingButton(Button.ABILITY_1):
-        eventPlayer.enhancementBattleAbilityButton = Button.ABILITY_1
-    elif eventPlayer.isHoldingButton(Button.ABILITY_2):
-        eventPlayer.enhancementBattleAbilityButton = Button.ABILITY_2
-    elif eventPlayer.isHoldingButton(Button.CROUCH):
-        eventPlayer.enhancementBattleAbilityButton = Button.CROUCH
-    elif eventPlayer.isHoldingButton(Button.JUMP):
-        eventPlayer.enhancementBattleAbilityButton = Button.JUMP
+    # Retain button priority and fall back to the previous choice if all buttons were released.
+    eventPlayer.enhancementBattleAbilityButton = (
+        [Button.SECONDARY_FIRE, Button.ABILITY_1, Button.ABILITY_2, Button.CROUCH, Button.JUMP]
+        .filter(lambda button: eventPlayer.isHoldingButton(button))
+        .concat(eventPlayer.enhancementBattleAbilityButton)
+    )[0]
     #Temp rein fix ability 2
     if eventPlayer.getHero() in [Hero.REINHARDT, Hero.ZARYA] and eventPlayer.enhancementBattleAbilityButton == Button.ABILITY_2:
         waitUntil(eventPlayer.isUsingAbility2(), 0.016)
