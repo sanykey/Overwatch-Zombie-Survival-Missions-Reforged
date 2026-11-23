@@ -39,7 +39,7 @@ rule "KEVLAR RANGED DAMAGE COMPENSATION":
     # resist, so melee hits stay full-damage without proximity guesswork.
     # Scripted damage() has no ability (boss specials, DoT) and stays untouched.
     # Quick melee, zombie bites included, registers as Button.MELEE.
-    if eventAbility == null or eventAbility == Button.MELEE:
+    if eventAbility in [null, Button.MELEE]:
         return
 
     # Native melee weapons pierce the compensation: they read as full damage
