@@ -77,13 +77,14 @@ rule "[debug] Log bot AI activity":
     debugBotTargetScans = 0
     debugBotTargetMisses = 0
     debugBotTeleportAttempts = 0
+    debugBotTeleportCacheHits = 0
     debugBotTeleportSuccesses = 0
     debugBotTeleportNoTargets = 0
     wait(1, Wait.ABORT_WHEN_FALSE)
     # Sample how many bots are still teleporting with no targets at log time.
     # teleNoTargets above counts search iterations over the whole interval.
     #!define debugBotTeleportNoTargetBots (len(getPlayers(Team.2).filter(lambda zombie: zombie.botIsTeleporting)) if playerTargetList == [] else 0)
-    logToInspector(f"[bot AI] zombies={getNumberOfPlayers(Team.2)} avg={getAverageServerLoad()} peak={getPeakServerLoad()} spawnPoints={len(botSpawnPointList)} scans={debugBotTargetScans} misses={debugBotTargetMisses} teleSearch={debugBotTeleportAttempts} teleOk={debugBotTeleportSuccesses} teleNoTargets={debugBotTeleportNoTargets} teleNoTargetBots={debugBotTeleportNoTargetBots}")
+    logToInspector(f"[bot AI] zombies={getNumberOfPlayers(Team.2)} avg={getAverageServerLoad()} peak={getPeakServerLoad()} spawnPoints={len(botSpawnPointList)} scans={debugBotTargetScans} misses={debugBotTargetMisses} teleSearch={debugBotTeleportAttempts} teleCacheHits={debugBotTeleportCacheHits} teleOk={debugBotTeleportSuccesses} teleNoTargets={debugBotTeleportNoTargets} teleNoTargetBots={debugBotTeleportNoTargetBots}")
     loop()
 
 
