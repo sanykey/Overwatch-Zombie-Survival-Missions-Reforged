@@ -271,7 +271,7 @@ def setZombieMode():
     #Bot available hero list
     botHeroList = ZOMBIE_SPAWN_HEROES
     #Zombie types without a boss variation
-    bossesExcludedHeroList = [Hero.JUNKRAT, Hero.ANRAN, Hero.WIDOWMAKER, Hero.JUNKER_QUEEN, Hero.SYMMETRA, Hero.ANA, Hero.DOOMFIST, Hero.KIRIKO, Hero.MAUGA, Hero.SIGMA, Hero.WRECKING_BALL, Hero.JETPACK_CAT]
+    bossesExcludedHeroList = numbersList.slice(NL_BOSS_EXCLUDED_HERO_OFFSET, NL_BOSS_EXCLUDED_HERO_LEN).map(lambda index: botHeroList[index])
     botSpawnRateList = numbersList.slice(NL_SPAWN_MODE_OFFSETS[zombieSetting], ZOMBIE_SPAWN_HERO_COUNT)
 
 

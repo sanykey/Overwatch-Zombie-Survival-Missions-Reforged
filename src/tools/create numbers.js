@@ -216,6 +216,24 @@ for (const [name, palette] of Object.entries(colorPalettes)) {
   });
 }
 
+const spawnHeroIndexTables = {
+  BOSS_EXCLUDED_HERO: [
+    "JUNKRAT", "ANRAN", "WIDOWMAKER", "JUNKER_QUEEN", "SYMMETRA", "ANA",
+    "DOOMFIST", "KIRIKO", "MAUGA", "SIGMA", "WRECKING_BALL", "JETPACK_CAT",
+  ],
+};
+
+for (const [name, heroes] of Object.entries(spawnHeroIndexTables)) {
+  const indices = heroes.map(hero => {
+    const index = zombieSpawnHeroes.indexOf(hero);
+    if (index === -1) {
+      throw new Error(`Hero missing from zombie spawn list for ${name}: ${hero}`);
+    }
+    return index;
+  });
+  numbers.push({ offset: `NL_${name}_OFFSET`, len: `NL_${name}_LEN`, list: indices });
+}
+
 const spawnModeOffsets = [0];
 const spawnModeWeightTotals = [0];
 let numberIndex = 0;
