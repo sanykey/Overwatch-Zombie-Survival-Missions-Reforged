@@ -78,7 +78,9 @@
 #!define DASH_PHASE_DURATION 1.7
 #!define AIR_ACTION_RELEASE_WINDOW 0.25
 #!define AIR_ACTION_SECOND_PRESS_WINDOW 0.25
-#!define DASH_IMPULSE 22
+#!define DASH_LAUNCH_SPEED 23.1
+# Workshop pitch is negative above the horizon.
+#!define DASH_LAUNCH_PITCH -7
 #!define HIGHRISE_JUMP_IMPULSE 16
 #!define HIGHRISE_COOLDOWN 14
 #!define TELEKINESIS_MELEE_RADIUS 2.5

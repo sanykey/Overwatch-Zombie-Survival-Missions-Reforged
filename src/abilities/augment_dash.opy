@@ -4,9 +4,10 @@
 
 #21.25
 
-# Dash samples movement on the second Jump press. This scratch vector is
-# consumed by the impulse immediately; it has no waits or live captures.
+# Dash samples movement on the second Jump press. Reuse the same scratch for
+# the velocity correction. Both values are consumed before any wait.
 #!define augmentDashDirection tmp0
+#!define augmentDashVelocityDelta tmp0
 
 macro useDashAirActionMacro():
     if eventPlayer.augmentDashCharges > 0:
@@ -18,7 +19,7 @@ macro useDashAirActionMacro():
         augmentDashDirection = eventPlayer.getThrottle()
         # Reduce each axis to -1/0/1: adjacent inputs always make a 45-degree
         # diagonal, independent of their relative strength. Opposite inputs
-        # cancel in Workshop's movement vector; zero input grants protection only.
+        # cancel in Workshop's movement vector.
         augmentDashDirection = vect(
             (augmentDashDirection.x > 0) - (augmentDashDirection.x < 0),
             0,
@@ -40,13 +41,12 @@ macro useDashAirActionMacro():
         # The window also nulls knockback received. Set Knockback Received
         # ignores scripted Apply Impulse pushes, which keep their own scaling.
         eventPlayer.setKnockbackReceived(0)
-        # Zero movement input grants only the invulnerability: no impulse.
-        # Otherwise a flat horizontal push: a downward pitch would fight the
-        # floor when grounded and cancel the rising jump's momentum
-        # (CANCEL_CONTRARY_MOTION), leaving an in-place dash without push.
-        # Workshop compares the zero vector to False.
+        # A zero throttle vector compares equal to False and opens only the
+        # protection window. Otherwise subtract current velocity to cancel
+        # falling and prevent repeated dashes from stacking speed.
         if augmentDashDirection != false:
-            eventPlayer.applyImpulse(directionFromAngles(eventPlayer.getHorizontalFacingAngle() + horizontalAngleOfDirection(augmentDashDirection), 0), DASH_IMPULSE, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
+            augmentDashVelocityDelta = directionFromAngles(eventPlayer.getHorizontalFacingAngle() + horizontalAngleOfDirection(augmentDashDirection), DASH_LAUNCH_PITCH) * DASH_LAUNCH_SPEED - eventPlayer.getVelocity()
+            eventPlayer.applyImpulse(augmentDashVelocityDelta, magnitude(augmentDashVelocityDelta), Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
 
 
 rule "[DASH] CHARGE RECHARGE":
