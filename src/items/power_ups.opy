@@ -105,7 +105,6 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
 #!include "powerup_sentry_turret.opy"
 #!include "powerup_cloaking_device.opy"
 #!include "powerup_super_nano.opy"
-#!include "powerup_jetpack.opy"
 #!include "powerup_ultimate_charger.opy"
 #!include "powerup_stun.opy"
 
@@ -145,9 +144,6 @@ def powerUpUsage():
         case PowerUpItem.SUPER_NANO:
             activateSuperNano()
             break
-        case PowerUpItem.JETPACK:
-            useJetpackPowerUp()
-            break
         case PowerUpItem.ULTIMATE_CHARGER:
             useUltimateChargerPowerUp()
             break
@@ -176,7 +172,7 @@ macro powerUpAssignmentMacro():
     groundPowerUpItemId = supplyPowerUpIdList[len(supplyPowerUpEffectIdList)]
     if groundPowerUpItemId >= PowerUpItem.CURE and groundPowerUpItemId <= PowerUpItem.STUN:
         createEffect(getAllPlayers(), Effect.ORB, powerUpColorListConst[groundPowerUpItemId - 1], supplyPowerUpPositionList[len(supplyPowerUpEffectIdList)], 1, EffectReeval.VISIBILITY)
-        createInWorldText(getAllPlayers(), ["CURE", "Revive", "Force Field", "No Cooldowns", "Air Strike", "Beacon of Healing", "Sentry Turret", "Cloaking Device", "Super Nano", "Jetpack", "Ultimate Charger", "Stun"][groundPowerUpItemId - 1], supplyPowerUpPositionList[len(supplyPowerUpTextIdList)], 1, Clip.SURFACES, WorldTextReeval.VISIBILITY)
+        createInWorldText(getAllPlayers(), ["CURE", "Revive", "Force Field", "No Cooldowns", "Air Strike", "Beacon of Healing", "Sentry Turret", "Cloaking Device", "Super Nano", "Ultimate Charger", "Stun"][groundPowerUpItemId - 1], supplyPowerUpPositionList[len(supplyPowerUpTextIdList)], 1, Clip.SURFACES, WorldTextReeval.VISIBILITY)
 
 
 rule "POWER UP EFFECT/TEXT MANAGEMENT":
@@ -227,7 +223,6 @@ rule "EFFECT/TEXT (PERMANENT)":
             "Sentry Turret",
             "Cloaking Device",
             "Super Nano",
-            "Jetpack",
             "Ultimate Charger",
             "Stun"
         ][localPlayer.powerUpItemId - 1],
@@ -245,7 +240,6 @@ rule "EFFECT/TEXT (PERMANENT)":
                 "to place a sentry turret",
                 "to become invisible to enemies",
                 "to increase your dmg and speed",
-                "to refuel your jetpack; hold Jump in the air to fly",
                 "to rapidly charge your ultimate",
                 "to stun nearby enemies"
             ][localPlayer.powerUpItemId - 1]

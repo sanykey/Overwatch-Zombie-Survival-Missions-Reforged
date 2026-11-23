@@ -197,7 +197,7 @@ const sharedColorPalette = [
 
 // Rows follow item ID - 1 or the raw menu selection ID. Keep the gaps in Objective.
 const colorPalettes = {
-  POWERUP: ["GREEN", "YELLOW", "BLUE", "RED", "ORANGE", "YELLOW", "ORANGE", "BLUE", "RED", "PURPLE", "RED", "WHITE"],
+  POWERUP: ["GREEN", "YELLOW", "BLUE", "RED", "ORANGE", "YELLOW", "ORANGE", "BLUE", "RED", "RED", "WHITE"],
   ZOMBIE_MENU: ["AQUA", "ORANGE", "RED", "PURPLE", "LIME_GREEN", "BLUE", "GRAY"],
   OBJECTIVE_MENU: ["AQUA", "ORANGE", "RED", null, null, "RED", "LIME_GREEN", "TURQUOISE", null, "PURPLE"],
   ENHANCEMENT_MENU: ["AQUA", "GRAY", "LIME_GREEN", "RED", "ORANGE", "GRAY", "WHITE", "BLUE", "SKY_BLUE", "YELLOW", "ROSE", "SKY_BLUE", "GREEN", "TURQUOISE", "PURPLE"],

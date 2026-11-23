@@ -119,9 +119,8 @@ enum PowerUpItem:
     SENTRY_TURRET = 7,
     CLOAKING_DEVICE = 8,
     SUPER_NANO = 9,
-    JETPACK = 10,
-    ULTIMATE_CHARGER = 11,
-    STUN = 12,
+    ULTIMATE_CHARGER = 10,
+    STUN = 11,
 
 # Remaining sparse indices in powerUpEntityIdList; frequently used IDs have dedicated player variables below.
 # Turret effect slots 50..54 stay contiguous for creation and cleanup loops.
@@ -142,7 +141,6 @@ enum PowerUpEntitySlot:
     SUPER_NANO_BAD_AURA = 72,
     SUPER_NANO_DAMAGE_DEALT_MODIFICATION = 73,
     SUPER_NANO_DAMAGE_RECEIVED_MODIFICATION = 74,
-    JETPACK_FLIGHT_EFFECT = 82,
 
 enum AugmentIcon:
     NO_PREFERENCE = iconString(Icon.QUESTION_MARK),

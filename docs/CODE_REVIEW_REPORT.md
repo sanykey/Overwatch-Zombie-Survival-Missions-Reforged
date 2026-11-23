@@ -122,7 +122,7 @@ Closed findings are struck through. See the current status at the linked ID for 
 
 ### R01. Restarting a waiting subroutine
 
-**Consumables are fixed. The prematch timer remains open.** All nine current asynchronous consumable handlers use `Start Rule(..., Do Nothing)` in the standard build. `0390d8d` changed six power-ups to refresh or relocate the active effect. Since `3914842`, repeating Instant Revive, Air Strike, or Stun displays a message and keeps the second item in inventory. No Cooldowns refreshes the deadline of a separate rule, and Jetpack replaced Bounce Pad with its own flight rule. [Consumables](../src/items/power_ups.opy#L113) · [No Cooldowns](../src/items/powerup_no_cooldowns.opy#L9) · [Jetpack](../src/items/powerup_jetpack.opy#L16)
+**Consumables are fixed. The prematch timer remains open.** All nine current asynchronous consumable handlers use `Start Rule(..., Do Nothing)` in the standard build. `0390d8d` changed six power-ups to refresh or relocate the active effect. Since `3914842`, repeating Instant Revive, Air Strike, or Stun displays a message and keeps the second item in inventory. No Cooldowns refreshes the deadline of a separate rule. [Consumables](../src/items/power_ups.opy#L113) · [No Cooldowns](../src/items/powerup_no_cooldowns.opy#L9)
 
 **Category:** Stability, lifecycle. **Priority:** High. **Evidence:** C + R.
 
@@ -750,7 +750,7 @@ Naively replacing removal with `slice` needs separate proof: the original `remov
 
 ### R32. Decorative Bounce Pad and Air Strike effects
 
-**Partially implemented.** Jetpack occupies the former Bounce Pad slot. `ed960ac` reuses the Air Strike blast audience; cosmetic frequency and effect count remain in place.
+**Partially implemented.** Bounce Pad has been removed. `ed960ac` reuses the Air Strike blast audience; cosmetic frequency and effect count remain in place.
 
 **Category:** Performance, visualization. **Priority:** Medium; check clients. **Evidence:** O.
 

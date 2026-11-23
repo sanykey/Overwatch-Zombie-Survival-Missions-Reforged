@@ -1,7 +1,7 @@
 #!mainFile "../../main.opy"
 
 # Combat HUD order on the left: roster (player slot), enhancement (97),
-# augment (98), attachment status (98.5), Jetpack fuel (99), carried powerup (100).
+# augment (98), attachment status (98.5), carried powerup (100).
 
 # Telekinesis's augmentMeleePushReadyAt aliases augmentMovementReadyAt's slot;
 # the shared movement HUD reads the selected augment's deadline directly.
@@ -82,13 +82,6 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
         HudPosition.ACTUALLY_LEFT, 98, Color.WHITE, Color.WHITE,
         (Color.RED if localPlayer.augmentBarrierPlacementCooldown > 0 else Color.GREEN) if localPlayer.augmentId == Augment.LASER_BARRICADE else ([Color.RED, Color.SKY_BLUE, Color.GREEN][localPlayer.augmentDashCharges] if localPlayer.augmentId == Augment.DASH else (Color.RED if getTotalTimeElapsed() < localPlayer.augmentMovementReadyAt else Color.GREEN)) if localPlayer.augmentId in [Augment.DASH, Augment.HIGHRISE, Augment.TELEKINESIS, Augment.GRAPNEL_LAUNCHER] else ([Color.WHITE, Color.SKY_BLUE, Color.GREEN][len(localPlayer.augmentScavengerBackpack)] if localPlayer.augmentId == Augment.SCAVENGER else Color.WHITE),
         HudReeval.VISIBILITY_STRING_AND_COLOR
-    )
-
-    # One persistent fuel HUD for all viewers; sort 99 stays above item HUD (100).
-    hudSubheader(
-        localPlayer if localPlayer.powerUpJetpackFuel > 0 else null,
-        f"jetpack fuel: {ceil(localPlayer.powerUpJetpackFuel)}/{POWERUP_JETPACK_FUEL_MAX}",
-        HudPosition.ACTUALLY_LEFT, 99, Color.WHITE, HudReeval.VISIBILITY_AND_STRING
     )
 
     # Attachment status subheaders: one persistent call each for the passenger

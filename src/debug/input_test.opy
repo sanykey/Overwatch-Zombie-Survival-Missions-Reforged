@@ -26,8 +26,6 @@ macro DEBUG_BUTTON_CASES = [
     [f"Crouch (hold {DEBUG_BUTTON_PLACEMENT_HOLD}s)", DEBUG_BUTTON_PLACEMENT_HOLD, false, Button.CROUCH],
     # Crouch + Jump activates Telekinesis push or Grapnel Launcher.
     ["Crouch + Jump", DEBUG_BUTTON_PULSE, false, Button.CROUCH, Button.JUMP],
-    # Hold Jump to activate a fueled Jetpack while airborne.
-    [f"Jump (hold {DEBUG_BUTTON_HOLD}s)", DEBUG_BUTTON_HOLD, false, Button.JUMP],
     # Reload exercises Ammo Pack. The hold also lets Scavenger drop its backpack.
     [f"Reload (hold {DEBUG_BUTTON_HOLD}s)", DEBUG_BUTTON_HOLD, false, Button.RELOAD],
 ]

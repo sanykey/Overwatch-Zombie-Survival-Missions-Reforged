@@ -909,8 +909,7 @@ def playPlacementWindupFeedback():
 def applyScaledMoveSpeed():
     @Name "applyScaledMoveSpeed"
 
-    # Preserve the donor's additive +30 Jetpack bonus through other speed updates.
-    eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100 + 30 * eventPlayer.powerUpJetpackIsFlying)
+    eventPlayer.setMoveSpeed(eventPlayer.movementSpeedScale * 100)
 
 
 def refreshCurrentObjectivePosition():

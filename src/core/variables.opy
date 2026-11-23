@@ -566,7 +566,6 @@ playervar powerUpNoCooldownsHudId  # Owned by the No Cooldowns rule from creatio
 playervar powerUpAirStrikeRingId
 playervar powerUpCloakingDeviceSphereId
 playervar powerUpSuperNanoGoodAuraId  # Super Nano good-aura entity; nonzero only while the power-up is active, and the flag the shared damage-intake recompute reads.
-playervar powerUpJetpackIsFlying  # Dedicated boolean; also read by shared movement-speed updates on both teams.
 playervar powerUpUltimateChargerHudId
 playervar powerUpStunBeamId
 
@@ -636,12 +635,9 @@ playervar actorTeamSlot16  # Team 2: botConfiguredHero; Team 1: powerUpForceFiel
 # Placed Force Field position; zero clears it.
 #!define powerUpForceFieldPosition actorTeamSlot16
 
-playervar actorTeamSlot17  # Team 2: botMutationId; Team 1: powerUpJetpackFuel. Receivers own storage.
+playervar actorTeamSlot17  # Team 2: botMutationId.
 # Selected mutation ID; zero means no mutation.
 #!define botMutationId actorTeamSlot17
-# Jetpack fuel, 0..POWERUP_JETPACK_FUEL_MAX; chased only on Team 1 during flight; item 11 adds up to 100.
-# Retained between flights/respawns and read by the fuel HUD; never use as scratch.
-#!define powerUpJetpackFuel actorTeamSlot17
 
 playervar actorTeamSlot18  # Team 2: botIsInitializing; Team 1: powerUpStunOrigin. Receivers, not rule teams, own the storage.
 # Zombie respawn/stat initialization is in progress; spawn/teleport/objective rules wait for it.
