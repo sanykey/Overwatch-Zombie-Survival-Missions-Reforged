@@ -221,6 +221,11 @@ const spawnHeroIndexTables = {
     "JUNKRAT", "ANRAN", "WIDOWMAKER", "JUNKER_QUEEN", "SYMMETRA", "ANA",
     "DOOMFIST", "KIRIKO", "MAUGA", "SIGMA", "WRECKING_BALL", "JETPACK_CAT",
   ],
+  // Ham N' Hammer draws from the first two entries only.
+  MINIBOSS_HERO: [
+    "REINHARDT", "WRECKING_BALL", "JUNKER_QUEEN", "DOOMFIST",
+    "KIRIKO", "MAUGA", "HAZARD", "REAPER",
+  ],
 };
 
 for (const [name, heroes] of Object.entries(spawnHeroIndexTables)) {
