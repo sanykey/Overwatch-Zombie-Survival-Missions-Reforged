@@ -18,6 +18,7 @@ subroutine excludeCurrentHeroFromSelection
 subroutine applyBotKnockbackScale
 subroutine applyCurrentSizeScale
 subroutine applyBotBossHealth
+subroutine retireDeadBot
 subroutine resolveReconnectUserIndex
 subroutine enableDisableAbilities
 subroutine setDifficulty
@@ -332,16 +333,16 @@ macro globalObjectiveEntityManagementMacro():
     #Bosses
     elif objectiveValue == ObjectiveType.BOSSES:
         #Boss health progress bar
-        progressBarHud(getAllPlayers().filter(lambda _: bossesStateList != []), bossesStateList[0].getNormalizedHealth() * 100, "Boss Health {0}".format(heroIcon(bossesStateList[0].getHero())), HudPosition.TOP, 2, Color.RED, Color.RED)
+        progressBarHud(getAllPlayers().filter(lambda _: not isObjectiveComplete and entityExists(bossesStateList[0])), bossesStateList[0].getNormalizedHealth() * 100, "Boss Health {0}".format(heroIcon(bossesStateList[0].getHero())), HudPosition.TOP, 2, Color.RED, Color.RED)
         objectiveEntityIdList.append(getLastCreatedText())
         #Objectives remaining hud text
         hudSubheader(getAllPlayers(), "Objectives Remaining: {0}".format(len(objectivePositionList) - 1) if objectiveTypeSetting != ObjectiveType.BIOMORPHING else "Giant Zombies Remaining: {0}".format(len(objectivePositionList) - 1), HudPosition.TOP, 1, Color.RED, HudReeval.VISIBILITY)
         objectiveEntityIdList.append(getLastCreatedText())
         #Boss icon
-        createIcon(getAllPlayers(), bossesStateList[0].getEyePosition() + Vector.UP if bossesStateList != [] else currentObjectivePosition, Icon.SKULL, IconReeval.VISIBILITY_AND_POSITION, Color.RED)
+        createIcon(getAllPlayers().filter(lambda _: not isObjectiveComplete), bossesStateList[0].getEyePosition() + Vector.UP if bossesStateList != [] else currentObjectivePosition, Icon.SKULL, IconReeval.VISIBILITY_AND_POSITION, Color.RED)
         objectiveEntityIdList.append(getLastCreatedEntity())
         #Boss Distance
-        createInWorldText(getAllPlayers().filter(lambda player: bossesStateList == [] or not player in bossesStateList[0].botPotentialTargetList), "Distance: {0}m".format(distance(localPlayer, bossesStateList[0] if bossesStateList != [] else currentObjectivePosition)), bossesStateList[0].getPosition() if bossesStateList != [] else currentObjectivePosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.RED, SpecVisibility.NEVER)
+        createInWorldText(getAllPlayers().filter(lambda player: not isObjectiveComplete and (bossesStateList == [] or not player in bossesStateList[0].botPotentialTargetList)), "Distance: {0}m".format(distance(localPlayer, bossesStateList[0] if bossesStateList != [] else currentObjectivePosition)), bossesStateList[0].getPosition() if bossesStateList != [] else currentObjectivePosition, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.RED, SpecVisibility.NEVER)
         objectiveEntityIdList.append(getLastCreatedText())
     #Biomoprhing
     elif objectiveValue == ObjectiveType.BIOMORPHING:

@@ -71,6 +71,7 @@ rule "BOT BECOMES BOSS":
     eventPlayer.startModifyingVoicelinePitch(0.5 + (1 / (eventPlayer.sizeScale + 1)), false)
     eventPlayer.stopAllDamageOverTime()
     eventPlayer.setHealth(eventPlayer.getMaxHealth())
+    eventPlayer.stopThrottleInDirection()
     eventPlayer.setStatusEffect(null, Status.ROOTED, Math.INFINITY)
     eventPlayer.disableEnvironmentCollision(false)
     eventPlayer.botIsWallCollisionEnabled = false
@@ -82,7 +83,8 @@ rule "BOT BECOMES BOSS":
     bossesStateList[1] = distance(eventPlayer, eventPlayer.getEyePosition())
     waitUntil(eventPlayer.botTarget == null, 1)
     wait(0.25)
-    waitUntil(eventPlayer.botTarget != null or eventPlayer.getHealth() < eventPlayer.botBaseHealth, Math.INFINITY)
+    # Wake on a visible target or health loss. Actual max health may differ from botBaseHealth.
+    waitUntil(eventPlayer.botTarget != null or eventPlayer.getNormalizedHealth() < 1, Math.INFINITY)
     eventPlayer.clearStatusEffect(Status.ROOTED)
     bossesStateList[1] = distance(eventPlayer, eventPlayer.getEyePosition())
     wait(1)
@@ -126,7 +128,8 @@ rule "BOSS DIES (ALL BOSS OBJECTIVES)":
     @Event playerDied
     @Team 2
     @Condition eventPlayer.isDead() == true
-    @Condition eventPlayer in bossesStateList == true
+    @Condition bossesStateList[0] == eventPlayer
+    @Condition isObjectiveComplete == false
     
     if eventWasEnvironment:
         eventPlayer.stopAllDamageOverTime()
@@ -138,42 +141,45 @@ rule "BOSS DIES (ALL BOSS OBJECTIVES)":
         else:
             eventPlayer.botBossHealth = eventDamage
         if eventPlayer.botBossHealth > 0:
-            while eventPlayer.isDead():
-                if eventPlayer.getPosition().y - nearestWalkablePosition(eventPlayer.getPosition()).y < -50:
-                    #Teleport boss if they fall very far below the map
-                    bossReturn()
-                else:
-                    # Synchronous scratch: consume the living target before the next wait or subroutine call.
-                    #!define bossRecoveryTarget tmp0
-                    bossRecoveryTarget = getRealClosestPlayer(eventPlayer, Team.1)
-                    if entityExists(bossRecoveryTarget):
-                        # Use the same valid target for direction and height; 17.532 is gravity acceleration.
-                        eventPlayer.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, bossRecoveryTarget)), -75), max(1, sqrt(2 * 17.532 * (bossRecoveryTarget.getPosition().y + 3 - eventPlayer.getPosition().y))), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
-                wait()
+            if eventPlayer.getPosition().y - nearestWalkablePosition(eventPlayer.getPosition()).y < -50:
+                #Teleport boss if they fall very far below the map
+                bossReturn()
+            else:
+                # Synchronous scratch: consume the living target before the next wait or subroutine call.
+                #!define bossRecoveryTarget tmp0
+                bossRecoveryTarget = getRealClosestPlayer(eventPlayer, Team.1)
+                if entityExists(bossRecoveryTarget):
+                    # Use the same valid target for direction and height; 17.532 is gravity acceleration.
+                    eventPlayer.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, bossRecoveryTarget)), -75), max(1, sqrt(2 * 17.532 * (bossRecoveryTarget.getPosition().y + 3 - eventPlayer.getPosition().y))), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+            wait()
+            eventPlayer.resurrect()
+            waitUntil(eventPlayer.isAlive(), 0.25)
+            if eventPlayer.isDead():
+                # Retry on walkable ground if the boss is still in a kill volume.
+                bossReturn()
                 eventPlayer.resurrect()
-                waitUntil(eventPlayer.isAlive(), 0.25)
-            applyBotBossHealth()
-            if eventPlayer.botTarget == null and entityExists(eventPlayer.botLastTarget) and eventPlayer.botLastTarget.isAlive() and eventPlayer.botLastTarget.hasSpawned():
-                eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.botLastTarget), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
-            #Illari punishes with ultimate
-            if eventPlayer.getHero() == Hero.ILLARI and attacker.getTeam() == Team.1:
-                illariUlt()
-        else:
-            completeBossObjective()
-            goto lbl_0
+                waitUntil(eventPlayer.isAlive(), 5)
+            if eventPlayer.isAlive():
+                applyBotBossHealth()
+                if eventPlayer.botTarget == null and entityExists(eventPlayer.botLastTarget) and eventPlayer.botLastTarget.isAlive() and eventPlayer.botLastTarget.hasSpawned():
+                    eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.botLastTarget), eventPlayer.botThrottleSpeed, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.NONE)
+                # Keep the death handler free for the next kill while the ultimate runs.
+                if eventPlayer.getHero() == Hero.ILLARI and attacker.getTeam() == Team.1:
+                    startRule(illariUlt, StartRuleBehavior.NOOP)
+                return
+        completeBossObjective()
+        return
     #Resurrects player if event damage was greater than 1000 and their health still is higher than 0hp.
-    elif eventDamage > 1000:
+    if eventDamage > 1000:
         eventPlayer.botBossHealth = eventDamage - 1000
         eventPlayer.resurrect()
         waitUntil(eventPlayer.isAlive(), 5)
-        applyBotBossHealth()
-    else:
-        completeBossObjective()
-        (getPlayersOnHero(Hero.WINSTON, Team.2) if eventPlayer.getHero() == Hero.WINSTON else []).setStatusEffect(null, Status.KNOCKED_DOWN, 12)
-        lbl_0:
-    wait(0.25, Wait.RESTART_WHEN_TRUE)
-    if ruleCondition:
-        loop()
+        if eventPlayer.isAlive():
+            applyBotBossHealth()
+            return
+    completeBossObjective()
+    if eventPlayer.getHero() == Hero.WINSTON:
+        getPlayersOnHero(Hero.WINSTON, Team.2).setStatusEffect(null, Status.KNOCKED_DOWN, 12)
 
 
 rule "BOSS TAKES KNOCKBACK":
@@ -234,6 +240,10 @@ def bossReturn():
 def completeBossObjective():
     @Name "completeBossObjective"
 
-    isObjectiveComplete = true
-    bossesStateList[bossesStateList.index(eventPlayer)] = 0
+    if bossesStateList[0] != eventPlayer:
+        return
+    # Keep ownership until objectivesManagement clears the slot. BOT DIES excludes it.
     eventPlayer.botRespawnDelay = 10
+    eventPlayer.stopAllDamageOverTime()
+    isObjectiveComplete = true
+    startRule(retireDeadBot, StartRuleBehavior.NOOP)

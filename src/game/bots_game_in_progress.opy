@@ -187,20 +187,7 @@ rule "BOT DIES":
     eventPlayer.stopFacing()
     if not eventWasEnvironment or attacker.getTeam() == Team.1:
         miniBossList.remove(eventPlayer)
-        eventPlayer.disableNameplatesFor(getAllPlayers())
-        #Allow for custom revive times
-        waitUntil(eventPlayer.botRespawnDelay > 0, 0.125)
-        if not eventPlayer.botRespawnDelay:
-            eventPlayer.botRespawnDelay = 1 + ((getMatchTime() + matchEndTime) / 60)
-        if len(botSpawnTimeList) < numberOfBots:
-            # Keep the earliest deadline at the head. Only enqueueing can reorder the queue.
-            botSpawnTimeList = sorted(botSpawnTimeList.concat(getTotalTimeElapsed() + eventPlayer.botRespawnDelay))
-        if eventPlayer.botCustomTeleportPosition:
-            customTeleportPositionList.append(eventPlayer.botCustomTeleportPosition)
-        wait(1)
-        waitUntil(eventPlayer.damageOverTimeRemaining <= 0, 10)
-        updateBotSpawnPoints()
-        destroyDummy(Team.2, eventPlayer.getSlot())
+        retireDeadBot()
         return
     elif eventWasEnvironment and magnitude((eventPlayer.getPosition() - eventPlayer.botTeleportPosition) * horizontalMaskConst) < 10:
         eventPlayer.botIsTeleportConfirmed = false
@@ -208,6 +195,25 @@ rule "BOT DIES":
     eventPlayer.teleport(vect(500, 50, 500))
     wait(0.25)
     eventPlayer.resurrect()
+
+
+def retireDeadBot():
+    @Name "retireDeadBot"
+
+    eventPlayer.disableNameplatesFor(getAllPlayers())
+    # Allow for custom revive times.
+    waitUntil(eventPlayer.botRespawnDelay > 0, 0.125)
+    if not eventPlayer.botRespawnDelay:
+        eventPlayer.botRespawnDelay = 1 + ((getMatchTime() + matchEndTime) / 60)
+    if len(botSpawnTimeList) < numberOfBots:
+        # Keep the earliest deadline at the head. Only enqueueing can reorder the queue.
+        botSpawnTimeList = sorted(botSpawnTimeList.concat(getTotalTimeElapsed() + eventPlayer.botRespawnDelay))
+    if eventPlayer.botCustomTeleportPosition:
+        customTeleportPositionList.append(eventPlayer.botCustomTeleportPosition)
+    wait(1)
+    waitUntil(eventPlayer.damageOverTimeRemaining <= 0, 10)
+    updateBotSpawnPoints()
+    destroyDummy(Team.2, eventPlayer.getSlot())
 
 
 rule "TELEPORT BOTS (GENERAL)":
