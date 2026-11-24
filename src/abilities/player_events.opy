@@ -43,8 +43,7 @@ rule "PLAYER DEALT FINAL BLOW":
     @Team 1
 
     if eventPlayer.enhancementId == Enhancement.BORN_TO_BATTLE:
-        if eventPlayer.enhancementBattleResetCharges < BORN_TO_BATTLE_MAX_RESETS:
-            eventPlayer.enhancementBattleResetCharges += 1
+        creditBornToBattleFinalBlowMacro()
 
     if currentObjectiveType != ObjectiveType.KILL_ZONE:
         return
@@ -69,22 +68,16 @@ rule "PLAYER EARNED ELIMINATION":
     @Team 1
 
     if eventPlayer.enhancementId == Enhancement.BULKING_SEASON:
-        # One credit for a kill or damage participation; healing/buff assists do not count.
-        eventPlayer.enhancementBulkStacks += 1
-        applyBulkingSeasonStats()
+        creditBulkingSeasonEliminationMacro()
 
 
 rule "PLAYER DIED":
     @Event playerDied
     @Team 1
-
     if eventPlayer.enhancementId == Enhancement.BULKING_SEASON:
-        eventPlayer.enhancementBulkStacks = floor(eventPlayer.enhancementBulkStacks / (100 / (100 - BULKING_SEASON_DEATH_LOSS_PCT)))
-        applyBulkingSeasonStats()
+        applyBulkingSeasonDeathMacro()
     elif eventPlayer.enhancementId == Enhancement.ENGINEER and eventPlayer.enhancementScrapBeamEntity != null:
-        # Scrap itself survives death; only the transfer beam is torn down.
-        destroyEffect(eventPlayer.enhancementScrapBeamEntity)
-        eventPlayer.enhancementScrapBeamEntity = null
+        clearEngineerBeamOnDeathMacro()
 
     if eventPlayer.augmentId == Augment.DASH:
         # A death inside the resist window must not carry the 0% damage intake
@@ -108,17 +101,7 @@ rule "PLAYER DEALT HEALING":
     @Team 1
 
     if eventPlayer.enhancementId == Enhancement.PLAGUE_DOCTOR:
-        if eventPlayer.isInfected:
-            eventPlayer.infectionLevel -= eventHealing / 500
-            eventPlayer.enhancementPlagueCureTotal += eventHealing / 500
-        if healee.infectionLevel >= 1 and healee.enhancementId != Enhancement.ZOMBIE_HYBRID:
-            healee.infectionLevel -= eventHealing / 275
-            eventPlayer.enhancementPlagueCureTotal += eventHealing / 275
-            if healee.infectionLevel < 1:
-                healee.infectionLevel -= 0.5
-                eventPlayer.enhancementPlagueCureTotal += 0.5
-                playEffect(eventPlayer, DynamicEffect.GOOD_PICKUP_EFFECT, Color.GREEN, healee, 1)
-                smallMessage(eventPlayer, "You cured yourself!" if healee == eventPlayer else "You cured {0} {1}!".format(healee, heroIcon(healee.getHero())))
+        applyPlagueDoctorHealingMacro()
 
 
 rule "PLAYER DEALT DAMAGE":
@@ -128,9 +111,7 @@ rule "PLAYER DEALT DAMAGE":
     @Condition eventDamage > 0
 
     if eventPlayer.enhancementId == Enhancement.BRAIN_KILLER and eventWasCriticalHit == true:
-        # Critical hits deal 50% more damage, 20% if the victim is a boss.
-        damage(victim, eventPlayer, eventDamage * (BRAIN_KILLER_BOSS_CRIT_BONUS_PCT / 100 if victim in bossStateList else BRAIN_KILLER_CRIT_BONUS_PCT / 100))
-        playEffect(eventPlayer, DynamicEffect.BAD_EXPLOSION, Color.RED, victim.getEyePosition() + directionTowards(eventPlayer.getEyePosition(), victim.getEyePosition()) * victim.sizeScale, 0.1 * victim.sizeScale)
+        applyBrainKillerCritMacro()
     if eventAbility != null:
         # Scripted Damage has no Event Ability, keeping both bonuses from triggering themselves.
         if eventPlayer.enhancementId == Enhancement.PYROTECHNIC:
@@ -139,12 +120,7 @@ rule "PLAYER DEALT DAMAGE":
             applyOverchargeHitMacro(victim)
 
         if victim.botAuspexExpiry > getTotalTimeElapsed() and entityExists(victim.botAuspexOwner):
-            # Synchronous scratch for the charge award and the ensuing Damage action.
-            #!define auspexBonusDamage tmp1
-            auspexBonusDamage = eventDamage * (AUSPEX_BOSS_BONUS_DAMAGE if victim in bossStateList or victim in miniBossList else AUSPEX_BONUS_DAMAGE)
-            if eventPlayer != victim.botAuspexOwner:
-                victim.botAuspexOwner.setUltCharge(victim.botAuspexOwner.getUltCharge() + auspexBonusDamage * AUSPEX_ULT_PCT_PER_BONUS_DAMAGE)
-            damage(victim, eventPlayer, auspexBonusDamage)
+            applyAuspexMarkDamageMacro()
 
     # Augments: Leech includes damage from the hero, primary enhancement and
     # scripted powerups. The HIGHRISE airborne bonus is a Set Damage Dealt

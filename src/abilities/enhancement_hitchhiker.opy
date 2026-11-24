@@ -17,13 +17,13 @@ macro createHitchhikerHudMacro():
     )
 
 
-rule "[HITCHHIKER] ATTACH OR DETACH":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.enhancementId == Enhancement.HITCHHIKER
-    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
+macro toggleHitchhikerAttachment():
+    if eventPlayer.hitchhikerAttached:
+        hitchhikerLandAtCarrier = true
+        detachHitchhikerPassenger()
+        return
 
-    if not eventPlayer.isAlive() or eventPlayer.hitchhikerCarrierPool != null:
+    if eventPlayer.hitchhikerCarrierPool != null or getTotalTimeElapsed() < eventPlayer.hitchhikerAttachReadyAt:
         return
 
     # Pick the eligible carrier nearest the passenger's aim.
@@ -59,13 +59,8 @@ rule "[HITCHHIKER] ATTACH OR DETACH":
     eventPlayer.hitchhikerCarrier.hitchhikerCarrierPool = [getLastCreatedHealthPool()]
     eventPlayer.hitchhikerCarrier.hitchhikerPassenger = eventPlayer
 
-    # Forced release and hero switches clear the flag, ending either Crouch wait.
-    waitUntil(not eventPlayer.hitchhikerAttached or not eventPlayer.isHoldingButton(Button.CROUCH), Math.INFINITY)
-    waitUntil(not eventPlayer.hitchhikerAttached or eventPlayer.isHoldingButton(Button.CROUCH), Math.INFINITY)
-
-    hitchhikerLandAtCarrier = true
-    detachHitchhikerPassenger()
-    wait(HITCHHIKER_DETACH_COOLDOWN)
+    # Consume the second press before accepting a fresh pair to detach.
+    waitUntil(not eventPlayer.isHoldingButton(Button.CROUCH), Math.INFINITY)
 
 
 rule "[HITCHHIKER] FORCE DETACH":
@@ -96,6 +91,7 @@ def detachHitchhikerPassenger():
         eventPlayer.allowButton(Button.ABILITY_1)
     eventPlayer.hitchhikerCarrier = 0
     removeHealthPool(eventPlayer.hitchhikerPassengerPoolId)
+    eventPlayer.hitchhikerAttachReadyAt = getTotalTimeElapsed() + HITCHHIKER_DETACH_COOLDOWN
 
 
 rule "[HITCHHIKER] RELEASE CARRIER HEALTH POOL":

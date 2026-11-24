@@ -1,21 +1,7 @@
 #!mainFile "../../main.opy"
 
-rule "[AUSPEX SCAN] PLACE ON DOUBLE CROUCH":
-    @Event eachPlayer
-    @Team 1
-    # Keep the gameplay phase and enhancement ID in one native UI workaround Condition.
-    @Condition uiPhaseAndId(eventPlayer.enhancementId == Enhancement.AUSPEX_SCAN)
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
-
-    # As with Bolt Strike, holding Crouch through cooldown expiry cannot start a tap.
+macro useAuspexScan():
     if getTotalTimeElapsed() < eventPlayer.enhancementAuspexReadyAt:
-        return
-    waitUntil(not eventPlayer.isHoldingButton(Button.CROUCH), AUSPEX_TAP_WINDOW)
-    if eventPlayer.isHoldingButton(Button.CROUCH):
-        return
-    waitUntil(eventPlayer.isHoldingButton(Button.CROUCH), AUSPEX_TAP_WINDOW)
-    if not ruleCondition:
         return
 
     # Cast beyond the range so the miss endpoint fails the range check.
@@ -48,3 +34,12 @@ rule "[AUSPEX SCAN] PLACE ON DOUBLE CROUCH":
     wait(0.5, Wait.IGNORE_CONDITION)
     destroyEffect(eventPlayer.enhancementAttackBeamEntity)
     eventPlayer.enhancementAttackBeamEntity = null
+
+
+macro applyAuspexMarkDamageMacro():
+    # Synchronous scratch for the charge award and the ensuing Damage action.
+    #!define auspexBonusDamage tmp1
+    auspexBonusDamage = eventDamage * (AUSPEX_BOSS_BONUS_DAMAGE if victim in bossStateList or victim in miniBossList else AUSPEX_BONUS_DAMAGE)
+    if eventPlayer != victim.botAuspexOwner:
+        victim.botAuspexOwner.setUltCharge(victim.botAuspexOwner.getUltCharge() + auspexBonusDamage * AUSPEX_ULT_PCT_PER_BONUS_DAMAGE)
+    damage(victim, eventPlayer, auspexBonusDamage)

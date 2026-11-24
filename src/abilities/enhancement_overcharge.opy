@@ -32,23 +32,9 @@ macro creditOverchargeHealthPackMacro():
         eventPlayer.enhancementCapacitorEnergy += eventHealing / OVERCHARGE_HEAL_ENERGY_DIVISOR
 
 
-rule "OVERCHARGE ARM ON DOUBLE CROUCH":
-    @Event eachPlayer
-    @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
-    @Condition eventPlayer.enhancementId == Enhancement.OVERCHARGE
-    @Condition eventPlayer.enhancementCapacitorCharge == 0
-
-    # Require a release and a second press within the tap windows.
-    waitUntil(not eventPlayer.isHoldingButton(Button.CROUCH), OVERCHARGE_ARM_TAP_WINDOW)
-    if eventPlayer.isHoldingButton(Button.CROUCH):
+macro armOvercharge():
+    if eventPlayer.enhancementCapacitorCharge != 0:
         return
-    waitUntil(eventPlayer.isHoldingButton(Button.CROUCH), OVERCHARGE_ARM_TAP_WINDOW)
-    if not ruleCondition:
-        return
-
     # Spend from the current balance even between background samples.
     refreshOverchargeEnergy()
     if eventPlayer.enhancementCapacitorEnergy <= 0:

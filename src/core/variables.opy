@@ -718,8 +718,10 @@ playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateS
 #!define enhancementBattleAbilityButton actorTeamSlot23
 # Battery remaining reuse cooldown.
 #!define enhancementBatteryReuseCooldown actorTeamSlot23
-# Extra health-pool ID on the Hitchhiker passenger.
+# Hitchhiker passenger: extra health-pool ID while attached, absolute reattach
+# deadline while detached. Remove the pool before switching the slot to a deadline.
 #!define hitchhikerPassengerPoolId actorTeamSlot23
+#!define hitchhikerAttachReadyAt actorTeamSlot23
 # P.U.P. attack beam is active.
 #!define enhancementIsPupBeamActive actorTeamSlot23
 # Engineer's transfer beam entity; null after BEAM FADE, death and

@@ -53,7 +53,7 @@ rule "INITIALIZE SURVIVOR TO BE RESCUED":
     eventPlayer.movementSpeedScale = 1
     eventPlayer.enhancementId = Enhancement.HITCHHIKER
     eventPlayer.hitchhikerCarrier = 0
-    eventPlayer.hitchhikerPassengerPoolId = false
+    eventPlayer.hitchhikerAttachReadyAt = 0
     rescueSurvivor.setStatusEffect(null, Status.UNKILLABLE, Math.INFINITY)
     rescueSurvivor.setHealingReceived(110)
     #Objective/Survivor distance

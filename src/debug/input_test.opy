@@ -9,12 +9,13 @@
 # A double-tap row contains one button. Damage, healing and proximity passives
 # still rely on the hero, targets and combat events during the test.
 macro DEBUG_BUTTON_CASES = [
-    # Double Crouch arms Overcharge, grants Engineer armor or triggers Bolt Strike.
+    # Double Crouch exercises Hybrid, Bulking, Wrestler pull, Bolt Strike,
+    # Engineer armor, Auspex Scan, Overcharge and Hitchhiker.
     ["Crouch (double tap)", DEBUG_BUTTON_PULSE, true, Button.CROUCH],
     # Double Jump activates Dash or Highrise.
     ["Jump (double tap)", DEBUG_BUTTON_PULSE, true, Button.JUMP],
-    # Melee covers Zombie Hybrid, Bulking Season, Wrestler pull, Engineer turret
-    # and Charge Battery placement. Keep the button down past the 0.5s windup.
+    # Melee covers Engineer turret and Charge Battery placement.
+    # Keep the button down past the 0.5s windup.
     [f"Melee (hold {DEBUG_BUTTON_PLACEMENT_HOLD}s)", DEBUG_BUTTON_PLACEMENT_HOLD, false, Button.MELEE],
     # Crouch + Interact places Laser Barricade on release or operates Scavenger's backpack.
     [f"Crouch + Interact (hold {DEBUG_BUTTON_PLACEMENT_HOLD}s)", DEBUG_BUTTON_PLACEMENT_HOLD, false, Button.CROUCH, Button.INTERACT],
@@ -22,7 +23,6 @@ macro DEBUG_BUTTON_CASES = [
     [f"Interact (hold {DEBUG_BUTTON_HOLD}s)", DEBUG_BUTTON_HOLD, false, Button.INTERACT],
     # Tap Interact to open, pick up, grab or throw.
     ["Interact", DEBUG_BUTTON_PULSE, false, Button.INTERACT],
-    # Crouch also exercises Hitchhiker's attach and detach input.
     [f"Crouch (hold {DEBUG_BUTTON_PLACEMENT_HOLD}s)", DEBUG_BUTTON_PLACEMENT_HOLD, false, Button.CROUCH],
     # Crouch + Jump activates Telekinesis push or Grapnel Launcher.
     ["Crouch + Jump", DEBUG_BUTTON_PULSE, false, Button.CROUCH, Button.JUMP],

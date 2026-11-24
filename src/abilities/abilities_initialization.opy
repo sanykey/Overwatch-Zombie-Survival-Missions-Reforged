@@ -18,20 +18,20 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
         ENHANCEMENT_ICONS[localPlayer.enhancementId],
         [
             " ",
-            f"Explosion: {ceil(localPlayer.enhancementHybridCooldown)}s CD" if localPlayer.enhancementHybridCooldown > 0 else f"[{inputBindingString(Button.MELEE)}]: explode for {floor(localPlayer.infectionLevel * ZOMBIE_HYBRID_DAMAGE_PER_LEVEL)} dmg" if localPlayer.infectionLevel >= 1 else "Build infection",
-            f"Stacks: {localPlayer.enhancementBulkStacks} | +{min((BULKING_SEASON_MAX_HP_MULTIPLIER - 1) * 100, localPlayer.enhancementBulkStacks * BULKING_SEASON_HP_PER_STACK_PCT)}% HP | Size: {round(localPlayer.sizeScale * 100) / 100}x | Hold [{inputBindingString(Button.MELEE)}]: toggle size",
+            f"Explosion: {ceil(localPlayer.enhancementHybridCooldown)}s CD" if localPlayer.enhancementHybridCooldown > 0 else f"2x [{inputBindingString(Button.CROUCH)}]: explode for {floor(localPlayer.infectionLevel * ZOMBIE_HYBRID_DAMAGE_PER_LEVEL)} dmg" if localPlayer.infectionLevel >= 1 else "Build infection",
+            f"Stacks: {localPlayer.enhancementBulkStacks} | +{min((BULKING_SEASON_MAX_HP_MULTIPLIER - 1) * 100, localPlayer.enhancementBulkStacks * BULKING_SEASON_HP_PER_STACK_PCT)}% HP | Size: {round(localPlayer.sizeScale * 100) / 100}x | 2x [{inputBindingString(Button.CROUCH)}]: toggle size",
             f"+{BRAIN_KILLER_CRIT_BONUS_PCT}% crit dmg (+{BRAIN_KILLER_BOSS_CRIT_BONUS_PCT}% vs bosses)",
             f"Hits in {PYROTECHNIC_IGNITE_RANGE}m ignite zombies",
             f"Ability resets: {localPlayer.enhancementBattleResetCharges}/{BORN_TO_BATTLE_MAX_RESETS}",
             f"Place: {ceil(localPlayer.enhancementBatteryPlacementCooldown)}s CD" if localPlayer.enhancementBatteryPlacementCooldown > 0 else f"Hold [{inputBindingString(Button.MELEE)}]: aim | Release: place",
             "Attacking" if localPlayer.enhancementIsPupBeamActive == true else "Drone idle",
-            "{1} | {0}".format(f"Pull: {ceil(localPlayer.enhancementPullReadyAt - getTotalTimeElapsed())}s CD" if getTotalTimeElapsed() < localPlayer.enhancementPullReadyAt else f"Hold [{inputBindingString(Button.MELEE)}]: pull", f"[{inputBindingString(Button.INTERACT)}]: throw" if localPlayer.enhancementCarryState != WrestlerCarryState.NONE else f"[{inputBindingString(Button.INTERACT)}]: grab"),
+            "{1} | {0}".format(f"Pull: {ceil(localPlayer.enhancementPullReadyAt - getTotalTimeElapsed())}s CD" if getTotalTimeElapsed() < localPlayer.enhancementPullReadyAt else f"2x [{inputBindingString(Button.CROUCH)}]: pull", f"[{inputBindingString(Button.INTERACT)}]: throw" if localPlayer.enhancementCarryState != WrestlerCarryState.NONE else f"[{inputBindingString(Button.INTERACT)}]: grab"),
             f"Strike: {ceil(localPlayer.enhancementBoltReadyAt - getTotalTimeElapsed())}s CD" if getTotalTimeElapsed() < localPlayer.enhancementBoltReadyAt else f"2x [{inputBindingString(Button.CROUCH)}]: strike",
             f"Scrap: {floor(localPlayer.enhancementScrap)}/{ENGINEER_SCRAP_MAX} | 2x [{inputBindingString(Button.CROUCH)}]: +{ENGINEER_ARMOR_STACK} armor ({ENGINEER_ARMOR_ALLY_COST} ally/{ENGINEER_ARMOR_SELF_COST} self) | Hold [{inputBindingString(Button.MELEE)}]: turret ({ENGINEER_TURRET_COST})",
             f"Scan: {ceil(localPlayer.enhancementAuspexReadyAt - getTotalTimeElapsed())}s CD" if getTotalTimeElapsed() < localPlayer.enhancementAuspexReadyAt else f"2x [{inputBindingString(Button.CROUCH)}]: scan",
             f"Infection removed: {round(localPlayer.enhancementPlagueCureTotal)}",
             "{0} | {1}".format(f"Energy: {floor(localPlayer.enhancementCapacitorEnergy)}", f"Armed: +{floor(localPlayer.enhancementCapacitorCharge)} dmg/hit" if localPlayer.enhancementCapacitorCharge > 0 else f"2x [{inputBindingString(Button.CROUCH)}]: arm"),
-            f"[{inputBindingString(Button.CROUCH)}]: detach" if localPlayer.hitchhikerAttached else f"[{inputBindingString(Button.CROUCH)}]: attach near ally"
+            f"2x [{inputBindingString(Button.CROUCH)}]: {'detach' if localPlayer.hitchhikerAttached else 'attach near ally'}"
         ][localPlayer.enhancementId],
         ENHANCEMENT_NAMES[localPlayer.enhancementId],
         HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE,
@@ -89,98 +89,6 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
     # passenger back-reference instead of scanning for it.
     createHitchhikerHudMacro()
 
-
-macro initializePlayerEnhancement():
-    if eventPlayer.enhancementId == Enhancement.NO_PREFERENCE:
-        # No preference and late-join zero state roll once for the current hero.
-        # Hybrid/Bulking Season are tank-only and Plague Doctor/Overcharge are support-only.
-        # Hitchhiker is after both upper bounds. Explicit choices and later spawns retain the ID.
-        eventPlayer.enhancementId = random.randint(
-            Enhancement.ZOMBIE_HYBRID if eventPlayer.getHero() in getTankHeroes() else Enhancement.BRAIN_KILLER,
-            Enhancement.OVERCHARGE if eventPlayer.getHero() in getSupportHeroes() else Enhancement.AUSPEX_SCAN
-        )
-    #Zombie Hybrid
-    if eventPlayer.enhancementId == Enhancement.ZOMBIE_HYBRID:
-        # enhancementHybridCooldown: remaining explosion cooldown in seconds (20 on use), for activation checks and HUD.
-        startDamageModification(eventPlayer, getPlayers(Team.2), 90)
-        eventPlayer.explosionScale = 1.25
-        eventPlayer.explosionInnerColor = Color.GRAY
-        eventPlayer.explosionOuterColor = Color.LIME_GREEN
-    #Infection reduced if not selected
-    else:
-        chaseAtRate(eventPlayer.infectionLevel, 0, 0.015 if eventPlayer.infectionLevel > 0 else 0)
-    switch eventPlayer.enhancementId:
-        #Pyrotechnic
-        case Enhancement.PYROTECHNIC:
-            initializePyrotechnicMacro()
-            break
-        #Plague Doctor
-        case Enhancement.PLAGUE_DOCTOR:
-            # enhancementPlagueCureTotal: accumulated infection levels removed, including cure bonuses, displayed in the HUD.
-            # Permanent +30% healing; infected targets receive another x1.25 (x1.625 total).
-            eventPlayer.setHealingDealt(100 + PLAGUE_DOCTOR_HEAL_BONUS_PCT)
-            startHealingModification(getPlayers(Team.1).filter(lambda player: player.isInfected), eventPlayer, PLAGUE_DOCTOR_INFECTED_HEAL_MULTIPLIER_PCT, HealingReeval.RECEIVERS_AND_HEALERS)
-            eventPlayer.enhancementPlagueCureTotal = 0
-            break
-        case Enhancement.OVERCHARGE:
-            initializeOverchargeMacro()
-            break
-        case Enhancement.BULKING_SEASON:
-            eventPlayer.enhancementBulkStacks = 0
-            eventPlayer.enhancementBulkNormalSize = false
-            break
-        case Enhancement.WRESTLER:
-            # Shared enhancement storage starts in the numeric idle state.
-            eventPlayer.enhancementCarryState = WrestlerCarryState.NONE
-            break
-        #Engineer
-        case Enhancement.ENGINEER:
-            # Scrap storage stays untouched here: it starts at zero, survives
-            # death and hero switches, and is swept per match by START GAME.
-            # Only beam state is re-cleaned; death cleanup already destroyed it.
-            eventPlayer.enhancementScrapBeamEntity = null
-            eventPlayer.enhancementScrapBeamTarget = null
-            break
-        #Born to Battle
-        case Enhancement.BORN_TO_BATTLE:
-            #Enhancement: Born to Battle
-            # enhancementBattleResetCharges: 0-2 earned ability resets; final blows add one and each reset consumes one.
-            # enhancementBattleAbilityButton: selected ability button, retained through waits to reset its charge or cooldown.
-            eventPlayer.enhancementBattleResetCharges = 0
-            break
-        #Charge Battery
-        case Enhancement.CHARGE_BATTERY:
-            initializeChargeBatteryMacro()
-            break
-        #P.U.P.
-        case Enhancement.PUP:
-            #Enhancement Selection: P.U.P.
-            # enhancementPupColor: current drone color, indicating its mode in the sphere and beam.
-            # enhancementIsPupBeamActive: whether the attack beam is active; also controls its sound and pauses cooldown decay.
-            # enhancementPupTarget: current enemy target, shared by movement, attack and target cleanup rules; null when idle.
-            # enhancementIsPupFreezeAuraActive: whether the freezing aura effect is visible around the target.
-            # enhancementPupPosition: chased drone position in world coordinates, for movement, effects and attack direction.
-            # enhancementPupCooldown: remaining ability cooldown in seconds (2 after freezing, 1 after laser), gating target selection.
-            #Postion of P.U.P.
-            eventPlayer.enhancementPupPosition = eventPlayer.getPosition() + 200 * Vector.UP
-            #P.U.P. Default movment
-            startPupDefaultChase()
-            eventPlayer.enhancementPupCooldown = 0
-            #P.U.P. ability cooldown
-            chaseAtRate(eventPlayer.enhancementPupCooldown, 0, 0 if eventPlayer.enhancementIsPupBeamActive else 1)
-            #P.U.P. visual
-            createEffect(getAllPlayers(), Effect.SPHERE, eventPlayer.enhancementPupColor, eventPlayer.enhancementPupPosition, 0.25)
-            #P.U.P. Beam
-            createBeam(getAllPlayers().filter(lambda _: eventPlayer.enhancementIsPupBeamActive and eventPlayer.enhancementPupTarget != null), Beam.GOOD, eventPlayer.enhancementPupPosition, eventPlayer.enhancementPupTarget, eventPlayer.enhancementPupColor)
-            #P.U.P using beam sound
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.enhancementIsPupBeamActive), Effect.BEACON_SOUND, Color.SKY_BLUE, eventPlayer.enhancementPupPosition, 200, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            #Freeze aura
-            createEffect(getAllPlayers().filter(lambda _: eventPlayer.enhancementIsPupFreezeAuraActive), Effect.BAD_AURA, Color.SKY_BLUE, eventPlayer.enhancementPupTarget, eventPlayer.enhancementPupTarget.sizeScale, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-            resetPupColorAndBeam()
-            #P.U.P. target null
-            eventPlayer.enhancementPupTarget = null
-            #Freeze aura visibility
-            eventPlayer.enhancementIsPupFreezeAuraActive = false
 
 macro initializePlayerAugment():
     if eventPlayer.augmentId == Augment.NO_PREFERENCE:

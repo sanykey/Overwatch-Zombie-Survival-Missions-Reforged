@@ -196,19 +196,15 @@ Event/Team/Hero остаются прежними. Native event запускае
 
 ### Gameplay-обходы в текущих исходниках
 
-В текущем экспорте подтверждены **14 правил** с объединённой проверкой фазы и ID и **7 событийных обработчиков** с guard в Actions.
+В текущих исходниках **10 правил** с объединённой проверкой фазы и ID и **7 событийных обработчиков** с guard в Actions. Общее правило `ENHANCEMENT DOUBLE CROUCH` проверяет фазу в Conditions, а Enhancement ID — после второго нажатия. Игровой прогон с этой формой правила ещё не проводился.
 
 | Файл | Правило | Приём |
 |---|---|---|
 | [enhancement_charge_battery.opy](../src/abilities/enhancement_charge_battery.opy) | `[CHARGE_BATTERY] NO COOLDOWNS ON ULTIMATE` | Пара phase/ID |
 | enhancement_charge_battery.opy | `[CHARGE_BATTERY] USAGE AND COOLDOWNS` | Пара phase/ID |
-| [enhancements.opy](../src/abilities/enhancements.opy) | `BULKING SEASON TOGGLES SIZE` | Пара phase/ID |
-| enhancements.opy | `OVERCHARGE STORES HEALING AND ASSISTS` | Пара phase/ID |
-| enhancements.opy | `BOLT STRIKE ON DOUBLE CROUCH` | Пара phase/ID |
-| enhancements.opy | `WRESTLER PULL` | Пара phase/ID |
-| enhancements.opy | `ENGINEER SCRAP INCOME` | Пара phase/ID |
-| enhancements.opy | `ENGINEER ARMOR TRANSFER` | Пара phase/ID |
-| enhancements.opy | `ENGINEER TURRET DEPLOY` | Пара phase/ID |
+| [enhancement_overcharge.opy](../src/abilities/enhancement_overcharge.opy) | `OVERCHARGE STORES HEALING AND ASSISTS` | Пара phase/ID |
+| [enhancement_engineer.opy](../src/abilities/enhancement_engineer.opy) | `ENGINEER SCRAP INCOME` | Пара phase/ID |
+| enhancement_engineer.opy | `ENGINEER TURRET DEPLOY` | Пара phase/ID |
 | [augments.opy](../src/abilities/augments.opy) | `DOUBLE TAP JUMP (DASH / HIGHRISE)` | Пара phase/ID |
 | [augment_dash.opy](../src/abilities/augment_dash.opy) | `[DASH] CHARGE RECHARGE` | Пара phase/ID |
 | [augment_grapnel_launcher.opy](../src/abilities/augment_grapnel_launcher.opy) | `CROUCH + JUMP (GRAPNEL LAUNCHER)` | Пара phase/ID |
@@ -217,8 +213,8 @@ Event/Team/Hero остаются прежними. Native event запускае
 | [hero_tuning.opy](../src/abilities/hero_tuning.opy) | `REINHARDT SHIELD SLAM STUN` | Event guard |
 | hero_tuning.opy | `CASSIDY FLASHBANG STUN` | Event guard |
 | enhancements.opy | `ENHANCEMENT ATTACK BEAM DISCONNECT CLEANUP` | Event guard |
-| enhancements.opy | `ENGINEER BEAM DISCONNECT CLEANUP` | Event guard |
-| enhancements.opy | `ENGINEER SCRAP ARMOR DEPLETION` | Event guard |
+| enhancement_engineer.opy | `ENGINEER BEAM DISCONNECT CLEANUP` | Event guard |
+| enhancement_engineer.opy | `ENGINEER SCRAP ARMOR DEPLETION` | Event guard |
 | [augment_grapnel_launcher.opy](../src/abilities/augment_grapnel_launcher.opy) | `GRAPNEL LAUNCHER DISCONNECT CLEANUP` | Event guard |
 | [player_events.opy](../src/abilities/player_events.opy) | `PLAYER PICKS UP HEALTH PACK` | Event guard |
 
