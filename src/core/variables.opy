@@ -565,7 +565,7 @@ playervar powerUpHealBeaconLightShaftId
 playervar powerUpNoCooldownsHudId  # Owned by the No Cooldowns rule from creation to cleanup.
 playervar powerUpAirStrikeRingId
 playervar powerUpCloakingDeviceSphereId
-playervar powerUpSuperNanoGoodAuraId  # Super Nano good-aura entity; nonzero only while the power-up is active, and the flag the shared damage-intake recompute reads.
+playervar powerUpSuperNanoAuraId  # Super Nano aura entity; nonzero only while the power-up is active, and the flag the shared damage-intake recompute reads.
 playervar powerUpUltimateChargerHudId
 playervar powerUpStunBeamId
 

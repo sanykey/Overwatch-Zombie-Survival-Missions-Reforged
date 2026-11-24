@@ -26,7 +26,7 @@ def applyDamageReceivedModifier():
     # Cache the DoT gate for the bite, rocket, Molten Core, gas and explosion rules.
     eventPlayer.isDotProtected = eventPlayer.isUsingUltimate() or isDashResistActive
     # After Dash is handled, isDotProtected reflects the ultimate state.
-    eventPlayer.setDamageReceived(0 if isDashResistActive else 50 if eventPlayer.powerUpSuperNanoGoodAuraId != 0 else 65 if eventPlayer.isDotProtected else 100)
+    eventPlayer.setDamageReceived(0 if isDashResistActive else 50 if eventPlayer.powerUpSuperNanoAuraId != 0 else 65 if eventPlayer.isDotProtected else 100)
 
 
 rule "CROWD CONTROL STATUS":

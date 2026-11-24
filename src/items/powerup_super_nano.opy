@@ -7,12 +7,10 @@ def activateSuperNano():
     if eventPlayer.powerUpSuperNanoEndsAt == 0:
         eventPlayer.movementSpeedScale *= 1.5
         applyScaledMoveSpeed()
-        createEffect(getAllPlayers(), Effect.GOOD_AURA, Color.RED, eventPlayer, distance(eventPlayer.getEyePosition(), eventPlayer) * 0.95, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpSuperNanoGoodAuraId = getLastCreatedEntity()
+        createEffect(getAllPlayers(), Effect.BAD_AURA, Color.RED, eventPlayer, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        eventPlayer.powerUpSuperNanoAuraId = getLastCreatedEntity()
         hudHeader(eventPlayer, "Super Nano: {0}s".format(powerUpSecondsRemaining(eventPlayer.powerUpSuperNanoEndsAt)), HudPosition.RIGHT, 0.2, Color.RED, HudReeval.VISIBILITY_AND_STRING)
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SUPER_NANO_HUD] = getLastCreatedText()
-        createEffect(getAllPlayers(), Effect.BAD_AURA, Color.RED, eventPlayer, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SUPER_NANO_BAD_AURA] = getLastCreatedEntity()
         startDamageModification(getPlayers(Team.2), eventPlayer, 200)
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SUPER_NANO_DAMAGE_DEALT_MODIFICATION] = getLastDamageModification()
         startDamageModification(eventPlayer, getAllPlayers(), 50)
@@ -40,13 +38,12 @@ def superNano():
         # A refresh during the cleanup delay keeps the same modifiers and HUD.
         if getTotalTimeElapsed() >= eventPlayer.powerUpSuperNanoEndsAt:
             break
-    destroyEffect(eventPlayer.powerUpSuperNanoGoodAuraId)
+    destroyEffect(eventPlayer.powerUpSuperNanoAuraId)
     destroyHudText(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SUPER_NANO_HUD])
-    destroyEffect(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SUPER_NANO_BAD_AURA])
     stopDamageModification(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SUPER_NANO_DAMAGE_DEALT_MODIFICATION])
     stopDamageModification(eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SUPER_NANO_DAMAGE_RECEIVED_MODIFICATION])
     eventPlayer.setMoveSpeed(100)
-    eventPlayer.powerUpSuperNanoGoodAuraId = 0
+    eventPlayer.powerUpSuperNanoAuraId = 0
     # Clearing the handle first lets the recompute keep an active Dash window.
     applyDamageReceivedModifier()
     eventPlayer.movementSpeedScale /= 1.5
