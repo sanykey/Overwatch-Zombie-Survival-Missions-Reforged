@@ -184,15 +184,7 @@ rule "PREGAME SPAWN ROOM ROTATION":
 
 
 rule "VARIABLE ASSIGNMENT":
-    # Keep one compiled copy of each shared name table.
-    enhancementNameListConst = [
-        "No Preference", "Zombie Hybrid", "Bulking Season", "Brain Killer", "Pyrotechnic",
-        "Born to Battle", "Charge Battery", "P.U.P.", "Wrestler", "Bolt Strike",
-        "Engineer", "Auspex Scan", "Plague Doctor", "Overcharge", "Hitchhiker"
-    ]
-    augmentNameListConst = ["No Preference", "Kevlar", "Dash", "Highrise", "Telekinesis", "Ammo Pack", "Grapnel Launcher", "Laser Barricade", "Scavenger", "Survivalist"]
-    augmentMeleeWeaponHeroListConst = [Hero.REINHARDT, Hero.BRIGITTE, Hero.DMON, Hero.GENJI, Hero.RAMATTRA, Hero.TORBJORN, Hero.VENDETTA]
-    augmentMeleeBtnHeroListConst = [Hero.REINHARDT, Hero.BRIGITTE, Hero.TORBJORN]
+    initializeImmutableVariables()
     if getCurrentGamemode() == Gamemode.CTF:
         attackSpawnRooms = sorted(getSpawnPoints(Team.2), lambda x: distance(x, getFlagPosition(Team.2)))[0]
     elif getCurrentGamemode() == Gamemode.TDM:

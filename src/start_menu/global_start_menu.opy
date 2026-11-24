@@ -105,14 +105,7 @@ rule "EFFECTS/TEXTS":
     startMenuChallengeTitleColorList = decodeColorPalette(NL_CHALLENGE_TITLE_COLORS_OFFSET, NL_CHALLENGE_TITLE_COLORS_LEN)
     hudText(
         getPlayers(Team.1),
-        [
-            "Challenge: No Preference",
-            "Challenge: None",
-            "Challenge: Swarm Shootout",
-            "Challenge: Random Abilities",
-            "Challenge: Insanity",
-            "Challenge: Pandora's Box"
-        ][localPlayer.pregameChallengeVote],
+        f"Challenge: {challengeNameListConst[localPlayer.pregameChallengeVote]}",
         [
             " ",
             " ",
@@ -133,15 +126,7 @@ rule "EFFECTS/TEXTS":
     startMenuZombieColorList = decodeColorPalette(NL_ZOMBIE_MENU_COLORS_OFFSET, NL_ZOMBIE_MENU_COLORS_LEN)
     hudText(
         getPlayers(Team.1),
-        [
-            "Zombie Mode: No Preference",
-            "Zombie Mode: All Zombies",
-            "Zombie Mode: New Blood",
-            "Zombie Mode: What'll it be?",
-            "Zombie Mode: Zombie Shuffle",
-            "Zombie Mode: Dinner Rush!",
-            "Zombie Mode: Ham N' Hammer!"
-        ][localPlayer.pregameZombieVote],
+        f"Zombie Mode: {zombieModeNameListConst[localPlayer.pregameZombieVote]}",
         [
             "",
             "Normal game featuring all zombie types",
