@@ -205,7 +205,7 @@ Event/Team/Hero остаются прежними. Native event запускае
 | [enhancement_overcharge.opy](../src/abilities/enhancement_overcharge.opy) | `OVERCHARGE STORES HEALING AND ASSISTS` | Пара phase/ID |
 | [enhancement_engineer.opy](../src/abilities/enhancement_engineer.opy) | `ENGINEER SCRAP INCOME` | Пара phase/ID |
 | enhancement_engineer.opy | `ENGINEER TURRET DEPLOY` | Пара phase/ID |
-| [augments.opy](../src/abilities/augments.opy) | `DOUBLE TAP JUMP (DASH)` | Пара phase/ID |
+| [augments.opy](../src/abilities/augments.opy) | `DOUBLE TAP JUMP (DASH / HIGHRISE)` | Пара phase/ID |
 | [augment_dash.opy](../src/abilities/augment_dash.opy) | `[DASH] CHARGE RECHARGE` | Пара phase/ID |
 | augments.opy | `AMMO PACK MAGAZINES` | Пара phase/ID |
 | augments.opy | `AMMO PACK REFILL FALLBACK` | Пара phase/ID |

@@ -77,7 +77,7 @@
 #!define DASH_COOLDOWN 14
 #!define DASH_MAX_CHARGES 2
 #!define DASH_PHASE_DURATION 1.7
-#!define DASH_JUMP_TAP_WINDOW 0.25
+#!define AUGMENT_JUMP_TAP_WINDOW 0.25
 #!define DASH_LAUNCH_SPEED 23.1
 # Workshop pitch is negative above the horizon.
 #!define DASH_LAUNCH_PITCH -7

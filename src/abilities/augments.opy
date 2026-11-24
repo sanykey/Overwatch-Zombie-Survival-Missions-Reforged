@@ -65,23 +65,26 @@ rule "KEVLAR RANGED DAMAGE COMPENSATION":
 #!include "augment_grapnel_launcher.opy"
 
 
-rule "DOUBLE TAP JUMP (DASH)":
+rule "DOUBLE TAP JUMP (DASH / HIGHRISE)":
     @Event eachPlayer
     @Team 1
-    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
-    @Condition uiPhaseAndId(eventPlayer.augmentId == Augment.DASH)
-    @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
+    @Condition eventPlayer.isAlive() == true
+    # Keep the native UI phase/ID workaround after the button check.
+    @Condition uiPhaseAndId(eventPlayer.augmentId in [Augment.DASH, Augment.HIGHRISE])
 
-    waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), DASH_JUMP_TAP_WINDOW)
+    waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), AUGMENT_JUMP_TAP_WINDOW)
     if eventPlayer.isHoldingButton(Button.JUMP):
         return
-    waitUntil(eventPlayer.isHoldingButton(Button.JUMP), DASH_JUMP_TAP_WINDOW)
+    waitUntil(eventPlayer.isHoldingButton(Button.JUMP), AUGMENT_JUMP_TAP_WINDOW)
     if not ruleCondition:
         return
 
     if not augmentMovementBlocked:
-        useDashAirActionMacro()
+        if eventPlayer.augmentId == Augment.DASH:
+            useDashAirActionMacro()
+        else:
+            useHighriseAirActionMacro()
     # Consume the second press before accepting a fresh pair.
     waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), Math.INFINITY)
 
@@ -96,11 +99,8 @@ rule "CROUCH + JUMP (AUGMENTS)":
 
     if eventPlayer.augmentId == Augment.TELEKINESIS:
         useTelekinesisPushMacro()
-    elif not augmentMovementBlocked:
-        if eventPlayer.augmentId == Augment.HIGHRISE:
-            useHighriseAirActionMacro()
-        elif eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER:
-            useGrapnelLauncherMacro()
+    elif eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER and not augmentMovementBlocked:
+        useGrapnelLauncherMacro()
 
 
 rule "AMMO PACK MAGAZINES":
