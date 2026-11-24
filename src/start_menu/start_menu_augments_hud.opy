@@ -7,8 +7,8 @@ macro createStartMenuAugmentHud():
         [
             " ",
             f"+{AUGMENT_KEVLAR_ARMOR} armor, +{AUGMENT_KEVLAR_KNOCKBACK_RESIST}% knockback resist. +{AUGMENT_KEVLAR_RANGED_DMG_RESIST}% ranged/ability dmg resist",
-            f"Dash in move direction ({compactHudNumber(DASH_PHASE_DURATION)}s invuln). {DASH_MAX_CHARGES} charges, {DASH_COOLDOWN}s/charge",
-            f"2x Jump: launch up. +{HIGHRISE_DAMAGE_BONUS}% dmg until landing ({HIGHRISE_DAMAGE_DURATION}s max, +{compactHudNumber(HIGHRISE_DAMAGE_GRACE_PERIOD)}s grace). {HIGHRISE_COOLDOWN}s CD",
+            f"2x Jump: dash in move direction ({compactHudNumber(DASH_PHASE_DURATION)}s invuln). {DASH_MAX_CHARGES} charges, {DASH_COOLDOWN}s/charge",
+            f"Crouch + Jump: launch up. +{HIGHRISE_DAMAGE_BONUS}% dmg until landing ({HIGHRISE_DAMAGE_DURATION}s max, +{compactHudNumber(HIGHRISE_DAMAGE_GRACE_PERIOD)}s grace). {HIGHRISE_COOLDOWN}s CD",
             f"{TELEKINESIS_WEAPON_REACH_MULTIPLIER}x melee reach ({100 - TELEKINESIS_EXTENDED_WEAPON_DAMAGE_PCT}% less dmg at extended range). Push zombies in {TELEKINESIS_MELEE_PUSH_RADIUS}m ({TELEKINESIS_MELEE_PUSH_DAMAGE} dmg). {TELEKINESIS_MELEE_PUSH_COOLDOWN}s CD",
             f"{AMMO_PACK_CAPACITY_MULTIPLIER}x mag size. Full reload restores extra ammo",
             f"Grapple allies/foes ({AUGMENT_GRAPNEL_MIN_RANGE}–{AUGMENT_GRAPNEL_RANGE}m). Hold Jump to launch up on arrival. Foes: {AUGMENT_GRAPNEL_DAMAGE} dmg, stun ({compactHudNumber(AUGMENT_GRAPNEL_GROUND_STUN_DURATION)}s) or air knockdown ({AUGMENT_GRAPNEL_AIR_KNOCKDOWN_DURATION}s). {AUGMENT_GRAPNEL_COOLDOWN}s CD",

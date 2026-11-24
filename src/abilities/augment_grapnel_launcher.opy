@@ -7,19 +7,10 @@ macro augmentGrapnelCanMove = (
 )
 
 
-rule "CROUCH + JUMP (GRAPNEL LAUNCHER)":
-    @Event eachPlayer
-    @Team 1
-    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
-    @Condition uiPhaseAndId(eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER)
-    @Condition eventPlayer.hasSpawned() == true
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
-    @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
-
+macro useGrapnelLauncherMacro():
     # Cooldown is checked on the input edge; holding the chord through expiry
     # cannot auto-launch. A miss does not consume the cooldown.
-    if getTotalTimeElapsed() < eventPlayer.augmentMovementReadyAt or augmentMovementBlocked:
+    if not eventPlayer.hasSpawned() or getTotalTimeElapsed() < eventPlayer.augmentMovementReadyAt:
         return
     # Zombies and allies are both valid anchors; the candidate closest in the
     # aim cone to the crosshair wins. The all-team query includes this player, so self must go.

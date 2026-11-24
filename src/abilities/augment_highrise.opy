@@ -1,6 +1,6 @@
 #!mainFile "../../main.opy"
 
-# Highrise flight bonus and synchronous activation. Jump input lives in augments.opy.
+# Highrise flight bonus and synchronous activation. Input lives in augments.opy.
 
 
 macro useHighriseAirActionMacro():

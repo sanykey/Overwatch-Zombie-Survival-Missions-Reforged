@@ -196,7 +196,7 @@ Event/Team/Hero остаются прежними. Native event запускае
 
 ### Gameplay-обходы в текущих исходниках
 
-В текущих исходниках **10 правил** с объединённой проверкой фазы и ID и **7 событийных обработчиков** с guard в Actions. Общее правило `ENHANCEMENT DOUBLE CROUCH` проверяет фазу в Conditions, а Enhancement ID — после второго нажатия. Игровой прогон с этой формой правила ещё не проводился.
+В текущих исходниках **9 правил** с объединённой проверкой фазы и ID и **7 событийных обработчиков** с guard в Actions. Правила `ENHANCEMENT DOUBLE CROUCH` и `CROUCH + JUMP (AUGMENTS)` проверяют фазу в Conditions и выбирают способность по ID в Actions. Игровой прогон с этими версиями правил ещё не проводился.
 
 | Файл | Правило | Приём |
 |---|---|---|
@@ -205,9 +205,8 @@ Event/Team/Hero остаются прежними. Native event запускае
 | [enhancement_overcharge.opy](../src/abilities/enhancement_overcharge.opy) | `OVERCHARGE STORES HEALING AND ASSISTS` | Пара phase/ID |
 | [enhancement_engineer.opy](../src/abilities/enhancement_engineer.opy) | `ENGINEER SCRAP INCOME` | Пара phase/ID |
 | enhancement_engineer.opy | `ENGINEER TURRET DEPLOY` | Пара phase/ID |
-| [augments.opy](../src/abilities/augments.opy) | `DOUBLE TAP JUMP (DASH / HIGHRISE)` | Пара phase/ID |
+| [augments.opy](../src/abilities/augments.opy) | `DOUBLE TAP JUMP (DASH)` | Пара phase/ID |
 | [augment_dash.opy](../src/abilities/augment_dash.opy) | `[DASH] CHARGE RECHARGE` | Пара phase/ID |
-| [augment_grapnel_launcher.opy](../src/abilities/augment_grapnel_launcher.opy) | `CROUCH + JUMP (GRAPNEL LAUNCHER)` | Пара phase/ID |
 | augments.opy | `AMMO PACK MAGAZINES` | Пара phase/ID |
 | augments.opy | `AMMO PACK REFILL FALLBACK` | Пара phase/ID |
 | [hero_tuning.opy](../src/abilities/hero_tuning.opy) | `REINHARDT SHIELD SLAM STUN` | Event guard |

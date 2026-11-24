@@ -62,33 +62,45 @@ rule "KEVLAR RANGED DAMAGE COMPENSATION":
     heal(eventPlayer, null, eventDamage * (1 - AUGMENT_KEVLAR_RANGED_DMG_RESIST / 100))
 
 
-rule "DOUBLE TAP JUMP (DASH / HIGHRISE)":
+#!include "augment_grapnel_launcher.opy"
+
+
+rule "DOUBLE TAP JUMP (DASH)":
     @Event eachPlayer
     @Team 1
-    # Native UI workaround: retain one phase/ID Condition; docs/WORKSHOP_NATIVE_UI_CORRUPTION.md.
-    @Condition uiPhaseAndId(eventPlayer.augmentId in [Augment.DASH, Augment.HIGHRISE])
+    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
+    @Condition uiPhaseAndId(eventPlayer.augmentId == Augment.DASH)
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
 
-    # The rule starts on the first press. Time the release and second press separately.
-    waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), AIR_ACTION_RELEASE_WINDOW)
+    waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), DASH_JUMP_TAP_WINDOW)
     if eventPlayer.isHoldingButton(Button.JUMP):
         return
-    waitUntil(eventPlayer.isHoldingButton(Button.JUMP), AIR_ACTION_SECOND_PRESS_WINDOW)
+    waitUntil(eventPlayer.isHoldingButton(Button.JUMP), DASH_JUMP_TAP_WINDOW)
     if not ruleCondition:
         return
 
-    # Recheck movement restrictions on the second press. Each action owns its cooldown.
     if not augmentMovementBlocked:
-        if eventPlayer.augmentId == Augment.DASH:
-            useDashAirActionMacro()
-        else:
-            useHighriseAirActionMacro()
-    # Consume the second press before the rule can accept a new pair.
+        useDashAirActionMacro()
+    # Consume the second press before accepting a fresh pair.
     waitUntil(not eventPlayer.isHoldingButton(Button.JUMP), Math.INFINITY)
 
 
-#!include "augment_grapnel_launcher.opy"
+rule "CROUCH + JUMP (AUGMENTS)":
+    @Event eachPlayer
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
+    @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
+    @Condition eventPlayer.isAlive() == true
+
+    if eventPlayer.augmentId == Augment.TELEKINESIS:
+        useTelekinesisPushMacro()
+    elif not augmentMovementBlocked:
+        if eventPlayer.augmentId == Augment.HIGHRISE:
+            useHighriseAirActionMacro()
+        elif eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER:
+            useGrapnelLauncherMacro()
 
 
 rule "AMMO PACK MAGAZINES":

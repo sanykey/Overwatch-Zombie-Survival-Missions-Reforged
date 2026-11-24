@@ -23,18 +23,9 @@ macro extendAugmentMeleeMacro(radius, damage):
     extendAugmentMelee()
 
 
-rule "[LONG_REACH] MELEE PUSH":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
-    @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
-
-    # Chord edge only: readiness/phase in Actions prevent a held press from
-    # automatically firing on cooldown expiry or when a target enters range.
-    if not isGameplayActive or eventPlayer.augmentId != Augment.TELEKINESIS or getTotalTimeElapsed() < eventPlayer.augmentMeleePushReadyAt:
-        return
-    if eventPlayer.isCrowdControlled:
+macro useTelekinesisPushMacro():
+    # Check readiness on the chord press before looking for targets.
+    if getTotalTimeElapsed() < eventPlayer.augmentMeleePushReadyAt or eventPlayer.isCrowdControlled:
         return
     # One spatial query per ready press. The synchronous hit helper preserves
     # the target list and loop index in tmp0/tmp1 and reads its target from tmp3.
