@@ -172,7 +172,7 @@ macro powerUpAssignmentMacro():
     groundPowerUpItemId = supplyPowerUpIdList[len(supplyPowerUpEffectIdList)]
     if groundPowerUpItemId >= PowerUpItem.CURE and groundPowerUpItemId <= PowerUpItem.STUN:
         createEffect(getAllPlayers(), Effect.ORB, powerUpColorListConst[groundPowerUpItemId - 1], supplyPowerUpPositionList[len(supplyPowerUpEffectIdList)], 1, EffectReeval.VISIBILITY)
-        createInWorldText(getAllPlayers(), ["CURE", "Revive", "Force Field", "No Cooldowns", "Air Strike", "Beacon of Healing", "Sentry Turret", "Cloaking Device", "Super Nano", "Ultimate Charger", "Stun"][groundPowerUpItemId - 1], supplyPowerUpPositionList[len(supplyPowerUpTextIdList)], 1, Clip.SURFACES, WorldTextReeval.VISIBILITY)
+        createInWorldText(getAllPlayers(), ["Cure+", "Revive", "Force Field", "No Cooldowns", "Air Strike", "Beacon of Healing", "Sentry Turret", "Cloaking Device", "Super Nano", "Ultimate Charger", "Stun"][groundPowerUpItemId - 1], supplyPowerUpPositionList[len(supplyPowerUpTextIdList)], 1, Clip.SURFACES, WorldTextReeval.VISIBILITY)
 
 
 rule "POWER UP EFFECT/TEXT MANAGEMENT":
@@ -214,7 +214,7 @@ rule "EFFECT/TEXT (PERMANENT)":
     hudText(
         localPlayer if localPlayer.getTeam() == Team.1 and localPlayer.isAlive() and localPlayer.powerUpItemId >= PowerUpItem.CURE and localPlayer.powerUpItemId <= PowerUpItem.STUN else null,
         [
-            "CURE",
+            "Cure+",
             "REVIVE",
             "Force Field",
             "No Cooldowns",

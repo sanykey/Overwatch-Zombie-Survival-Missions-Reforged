@@ -134,7 +134,7 @@ rule "EFFECTS/TEXTS":
         "<fgFFAA40FF>{0}</fg> <fg66FFFFFF>{1}</fg>{2}{3}".format(
             ENHANCEMENT_ICONS[eventPlayer.enhancementId],
             AUGMENT_ICONS[eventPlayer.augmentId],
-            f" <fgA0E81BFF>Infection: {floor(eventPlayer.infectionLevel)}</fg>" if eventPlayer.infectionLevel >= 1 else f" <fg66BBFFFF>Vaccine: {abs(floor(eventPlayer.infectionLevel))}</fg>" if eventPlayer.infectionLevel < 0 else "",
+            f" <fgA0E81BFF>Infection: {floor(eventPlayer.infectionLevel)}</fg>" if eventPlayer.infectionLevel >= 1 else f" <fg66BBFFFF>Vaccine: {abs(eventPlayer.infectionLevel)}</fg>" if eventPlayer.infectionLevel < 0 else "",
             f" <fgFFE14AFF>Reviving: {ceil(eventPlayer.reviveTimeRemaining)}s</fg>" if eventPlayer.isReviving else f" <fgFF6666FF>Revive: {ceil(eventPlayer.rescueTimeRemaining)}s</fg>" if eventPlayer.isDead() else ""
         ),
         "{0}: {1}".format(eventPlayer, f"{ceil(eventPlayer.getNormalizedHealth() * 100)}%" if eventPlayer.isAlive() else "DOWN"),
