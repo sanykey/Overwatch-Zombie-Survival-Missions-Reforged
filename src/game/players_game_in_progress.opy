@@ -270,7 +270,7 @@ rule "PLAYER AFK":
     @Event eachPlayer
     @Team 1
     @Condition isPregameSetup != true
-    @Condition createWorkshopSettingBool("General", "Allow players to go AFK", true, 3) == true
+    @Condition createWorkshopSettingBool("General", "Allow players to go AFK", DEFAULT_ALLOW_AFK, 3) == true
     @Condition eventPlayer.isPlayerActive == true
     @Condition eventPlayer.isAttached != true
     @Condition not magnitude(eventPlayer.getThrottle())

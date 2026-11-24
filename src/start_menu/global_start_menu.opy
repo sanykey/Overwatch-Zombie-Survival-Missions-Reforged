@@ -336,7 +336,7 @@ def setObjectiveType():
     #Wait until game begins
     waitUntil(isGameInProgress() and not isPregameSetup, Math.INFINITY)
     #Create objective positions
-    while len(objectiveTypeList) < createWorkshopSettingInt("General", "Number of Objectives", 5, 0, 100) + 1:
+    while len(objectiveTypeList) < createWorkshopSettingInt("General", "Number of Objectives", DEFAULT_OBJECTIVE_COUNT, 0, 100) + 1:
         if objectiveTypeSetting != ObjectiveType.MIXED_OBJECTIVES:
             objectiveTypeList.append(objectiveTypeSetting)
         else:

@@ -2,6 +2,55 @@
 
 #!define BUILD_DATE() __script__("../tools/build_date.js")
 
+# General
+#!define DEFAULT_OBJECTIVE_COUNT 5
+#!define DEFAULT_ZOMBIE_COUNT 7
+#!define DEFAULT_ZOMBIE_SPAWN_SERVER_LOAD_LIMIT 180
+#!define DEFAULT_ALLOW_AFK true
+
+# Power Ups
+#!define DEFAULT_SUPPLY_DROP_POWER_UP_COUNT 6
+
+# Infection
+#!define DEFAULT_MELEE_INFECTION true
+
+# Available Objective Types
+#!define DEFAULT_OBJECTIVE_SHOWDOWN true
+#!define DEFAULT_OBJECTIVE_BOSSES true
+#!define DEFAULT_OBJECTIVE_KILL_ZONE true
+#!define DEFAULT_OBJECTIVE_ZOMBIE_EGG true
+#!define DEFAULT_OBJECTIVE_SATELLITE_UPLINK true
+#!define DEFAULT_OBJECTIVE_MIXED_OBJECTIVES true
+
+# Mixed Objectives Pool
+#!define DEFAULT_MIXED_OBJECTIVE_STANDOFF true
+#!define DEFAULT_MIXED_OBJECTIVE_BOSSES true
+#!define DEFAULT_MIXED_OBJECTIVE_BIOMORPHING true
+#!define DEFAULT_MIXED_OBJECTIVE_SURVIVOR_RESCUE true
+#!define DEFAULT_MIXED_OBJECTIVE_KILL_ZONE true
+#!define DEFAULT_MIXED_OBJECTIVE_ZOMBIE_EGG true
+#!define DEFAULT_MIXED_OBJECTIVE_SATELLITE_UPLINK true
+
+# Mutations
+#!define DEFAULT_MUTATION_SPEED true
+#!define DEFAULT_MUTATION_SIZE_GROWTH true
+#!define DEFAULT_MUTATION_SIZE_REDUCTION true
+#!define DEFAULT_MUTATION_RADIOACTIVE true
+#!define DEFAULT_MUTATION_HEAVY true
+
+# Challenge Toggle
+#!define DEFAULT_CHALLENGE_SWARM_SHOOTOUT true
+#!define DEFAULT_CHALLENGE_RANDOM_ABILITIES true
+#!define DEFAULT_CHALLENGE_INSANITY true
+#!define DEFAULT_CHALLENGE_PANDORAS_BOX true
+
+# Zombie Mode Toggle
+#!define DEFAULT_ZOMBIE_MODE_NEW_BLOOD true
+#!define DEFAULT_ZOMBIE_MODE_WHATLL_IT_BE true
+#!define DEFAULT_ZOMBIE_MODE_ZOMBIE_SHUFFLE true
+#!define DEFAULT_ZOMBIE_MODE_DINNER_RUSH true
+#!define DEFAULT_ZOMBIE_MODE_HAM_N_HAMMER true
+
 macro STANDARD_TEAM1_HERO_SETTINGS = {
     # Tanks
     "dmon": {"damageDealt%": 90},
@@ -46,9 +95,50 @@ macro STANDARD_TEAM1_HERO_SETTINGS = {
 }
 
 macro STANDARD_WORKSHOP_SETTINGS = {
-    "Chance to mutate percentage": 25,
-    "Number of Objectives": 5,
-    "Number of zombies": 7
+    # General
+    "Number of Objectives": DEFAULT_OBJECTIVE_COUNT,
+    "Number of zombies": DEFAULT_ZOMBIE_COUNT,
+
+    # # Power Ups
+    # "Number of Powerups Per Supply Drop": DEFAULT_SUPPLY_DROP_POWER_UP_COUNT,
+    # # OverPy appends U+0001 to the emitted Workshop setting name in the AFK condition.
+    # "Allow players to go AFK\u0001": DEFAULT_ALLOW_AFK,
+    # "Spawn Zombies When Server Load Average is Less Than": DEFAULT_ZOMBIE_SPAWN_SERVER_LOAD_LIMIT,
+    # # Infection
+    # "Melee Infection Enabled": DEFAULT_MELEE_INFECTION,
+    # # Available Objective Types
+    # "Showdown": DEFAULT_OBJECTIVE_SHOWDOWN,
+    # "Bosses": DEFAULT_OBJECTIVE_BOSSES,
+    # "Kill Zone": DEFAULT_OBJECTIVE_KILL_ZONE,
+    # "Zombie Egg": DEFAULT_OBJECTIVE_ZOMBIE_EGG,
+    # "Satellite Uplink": DEFAULT_OBJECTIVE_SATELLITE_UPLINK,
+    # "Mixed Objectives": DEFAULT_OBJECTIVE_MIXED_OBJECTIVES,
+    # # Mixed Objectives Pool
+    # "Standoff.": DEFAULT_MIXED_OBJECTIVE_STANDOFF,
+    # "Bosses.": DEFAULT_MIXED_OBJECTIVE_BOSSES,
+    # "Biomorphing.": DEFAULT_MIXED_OBJECTIVE_BIOMORPHING,
+    # "Survivor Rescue.": DEFAULT_MIXED_OBJECTIVE_SURVIVOR_RESCUE,
+    # "Kill Zone.": DEFAULT_MIXED_OBJECTIVE_KILL_ZONE,
+    # "Zombie Egg.": DEFAULT_MIXED_OBJECTIVE_ZOMBIE_EGG,
+    # "Satellite Uplink.": DEFAULT_MIXED_OBJECTIVE_SATELLITE_UPLINK,
+    # # Mutations
+    # "Chance to mutate percentage": 25,
+    # "Speed": DEFAULT_MUTATION_SPEED,
+    # "Size Growth": DEFAULT_MUTATION_SIZE_GROWTH,
+    # "Size Reduction": DEFAULT_MUTATION_SIZE_REDUCTION,
+    # "Radioactive": DEFAULT_MUTATION_RADIOACTIVE,
+    # "Heavy": DEFAULT_MUTATION_HEAVY,
+    # # Challenge Toggle
+    # "Swarm Shootout": DEFAULT_CHALLENGE_SWARM_SHOOTOUT,
+    # "Random Abilities": DEFAULT_CHALLENGE_RANDOM_ABILITIES,
+    # "Insanity": DEFAULT_CHALLENGE_INSANITY,
+    # "Pandora's Box": DEFAULT_CHALLENGE_PANDORAS_BOX,
+    # # Zombie Mode Toggle
+    # "New Blood": DEFAULT_ZOMBIE_MODE_NEW_BLOOD,
+    # "What'll it be?": DEFAULT_ZOMBIE_MODE_WHATLL_IT_BE,
+    # "Zombie Shuffle": DEFAULT_ZOMBIE_MODE_ZOMBIE_SHUFFLE,
+    # "Dinner Rush!": DEFAULT_ZOMBIE_MODE_DINNER_RUSH,
+    # "Ham N' Hammer!": DEFAULT_ZOMBIE_MODE_HAM_N_HAMMER
 }
 
 settings {
