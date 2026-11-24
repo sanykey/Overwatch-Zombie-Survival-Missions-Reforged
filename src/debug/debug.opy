@@ -11,13 +11,15 @@ rule "[debug] snky buffs":
     @Condition isGameplayActive
 
     # Reapply after respawns, hero changes and power-ups that overwrite healing dealt.
-    # eventPlayer.setDamageDealt(1000)
-    # eventPlayer.setHealingDealt(10000)
-    # eventPlayer.setMaxHealth(10000)
+    if DEBUG_MEGA_STATS:
+        eventPlayer.setDamageDealt(1000)
+        eventPlayer.setHealingDealt(10000)
+        eventPlayer.setMaxHealth(10000)
 
     # debug(wrestlerPullTarget)
     wait(3)
     eventPlayer.setUltCharge(100)
+    eventPlayer.powerUpItemId = PowerUpItem.SUPER_NANO
     # The stack slot belongs to other state when a different enhancement is selected.
     if eventPlayer.enhancementId == Enhancement.BULKING_SEASON:
         eventPlayer.enhancementBulkStacks = 300
