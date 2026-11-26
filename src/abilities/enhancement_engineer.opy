@@ -60,6 +60,7 @@ macro transferEngineerArmor():
     # ally and resets its ENGINEER_BEAM_DURATION lifetime; the endpoint must be a stable player
     # variable, never scratch, because the reevaluating beam reads it every frame.
     if scrapArmorGrantTarget != eventPlayer:
+        eventPlayer.setUltCharge(eventPlayer.getUltCharge() + ENGINEER_ARMOR_ALLY_ULT_PCT)
         eventPlayer.enhancementScrapBeamTarget = scrapArmorGrantTarget
         if eventPlayer.enhancementScrapBeamEntity != null:
             destroyEffect(eventPlayer.enhancementScrapBeamEntity)

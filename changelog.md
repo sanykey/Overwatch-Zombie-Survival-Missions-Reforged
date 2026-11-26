@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Engineer gains 4% ultimate charge each time they give armor to an ally.
 - Beacon of Healing now uses a yellow smoke aura on the player, matching the size of Super Nano and Dash, because the previous effect obscured players' view.
 - Optimized Auspex Scan code.
 - Auspex Scan now increases damage taken by minibosses by 40%, up from 20%.
