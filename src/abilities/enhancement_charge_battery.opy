@@ -30,8 +30,8 @@ rule "[CHARGE_BATTERY] NO COOLDOWNS ON ULTIMATE":
     @Condition uiPhaseAndId(eventPlayer.enhancementId == Enhancement.CHARGE_BATTERY)
     @Condition eventPlayer.isUsingUltimate() == true
 
-    # Check the timer in Actions so expiry cannot start a new window mid-ult.
-    if eventPlayer.noCooldownsEndTime <= getTotalTimeElapsed():
+    # Check remaining time only at ult start and refresh only if it extends the window.
+    if eventPlayer.noCooldownsEndTime < getTotalTimeElapsed() + CHARGE_BATTERY_NO_COOLDOWNS_DURATION:
         noCooldownsDuration = CHARGE_BATTERY_NO_COOLDOWNS_DURATION
         noCooldowns()
 
