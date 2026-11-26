@@ -680,7 +680,7 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 # Bulking Season: retained stacks; each credited elimination (kill/damage participation) adds one; death halves it (rounded down).
 # Exclusive primary enhancement, owned by this human; safe alongside all independent Augments.
 #!define enhancementBulkStacks actorTeamSlot22
-# Overcharge: unspent energy (native Healing Dealt 1:3, +10 per offensive/defensive assist), independent of an armed burst.
+# Overcharge: unspent energy (1 per OVERCHARGE_HEAL_ENERGY_DIVISOR HP healed, plus energy from assists), independent of an armed burst.
 # Exclusive primary enhancement; its selected human owns the native-stat earnings,
 # charge spending and persistent balance; never write it on an enemy target.
 #!define enhancementCapacitorEnergy actorTeamSlot22
@@ -754,7 +754,7 @@ playervar actorTeamSlot25  # Team 2: botCandidateTarget; Team 1: enhancementStat
 # Default zero allows the first grab; retained across death/hero changes.
 # Exclusive primary enhancement; no wait/chase/HUD owns this slot on Wrestler.
 #!define enhancementGrabReadyAt actorTeamSlot25
-# Overcharge: last credited native Healing Dealt / 3 + 10 * (offensive + defensive assists).
+# Overcharge: last credited energy total from native Healing Dealt and assists.
 # Exclusive primary enhancement; retained across death/hero changes, no wait/chase/HUD ownership.
 #!define enhancementCapacitorStatsSnapshot actorTeamSlot25
 # Battery remaining placement cooldown.
