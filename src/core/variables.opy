@@ -423,6 +423,8 @@ playervar recoveryTimeSlot  # Existing Team 1 revive countdown / Team 2 replacem
 # Delay assigned to the next zombie replacement; bosses, objectives and air strike may change it.
 #!define botRespawnDelay recoveryTimeSlot
 
+macro eventPlayerHasHardCrowdControl = eventPlayer.hasStatus(Status.KNOCKED_DOWN) or eventPlayer.hasStatus(Status.ASLEEP) or eventPlayer.hasStatus(Status.FROZEN) or eventPlayer.hasStatus(Status.STUNNED)
+
 playervar isCrowdControlled  # Live boolean for both teams, set/reset by CROWD CONTROL STATUS. Excludes Rooted.
 # The bot CC tracker itself and Team 1 consumers (Hitchhiker carriers, Wrestler,
 # augments) read this live flag; zombie behavior rules read the

@@ -2,12 +2,19 @@
 
 ## Unreleased
 
+### Fixes
+- Downfallen (Sigma) gives players 1.25 seconds to interrupt its grab with crowd control or a hack. An interrupted grab releases the player without a throw or knockdown.
+- Beacon of Healing now uses a yellow smoke aura on the player, matching the size of Super Nano and Dash, because the previous effect obscured players' view.
+- If No Cooldowns is already active at ultimate start, Charge Battery refreshes it to 8 seconds when less time remains.
+- The third-person camera temporarily gives way to the native view during emotes and the ultimates of Bastion, Junkrat, and Doomfist.
+
+### Balance
+- Laser Barricade now knocks down large bosses for at most 1 second per contact.
 - Bulking Season now loses 40% of its stacks on death, down from 50%. Remaining stacks are rounded down.
 - Engineer gains 4% ultimate charge each time they give armor to an ally.
-- Beacon of Healing now uses a yellow smoke aura on the player, matching the size of Super Nano and Dash, because the previous effect obscured players' view.
-- Optimized Auspex Scan code.
 - Auspex Scan now increases damage taken by minibosses by 40%, up from 20%.
-- Laser Barricade now knocks down large bosses for at most 1 second per contact.
-- Charge Battery now grants 8 seconds of No Cooldowns at ultimate start, up from 7. If No Cooldowns is already active, it refreshes to 8 seconds when less time remains.
+- Charge Battery now grants 8 seconds of No Cooldowns at ultimate start, up from 7.
 - Overcharge now gains 1 energy per 2.7 HP healed, including health packs, down from 3 HP.
-- The third-person camera temporarily gives way to the native view during emotes and the ultimates of Bastion, Junkrat, and Doomfist.
+
+### Optimizations
+- Optimized Auspex Scan code.

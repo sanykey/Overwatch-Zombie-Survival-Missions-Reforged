@@ -949,10 +949,14 @@ rule "DOWNFALLEN (SIGMA) FIRES":
     if distance(eventPlayer, eventPlayer.botTarget) < 11 * eventPlayer.sizeScale and not eventPlayer.isHoldingButton(Button.PRIMARY_FIRE):
         eventPlayer.forceButtonPress(Button.PRIMARY_FIRE)
         wait(0.1)
-        eventPlayer.cancelPrimaryAction()
+        if not eventPlayer.botIsDownfallenGrabbing:
+            eventPlayer.cancelPrimaryAction()
     wait(2)
     if ruleCondition:
         loop()
+
+
+macro isDownfallenGrabInterrupted = eventPlayer.isDead() or eventPlayer.hasStatus(Status.HACKED) or eventPlayer.botIsCrowdControlled or eventPlayerHasHardCrowdControl
 
 
 rule "DOWNFALLEN GRABS PLAYER":
@@ -979,12 +983,11 @@ rule "DOWNFALLEN GRABS PLAYER":
     eventPlayer.forceButtonPress(Button.ULTIMATE)
     eventPlayer.botAbilityTarget.startFacing(directionTowards(eventPlayer.botAbilityTarget.getEyePosition(), eventPlayer.getEyePosition() - 0.2 * Vector.UP), 999)
     eventPlayer.applyImpulse(vect(0, 5, -3), 5 * eventPlayer.sizeScale, Relativity.TO_PLAYER, Impulse.CANCEL_CONTRARY_MOTION)
-    waitUntil(not eventPlayer.isUsingUltimate(), 1.25)
+    # The scripted throw stays interruptible even if the native ultimate has not started yet or ends early.
+    waitUntil(isDownfallenGrabInterrupted, 1.25)
     eventPlayer.cancelPrimaryAction()
-    # Facing ends on both interruption and throw, without a wait in between.
     eventPlayer.botAbilityTarget.stopFacing()
-    # A recent interruption must still cancel the grab when native ult ends.
-    if eventPlayer.botIsCrowdControlled or distance(eventPlayer.getEyePosition(), eventPlayer.botAbilityTarget.getEyePosition()) > 4 * eventPlayer.sizeScale or eventPlayer.hasStatus(Status.HACKED) or eventPlayer.isDead():
+    if isDownfallenGrabInterrupted or distance(eventPlayer.getEyePosition(), eventPlayer.botAbilityTarget.getEyePosition()) > 4 * eventPlayer.sizeScale:
         detachAbilityTarget()
     else:
         eventPlayer.forceButtonPress(Button.MELEE)

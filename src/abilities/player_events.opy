@@ -31,7 +31,7 @@ def applyDamageReceivedModifier():
 
 rule "CROWD CONTROL STATUS":
     @Event eachPlayer
-    @Condition (eventPlayer.hasStatus(Status.KNOCKED_DOWN) or eventPlayer.hasStatus(Status.ASLEEP) or eventPlayer.hasStatus(Status.FROZEN) or eventPlayer.hasStatus(Status.STUNNED)) == true
+    @Condition eventPlayerHasHardCrowdControl == true
 
     eventPlayer.isCrowdControlled = true
     waitUntil(not ruleCondition, Math.INFINITY)
