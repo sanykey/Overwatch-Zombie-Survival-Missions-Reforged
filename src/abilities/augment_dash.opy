@@ -34,7 +34,7 @@ macro useDashAirActionMacro():
         # priority over Super Nano and the ultimate until the aura clears.
         # Keep one aura for overlapping dashes; only its deadline changes.
         if eventPlayer.augmentDashSmokeEntity == null:
-            createEffect(getAllPlayers(), Effect.BAD_AURA, Color.BLUE, eventPlayer, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+            createEffect(getAllPlayers(), Effect.BAD_AURA, Color.BLUE, eventPlayer, PLAYER_BUFF_AURA_RADIUS, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
             eventPlayer.augmentDashSmokeEntity = getLastCreatedEntity()
         eventPlayer.augmentDashSmokeDeadline = getTotalTimeElapsed() + DASH_PHASE_DURATION
         applyDamageReceivedModifier()

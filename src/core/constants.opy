@@ -59,6 +59,7 @@
 #!define START_CAM_DISTANCE 6.5
 #!define START_TIME 300
 #!define SUPER_NANO_DURATION 20
+#!define PLAYER_BUFF_AURA_RADIUS 0.5
 #!define PREGAME_VOTING_DURATION 30
 #!define PREGAME_PREPARATION_DURATION 30
 # Unique hero-skin budget shared by players and zombies.

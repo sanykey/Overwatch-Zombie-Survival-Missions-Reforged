@@ -20,7 +20,7 @@ def healBeacon():
     eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_RING] = getLastCreatedEntity()
     hudHeader(eventPlayer, "Beacon of Healing: {0}s".format(powerUpSecondsRemaining(eventPlayer.powerUpHealBeaconEndsAt)), HudPosition.RIGHT, 0.2, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)
     eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_HUD] = getLastCreatedText()
-    createEffect(getAllPlayers(), Effect.GOOD_AURA, Color.YELLOW, eventPlayer, distance(eventPlayer.getEyePosition(), eventPlayer) * 0.9, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    createEffect(getAllPlayers(), Effect.BAD_AURA, Color.YELLOW, eventPlayer, PLAYER_BUFF_AURA_RADIUS, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.HEAL_BEACON_AURA] = getLastCreatedEntity()
     while getTotalTimeElapsed() < eventPlayer.powerUpHealBeaconEndsAt:
         wait(1)

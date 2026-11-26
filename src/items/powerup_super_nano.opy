@@ -7,7 +7,7 @@ def activateSuperNano():
     if eventPlayer.powerUpSuperNanoEndsAt == 0:
         eventPlayer.movementSpeedScale *= 1.5
         applyScaledMoveSpeed()
-        createEffect(getAllPlayers(), Effect.BAD_AURA, Color.RED, eventPlayer, 0.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createEffect(getAllPlayers(), Effect.BAD_AURA, Color.RED, eventPlayer, PLAYER_BUFF_AURA_RADIUS, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         eventPlayer.powerUpSuperNanoAuraId = getLastCreatedEntity()
         hudHeader(eventPlayer, "Super Nano: {0}s".format(powerUpSecondsRemaining(eventPlayer.powerUpSuperNanoEndsAt)), HudPosition.RIGHT, 0.2, Color.RED, HudReeval.VISIBILITY_AND_STRING)
         eventPlayer.powerUpEntityIdList[PowerUpEntitySlot.SUPER_NANO_HUD] = getLastCreatedText()

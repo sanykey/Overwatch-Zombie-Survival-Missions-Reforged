@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Beacon of Healing now uses a yellow smoke aura on the player, matching the size of Super Nano and Dash, because the previous effect obscured players' view.
 - Optimized Auspex Scan code.
 - Auspex Scan now increases damage taken by minibosses by 40%, up from 20%.
 - Laser Barricade now knocks down large bosses for at most 1 second per contact.
