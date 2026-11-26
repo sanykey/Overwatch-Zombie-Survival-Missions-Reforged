@@ -11,6 +11,7 @@
 ### Balance
 - Laser Barricade now knocks down large bosses for at most 1 second per contact.
 - Bulking Season now loses 40% of its stacks on death, down from 50%. Remaining stacks are rounded down.
+- Bulking Season now grants +0.75% max health per stack, up from +0.5%, and caps the bonus at +150%, up from +100%.
 - Engineer gains 4% ultimate charge each time they give armor to an ally.
 - Auspex Scan now increases damage taken by minibosses by 40%, up from 20%.
 - Charge Battery now grants 8 seconds of No Cooldowns at ultimate start, up from 7.
