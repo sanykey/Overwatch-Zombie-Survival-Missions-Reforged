@@ -30,5 +30,5 @@ macro creditBulkingSeasonEliminationMacro():
 
 
 macro applyBulkingSeasonDeathMacro():
-    eventPlayer.enhancementBulkStacks = floor(eventPlayer.enhancementBulkStacks / (100 / (100 - BULKING_SEASON_DEATH_LOSS_PCT)))
+    eventPlayer.enhancementBulkStacks = floor(eventPlayer.enhancementBulkStacks * ((100 - BULKING_SEASON_DEATH_LOSS_PCT) / 100))
     applyBulkingSeasonStats()

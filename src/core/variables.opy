@@ -679,7 +679,7 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 #!define enhancementPyroHitList actorTeamSlot22
 # Total infection levels cured by Plague Doctor.
 #!define enhancementPlagueCureTotal actorTeamSlot22
-# Bulking Season: retained stacks; each credited elimination (kill/damage participation) adds one; death halves it (rounded down).
+# Bulking Season: each credited elimination (kill/damage participation) adds one stack. Death applies BULKING_SEASON_DEATH_LOSS_PCT and rounds remaining stacks down.
 # Exclusive primary enhancement, owned by this human; safe alongside all independent Augments.
 #!define enhancementBulkStacks actorTeamSlot22
 # Overcharge: unspent energy (1 per OVERCHARGE_HEAL_ENERGY_DIVISOR HP healed, plus energy from assists), independent of an armed burst.

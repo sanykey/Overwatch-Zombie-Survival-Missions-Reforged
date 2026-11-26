@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Bulking Season now loses 40% of its stacks on death, down from 50%. Remaining stacks are rounded down.
 - Engineer gains 4% ultimate charge each time they give armor to an ally.
 - Beacon of Healing now uses a yellow smoke aura on the player, matching the size of Super Nano and Dash, because the previous effect obscured players' view.
 - Optimized Auspex Scan code.
