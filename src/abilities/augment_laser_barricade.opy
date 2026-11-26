@@ -99,9 +99,12 @@ macro pushLaserBarricadeContacts():
             barrierContactDamage = barrierCollisionTarget.getMaxHealth() * LASER_BARRICADE_CONTACT_DAMAGE_MULTIPLIER
             eventPlayer.augmentBarrierHealth -= barrierContactDamage
             barrierCollisionTarget.setStatusEffect(eventPlayer, Status.ROOTED, 0.5)
-            # Each full threshold adds 1s of knockdown, including a contact that breaks the wall.
+            # Each full threshold adds 1s of knockdown, capped at 1s for large bosses.
             if barrierContactDamage >= LASER_BARRICADE_KNOCKDOWN_DAMAGE_THRESHOLD:
-                barrierCollisionTarget.setStatusEffect(eventPlayer, Status.KNOCKED_DOWN, floor(barrierContactDamage / LASER_BARRICADE_KNOCKDOWN_DAMAGE_THRESHOLD))
+                barrierCollisionTarget.setStatusEffect(
+                    eventPlayer, Status.KNOCKED_DOWN,
+                    1 if barrierCollisionTarget in bossStateList else floor(barrierContactDamage / LASER_BARRICADE_KNOCKDOWN_DAMAGE_THRESHOLD)
+                )
             damage(barrierCollisionTarget, eventPlayer, 20)
         # Reuse the zombie's position for the height check and the ground-normal ray.
         #!define barrierCollisionPosition tmp3

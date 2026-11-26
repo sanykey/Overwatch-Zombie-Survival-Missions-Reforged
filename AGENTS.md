@@ -12,6 +12,10 @@ Measure element savings in the compiled output rather than by counting OverPy so
 
 Adapt borrowed code to the project's architecture and review it for these optimizations instead of copying it unchanged.
 
+## Changelog
+
+Record balance changes and gameplay fixes in [changelog.md](changelog.md) under `Unreleased` as part of the same change. Describe the effect players will see.
+
 ## Analysis Directory
 
 Everything in `analysis/` (reports, temporary scripts, validation results) belongs there. When a file name includes a date, put the date in the prefix (for example, `2026-11-10-element-optimization-ideas.md`), not the suffix. Existing files with date suffixes keep their names; update them only together with every reference to them (script `writeFileSync` targets, `require` paths and markdown links).
