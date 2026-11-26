@@ -44,7 +44,7 @@
 #!include "game/players_game_in_progress.opy"
 #!include "abilities/hero_tuning.opy"
 #!include "game/bots_game_in_progress.opy"
-#!include "game/zombie_types.opy"
+#!include "zombie_types/zombie_types.opy"
 #!include "items/supply_drops.opy"
 #!include "items/power_ups.opy"
 #!include "abilities/enhancements.opy"
