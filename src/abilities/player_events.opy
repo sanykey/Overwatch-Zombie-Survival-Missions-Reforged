@@ -110,24 +110,39 @@ rule "PLAYER DEALT DAMAGE":
     @Condition victim != attacker
     @Condition eventDamage > 0
 
-    if eventPlayer.enhancementId == Enhancement.BRAIN_KILLER and eventWasCriticalHit == true:
-        applyBrainKillerCritMacro()
-    if eventAbility != null:
-        # Scripted Damage has no Event Ability, keeping both bonuses from triggering themselves.
-        if eventPlayer.enhancementId == Enhancement.PYROTECHNIC:
-            applyPyrotechnicHitMacro(victim)
-        elif eventPlayer.enhancementId == Enhancement.OVERCHARGE:
-            applyOverchargeHitMacro(victim)
-
-        if victim.botAuspexExpiry > getTotalTimeElapsed() and entityExists(victim.botAuspexOwner):
-            applyAuspexMarkDamageMacro()
-
     # Augments: Leech includes damage from the hero, primary enhancement and
     # scripted powerups. The HIGHRISE airborne bonus is a Set Damage Dealt
     # multiplier, so it stacks with every source already applied above.
     if eventPlayer.augmentId == Augment.SURVIVALIST:
         # Include damage from the hero, primary enhancement and scripted powerups.
         heal(eventPlayer, eventPlayer, eventDamage * (SURVIVALIST_LIFESTEAL_PCT / 100))
+
+    if victim.botAuspexExpiry > getTotalTimeElapsed() and eventPlayer != victim.botAuspexOwner and entityExists(victim.botAuspexOwner):
+        # Credit this hit before Brain Killer's extra damage can kill the victim.
+        # Subtract the damage the hit would have dealt without Auspex.
+        victim.botAuspexOwner.setUltCharge(victim.botAuspexOwner.getUltCharge()
+            + (eventDamage - eventDamage / (1 + victim.botAuspexBonus)) * AUSPEX_ULT_PCT_PER_BONUS_DAMAGE)
+
+    if eventPlayer.enhancementId == Enhancement.BRAIN_KILLER and eventWasCriticalHit == true:
+        applyBrainKillerCritMacro()
+
+    # Scripted Damage has no Event Ability, keeping both bonuses from triggering themselves.
+    if eventAbility == null:
+        return
+
+    if eventPlayer.enhancementId == Enhancement.PYROTECHNIC:
+        applyPyrotechnicHitMacro(victim)
+    elif eventPlayer.enhancementId == Enhancement.OVERCHARGE:
+        applyOverchargeHitMacro(victim)
+
+
+rule "AUSPEX MARK CLEARS ON DEATH":
+    @Event playerDied
+    @Team 2
+    @Condition eventPlayer.botAuspexExpiry > 0
+
+    eventPlayer.botBlasterResistPct = 0
+    clearAuspexMark()
 
 
 rule "PLAYER PICKS UP HEALTH PACK":

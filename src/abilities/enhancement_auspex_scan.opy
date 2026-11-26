@@ -27,6 +27,13 @@ macro useAuspexScan():
     auspexMarkTargets = auspexPulseTargets.filter(lambda zombie: zombie.isDummy())
     auspexMarkTargets.botAuspexOwner = eventPlayer
     auspexMarkTargets.botAuspexExpiry = getTotalTimeElapsed() + AUSPEX_MARK_DURATION
+    # The visuals already consumed tmp0. This loop uses tmp0/tmp3 without yielding.
+    #!define auspexMarkTarget tmp0
+    #!define auspexMarkIndex tmp3
+    for auspexMarkIndex in range(len(auspexMarkTargets)):
+        auspexMarkTarget = auspexMarkTargets[auspexMarkIndex]
+        auspexMarkTarget.botAuspexBonus = auspexBonusFor(auspexMarkTarget)
+        applyBotDamageReceived(auspexMarkTarget)
     # Read the boss handle only in the Bosses objective; Zombie Egg reuses its slot.
     auspexPulseTargets.exclude(bossesStateList[0] if currentObjectiveType == ObjectiveType.BOSSES else null).setStatusEffect(
         eventPlayer, Status.HACKED, AUSPEX_MARK_DURATION)
@@ -36,10 +43,18 @@ macro useAuspexScan():
     eventPlayer.enhancementAttackBeamEntity = null
 
 
-macro applyAuspexMarkDamageMacro():
-    # Synchronous scratch for the charge award and the ensuing Damage action.
-    #!define auspexBonusDamage tmp1
-    auspexBonusDamage = eventDamage * (AUSPEX_BOSS_BONUS_DAMAGE if victim in bossStateList or victim in miniBossList else AUSPEX_BONUS_DAMAGE)
-    if eventPlayer != victim.botAuspexOwner:
-        victim.botAuspexOwner.setUltCharge(victim.botAuspexOwner.getUltCharge() + auspexBonusDamage * AUSPEX_ULT_PCT_PER_BONUS_DAMAGE)
-    damage(victim, eventPlayer, auspexBonusDamage)
+def clearAuspexMark():
+    eventPlayer.botAuspexExpiry = 0
+    eventPlayer.botAuspexBonus = 0
+    refreshBotDamageReceived()
+
+
+rule "AUSPEX MARK EXPIRES":
+    @Event eachPlayer
+    @Team 2
+    @Condition eventPlayer.botAuspexExpiry > 0
+
+    # Rescans extend the deadline. Death clears it and aborts the wait.
+    while eventPlayer.botAuspexExpiry > getTotalTimeElapsed():
+        wait(eventPlayer.botAuspexExpiry - getTotalTimeElapsed(), Wait.ABORT_WHEN_FALSE)
+    clearAuspexMark()

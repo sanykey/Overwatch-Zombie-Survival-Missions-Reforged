@@ -867,21 +867,20 @@ rule "BLASTER (PHARAH) CHARGES ROCKET THEN FIRES":
     beginBotOverride()
     startBlasterDaytakerFacing()
     eventPlayer.botBlasterCharge = 0
-    eventPlayer.setDamageReceived(50)
+    eventPlayer.botBlasterResistPct = 50
+    refreshBotDamageReceived()
     #charge up attack
     chaseOverTime(eventPlayer.botBlasterCharge, 2, 1 if eventPlayer.botTarget.isInAir() else 2, ChaseTimeReeval.NONE)
     waitUntil(eventPlayer.isDead() or eventPlayer.botBlasterCharge >= 2, Math.INFINITY)
     stopChasing(eventPlayer.botBlasterCharge)
+    eventPlayer.botBlasterResistPct = 0
+    refreshBotDamageReceived()
     if eventPlayer.isDead():
-        eventPlayer.setDamageReceived(100)
         eventPlayer.botBlasterCharge = 0
         eventPlayer.botIsThrottleOverridden = false
         eventPlayer.botIsFacingOverridden = false
         return
-    else:
-        #charge up attack
-        chaseOverTime(eventPlayer.botBlasterCharge, 0, 0.25, ChaseTimeReeval.NONE)
-    eventPlayer.setDamageReceived(100)
+    chaseOverTime(eventPlayer.botBlasterCharge, 0, 0.25, ChaseTimeReeval.NONE)
     waitUntil(eventPlayer.isDead() or not eventPlayer.botBlasterCharge, Math.INFINITY)
     if eventPlayer.isDead():
         eventPlayer.botIsThrottleOverridden = false

@@ -82,6 +82,18 @@ macro minibossMutationMacro():
     eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
 
 
+macro auspexBonusFor(target):
+    AUSPEX_BOSS_BONUS_DAMAGE if target in bossStateList or target in miniBossList else AUSPEX_BONUS_DAMAGE
+
+
+macro applyBotDamageReceived(target):
+    target.setDamageReceived((100 - target.botBlasterResistPct) * (1 + target.botAuspexBonus))
+
+
+def refreshBotDamageReceived():
+    applyBotDamageReceived(eventPlayer)
+
+
 macro botStatManagementMacro():
     # botStatHeroIndex: current bot hero's table index, to look up bite, movement and damage settings without repeating the hero search.
     #!define botStatHeroIndex tmp0
@@ -93,7 +105,11 @@ macro botStatManagementMacro():
     #Range from 0 to 1 in terms of throttle
     eventPlayer.botThrottleSpeed = botThrottleSpeedList[botStatHeroIndex]
     eventPlayer.setDamageDealt(botDamageDealtList[botStatHeroIndex])
-    eventPlayer.setDamageReceived(100)
+    eventPlayer.botBlasterResistPct = 0
+    if eventPlayer.botAuspexExpiry > 0:
+        # Initialization can turn a live marked zombie into a boss or miniboss.
+        eventPlayer.botAuspexBonus = auspexBonusFor(eventPlayer)
+    refreshBotDamageReceived()
     eventPlayer.movementSpeedScale = 1
     eventPlayer.setMoveSpeed(100 + ((len(getDeadPlayers(Team.1).filter(lambda player: player.rescueTimeRemaining <= 0))) * 3))
     eventPlayer.setJumpVerticalSpeed(100)

@@ -291,7 +291,7 @@ playervar isHeroSwitchRespawn  # Player has switched heroes; prevents repeating 
 # Enhancements only (enhancement prefix; includes the Rescue Hitchhiker setup).
 playervar enhancementId  # Selected Enhancement enum; pregame selection, runtime behavior and Rescue Hitchhiker initialization.
 playervar botAuspexOwner  # Team 2 only: latest mark caster, read only while the mark is active.
-playervar botAuspexExpiry  # Team 2 only: absolute mark deadline; cleared on normal bot death.
+playervar botAuspexExpiry  # Team 2 only: absolute mark deadline; zero after expiry or death.
 
 # Human Augment storage is independent of enhancements and power-ups.
 # Team 2 Wrestler roles are team-exclusive; no bot Augment owns these slots.
@@ -429,9 +429,11 @@ playervar isCrowdControlled  # Live boolean for both teams, set/reset by CROWD C
 # delayed flag below so a recent interruption still counts for up to 0.125s.
 playervar botIsCrowdControlled  # Delayed Team 2 flag, lags CC exit by up to 0.125s. BOT STUN MANAGEMENT refreshes it; botRespawnInitialization resets it.
 
-playervar actorCountdownSlot  # Team 1 No Cooldowns expiry.
+playervar actorCountdownSlot  # Team 1 No Cooldowns expiry or Team 2 Blaster charge protection.
 # Absolute elapsed time in seconds, cleared by the No Cooldowns rule after cleanup.
 #!define noCooldownsEndTime actorCountdownSlot
+# Damage received reduction in percentage points. 50 during the rocket windup, zero otherwise.
+#!define botBlasterResistPct actorCountdownSlot
 
 playervar controlStateSlot  # Player crowd-control immunity flag or zombie boss return target; hero_tuning/zombie abilities/Bosses.
 # Team 1 immunity window after Brute/Downfallen control.
@@ -771,9 +773,11 @@ playervar actorTeamSlot26  # Teleport permission on Team 2 or first barrier corn
 # Barrier first lower corner.
 #!define augmentBarrierCorner1 actorTeamSlot26
 
-playervar actorTeamSlot27  # Team 1: second barrier corner.
+playervar actorTeamSlot27  # Team 1: second barrier corner; Team 2: Auspex damage bonus.
 # Barrier second lower corner.
 #!define augmentBarrierCorner2 actorTeamSlot27
+# Fractional bonus applied to damage received, cleared with the mark deadline.
+#!define botAuspexBonus actorTeamSlot27
 
 playervar actorTeamSlot28  # Team 2: Biomorphing resource icon IDs; Team 1 humans: camera mode.
 # Zombie Biomorphing resource icon IDs; separate from the zombie visual-effect list.
