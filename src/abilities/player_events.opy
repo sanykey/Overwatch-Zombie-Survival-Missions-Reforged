@@ -119,9 +119,8 @@ rule "PLAYER DEALT DAMAGE":
 
     if victim.botAuspexExpiry > getTotalTimeElapsed() and eventPlayer != victim.botAuspexOwner and entityExists(victim.botAuspexOwner):
         # Credit this hit before Brain Killer's extra damage can kill the victim.
-        # Subtract the damage the hit would have dealt without Auspex.
         victim.botAuspexOwner.setUltCharge(victim.botAuspexOwner.getUltCharge()
-            + (eventDamage - eventDamage / (1 + victim.botAuspexBonus)) * AUSPEX_ULT_PCT_PER_BONUS_DAMAGE)
+            + eventDamage * victim.botAuspexBonusFraction * AUSPEX_ULT_PCT_PER_BONUS_DAMAGE)
 
     if eventPlayer.enhancementId == Enhancement.BRAIN_KILLER and eventWasCriticalHit == true:
         applyBrainKillerCritMacro()

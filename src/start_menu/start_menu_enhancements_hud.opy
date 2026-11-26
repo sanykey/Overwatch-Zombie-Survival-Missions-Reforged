@@ -19,7 +19,7 @@ macro createStartMenuEnhancementHud():
             f"Grab CC’d zombies ({WRESTLER_CARRY_DMG_RESIST_PCT}% dmg resist while carrying). Throw ({WRESTLER_THROW_DAMAGE} dmg). Pull & knock down ({WRESTLER_PULL_DAMAGE} dmg, {WRESTLER_PULL_COOLDOWN}s CD)",
             f"Call lightning on aimed target: {BOLT_STRIKE_DAMAGE} dmg, {BOLT_STRIKE_SPLASH_DAMAGE} splash in {BOLT_STRIKE_SPLASH_RADIUS}m, stun ({compactHudNumber(BOLT_STRIKE_STUN_DURATION)}s). {BOLT_STRIKE_COOLDOWN}s CD",
             f"Scrap: +{ENGINEER_COLLECTION_REWARD}/zombie death in {ENGINEER_COLLECTION_RANGE}m, +{ENGINEER_SCRAP_PASSIVE_RATE}/s. Craft team armor ({ENGINEER_ARMOR_MAX} armor/target) & freezing turrets",
-            f"Hack & amplify dmg taken ({AUSPEX_MARK_DURATION}s): +{AUSPEX_BONUS_DAMAGE * 100}% (+{AUSPEX_BOSS_BONUS_DAMAGE * 100}% bosses). {AUSPEX_RADIUS}m pulse through walls. +{compactHudNumber(AUSPEX_ULT_PCT_PER_BONUS_DAMAGE)}% ult/ally bonus dmg. {AUSPEX_COOLDOWN}s CD",
+            f"Hack & amplify dmg taken ({AUSPEX_MARK_DURATION}s): +{AUSPEX_BONUS_DAMAGE * 100}% (+{AUSPEX_BOSS_BONUS_DAMAGE * 100}% objective bosses & Egg). {AUSPEX_RADIUS}m pulse through walls. +{compactHudNumber(AUSPEX_ULT_PCT_PER_BONUS_DAMAGE)}% ult/ally bonus dmg. {AUSPEX_COOLDOWN}s CD",
             f"+{PLAGUE_DOCTOR_HEAL_BONUS_PCT}% heal (+{compactHudNumber((100 + PLAGUE_DOCTOR_HEAL_BONUS_PCT) * PLAGUE_DOCTOR_INFECTED_HEAL_MULTIPLIER_PCT / 100 - 100)}% on infected). Healing reduces infection in caster and allies",
             f"+{OVERCHARGE_HEAL_BONUS_PCT}% heal. Gain 1 energy/{OVERCHARGE_HEAL_ENERGY_DIVISOR} healing (incl. packs) +{OVERCHARGE_ENERGY_PER_ASSIST}/assist. Spend up to {OVERCHARGE_MAX_CHARGE} for bonus dmg/hit",
             "Ride nearby ally and share combined HP"

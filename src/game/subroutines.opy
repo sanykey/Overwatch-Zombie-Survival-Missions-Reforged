@@ -82,16 +82,16 @@ macro minibossMutationMacro():
     eventPlayer.botVisualEntityIdList.append(getLastCreatedEntity())
 
 
-macro auspexBonusFor(target):
-    AUSPEX_BOSS_BONUS_DAMAGE if target in bossStateList or target in miniBossList else AUSPEX_BONUS_DAMAGE
-
-
-macro applyBotDamageReceived(target):
-    target.setDamageReceived((100 - target.botBlasterResistPct) * (1 + target.botAuspexBonus))
+macro auspexBonusFractionFor(target):
+    (
+        AUSPEX_BOSS_BONUS_DAMAGE / (1 + AUSPEX_BOSS_BONUS_DAMAGE)
+        if target in bossStateList
+        else AUSPEX_BONUS_DAMAGE / (1 + AUSPEX_BONUS_DAMAGE)
+    )
 
 
 def refreshBotDamageReceived():
-    applyBotDamageReceived(eventPlayer)
+    eventPlayer.setDamageReceived((100 - eventPlayer.botBlasterResistPct) / (1 - eventPlayer.botAuspexBonusFraction))
 
 
 macro botStatManagementMacro():
@@ -108,7 +108,7 @@ macro botStatManagementMacro():
     eventPlayer.botBlasterResistPct = 0
     if eventPlayer.botAuspexExpiry > 0:
         # Initialization can turn a live marked zombie into a boss or miniboss.
-        eventPlayer.botAuspexBonus = auspexBonusFor(eventPlayer)
+        eventPlayer.botAuspexBonusFraction = auspexBonusFractionFor(eventPlayer)
     refreshBotDamageReceived()
     eventPlayer.movementSpeedScale = 1
     eventPlayer.setMoveSpeed(100 + ((len(getDeadPlayers(Team.1).filter(lambda player: player.rescueTimeRemaining <= 0))) * 3))

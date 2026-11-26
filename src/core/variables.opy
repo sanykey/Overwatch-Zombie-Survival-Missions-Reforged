@@ -776,8 +776,8 @@ playervar actorTeamSlot26  # Teleport permission on Team 2 or first barrier corn
 playervar actorTeamSlot27  # Team 1: second barrier corner; Team 2: Auspex damage bonus.
 # Barrier second lower corner.
 #!define augmentBarrierCorner2 actorTeamSlot27
-# Fractional bonus applied to damage received, cleared with the mark deadline.
-#!define botAuspexBonus actorTeamSlot27
+# Fraction of the amplified damage contributed by Auspex, cleared with the mark deadline.
+#!define botAuspexBonusFraction actorTeamSlot27
 
 playervar actorTeamSlot28  # Team 2: Biomorphing resource icon IDs; Team 1 humans: camera mode.
 # Zombie Biomorphing resource icon IDs; separate from the zombie visual-effect list.
