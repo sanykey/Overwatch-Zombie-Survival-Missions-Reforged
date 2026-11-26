@@ -40,6 +40,10 @@ Passive health regeneration for the zombie team is disabled under **Settings →
 | **Overcharge** | New Enhancement. Increases healing dealt by **15%**. Gain 1 energy per 2.7 HP healed, including health packs, and 10 energy per assist. Double-tap **Crouch** to spend up to 100 energy on bonus damage. Your next hit opens a **0.3-second** window in which the bonus applies to every hit. Unspent energy stays available. Only supports can roll this Enhancement at random. |
 | **Hitchhiker** | Double-tap **Crouch** to ride an eligible nearby ally in the direction you're facing, or to dismount. Each player can belong to only one pair. Both players lose the extra health when the pair breaks up, including when the passenger leaves the match. Mei can now ride an ally, with **Cryo-Freeze** disabled while attached. **Hitchhiker** must be selected manually. |
 
+#### Born to Battle limitations
+
+Known cooldown reset issues affect **D.Va's Micro Missiles**, **Ramattra's Void Barrier**, **Genji's Swift Strike**, **Soldier: 76's Helix Rockets**, **Tracer's Recall**, **Baptiste's Immortality Field**, and **Lifeweaver's Rejuvenating Dash**. Born to Battle also can't refill **Roadhog's Take a Breather**. [Workshop bug report](https://us.forums.blizzard.com/en/overwatch/t/workshop-ability-cooldown-showing-incorrect-values/854487)
+
 ### Augments
 
 | Augment | Effect |
@@ -48,7 +52,7 @@ Passive health regeneration for the zombie team is disabled under **Settings →
 | **Dash** | Double-tap **Jump** to dash in your movement direction. Stores **two charges** and restores one every **14 seconds**. For **1.7 seconds**, you have **100% damage resistance** and immunity to regular knockback. Zombie bites can't add infection stacks or apply damage over time, and zombie attacks can't ignite you. Existing effects stay active. |
 | **Highrise** | Double-tap **Jump** to launch upward from the ground or in midair. Deal **55% more damage** until you land or **5 seconds** pass, plus **0.1 seconds** afterward. **14-second cooldown.** |
 | **Telekinesis** | Triples melee reach. Weapon hits at extended range deal **75% of normal damage**. **Crouch + Jump** pushes visible regular zombies within **10 m** and deals **35 damage** to them. **15-second cooldown.** |
-| **Ammo Pack** | Doubles magazine capacity. A full reload replenishes the extra rounds. Workshop bugs prevent this from working on some heroes. |
+| **Ammo Pack** | Doubles magazine capacity. A full reload replenishes the extra rounds. |
 | **Grapnel Launcher** | **Crouch + Jump** pulls you toward an ally or zombie **7–45 m** away. Impact deals **100 damage** to zombies, stuns grounded targets for **1 second**, and knocks down airborne targets for **3 seconds**. Hold **Jump** to launch upward on arrival. **14-second cooldown.** |
 | **Laser Barricade** | Moved to the Augment slot. Hold **Crouch + Interact** to aim, then release **Interact** to place the wall. Width increased from **5 to 6 m**, cooldown reduced from **30 to 25 seconds**, and contact damage to zombies increased from **10 to 20**. For every **4,900 damage** a zombie deals to the wall on contact, it is knocked down for **1 second**. |
 | **Scavenger** | Gives you two extra power-up slots. When a zombie dies within **15 m**, you have a **5% chance** to receive a power-up. Loot fills your active slot first, then your backpack. **Crouch + Interact** stows a power-up or cycles your slots. Death or a manual drop empties your inventory onto the ground. |
