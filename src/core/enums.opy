@@ -90,7 +90,8 @@ enum PregameState:
 
 enum CameraMode:
     NORMAL = 0,
-    PRECISE = 1,
+    THIRD_PERSON = 1,
+    THIRD_PERSON_PAUSED = 2,
 
 # Fields of playerStatsList[user index] and reconnectRowSnapshot; full-row writes follow this order.
 enum ReconnectField:

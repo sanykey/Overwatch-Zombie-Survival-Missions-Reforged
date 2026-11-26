@@ -1,6 +1,7 @@
 #!mainFile "../../main.opy"
 
-#!define CAMERA_HOTKEY f"[{inputBindingString(Button.RELOAD)}] + [{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.JUMP)}]"
+macro cameraHotkeyText():
+    f"[{inputBindingString(Button.RELOAD)}] + [{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.JUMP)}]"
 
 # Freja's Take Aim needs the secondary-fire input even before she fires a bolt.
 macro isAimingWithScope():
@@ -16,10 +17,19 @@ macro shouldPausePlayerCamera():
     )
 
 
-def applyPlayerCamera():
-    @Name "APPLY PLAYER CAMERA"
+rule "UPDATE THIRD-PERSON CAMERA":
+    @Event eachPlayer
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.cameraMode != CameraMode.NORMAL
+    @Condition (eventPlayer.cameraMode == CameraMode.THIRD_PERSON) == shouldPausePlayerCamera()
 
-    if eventPlayer.cameraMode == CameraMode.PRECISE and not shouldPausePlayerCamera():
+    # Among enabled modes, only act when the current view disagrees with the pause condition.
+    if eventPlayer.cameraMode == CameraMode.THIRD_PERSON:
+        eventPlayer.cameraMode = CameraMode.THIRD_PERSON_PAUSED
+        eventPlayer.stopCamera()
+    else:
+        eventPlayer.cameraMode = CameraMode.THIRD_PERSON
         # ZSMM-remixed: preserve both nested wall rays and the fast tracking speed.
         # Reuse the origin within each live camera reevaluation.
         #!define CAMERA_ORIGIN (eventPlayer + Vector.UP * (distance(eventPlayer.getEyePosition(), eventPlayer) + 0.5 * eventPlayer.sizeScale))
@@ -32,22 +42,11 @@ def applyPlayerCamera():
             eventPlayer + eventPlayer.getFacingDirection() * 100,
             100
         )
-    else:
-        eventPlayer.stopCamera()
 
-
-rule "PAUSE PLAYER CAMERA FOR NATIVE VIEWS":
-    @Event eachPlayer
-    @Team 1
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.cameraMode == CameraMode.PRECISE
-    @Condition shouldPausePlayerCamera() == true
-
-    eventPlayer.stopCamera()
-    # Keep the native view until all overlapping reasons clear, or the camera is no longer needed.
-    waitUntil(not isGameplayActive or eventPlayer.cameraMode != CameraMode.PRECISE or not shouldPausePlayerCamera(), Math.INFINITY)
-    if isGameplayActive:
-        applyPlayerCamera()
+    # Recheck after the next tick in case inputs change before the condition ever reads false.
+    wait()
+    if ruleCondition:
+        loop()
 
 
 rule "CYCLE PLAYER CAMERA":
@@ -62,5 +61,8 @@ rule "CYCLE PLAYER CAMERA":
     @Condition eventPlayer.isHoldingButton(Button.JUMP) == true
 
     # Ongoing rule retriggers only after a condition becomes false and true again.
-    eventPlayer.cameraMode = (eventPlayer.cameraMode + 1) % 2
-    applyPlayerCamera()
+    if eventPlayer.cameraMode == CameraMode.NORMAL:
+        eventPlayer.cameraMode = CameraMode.THIRD_PERSON_PAUSED
+    else:
+        eventPlayer.cameraMode = CameraMode.NORMAL
+        eventPlayer.stopCamera()

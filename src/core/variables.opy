@@ -778,9 +778,9 @@ playervar actorTeamSlot27  # Team 1: second barrier corner.
 playervar actorTeamSlot28  # Team 2: Biomorphing resource icon IDs; Team 1 humans: camera mode.
 # Zombie Biomorphing resource icon IDs; separate from the zombie visual-effect list.
 #!define botResourceIconIdList actorTeamSlot28
-# Human camera preference (0/1/2), retained across respawns and hero changes.
+# Human camera mode: normal, third-person, or third-person selected with the native view active.
 # Only Team 1 humans write/read this role; bot icon cleanup owns Team 2 receivers.
-# Start Camera reevaluates player geometry, not this slot; no wait/chase owns it.
+# Third-person selection survives respawns and hero changes. The camera rule rereads the mode after its wait.
 #!define cameraMode actorTeamSlot28
 
 playervar team1PositionSlot  # Pregame position -> final extraction destination on humans; Rescue NPC path origin on its own actor. No chase owns this slot.

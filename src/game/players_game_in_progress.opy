@@ -104,7 +104,10 @@ rule "PLAYER INITIALIZATION":
         eventPlayer.clearStatusEffect(Status.INVINCIBLE)
         updateUsers()
     # Release the pregame camera only after placement and facing, as in the original transition.
-    applyPlayerCamera()
+    eventPlayer.stopCamera()
+    if eventPlayer.cameraMode != CameraMode.NORMAL:
+        # Reapply the selected camera through its rule once the native view is clear.
+        eventPlayer.cameraMode = CameraMode.THIRD_PERSON_PAUSED
     eventPlayer.clearStatusEffect(Status.ROOTED)
     eventPlayer.setInvisibility(Invis.NONE)
 

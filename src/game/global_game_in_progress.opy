@@ -26,7 +26,7 @@ rule "EFFECTS/TEXTS":
     createIcon(getPlayers(Team.1).filter(lambda player: player.enhancementId != Enhancement.ZOMBIE_HYBRID and healthpackPositionList != [] and player.isInfected and getMatchTime() > matchEndTime), sorted(healthpackPositionList, lambda x: angleBetweenVectors(localPlayer.getFacingDirection(), directionTowards(localPlayer.getEyePosition(), x)))[0] + offsetUpThreeQuartersConst + offsetUpHalfConst, Icon.POISON, IconReeval.VISIBILITY_AND_POSITION, Color.GREEN)
     hudSubheader(
         getAllPlayers(),
-        f"3P camera: {CAMERA_HOTKEY}\nworkshop.codes/45N5D\nMode: {challengeNameListConst[challengeSetting]} ({zombieModeNameListConst[zombieSetting]})",
+        f"3P camera: {cameraHotkeyText()}\nworkshop.codes/45N5D\nMode: {challengeNameListConst[challengeSetting]} ({zombieModeNameListConst[zombieSetting]})",
         HudPosition.RIGHT, 0.1, Color.TEAM_1, HudReeval.VISIBILITY_AND_STRING
     )
     hudSubtext(getAllPlayers().filter(lambda _: challengeSetting >= Challenge.SWARM_SHOOTOUT), "Challenge round!", HudPosition.RIGHT, 0.2, Color.TEAM_1, HudReeval.VISIBILITY_AND_STRING)
