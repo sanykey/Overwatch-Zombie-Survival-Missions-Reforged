@@ -108,7 +108,7 @@ rule "WIN/LOSS CONDITIONS":
         for lossRoundVictoryIndex in range(5):
             declareRoundVictory(Team.2)
     else:
-        (getPlayers(Team.1).filter(lambda player: player.hasSpawned() and distance(currentObjectivePosition, vect(player.getPosition().x, currentObjectivePosition.y, player.getPosition().z)) < objectiveRad)).resurrect()
+        getPlayers(Team.1).filter(lambda player: player.hasSpawned() and magnitude((currentObjectivePosition - player.getPosition()) * horizontalMaskConst) < objectiveRad).resurrect()
         getAllPlayers().enableKillFeed()
         wait()
         extractionFlightDestination = currentObjectivePosition + 250 * Vector.UP + directionFromAngles(random.uniform(0, 360), 0) * 500
