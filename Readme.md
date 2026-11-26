@@ -77,7 +77,7 @@ Passive health regeneration for the zombie team is disabled under **Settings →
 
 ### Camera and HUD
 
-- **Reload + Crouch + Jump** switches between the standard camera and the **Precise** third-person camera. Camera distance scales with hero size. Aiming temporarily restores the standard camera for **Ana, Ashe, Widowmaker, Emre, and Freja**.
+- **Reload + Crouch + Jump** switches between the standard camera and the third-person camera. Camera distance scales with hero size. Aiming temporarily restores the standard camera for **Ana, Ashe, Widowmaker, Emre, and Freja**.
 - The team HUD now shows each player's Enhancement and Augment icons.
 - The redesigned ability HUD shows charges, cooldown timers, and control hints. Ability names change color to show their current status.
 - The selected **Challenge** and **Zombie Mod** are displayed during the match.

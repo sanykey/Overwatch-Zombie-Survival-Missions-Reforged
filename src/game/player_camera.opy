@@ -2,10 +2,24 @@
 
 #!define CAMERA_HOTKEY f"[{inputBindingString(Button.RELOAD)}] + [{inputBindingString(Button.CROUCH)}] + [{inputBindingString(Button.JUMP)}]"
 
+# Freja's Take Aim needs the secondary-fire input even before she fires a bolt.
+macro isAimingWithScope():
+    eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) if eventPlayer.getHero() == Hero.FREJA else eventPlayer.isFiringSecondaryFire()
+
+
+# String conversion preserves the Workshop distinction between idle 0 and an active emote.
+macro shouldPausePlayerCamera():
+    f"{eventPlayer.isCommunicatingEmote()}" != "0" or (
+        eventPlayer.isUsingUltimate() and eventPlayer.getHero() in [Hero.BASTION, Hero.JUNKRAT, Hero.DOOMFIST]
+    ) or (
+        eventPlayer.getHero() in [Hero.ANA, Hero.ASHE, Hero.WIDOWMAKER, Hero.EMRE, Hero.FREJA] and isAimingWithScope()
+    )
+
+
 def applyPlayerCamera():
     @Name "APPLY PLAYER CAMERA"
 
-    if eventPlayer.cameraMode == CameraMode.PRECISE:
+    if eventPlayer.cameraMode == CameraMode.PRECISE and not shouldPausePlayerCamera():
         # ZSMM-remixed: preserve both nested wall rays and the fast tracking speed.
         # Reuse the origin within each live camera reevaluation.
         #!define CAMERA_ORIGIN (eventPlayer + Vector.UP * (distance(eventPlayer.getEyePosition(), eventPlayer) + 0.5 * eventPlayer.sizeScale))
@@ -22,21 +36,16 @@ def applyPlayerCamera():
         eventPlayer.stopCamera()
 
 
-# Freja's Take Aim needs the secondary-fire input even before she fires a bolt.
-macro isAimingWithScope():
-    eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) if eventPlayer.getHero() == Hero.FREJA else eventPlayer.isFiringSecondaryFire()
-
-
-rule "DISABLE PLAYER CAMERA WHILE AIMING":
+rule "PAUSE PLAYER CAMERA FOR NATIVE VIEWS":
     @Event eachPlayer
     @Team 1
     @Condition isGameplayActive == true
     @Condition eventPlayer.cameraMode == CameraMode.PRECISE
-    @Condition eventPlayer.getHero() in [Hero.ANA, Hero.ASHE, Hero.WIDOWMAKER, Hero.EMRE, Hero.FREJA]
-    @Condition isAimingWithScope() == true
+    @Condition shouldPausePlayerCamera() == true
 
     eventPlayer.stopCamera()
-    waitUntil(not isAimingWithScope() or eventPlayer.cameraMode != CameraMode.PRECISE, Math.INFINITY)
+    # Keep the native view until all overlapping reasons clear, or the camera is no longer needed.
+    waitUntil(not isGameplayActive or eventPlayer.cameraMode != CameraMode.PRECISE or not shouldPausePlayerCamera(), Math.INFINITY)
     if isGameplayActive:
         applyPlayerCamera()
 
