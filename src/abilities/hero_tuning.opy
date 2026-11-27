@@ -1,7 +1,6 @@
 #!mainFile "../../main.opy"
 
 subroutine applyDamageReceivedModifier
-subroutine detonateZaryaBarrier
 
 rule "CC COOLDOWN FROM DOWNFALLEN/BRUTE":
     @Event eachPlayer
@@ -60,51 +59,6 @@ rule "TRACER INVIS WHILE RECALLING":
     eventPlayer.invisibilityCount++
     waitUntil(not eventPlayer.isUsingAbility2(), Math.INFINITY)
     eventPlayer.invisibilityCount--
-
-
-# Explosion recipient set immediately before the synchronous call.
-#!define zaryaBarrierExplosionTarget tmp0
-
-
-rule "ZARYA COMBUSTA-BUBBLE: PARTICLE BARRIER":
-    @Event eachPlayer
-    @Team 1
-    @Hero zarya
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.isUsingAbility1() == true
-    @Condition eventPlayer.hasStatus(Status.INVINCIBLE) == true
-
-    waitUntil(not eventPlayer.hasStatus(Status.INVINCIBLE), 2.25)
-    zaryaBarrierExplosionTarget = eventPlayer
-    detonateZaryaBarrier()
-
-
-rule "ZARYA COMBUSTA-BUBBLE: PROJECTED BARRIER":
-    @Event eachPlayer
-    @Team 1
-    @Hero zarya
-    @Condition isGameplayActive == true
-    @Condition eventPlayer.isUsingAbility2() == true
-
-    # Let the native cast apply Invincible, then pick the protected ally closest to the crosshair.
-    wait(0.025)
-    eventPlayer.zaryaProjectedBarrierTarget = sorted(
-        getPlayersInRadius(eventPlayer, 30, Team.1, LosCheck.SURFACES).filter(lambda ally: ally != eventPlayer and ally.isAlive() and ally.hasStatus(Status.INVINCIBLE) and eventPlayer.isInViewAngle(ally.getEyePosition(), 103)),
-        lambda ally: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), ally.getEyePosition()))
-    )[0]
-    if not eventPlayer.zaryaProjectedBarrierTarget:
-        return
-    waitUntil(not eventPlayer.zaryaProjectedBarrierTarget.hasStatus(Status.INVINCIBLE), 2.25)
-    zaryaBarrierExplosionTarget = eventPlayer.zaryaProjectedBarrierTarget
-    eventPlayer.zaryaProjectedBarrierTarget = null
-    detonateZaryaBarrier()
-
-
-def detonateZaryaBarrier():
-    @Name "detonateZaryaBarrier"
-    if not entityExists(zaryaBarrierExplosionTarget):
-        return
-    damage(getPlayersInRadius(zaryaBarrierExplosionTarget, 6, Team.2, LosCheck.SURFACES), zaryaBarrierExplosionTarget, 100)
 
 
 def applyDamageDealtModifier():

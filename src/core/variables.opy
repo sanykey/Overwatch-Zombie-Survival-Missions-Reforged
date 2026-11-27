@@ -660,13 +660,11 @@ playervar actorTeamSlot20  # Team 2: botCustomTeleportPosition; Team 1: powerUpA
 # Ground center of the active air-strike area.
 #!define powerUpAirStrikePosition actorTeamSlot20
 
-playervar actorTeamSlot21  # Team 2: botLastTarget; Team 1: objective vote in pregame or Zarya's Projected Barrier target in gameplay.
+playervar actorTeamSlot21  # Team 2: botLastTarget; Team 1: pregame objective vote. Pregame readers/writers end before gameplay.
 # Last visible/attacking target retained when zombie line of sight is lost.
 #!define botLastTarget actorTeamSlot21
 # Human objective vote during pregame only; distinct from the selected global objective mode.
 #!define pregameObjectiveVote actorTeamSlot21
-# Zarya owns this reference from target resolution until Projected Barrier ends.
-#!define zaryaProjectedBarrierTarget actorTeamSlot21
 
 playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state on Team 1.
 # Boss Behemoth active gas-cloud positions.
