@@ -688,7 +688,6 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 # charge spending and persistent balance; never write it on an enemy target.
 #!define enhancementCapacitorEnergy actorTeamSlot22
 # Bolt Strike: absolute cooldown deadline, retained across deaths and hero switches.
-# START GAME clears this slot through the existing enhancementScrap sweep.
 #!define enhancementBoltReadyAt actorTeamSlot22
 # Auspex: absolute cooldown deadline with the same lifetime as Bolt Strike.
 #!define enhancementAuspexReadyAt actorTeamSlot22
@@ -700,7 +699,7 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 #!define enhancementPupColor actorTeamSlot22
 # Engineer: scrap balance up to ENGINEER_SCRAP_MAX, earned from nearby zombie deaths and the income
 # rule, spent on armor grants and turret deployment. Survives death and hero
-# switches; reset to 0 by START GAME, never per spawn.
+# switches, and starts each match at Workshop's default zero.
 #!define enhancementScrap actorTeamSlot22
 
 playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateSlot2. Receivers, not rule teams, own the storage.

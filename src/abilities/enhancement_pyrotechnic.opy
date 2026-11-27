@@ -15,8 +15,10 @@ macro applyPyrotechnicHitMacro(hitTarget):
 rule "PYROTECHNIC APPLIES DAMAGE":
     @Event eachPlayer
     @Team 1
-    @Condition eventPlayer.enhancementId == Enhancement.PYROTECHNIC
-    @Condition eventPlayer.enhancementPyroHitList != []
+    # Keep the phase and enhancement ID in one Workshop Condition.
+    @Condition uiPhaseAndId(eventPlayer.enhancementId == Enhancement.PYROTECHNIC)
+    # The slot can still be unset before the player's enhancement initializes.
+    @Condition eventPlayer.enhancementPyroHitList != false
 
     #!define pyroBurnTarget tmp0
     #!define pyroBurnDamagePerSecond tmp1

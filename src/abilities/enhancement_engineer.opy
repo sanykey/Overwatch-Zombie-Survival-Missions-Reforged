@@ -126,8 +126,7 @@ rule "ENGINEER SCRAP ARMOR DEPLETION":
 
 
 macro initializeEngineerMacro():
-    # Scrap storage stays untouched here: it starts at zero, survives
-    # death and hero switches, and is swept per match by START GAME.
+    # Scrap starts at Workshop's default zero and survives death and hero switches.
     # Only beam state is re-cleaned; death cleanup already destroyed it.
     eventPlayer.enhancementScrapBeamEntity = null
     eventPlayer.enhancementScrapBeamTarget = null

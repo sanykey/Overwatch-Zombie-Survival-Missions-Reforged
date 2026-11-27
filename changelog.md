@@ -33,8 +33,3 @@
 - **Nerf** — Jetpack Cat cannot use Frenetic Flight while holding a zombie with Wrestler.
 - **Nerf** — Grapnel Launcher direct hits now deal 75 damage, down from 100.
 - **Nerf** — Laser Barricade now knocks down large bosses for at most 1 second per contact.
-
-### Optimizations
-
-- Optimized Auspex Scan code.
-- Reduced Workshop element count for Grapnel Launcher.
