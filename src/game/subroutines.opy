@@ -983,8 +983,9 @@ def selectPullAimTarget():
     # Indexed by PullAimMode; one small array per input avoids nested range branches.
     pullAimRange = [AUGMENT_GRAPNEL_RANGE, WRESTLER_PULL_RANGE, WRESTLER_RANGE, AUGMENT_GRAPNEL_RANGE][pullAimMode]
     # One owner center for the Grapnel minimum range and the final range and LoS.
+    # The positive Grapnel minimum range also excludes the owner as a target.
     pullAimOrigin = augmentGrapnelCenter(eventPlayer)
-    pullAimCandidates = getPlayersInRadius(eventPlayer.getEyePosition(), pullAimRange + 2, Team.2 if pullAimMode != PullAimMode.GRAPNEL else Team.ALL, LosCheck.SURFACES).filter(lambda target: target.isAlive() and (target.getTeam() == Team.1 or not target.botIsTeleporting) and (target.isDummy() and not target.botIsInitializing and not target.botIsAttached if pullAimMode != PullAimMode.GRAPNEL else target != eventPlayer and distance(pullAimOrigin, augmentGrapnelCenter(target)) >= AUGMENT_GRAPNEL_MIN_RANGE) and eventPlayer.isInViewAngle(augmentGrapnelCenter(target), WRESTLER_GRAB_ANGLE if pullAimMode == PullAimMode.WRESTLER_GRAB else 35))
+    pullAimCandidates = getPlayersInRadius(eventPlayer.getEyePosition(), pullAimRange + 2, Team.2 if pullAimMode != PullAimMode.GRAPNEL else Team.ALL, LosCheck.SURFACES).filter(lambda target: target.isAlive() and (target.getTeam() == Team.1 or not target.botIsTeleporting) and (target.isDummy() and not target.botIsInitializing and not target.botIsAttached if pullAimMode != PullAimMode.GRAPNEL else distance(pullAimOrigin, augmentGrapnelCenter(target)) >= AUGMENT_GRAPNEL_MIN_RANGE) and eventPlayer.isInViewAngle(augmentGrapnelCenter(target), WRESTLER_GRAB_ANGLE if pullAimMode == PullAimMode.WRESTLER_GRAB else 35))
     if pullAimMode == PullAimMode.WRESTLER_GRAB:
         # Filter before aim sorting so an ineligible bot cannot hide a valid one.
         # Preserve both live CC and the bot tracker's up-to-0.125s exit grace.

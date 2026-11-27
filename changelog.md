@@ -6,6 +6,7 @@
 
 - Ammo Pack now also refills the magazine when the player activates their Ultimate.
 - Hitchhiker moves to the Augment slot and can be paired with any Enhancement. Press Crouch + Jump to attach to a nearby ally or detach.
+- Reaching an ally or zombie with Grapnel Launcher sends out a wave that knocks back nearby zombies and deals 30 damage to each. Wave hits can trigger on-hit Enhancements.
 
 ### Fixes
 
@@ -19,6 +20,7 @@
 
 - Jetpack Cat cannot use Frenetic Flight while holding a zombie with Wrestler.
 - Grapnel Launcher's cooldown is now 12 seconds, down from 14.
+- Grapnel Launcher direct hits now deal 75 damage, down from 100.
 - Laser Barricade now knocks down large bosses for at most 1 second per contact.
 - Bulking Season now loses 40% of its stacks on death, down from 50%. Remaining stacks are rounded down.
 - Bulking Season now grants +0.75% max health per stack, up from +0.5%, and caps the bonus at +150%, up from +100%.
@@ -30,3 +32,4 @@
 ### Optimizations
 
 - Optimized Auspex Scan code.
+- Reduced Workshop element count for Grapnel Launcher.
