@@ -99,9 +99,9 @@ macro initializePlayerAugment():
         # Use IDs so the log needs no additional table or phase-owned state.
         logToInspector(f"[loadout] {eventPlayer}: enhancement={eventPlayer.enhancementId} / {AUGMENT_NAMES[eventPlayer.augmentId]}")
     if eventPlayer.augmentId == Augment.SCAVENGER:
-        eventPlayer.augmentScavengerBackpack = []
+        initializeScavengerAugment()
     if eventPlayer.augmentId == Augment.DASH:
-        eventPlayer.augmentDashCharges = DASH_MAX_CHARGES
+        initializeDashAugment()
     if eventPlayer.augmentId == Augment.LASER_BARRICADE:
         initializeLaserBarricadeAugmentMacro()
     # HUD lives in AUGMENT HUD (PERMANENT TABLE).
@@ -109,12 +109,9 @@ macro initializePlayerAugment():
         # Share the native-health readiness gate; keep both pools recoverable.
         waitUntil(eventPlayer.initialMaxHealth > 0, Math.INFINITY)
         if eventPlayer.augmentId == Augment.KEVLAR:
-            # Reapply on each life. Dash is a different augment, so its temporary
-            # knockback immunity and cleanup never overwrite a Kevlar player's resist.
-            eventPlayer.setKnockbackReceived(100 - AUGMENT_KEVLAR_KNOCKBACK_RESIST)
-            eventPlayer.addHealthPool(Health.ARMOR, AUGMENT_KEVLAR_ARMOR, true, false)
+            initializeKevlarAugment()
         else:
-            eventPlayer.addHealthPool(Health.NORMAL, SURVIVALIST_BONUS_HP, true, false)
+            initializeSurvivalistAugment()
 
 
 rule "PLAYER ENHANCEMENT AND AUGMENT INITIALIZATION":

@@ -207,8 +207,8 @@ Event/Team/Hero остаются прежними. Native event запускае
 | enhancement_engineer.opy | `ENGINEER TURRET DEPLOY` | Пара phase/ID |
 | [augments.opy](../src/abilities/augments.opy) | `DOUBLE TAP JUMP (DASH / HIGHRISE)` | Пара phase/ID |
 | [augment_dash.opy](../src/abilities/augment_dash.opy) | `[DASH] CHARGE RECHARGE` | Пара phase/ID |
-| augments.opy | `AMMO PACK MAGAZINES` | Пара phase/ID |
-| augments.opy | `AMMO PACK REFILL FALLBACK` | Пара phase/ID |
+| [augment_ammo_pack.opy](../src/abilities/augment_ammo_pack.opy#L3) | `AMMO PACK MAGAZINES` | Пара phase/ID |
+| [augment_ammo_pack.opy](../src/abilities/augment_ammo_pack.opy#L46) | `AMMO PACK REFILL FALLBACK` | Пара phase/ID |
 | [hero_tuning.opy](../src/abilities/hero_tuning.opy) | `REINHARDT SHIELD SLAM STUN` | Event guard |
 | hero_tuning.opy | `CASSIDY FLASHBANG STUN` | Event guard |
 | enhancements.opy | `ENHANCEMENT ATTACK BEAM DISCONNECT CLEANUP` | Event guard |

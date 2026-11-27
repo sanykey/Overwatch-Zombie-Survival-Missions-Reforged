@@ -19,26 +19,13 @@ macro collectNearbyZombieLoot():
     #!define zombieLootCollectors tmp0
     #!define zombieLootCollector tmp1
     #!define zombieLootCollectorIndex tmp2
-    #!define scavengerLootItemId tmp3
     zombieLootCollectors = getLivingPlayers(Team.1).filter(lambda player: (player.enhancementId == Enhancement.ENGINEER or player.augmentId == Augment.SCAVENGER) and distance(player, victim) < ENGINEER_COLLECTION_RANGE)
     for zombieLootCollectorIndex in range(len(zombieLootCollectors)):
         zombieLootCollector = zombieLootCollectors[zombieLootCollectorIndex]
         if zombieLootCollector.enhancementId == Enhancement.ENGINEER:
             zombieLootCollector.enhancementScrap = min(ENGINEER_SCRAP_MAX, zombieLootCollector.enhancementScrap + ENGINEER_COLLECTION_REWARD)
         # Enhancement and augment can coexist: an Engineer/Scavenger gets both.
-        if zombieLootCollector.augmentId == Augment.SCAVENGER:
-            if random.randint(1, 100) <= SCAVENGER_LOOT_CHANCE:
-                scavengerLootItemId = random.randint(PowerUpItem.CURE, PowerUpItem.STUN)
-                # An empty active slot takes the loot; reserves never activate here.
-                if zombieLootCollector.powerUpItemId == PowerUpItem.NONE:
-                    zombieLootCollector.powerUpItemId = scavengerLootItemId
-                    smallMessage(zombieLootCollector, "Scavenger: powerup equipped")
-                elif len(zombieLootCollector.augmentScavengerBackpack) < SCAVENGER_BACKPACK_CAPACITY:
-                    zombieLootCollector.augmentScavengerBackpack.append(scavengerLootItemId)
-                    smallMessage(zombieLootCollector, "Scavenger: powerup added to backpack")
-                else:
-                    supplyPowerUpIdList.append(scavengerLootItemId)
-                    supplyPowerUpPositionList.append(nearestWalkablePosition(victim.getPosition()) + offsetUpQuarterConst)
+        collectScavengerLoot(zombieLootCollector)
 
 
 macro botTeleportCenterMacro():
@@ -159,8 +146,7 @@ rule "BOT DIES":
     # Environmental deaths do not grant normal damage-event lifesteal.
     # Heal the credited survivor before any death-handler waits.
     if eventWasEnvironment and attacker.getTeam() == Team.1:
-        if attacker.augmentId == Augment.SURVIVALIST:
-            heal(attacker, attacker, eventDamage * (SURVIVALIST_LIFESTEAL_PCT / 100))
+        applySurvivalistLifesteal(attacker, eventDamage)
     # Engineer/Scavenger collection: synchronous, before any death-handler waits.
     collectNearbyZombieLoot()
 

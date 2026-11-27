@@ -46,11 +46,11 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
 
     # Snapshot the Scavenger chord for the synchronous pickup and backpack branches.
     #!define isScavengerCrouchHeld tmp3
-    isScavengerCrouchHeld = eventPlayer.augmentId == Augment.SCAVENGER and eventPlayer.isHoldingButton(Button.CROUCH)
+    isScavengerCrouchHeld = scavengerCrouchHeld()
     if canOpenSupplyDrop():
         openSupplyDrop()
 
-    elif aimedPowerUpPositions != [] and not (isScavengerCrouchHeld and len(eventPlayer.augmentScavengerBackpack) >= SCAVENGER_BACKPACK_CAPACITY):
+    elif aimedPowerUpPositions != [] and not (isScavengerCrouchHeld and scavengerBackpackFull()):
         # Commit pickup and all four aligned ground lists without waits: another
         # player's pickup or a Reload drop must never observe a half-finished trade.
         # Synchronous scratch; the removal subroutine only reads the shared index.
@@ -60,7 +60,7 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
         groundPowerUpRemovalIndex = supplyPowerUpPositionList.index(pickedPowerUpPosition)
         tradedPowerUpItemId = eventPlayer.powerUpItemId
         if isScavengerCrouchHeld:
-            eventPlayer.augmentScavengerBackpack.append(supplyPowerUpIdList[groundPowerUpRemovalIndex])
+            stashScavengerPowerUp(supplyPowerUpIdList[groundPowerUpRemovalIndex])
             tradedPowerUpItemId = PowerUpItem.NONE
         else:
             eventPlayer.powerUpItemId = supplyPowerUpIdList[groundPowerUpRemovalIndex]
@@ -69,20 +69,8 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
             supplyPowerUpIdList.append(tradedPowerUpItemId)
             supplyPowerUpPositionList.append(pickedPowerUpPosition)
 
-    # Scavenger backpack cycling: Crouch + Interact with nothing to store swaps
-    # the first reserve with the active slot; an empty backpack stows the active
-    # item, an empty slot pulls the first reserve. Reuses the aimed-items scratch.
-    #!define scavCycleItemId tmp0
     elif isScavengerCrouchHeld:
-        scavCycleItemId = eventPlayer.powerUpItemId
-        if len(eventPlayer.augmentScavengerBackpack) > 0:
-            eventPlayer.powerUpItemId = eventPlayer.augmentScavengerBackpack[0]
-            del eventPlayer.augmentScavengerBackpack[0]
-            if scavCycleItemId != PowerUpItem.NONE:
-                eventPlayer.augmentScavengerBackpack.append(scavCycleItemId)
-        elif scavCycleItemId != PowerUpItem.NONE:
-            eventPlayer.augmentScavengerBackpack.append(scavCycleItemId)
-            eventPlayer.powerUpItemId = PowerUpItem.NONE
+        cycleScavengerBackpack()
 
     elif eventPlayer.powerUpItemId:
         # Any Crouch during the hold cancels use, regardless of abilities. Ending
@@ -292,9 +280,7 @@ def dropCarriedPowerUps():
     #!define droppedPowerUpIds tmp0
     #!define droppedPowerUpPosition tmp1
     droppedPowerUpIds = [eventPlayer.powerUpItemId] if eventPlayer.powerUpItemId != PowerUpItem.NONE else []
-    if eventPlayer.augmentId == Augment.SCAVENGER:
-        droppedPowerUpIds = droppedPowerUpIds.concat(eventPlayer.augmentScavengerBackpack)
-        eventPlayer.augmentScavengerBackpack = []
+    appendDroppedScavengerPowerUps(droppedPowerUpIds)
     droppedPowerUpPosition = eventPlayer.getPosition() + offsetUpQuarterConst if eventPlayer.isOnGround() else nearestWalkablePosition(eventPlayer.getPosition())
     supplyPowerUpIdList = supplyPowerUpIdList.concat(droppedPowerUpIds)
     # Spread the items so each can be aimed at independently.

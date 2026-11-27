@@ -22,7 +22,7 @@ def applyDamageReceivedModifier():
     # Modification, which multiplies on top and stays outside this recompute.
     # Synchronous tmp3 scratch. Dash activation retains its direction in tmp0.
     #!define isDashResistActive tmp3
-    isDashResistActive = eventPlayer.augmentId == Augment.DASH and eventPlayer.augmentDashSmokeEntity != null
+    isDashResistActive = dashProtectionActive()
     # Cache the DoT gate for the bite, rocket, Molten Core, gas and explosion rules.
     eventPlayer.isDotProtected = eventPlayer.isUsingUltimate() or isDashResistActive
     # After Dash is handled, isDotProtected reflects the ultimate state.
@@ -79,13 +79,7 @@ rule "PLAYER DIED":
     elif eventPlayer.enhancementId == Enhancement.ENGINEER and eventPlayer.enhancementScrapBeamEntity != null:
         clearEngineerBeamOnDeathMacro()
 
-    if eventPlayer.augmentId == Augment.DASH:
-        # A death inside the resist window must not carry the 0% damage intake
-        # or the knockback immunity into the next life before the deadline passes.
-        if eventPlayer.augmentDashSmokeEntity != null:
-            destroyEffect(eventPlayer.augmentDashSmokeEntity)
-            eventPlayer.augmentDashSmokeEntity = null
-            eventPlayer.setKnockbackReceived(100)
+    clearDashProtectionOnDeath()
     # Death ends the ultimate resist with the ultimate itself, and Super Nano
     # cleans up on its own thread (~1.25s, always before any respawn), so the
     # recompute restores the normal intake for the next life.
@@ -110,12 +104,8 @@ rule "PLAYER DEALT DAMAGE":
     @Condition victim != attacker
     @Condition eventDamage > 0
 
-    # Augments: Leech includes damage from the hero, primary enhancement and
-    # scripted powerups. The HIGHRISE airborne bonus is a Set Damage Dealt
-    # multiplier, so it stacks with every source already applied above.
-    if eventPlayer.augmentId == Augment.SURVIVALIST:
-        # Include damage from the hero, primary enhancement and scripted powerups.
-        heal(eventPlayer, eventPlayer, eventDamage * (SURVIVALIST_LIFESTEAL_PCT / 100))
+    # Include damage from the hero, primary enhancement and scripted powerups.
+    applySurvivalistLifesteal(eventPlayer, eventDamage)
 
     if victim.botAuspexExpiry > getTotalTimeElapsed() and eventPlayer != victim.botAuspexOwner and entityExists(victim.botAuspexOwner):
         # Credit this hit before Brain Killer's extra damage can kill the victim.

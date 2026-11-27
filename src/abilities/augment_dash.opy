@@ -81,3 +81,21 @@ rule "[DASH] SMOKE FADE":
     applyDamageReceivedModifier()
     # Dash and Kevlar are mutually exclusive; Dash restores normal knockback.
     eventPlayer.setKnockbackReceived(100)
+
+
+macro initializeDashAugment():
+    eventPlayer.augmentDashCharges = DASH_MAX_CHARGES
+
+
+macro dashProtectionActive():
+    eventPlayer.augmentId == Augment.DASH and eventPlayer.augmentDashSmokeEntity != null
+
+
+macro clearDashProtectionOnDeath():
+    if eventPlayer.augmentId == Augment.DASH:
+        # A death inside the resist window must not carry the 0% damage intake
+        # or the knockback immunity into the next life before the deadline passes.
+        if eventPlayer.augmentDashSmokeEntity != null:
+            destroyEffect(eventPlayer.augmentDashSmokeEntity)
+            eventPlayer.augmentDashSmokeEntity = null
+            eventPlayer.setKnockbackReceived(100)

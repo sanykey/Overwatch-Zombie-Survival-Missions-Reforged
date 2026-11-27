@@ -3,6 +3,10 @@
 # Owned rules and inline fragments; shared storage contracts stay in variables.opy.
 
 
+macro canPlaceLaserBarricade():
+    eventPlayer.augmentId == Augment.LASER_BARRICADE and eventPlayer.augmentBarrierPlacementCooldown == 0
+
+
 macro placeLaserBarricadeAugmentMacro():
     # -1 latches aiming until Interact release or death.
     # After entry, placement and cooldown ignore the common input conditions.
