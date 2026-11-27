@@ -39,7 +39,7 @@ rule "[debug] Resource usage and server load":
     wait(0.5)
     if DEBUG_ENABLE_INSPECTOR:
         logToInspector(f"[server load HUD] init (pregame={isPregameSetup}, gameplay={isGameplayActive})")
-    hudSubheader(getAllPlayers().filter(lambda player: not player.isDummy() and "{0}".format(player) == "snky"), "Texts: {0}/128 | Effects: {1}/256\nServer load: {2}{3}".format(getNumberOfTextIds(), getNumberOfEntityIds(), "{0} | Avg (2s): {1} | Peak (2s): {2}".format(getServerLoad(), getAverageServerLoad(), getPeakServerLoad()), f"\nMap: {__getCurrentMap__()}\nMap grid: {len(mapGridList)}/900"), HudPosition.RIGHT, -10, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudSubheader(getAllPlayers().filter(lambda player: not player.isDummy() and "{0}".format(player) == "snky"), "Texts: {0}/128 | Effects: {1}/256\nServer load: {2}{3}".format(getNumberOfTextIds(), getNumberOfEntityIds(), "{0} | Avg (2s): {1} | Peak (2s): {2}".format(getServerLoad(), getAverageServerLoad(), getPeakServerLoad()), f"\nMap: {__getCurrentMap__()} ({getCurrentGamemode()})\nMap grid: {len(mapGridList)}/900"), HudPosition.RIGHT, -10, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
     debugHud = getLastCreatedText()
     # evalOnce captures the phase at HUD creation; the other operands keep updating.
     waitUntil(isPregameSetup != evalOnce(isPregameSetup) or isGameplayActive != evalOnce(isGameplayActive), Math.INFINITY)
@@ -50,7 +50,7 @@ rule "[debug] Resource usage and server load":
 rule "[debug] init":
     @Condition DEBUG_ENABLE_INSPECTOR
     # The post-compile hook replaces these markers in the exported string.
-    logToInspector(f"Map: {__getCurrentMap__()}\nVersion: {VERSION} ({BUILD_DATE()})\nBuild: __ZSM_BUILD_HASH__\nElements: __ZSM_BUILD_ELEMENTS__")
+    logToInspector(f"Map: {__getCurrentMap__()} ({getCurrentGamemode()})\nVersion: {VERSION} ({BUILD_DATE()})\nBuild: __ZSM_BUILD_HASH__\nElements: __ZSM_BUILD_ELEMENTS__")
 
 
 rule "[debug] Log match completion":
