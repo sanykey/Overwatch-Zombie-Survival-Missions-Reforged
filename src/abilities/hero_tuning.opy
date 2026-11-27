@@ -102,10 +102,8 @@ rule "ZARYA COMBUSTA-BUBBLE: PROJECTED BARRIER":
 
 def detonateZaryaBarrier():
     @Name "detonateZaryaBarrier"
-    if not isGameplayActive or not entityExists(zaryaBarrierExplosionTarget):
+    if not entityExists(zaryaBarrierExplosionTarget):
         return
-    playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.ORANGE, zaryaBarrierExplosionTarget.getEyePosition(), 6)
-    playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, Color.ORANGE, zaryaBarrierExplosionTarget, 120)
     damage(getPlayersInRadius(zaryaBarrierExplosionTarget, 6, Team.2, LosCheck.SURFACES), zaryaBarrierExplosionTarget, 100)
 
 
