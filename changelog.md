@@ -17,6 +17,7 @@
 - Beacon of Healing now uses a yellow smoke aura on the player, matching the size of Super Nano and Dash, because the previous effect obscured players' view.
 - If No Cooldowns is already active at ultimate start, Charge Battery refreshes it to 8 seconds when less time remains.
 - The third-person camera temporarily gives way to the native view during emotes and the ultimates of Bastion, Junkrat, and Doomfist.
+- Laser Barricade counts only the HP it loses on contact toward knockdown. A zombie needs to remove at least 4,900 HP to be knocked down.
 
 ### Balance
 

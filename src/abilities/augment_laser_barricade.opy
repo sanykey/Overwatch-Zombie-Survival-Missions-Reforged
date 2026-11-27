@@ -98,9 +98,9 @@ macro pushLaserBarricadeContacts():
         #!define barrierCollisionTarget tmp2
         barrierCollisionTarget = eventPlayer.augmentBarrierTargetList[barrierCollisionTargetIndex]
         if not barrierCollisionTarget.hasStatus(Status.ROOTED):
-            # Reuse the contact damage for the wall debit and knockdown before tmp3 becomes the impulse angle.
+            # Cap contact damage at the wall's remaining HP. Reuse it for the debit and knockdown.
             #!define barrierContactDamage tmp3
-            barrierContactDamage = barrierCollisionTarget.getMaxHealth() * LASER_BARRICADE_CONTACT_DAMAGE_MULTIPLIER
+            barrierContactDamage = min(eventPlayer.augmentBarrierHealth, barrierCollisionTarget.getMaxHealth() * LASER_BARRICADE_CONTACT_DAMAGE_MULTIPLIER)
             eventPlayer.augmentBarrierHealth -= barrierContactDamage
             barrierCollisionTarget.setStatusEffect(eventPlayer, Status.ROOTED, 0.5)
             # Each full threshold adds 1s of knockdown, capped at 1s for large bosses.
