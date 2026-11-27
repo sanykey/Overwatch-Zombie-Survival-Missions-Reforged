@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 3.0 - 2026-11-28
+
 ### New
 
 - Ammo Pack now also refills the magazine when the player activates their Ultimate.

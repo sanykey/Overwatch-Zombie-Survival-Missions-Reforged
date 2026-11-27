@@ -1,6 +1,6 @@
 #!mainFile "../main.opy"
 
-#!define VERSION "2.0"
+#!define VERSION "3.0"
 
 #!define DEBUG_ENABLE_INSPECTOR false
 #!define SERVER_LOAD_UI false
