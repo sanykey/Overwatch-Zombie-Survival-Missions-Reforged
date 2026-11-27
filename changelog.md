@@ -9,6 +9,7 @@
 - Reaching an ally or zombie with Grapnel Launcher sends out a wave that knocks back nearby zombies and deals 30 damage to each. Wave hits can trigger on-hit Enhancements.
 - Telekinesis pushes zombies in a 20-meter cone around the crosshair. Each hit deals 35 damage and pushes forward with the same strength at any range. The push plays the Grapnel Launcher wave sound and has a 14-second cooldown, down from 15.
 - Throwing a zombie with Wrestler now pushes other zombies within 10 meters and up to 90° off the crosshair, dealing 35 damage to each.
+- Combusta-Bubble makes Zarya's Particle Barrier and Projected Barrier explode when broken or expired, dealing 100 damage to zombies within 6 meters.
 
 ### Fixes
 
