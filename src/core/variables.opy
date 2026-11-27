@@ -693,7 +693,7 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 #!define enhancementBoltReadyAt actorTeamSlot22
 # Auspex: absolute cooldown deadline with the same lifetime as Bolt Strike.
 #!define enhancementAuspexReadyAt actorTeamSlot22
-# Born to Battle unspent ability resets (0-2); retained through ability waits and reevaluated by its HUD.
+# Born to Battle unspent ability resets (0-2, including partial progress); retained through ability waits and reevaluated by its HUD.
 #!define enhancementBattleResetCharges actorTeamSlot22
 # Placed Charge Battery position; zero clears it.
 #!define enhancementBatteryPosition actorTeamSlot22

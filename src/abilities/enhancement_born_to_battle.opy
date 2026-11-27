@@ -1,11 +1,16 @@
 #!mainFile "../../main.opy"
 
 
+macro spendBornToBattleReset():
+    # Only a full reserve leaves one reset after spending.
+    eventPlayer.enhancementBattleResetCharges = floor(eventPlayer.enhancementBattleResetCharges / BORN_TO_BATTLE_MAX_RESETS)
+
+
 rule "BORN TO BATTLE PLAYER USES ABILITY CHARGE":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.enhancementId == Enhancement.BORN_TO_BATTLE
-    @Condition eventPlayer.enhancementBattleResetCharges > 0
+    @Condition eventPlayer.enhancementBattleResetCharges >= 1
     @Condition [Button.SECONDARY_FIRE, Button.ABILITY_1, Button.ABILITY_2, Button.CROUCH, Button.JUMP].any(lambda x: eventPlayer.isHoldingButton(x)) == true
 
     # Retain button priority and fall back to the previous choice if all buttons were released.
@@ -30,29 +35,28 @@ rule "BORN TO BATTLE PLAYER USES ABILITY CHARGE":
         goto lbl_0
     eventPlayer.setAbilityCharge(eventPlayer.enhancementBattleAbilityButton, eventPlayer.getAbilityCharge(eventPlayer.enhancementBattleAbilityButton) + 1)
     lbl_0:
-    #If the ability charge increased
-    if eventPlayer.getAbilityCharge(eventPlayer.enhancementBattleAbilityButton):
-        eventPlayer.enhancementBattleResetCharges -= 1
-    #Else if ability is on cooldown
-    elif eventPlayer.getAbilityCooldown(eventPlayer.enhancementBattleAbilityButton) > 0.5:
+    if not eventPlayer.getAbilityCharge(eventPlayer.enhancementBattleAbilityButton):
+        if eventPlayer.getAbilityCooldown(eventPlayer.enhancementBattleAbilityButton) <= 0.5:
+            return
         eventPlayer.setAbilityCooldown(eventPlayer.enhancementBattleAbilityButton, 0)
-        eventPlayer.enhancementBattleResetCharges -= 1
+    spendBornToBattleReset()
 
 
 def resetBattleAbilityCharge():
     @Name "resetBattleAbilityCharge"
 
     eventPlayer.setAbilityCharge(eventPlayer.enhancementBattleAbilityButton, 1)
-    eventPlayer.enhancementBattleResetCharges -= 1
+    spendBornToBattleReset()
 
 
 macro initializeBornToBattleMacro():
     #Enhancement: Born to Battle
-    # enhancementBattleResetCharges: 0-2 earned ability resets; final blows add one and each reset consumes one.
     # enhancementBattleAbilityButton: selected ability button, retained through waits to reset its charge or cooldown.
     eventPlayer.enhancementBattleResetCharges = 0
 
 
 macro creditBornToBattleFinalBlowMacro():
-    if eventPlayer.enhancementBattleResetCharges < BORN_TO_BATTLE_MAX_RESETS:
-        eventPlayer.enhancementBattleResetCharges += 1
+    eventPlayer.enhancementBattleResetCharges = (
+        1 if eventPlayer.enhancementBattleResetCharges < 1 else
+        min(BORN_TO_BATTLE_MAX_RESETS, eventPlayer.enhancementBattleResetCharges + BORN_TO_BATTLE_SECOND_RESET_PER_FINAL_BLOW)
+    )

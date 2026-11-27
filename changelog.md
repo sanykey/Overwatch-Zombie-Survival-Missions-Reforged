@@ -19,16 +19,17 @@
 
 ### Balance
 
-- Jetpack Cat cannot use Frenetic Flight while holding a zombie with Wrestler.
-- Grapnel Launcher's cooldown is now 12 seconds, down from 14.
-- Grapnel Launcher direct hits now deal 75 damage, down from 100.
-- Laser Barricade now knocks down large bosses for at most 1 second per contact.
-- Bulking Season now loses 40% of its stacks on death, down from 50%. Remaining stacks are rounded down.
-- Bulking Season now grants +0.75% max health per stack, up from +0.5%, and caps the bonus at +150%, up from +100%.
-- Engineer gains 4% ultimate charge each time they give armor to an ally.
-- Auspex Scan now increases damage taken by minibosses by 40%, up from 20%.
-- Charge Battery now grants 8 seconds of No Cooldowns at ultimate start, up from 7.
-- Overcharge now gains 1 energy per 2.7 HP healed, including health packs, down from 3 HP.
+- **Buff** — Grapnel Launcher's cooldown is now 12 seconds, down from 14.
+- **Buff** — Bulking Season now loses 40% of its stacks on death, down from 50%. Remaining stacks are rounded down.
+- **Buff** — Bulking Season now grants +0.75% max health per stack, up from +0.5%, and caps the bonus at +150%, up from +100%.
+- **Buff** — Engineer gains 4% ultimate charge each time they give armor to an ally.
+- **Buff** — Auspex Scan now increases damage taken by minibosses by 40%, up from 20%.
+- **Buff** — Charge Battery now grants 8 seconds of No Cooldowns at ultimate start, up from 7.
+- **Buff** — Overcharge now gains 1 energy per 2.7 HP healed, including health packs, down from 3 HP.
+- **Nerf** — Born to Battle grants the first ability reset on a final blow. Earn the second with three more final blows before spending the first. Spending a reset clears any partial progress toward the second.
+- **Nerf** — Jetpack Cat cannot use Frenetic Flight while holding a zombie with Wrestler.
+- **Nerf** — Grapnel Launcher direct hits now deal 75 damage, down from 100.
+- **Nerf** — Laser Barricade now knocks down large bosses for at most 1 second per contact.
 
 ### Optimizations
 
