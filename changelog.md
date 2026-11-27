@@ -17,6 +17,7 @@
 
 ### Balance
 
+- Jetpack Cat cannot use Frenetic Flight while holding a zombie with Wrestler.
 - Grapnel Launcher's cooldown is now 12 seconds, down from 14.
 - Laser Barricade now knocks down large bosses for at most 1 second per contact.
 - Bulking Season now loses 40% of its stacks on death, down from 50%. Remaining stacks are rounded down.

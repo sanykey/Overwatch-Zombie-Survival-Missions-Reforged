@@ -1,5 +1,5 @@
 #!mainFile "../../main.opy"
-subroutine useLivingProjectile
+subroutine useWrestlerGrabOrThrow
 
 subroutine playAquaPowerUpSound
 
@@ -37,7 +37,7 @@ rule "PLAYER INTERACT (1: OPEN SUPPLY DROP, 2: PICK UP POWER UP, 3: USE POWER UP
 
     # Zombie and item interactions may share the same press.
     if eventPlayer.enhancementId == Enhancement.WRESTLER:
-        useLivingProjectile()
+        useWrestlerGrabOrThrow()
 
     # Query aimed items only on interaction; reuse this scratch slot for the chosen
     # position below after sorting. No reader retains the candidate array across waits.

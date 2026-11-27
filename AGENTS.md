@@ -30,7 +30,7 @@ Everything in `analysis/` (reports, temporary scripts, validation results) belon
 - Compiled global and player variable names must not exceed 31 characters; the Workshop rejects longer names at import with "variable is too long" (a 37-character name fails, 31-character names import fine; 32 is often cited but unverified). `#!define` macro aliases are not compiled and are exempt. When a declaration would exceed the limit, shorten the compiled name (e.g. abbreviate a middle word) and keep the descriptive alias in `src/core/variables.opy`.
 - When reusing variables, account for value lifetimes, which player owns each player variable, waits, asynchronous calls, `chase`, and HUD/effect reevaluation. Follow the contracts and comments in `src/core/variables.opy`; use meaningful `#!define` aliases for shared temporary slots and document their purpose near each use.
 
-- Check collection predicates in the generated Workshop before importing. Workshop can reject nested array predicates even when OverPy compiles them. For example, keep the `all()` inside `livingProjectileValid()` outside another array predicate such as `any()`.
+- Check collection predicates in the generated Workshop before importing. Workshop can reject nested array predicates even when OverPy compiles them. For example, keep the `all()` inside `isWrestlerCarryValid()` outside another array predicate such as `any()`.
 
 ## Hero Ability HUD Text
 
