@@ -365,6 +365,9 @@ playervar augmentState3
 # Team 2 Wrestler: throw damage credit retained across the 0.75s wait.
 # Pickup never writes this role; the inactive value is dead and needs no reset.
 #!define wrestlerThrowDamageCredit augmentState3
+# Synchronous cone push source. Telekinesis uses this otherwise free slot on
+# Team 1. On Team 2, Wrestler reads the retained throw credit from the same slot.
+#!define conePushSource augmentState3
 # Laser Barricade center; retained across waits and reevaluated by live effects.
 #!define augmentBarrierPosition augmentState3
 # HIGHRISE: damage bonus armed on activation, retained for the grace period

@@ -36,6 +36,8 @@ subroutine abilityPlacement
 subroutine createRemainingObjectivesHud
 subroutine selectPullAimTarget
 subroutine applyHitEnhancements
+subroutine playAugmentPushRing
+subroutine pushZombiesInAimCone
 subroutine useChargedUltimate
 
 
@@ -66,6 +68,37 @@ macro damageWithEnhancements(amount, target):
     # The pre-hit snapshot is dead; its slot now holds actual health removed.
     enhancementHitDamage -= enhancementHitVictim.getHealth()
     applyHitEnhancements()
+
+
+# Synchronous cone push. tmp0 is the range input, then the target snapshot.
+# tmp1 is the loop index; the hit handler may overwrite tmp2/tmp3.
+#!define conePushRange tmp0
+#!define conePushTargets tmp0
+#!define conePushTargetIndex tmp1
+#!define conePushTarget tmp3
+
+def pushZombiesInAimCone():
+    # Telekinesis excludes bosses and minibosses. Wrestler excludes the thrown zombie, which owns the rule.
+    conePushTargets = (
+        getPlayersInRadius(eventPlayer.conePushSource, conePushRange, Team.2, LosCheck.SURFACES)
+        .exclude(bossStateList.concat(miniBossList) if eventPlayer.conePushSource == eventPlayer else eventPlayer)
+        .filter(lambda zombie: zombie.isAlive() and not zombie.botIsTeleporting and not zombie.botIsAttached
+            and zombie.botKnockbackScale > 0 and eventPlayer.conePushSource.isInViewAngle(zombie.getEyePosition(), ZOMBIE_CONE_PUSH_ANGLE))
+    )
+    if eventPlayer.conePushSource == eventPlayer:
+        if conePushTargets == []:
+            return
+        eventPlayer.augmentMeleePushReadyAt = getTotalTimeElapsed() + TELEKINESIS_MELEE_PUSH_COOLDOWN
+        augmentPushRingCenter = augmentGrapnelCenter(eventPlayer)
+        playAugmentPushRing()
+    for conePushTargetIndex in range(len(conePushTargets)):
+        conePushTarget = conePushTargets[conePushTargetIndex]
+        conePushTarget.applyImpulse(directionFromAngles(eventPlayer.conePushSource.getHorizontalFacingAngle(), -15), ZOMBIE_CONE_PUSH_IMPULSE * conePushTarget.botKnockbackScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+        conePushTarget.setEnvironmentalKillCreditor(eventPlayer.conePushSource)
+        if eventPlayer.conePushSource == eventPlayer:
+            damageWithEnhancements(ZOMBIE_CONE_PUSH_DAMAGE, conePushTarget)
+        else:
+            damage(conePushTarget, eventPlayer.conePushSource, ZOMBIE_CONE_PUSH_DAMAGE)
 
 
 macro minibossMutationMacro():

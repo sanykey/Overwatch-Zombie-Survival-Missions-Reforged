@@ -1,7 +1,5 @@
 #!mainFile "../../main.opy"
 
-subroutine playAugmentPushRing
-
 def playAugmentPushRing():
     playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.RED, augmentPushRingCenter, AUGMENT_PUSH_EFFECT_RADIUS)
     playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.WHITE, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection(), 100)

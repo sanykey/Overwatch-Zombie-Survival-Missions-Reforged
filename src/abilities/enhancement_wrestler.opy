@@ -115,6 +115,9 @@ rule "WRESTLER GRAB RELEASE":
     if wrestlerShouldThrow:
         eventPlayer.applyImpulse(wrestlerCarrier.getFacingDirection(), WRESTLER_THROW_SPEED, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
         eventPlayer.wrestlerThrowDamageCredit = wrestlerCarrier
+        # The wave reads the retained carrier and reuses the release scratch before the wait.
+        conePushRange = WRESTLER_THROW_PUSH_RANGE
+        pushZombiesInAimCone()
         wait(WRESTLER_DAMAGE_DELAY, Wait.IGNORE_CONDITION)
         damage(eventPlayer, eventPlayer.wrestlerThrowDamageCredit, WRESTLER_THROW_DAMAGE)
         eventPlayer.clearStatusEffect(Status.KNOCKED_DOWN)
