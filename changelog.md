@@ -25,9 +25,11 @@
 - **Buff** — Zarya's Particle Barrier and Projected Barrier each recharge 2 seconds faster.
 - **Buff** — Grapnel Launcher's cooldown is now 12 seconds, down from 14.
 - **Buff** — Grapnel Launcher pulls the player 25% faster (50 m/s, up from 40 m/s).
+- **Buff** — Highrise now grants +75% damage, up from +55%, until landing or for up to 4 seconds, down from 5, plus the 0.1-second grace period.
 - **Buff** — Bulking Season now loses 40% of its stacks on death, down from 50%. Remaining stacks are rounded down.
 - **Buff** — Bulking Season now grants +0.75% max health per stack, up from +0.5%, and caps the bonus at +150%, up from +100%.
 - **Buff** — Engineer gains 4% ultimate charge each time they give armor to an ally.
+- **Buff** — Engineer can now hold up to 700 scrap, up from 500.
 - **Buff** — Zombie deaths now grant Engineer scrap and can trigger Scavenger powerups from up to 20 meters away, up from 15.
 - **Buff** — Auspex Scan now increases damage taken by minibosses by 40%, up from 20%.
 - **Buff** — Charge Battery now grants 8 seconds of No Cooldowns at ultimate start, up from 7.
