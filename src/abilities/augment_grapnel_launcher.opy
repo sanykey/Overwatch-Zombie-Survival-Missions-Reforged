@@ -83,7 +83,7 @@ macro useGrapnelLauncherMacro():
             grapnelExitUpSpeed = AUGMENT_GRAPNEL_JUMP_IMPULSE if eventPlayer.isHoldingButton(Button.JUMP) else 0
             goto grapnelCleanup
         # Synchronous scratch: correct current velocity to the desired velocity,
-        # rather than stacking 40-speed impulses every frame. Consumed before wait.
+        # with one corrective impulse per pull update. Consumed before wait.
         #!define augmentGrapnelVelocityDelta tmp0
         augmentGrapnelVelocityDelta = directionTowards(grapnelPullOrigin, grapnelPullAnchor) * AUGMENT_GRAPNEL_SPEED - eventPlayer.getVelocity()
         eventPlayer.applyImpulse(augmentGrapnelVelocityDelta, magnitude(augmentGrapnelVelocityDelta), Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)

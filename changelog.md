@@ -22,6 +22,7 @@
 ### Balance
 
 - **Buff** — Grapnel Launcher's cooldown is now 12 seconds, down from 14.
+- **Buff** — Grapnel Launcher pulls the player 25% faster (50 m/s, up from 40 m/s).
 - **Buff** — Bulking Season now loses 40% of its stacks on death, down from 50%. Remaining stacks are rounded down.
 - **Buff** — Bulking Season now grants +0.75% max health per stack, up from +0.5%, and caps the bonus at +150%, up from +100%.
 - **Buff** — Engineer gains 4% ultimate charge each time they give armor to an ally.
