@@ -200,15 +200,15 @@ Event/Team/Hero остаются прежними. Native event запускае
 
 | Файл | Правило | Приём |
 |---|---|---|
-| [enhancement_charge_battery.opy](../src/abilities/enhancement_charge_battery.opy) | `[CHARGE_BATTERY] NO COOLDOWNS ON ULTIMATE` | Пара phase/ID |
-| enhancement_charge_battery.opy | `[CHARGE_BATTERY] USAGE AND COOLDOWNS` | Пара phase/ID |
+| [player_events.opy](../src/abilities/player_events.opy) | `PLAYER STARTS ULTIMATE` | Фаза и ID Charge Battery или Ammo Pack |
+| [enhancement_charge_battery.opy](../src/abilities/enhancement_charge_battery.opy) | `[CHARGE_BATTERY] USAGE AND COOLDOWNS` | Пара phase/ID |
 | [enhancement_overcharge.opy](../src/abilities/enhancement_overcharge.opy) | `OVERCHARGE STORES HEALING AND ASSISTS` | Пара phase/ID |
 | [enhancement_engineer.opy](../src/abilities/enhancement_engineer.opy) | `ENGINEER SCRAP INCOME` | Пара phase/ID |
 | enhancement_engineer.opy | `ENGINEER TURRET DEPLOY` | Пара phase/ID |
 | [augments.opy](../src/abilities/augments.opy) | `DOUBLE TAP JUMP (DASH / HIGHRISE)` | Пара phase/ID |
 | [augment_dash.opy](../src/abilities/augment_dash.opy) | `[DASH] CHARGE RECHARGE` | Пара phase/ID |
-| [augment_ammo_pack.opy](../src/abilities/augment_ammo_pack.opy#L3) | `AMMO PACK MAGAZINES` | Пара phase/ID |
-| [augment_ammo_pack.opy](../src/abilities/augment_ammo_pack.opy#L46) | `AMMO PACK REFILL FALLBACK` | Пара phase/ID |
+| [augment_ammo_pack.opy](../src/abilities/augment_ammo_pack.opy#L10) | `AMMO PACK MAGAZINES` | Пара phase/ID |
+| [augment_ammo_pack.opy](../src/abilities/augment_ammo_pack.opy#L22) | `AMMO PACK REFILL` | Пара phase/ID |
 | [hero_tuning.opy](../src/abilities/hero_tuning.opy) | `REINHARDT SHIELD SLAM STUN` | Event guard |
 | hero_tuning.opy | `CASSIDY FLASHBANG STUN` | Event guard |
 | enhancements.opy | `ENHANCEMENT ATTACK BEAM DISCONNECT CLEANUP` | Event guard |

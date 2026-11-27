@@ -38,6 +38,20 @@ rule "CROWD CONTROL STATUS":
     eventPlayer.isCrowdControlled = false
 
 
+rule "PLAYER STARTS ULTIMATE":
+    @Event eachPlayer
+    @Team 1
+    @Condition isGameplayActive == true
+    @Condition eventPlayer.isUsingUltimate() == true
+
+    # Refresh No Cooldowns only if Charge Battery extends the remaining time.
+    if eventPlayer.enhancementId == Enhancement.CHARGE_BATTERY and eventPlayer.noCooldownsEndTime < getTotalTimeElapsed() + CHARGE_BATTERY_NO_COOLDOWNS_DURATION:
+        noCooldownsDuration = CHARGE_BATTERY_NO_COOLDOWNS_DURATION
+        noCooldowns()
+    if eventPlayer.augmentId == Augment.AMMO_PACK:
+        refillAmmoPack()
+
+
 rule "PLAYER DEALT FINAL BLOW":
     @Event playerDealtFinalBlow
     @Team 1

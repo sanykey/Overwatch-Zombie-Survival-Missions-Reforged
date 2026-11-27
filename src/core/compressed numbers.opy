@@ -7,6 +7,9 @@ globalvar numbersList = compressed([ # Shared compressed numeric lookup data for
     createNumbers()
 ])
 
+# Fixed Ammo Pack roster in the same order as the compressed magazine table.
+globalvar ammoPackHeroListConst = AMMO_PACK_HEROES
+
 # The shared palette starts with the Augment colors in ID order.
 globalvar augmentColorListConst = SHARED_COLOR_PALETTE
 

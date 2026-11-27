@@ -76,7 +76,7 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
                 f"{ceil(localPlayer.augmentMovementReadyAt - getTotalTimeElapsed())}s CD" if getTotalTimeElapsed() < localPlayer.augmentMovementReadyAt else iconString(Icon.CHECKMARK)
             ) if localPlayer.augmentId in [Augment.TELEKINESIS, Augment.GRAPNEL_LAUNCHER] else
             f"Backpack: {len(localPlayer.augmentScavengerBackpack)}/{SCAVENGER_BACKPACK_CAPACITY} | [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.INTERACT)}]: store/swap | Hold [{inputBindingString(Button.RELOAD)}]: drop all" if localPlayer.augmentId == Augment.SCAVENGER else
-            [" ", f"+{AUGMENT_KEVLAR_ARMOR} armor | {AUGMENT_KEVLAR_RANGED_DMG_RESIST}% ranged/ability dmg resist", " ", " ", " ", f"{AMMO_PACK_CAPACITY_MULTIPLIER}x magazine | Fully reload to refill", " ", " ", " ", f"{SURVIVALIST_LIFESTEAL_PCT}% lifesteal | +{SURVIVALIST_BONUS_HP} HP"][localPlayer.augmentId]
+            [" ", f"+{AUGMENT_KEVLAR_ARMOR} armor | {AUGMENT_KEVLAR_RANGED_DMG_RESIST}% ranged/ability dmg resist", " ", " ", " ", f"{AMMO_PACK_CAPACITY_MULTIPLIER}x magazine | Reload or ult to refill", " ", " ", " ", f"{SURVIVALIST_LIFESTEAL_PCT}% lifesteal | +{SURVIVALIST_BONUS_HP} HP"][localPlayer.augmentId]
         ),
         AUGMENT_NAMES[localPlayer.augmentId],
         HudPosition.ACTUALLY_LEFT, 98, Color.WHITE, Color.WHITE,

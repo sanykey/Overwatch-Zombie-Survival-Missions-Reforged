@@ -239,6 +239,25 @@ for (const [name, heroes] of Object.entries(spawnHeroIndexTables)) {
   numbers.push({ offset: `NL_${name}_OFFSET`, len: `NL_${name}_LEN`, list: indices });
 }
 
+// Season 5 base magazines. Use Kunai for Kiriko and Thorn Volley for Lifeweaver.
+// Zero skips heroes without magazines, Orisa's heat and D.Mon (Set Ammo breaks fire).
+const ammoPackMagazines = {
+  ANA: 15, ANRAN: 20, ASHE: 12, BAPTISTE: 36, BASTION: 25, BRIGITTE: 0,
+  CASSIDY: 6, DMON: 0, DOCTRINE: 18, DOMINA: 100, DOOMFIST: 4, DVA: 20,
+  ECHO: 12, EMRE: 36, FREJA: 15, GENJI: 30, HANZO: 0, HAZARD: 8,
+  ILLARI: 14, JETPACK_CAT: 24, JUNKER_QUEEN: 8, JUNKRAT: 5, JUNO: 180, KIRIKO: 15,
+  LIFEWEAVER: 100, LUCIO: 20, MAUGA: 300, MEI: 140, MERCY: 25, MIZUKI: 15,
+  MOIRA: 0, ORISA: 0, PHARAH: 6, RAMATTRA: 125, REAPER: 8, REINHARDT: 0,
+  ROADHOG: 12, SHION: 18, SIERRA: 80, SIGMA: 0, SOJOURN: 45, SOLDIER: 30,
+  SOMBRA: 60, SYMMETRA: 100, TORBJORN: 18, TRACER: 40, VENDETTA: 0, VENTURE: 8,
+  WIDOWMAKER: 35, WINSTON: 120, WRECKING_BALL: 80, WUYANG: 20, ZARYA: 100, ZENYATTA: 25,
+};
+const ammoPackCapacityMultiplier = 2;
+numbers.push({
+  offset: "NL_AMMO_PACK_OFFSET",
+  list: [0, ...Object.values(ammoPackMagazines).map(capacity => capacity * ammoPackCapacityMultiplier)],
+});
+
 const spawnModeOffsets = [0];
 const spawnModeWeightTotals = [0];
 let numberIndex = 0;
@@ -271,6 +290,8 @@ numbers.forEach(group => {
 });
 
 result += `  #!define ZOMBIE_SPAWN_HEROES [${zombieSpawnHeroes.map(hero => "Hero." + hero).join(", ")}]\n`;
+result += `  #!define AMMO_PACK_HEROES [${Object.keys(ammoPackMagazines).map(hero => "Hero." + hero).join(", ")}]\n`;
+result += `  #!define AMMO_PACK_CAPACITY_MULTIPLIER ${ammoPackCapacityMultiplier}\n`;
 result += `  #!define ZOMBIE_SPAWN_HERO_COUNT ${zombieSpawnHeroes.length}\n`;
 result += `  #!define NL_SPAWN_MODE_OFFSETS [${spawnModeOffsets.join(", ")}]\n`;
 result += `  #!define NL_SPAWN_MODE_WEIGHT_TOTALS [${spawnModeWeightTotals.join(", ")}]\n`;

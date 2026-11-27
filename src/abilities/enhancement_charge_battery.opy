@@ -23,19 +23,6 @@ macro initializeChargeBatteryMacro():
     eventPlayer.enhancementBatteryReuseDuration = CHARGE_BATTERY_RECHARGE_DURATION
 
 
-rule "[CHARGE_BATTERY] NO COOLDOWNS ON ULTIMATE":
-    @Event eachPlayer
-    @Team 1
-    # Native UI workaround: retain one phase/ID Condition; WORKSHOP_NATIVE_UI_CORRUPTION.md.
-    @Condition uiPhaseAndId(eventPlayer.enhancementId == Enhancement.CHARGE_BATTERY)
-    @Condition eventPlayer.isUsingUltimate() == true
-
-    # Check remaining time only at ult start and refresh only if it extends the window.
-    if eventPlayer.noCooldownsEndTime < getTotalTimeElapsed() + CHARGE_BATTERY_NO_COOLDOWNS_DURATION:
-        noCooldownsDuration = CHARGE_BATTERY_NO_COOLDOWNS_DURATION
-        noCooldowns()
-
-
 rule "[CHARGE_BATTERY] PLACE BATTERY":
     @Event eachPlayer
     @Team 1

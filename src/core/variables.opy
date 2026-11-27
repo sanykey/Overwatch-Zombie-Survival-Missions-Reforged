@@ -316,8 +316,6 @@ playervar augmentState0
 #!define augmentDashReadyAt augmentState0
 # HIGHRISE next allowed activation time; only written on a successful extra jump.
 #!define augmentJumpReadyAt augmentState0
-# Ammo Pack cached [hero, weapon, doubled clip 0, doubled clip 1] entries; persists across respawns.
-#!define augmentAmmoLoadoutList augmentState0
 
 playervar augmentState1
 # Dash smoke effect entity; retained across overlapping dashes, null after DASH
@@ -329,8 +327,6 @@ playervar augmentState1
 #!define wrestlerProtectionId augmentState1
 # Laser Barricade unit edge direction; persists for collision checks.
 #!define augmentBarrierEdgeDirection augmentState1
-# Ammo Pack current cached entry, retained through the hero/weapon/respawn wait.
-#!define augmentAmmoLoadout augmentState1
 # Telekinesis hero snapshot; an interrupted attack cannot resume for a different hero.
 #!define augmentMeleeHero augmentState1
 # Telekinesis target-loop index, after the windup's hero snapshot has been consumed; no waits or live captures.
@@ -343,11 +339,6 @@ playervar augmentState2
 # positive values are cooldown seconds. Owned by placement across waits; read by
 # preview and HUD. Clear the latch before every abort.
 #!define augmentBarrierPlacementCooldown augmentState2
-# Ammo Pack refill snapshot [clip 0 below native max, clip 1 below native max,
-# was reloading, clip 0 ammo at reload start, clip 1 ammo at reload start].
-# Null for supported native capacities. Otherwise initialized after loadout writes,
-# updated only on native-full boundary / reload edges, and owned by this augment.
-#!define augmentAmmoFallbackState augmentState2
 # Telekinesis's additional primary-weapon controller owns this profile across waits.
 # D.Mon / Ramattra quick melee cancels the primary windup; other quick-melee users do not
 # enter that controller. The helper does not modify this retained profile.
