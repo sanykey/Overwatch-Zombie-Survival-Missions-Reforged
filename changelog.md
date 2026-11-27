@@ -30,6 +30,8 @@
 - **Buff** — Plague Doctor now grants +50% healing, up from +40%. The total bonus on infected targets is now +87.5%, up from +75%.
 - **Nerf** — Born to Battle grants the first ability reset on a final blow. Earn the second with three more final blows before spending the first. Spending a reset clears any partial progress toward the second.
 - **Nerf** — Wrestler no longer reduces damage taken while holding a zombie.
+- **Nerf** — Tank heroes now deal 88% of their base damage, down from 90%.
+- **Nerf** — Damage heroes now deal 94% of their base damage, down from 95%.
 - **Nerf** — Jetpack Cat cannot use Frenetic Flight while holding a zombie with Wrestler.
 - **Nerf** — Grapnel Launcher direct hits now deal 75 damage, down from 100.
 - **Nerf** — Laser Barricade now knocks down large bosses for at most 1 second per contact.

@@ -61,7 +61,7 @@ Known cooldown reset issues affect **D.Va's Micro Missiles**, **Ramattra's Void 
 ### Combat, zombies, and power-ups
 
 - **Take 35% less damage while using your ultimate.** Zombie bites can't add infection stacks or apply damage over time, and zombie attacks can't ignite you. Existing effects stay active.
-- **Tanks deal 10% less base damage, and Damage heroes deal 5% less.**
+- Tanks deal **88%** of their base damage, and Damage heroes deal **94%**.
 - **Carrion (Jetpack Cat)** is a new regular zombie. It attacks from the air, can use its ultimate, and can carry other zombies that request a ride. It appears in **All Zombies**, **New Blood**, and **What’ll it be?**
 - **Cure+ combines Cure and Vaccine.** It clears active infection. If you're uninfected, it grants **1.5 levels of protection** against future bites.
 - **Bounce Pad** has been removed from the power-up pool.
