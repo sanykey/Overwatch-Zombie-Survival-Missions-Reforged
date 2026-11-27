@@ -12,6 +12,7 @@
 
 ### Fixes
 
+- Players who die in the first 10 seconds of a match automatically revive after going down. A team wipe during those 10 seconds does not end the match.
 - Ammo Pack now works correctly for most heroes, except Wuyang, Mauga, Jetpack Cat, and D.Mon (Pilot Form).
 - Downfallen (Sigma) gives players 1.25 seconds to interrupt its grab with crowd control or a hack. An interrupted grab releases the player without a throw or knockdown.
 - Beacon of Healing now uses a yellow smoke aura on the player, matching the size of Super Nano and Dash, because the previous effect obscured players' view.

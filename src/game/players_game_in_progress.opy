@@ -2,6 +2,7 @@
 
 subroutine teleportToClosestPlayer
 subroutine teleportDownedPlayerToWalkable
+subroutine processDownedPlayer
 subroutine updateUsers
 subroutine saveAlivePlayerState
 
@@ -156,7 +157,16 @@ rule "PLAYER GETS DOWNED":
     @Team 1
     @Condition eventPlayer.isPlayerActive == true
     @Condition eventPlayer.isDummy() == false
-    
+
+    # Check at death, before the Downed cleanup wait can cross the deadline.
+    if getTotalTimeElapsed() < matchStartReviveEndsAt:
+        processDownedPlayer()
+        eventPlayer.resurrect()
+    else:
+        processDownedPlayer()
+
+
+def processDownedPlayer():
     wait(0.16)
     eventPlayer.reviveTimeRemaining = eventPlayer.reviveDuration / (2 if challengeSetting == Challenge.SWARM_SHOOTOUT else 1)
     eventPlayer.stopAllDamageOverTime()
@@ -186,7 +196,9 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
     
     # Save row in ReconnectField order.
     playerStatsList[eventPlayer.reconnectUserIndex] = [ReconnectStatus.DOWNED, eventPlayer.rescueTimeRemaining, eventPlayer.reviveTimeRemaining, eventPlayer.reviveDuration, eventPlayer.getPosition()]
-    waitUntil(not eventPlayer.isReviving and hasNearbyReviver(), 0.5)
+    waitUntil(eventPlayer.isAlive() or (not eventPlayer.isReviving and hasNearbyReviver()), 0.5)
+    if eventPlayer.isAlive():
+        goto reviveCleanup
     if hasNearbyReviver():
         eventPlayer.isReviving = true
         playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.YELLOW, eventPlayer.getPosition(), REVIVE_RADIUS * 2)
@@ -232,6 +244,7 @@ rule "REVIVE PLAYER OR ADVANCE DEATH TIMER":
         waitUntil(eventPlayer.isAlive(), Math.INFINITY)
         eventPlayer.setInvisibility(Invis.NONE)
         playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, null, eventPlayer, 100)
+    reviveCleanup:
     if ruleCondition:
         loop()
     eventPlayer.isReviving = false

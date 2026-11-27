@@ -3,6 +3,8 @@
 subroutine nukeMap
 subroutine startExtractionAscent
 
+#!define DEFEAT_CONFIRMATION_DELAY 0.25
+
 
 rule "PLAYERS IN EXTRACTION POINT CONTROL":
     @Event eachPlayer
@@ -66,14 +68,22 @@ rule "PLAYER EXTRACTION CONTROL":
     chaseAtRate(eventPlayer.extractionFlightPosition, eventPlayer.extractionDestination, extractionFlightSpeed)
 
 
+macro hasExtractionSurvivors():
+    # Both lists are initialized arrays before gameplay; Workshop treats empty arrays as false.
+    playerTargetList and objectivePlayerList
+
+
 rule "WIN/LOSS CONDITIONS":
     @Condition isObjectiveComplete == false
     @Condition isGameplayActive == true
-    @Condition (len(objectivePositionList) == 1 and (len(objectivePlayerList) == (len(getPlayers(Team.1).filter(lambda player: player.hasSpawned() and player.rescueTimeRemaining > 0 and not player.isAfk)))) or (playerTargetList == [] or extractionZoneRad <= 0)) == true
+    @Condition (len(objectivePositionList) == 1 and (len(objectivePlayerList) == (len(getPlayers(Team.1).filter(lambda player: player.hasSpawned() and player.rescueTimeRemaining > 0 and not player.isAfk)))) or (not playerTargetList or extractionZoneRad <= 0)) == true
+    # Let the last protected death finish Downed and rejoin the target list,
+    # including when a pending extraction win turns into a team wipe.
+    @Condition (getTotalTimeElapsed() >= matchStartReviveEndsAt + DEFEAT_CONFIRMATION_DELAY or hasExtractionSurvivors()) == true
     
-    if playerTargetList == [] and getPlayersOnHero(Hero.ANRAN, Team.1).any(lambda player: player.getUltCharge() == 100):
+    if not playerTargetList and getPlayersOnHero(Hero.ANRAN, Team.1).any(lambda player: player.getUltCharge() == 100):
         wait(5.5, Wait.ABORT_WHEN_FALSE)
-    wait(0.25, Wait.ABORT_WHEN_FALSE)
+    wait(DEFEAT_CONFIRMATION_DELAY, Wait.ABORT_WHEN_FALSE)
     isGameplayActive = false
     enableAnnouncer()
     getAllPlayers().disableNameplatesFor(getAllPlayers())
@@ -90,7 +100,7 @@ rule "WIN/LOSS CONDITIONS":
     bigMessage(getPlayers(Team.1).filter(lambda player: playerTargetList > 0 and not player in objectivePlayerList), "You were left behind!")
     getPlayers(Team.1).setStatusEffect(null, Status.ROOTED, Math.INFINITY)
     getPlayers(Team.1).setStatusEffect(null, Status.PHASED_OUT, Math.INFINITY)
-    if playerTargetList == [] or objectivePlayerList == []:
+    if not hasExtractionSurvivors():
         getPlayers(Team.1).teleport(500 * Vector.UP)
         getAllPlayers().setInvisibility(Invis.ALL)
         wait(0.25)

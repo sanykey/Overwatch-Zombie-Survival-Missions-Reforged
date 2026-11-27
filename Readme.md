@@ -78,6 +78,7 @@ Known cooldown reset issues affect **D.Va's Micro Missiles**, **Ramattra's Void 
 
 ### Objectives and extraction
 
+- **Players who die in the first 10 seconds of the match automatically revive as soon as they go down.** If the whole team goes down during that window, the match continues.
 - **Completing an objective gives the team more time to rescue downed players.** It adds the full current rescue allowance, between **30 and 60 seconds**, to each downed player's active timer. For example, **12 seconds** remaining with a **60-second** allowance becomes **72 seconds**.
 
 ### Camera and HUD

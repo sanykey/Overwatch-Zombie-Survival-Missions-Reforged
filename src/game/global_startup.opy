@@ -270,6 +270,7 @@ rule "START GAME":
     disableAnnouncer()
     pauseMatchTime()
     walkCenter = nearestWalkablePosition(walkCenter)
+    matchStartReviveEndsAt = getTotalTimeElapsed() + MATCH_START_REVIVE_DURATION
     isPregameSetup = false
     enableMusic()
     if not (DEBUG or DEBUG_ENABLE_INSPECTOR):

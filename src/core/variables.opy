@@ -131,6 +131,7 @@ globalvar currentObjectivePosition  # Mirrors the objective queue head, includin
 globalvar isPregameSetup        # Pregame hero selection/voting is active; cleared by START GAME before gameplay activation.
 globalvar isSpecialGameMode     # TDM, CTF, PUSH or CONTROL uses alternate menu/spawn handling.
 globalvar isGameplayActive      # Objectives are generated and combat is active; cleared when the match outcome is decided.
+globalvar matchStartReviveEndsAt # Elapsed-time deadline for automatic revives and defeat protection, set by START GAME.
 # Only unset/0, false or true; uiPhaseAndId relies on this contract (WORKSHOP_NATIVE_UI_CORRUPTION.md).
 globalvar isOvertimeActive      # Prevents repeated overtime activation and zombie relocation on standard modes.
 globalvar isVoting              # Global pregame vote is open; separate from each player's isPregameVoting field.
