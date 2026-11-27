@@ -31,16 +31,16 @@ macro useTelekinesisPushMacro():
     # the target list and loop index in tmp0/tmp1 and reads its target from tmp3.
     #!define augmentPushTargets tmp0
     #!define augmentPushTargetIndex tmp1
-    # Push in every direction within a fixed radius; surfaces block visibility.
-    augmentPushTargets = getPlayersInRadius(eventPlayer, TELEKINESIS_MELEE_PUSH_RADIUS, Team.2, LosCheck.SURFACES).filter(lambda zombie: zombie.isAlive() and not zombie.botIsTeleporting and not zombie.botIsAttached and zombie.botKnockbackScale > 0 and zombie not in bossStateList and zombie not in miniBossList)
+    # Surfaces block the push; only targets in the aim cone are eligible.
+    augmentPushTargets = getPlayersInRadius(eventPlayer, TELEKINESIS_MELEE_PUSH_RANGE, Team.2, LosCheck.SURFACES).exclude(bossStateList.concat(miniBossList)).filter(lambda zombie: zombie.isAlive() and not zombie.botIsTeleporting and not zombie.botIsAttached and zombie.botKnockbackScale > 0 and eventPlayer.isInViewAngle(zombie.getEyePosition(), TELEKINESIS_MELEE_PUSH_ANGLE))
     if augmentPushTargets == []:
         return
     eventPlayer.augmentMeleePushReadyAt = getTotalTimeElapsed() + TELEKINESIS_MELEE_PUSH_COOLDOWN
-    # One expanding ring per push, centered at waist height with the push radius.
-    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.RED, augmentGrapnelCenter(eventPlayer), TELEKINESIS_MELEE_PUSH_RADIUS)
+    augmentPushRingCenter = augmentGrapnelCenter(eventPlayer)
+    playAugmentPushRing()
     for augmentPushTargetIndex in range(len(augmentPushTargets)):
         enhancementHitVictim = augmentPushTargets[augmentPushTargetIndex]
-        enhancementHitVictim.applyImpulse(directionFromAngles(horizontalAngleOfDirection(directionTowards(eventPlayer, enhancementHitVictim)), -15), TELEKINESIS_MELEE_PUSH_IMPULSE * enhancementHitVictim.botKnockbackScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+        enhancementHitVictim.applyImpulse(directionFromAngles(eventPlayer.getHorizontalFacingAngle(), -15), TELEKINESIS_MELEE_PUSH_IMPULSE * enhancementHitVictim.botKnockbackScale, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
         enhancementHitVictim.setEnvironmentalKillCreditor(eventPlayer)
         damageWithEnhancements(TELEKINESIS_MELEE_PUSH_DAMAGE, enhancementHitVictim)
 

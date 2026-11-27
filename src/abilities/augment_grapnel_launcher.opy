@@ -53,8 +53,7 @@ macro useGrapnelLauncherMacro():
         if not isInLoS(grapnelPullOrigin, grapnelPullAnchor):
             break
         if distance(grapnelPullOrigin, grapnelPullAnchor) <= 1.5 * eventPlayer.sizeScale + 0.5 * eventPlayer.augmentGrapnelTarget.sizeScale:
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.RED, grapnelPullAnchor, AUGMENT_GRAPNEL_PUSH_RADIUS)
-            playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.WHITE, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection(), 100)
+            playAugmentPushRing()
             # The impact uses the same tmp3 as damageWithEnhancements; its handler preserves the victim.
             #!define grapnelImpactTarget tmp3
             grapnelImpactTarget = eventPlayer.augmentGrapnelTarget

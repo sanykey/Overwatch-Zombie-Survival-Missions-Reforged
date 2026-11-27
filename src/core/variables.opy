@@ -56,6 +56,9 @@ globalvar tmp3  # Fourth synchronous scratch value, including barricade impulse 
 #!define enhancementHitDamage tmp2
 #!define enhancementHitVictim tmp3
 
+# Synchronous ring center. Grapnel reuses its tmp2 arrival anchor.
+#!define augmentPushRingCenter tmp2
+
 # Synchronous selectPullAimTarget contract: tmp1 inputs PullAimMode;
 # tmp0 returns the selected player (or Null), tmp2/tmp3 are clobbered.
 # tmp1 becomes the eye position only after mode-dependent filtering finishes.
