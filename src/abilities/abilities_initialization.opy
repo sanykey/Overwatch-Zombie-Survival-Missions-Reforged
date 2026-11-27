@@ -30,8 +30,7 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             f"Scrap: {floor(localPlayer.enhancementScrap)}/{ENGINEER_SCRAP_MAX} | 2x [{inputBindingString(Button.CROUCH)}]: +{ENGINEER_ARMOR_STACK} armor ({ENGINEER_ARMOR_ALLY_COST} ally/{ENGINEER_ARMOR_SELF_COST} self) | Hold [{inputBindingString(Button.MELEE)}]: turret ({ENGINEER_TURRET_COST})",
             f"Scan: {ceil(localPlayer.enhancementAuspexReadyAt - getTotalTimeElapsed())}s CD" if getTotalTimeElapsed() < localPlayer.enhancementAuspexReadyAt else f"2x [{inputBindingString(Button.CROUCH)}]: scan",
             f"Infection removed: {round(localPlayer.enhancementPlagueCureTotal)}",
-            "{0} | {1}".format(f"Energy: {floor(localPlayer.enhancementCapacitorEnergy)}", f"Armed: +{floor(localPlayer.enhancementCapacitorCharge)} dmg/hit" if localPlayer.enhancementCapacitorCharge > 0 else f"2x [{inputBindingString(Button.CROUCH)}]: arm"),
-            f"2x [{inputBindingString(Button.CROUCH)}]: {'detach' if localPlayer.hitchhikerAttached else 'attach near ally'}"
+            "{0} | {1}".format(f"Energy: {floor(localPlayer.enhancementCapacitorEnergy)}", f"Armed: +{floor(localPlayer.enhancementCapacitorCharge)} dmg/hit" if localPlayer.enhancementCapacitorCharge > 0 else f"2x [{inputBindingString(Button.CROUCH)}]: arm")
         ][localPlayer.enhancementId],
         ENHANCEMENT_NAMES[localPlayer.enhancementId],
         HudPosition.ACTUALLY_LEFT, 97, Color.WHITE, Color.WHITE,
@@ -51,8 +50,7 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
             Color.WHITE if localPlayer.enhancementScrap < ENGINEER_ARMOR_ALLY_COST else Color.SKY_BLUE if localPlayer.enhancementScrap < ENGINEER_TURRET_COST else Color.GREEN,
             Color.RED if getTotalTimeElapsed() < localPlayer.enhancementAuspexReadyAt else Color.GREEN,
             Color.WHITE,
-            Color.YELLOW if localPlayer.enhancementCapacitorCharge > 0 else Color.GREEN if localPlayer.enhancementCapacitorEnergy >= OVERCHARGE_MAX_CHARGE else Color.SKY_BLUE if localPlayer.enhancementCapacitorEnergy >= 50 else Color.WHITE,
-            Color.WHITE
+            Color.YELLOW if localPlayer.enhancementCapacitorCharge > 0 else Color.GREEN if localPlayer.enhancementCapacitorEnergy >= OVERCHARGE_MAX_CHARGE else Color.SKY_BLUE if localPlayer.enhancementCapacitorEnergy >= 50 else Color.WHITE
         ][localPlayer.enhancementId],
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
@@ -76,6 +74,7 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
                 f"{ceil(localPlayer.augmentMovementReadyAt - getTotalTimeElapsed())}s CD" if getTotalTimeElapsed() < localPlayer.augmentMovementReadyAt else iconString(Icon.CHECKMARK)
             ) if localPlayer.augmentId in [Augment.TELEKINESIS, Augment.GRAPNEL_LAUNCHER] else
             f"Backpack: {len(localPlayer.augmentScavengerBackpack)}/{SCAVENGER_BACKPACK_CAPACITY} | [{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.INTERACT)}]: store/swap | Hold [{inputBindingString(Button.RELOAD)}]: drop all" if localPlayer.augmentId == Augment.SCAVENGER else
+            f"[{inputBindingString(Button.CROUCH)}]+[{inputBindingString(Button.JUMP)}]: {'detach' if localPlayer.hitchhikerAttached else 'attach near ally'}" if localPlayer.augmentId == Augment.HITCHHIKER else
             [" ", f"+{AUGMENT_KEVLAR_ARMOR} armor | {AUGMENT_KEVLAR_RANGED_DMG_RESIST}% ranged/ability dmg resist", " ", " ", " ", f"{AMMO_PACK_CAPACITY_MULTIPLIER}x magazine | Reload or ult to refill", " ", " ", " ", f"{SURVIVALIST_LIFESTEAL_PCT}% lifesteal | +{SURVIVALIST_BONUS_HP} HP"][localPlayer.augmentId]
         ),
         AUGMENT_NAMES[localPlayer.augmentId],
@@ -84,16 +83,13 @@ rule "ENHANCEMENT HUD and AUGMENT HUD (PERMANENT TABLES)":
         HudReeval.VISIBILITY_STRING_AND_COLOR
     )
 
-    # Attachment status subheaders: one persistent call each for the passenger
-    # and the carrier, reevaluated per viewer; the carrier-side text reads the
-    # passenger back-reference instead of scanning for it.
     createHitchhikerHudMacro()
 
 
 macro initializePlayerAugment():
     if eventPlayer.augmentId == Augment.NO_PREFERENCE:
         # Menu non-selection and late-join zero state each receive one real
-        # random choice. A nonzero ID preserves explicit and previously rolled choices.
+        # random choice through Survivalist. Hitchhiker is manual-only.
         eventPlayer.augmentId = random.randint(Augment.KEVLAR, Augment.SURVIVALIST)
     if DEBUG_ENABLE_INSPECTOR:
         # Use IDs so the log needs no additional table or phase-owned state.

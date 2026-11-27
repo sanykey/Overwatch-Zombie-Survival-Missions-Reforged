@@ -10,7 +10,7 @@
 # still rely on the hero, targets and combat events during the test.
 macro DEBUG_BUTTON_CASES = [
     # Double Crouch exercises Hybrid, Bulking, Wrestler pull, Bolt Strike,
-    # Engineer armor, Auspex Scan, Overcharge and Hitchhiker.
+    # Engineer armor, Auspex Scan and Overcharge.
     ["Crouch (double tap)", DEBUG_BUTTON_PULSE, true, Button.CROUCH],
     # Double Jump activates Dash or Highrise.
     ["Jump (double tap)", DEBUG_BUTTON_PULSE, true, Button.JUMP],
@@ -24,7 +24,7 @@ macro DEBUG_BUTTON_CASES = [
     # Tap Interact to open, pick up, grab or throw.
     ["Interact", DEBUG_BUTTON_PULSE, false, Button.INTERACT],
     [f"Crouch (hold {DEBUG_BUTTON_PLACEMENT_HOLD}s)", DEBUG_BUTTON_PLACEMENT_HOLD, false, Button.CROUCH],
-    # Crouch + Jump activates Telekinesis push or Grapnel Launcher.
+    # Crouch + Jump activates Telekinesis push, Grapnel Launcher or Hitchhiker.
     ["Crouch + Jump", DEBUG_BUTTON_PULSE, false, Button.CROUCH, Button.JUMP],
     # Reload exercises Ammo Pack. The hold also lets Scavenger drop its backpack.
     [f"Reload (hold {DEBUG_BUTTON_HOLD}s)", DEBUG_BUTTON_HOLD, false, Button.RELOAD],

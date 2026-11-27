@@ -23,7 +23,6 @@ enum Challenge:
 # Enhancement IDs index enhancementOptionList and the start-menu tables.
 # Zero means no preference; initialization rolls a role-eligible real ID.
 # Tank-only Hybrid/Bulking Season start the random range; support-only Plague Doctor/Overcharge end it.
-# Hitchhiker is last in the menu and outside the random range.
 # Keep every indexed menu/HUD/icon table in this same order.
 enum Enhancement:
     NO_PREFERENCE = 0,
@@ -40,7 +39,6 @@ enum Enhancement:
     AUSPEX_SCAN = 11,
     PLAGUE_DOCTOR = 12,
     OVERCHARGE = 13,
-    HITCHHIKER = 14,
 
 # Wrestler holds until Knocked Down ends; manual throws request release.
 enum WrestlerCarryState:
@@ -56,6 +54,7 @@ enum PullAimMode:
     BOLT_STRIKE = 3,
 
 # Independent secondary enhancement slot. IDs index the augment name, icon and color tables.
+# Hitchhiker is last in the menu and outside the random range.
 enum Augment:
     NO_PREFERENCE = 0,
     KEVLAR = 1,
@@ -67,6 +66,7 @@ enum Augment:
     LASER_BARRICADE = 7,
     SCAVENGER = 8,
     SURVIVALIST = 9,
+    HITCHHIKER = 10,
 
 # Objective IDs also index objectiveTypeVoteList and identify entries in objectiveTypeList.
 # Biomorphing and Survivor Rescue are only selectable through the mixed pool.
@@ -153,6 +153,7 @@ enum AugmentIcon:
     LASER_BARRICADE = iconString(Icon.DIAMOND),
     SCAVENGER = iconString(Icon.RECYCLE),
     SURVIVALIST = iconString(Icon.ASTERISK),
+    HITCHHIKER = iconString(Icon.FLAG),
 
 enum EnhancementIcon:
     NO_PREFERENCE = iconString(Icon.QUESTION_MARK),
@@ -163,7 +164,6 @@ enum EnhancementIcon:
     BORN_TO_BATTLE = "<TX C000000000039D7>",
     CHARGE_BATTERY = iconString(Icon.SPIRAL),
     AUSPEX_SCAN = iconString(Icon.EYE),
-    HITCHHIKER = iconString(Icon.FLAG),
     PUP = iconString(Icon.HAPPY),
     WRESTLER = iconString(Icon.TRASHCAN),
     BOLT_STRIKE = iconString(Icon.BOLT),

@@ -288,15 +288,15 @@ playervar isAfk  # Player is treated as inactive/AFK and excluded from objective
 
 playervar isHeroSwitchRespawn  # Player has switched heroes; prevents repeating first-spawn and enhancement initialization.
 
-# Enhancements only (enhancement prefix; includes the Rescue Hitchhiker setup).
-playervar enhancementId  # Selected Enhancement enum; pregame selection, runtime behavior and Rescue Hitchhiker initialization.
+# Enhancements only (enhancement prefix).
+playervar enhancementId  # Selected Enhancement enum; pregame selection and runtime behavior.
 playervar botAuspexOwner  # Team 2 only: latest mark caster, read only while the mark is active.
 playervar botAuspexExpiry  # Team 2 only: absolute mark deadline; zero after expiry or death.
 
 # Human Augment storage is independent of enhancements and power-ups.
 # Team 2 Wrestler roles are team-exclusive; no bot Augment owns these slots.
-# Only the selected human augment owns them; selection is fixed once gameplay begins.
-playervar augmentId  # Selected Augment enum; pregame Interact selection and gameplay effects.
+# Team 1 slots are owned by the selected augment, including the Rescue NPC's Hitchhiker.
+playervar augmentId  # Selected Augment enum; pregame Interact selection, gameplay effects and Rescue Hitchhiker initialization.
 playervar augmentState0
 # Team 2 Wrestler: carrier reference until release, including carrier disconnect.
 # Humans use separate primary enhancement storage; no bot augment uses this slot.
@@ -316,6 +316,8 @@ playervar augmentState0
 #!define augmentDashReadyAt augmentState0
 # HIGHRISE next allowed activation time; only written on a successful extra jump.
 #!define augmentJumpReadyAt augmentState0
+# Hitchhiker passenger owns the carrier reference for attachment, health sharing and HUD. Zero when detached.
+#!define hitchhikerCarrier augmentState0
 
 playervar augmentState1
 # Dash smoke effect entity; retained across overlapping dashes, null after DASH
@@ -331,6 +333,10 @@ playervar augmentState1
 #!define augmentMeleeHero augmentState1
 # Telekinesis target-loop index, after the windup's hero snapshot has been consumed; no waits or live captures.
 #!define augmentMeleeTargetIndex augmentState1
+# Hitchhiker passenger: extra health-pool ID while attached, absolute reattach
+# deadline while detached. Remove the pool before switching the slot to a deadline.
+#!define hitchhikerPassengerPoolId augmentState1
+#!define hitchhikerAttachReadyAt augmentState1
 
 playervar augmentState2
 # Team 2 Wrestler: carrier hero at pickup, retained until release. No human reader.
@@ -688,8 +694,6 @@ playervar actorTeamSlot22  # Boss gas positions on Team 2 or enhancement state o
 #!define enhancementBattleResetCharges actorTeamSlot22
 # Placed Charge Battery position; zero clears it.
 #!define enhancementBatteryPosition actorTeamSlot22
-# Hitchhiker passenger owns the carrier reference for attachment, health sharing and HUD. Zero when detached.
-#!define hitchhikerCarrier actorTeamSlot22
 # P.U.P. mode color.
 #!define enhancementPupColor actorTeamSlot22
 # Engineer: scrap balance up to ENGINEER_SCRAP_MAX, earned from nearby zombie deaths and the income
@@ -713,10 +717,6 @@ playervar actorTeamSlot23  # Team 2: botGasRadiusList; Team 1: enhancementStateS
 #!define enhancementBattleAbilityButton actorTeamSlot23
 # Battery remaining reuse cooldown.
 #!define enhancementBatteryReuseCooldown actorTeamSlot23
-# Hitchhiker passenger: extra health-pool ID while attached, absolute reattach
-# deadline while detached. Remove the pool before switching the slot to a deadline.
-#!define hitchhikerPassengerPoolId actorTeamSlot23
-#!define hitchhikerAttachReadyAt actorTeamSlot23
 # P.U.P. attack beam is active.
 #!define enhancementIsPupBeamActive actorTeamSlot23
 # Engineer's transfer beam entity; null after BEAM FADE, death and

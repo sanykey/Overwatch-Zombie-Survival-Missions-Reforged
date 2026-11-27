@@ -14,7 +14,8 @@ macro createStartMenuAugmentHud():
             f"Grapple allies/foes ({AUGMENT_GRAPNEL_MIN_RANGE}–{AUGMENT_GRAPNEL_RANGE}m). Hold Jump to launch up on arrival. Foes: {AUGMENT_GRAPNEL_DAMAGE} dmg, stun ({compactHudNumber(AUGMENT_GRAPNEL_GROUND_STUN_DURATION)}s) or air knockdown ({AUGMENT_GRAPNEL_AIR_KNOCKDOWN_DURATION}s). {AUGMENT_GRAPNEL_COOLDOWN}s CD",
             f"Deploy zombie-blocking wall. {LASER_BARRICADE_AUGMENT_COOLDOWN}s CD",
             f"+{SCAVENGER_BACKPACK_CAPACITY} powerup slots. Zombie deaths in {ENGINEER_COLLECTION_RANGE}m: {SCAVENGER_LOOT_CHANCE}% chance for powerup (fills active slot, then bag)",
-            f"{SURVIVALIST_LIFESTEAL_PCT}% lifesteal. +{SURVIVALIST_BONUS_HP} recoverable HP"
+            f"{SURVIVALIST_LIFESTEAL_PCT}% lifesteal. +{SURVIVALIST_BONUS_HP} recoverable HP",
+            "Ride nearby ally and share combined HP"
         ][localPlayer.augmentId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.INTERACT)),
         HudPosition.ACTUALLY_LEFT, 4, AUGMENT_COLORS[localPlayer.augmentId], AUGMENT_COLORS[localPlayer.augmentId], AUGMENT_COLORS[localPlayer.augmentId],

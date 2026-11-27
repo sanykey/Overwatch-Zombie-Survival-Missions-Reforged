@@ -306,7 +306,7 @@ Teleport search and supply-drop search are covered separately in R26 and R37. Em
 
 **Category:** Logic, attachment. **Priority:** High. **Evidence:** C + M; physics: R.
 
-**Fixed November 21, 2026.** A single filter selects an eligible carrier and checks that the selected entity exists before attaching. Each player can belong to at most one pair. Crouch, forced release and hero switching use one detach subroutine. Cleanup removes the carrier's extra health pool before freeing its slot, including when the passenger disconnects. Verified in source and compiled Workshop output. In-game verification is pending. [Attach](../src/abilities/enhancement_hitchhiker.opy#L20) · [Detach and cleanup](../src/abilities/enhancement_hitchhiker.opy#L84)
+**Fixed November 21, 2026.** A single filter selects an eligible carrier and checks that the selected entity exists before attaching. Each player can belong to at most one pair. Crouch, forced release and hero switching use one detach subroutine. Cleanup removes the carrier's extra health pool before freeing its slot, including when the passenger disconnects. Verified in source and compiled Workshop output. In-game verification is pending. [Attach](../src/abilities/augment_hitchhiker.opy#L20) · [Detach and cleanup](../src/abilities/augment_hitchhiker.opy#L76)
 
 Carrier-admission and selection filters already differed in the original; the single passenger reference and unconditional cleanup could overwrite another player's association. Source: [original:6990](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6990>), [original:6992](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L6992>), [original:7006](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7006>), [original:7013](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7013>).
 
@@ -771,7 +771,7 @@ Client-load/traffic candidate: reduce decorative-ring frequency or restrict dist
 
 **Category:** Performance, minor overhead. **Priority:** Low. **Evidence:** O.
 
-**Hitchhiker optimization implemented November 21, 2026.** Health balancing uses the first and last entries of one sorted pair and updates the recipient first. [Health balancing](../src/abilities/enhancement_hitchhiker.opy#L116)
+**Hitchhiker optimization implemented November 21, 2026.** Health balancing uses the first and last entries of one sorted pair and updates the recipient first. [Health balancing](../src/abilities/augment_hitchhiker.opy#L109)
 
 Optimization candidates: timer sorting and sorting two Hitchhiker participants already existed in the original. Source: [original:534](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L534>), [original:7042](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7042>), [original:7043](<../workshop-snapshots/ZSMM (786TW)/2026-10-30 ZSMM (786TW).opy#L7043>).
 

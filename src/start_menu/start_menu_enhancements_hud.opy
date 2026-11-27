@@ -21,8 +21,7 @@ macro createStartMenuEnhancementHud():
             f"Scrap: +{ENGINEER_COLLECTION_REWARD}/zombie death in {ENGINEER_COLLECTION_RANGE}m, +{ENGINEER_SCRAP_PASSIVE_RATE}/s. Craft team armor ({ENGINEER_ARMOR_MAX} max/target, +{ENGINEER_ARMOR_ALLY_ULT_PCT}% ult/ally grant) & freezing turrets",
             f"Hack & amplify dmg taken ({AUSPEX_MARK_DURATION}s): +{AUSPEX_BONUS_DAMAGE * 100}% (+{AUSPEX_BOSS_BONUS_DAMAGE * 100}% objective bosses & Egg). {AUSPEX_RADIUS}m pulse through walls. +{compactHudNumber(AUSPEX_ULT_PCT_PER_BONUS_DAMAGE)}% ult/ally bonus dmg. {AUSPEX_COOLDOWN}s CD",
             f"+{PLAGUE_DOCTOR_HEAL_BONUS_PCT}% heal (+{compactHudNumber((100 + PLAGUE_DOCTOR_HEAL_BONUS_PCT) * PLAGUE_DOCTOR_INFECTED_HEAL_MULTIPLIER_PCT / 100 - 100)}% on infected). Healing reduces infection in caster and allies",
-            f"+{OVERCHARGE_HEAL_BONUS_PCT}% heal. Gain 1 energy/{OVERCHARGE_HEAL_ENERGY_DIVISOR} healing (incl. packs) +{OVERCHARGE_ENERGY_PER_ASSIST}/assist. Spend up to {OVERCHARGE_MAX_CHARGE} for bonus dmg/hit",
-            "Ride nearby ally and share combined HP"
+            f"+{OVERCHARGE_HEAL_BONUS_PCT}% heal. Gain 1 energy/{OVERCHARGE_HEAL_ENERGY_DIVISOR} healing (incl. packs) +{OVERCHARGE_ENERGY_PER_ASSIST}/assist. Spend up to {OVERCHARGE_MAX_CHARGE} for bonus dmg/hit"
         ][localPlayer.enhancementId],
         "Change Selection (Press [{0}])".format(inputBindingString(Button.MELEE)),
         HudPosition.ACTUALLY_LEFT,

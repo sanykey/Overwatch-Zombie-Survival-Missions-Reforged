@@ -21,7 +21,7 @@ Passive health regeneration for the zombie team is disabled under **Settings →
 
 ### Choosing abilities before the match
 
-- Each survivor now has two independent ability slots. Press **Quick Melee** to choose an **Enhancement** and **Interact** to choose an **Augment**. There are **14 Enhancements and 9 Augments**.
+- Each survivor now has two independent ability slots. Press **Quick Melee** to choose an **Enhancement** and **Interact** to choose an **Augment**. There are **13 Enhancements and 10 Augments**.
 - Leave a slot on **No Preference** to get a random ability. This also applies when joining a match in progress.
 
 ### Enhancements
@@ -38,7 +38,6 @@ Passive health regeneration for the zombie team is disabled under **Settings →
 | **Auspex Scan** | Aim at a surface or zombie within **30 m** and double-tap **Crouch**. The pulse passes through walls in an **8 m radius**, marking and hacking zombies for **6 seconds**. The objective boss is marked without being hacked. Survivors deal **40% more damage** to marked targets, including minibosses, or **20% more** to objective bosses and the Zombie Egg. The latest caster gains **0.2 percentage points of ultimate charge** per point of bonus damage dealt by allies. **15-second cooldown.** |
 | **Plague Doctor** | Heal for **40% more**, or **75% more** when healing infected targets. Restoring health reduces your own infection if you're infected. It also reduces infection in recipients who are infected and don't have **Zombie Hybrid**. **Beacon of Healing** stacks with **Plague Doctor** and **Overcharge**. Only supports can roll this Enhancement at random. |
 | **Overcharge** | New Enhancement. Increases healing dealt by **15%**. Gain 1 energy per 2.7 HP healed, including health packs, and 10 energy per assist. Double-tap **Crouch** to spend up to 100 energy on bonus damage. Your next hit opens a **0.3-second** window in which the bonus applies to every hit. Unspent energy stays available. Only supports can roll this Enhancement at random. |
-| **Hitchhiker** | Double-tap **Crouch** to ride an eligible nearby ally in the direction you're facing, or to dismount. Each player can belong to only one pair. Both players lose the extra health when the pair breaks up, including when the passenger leaves the match. Mei can now ride an ally, with **Cryo-Freeze** disabled while attached. **Hitchhiker** must be selected manually. |
 
 #### Born to Battle limitations
 
@@ -57,6 +56,7 @@ Known cooldown reset issues affect **D.Va's Micro Missiles**, **Ramattra's Void 
 | **Laser Barricade** | Moved to the Augment slot. Hold **Crouch + Interact** to aim, then release **Interact** to place the wall. Width increased from **5 to 6 m**, cooldown reduced from **30 to 25 seconds**, and contact damage to zombies increased from **10 to 20**. For every **4,900 damage** a zombie deals to the wall on contact, it is knocked down for **1 second**. |
 | **Scavenger** | Gives you two extra power-up slots. When a zombie dies within **15 m**, you have a **5% chance** to receive a power-up. Loot fills your active slot first, then your backpack. **Crouch + Interact** stows a power-up or cycles your slots. Death or a manual drop empties your inventory onto the ground. |
 | **Survivalist** | Grants **50 recoverable health** and heals you for **12% of damage dealt**, including damage from power-ups and Enhancements. Lifesteal benefits from **Plague Doctor** healing bonuses. |
+| **Hitchhiker** | Press **Crouch + Jump** to ride a nearby eligible ally closest to your aim or to dismount. Each player can belong to one pair. While attached, both players gain bonus HP equal to their partner's base max HP and share a health percentage. The bonus HP pools expire on detach. Reattaching has a **1.5-second cooldown**. Mei's **Cryo-Freeze** is disabled while she rides. Select Hitchhiker manually. |
 
 ### Combat, zombies, and power-ups
 

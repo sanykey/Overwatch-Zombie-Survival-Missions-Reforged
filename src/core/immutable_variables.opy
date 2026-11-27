@@ -23,15 +23,15 @@ globalvar augmentMeleeBtnHeroListConst
 globalvar horizontalMaskConst
 
 macro initializeImmutableVariables():
-    augmentIconListConst = [AugmentIcon.NO_PREFERENCE, AugmentIcon.KEVLAR, AugmentIcon.DASH, AugmentIcon.HIGHRISE, AugmentIcon.TELEKINESIS, AugmentIcon.AMMO_PACK, AugmentIcon.GRAPNEL_LAUNCHER, AugmentIcon.LASER_BARRICADE, AugmentIcon.SCAVENGER, AugmentIcon.SURVIVALIST]
-    enhancementIconListConst = [EnhancementIcon.NO_PREFERENCE, EnhancementIcon.ZOMBIE_HYBRID, EnhancementIcon.BULKING_SEASON, EnhancementIcon.BRAIN_KILLER, EnhancementIcon.PYROTECHNIC, EnhancementIcon.BORN_TO_BATTLE, EnhancementIcon.CHARGE_BATTERY, EnhancementIcon.PUP, EnhancementIcon.WRESTLER, EnhancementIcon.BOLT_STRIKE, EnhancementIcon.ENGINEER, EnhancementIcon.AUSPEX_SCAN, EnhancementIcon.PLAGUE_DOCTOR, EnhancementIcon.OVERCHARGE, EnhancementIcon.HITCHHIKER]
+    augmentIconListConst = [AugmentIcon.NO_PREFERENCE, AugmentIcon.KEVLAR, AugmentIcon.DASH, AugmentIcon.HIGHRISE, AugmentIcon.TELEKINESIS, AugmentIcon.AMMO_PACK, AugmentIcon.GRAPNEL_LAUNCHER, AugmentIcon.LASER_BARRICADE, AugmentIcon.SCAVENGER, AugmentIcon.SURVIVALIST, AugmentIcon.HITCHHIKER]
+    enhancementIconListConst = [EnhancementIcon.NO_PREFERENCE, EnhancementIcon.ZOMBIE_HYBRID, EnhancementIcon.BULKING_SEASON, EnhancementIcon.BRAIN_KILLER, EnhancementIcon.PYROTECHNIC, EnhancementIcon.BORN_TO_BATTLE, EnhancementIcon.CHARGE_BATTERY, EnhancementIcon.PUP, EnhancementIcon.WRESTLER, EnhancementIcon.BOLT_STRIKE, EnhancementIcon.ENGINEER, EnhancementIcon.AUSPEX_SCAN, EnhancementIcon.PLAGUE_DOCTOR, EnhancementIcon.OVERCHARGE]
     horizontalMaskConst = vect(1, 0, 1)
     enhancementNameListConst = [
         "No Preference", "Zombie Hybrid", "Bulking Season", "Brain Killer", "Pyrotechnic",
         "Born to Battle", "Charge Battery", "P.U.P.", "Wrestler", "Bolt Strike",
-        "Engineer", "Auspex Scan", "Plague Doctor", "Overcharge", "Hitchhiker"
+        "Engineer", "Auspex Scan", "Plague Doctor", "Overcharge"
     ]
-    augmentNameListConst = ["No Preference", "Kevlar", "Dash", "Highrise", "Telekinesis", "Ammo Pack", "Grapnel Launcher", "Laser Barricade", "Scavenger", "Survivalist"]
+    augmentNameListConst = ["No Preference", "Kevlar", "Dash", "Highrise", "Telekinesis", "Ammo Pack", "Grapnel Launcher", "Laser Barricade", "Scavenger", "Survivalist", "Hitchhiker"]
     challengeNameListConst = ["No Preference", "None", "Swarm Shootout", "Random Abilities", "Insanity", "Pandora's Box"]
     zombieModeNameListConst = ["No Preference", "All Zombies", "New Blood", "What'll it be?", "Zombie Shuffle", "Dinner Rush!", "Ham N' Hammer!"]
     augmentMeleeWeaponHeroListConst = [Hero.REINHARDT, Hero.BRIGITTE, Hero.DMON, Hero.GENJI, Hero.RAMATTRA, Hero.TORBJORN, Hero.VENDETTA]

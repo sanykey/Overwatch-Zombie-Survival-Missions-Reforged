@@ -189,10 +189,10 @@ const numbers = [
   },
 ];
 
-// Augment IDs still index the first ten colors directly.
+// Augment IDs index the first eleven colors directly.
 const sharedColorPalette = [
   "AQUA", "LIGHT_GRAY", "YELLOW", "SKY_BLUE", "ORANGE", "WHITE",
-  "TURQUOISE", "BLUE", "LIME_GREEN", "RED", "GREEN", "PURPLE", "GRAY", "ROSE", null,
+  "TURQUOISE", "BLUE", "LIME_GREEN", "RED", "PURPLE", "GREEN", "GRAY", "ROSE", null,
 ];
 
 // Rows follow item ID - 1 or the raw menu selection ID. Keep the gaps in Objective.
@@ -200,7 +200,7 @@ const colorPalettes = {
   POWERUP: ["GREEN", "YELLOW", "BLUE", "RED", "ORANGE", "YELLOW", "ORANGE", "BLUE", "RED", "RED", "WHITE"],
   ZOMBIE_MENU: ["AQUA", "ORANGE", "RED", "PURPLE", "LIME_GREEN", "BLUE", "GRAY"],
   OBJECTIVE_MENU: ["AQUA", "ORANGE", "RED", null, null, "RED", "LIME_GREEN", "TURQUOISE", null, "PURPLE"],
-  ENHANCEMENT_MENU: ["AQUA", "GRAY", "LIME_GREEN", "RED", "ORANGE", "GRAY", "WHITE", "BLUE", "SKY_BLUE", "YELLOW", "ROSE", "SKY_BLUE", "GREEN", "TURQUOISE", "PURPLE"],
+  ENHANCEMENT_MENU: ["AQUA", "GRAY", "LIME_GREEN", "RED", "ORANGE", "GRAY", "WHITE", "BLUE", "SKY_BLUE", "YELLOW", "ROSE", "SKY_BLUE", "GREEN", "TURQUOISE"],
   CHALLENGE_TITLE: ["AQUA", "YELLOW", "LIME_GREEN", "ORANGE", "TURQUOISE", "PURPLE"],
 };
 

@@ -20,7 +20,6 @@ def checkEnhancementPlacement():
     # The caller must return on rejection; returning here alone would not cancel placement.
     isEnhancementPlacementInvalid = distance(eventPlayer.getEyePosition(), raycastHitPosition(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 31, null, null, false)) > 30 or eventPlayer.isDead()
 
-#!include "enhancement_hitchhiker.opy"
 #!include "enhancement_pup.opy"
 
 rule "ENHANCEMENT ATTACK BEAM DISCONNECT CLEANUP":
@@ -62,8 +61,6 @@ rule "ENHANCEMENT DOUBLE CROUCH":
         toggleBulkingSeasonSize()
     elif eventPlayer.enhancementId == Enhancement.WRESTLER:
         useWrestlerPull()
-    elif eventPlayer.enhancementId == Enhancement.HITCHHIKER:
-        toggleHitchhikerAttachment()
 
 #!include "enhancement_charge_battery.opy"
 
@@ -72,7 +69,6 @@ macro initializePlayerEnhancement():
     if eventPlayer.enhancementId == Enhancement.NO_PREFERENCE:
         # No preference and late-join zero state roll once for the current hero.
         # Hybrid/Bulking Season are tank-only and Plague Doctor/Overcharge are support-only.
-        # Hitchhiker is after both upper bounds. Explicit choices and later spawns retain the ID.
         eventPlayer.enhancementId = random.randint(
             Enhancement.ZOMBIE_HYBRID if eventPlayer.getHero() in getTankHeroes() else Enhancement.BRAIN_KILLER,
             Enhancement.OVERCHARGE if eventPlayer.getHero() in getSupportHeroes() else Enhancement.AUSPEX_SCAN

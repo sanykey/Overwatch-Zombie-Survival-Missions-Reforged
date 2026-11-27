@@ -4,6 +4,7 @@
 #!include "augment_highrise.opy"
 #!include "augment_dash.opy"
 #!include "augment_laser_barricade.opy"
+#!include "augment_hitchhiker.opy"
 
 macro augmentMovementBlocked = eventPlayer.isAttached or eventPlayer.hasStatus(Status.ROOTED) or eventPlayer.isCrowdControlled
 
@@ -15,7 +16,7 @@ rule "PLAYER MENU CONTROLS (INTERACT, AUGMENT SELECTION)":
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
 
-    eventPlayer.augmentId = (eventPlayer.augmentId + (Augment.SURVIVALIST if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else 1)) % (Augment.SURVIVALIST + 1)
+    eventPlayer.augmentId = (eventPlayer.augmentId + (Augment.HITCHHIKER if eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) else 1)) % (Augment.HITCHHIKER + 1)
 
 
 rule "CROUCH + INTERACT (LASER BARRICADE)":
@@ -72,6 +73,8 @@ rule "CROUCH + JUMP (AUGMENTS)":
         useTelekinesisPushMacro()
     elif eventPlayer.augmentId == Augment.GRAPNEL_LAUNCHER and not augmentMovementBlocked:
         useGrapnelLauncherMacro()
+    elif eventPlayer.augmentId == Augment.HITCHHIKER:
+        toggleHitchhikerAttachment()
 
 
 #!include "augment_ammo_pack.opy"

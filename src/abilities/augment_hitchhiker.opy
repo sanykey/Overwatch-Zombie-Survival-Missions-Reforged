@@ -59,9 +59,6 @@ macro toggleHitchhikerAttachment():
     eventPlayer.hitchhikerCarrier.hitchhikerCarrierPool = [getLastCreatedHealthPool()]
     eventPlayer.hitchhikerCarrier.hitchhikerPassenger = eventPlayer
 
-    # Consume the second press before accepting a fresh pair to detach.
-    waitUntil(not eventPlayer.isHoldingButton(Button.CROUCH), Math.INFINITY)
-
 
 rule "[HITCHHIKER] FORCE DETACH":
     @Event eachPlayer

@@ -5,6 +5,7 @@
 ### New
 
 - Ammo Pack now also refills the magazine when the player activates their Ultimate.
+- Hitchhiker moves to the Augment slot and can be paired with any Enhancement. Press Crouch + Jump to attach to a nearby ally or detach.
 
 ### Fixes
 

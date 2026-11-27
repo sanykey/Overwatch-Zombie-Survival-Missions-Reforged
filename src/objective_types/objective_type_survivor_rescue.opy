@@ -51,7 +51,7 @@ rule "INITIALIZE SURVIVOR TO BE RESCUED":
     rescueSurvivor.rescueIsExtracting = false
     eventPlayer.rescueLeader = null
     eventPlayer.movementSpeedScale = 1
-    eventPlayer.enhancementId = Enhancement.HITCHHIKER
+    eventPlayer.augmentId = Augment.HITCHHIKER
     eventPlayer.hitchhikerCarrier = 0
     eventPlayer.hitchhikerAttachReadyAt = 0
     rescueSurvivor.setStatusEffect(null, Status.UNKILLABLE, Math.INFINITY)
