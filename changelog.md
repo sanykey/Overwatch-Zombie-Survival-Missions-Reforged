@@ -22,7 +22,7 @@
 
 ### Balance
 
-- **Buff** — Zarya's Particle Barrier and Projected Barrier each recharge 2 seconds faster.
+- **Buff** — Zarya's Particle Barrier and Projected Barrier each recharge 1 second faster, with cooldowns of 11 and 8 seconds respectively.
 - **Buff** — Grapnel Launcher's cooldown is now 12 seconds, down from 14.
 - **Buff** — Grapnel Launcher pulls the player 25% faster (50 m/s, up from 40 m/s).
 - **Buff** — Highrise now grants +75% damage, up from +55%, until landing or for up to 4 seconds, down from 5, plus the 0.1-second grace period.

@@ -67,8 +67,8 @@ macro STANDARD_TEAM1_HERO_SETTINGS = {
     "sigma": {"damageDealt%": 88},
     "winston": {"damageDealt%": 88},
     "wreckingBall": {"damageDealt%": 88},
-    # Particle Barrier: 12s to 10s. Projected Barrier: 9s to 7s.
-    "zarya": {"damageDealt%": 88, "ability1Cooldown%": 83.33, "ability2Cooldown%": 77.78},
+    # Particle Barrier: 12s to 11s. Projected Barrier: 9s to 8s.
+    "zarya": {"damageDealt%": 88, "ability1Cooldown%": 91.67, "ability2Cooldown%": 88.89},
     # Damage
     "anran": {"damageDealt%": 94},
     "ashe": {"damageDealt%": 94},
