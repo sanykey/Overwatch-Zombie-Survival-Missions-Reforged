@@ -26,6 +26,7 @@
 - **Buff** — Auspex Scan now increases damage taken by minibosses by 40%, up from 20%.
 - **Buff** — Charge Battery now grants 8 seconds of No Cooldowns at ultimate start, up from 7.
 - **Buff** — Overcharge now gains 1 energy per 2.7 HP healed, including health packs, down from 3 HP.
+- **Buff** — Plague Doctor now grants +50% healing, up from +40%. The total bonus on infected targets is now +87.5%, up from +75%.
 - **Nerf** — Born to Battle grants the first ability reset on a final blow. Earn the second with three more final blows before spending the first. Spending a reset clears any partial progress toward the second.
 - **Nerf** — Jetpack Cat cannot use Frenetic Flight while holding a zombie with Wrestler.
 - **Nerf** — Grapnel Launcher direct hits now deal 75 damage, down from 100.
