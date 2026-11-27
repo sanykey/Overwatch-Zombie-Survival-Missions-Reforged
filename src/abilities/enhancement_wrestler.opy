@@ -54,9 +54,6 @@ def useWrestlerGrabOrThrow():
         # Frenetic Flight uses secondary fire.
         eventPlayer.setSecondaryFireEnabled(false)
     wrestlerGrabTarget.wrestlerZombieCarrier = eventPlayer
-    # Independent of Super Nano's damage-received settings; bot owns cleanup.
-    startDamageModification(eventPlayer, getAllPlayers(), 100 - WRESTLER_CARRY_DMG_RESIST_PCT)
-    wrestlerGrabTarget.wrestlerProtectionId = getLastDamageModification()
     wrestlerGrabTarget.botIsAttached = true
     # Knockdown owns the carry lifetime; expiration or early removal releases.
     # Throw damage clears it explicitly after the existing damage delay.
@@ -102,7 +99,6 @@ rule "WRESTLER GRAB RELEASE":
     wrestlerShouldThrow = wrestlerCarrier.enhancementCarryState == WrestlerCarryState.THROW_REQUESTED and isWrestlerCarryValid(wrestlerCarrier)
     eventPlayer.detach()
     eventPlayer.botIsAttached = false
-    stopDamageModification(eventPlayer.wrestlerProtectionId)
     if entityExists(wrestlerCarrier):
         wrestlerCarrier.setSecondaryFireEnabled(true)
     wrestlerCarrier.enhancementCarryState = WrestlerCarryState.NONE

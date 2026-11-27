@@ -326,10 +326,6 @@ playervar augmentState1
 # Dash smoke effect entity; retained across overlapping dashes, null after DASH
 # SMOKE FADE removes it.
 #!define augmentDashSmokeEntity augmentState1
-# Team 2 Wrestler: carrier's 50% damage modifier, from pickup to synchronous
-# release cleanup, before any throw-damage wait. Overwritten on each pickup.
-# No bot Augment owns this slot; independent of all human powerup/augment state.
-#!define wrestlerProtectionId augmentState1
 # Laser Barricade unit edge direction; persists for collision checks.
 #!define augmentBarrierEdgeDirection augmentState1
 # Telekinesis hero snapshot; an interrupted attack cannot resume for a different hero.
