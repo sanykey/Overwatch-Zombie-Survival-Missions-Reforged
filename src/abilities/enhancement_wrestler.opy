@@ -50,7 +50,7 @@ def useWrestlerGrabOrThrow():
         return
     eventPlayer.enhancementCarryState = WrestlerCarryState.HOLDING
     wrestlerGrabTarget.wrestlerCarryHero = eventPlayer.getHero()
-    if wrestlerGrabTarget.wrestlerCarryHero == Hero.JETPACK_CAT:
+    if eventPlayer.getHero() == Hero.JETPACK_CAT:
         # Frenetic Flight uses secondary fire.
         eventPlayer.setSecondaryFireEnabled(false)
     wrestlerGrabTarget.wrestlerZombieCarrier = eventPlayer
