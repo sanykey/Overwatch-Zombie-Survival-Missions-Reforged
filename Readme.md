@@ -65,7 +65,8 @@ Known cooldown reset issues affect **D.Va's Micro Missiles**, **Ramattra's Void 
 - **Carrion (Jetpack Cat)** is a new regular zombie. It attacks from the air, can use its ultimate, and can carry other zombies that request a ride. It appears in **All Zombies**, **New Blood**, and **What’ll it be?**
 - **Cure+ combines Cure and Vaccine.** It clears active infection. If you're uninfected, it grants **1.5 levels of protection** against future bites.
 - **Bounce Pad** has been removed from the power-up pool.
-- The default zombie count increased from **6 to 7**. Supply drops now contain **6 power-ups instead of 5** by default.
+- The default zombie count increased from **6 to 7**.
+- Supply drops now contain **6 power-ups instead of 5** by default.
 
 ### Hero changes
 
